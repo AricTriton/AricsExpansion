@@ -1,0 +1,82 @@
+AricsExpansion Rebred v1.1
+
+<HOW TO CORRECTLY INSTALL THIS MOD>
+1) Extract Ankmairdor's BugFix v5 and AricExpansion v1 into your %AppData%/Strive/mods folder
+    - Links are in "Shortcuts" if needed
+2) Verify that the extracted folders are "Strive-1.0d-Bugfix-V5a" and "AricsExpansion"
+    - If they aren't, the correct folders are likely within the ones you extracted.
+2) Start the Game, Activate BugFix v5 (and ONLY this), and Exit Game
+4) Start the Game, Activate AricExpansion BENEATH BugFix v5, and Exit Game
+5) Start the Game, Make a New Game, SAVE as soon as possible, then LOAD that game you just created and saved
+6) You are ready to play!
+
+<Load Order & Disclaimer>
+Load Order should look like "BugFix v5", then "AricExpansion". Any others must load below AricsExpansion.
+Save games from this mod are not compatible with Vanilla. Back up your saves before trying this mod out.
+
+
+<What Does This Mod Do?>
+Please Note, if you didn't follow the Installation Steps, things will not work and will likely break.
+This mod expands each individual character in a myriad of fun, interesting, and kinky ways.
+Basically...this mod does a whole lot. It can be somewhat clunky at times and bugs will likely pop up in some random places, but let me know and we'll resolve those together as best we can.
+
+-New Image Folders:
+Don't forget to add pictures to the new 'bodiesnude' and 'bodiespreg' in your %AppData%/Strive folder.
+The picture name should be identical as whatever body and portrait picture you want them attached to.
+This means folders as well. If you have a folder called "Beastkin" that a portrait is in, it HAS to be in a folder with the same exact name in bodies, bodiesnude, and bodiespreg.
+
+-Starting Features:
+The Player and Starting Slave have a lot of new starting features for specializations.
+
+-Updated NPCs:
+NPCs have personalities, flaws, fetishes, and more. They also have expanded sexual features and expanded bodily sizes/options for greater variety.
+Escaped slaves from your Mansion can be recaptured (though they may travel farther away from your Mansion every day they aren't to escape you).
+
+-Expanded Towns:
+Towns have several new features and scenes, included a daily report, new scenes, and more interactivity with the Brothel.
+
+-New Farm System:
+The Farm is completely overhauled. There are more details for mechanics in the Library (when the farm is unlocked).
+
+-New Pregnancy System:
+Pregnancy has been completely overhauled. Hybrid Races are implimented with mechanical benefits. More details on Pregnancy, Geneology, and more can be found on the itch.io Forums.
+
+-New Talk System:
+The Talk button has a lot of new features integrated into it. Consent (combat, sexual, etc), Fetishes, Sexuality, and a lot more can be found within it.
+
+-Combat Additions:
+NPCs persist when released and not killed to level up as rivals and nemesis', Stress can be a major combonent in Combat, New Abilites are added, and a lot more.
+
+
+<Compatibility>
+-Compatible Mods (Load After AricsExpansion)
+RandomPortraits (Version for Game Version v1 | Partially Tested and No Errors Yet)
+
+-Note: Be aware this mod is a complete overhaul of many game mechanics. It is not recommended to use it in addition to other mods and doing so may break your game.
+If you don't want to risk corrupting a save or breaking a game, check the forums or Discord for ones tested for compatibility first.
+
+-Vanilla & Modded: You can actually have multiple Strive game folders set up to switch between Vanilla and Modded Strive.
+App Data is the same for both, though, so you will need to duplicate and rename the %AppData%/Strive folder to do this successfully.
+I would also recommend backing up and deleting the ProgressData from the %AppData%/Strive folder, especially if you are playing on an existing savegame. The date and icons for your save will return next time you save the game!
+
+<More Details Here and Support Here>
+Use the AricsExpansion Mod v1 Shortcut in the Shortcuts folder for Support on the itch.io forums
+You can also generally contact Aric via the mod channel in the Strive Discord
+
+-Reporting Bugs Note-
+Report bugs to the itch.io forum listed above or Discord.
+Please include a screenshot or the text from the black box that pops up alongside the game.
+You can get those by using the Debug mod's exe instead (link in the "Shortcuts" folder).
+Please include the whole box with any errors listed (if there are multiple).
+Be aware that this is a work in progress and generally only developed on by 1 person (with help from others). Your patience is appreciated.
+
+
+<Uninstalling AricsExpansion>
+That sucks, but we're cool. I advise just re-extracting the game from the zip file to be safe, but technically you can just deselect it from the Mods list and Exit Game.
+Keep in mind that saves from vanilla may be backwards compatible with Arics but not the other way around. Saves in Aric's Expansion must stay in Aric's Expansion.
+
+
+<Changelogs>
+1) https://itch.io/post/982628
+   - Note: The most recent changelogs are at the bottom by default.
+2) Folder in AricsExpansion: "Changelogs and Boring Details (Safe to Ignore)"

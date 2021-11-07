@@ -1,0 +1,222 @@
+Installation Changes
+>Altered Folder Creation to automatically add BodiesNaked and BodiesPreg into AppData
+>Moved Expansion.Settings to separate Script: expansionsettings. Set all references to pull from that.
+
+--Mod Files--
+Expansion Scripts (All)
+>Dark Elf to Tribal Elf
+>Drow to Dark Elf
+
+globals.gd
+>Updated
+
+inventory.gd
+>Updated Races (Drow to Tribal)
+>Removed Lingering Hybrid Races
+>Cleaned up Unneeded Ank Bugfix Code
+
+playercustomization.tres
+>Changed Racial Coloring from Dark Elf to Tribal Elf + Dark Elf
+
+299wearstrapon.gd
+>Left as change still needed
+
+aydashop.gd
+>Removed (No Longer Needed, Ank Bugfix Applied)
+
+constructor.gd
+>Removed BugFixed Functions
+>Updated Drow to Dark and Dark to Tribal for Genealogies
+
+description.gd
+>Updated
+
+person.gd
+>Added {'day' : 0, 'count' : 0} to line 121
+>Removed BugFixed Functions
+>Updated Racials
+
+abilities.gd
+>Updated
+
+assets.gd
+>Updated/Cleaned Up Labels
+
+combat.gd
+>Updated Ank BugFix Labels
+>Updated Futanari at 431 to Futa
+>General Update
+
+combatdata.gd
+>Removed (No Needed Changes Found)
+
+dailyevents.gd
+>Updated all Drow References with Dark Elf
+
+dating.gd
+>Updated Code, Labels, and Flaws
+>Removed Ank's BugFix and Unused Functions
+
+EditTree.gd
+>Removed (Unneeded)
+
+events.gd
+>Updated Racial Support
+>Removed everything above "mountainwin" as it was just implimented BugFixes
+
+exploration.gd
+>Updated Labels
+>Removed Unused Code & Implimented Bugfixes
+>Applied change to line 406
+>Applied change to line 670
+>Applied 1136-1144 changes
+>Applied 1154 change
+
+gallery.gd
+>Removed everything but the Unique Genealogy Fixer
+
+groupselectpanel.gd
+>Updated Join Req Obed+Loyal from 50 to 80 (vanilla is 90)
+
+imageselect.gd
+>Updated to new method. Added back in Body Update
+
+joblist.gd
+>No Change Needed
+
+laboratory.gd
+>Removed BugFix Label for implemented BugFix
+
+mainmenu.gd
+>Removed Unneeded/Implemented BugFix Code
+>Cleaned up code
+>Left StartingSlave Health 1000 BugFix (not Vanilla Implemented)
+>Updated Player Racial Bonuses to allow for Hybrid Race (Future Compatibility)
+
+mansion.gd
+>Replaced many old functions with the new versions
+>Replaced the BuildMansion function with new one, adding back Dimensional Crystal and Kennel Changes
+>Drow/Dark Elf changes
+>Removed Unneeded Functions
+
+newsexsystem.gd
+>Updated all Scripts to new methods
+>Reapplied previous changes to new changes
+>Updated Racial support
+
+origins.gd
+>Updated return line
+
+repeatable_quests.gd
+>Updated Racial Support
+>Removed Quest list (unneeded for now)
+
+slave_tab.gd
+>Updated scripts
+>Cleaned up old BugFix scripts
+
+spells.gd
+>Removed old BugFix Scripts
+>Matched updated Indentation
+
+statstab.gd
+>Removed BugFix Changes
+
+traits.gd
+>Updated to new Indentation
+>Fixed few Capitalization issues
+
+upgradespanel.gd
+>No Changes Needed
+
+--Patch Files (Put in Strive Game Files)--
+actions\299wearstrapon.gd - Mav Updated Error
+characters\races.gd - No Needed Mod Changes
+constantsmoddata\constantsmod.gd - File Load Structure Updated. File Updated, Revision No Longer Needed
+constantsmoddata\mainmenu.gd - File Updated, Revision No Longer Needed
+mods\modpanel.gd - File Updated, Revision No Longer Needed
+dailyevents.gd - File Updated, Revision No Longer Needed
+options.tres - File Updated, Revision No Longer Needed
+shopinventory.gd - File Updated, Revision No Longer Needed
+constmodinstal - No Revisions
+
+--Updated Files (Put in Strive Game Files)--
+dating.gd
+>Modified expansion.getSexualAttraction with separated testSexualCompatibility providing 'low','medium', or 'high' results for future integration
+>Added expansion.getSexualAttraction check into checkAcceptSexPairing
+>Added relativescheck & Fetish(Incest) check into Propose action.
+
+dictionary.gd
+>Added Sexuality and Attraction entry
+>Expanded The Sexuality Scale entry
+
+items.gd
+>Modified with updated code
+
+jobs&specs.gd
+>Added back in the Aric's Expansion Jobs & matched new Tabbing
+>Added back Vacation Req of 'person.metrics.ownership >= 7 && person.level >= 2' as I prefer that only triggering after a week (too rapidly fires otherwise)
+>Added all Job Skills Additions
+>Added all Hybrid Support Additions
+>Added all New Jobs
+
+mansionupgrades.gd
+>Added in all new Updates
+>Reverted the altered Upgrade Costs, Tiers, and Descriptions
+>Changes Indentation to match new standard
+
+outside.gd
+>Removed Ank Bugfix v4 updates (now included)
+>Added back in Breeder Specialization & Town Expansions
+>Added Movement Icons
+>Updated 1776 from specific array to TitSizeArray >= 5
+>Removed Hybrid Races that were already blanked out
+
+sexdescriptions.gd
+>Added Person & Genitalia Expansion Descriptions
+
+variables.gd
+>GearDropChance upped from 15 to 30
+>PlayerStartBeauty upped from 40 to 70
+>CharacterStartBeauty upped from 40 to 50
+>Added Deviate's Ovulation Changes & Descriptions
+>Returned AgePriceMods
+
+globals.gd
+>Added in NPC/Town/Farm/Preg Expanded Changes
+
+-----
+BugFixes Prior to v1's Release:
+v1.0
+General Changes
+Applied the if person.race.find('Dark Elf') < 0 || i.code == 'bandaged' || i.code == 'sedated' || randf() > 0.5 fix to Mansion.gd - Reported/Fixed by X3h0n
+Applied the if scenedict.givers.has(self) && scenedict.takers.has(i)/inverse fixes to newsexsystem.gd to fix the Genital Size Compare to fix during group sex scenes. - Reported/Fixed by X3h0n
+Applied the fix to show fertility and ovulation info for non-pregnant female slaves - Reported/Fixed by X3h0n
+Applied the fix to have the Dog Kennel show in the Spreadsheet - Reported/Fixed by X3h0n
+Fixed line 2097 in globals.gd to fix the dog father in pregnancies - Reported/Fixed by Darisco
+Fixed .back to .back() in expansion.gd for the TitsGrow function. - Reported/Fixed by Darisco
+Added in Globals.CurrentSlave to the Job Checks for Events (Guardian/Slaver) per Ankmairdor's Recommendation for the Evaulate function - Reported by Ankmairdor
+Set a clamp on Jobskills for 0-100 as well as a one time only notification when a job is maxed out at 100.
+Fixed the son/daughter calling the player their son/daughter bug - Reported by Darkness
+
+Farm Fixes
+Fixed an issue where hyperlactating slaves milked for amounts over their milkstorage (using the top quality items/extractors) would have negative milk storage and take a few days to produce again. - Reported by zzc & 5_pandas
+Fixed the MilkMaid job to pull Job Skills from Milking instead of Milk Maid to show experience properly. - Reported by zzc
+Fixed the Nurse and Forager job skill conversation (jobskills instead of jobskill) - Reported by Darkness
+Set Farm Manager to gain 1-2 jobskill daily (though it isn't currently called for anything, might as well let them start to gain experience for when it is). - Reported by zzc
+Added the relevant lactating stats to the perfect info setting for troubleshooting. It will display prior to text for cattle in the farm.
+Fixed issue with the old DailyMilking processing before the Farm and draining the milk during that phase, keeping it from occuring during dailyFarm. - Reported by Hory Shiet, Fixed by Ankmairdor
+Split the Farm Invalid checks to separate No Lactation from No Milk in Storage for easier clarification.
+Added a Traitmod reset to prevent the check from finding a storage trait and registering it as both storage and regen on dailyLactation - Reported by Ankmairdor.
+Fixed issue with expansion 2865 calculating Taurus milkstorage by 120% of regen instead of storage - Reported by Ankmairdor
+
+Lip Traits Change
+Per popular request, the Lip Size giving Lisp/Mute has been changed. The base chance is now (25-((LipArray-5)*5)/2), meaning that Plump will give a 2.5%ish chance to give Lisp and every size above that increases the chance by 2.5ish. If the person gained Lisp from their lip size increase, their chance will double per size. The added traits can be removed if the lip size is dropped below Plump as well now (though this will only effect NEWLY added traits, existing saves can't remove the existing Lisp/Mute except in the Laboratory per usual). This has a delay timer of up to 3 days between occurance to space out the events somewhat.
+
+Fetish Conversations
+Increased the modifier for the first-time Fetish conversation check from 2 to 3 (to less the "I can't talk about X").
+Changed the Encourage/Discourage Fetish Modifier to take into account 1% of the person's loyalty (ie: 50 loyalty will give a 1.5 modifier instead of the base 1 now).
+
+Sexuality
+Updated Sexuality Traits to show the Homosexual Trait for "Mostly Gay" and "Gay" & "Bisexual" for "Occassionally Gay/Straight" and "Bi" for compatibilty with other mods [expansion.gd]
+

@@ -1,0 +1,54 @@
+<---Changelog--->
+<Settings>
+-Set ihavebloodygoodtaste to default of false. It's there to be enabled if you'd like it still, though.
+
+-Added Print Reports on game load showing when Perfect Info and BloodyGood Taste are enabled in addition to Cheat Button (need DebugMod to see the log though). All can still be enabled/disabled in customScripts\expansionsettings.gd
+
+-Renamed minortweaknicknames to use_nickname_plus_first_name to clarify its function. Set to false by default. (expansionsettings.gd)
+
+<Interactions>
+-Set the Meet Interactions to 20 as a default - (variables.gd)
+
+<Slave Inspect>
+-Added better descriptors to Sexuality icon along with a hint if Sexuality is unknown - (slave_tab.gd)
+
+<Sex System>
+-Changed Feature: Fixed Cum Expulsion text to only show if there's cum in her pussy or ass greater than 6-the hole's size. The Mansion loses Condition equal to 1/2 the amount of cum lost. (newsexsystem.gd)
+
+-Sexuality Shifting: After Non-Consentual Sex, the person's Sexuality is now likely to shift away from their aggressor's unless they have the traits "Masochist", "Deviant", "Pervert", "Submissive", "Sex-crazed", or "Likes it rough". (newsexsystem.gd)
+
+-Player Sexuality Shifting: Added Setting "player_sexuality_shift" in customScripts\expansionsettings.gd. It is set to True by default to allow Player's sexualities to shift. Setting it to false will disable the system. (newsexsystem.gd)
+
+-Removed vagTorn and assTorn from person.gd as it no longer is needed to track. Handled by person.dailyevents.append('vagTorn') or person.dailyevents.append('assTorn') instead.
+
+-Sex Dialogue Results: Updated Sex Results to compile rewards earned under a header for ease of reading. Also added slightly more variety in sexual shifting dialogue. Changed the few lines of dialogue that come in as lime to yellow to match. Added color coding to point out "not" attractions in the sidebar. (newsexsystem.gd)
+
+<Towns Expanded>
+-New Setting 'minimum_npcs_to_detain': Guards wil only activate to catch "baddies" if the total number of unseen NPCs it above this number. Default is 10. This lets you delay the town guard zealously capturing all of your enemies and nemesis', especially in the early game. - (expansion.gd)
+
+-Added "Cruelty" numbers next to each of the execution options to clarify which will be perceived as easier or harsher punishments. - (outside.gd)
+
+<Genealogy>
+-Sibling Match: If there is an existing sibling created in the world, the genes should match the sibling identically unless they were born in the mansion. This should hopefully cut down on the immersion breaking of siblings having different genes. (constructor.gd)
+
+-Increased PureBlood chances to 20 and Mixed to 40 by default. (expansionsettings.gd)
+
+BUGFIXES
+<Slave Inspect>
+Fixed issue with incorrect names in View Relationship between Player and Sibling (for both) - (slave_tab.gd and mansion.gd)
+Moved Sexuality icon over to the Right - (Mansion.tscn)
+
+<Sex System>
+Fixed issue with Sex Results showing Vagina text for Males - (newsexsystem.gd)
+Fixed issue with Sex Results showing Ass Torn when it wasn't interacted with - (newsexsystem.gd)
+Fixed Line 1250 Issue with Sex showing all larger penis' as small. Reported by Raizer666, Fixed by Ankmairdor - (sexdescription.gd)
+Fixed Line 1698 Issue with Crashes on Fondle Chest action for multiple nipples. Reported by JulianK, Fixed by Ankmairdor - (sexdescription.gd)
+Fixed line 2190 Issue with the Player's sexuality never shifting. - (newsexsystem.gd)
+Trimmed down the Wear and Tear unused text in sidebar - (newsexsystem.gd)
+
+<Traits>
+Fixed Line 348 indentation issue with Blemished - (traits.gd)
+
+<End of Day>
+-Lips will no longer gain Lisp unless they are "huge" or larger. - (expansion.gd)
+-Changed from "covered their ass" to "covered $his". - (expansion.gd)
