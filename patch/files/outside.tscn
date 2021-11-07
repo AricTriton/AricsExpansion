@@ -1,0 +1,3140 @@
+[gd_scene load_steps=120 format=2]
+
+[ext_resource path="res://files/theme.tres" type="Theme" id=1]
+[ext_resource path="res://files/scripts/outside.gd" type="Script" id=2]
+[ext_resource path="res://files/buttons/outside/7.png" type="Texture" id=3]
+[ext_resource path="res://files/buttons/outside/10.png" type="Texture" id=4]
+[ext_resource path="res://files/buttons/outside/5.png" type="Texture" id=5]
+[ext_resource path="res://mainfont.tres" type="DynamicFont" id=6]
+[ext_resource path="res://files/buttons/outside/21.png" type="Texture" id=7]
+[ext_resource path="res://files/buttons/outside/4.png" type="Texture" id=8]
+[ext_resource path="res://files/buttons/btn-noact-oran.png" type="Texture" id=9]
+[ext_resource path="res://files/buttons/btn-hover-oran.png" type="Texture" id=10]
+[ext_resource path="res://files/buttons/btn-norm-oran.png" type="Texture" id=11]
+[ext_resource path="res://files/buttons/btn-act-oran.png" type="Texture" id=12]
+[ext_resource path="res://files/buttons/scenes/5.png" type="Texture" id=13]
+[ext_resource path="res://files/buttons/scenes/6.png" type="Texture" id=14]
+[ext_resource path="res://files/buttons/scenes/7.png" type="Texture" id=15]
+[ext_resource path="res://files/buttons/scenes/4.png" type="Texture" id=16]
+[ext_resource path="res://Roundo-Medium.otf" type="DynamicFontData" id=17]
+[ext_resource path="res://files/buttons/outside/6.png" type="Texture" id=18]
+[ext_resource path="res://files/buttons/outside/11.png" type="Texture" id=19]
+[ext_resource path="res://files/buttons/outside/24.png" type="Texture" id=20]
+[ext_resource path="res://files/buttons/outside/25.png" type="Texture" id=21]
+[ext_resource path="res://files/buttons/outside/26.png" type="Texture" id=22]
+[ext_resource path="res://files/buttons/outside/32.png" type="Texture" id=23]
+[ext_resource path="res://files/buttons/outside/27.png" type="Texture" id=24]
+[ext_resource path="res://files/buttons/outside/12.png" type="Texture" id=25]
+[ext_resource path="res://files/buttons/outside/13.png" type="Texture" id=26]
+[ext_resource path="res://files/buttons/outside/14.png" type="Texture" id=27]
+[ext_resource path="res://files/buttons/outside/15.png" type="Texture" id=28]
+[ext_resource path="res://files/buttons/outside/16.png" type="Texture" id=29]
+[ext_resource path="res://files/buttons/outside/17.png" type="Texture" id=30]
+[ext_resource path="res://files/buttons/outside/22.png" type="Texture" id=31]
+[ext_resource path="res://files/buttons/outside/23.png" type="Texture" id=32]
+[ext_resource path="res://files/buttons/outside/19.png" type="Texture" id=33]
+[ext_resource path="res://files/buttons/outside/20.png" type="Texture" id=34]
+[ext_resource path="res://files/buttons/mainscreen/40.png" type="Texture" id=35]
+[ext_resource path="res://files/images/cali/caliportrait.png" type="Texture" id=36]
+[ext_resource path="res://files/buttons/outside/18.png" type="Texture" id=37]
+[ext_resource path="res://files/buttons/outside/8.png" type="Texture" id=38]
+[ext_resource path="res://files/buttons/outside/9.png" type="Texture" id=39]
+[ext_resource path="res://files/buttons/paneltransperent.png" type="Texture" id=40]
+[ext_resource path="res://files/buttons/menupanel.png" type="Texture" id=41]
+[ext_resource path="res://files/buttons/itemactive.png" type="Texture" id=42]
+[ext_resource path="res://files/buttons/itemnormal.png" type="Texture" id=43]
+[ext_resource path="res://files/buttons/explorebar2.png" type="Texture" id=44]
+[ext_resource path="res://files/buttons/explorebar.png" type="Texture" id=45]
+[ext_resource path="res://files/buttons/noimage.png" type="Texture" id=46]
+[ext_resource path="res://files/buttons/inspect.png" type="Texture" id=47]
+[ext_resource path="res://files/buttons/mappanel.png" type="Texture" id=48]
+[ext_resource path="res://files/map.scn" type="PackedScene" id=49]
+[ext_resource path="res://testfont.tres" type="DynamicFontData" id=50]
+[ext_resource path="res://files/buttons/outside/bar.png" type="Texture" id=51]
+[ext_resource path="res://files/buttongrouptheme.tres" type="Theme" id=52]
+[ext_resource path="res://files/buttons/sexicons/male.png" type="Texture" id=53]
+[ext_resource path="res://files/buttons/mainscreen/41.png" type="Texture" id=54]
+[ext_resource path="res://files/statspanel.tscn" type="PackedScene" id=55]
+[ext_resource path="res://files/buttons/mainscreen/7.png" type="Texture" id=56]
+[ext_resource path="res://files/theme slavetab.tres" type="Theme" id=57]
+[ext_resource path="res://files/buttons/inventory/11-litter.png" type="Texture" id=58]
+[ext_resource path="res://files/scripts/shopinventory.gd" type="Script" id=59]
+[ext_resource path="res://files/buttons/inventory/12_chest.png" type="Texture" id=60]
+[ext_resource path="res://files/buttons/inventory/14(1).png" type="Texture" id=61]
+[ext_resource path="res://files/buttons/inventory/14(2).png" type="Texture" id=62]
+[ext_resource path="res://files/buttons/inventory/15(1).png" type="Texture" id=63]
+[ext_resource path="res://files/buttons/inventory/15(2).png" type="Texture" id=64]
+[ext_resource path="res://files/buttons/inventory/31.png" type="Texture" id=65]
+[ext_resource path="res://files/buttons/inventory/32.png" type="Texture" id=66]
+[ext_resource path="res://files/buttons/inventory/16(1).png" type="Texture" id=67]
+[ext_resource path="res://files/buttons/inventory/16(2).png" type="Texture" id=68]
+[ext_resource path="res://files/buttons/inventory/17(1).png" type="Texture" id=69]
+[ext_resource path="res://files/buttons/inventory/17(2).png" type="Texture" id=70]
+[ext_resource path="res://files/buttons/inventory/6-(item).png" type="Texture" id=71]
+[ext_resource path="res://files/images/items/armorleather.png" type="Texture" id=72]
+[ext_resource path="res://files/buttons/inventory/18(1).png" type="Texture" id=73]
+[ext_resource path="res://files/buttons/inventory/18(2).png" type="Texture" id=74]
+[ext_resource path="res://files/buttons/inventory/21(1).png" type="Texture" id=75]
+[ext_resource path="res://files/buttons/inventory/21(2).png" type="Texture" id=76]
+[ext_resource path="res://files/buttons/mainscreen/gold.png" type="Texture" id=77]
+[ext_resource path="res://files/buttons/inventory/5.png" type="Texture" id=78]
+[ext_resource path="res://files/buttons/inventorypanel.png" type="Texture" id=79]
+[ext_resource path="res://files/buttons/inventory/33.png" type="Texture" id=80]
+[ext_resource path="res://files/buttons/inventory/1.png" type="Texture" id=81]
+[ext_resource path="res://files/buttons/itemactive2.png" type="Texture" id=82]
+[ext_resource path="res://files/images/items/armorchain.png" type="Texture" id=83]
+[ext_resource path="res://files/buttons/combat/8.png" type="Texture" id=84]
+[ext_resource path="res://files/buttons/combat/9.png" type="Texture" id=85]
+[ext_resource path="res://files/buttons/combat/8.1.png" type="Texture" id=86]
+[ext_resource path="res://files/buttons/combat/12.png" type="Texture" id=87]
+[ext_resource path="res://files/buttons/combat/13.png" type="Texture" id=88]
+[ext_resource path="res://files/buttons/combat/14.png" type="Texture" id=89]
+
+[sub_resource type="StyleBoxTexture" id=1]
+texture = ExtResource( 3 )
+region_rect = Rect2( 0, 0, 115, 395 )
+
+[sub_resource type="StyleBoxTexture" id=2]
+texture = ExtResource( 5 )
+region_rect = Rect2( 0, 0, 801, 822 )
+
+[sub_resource type="StyleBoxTexture" id=3]
+texture = ExtResource( 7 )
+region_rect = Rect2( 0, 0, 801, 822 )
+
+[sub_resource type="StyleBoxTexture" id=4]
+texture = ExtResource( 8 )
+region_rect = Rect2( 0, 0, 409, 822 )
+
+[sub_resource type="StyleBoxTexture" id=5]
+texture = ExtResource( 9 )
+region_rect = Rect2( 0, 0, 219, 50 )
+margin_left = 8.0
+margin_right = 8.0
+margin_top = 8.0
+margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id=6]
+texture = ExtResource( 10 )
+region_rect = Rect2( 0, 0, 219, 50 )
+margin_left = 8.0
+margin_right = 8.0
+margin_top = 8.0
+margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id=7]
+texture = ExtResource( 11 )
+region_rect = Rect2( 0, 0, 219, 50 )
+margin_left = 8.0
+margin_right = 8.0
+margin_top = 8.0
+margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id=8]
+texture = ExtResource( 12 )
+region_rect = Rect2( 0, 0, 219, 50 )
+margin_left = 8.0
+margin_right = 8.0
+margin_top = 8.0
+margin_bottom = 8.0
+
+[sub_resource type="Theme" id=9]
+Button/colors/font_color = Color( 0.878431, 0.878431, 0.878431, 1 )
+Button/colors/font_color_disabled = Color( 0.226563, 0.226563, 0.226563, 1 )
+Button/colors/font_color_hover = Color( 1, 1, 1, 1 )
+Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+Button/constants/hseparation = 2
+Button/fonts/font = null
+Button/styles/disabled = SubResource( 5 )
+Button/styles/focus = null
+Button/styles/hover = SubResource( 6 )
+Button/styles/normal = SubResource( 7 )
+Button/styles/pressed = SubResource( 8 )
+
+[sub_resource type="StyleBoxTexture" id=10]
+texture = ExtResource( 13 )
+region_rect = Rect2( 0, 0, 604, 60 )
+
+[sub_resource type="StyleBoxTexture" id=11]
+texture = ExtResource( 14 )
+region_rect = Rect2( 0, 0, 604, 60 )
+
+[sub_resource type="StyleBoxTexture" id=12]
+texture = ExtResource( 15 )
+region_rect = Rect2( 0, 0, 604, 60 )
+
+[sub_resource type="StyleBoxTexture" id=13]
+texture = ExtResource( 16 )
+region_rect = Rect2( 0, 0, 610, 64 )
+
+[sub_resource type="DynamicFont" id=14]
+use_filter = true
+extra_spacing_top = 1
+font_data = ExtResource( 17 )
+
+[sub_resource type="StyleBoxTexture" id=15]
+texture = ExtResource( 18 )
+region_rect = Rect2( 0, 0, 1885, 150 )
+
+[sub_resource type="StyleBoxTexture" id=16]
+texture = ExtResource( 19 )
+region_rect = Rect2( 0, 0, 403, 133 )
+
+[sub_resource type="StyleBoxTexture" id=17]
+texture = ExtResource( 40 )
+region_rect = Rect2( 0, 0, 500, 500 )
+margin_left = 15.0
+margin_right = 15.0
+margin_top = 15.0
+margin_bottom = 15.0
+
+[sub_resource type="StyleBoxTexture" id=18]
+texture = ExtResource( 41 )
+region_rect = Rect2( 0, 0, 500, 500 )
+
+[sub_resource type="StyleBoxTexture" id=19]
+texture = ExtResource( 42 )
+region_rect = Rect2( 0, 0, 50, 50 )
+margin_left = 10.0
+margin_right = 10.0
+margin_top = 10.0
+margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id=20]
+texture = ExtResource( 42 )
+region_rect = Rect2( 0, 0, 50, 50 )
+margin_left = 10.0
+margin_right = 10.0
+margin_top = 10.0
+margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id=21]
+
+[sub_resource type="StyleBoxTexture" id=22]
+
+[sub_resource type="StyleBoxTexture" id=23]
+texture = ExtResource( 43 )
+region_rect = Rect2( 0, 0, 50, 50 )
+margin_left = 10.0
+margin_right = 10.0
+margin_top = 10.0
+margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id=24]
+texture = ExtResource( 44 )
+region_rect = Rect2( 0, 0, 150, 18 )
+margin_left = 5.0
+margin_right = 5.0
+margin_top = 5.0
+margin_bottom = 5.0
+
+[sub_resource type="StyleBoxTexture" id=25]
+texture = ExtResource( 45 )
+region_rect = Rect2( 0, 0, 150, 18 )
+margin_left = 5.0
+margin_right = 5.0
+margin_top = 5.0
+margin_bottom = 5.0
+
+[sub_resource type="StyleBoxTexture" id=26]
+texture = ExtResource( 48 )
+region_rect = Rect2( 0, 0, 529, 529 )
+
+[sub_resource type="DynamicFont" id=27]
+size = 63
+use_filter = true
+extra_spacing_char = 2
+font_data = ExtResource( 50 )
+
+[sub_resource type="DynamicFont" id=28]
+size = 20
+use_filter = true
+extra_spacing_top = 3
+font_data = ExtResource( 17 )
+
+[sub_resource type="DynamicFont" id=29]
+size = 24
+use_filter = true
+extra_spacing_top = 1
+font_data = ExtResource( 17 )
+
+[sub_resource type="StyleBoxTexture" id=30]
+texture = ExtResource( 79 )
+region_rect = Rect2( 0, 0, 613, 833 )
+
+[node name="outside" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 2.0
+margin_bottom = 2.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="questlog" type="Button" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -122.0
+margin_top = 9.0
+margin_right = -11.0
+margin_bottom = 48.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Quest Log"
+
+[node name="mapbutton" type="Button" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -233.0
+margin_top = 9.0
+margin_right = -122.0
+margin_bottom = 48.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Map"
+
+[node name="itemmenu" type="Panel" parent="."]
+editor/display_folded = true
+margin_left = 1263.0
+margin_top = 101.0
+margin_right = 1360.0
+margin_bottom = 448.0
+custom_styles/panel = SubResource( 1 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="itemmenu"]
+margin_left = 23.0
+margin_top = 9.0
+margin_right = 92.0
+margin_bottom = 338.0
+scroll_horizontal_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="itemmenu/ScrollContainer"]
+
+[node name="TextureButton" type="TextureButton" parent="itemmenu/ScrollContainer/VBoxContainer"]
+visible = false
+margin_right = 60.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+texture_normal = ExtResource( 4 )
+expand = true
+
+[node name="icon" type="TextureRect" parent="itemmenu/ScrollContainer/VBoxContainer/TextureButton"]
+margin_left = 9.0
+margin_top = 6.0
+margin_right = 51.0
+margin_bottom = 53.0
+mouse_filter = 2
+expand = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="itemmenu/ScrollContainer/VBoxContainer/TextureButton"]
+margin_left = 43.0
+margin_top = 36.0
+margin_right = 60.0
+margin_bottom = 56.0
+text = "0"
+
+[node name="charactersprite" type="TextureRect" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -604.0
+margin_top = 19.0
+margin_right = 137.0
+margin_bottom = -10.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+expand = true
+stretch_mode = 6
+
+[node name="textpanelexplore" type="Panel" parent="."]
+editor/display_folded = true
+margin_left = 307.0
+margin_top = 158.0
+margin_right = 877.0
+margin_bottom = 667.0
+custom_styles/panel = SubResource( 2 )
+
+[node name="outsidetextbox2" type="RichTextLabel" parent="textpanelexplore"]
+anchor_bottom = 1.0
+margin_left = 12.0
+margin_top = 17.0
+margin_right = 559.0
+margin_bottom = -294.0
+rect_min_size = Vector2( 300, 0 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/normal_font = ExtResource( 6 )
+bbcode_enabled = true
+
+[node name="enemyinfo" type="RichTextLabel" parent="textpanelexplore"]
+margin_left = 25.0
+margin_top = 253.0
+margin_right = 238.0
+margin_bottom = 477.0
+bbcode_enabled = true
+
+[node name="enemyportrait" type="TextureRect" parent="textpanelexplore"]
+margin_left = 395.0
+margin_top = 233.0
+margin_right = 560.0
+margin_bottom = 398.0
+expand = true
+stretch_mode = 6
+
+[node name="textpanel" type="Panel" parent="."]
+editor/display_folded = true
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 308.0
+margin_top = 158.0
+margin_right = -485.0
+margin_bottom = -103.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/panel = SubResource( 3 )
+
+[node name="outsidetextbox" type="RichTextLabel" parent="textpanel"]
+anchor_bottom = 1.0
+margin_left = 12.0
+margin_top = 13.0
+margin_right = 559.0
+margin_bottom = -13.0
+rect_min_size = Vector2( 300, 300 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/normal_font = ExtResource( 6 )
+bbcode_enabled = true
+
+[node name="buttonpanel" type="Panel" parent="."]
+editor/display_folded = true
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = 60.0
+margin_right = 305.0
+margin_bottom = -103.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/panel = SubResource( 4 )
+
+[node name="outsidebuttoncontainer" type="VBoxContainer" parent="buttonpanel"]
+editor/display_folded = true
+margin_left = 19.0
+margin_top = 13.0
+margin_right = 291.0
+margin_bottom = 587.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = SubResource( 9 )
+
+[node name="buttontemplate" type="Button" parent="buttonpanel/outsidebuttoncontainer"]
+visible = false
+margin_right = 270.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 270, 40 )
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_styles/hover = SubResource( 10 )
+custom_styles/pressed = SubResource( 11 )
+custom_styles/disabled = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+custom_fonts/font = SubResource( 14 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+custom_constants/hseparation = 0
+text = "Button 1"
+
+[node name="Label" type="Label" parent="buttonpanel/outsidebuttoncontainer/buttontemplate"]
+margin_left = -11.0
+margin_top = 9.0
+margin_right = 33.0
+margin_bottom = 32.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "1"
+valign = 1
+
+[node name="playergrouppanel" type="Panel" parent="."]
+editor/display_folded = true
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 3.0
+margin_top = -104.0
+margin_right = -4.0
+margin_bottom = -5.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/panel = SubResource( 15 )
+
+[node name="VBoxContainer" type="HBoxContainer" parent="playergrouppanel"]
+editor/display_folded = true
+margin_left = 9.0
+margin_top = 5.0
+margin_right = 1141.0
+margin_bottom = 94.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="Panel" type="Panel" parent="playergrouppanel/VBoxContainer"]
+visible = false
+margin_right = 270.0
+margin_bottom = 89.0
+rect_min_size = Vector2( 270, 89 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+custom_styles/panel = SubResource( 16 )
+
+[node name="name" type="Label" parent="playergrouppanel/VBoxContainer/Panel"]
+margin_left = 104.0
+margin_top = 9.0
+margin_right = 154.0
+margin_bottom = 29.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+text = "Name"
+
+[node name="portait" type="TextureRect" parent="playergrouppanel/VBoxContainer/Panel"]
+margin_left = 14.0
+margin_top = 10.0
+margin_right = 83.0
+margin_bottom = 79.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+expand = true
+stretch_mode = 6
+
+[node name="button" type="TextureButton" parent="playergrouppanel/VBoxContainer/Panel"]
+margin_left = 8.0
+margin_top = 6.0
+margin_right = 263.0
+margin_bottom = 84.0
+
+[node name="hp" type="TextureProgress" parent="playergrouppanel/VBoxContainer/Panel"]
+margin_left = 118.0
+margin_top = 37.0
+margin_right = 246.0
+margin_bottom = 46.0
+value = 50.0
+texture_under = ExtResource( 20 )
+texture_progress = ExtResource( 21 )
+
+[node name="en" type="TextureProgress" parent="playergrouppanel/VBoxContainer/Panel"]
+margin_left = 118.0
+margin_top = 49.0
+margin_right = 246.0
+margin_bottom = 58.0
+value = 50.0
+texture_under = ExtResource( 20 )
+texture_progress = ExtResource( 22 )
+
+[node name="xp" type="TextureProgress" parent="playergrouppanel/VBoxContainer/Panel"]
+margin_left = 118.0
+margin_top = 61.0
+margin_right = 246.0
+margin_bottom = 70.0
+hint_tooltip = "asf"
+value = 50.0
+texture_under = ExtResource( 20 )
+texture_progress = ExtResource( 23 )
+
+[node name="stress" type="TextureProgress" parent="playergrouppanel/VBoxContainer/Panel"]
+visible = false
+margin_left = 118.0
+margin_top = 73.0
+margin_right = 246.0
+margin_bottom = 82.0
+value = 50.0
+texture_under = ExtResource( 20 )
+texture_progress = ExtResource( 24 )
+
+[node name="lust" type="TextureProgress" parent="playergrouppanel/VBoxContainer/Panel"]
+visible = false
+margin_left = 118.0
+margin_top = 73.0
+margin_right = 246.0
+margin_bottom = 82.0
+value = 50.0
+texture_under = ExtResource( 20 )
+texture_progress = ExtResource( 24 )
+
+[node name="details" type="Button" parent="playergrouppanel"]
+editor/display_folded = true
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -111.0
+margin_top = -89.0
+margin_right = -11.0
+margin_bottom = -7.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Control"
+
+[node name="Label" type="Label" parent="playergrouppanel/details"]
+margin_left = 68.0
+margin_top = 55.0
+margin_right = 88.0
+margin_bottom = 75.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_colors/font_color = Color( 0.761719, 0.660181, 0.261841, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "B"
+
+[node name="characterinfo" type="Popup" parent="playergrouppanel"]
+editor/display_folded = true
+margin_left = 447.0
+margin_top = -646.0
+margin_right = 901.0
+margin_bottom = 53.0
+
+[node name="TextureRect" type="TextureRect" parent="playergrouppanel/characterinfo"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 25 )
+expand = true
+
+[node name="name" type="Label" parent="playergrouppanel/characterinfo"]
+margin_left = 172.0
+margin_top = 32.0
+margin_right = 281.0
+margin_bottom = 52.0
+text = "Name"
+align = 1
+valign = 1
+
+[node name="equip" type="Label" parent="playergrouppanel/characterinfo"]
+margin_left = 172.0
+margin_top = 278.0
+margin_right = 281.0
+margin_bottom = 298.0
+text = "Equipment"
+align = 1
+valign = 1
+
+[node name="abil" type="Label" parent="playergrouppanel/characterinfo"]
+margin_left = 171.0
+margin_top = 395.0
+margin_right = 280.0
+margin_bottom = 415.0
+text = "Abilities"
+align = 1
+valign = 1
+
+[node name="other" type="Label" parent="playergrouppanel/characterinfo"]
+margin_left = 172.0
+margin_top = 566.0
+margin_right = 281.0
+margin_bottom = 586.0
+text = "Other"
+align = 1
+valign = 1
+
+[node name="hp" type="TextureProgress" parent="playergrouppanel/characterinfo"]
+margin_left = 241.0
+margin_top = 198.0
+margin_right = 419.0
+margin_bottom = 211.0
+value = 50.0
+texture_under = ExtResource( 26 )
+texture_progress = ExtResource( 27 )
+
+[node name="en" type="TextureProgress" parent="playergrouppanel/characterinfo"]
+margin_left = 241.0
+margin_top = 213.0
+margin_right = 419.0
+margin_bottom = 226.0
+value = 50.0
+texture_under = ExtResource( 26 )
+texture_progress = ExtResource( 28 )
+
+[node name="stress" type="TextureProgress" parent="playergrouppanel/characterinfo"]
+margin_left = 241.0
+margin_top = 228.0
+margin_right = 419.0
+margin_bottom = 241.0
+hint_tooltip = "Stress"
+value = 50.0
+texture_under = ExtResource( 26 )
+texture_progress = ExtResource( 29 )
+
+[node name="lust" type="TextureProgress" parent="playergrouppanel/characterinfo"]
+margin_left = 241.0
+margin_top = 243.0
+margin_right = 419.0
+margin_bottom = 256.0
+hint_tooltip = "Lust"
+value = 50.0
+texture_under = ExtResource( 26 )
+texture_progress = ExtResource( 30 )
+
+[node name="portait" type="TextureRect" parent="playergrouppanel/characterinfo"]
+margin_left = 23.0
+margin_top = 72.0
+margin_right = 208.0
+margin_bottom = 257.0
+expand = true
+stretch_mode = 7
+
+[node name="weapon" type="TextureButton" parent="playergrouppanel/characterinfo"]
+margin_left = 44.0
+margin_top = 315.0
+margin_right = 109.0
+margin_bottom = 380.0
+expand = true
+stretch_mode = 5
+
+[node name="armor" type="TextureButton" parent="playergrouppanel/characterinfo"]
+margin_left = 120.0
+margin_top = 315.0
+margin_right = 185.0
+margin_bottom = 380.0
+expand = true
+stretch_mode = 5
+
+[node name="accessory" type="TextureButton" parent="playergrouppanel/characterinfo"]
+margin_left = 196.0
+margin_top = 315.0
+margin_right = 261.0
+margin_bottom = 380.0
+expand = true
+stretch_mode = 5
+
+[node name="costume" type="TextureButton" parent="playergrouppanel/characterinfo"]
+margin_left = 272.0
+margin_top = 315.0
+margin_right = 337.0
+margin_bottom = 380.0
+expand = true
+stretch_mode = 5
+
+[node name="underwear" type="TextureButton" parent="playergrouppanel/characterinfo"]
+margin_left = 348.0
+margin_top = 315.0
+margin_right = 413.0
+margin_bottom = 380.0
+expand = true
+stretch_mode = 5
+
+[node name="Container" type="ScrollContainer" parent="playergrouppanel/characterinfo"]
+margin_left = 24.0
+margin_top = 427.0
+margin_right = 432.0
+margin_bottom = 553.0
+scroll_horizontal_enabled = false
+
+[node name="GridContainer" type="GridContainer" parent="playergrouppanel/characterinfo/Container"]
+size_flags_horizontal = 0
+size_flags_vertical = 0
+columns = 7
+
+[node name="Button" type="TextureButton" parent="playergrouppanel/characterinfo/Container/GridContainer"]
+visible = false
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+rect_clip_content = true
+size_flags_horizontal = 0
+size_flags_vertical = 0
+toggle_mode = true
+expand = true
+stretch_mode = 5
+
+[node name="closechar" type="TextureButton" parent="playergrouppanel/characterinfo"]
+margin_left = 419.0
+margin_top = 25.0
+margin_right = 444.0
+margin_bottom = 55.0
+texture_normal = ExtResource( 31 )
+texture_pressed = ExtResource( 32 )
+texture_hover = ExtResource( 32 )
+expand = true
+stretch_mode = 5
+
+[node name="stats" type="TextureRect" parent="playergrouppanel/characterinfo"]
+editor/display_folded = true
+margin_left = 226.0
+margin_top = 66.0
+margin_right = 437.0
+margin_bottom = 150.0
+texture = ExtResource( 33 )
+
+[node name="sstr" type="TextureRect" parent="playergrouppanel/characterinfo/stats"]
+margin_left = 3.0
+margin_top = 1.0
+margin_right = 43.0
+margin_bottom = 41.0
+
+[node name="Label" type="Label" parent="playergrouppanel/characterinfo/stats/sstr"]
+margin_left = 42.0
+margin_top = 10.0
+margin_right = 100.0
+margin_bottom = 33.0
+text = "1/5"
+align = 1
+
+[node name="smaf" type="TextureRect" parent="playergrouppanel/characterinfo/stats"]
+margin_left = 3.0
+margin_top = 43.0
+margin_right = 43.0
+margin_bottom = 83.0
+
+[node name="Label" type="Label" parent="playergrouppanel/characterinfo/stats/smaf"]
+margin_left = 42.0
+margin_top = 10.0
+margin_right = 100.0
+margin_bottom = 33.0
+text = "1/5"
+align = 1
+
+[node name="sagi" type="TextureRect" parent="playergrouppanel/characterinfo/stats"]
+margin_left = 107.0
+margin_top = 2.0
+margin_right = 147.0
+margin_bottom = 42.0
+
+[node name="Label" type="Label" parent="playergrouppanel/characterinfo/stats/sagi"]
+margin_left = 42.0
+margin_top = 10.0
+margin_right = 100.0
+margin_bottom = 33.0
+text = "1/5"
+align = 1
+
+[node name="send" type="TextureRect" parent="playergrouppanel/characterinfo/stats"]
+margin_left = 107.0
+margin_top = 43.0
+margin_right = 147.0
+margin_bottom = 83.0
+
+[node name="Label" type="Label" parent="playergrouppanel/characterinfo/stats/send"]
+margin_left = 42.0
+margin_top = 10.0
+margin_right = 100.0
+margin_bottom = 33.0
+text = "1/5"
+align = 1
+
+[node name="combstats" type="TextureRect" parent="playergrouppanel/characterinfo"]
+margin_left = 226.0
+margin_top = 66.0
+margin_right = 437.0
+margin_bottom = 150.0
+texture = ExtResource( 34 )
+
+[node name="attack" type="TextureRect" parent="playergrouppanel/characterinfo/combstats"]
+margin_left = 3.0
+margin_top = 1.0
+margin_right = 43.0
+margin_bottom = 41.0
+
+[node name="Label" type="Label" parent="playergrouppanel/characterinfo/combstats/attack"]
+margin_left = 42.0
+margin_top = 10.0
+margin_right = 100.0
+margin_bottom = 33.0
+text = "1/5"
+align = 1
+
+[node name="armor" type="TextureRect" parent="playergrouppanel/characterinfo/combstats"]
+margin_left = 3.0
+margin_top = 43.0
+margin_right = 43.0
+margin_bottom = 83.0
+
+[node name="Label" type="Label" parent="playergrouppanel/characterinfo/combstats/armor"]
+margin_left = 42.0
+margin_top = 10.0
+margin_right = 100.0
+margin_bottom = 33.0
+text = "1/5"
+align = 1
+
+[node name="speed" type="TextureRect" parent="playergrouppanel/characterinfo/combstats"]
+margin_left = 107.0
+margin_top = 2.0
+margin_right = 147.0
+margin_bottom = 42.0
+
+[node name="Label" type="Label" parent="playergrouppanel/characterinfo/combstats/speed"]
+margin_left = 42.0
+margin_top = 10.0
+margin_right = 100.0
+margin_bottom = 33.0
+text = "1/5"
+align = 1
+
+[node name="protection" type="TextureRect" parent="playergrouppanel/characterinfo/combstats"]
+margin_left = 107.0
+margin_top = 43.0
+margin_right = 147.0
+margin_bottom = 83.0
+
+[node name="Label" type="Label" parent="playergrouppanel/characterinfo/combstats/protection"]
+margin_left = 42.0
+margin_top = 10.0
+margin_right = 100.0
+margin_bottom = 33.0
+text = "1/5"
+align = 1
+
+[node name="grade" type="TextureRect" parent="playergrouppanel/characterinfo"]
+margin_left = 169.0
+margin_top = 213.0
+margin_right = 219.0
+margin_bottom = 263.0
+texture = ExtResource( 35 )
+expand = true
+stretch_mode = 6
+
+[node name="spec" type="TextureRect" parent="playergrouppanel/characterinfo"]
+margin_left = 35.0
+margin_top = 597.0
+margin_right = 105.0
+margin_bottom = 667.0
+texture = ExtResource( 36 )
+expand = true
+stretch_mode = 6
+
+[node name="movement" type="TextureRect" parent="playergrouppanel/characterinfo"]
+margin_left = 350.0
+margin_top = 597.0
+margin_right = 420.0
+margin_bottom = 667.0
+texture = ExtResource( 36 )
+expand = true
+stretch_mode = 6
+
+[node name="switch" type="TextureButton" parent="playergrouppanel/characterinfo"]
+margin_left = 424.0
+margin_top = 97.0
+margin_right = 447.0
+margin_bottom = 120.0
+texture_normal = ExtResource( 37 )
+
+[node name="exploreprogress" type="TextureProgress" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -482.0
+margin_top = 166.0
+margin_right = -457.0
+margin_bottom = 661.0
+hint_tooltip = "Area progress"
+mouse_filter = 0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+value = 50.0
+texture_under = ExtResource( 38 )
+texture_progress = ExtResource( 39 )
+fill_mode = 3
+
+[node name="playergroupdetails" type="Popup" parent="."]
+editor/display_folded = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = 20.0
+margin_right = -20.0
+margin_bottom = -20.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="BackPanel" type="Panel" parent="playergroupdetails"]
+margin_right = 1322.0
+margin_bottom = 730.0
+custom_styles/panel = SubResource( 17 )
+
+[node name="Panel" type="Panel" parent="playergroupdetails"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -630.0
+margin_top = 40.0
+margin_right = -30.0
+margin_bottom = -80.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/panel = SubResource( 18 )
+
+[node name="itemdescript" type="RichTextLabel" parent="playergroupdetails/Panel"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -315.0
+margin_top = 40.0
+margin_right = -40.0
+margin_bottom = -150.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+bbcode_enabled = true
+
+[node name="usebutton" type="Button" parent="playergroupdetails/Panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -268.0
+margin_top = -120.0
+margin_right = -90.0
+margin_bottom = -81.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Use"
+
+[node name="discardbutton" type="Button" parent="playergroupdetails/Panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -268.0
+margin_top = -70.0
+margin_right = -90.0
+margin_bottom = -31.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Discard"
+
+[node name="TabContainer" type="TabContainer" parent="playergroupdetails/Panel"]
+editor/display_folded = true
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = -24.0
+margin_right = 240.0
+margin_bottom = -7.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="Items" type="ScrollContainer" parent="playergroupdetails/Panel/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 40.0
+margin_right = -10.0
+margin_bottom = -11.0
+rect_min_size = Vector2( 215, 0 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
+scroll_vertical_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="playergroupdetails/Panel/TabContainer/Items"]
+margin_right = 215.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 215, 0 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_constants/separation = 0
+
+[node name="Button" type="Button" parent="playergroupdetails/Panel/TabContainer/Items/VBoxContainer"]
+visible = false
+margin_right = 215.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 215, 40 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/hover = SubResource( 19 )
+custom_styles/pressed = SubResource( 20 )
+custom_styles/focus = SubResource( 21 )
+custom_styles/disabled = SubResource( 22 )
+custom_styles/normal = SubResource( 23 )
+toggle_mode = true
+
+[node name="icon" type="TextureRect" parent="playergroupdetails/Panel/TabContainer/Items/VBoxContainer/Button"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -175.0
+rect_min_size = Vector2( 40, 40 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+expand = true
+stretch_mode = 5
+
+[node name="amount" type="Label" parent="playergroupdetails/Panel/TabContainer/Items/VBoxContainer/Button"]
+margin_left = 38.0
+margin_top = 19.0
+margin_right = 53.0
+margin_bottom = 39.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+
+[node name="name" type="Label" parent="playergroupdetails/Panel/TabContainer/Items/VBoxContainer/Button"]
+margin_left = 75.0
+margin_top = 11.0
+margin_right = 205.0
+margin_bottom = 31.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+clip_text = true
+
+[node name="Spells" type="ScrollContainer" parent="playergroupdetails/Panel/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 40.0
+margin_right = -10.0
+margin_bottom = -11.0
+rect_min_size = Vector2( 215, 0 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
+scroll_vertical_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="playergroupdetails/Panel/TabContainer/Spells"]
+margin_right = 215.0
+rect_min_size = Vector2( 215, 0 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_constants/separation = 0
+
+[node name="Button" type="Button" parent="playergroupdetails/Panel/TabContainer/Spells/VBoxContainer"]
+visible = false
+margin_right = 215.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 215, 40 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/hover = SubResource( 19 )
+custom_styles/pressed = SubResource( 20 )
+custom_styles/focus = SubResource( 21 )
+custom_styles/disabled = SubResource( 22 )
+custom_styles/normal = SubResource( 23 )
+toggle_mode = true
+
+[node name="name" type="Label" parent="playergroupdetails/Panel/TabContainer/Spells/VBoxContainer/Button"]
+margin_left = 15.0
+margin_top = 10.0
+margin_right = 155.0
+margin_bottom = 30.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "SpellName"
+clip_text = true
+
+[node name="cost" type="Label" parent="playergroupdetails/Panel/TabContainer/Spells/VBoxContainer/Button"]
+margin_left = 160.0
+margin_top = 11.0
+margin_right = 200.0
+margin_bottom = 31.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "1"
+align = 2
+
+[node name="closegroup" type="Button" parent="playergroupdetails"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -750.0
+margin_top = -69.0
+margin_right = -575.0
+margin_bottom = -27.0
+rect_min_size = Vector2( 70, 30 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Close"
+
+[node name="capturedslave" type="Popup" parent="playergroupdetails"]
+editor/display_folded = true
+margin_left = 225.0
+margin_top = 7.0
+margin_right = 734.0
+margin_bottom = 490.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="playergroupdetails/capturedslave"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 7 )
+expand = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="playergroupdetails/capturedslave"]
+margin_left = 19.0
+margin_top = 30.0
+margin_right = 489.0
+margin_bottom = 378.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+bbcode_enabled = true
+
+[node name="capturedclose" type="Button" parent="playergroupdetails/capturedslave"]
+margin_left = 168.0
+margin_top = 428.0
+margin_right = 345.0
+margin_bottom = 467.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Close"
+
+[node name="capturedfree" type="Button" parent="playergroupdetails/capturedslave"]
+visible = false
+margin_left = 191.0
+margin_top = 388.0
+margin_right = 326.0
+margin_bottom = 427.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Set Free"
+
+[node name="capturedmindread" type="Button" parent="playergroupdetails/capturedslave"]
+visible = false
+margin_left = 351.0
+margin_top = 388.0
+margin_right = 486.0
+margin_bottom = 427.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Cast Mindread"
+
+[node name="capturedteleport" type="Button" parent="playergroupdetails/capturedslave"]
+visible = false
+margin_left = 24.0
+margin_top = 388.0
+margin_right = 159.0
+margin_bottom = 427.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Teleport"
+
+[node name="TextureProgress" type="ProgressBar" parent="playergroupdetails"]
+editor/display_folded = true
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -530.0
+margin_top = -66.0
+margin_right = -130.0
+margin_bottom = -38.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/fg = SubResource( 24 )
+custom_styles/bg = SubResource( 25 )
+step = 1.0
+value = 40.0
+percent_visible = false
+
+[node name="Label" type="Label" parent="playergroupdetails/TextureProgress"]
+margin_left = 120.0
+margin_top = 29.0
+margin_right = 277.0
+margin_bottom = 49.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+align = 1
+
+[node name="return" type="Button" parent="playergroupdetails"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 28.0
+margin_top = -69.0
+margin_right = 191.0
+margin_bottom = -27.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Return to Mansion"
+
+[node name="quicksell" type="Button" parent="playergroupdetails"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 211.0
+margin_top = -69.0
+margin_right = 370.0
+margin_bottom = -27.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Quicksell Captives"
+
+[node name="TabContainer" type="TabContainer" parent="playergroupdetails"]
+margin_left = 30.0
+margin_top = 16.0
+margin_right = 600.0
+margin_bottom = 366.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="Party" type="ScrollContainer" parent="playergroupdetails/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 40.0
+margin_right = -10.0
+margin_bottom = -10.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="HBoxContainer" type="VBoxContainer" parent="playergroupdetails/TabContainer/Party"]
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="Button" type="Button" parent="playergroupdetails/TabContainer/Party/HBoxContainer"]
+visible = false
+margin_right = 400.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 400, 50 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+toggle_mode = true
+clip_text = true
+
+[node name="Captured Slaves" type="ScrollContainer" parent="playergroupdetails/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 40.0
+margin_right = -10.0
+margin_bottom = -10.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="HBoxContainer" type="VBoxContainer" parent="playergroupdetails/TabContainer/Captured Slaves"]
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="Button" type="Button" parent="playergroupdetails/TabContainer/Captured Slaves/HBoxContainer"]
+visible = false
+margin_right = 400.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 400, 50 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+toggle_mode = true
+clip_text = true
+
+[node name="setfree" type="TextureButton" parent="playergroupdetails/TabContainer/Captured Slaves/HBoxContainer/Button"]
+margin_left = 460.0
+margin_top = 3.0
+margin_right = 505.0
+margin_bottom = 48.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 46 )
+expand = true
+
+[node name="inspect" type="TextureButton" parent="playergroupdetails/TabContainer/Captured Slaves/HBoxContainer/Button"]
+margin_left = 410.0
+margin_top = 3.0
+margin_right = 455.0
+margin_bottom = 48.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 47 )
+expand = true
+
+[node name="minimappanel" type="Panel" parent="."]
+editor/display_folded = true
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 952.0
+margin_top = 60.0
+margin_right = 1322.0
+margin_bottom = 420.0
+custom_styles/panel = SubResource( 26 )
+
+[node name="map" type="ScrollContainer" parent="minimappanel"]
+show_behind_parent = true
+margin_left = 19.0
+margin_top = 20.0
+margin_right = 350.0
+margin_bottom = 340.0
+mouse_filter = 2
+
+[node name="Control" parent="minimappanel/map" instance=ExtResource( 49 )]
+margin_right = 0.0
+margin_bottom = 0.0
+mouse_filter = 2
+
+[node name="locationname" type="Label" parent="."]
+editor/display_folded = true
+margin_left = 368.0
+margin_top = 69.0
+margin_right = 1030.0
+margin_bottom = 149.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = SubResource( 27 )
+custom_colors/font_color = Color( 0.886275, 0.960938, 0.457947, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "Test"
+align = 1
+valign = 1
+
+[node name="TextureRect" type="TextureRect" parent="locationname"]
+show_behind_parent = true
+margin_left = -12.0
+margin_top = -2.0
+margin_right = 692.0
+margin_bottom = 80.0
+texture = ExtResource( 51 )
+expand = true
+
+[node name="slavebuypanel" type="Control" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -79.0
+margin_top = -3.0
+margin_right = -1089.0
+margin_bottom = -536.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="slavebuypanel" type="Panel" parent="slavebuypanel"]
+anchor_bottom = 1.0
+margin_left = 81.0
+margin_top = 89.0
+margin_right = 372.0
+margin_bottom = 443.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="slavebuypanel/slavebuypanel"]
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 11.0
+margin_right = 286.0
+margin_bottom = 10.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="slavebuypanel/slavebuypanel/ScrollContainer"]
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="slavebutton" type="Button" parent="slavebuypanel/slavebuypanel/ScrollContainer/VBoxContainer"]
+visible = false
+margin_right = 265.0
+margin_bottom = 75.0
+rect_min_size = Vector2( 265, 75 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource( 52 )
+toggle_mode = true
+
+[node name="name" type="Label" parent="slavebuypanel/slavebuypanel/ScrollContainer/VBoxContainer/slavebutton"]
+margin_left = 43.0
+margin_top = 9.0
+margin_right = 157.0
+margin_bottom = 31.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Maria Human"
+
+[node name="age" type="Label" parent="slavebuypanel/slavebuypanel/ScrollContainer/VBoxContainer/slavebutton"]
+margin_left = 44.0
+margin_top = 41.0
+margin_right = 85.0
+margin_bottom = 63.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Teen"
+
+[node name="price" type="Label" parent="slavebuypanel/slavebuypanel/ScrollContainer/VBoxContainer/slavebutton"]
+margin_left = 178.0
+margin_top = 52.0
+margin_right = 250.0
+margin_bottom = 72.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "150 gold"
+
+[node name="sex" type="TextureRect" parent="slavebuypanel/slavebuypanel/ScrollContainer/VBoxContainer/slavebutton"]
+margin_left = 14.0
+margin_top = 36.0
+margin_right = 40.0
+margin_bottom = 61.0
+texture = ExtResource( 53 )
+expand = true
+stretch_mode = 6
+
+[node name="grade" type="TextureRect" parent="slavebuypanel/slavebuypanel/ScrollContainer/VBoxContainer/slavebutton"]
+margin_left = 12.0
+margin_top = 5.0
+margin_right = 40.0
+margin_bottom = 31.0
+texture = ExtResource( 54 )
+expand = true
+stretch_mode = 6
+
+[node name="purchasebutton" type="Button" parent="slavebuypanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 119.0
+margin_top = 470.0
+margin_right = 275.0
+margin_bottom = 512.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Purchase"
+
+[node name="mindreadbutton" type="Button" parent="slavebuypanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 319.0
+margin_top = 469.0
+margin_right = 490.0
+margin_bottom = 511.0
+hint_tooltip = "Allows to see more information about the slaves. 
+Costs 5 mana"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+disabled = true
+text = "Use Mind Read (5)"
+
+[node name="slavelistcancel" type="Button" parent="slavebuypanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 518.0
+margin_top = 470.0
+margin_right = 674.0
+margin_bottom = 512.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Cancel"
+
+[node name="Label" type="Label" parent="slavebuypanel"]
+margin_left = 96.0
+margin_top = 70.0
+margin_right = 216.0
+margin_bottom = 95.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+text = "Available slaves"
+
+[node name="statspanel" parent="slavebuypanel" instance=ExtResource( 55 )]
+editor/display_folded = true
+margin_left = 623.0
+margin_top = 60.0
+margin_right = 1071.0
+margin_bottom = 440.0
+
+[node name="Label" parent="slavebuypanel/statspanel" index="0"]
+margin_left = -427.0
+margin_top = 207.0
+margin_right = -307.0
+margin_bottom = 227.0
+
+[node name="sstr" parent="slavebuypanel/statspanel" index="1"]
+editor/display_folded = true
+margin_left = -413.0
+margin_top = 233.0
+margin_right = -388.0
+margin_bottom = 258.0
+
+[node name="Label" parent="slavebuypanel/statspanel/sstr" index="0"]
+margin_right = 140.0
+margin_bottom = 24.0
+
+[node name="Control" parent="slavebuypanel/statspanel/sstr" index="1"]
+margin_right = 105.0
+
+[node name="Button" parent="slavebuypanel/statspanel/sstr" index="2"]
+visible = false
+
+[node name="sagi" parent="slavebuypanel/statspanel" index="2"]
+editor/display_folded = true
+margin_left = -413.0
+margin_top = 262.0
+margin_right = -388.0
+margin_bottom = 287.0
+
+[node name="Label" parent="slavebuypanel/statspanel/sagi" index="0"]
+margin_right = 138.0
+margin_bottom = 24.0
+
+[node name="Control" parent="slavebuypanel/statspanel/sagi" index="1"]
+margin_right = 111.0
+
+[node name="Button" parent="slavebuypanel/statspanel/sagi" index="2"]
+visible = false
+
+[node name="smaf" parent="slavebuypanel/statspanel" index="3"]
+margin_left = -413.0
+margin_top = 291.0
+margin_right = -388.0
+margin_bottom = 316.0
+
+[node name="Label" parent="slavebuypanel/statspanel/smaf" index="0"]
+margin_right = 139.0
+margin_bottom = 24.0
+
+[node name="Control" parent="slavebuypanel/statspanel/smaf" index="1"]
+margin_right = 106.0
+
+[node name="Button" parent="slavebuypanel/statspanel/smaf" index="2"]
+visible = false
+
+[node name="send" parent="slavebuypanel/statspanel" index="4"]
+editor/display_folded = true
+margin_left = -413.0
+margin_top = 320.0
+margin_right = -388.0
+margin_bottom = 345.0
+
+[node name="Label" parent="slavebuypanel/statspanel/send" index="0"]
+margin_right = 140.0
+margin_bottom = 24.0
+
+[node name="Control" parent="slavebuypanel/statspanel/send" index="1"]
+margin_right = 109.0
+
+[node name="Button" parent="slavebuypanel/statspanel/send" index="2"]
+visible = false
+
+[node name="Label1" parent="slavebuypanel/statspanel" index="5"]
+margin_left = -220.0
+margin_top = 207.0
+margin_right = -110.0
+margin_bottom = 227.0
+
+[node name="cour" parent="slavebuypanel/statspanel" index="6"]
+margin_left = -213.0
+margin_top = 233.0
+margin_right = -188.0
+margin_bottom = 258.0
+
+[node name="Label" parent="slavebuypanel/statspanel/cour" index="0"]
+margin_right = 134.0
+margin_bottom = 27.0
+
+[node name="Control" parent="slavebuypanel/statspanel/cour" index="1"]
+margin_right = 106.0
+
+[node name="conf" parent="slavebuypanel/statspanel" index="7"]
+margin_left = -213.0
+margin_top = 262.0
+margin_right = -188.0
+margin_bottom = 287.0
+
+[node name="Label" parent="slavebuypanel/statspanel/conf" index="0"]
+margin_right = 138.0
+margin_bottom = 28.0
+
+[node name="Control" parent="slavebuypanel/statspanel/conf" index="1"]
+margin_right = 101.0
+
+[node name="wit" parent="slavebuypanel/statspanel" index="8"]
+margin_left = -213.0
+margin_top = 291.0
+margin_right = -188.0
+margin_bottom = 316.0
+
+[node name="Label" parent="slavebuypanel/statspanel/wit" index="0"]
+margin_right = 117.0
+margin_bottom = 24.0
+
+[node name="Control" parent="slavebuypanel/statspanel/wit" index="1"]
+margin_right = 104.0
+
+[node name="charm" parent="slavebuypanel/statspanel" index="9"]
+margin_left = -213.0
+margin_top = 320.0
+margin_right = -188.0
+margin_bottom = 345.0
+
+[node name="Label" parent="slavebuypanel/statspanel/charm" index="0"]
+margin_right = 117.0
+margin_bottom = 27.0
+
+[node name="Control" parent="slavebuypanel/statspanel/charm" index="1"]
+margin_right = 102.0
+
+[node name="leveltext" parent="slavebuypanel/statspanel" index="10"]
+margin_top = 357.0
+margin_bottom = 464.0
+mouse_filter = 2
+
+[node name="levelreqs" parent="slavebuypanel/statspanel" index="11"]
+visible = false
+
+[node name="traittext" parent="slavebuypanel/statspanel" index="12"]
+margin_left = 19.0
+margin_top = 403.0
+margin_right = -22.0
+margin_bottom = 510.0
+
+[node name="levelprogress" parent="slavebuypanel/statspanel" index="13"]
+visible = false
+
+[node name="portrait" type="TextureRect" parent="slavebuypanel/statspanel"]
+margin_left = 16.0
+margin_top = 15.0
+margin_right = 166.0
+margin_bottom = 165.0
+expand = true
+stretch_mode = 6
+
+[node name="TextureRect" type="TextureRect" parent="slavebuypanel/statspanel/portrait"]
+margin_right = 150.0
+margin_bottom = 150.0
+rect_min_size = Vector2( 150, 150 )
+texture = ExtResource( 56 )
+expand = true
+stretch_mode = 7
+
+[node name="slavesellpanel" type="Control" parent="."]
+editor/display_folded = true
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 92.0
+margin_right = -782.0
+margin_bottom = -105.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="slavesellpanel"]
+anchor_bottom = 1.0
+margin_left = 3.0
+margin_top = 2.0
+margin_right = 283.0
+margin_bottom = 4.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="slavesellpanel/ScrollContainer"]
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="slavebutton" type="Button" parent="slavesellpanel/ScrollContainer/VBoxContainer"]
+visible = false
+margin_right = 260.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 260, 50 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource( 52 )
+toggle_mode = true
+
+[node name="name" type="Label" parent="slavesellpanel/ScrollContainer/VBoxContainer/slavebutton"]
+margin_left = 59.0
+margin_top = 8.0
+margin_right = 173.0
+margin_bottom = 30.0
+mouse_filter = 1
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Maria Human"
+
+[node name="price" type="Label" parent="slavesellpanel/ScrollContainer/VBoxContainer/slavebutton"]
+margin_left = 144.0
+margin_top = 27.0
+margin_right = 216.0
+margin_bottom = 47.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0.845959, 0.90625, 0.134521, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "150 gold"
+
+[node name="grade" type="TextureRect" parent="slavesellpanel/ScrollContainer/VBoxContainer/slavebutton"]
+margin_left = 11.0
+margin_top = 6.0
+margin_right = 28.0
+margin_bottom = 29.0
+texture = ExtResource( 54 )
+expand = true
+stretch_mode = 6
+
+[node name="sex" type="TextureRect" parent="slavesellpanel/ScrollContainer/VBoxContainer/slavebutton"]
+margin_left = 31.0
+margin_top = 6.0
+margin_right = 54.0
+margin_bottom = 29.0
+texture = ExtResource( 53 )
+expand = true
+stretch_mode = 6
+
+[node name="slavesellbutton" type="Button" parent="slavesellpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -125.0
+margin_top = 34.0
+margin_right = 29.0
+margin_bottom = 88.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Sell slave"
+
+[node name="slavesellcancel" type="Button" parent="slavesellpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 138.0
+margin_top = 34.0
+margin_right = 292.0
+margin_bottom = 88.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Cancel"
+
+[node name="Label" type="Label" parent="slavesellpanel"]
+margin_left = 17.0
+margin_top = -31.0
+margin_right = 137.0
+margin_bottom = -6.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+text = "Available slaves"
+
+[node name="slaveguildquestpanel" type="Control" parent="."]
+editor/display_folded = true
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 9.0
+margin_top = 98.0
+margin_right = -781.0
+margin_bottom = -106.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="slaveguildquestpanel"]
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 2.0
+margin_right = 291.0
+margin_bottom = 4.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="slaveguildquestpanel/ScrollContainer"]
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="questbutton" type="Button" parent="slaveguildquestpanel/ScrollContainer/VBoxContainer"]
+visible = false
+margin_right = 275.0
+margin_bottom = 75.0
+rect_min_size = Vector2( 275, 75 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 52 )
+toggle_mode = true
+
+[node name="name" type="RichTextLabel" parent="slaveguildquestpanel/ScrollContainer/VBoxContainer/questbutton"]
+margin_left = 15.0
+margin_top = 4.0
+margin_right = 272.0
+margin_bottom = 75.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/normal_font = ExtResource( 6 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+bbcode_enabled = true
+bbcode_text = "Local aristocrat wants an obedient servant for his house."
+text = "Local aristocrat wants an obedient servant for his house."
+
+[node name="reward" type="Label" parent="slaveguildquestpanel/ScrollContainer/VBoxContainer/questbutton"]
+margin_left = 178.0
+margin_top = 54.0
+margin_right = 260.0
+margin_bottom = 74.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+text = "150 gold"
+
+[node name="difficulty" type="Label" parent="slaveguildquestpanel/ScrollContainer/VBoxContainer/questbutton"]
+margin_left = 10.0
+margin_top = 55.0
+margin_right = 92.0
+margin_bottom = 75.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "1"
+align = 1
+
+[node name="questbrowse" type="Button" parent="slaveguildquestpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -332.0
+margin_top = 37.0
+margin_right = -179.0
+margin_bottom = 91.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Browse slaves"
+
+[node name="questaccept" type="Button" parent="slaveguildquestpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -146.0
+margin_top = 37.0
+margin_right = 7.0
+margin_bottom = 91.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Accept"
+
+[node name="questcancel" type="Button" parent="slaveguildquestpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 40.0
+margin_top = 37.0
+margin_right = 193.0
+margin_bottom = 91.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Forfeit"
+
+[node name="questhide" type="Button" parent="slaveguildquestpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 226.0
+margin_top = 37.0
+margin_right = 379.0
+margin_bottom = 91.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Leave"
+
+[node name="Label" type="Label" parent="slaveguildquestpanel"]
+margin_left = 17.0
+margin_top = -31.0
+margin_right = 141.0
+margin_bottom = 10.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+text = "Available quests"
+
+[node name="slaveservicepanel" type="Control" parent="."]
+editor/display_folded = true
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 9.0
+margin_top = 96.0
+margin_right = -784.0
+margin_bottom = -100.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="Control" type="Control" parent="slaveservicepanel"]
+visible = false
+margin_left = -27.0
+margin_top = -113.0
+margin_right = 1394.0
+margin_bottom = 690.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="slaveservicepanel"]
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 2.0
+margin_right = 284.0
+margin_bottom = 12.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="slaveservicepanel/ScrollContainer"]
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="Button" type="Button" parent="slaveservicepanel/ScrollContainer/VBoxContainer"]
+visible = false
+margin_right = 280.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 280, 30 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource( 52 )
+custom_fonts/font = ExtResource( 6 )
+toggle_mode = true
+text = "Hair Cut"
+align = 0
+
+[node name="price" type="Label" parent="slaveservicepanel/ScrollContainer/VBoxContainer/Button"]
+margin_left = 217.0
+margin_top = 6.0
+margin_right = 265.0
+margin_bottom = 24.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "100"
+align = 2
+
+[node name="speccontainer" type="ScrollContainer" parent="slaveservicepanel"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = 312.0
+margin_top = -32.0
+margin_right = 654.0
+margin_bottom = 280.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="slaveservicepanel/speccontainer"]
+size_flags_horizontal = 0
+size_flags_vertical = 0
+custom_constants/separation = -2
+
+[node name="Button" type="Button" parent="slaveservicepanel/speccontainer/VBoxContainer" groups=[
+"specsbutton",
+]]
+visible = false
+margin_right = 200.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 200, 30 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 52 )
+custom_fonts/font = ExtResource( 6 )
+toggle_mode = true
+text = "Hair Cut"
+align = 0
+
+[node name="price" type="Label" parent="slaveservicepanel/speccontainer/VBoxContainer/Button"]
+visible = false
+margin_left = 217.0
+margin_top = 6.0
+margin_right = 265.0
+margin_bottom = 24.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "100"
+align = 2
+
+[node name="serviceconfirm" type="Button" parent="slaveservicepanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 37.0
+margin_top = 30.0
+margin_right = 191.0
+margin_bottom = 84.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Confirm"
+
+[node name="selectslavebutton" type="Button" parent="slaveservicepanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -185.0
+margin_top = 30.0
+margin_right = -31.0
+margin_bottom = 84.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Select Slave"
+
+[node name="slaveservicecancel" type="Button" parent="slaveservicepanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 263.0
+margin_top = 30.0
+margin_right = 417.0
+margin_bottom = 84.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Cancel"
+
+[node name="Label" type="Label" parent="slaveservicepanel"]
+margin_left = 38.0
+margin_top = -30.0
+margin_right = 166.0
+margin_bottom = -5.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+text = "Available actions"
+
+[node name="hairlengthbutton" type="OptionButton" parent="slaveservicepanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 29.0
+margin_top = -38.0
+margin_right = 158.0
+margin_bottom = 1.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="mageorderservices" type="Panel" parent="."]
+editor/display_folded = true
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -976.0
+margin_top = -627.0
+margin_right = -388.0
+margin_bottom = -176.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="Control" type="Control" parent="mageorderservices"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -394.0
+margin_top = -151.0
+margin_right = 436.0
+margin_bottom = 168.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="Label" type="Label" parent="mageorderservices"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -388.0
+margin_top = -442.0
+margin_right = -246.0
+margin_bottom = -419.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = SubResource( 28 )
+text = "Available spells"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="mageorderservices"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -563.0
+margin_top = -410.0
+margin_right = -360.0
+margin_bottom = -82.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="spelllist" type="VBoxContainer" parent="mageorderservices/ScrollContainer"]
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_constants/separation = 15
+
+[node name="spellbutton" type="Button" parent="mageorderservices/ScrollContainer/spelllist"]
+visible = false
+margin_right = 200.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 200, 40 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource( 52 )
+custom_fonts/font = ExtResource( 6 )
+toggle_mode = true
+text = "Mind Read- learned"
+
+[node name="learnspellbutton" type="Button" parent="mageorderservices"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -439.0
+margin_top = -76.0
+margin_right = -297.0
+margin_bottom = -14.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Purchase spell"
+
+[node name="spelldescription" type="RichTextLabel" parent="mageorderservices"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -308.0
+margin_top = -399.0
+margin_right = -32.0
+margin_bottom = -110.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/normal_font = ExtResource( 6 )
+bbcode_enabled = true
+
+[node name="close" type="Button" parent="mageorderservices"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -276.0
+margin_top = -76.0
+margin_right = -134.0
+margin_bottom = -14.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Close"
+
+[node name="shoppanel" type="Control" parent="." groups=[
+"blockmaininput",
+]]
+editor/display_folded = true
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1.0
+margin_right = -2.0
+margin_bottom = -2.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="Panel" type="Panel" parent="shoppanel"]
+margin_left = 17.0
+margin_top = 63.0
+margin_right = 240.0
+margin_bottom = 346.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 57 )
+
+[node name="buybutton" type="Button" parent="shoppanel/Panel"]
+margin_left = 22.0
+margin_top = 41.0
+margin_right = 205.0
+margin_bottom = 81.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+toggle_mode = true
+text = "Trade"
+
+[node name="exchange" type="Button" parent="shoppanel/Panel"]
+margin_left = 22.0
+margin_top = 91.0
+margin_right = 205.0
+margin_bottom = 131.0
+hint_tooltip = "Exchage your enchanted gear for a random one"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+toggle_mode = true
+text = "Exchange"
+
+[node name="closebutton" type="Button" parent="shoppanel/Panel"]
+margin_left = 37.0
+margin_top = 201.0
+margin_right = 194.0
+margin_bottom = 236.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Close"
+
+[node name="title" type="Label" parent="shoppanel/Panel"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -191.0
+margin_top = 5.0
+margin_right = -31.0
+margin_bottom = 48.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Shopname"
+align = 1
+valign = 1
+
+[node name="inventory" type="TextureRect" parent="shoppanel"]
+editor/display_folded = true
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 1 )
+texture = ExtResource( 58 )
+expand = true
+script = ExtResource( 59 )
+
+[node name="mode" type="TextureButton" parent="shoppanel/inventory"]
+margin_left = 16.0
+margin_top = 29.0
+margin_right = 112.0
+margin_bottom = 78.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 60 )
+expand = true
+
+[node name="everything" type="TextureButton" parent="shoppanel/inventory" groups=[
+"invcategory",
+]]
+margin_left = 154.0
+margin_top = 30.0
+margin_right = 211.0
+margin_bottom = 78.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 57 )
+toggle_mode = true
+texture_normal = ExtResource( 61 )
+texture_pressed = ExtResource( 62 )
+expand = true
+
+[node name="potion" type="TextureButton" parent="shoppanel/inventory" groups=[
+"invcategory",
+]]
+margin_left = 274.0
+margin_top = 30.0
+margin_right = 331.0
+margin_bottom = 78.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 57 )
+toggle_mode = true
+texture_normal = ExtResource( 63 )
+texture_pressed = ExtResource( 64 )
+expand = true
+
+[node name="supply" type="TextureButton" parent="shoppanel/inventory" groups=[
+"invcategory",
+]]
+margin_left = 214.0
+margin_top = 30.0
+margin_right = 271.0
+margin_bottom = 78.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 57 )
+toggle_mode = true
+texture_normal = ExtResource( 65 )
+texture_pressed = ExtResource( 66 )
+expand = true
+
+[node name="ingredient" type="TextureButton" parent="shoppanel/inventory" groups=[
+"invcategory",
+]]
+margin_left = 334.0
+margin_top = 30.0
+margin_right = 391.0
+margin_bottom = 78.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 57 )
+toggle_mode = true
+texture_normal = ExtResource( 67 )
+texture_pressed = ExtResource( 68 )
+expand = true
+
+[node name="gear" type="TextureButton" parent="shoppanel/inventory" groups=[
+"invcategory",
+]]
+margin_left = 394.0
+margin_top = 30.0
+margin_right = 451.0
+margin_bottom = 78.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 57 )
+toggle_mode = true
+texture_normal = ExtResource( 69 )
+texture_pressed = ExtResource( 70 )
+expand = true
+
+[node name="merchant" type="TextureRect" parent="shoppanel/inventory"]
+margin_left = 748.0
+margin_top = 35.0
+margin_right = 1551.0
+margin_bottom = 765.0
+mouse_filter = 2
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="ScrollContainer" type="ScrollContainer" parent="shoppanel/inventory"]
+editor/display_folded = true
+anchor_bottom = 1.0
+margin_left = 13.0
+margin_top = 96.0
+margin_right = 481.0
+margin_bottom = -100.0
+mouse_filter = 1
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="GridContainer" type="VBoxContainer" parent="shoppanel/inventory/ScrollContainer"]
+margin_right = 400.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_min_size = Vector2( 400, 0 )
+mouse_filter = 0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_constants/separation = -2
+
+[node name="Button" type="TextureRect" parent="shoppanel/inventory/ScrollContainer/GridContainer"]
+visible = false
+margin_right = 430.0
+margin_bottom = 85.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_min_size = Vector2( 430, 85 )
+mouse_filter = 0
+size_flags_vertical = 0
+texture = ExtResource( 71 )
+expand = true
+
+[node name="icon" type="TextureRect" parent="shoppanel/inventory/ScrollContainer/GridContainer/Button"]
+margin_left = 6.0
+margin_top = 7.0
+margin_right = 80.0
+margin_bottom = 79.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 72 )
+expand = true
+stretch_mode = 6
+
+[node name="number" type="Label" parent="shoppanel/inventory/ScrollContainer/GridContainer/Button"]
+margin_left = 55.0
+margin_top = 59.0
+margin_right = 78.0
+margin_bottom = 79.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "20"
+align = 2
+
+[node name="Label" type="Label" parent="shoppanel/inventory/ScrollContainer/GridContainer/Button"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 79.0
+margin_top = 3.0
+margin_right = -12.0
+margin_bottom = -48.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Itemname"
+valign = 1
+autowrap = true
+clip_text = true
+
+[node name="info" type="TextureButton" parent="shoppanel/inventory/ScrollContainer/GridContainer/Button"]
+margin_left = 83.0
+margin_top = 43.0
+margin_right = 119.0
+margin_bottom = 79.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Inspect"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 73 )
+texture_pressed = ExtResource( 74 )
+expand = true
+
+[node name="sell" type="TextureButton" parent="shoppanel/inventory/ScrollContainer/GridContainer/Button"]
+margin_left = 122.0
+margin_top = 43.0
+margin_right = 158.0
+margin_bottom = 79.0
+hint_tooltip = "Sell"
+texture_normal = ExtResource( 75 )
+texture_pressed = ExtResource( 76 )
+texture_hover = ExtResource( 76 )
+expand = true
+
+[node name="price" type="Label" parent="shoppanel/inventory/ScrollContainer/GridContainer/Button"]
+margin_left = 375.0
+margin_top = 29.0
+margin_right = 424.0
+margin_bottom = 58.0
+custom_fonts/font = SubResource( 29 )
+text = "100"
+
+[node name="TextureRect2" type="TextureRect" parent="shoppanel/inventory/ScrollContainer/GridContainer/Button"]
+margin_left = 322.0
+margin_top = 21.0
+margin_right = 367.0
+margin_bottom = 66.0
+hint_tooltip = "Selling Price"
+texture = ExtResource( 77 )
+expand = true
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="shoppanel/inventory"]
+editor/display_folded = true
+anchor_bottom = 1.0
+margin_left = 485.0
+margin_top = 26.0
+margin_right = 955.0
+margin_bottom = -59.0
+mouse_filter = 1
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="GridContainer" type="VBoxContainer" parent="shoppanel/inventory/ScrollContainer2"]
+margin_right = 400.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_min_size = Vector2( 400, 0 )
+mouse_filter = 0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_constants/separation = -2
+
+[node name="Button" type="TextureRect" parent="shoppanel/inventory/ScrollContainer2/GridContainer"]
+visible = false
+margin_right = 430.0
+margin_bottom = 85.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_min_size = Vector2( 430, 85 )
+mouse_filter = 0
+size_flags_vertical = 0
+texture = ExtResource( 71 )
+expand = true
+
+[node name="icon" type="TextureRect" parent="shoppanel/inventory/ScrollContainer2/GridContainer/Button"]
+margin_left = 6.0
+margin_top = 7.0
+margin_right = 80.0
+margin_bottom = 79.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 72 )
+expand = true
+stretch_mode = 6
+
+[node name="number" type="Label" parent="shoppanel/inventory/ScrollContainer2/GridContainer/Button"]
+visible = false
+margin_left = 55.0
+margin_top = 59.0
+margin_right = 78.0
+margin_bottom = 79.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "20"
+align = 2
+
+[node name="Label" type="Label" parent="shoppanel/inventory/ScrollContainer2/GridContainer/Button"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 79.0
+margin_top = 3.0
+margin_right = -12.0
+margin_bottom = -48.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Itemname"
+valign = 1
+autowrap = true
+clip_text = true
+
+[node name="info" type="TextureButton" parent="shoppanel/inventory/ScrollContainer2/GridContainer/Button"]
+margin_left = 83.0
+margin_top = 43.0
+margin_right = 119.0
+margin_bottom = 79.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Inspect"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 73 )
+texture_pressed = ExtResource( 74 )
+expand = true
+
+[node name="price" type="Label" parent="shoppanel/inventory/ScrollContainer2/GridContainer/Button"]
+margin_left = 363.0
+margin_top = 29.0
+margin_right = 412.0
+margin_bottom = 58.0
+custom_fonts/font = SubResource( 29 )
+text = "100"
+
+[node name="TextureRect" type="TextureRect" parent="shoppanel/inventory/ScrollContainer2/GridContainer/Button"]
+margin_left = 310.0
+margin_top = 21.0
+margin_right = 355.0
+margin_bottom = 66.0
+hint_tooltip = "Price"
+texture = ExtResource( 77 )
+expand = true
+
+[node name="buy" type="TextureButton" parent="shoppanel/inventory/ScrollContainer2/GridContainer/Button"]
+margin_left = 122.0
+margin_top = 43.0
+margin_right = 158.0
+margin_bottom = 79.0
+hint_tooltip = "Buy"
+texture_normal = ExtResource( 75 )
+texture_pressed = ExtResource( 76 )
+texture_hover = ExtResource( 76 )
+expand = true
+
+[node name="TextureFrame 3" type="TextureRect" parent="shoppanel/inventory"]
+margin_left = 476.0
+margin_top = 19.0
+margin_right = 925.0
+margin_bottom = 707.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 78 )
+expand = true
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Panel" type="Panel" parent="shoppanel/inventory"]
+margin_left = 6.0
+margin_top = 89.0
+margin_right = 452.0
+margin_bottom = 679.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/panel = SubResource( 30 )
+
+[node name="noitems" type="Label" parent="shoppanel/inventory"]
+visible = false
+margin_left = 48.0
+margin_top = 104.0
+margin_right = 312.0
+margin_bottom = 147.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Currently you have no suitable 
+items in possession "
+
+[node name="weightmeter" type="ProgressBar" parent="shoppanel/inventory"]
+editor/display_folded = true
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -1192.0
+margin_top = -44.0
+margin_right = -925.0
+margin_bottom = -19.0
+size_flags_horizontal = 2
+custom_styles/fg = SubResource( 24 )
+custom_styles/bg = SubResource( 25 )
+step = 1.0
+value = 10.0
+percent_visible = false
+
+[node name="Label" type="Label" parent="shoppanel/inventory/weightmeter"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -431.0
+margin_top = -21.0
+margin_right = -273.0
+margin_bottom = -1.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Carry Weight:"
+align = 1
+
+[node name="inventoryclose" type="Button" parent="shoppanel/inventory"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -670.0
+margin_top = -52.0
+margin_right = -438.0
+margin_bottom = -13.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Close"
+
+[node name="iteminfo" type="Popup" parent="shoppanel/inventory"]
+editor/display_folded = true
+margin_left = 187.0
+margin_top = 78.0
+margin_right = 1121.0
+margin_bottom = 424.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="shoppanel/inventory/iteminfo"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 80 )
+expand = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="shoppanel/inventory/iteminfo"]
+margin_left = 364.0
+margin_top = 24.0
+margin_right = 911.0
+margin_bottom = 324.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+bbcode_enabled = true
+
+[node name="TextureFrame" type="TextureRect" parent="shoppanel/inventory/iteminfo"]
+margin_left = 35.0
+margin_top = 23.0
+margin_right = 335.0
+margin_bottom = 323.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+expand = true
+stretch_mode = 6
+
+[node name="gold" type="Label" parent="shoppanel/inventory"]
+margin_left = 521.0
+margin_top = 726.0
+margin_right = 615.0
+margin_bottom = 746.0
+text = "Gold"
+
+[node name="amountselect" type="Popup" parent="shoppanel/inventory"]
+editor/display_folded = true
+margin_left = 518.0
+margin_top = 285.0
+margin_right = 939.0
+margin_bottom = 536.0
+
+[node name="TextureRect" type="TextureRect" parent="shoppanel/inventory/amountselect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 7 )
+expand = true
+
+[node name="confirm" type="Button" parent="shoppanel/inventory/amountselect"]
+margin_left = 29.0
+margin_top = 190.0
+margin_right = 148.0
+margin_bottom = 229.0
+text = "Confirm"
+
+[node name="add5" type="Button" parent="shoppanel/inventory/amountselect"]
+margin_left = 161.0
+margin_top = 136.0
+margin_right = 204.0
+margin_bottom = 175.0
+text = "+5"
+
+[node name="add10" type="Button" parent="shoppanel/inventory/amountselect"]
+margin_left = 211.0
+margin_top = 136.0
+margin_right = 255.0
+margin_bottom = 175.0
+text = "+10"
+
+[node name="addmax" type="Button" parent="shoppanel/inventory/amountselect"]
+margin_left = 262.0
+margin_top = 136.0
+margin_right = 323.0
+margin_bottom = 175.0
+text = "+max"
+
+[node name="cancel" type="Button" parent="shoppanel/inventory/amountselect"]
+margin_left = 260.0
+margin_top = 190.0
+margin_right = 379.0
+margin_bottom = 229.0
+text = "Cancel"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="shoppanel/inventory/amountselect"]
+margin_left = 30.0
+margin_top = 14.0
+margin_right = 394.0
+margin_bottom = 121.0
+bbcode_enabled = true
+bbcode_text = "Select amount"
+text = "Select amount"
+
+[node name="SpinBox" type="SpinBox" parent="shoppanel/inventory/amountselect"]
+margin_left = 74.0
+margin_top = 138.0
+margin_right = 152.0
+margin_bottom = 172.0
+min_value = 1.0
+max_value = 500.0
+value = 1.0
+
+[node name="TextureRect" type="TextureRect" parent="shoppanel/inventory"]
+margin_left = 476.0
+margin_top = 716.0
+margin_right = 516.0
+margin_bottom = 756.0
+texture = ExtResource( 77 )
+expand = true
+
+[node name="TextureFrame 2" type="TextureRect" parent="shoppanel/inventory"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 81 )
+expand = true
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="search" type="LineEdit" parent="shoppanel/inventory"]
+margin_left = 19.0
+margin_top = 685.0
+margin_right = 438.0
+margin_bottom = 719.0
+placeholder_text = "Search"
+
+[node name="exchange" type="Panel" parent="shoppanel"]
+editor/display_folded = true
+visible = false
+margin_left = 239.0
+margin_top = 63.0
+margin_right = 1009.0
+margin_bottom = 563.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="shoppanel/exchange"]
+margin_left = 20.0
+margin_top = 17.0
+margin_right = 290.0
+margin_bottom = 477.0
+scroll_horizontal_enabled = false
+
+[node name="GridContainer" type="GridContainer" parent="shoppanel/exchange/ScrollContainer"]
+columns = 5
+
+[node name="Button" type="TextureButton" parent="shoppanel/exchange/ScrollContainer/GridContainer"]
+visible = false
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+toggle_mode = true
+texture_normal = ExtResource( 43 )
+texture_pressed = ExtResource( 82 )
+expand = true
+stretch_mode = 6
+
+[node name="Icon" type="TextureRect" parent="shoppanel/exchange/ScrollContainer/GridContainer/Button"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 45.0
+margin_bottom = 45.0
+rect_min_size = Vector2( 40, 40 )
+mouse_filter = 2
+texture = ExtResource( 83 )
+expand = true
+stretch_mode = 6
+
+[node name="RichTextLabel" type="RichTextLabel" parent="shoppanel/exchange"]
+margin_left = 350.0
+margin_top = 27.0
+margin_right = 750.0
+margin_bottom = 127.0
+bbcode_text = "Select enchanted gear you wish to exchange. 
+3 items will be exchanged for 1 random item."
+text = "Select enchanted gear you wish to exchange. 
+3 items will be exchanged for 1 random item."
+
+[node name="TradeButton" type="Button" parent="shoppanel/exchange"]
+margin_left = 310.0
+margin_top = 437.0
+margin_right = 440.0
+margin_bottom = 476.0
+text = "Trade"
+
+[node name="sebastiannode" type="Control" parent="."]
+editor/display_folded = true
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -2.0
+margin_top = 5.0
+margin_right = -4.0
+margin_bottom = 14.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="sebastionorder" type="OptionButton" parent="sebastiannode"]
+margin_left = 44.0
+margin_top = 213.0
+margin_right = 227.0
+margin_bottom = 257.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Elf"
+items = [ "Elf", null, false, 0, null, "Dark Elf", null, false, 1, null, "Drow", null, false, 2, null, "Orc", null, false, 3, null, "Beastkin Cat", null, false, 4, null, "Beastkin Wolf", null, false, 5, null, "Beastkin Fox", null, false, 6, null, "Beastkin Bunny", null, false, 7, null, "Beastkin Tanuki", null, false, 8, null, "Halfkin Cat", null, false, 9, null, "Halfkin Wolf", null, false, 10, null, "Halfkin Fox", null, false, 11, null, "Halfkin Tanuki", null, false, 12, null, "Halfkin Bunny", null, false, 13, null, "Fairy", null, false, 14, null, "Dryad", null, false, 15, null, "Demon", null, false, 16, null, "Seraph", null, false, 17, null, "Taurus", null, false, 18, null, "Dragonkin", null, false, 19, null, "Gnome", null, false, 20, null, "Goblin", null, false, 21, null, "Centaur", null, false, 22, null ]
+selected = 0
+
+[node name="sebastianconfirm" type="Button" parent="sebastiannode"]
+margin_left = 44.0
+margin_top = 302.0
+margin_right = 173.0
+margin_bottom = 337.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Confirm"
+
+[node name="sebastiancancel" type="Button" parent="sebastiannode"]
+margin_left = 44.0
+margin_top = 358.0
+margin_right = 173.0
+margin_bottom = 393.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Cancel"
+
+[node name="choseparty" type="Panel" parent="."]
+editor/display_folded = true
+visible = false
+margin_left = 156.0
+margin_top = 93.0
+margin_right = 1173.0
+margin_bottom = 641.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="choseparty"]
+margin_left = 49.0
+margin_top = 178.0
+margin_right = 761.0
+margin_bottom = 495.0
+
+[node name="Button" type="TextureButton" parent="choseparty/HBoxContainer"]
+visible = false
+margin_right = 224.0
+margin_bottom = 317.0
+texture_normal = ExtResource( 84 )
+texture_pressed = ExtResource( 85 )
+texture_hover = ExtResource( 85 )
+texture_disabled = ExtResource( 86 )
+
+[node name="stats" type="TextureRect" parent="choseparty/HBoxContainer/Button"]
+margin_left = 30.0
+margin_top = 62.0
+margin_right = 194.0
+margin_bottom = 146.0
+mouse_filter = 2
+texture = ExtResource( 33 )
+expand = true
+stretch_mode = 6
+
+[node name="sstr" type="Label" parent="choseparty/HBoxContainer/Button/stats"]
+margin_left = 36.0
+margin_top = 16.0
+margin_right = 76.0
+margin_bottom = 36.0
+text = "1"
+
+[node name="smaf" type="Label" parent="choseparty/HBoxContainer/Button/stats"]
+margin_left = 36.0
+margin_top = 47.0
+margin_right = 76.0
+margin_bottom = 67.0
+text = "1"
+
+[node name="send" type="Label" parent="choseparty/HBoxContainer/Button/stats"]
+margin_left = 117.0
+margin_top = 47.0
+margin_right = 157.0
+margin_bottom = 67.0
+text = "1"
+
+[node name="sagi" type="Label" parent="choseparty/HBoxContainer/Button/stats"]
+margin_left = 117.0
+margin_top = 17.0
+margin_right = 157.0
+margin_bottom = 37.0
+text = "1"
+
+[node name="hp" type="TextureProgress" parent="choseparty/HBoxContainer/Button/stats"]
+margin_left = 22.0
+margin_top = 173.0
+margin_right = 144.0
+margin_bottom = 191.0
+mouse_filter = 0
+value = 50.0
+texture_under = ExtResource( 87 )
+texture_progress = ExtResource( 88 )
+
+[node name="en" type="TextureProgress" parent="choseparty/HBoxContainer/Button/stats"]
+margin_left = 22.0
+margin_top = 193.0
+margin_right = 144.0
+margin_bottom = 211.0
+mouse_filter = 0
+value = 50.0
+texture_under = ExtResource( 87 )
+texture_progress = ExtResource( 89 )
+
+[node name="portrait" type="TextureRect" parent="choseparty/HBoxContainer/Button"]
+margin_left = 30.0
+margin_top = 37.0
+margin_right = 195.0
+margin_bottom = 202.0
+rect_min_size = Vector2( 165, 165 )
+mouse_filter = 2
+expand = true
+stretch_mode = 7
+
+[node name="Label" type="Label" parent="choseparty/HBoxContainer/Button"]
+margin_left = 27.0
+margin_top = 207.0
+margin_right = 197.0
+margin_bottom = 227.0
+text = "Slave name"
+align = 1
+
+[node name="RTL" type="RichTextLabel" parent="choseparty"]
+margin_left = 44.0
+margin_top = 57.0
+margin_right = 950.0
+margin_bottom = 193.0
+bbcode_enabled = true
+
+[node name="Label" type="Label" parent="choseparty"]
+margin_left = 452.0
+margin_top = 17.0
+margin_right = 594.0
+margin_bottom = 57.0
+text = "Select Character"
+
+[node name="chosepartyclose" type="Button" parent="choseparty"]
+margin_left = 436.0
+margin_top = 497.0
+margin_right = 566.0
+margin_bottom = 536.0
+text = "Cancel"
+
+[node name="bigmappanel" type="Panel" parent="."]
+editor/display_folded = true
+visible = false
+margin_left = 105.0
+margin_top = 72.0
+margin_right = 1288.0
+margin_bottom = 731.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="bigmappanel"]
+editor/display_folded = true
+margin_left = 15.0
+margin_top = 19.0
+margin_right = 1164.0
+margin_bottom = 640.0
+
+[node name="Control" parent="bigmappanel/ScrollContainer" instance=ExtResource( 49 )]
+margin_right = 0.0
+margin_bottom = 0.0
+
+[node name="mapclose" type="TextureButton" parent="bigmappanel"]
+margin_left = 1164.0
+margin_top = -2.0
+margin_right = 1186.0
+margin_bottom = 20.0
+texture_normal = ExtResource( 31 )
+texture_pressed = ExtResource( 32 )
+texture_hover = ExtResource( 32 )
+
+[connection signal="pressed" from="questlog" to="." method="_on_questlog_pressed"]
+[connection signal="pressed" from="mapbutton" to="." method="_on_mapbutton_pressed"]
+[connection signal="meta_clicked" from="textpanelexplore/outsidetextbox2" to="." method="_on_outsidetextbox_meta_clicked"]
+[connection signal="meta_clicked" from="textpanel/outsidetextbox" to="." method="_on_outsidetextbox_meta_clicked"]
+[connection signal="pressed" from="playergrouppanel/details" to="." method="_on_details_pressed"]
+[connection signal="pressed" from="playergrouppanel/characterinfo/closechar" to="." method="_on_closechar_pressed"]
+[connection signal="mouse_entered" from="playergrouppanel/characterinfo/grade" to="." method="_on_grade_mouse_entered"]
+[connection signal="mouse_exited" from="playergrouppanel/characterinfo/grade" to="." method="_on_grade_mouse_exited"]
+[connection signal="mouse_entered" from="playergrouppanel/characterinfo/spec" to="." method="_on_spec_mouse_entered"]
+[connection signal="mouse_exited" from="playergrouppanel/characterinfo/spec" to="." method="_on_spec_mouse_exited"]
+[connection signal="mouse_entered" from="playergrouppanel/characterinfo/movement" to="." method="_on_movement_mouse_entered"]
+[connection signal="mouse_exited" from="playergrouppanel/characterinfo/movement" to="." method="_on_movement_mouse_exited"]
+[connection signal="pressed" from="playergrouppanel/characterinfo/switch" to="." method="_on_switch_pressed"]
+[connection signal="pressed" from="playergroupdetails/Panel/usebutton" to="." method="_on_usebutton_pressed"]
+[connection signal="pressed" from="playergroupdetails/Panel/discardbutton" to="." method="_on_discardbutton_pressed"]
+[connection signal="pressed" from="playergroupdetails/closegroup" to="." method="_on_closegroup_pressed"]
+[connection signal="pressed" from="playergroupdetails/return" to="." method="_on_return_pressed"]
+[connection signal="pressed" from="playergroupdetails/quicksell" to="." method="_on_quicksell_pressed"]
+[connection signal="pressed" from="slavebuypanel/purchasebutton" to="." method="_on_purchasebutton_pressed"]
+[connection signal="pressed" from="slavebuypanel/mindreadbutton" to="." method="_on_mindreadbutton_pressed"]
+[connection signal="pressed" from="slavebuypanel/slavelistcancel" to="." method="_on_slavelistcancel_pressed"]
+[connection signal="pressed" from="slavesellpanel/slavesellbutton" to="." method="_on_slavesellbutton_pressed"]
+[connection signal="pressed" from="slavesellpanel/slavesellcancel" to="." method="_on_slavesellcancel_pressed"]
+[connection signal="pressed" from="slaveguildquestpanel/questbrowse" to="." method="_on_questbrowse_pressed"]
+[connection signal="pressed" from="slaveguildquestpanel/questaccept" to="." method="_on_questaccept_pressed"]
+[connection signal="pressed" from="slaveguildquestpanel/questcancel" to="." method="_on_questcancel_pressed"]
+[connection signal="pressed" from="slaveguildquestpanel/questhide" to="." method="_on_questhide_pressed"]
+[connection signal="pressed" from="slaveservicepanel/serviceconfirm" to="." method="_on_serviceconfirm_pressed"]
+[connection signal="pressed" from="slaveservicepanel/selectslavebutton" to="." method="_on_selectslavebutton_pressed"]
+[connection signal="pressed" from="slaveservicepanel/slaveservicecancel" to="." method="_on_slaveservicecancel_pressed"]
+[connection signal="pressed" from="mageorderservices/learnspellbutton" to="." method="_on_learnspellbutton_pressed"]
+[connection signal="pressed" from="mageorderservices/close" to="." method="_on_close_pressed"]
+[connection signal="pressed" from="shoppanel/Panel/buybutton" to="." method="shopbuy"]
+[connection signal="pressed" from="shoppanel/Panel/closebutton" to="." method="shopclose"]
+[connection signal="pressed" from="shoppanel/inventory/mode" to="shoppanel/inventory" method="_on_mode_pressed"]
+[connection signal="pressed" from="shoppanel/inventory/inventoryclose" to="shoppanel/inventory" method="_on_inventoryclose_pressed"]
+[connection signal="gui_input" from="shoppanel/inventory/iteminfo" to="shoppanel/inventory" method="_on_iteminfo_input_event"]
+[connection signal="pressed" from="shoppanel/inventory/amountselect/confirm" to="shoppanel/inventory" method="_on_confirm_pressed"]
+[connection signal="pressed" from="shoppanel/inventory/amountselect/add5" to="shoppanel/inventory" method="_on_add5_pressed"]
+[connection signal="pressed" from="shoppanel/inventory/amountselect/add10" to="shoppanel/inventory" method="_on_add10_pressed"]
+[connection signal="pressed" from="shoppanel/inventory/amountselect/addmax" to="shoppanel/inventory" method="_on_addmax_pressed"]
+[connection signal="pressed" from="shoppanel/inventory/amountselect/cancel" to="shoppanel/inventory" method="_on_cancel_pressed"]
+[connection signal="value_changed" from="shoppanel/inventory/amountselect/SpinBox" to="shoppanel/inventory" method="_on_SpinBox_value_changed"]
+[connection signal="text_changed" from="shoppanel/inventory/search" to="shoppanel/inventory" method="_on_search_text_changed"]
+[connection signal="pressed" from="sebastiannode/sebastianconfirm" to="." method="_on_sebastianconfirm_pressed"]
+[connection signal="pressed" from="sebastiannode/sebastiancancel" to="." method="_on_sebastiancancel_pressed"]
+[connection signal="pressed" from="choseparty/chosepartyclose" to="." method="_on_chosepartyclose_pressed"]
+[connection signal="pressed" from="bigmappanel/mapclose" to="." method="_on_mapclose_pressed"]
+
+[editable path="slavebuypanel/statspanel"]
