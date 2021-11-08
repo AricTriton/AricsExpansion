@@ -1,4 +1,4 @@
-AricsExpansion Rebred v1.1
+AricsExpansion Rebred v1.2
 
 <HOW TO CORRECTLY INSTALL THIS MOD>
 1) Extract Ankmairdor's BugFix v5 and AricExpansion v1 into your %AppData%/Strive/mods folder
