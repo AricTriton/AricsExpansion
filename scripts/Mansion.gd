@@ -389,7 +389,7 @@ func _on_end_pressed():
 
 	###---Added by Expansion---### Update Player, Towns, and People
 	var temptext
-	text = '\n'
+	text = "" if text0.get_bbcode().empty() else "\n"
 	#---NPCs Expanded
 	globals.expansion.dailyNPCs()
 	#Update Towns
@@ -401,7 +401,8 @@ func _on_end_pressed():
 	if temptext != null:
 		text += temptext
 	#slaves
-	text0.set_bbcode(text0.get_bbcode() + text + "\n")
+	if !text.empty():
+		text0.set_bbcode(text0.get_bbcode() + text + "\n")
 	###---End Expansion---###
 
 	###---Added by Expansion---### Category: Daily Update | Management First

@@ -1858,7 +1858,7 @@ func dailyUpdate(person):
 	var worktext = ""
 	var thoughtstext = ""
 	#Replace with Above
-	var text = "\n"
+	var text = ""
 	var temptext = ""
 	var moodchange = 0
 
