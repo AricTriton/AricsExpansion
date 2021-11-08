@@ -1,124 +1,112 @@
 
-###---Added by Expansion---### Only to load from Mods folder
-var expansion = loadModFile("AricsExpansion", "customScripts/expansion.gd").new()
-var expansionsetup = loadModFile("AricsExpansion", "customScripts/expansionsetup.gd").new()
-var expansionfarm = loadModFile("AricsExpansion", "customScripts/expansionfarm.gd").new()
-var expansiontalk = loadModFile("AricsExpansion", "customScripts/expansiontalk.gd").new()
-var backwardscompatibility = loadModFile("AricsExpansion", "customScripts/backwardscompatibility.gd").new()
-var expansionsettings = loadModFile("AricsExpansion", "customScripts/expansionsettings.gd").new()
-#var expansion_races = load(setfolders.mods + "customScripts/expansionraces.gd").new()
 
-###---End Expansion---###
-
-###---Added by Expansion---### General Arrays
-#Size Arrays
-var titssizearray = ['masculine','flat','small','average','big','huge','incredible','massive','gigantic','monstrous','immobilizing']
-var lipssizearray = ['masculine','thin','small','average','big','huge','plump','massive','monstrous','facepussy']
-var asssizearray = ['masculine','flat','small','average','big','huge']
-var vagsizearray = ['impenetrable','tiny','tight','average','loose','gaping']
-var assholesizearray = ['impenetrable','tiny','tight','average','loose','gaping']
-var penissizearray = ['micro','tiny','small','average','large','massive']
-var heightarrayexp = ['tiny','petite','short','average','tall','towering']
-var originsarrayexp = ['slave','poor','commoner','rich','atypical','noble']
-
-#Sexuality Arrays
-var kinseyscale = ['straight','mostlystraight','rarelygay','bi','rarelystraight','mostlygay','gay']
-#All Current Fetishes
-var fetishesarray = ['incest','lactation','drinkmilk','bemilked','milking','exhibitionism','drinkcum','wearcum','wearcumface','creampiemouth','creampiepussy','creampieass','pregnancy','oviposition','drinkpiss','wearpiss','pissing','otherspissing','bondage','dominance','submission','sadism','masochism']
-var fetishopinion = ['taboo','dirty','unacceptable','uncertain','acceptable','enjoyable','mindblowing']
-var restraintsarray = ['none','cuffed','shackled','fully','fullyexposed']
-
-#Expanded Towns
-var expandedtowns = ['wimborn','frostford','gorn','amberguard','shaliq','umbra']
-
-var expandedplayerspecs = {
-	Slaver = "+100% gold from selling captured slaves\n+33% gold reward from slave delivery tasks",
-	Hunter = "+100% gold drop from random encounters\n+20% gear drop chance\nBonus to preventing ambushes",
-	Alchemist = "Double potion production\nSelling potions earn 100% more gold\n[color=aqua]Start with an Alchemy Room unlocked[/color]",
-	Mage = "-50% mana cost of spells\nCombat spell deal 20% more damage",
-	Breeder = "Pregnancy chance for everyone increased by 25%\nBred Slaves sell for 200% more and receive 2x as many upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]"
-}
-###---End Expansion---###
-
-###---Added by Expansion---### Kennels Expanded
-var sleepdict = {communal = {name = 'Communal Room'}, jail = {name = "Jail"}, personal = {name = 'Personal Room'}, your = {name = "Your bed"}, kennel = {name = "Dog Kennel"}}
-###---End Expansion---###
-
-###---Added by Expansion---###
 var gradeimages = {
 	"slave" : load("res://files/buttons/mainscreen/40.png"),
 	poor = load("res://files/buttons/mainscreen/41.png"),
 	commoner = load("res://files/buttons/mainscreen/42.png"),
 	rich = load("res://files/buttons/mainscreen/43.png"),
-	atypical = load("res://files/buttons/mainscreen/40.png"),
+	atypical = load("res://files/buttons/mainscreen/40.png"), ###---Added by Expansion---###
 	noble = load("res://files/buttons/mainscreen/44.png"),
 }
-###---End Expansion---###
 
-###---Added by Expansion---### Movement Icons (replicated)
-var movementimages = {
-	Null = null,
-	man_crawl_clothed = load("res://files/aric_expansion_images/movement_icons/man_crawl_clothed.png"),
-	man_fly_clothed = load("res://files/aric_expansion_images/movement_icons/man_fly_clothed.png"),
-	man_lay_clothed = load("res://files/aric_expansion_images/movement_icons/man_lay_clothed.png"),
-	man_walk_clothed = load("res://files/aric_expansion_images/movement_icons/man_walk_clothed.png"),
-	man_crawl_naked = load("res://files/aric_expansion_images/movement_icons/man_crawl_naked.png"),
-	man_fly_naked = load("res://files/aric_expansion_images/movement_icons/man_fly_naked.png"),
-	man_lay_naked = load("res://files/aric_expansion_images/movement_icons/man_lay_naked.png"),
-	man_walk_naked = load("res://files/aric_expansion_images/movement_icons/man_walk_naked.png"),
-	woman_crawl_clothed = load("res://files/aric_expansion_images/movement_icons/woman_crawl_clothed.png"),
-	woman_crawl_clothed_pregnant_1 = load("res://files/aric_expansion_images/movement_icons/woman_crawl_clothed_pregnant_1.png"),
-	woman_crawl_clothed_pregnant_2 = load("res://files/aric_expansion_images/movement_icons/woman_crawl_clothed_pregnant_2.png"),
-	woman_crawl_clothed_pregnant_3 = load("res://files/aric_expansion_images/movement_icons/woman_crawl_clothed_pregnant_3.png"),
-	woman_fly_clothed = load("res://files/aric_expansion_images/movement_icons/woman_fly_clothed.png"),
-	woman_fly_clothed_pregnant_1 = load("res://files/aric_expansion_images/movement_icons/woman_fly_clothed_pregnant_1.png"),
-	woman_fly_clothed_pregnant_2 = load("res://files/aric_expansion_images/movement_icons/woman_fly_clothed_pregnant_2.png"),
-	woman_fly_clothed_pregnant_3 = load("res://files/aric_expansion_images/movement_icons/woman_fly_clothed_pregnant_3.png"),
-	woman_lay_clothed = load("res://files/aric_expansion_images/movement_icons/woman_lay_clothed.png"),
-	woman_lay_clothed_pregnant_1 = load("res://files/aric_expansion_images/movement_icons/woman_lay_clothed_pregnant_1.png"),
-	woman_lay_clothed_pregnant_2 = load("res://files/aric_expansion_images/movement_icons/woman_lay_clothed_pregnant_2.png"),
-	woman_lay_clothed_pregnant_3 = load("res://files/aric_expansion_images/movement_icons/woman_lay_clothed_pregnant_3.png"),
-	woman_walk_clothed = load("res://files/aric_expansion_images/movement_icons/woman_walk_clothed.png"),
-	woman_walk_clothed_pregnant_1 = load("res://files/aric_expansion_images/movement_icons/woman_walk_clothed_pregnant_1.png"),
-	woman_walk_clothed_pregnant_2 = load("res://files/aric_expansion_images/movement_icons/woman_walk_clothed_pregnant_2.png"),
-	woman_walk_clothed_pregnant_3 = load("res://files/aric_expansion_images/movement_icons/woman_walk_clothed_pregnant_3.png"),
-	woman_crawl_naked = load("res://files/aric_expansion_images/movement_icons/woman_crawl_naked.png"),
-	woman_crawl_naked_pregnant_1 = load("res://files/aric_expansion_images/movement_icons/woman_crawl_naked_pregnant_1.png"),
-	woman_crawl_naked_pregnant_2 = load("res://files/aric_expansion_images/movement_icons/woman_crawl_naked_pregnant_2.png"),
-	woman_crawl_naked_pregnant_3 = load("res://files/aric_expansion_images/movement_icons/woman_crawl_naked_pregnant_3.png"),
-	woman_fly_naked = load("res://files/aric_expansion_images/movement_icons/woman_fly_naked.png"),
-	woman_fly_naked_pregnant_1 = load("res://files/aric_expansion_images/movement_icons/woman_fly_naked_pregnant_1.png"),
-	woman_fly_naked_pregnant_2 = load("res://files/aric_expansion_images/movement_icons/woman_fly_naked_pregnant_2.png"),
-	woman_fly_naked_pregnant_3 = load("res://files/aric_expansion_images/movement_icons/woman_fly_naked_pregnant_3.png"),
-	woman_lay_naked = load("res://files/aric_expansion_images/movement_icons/woman_lay_naked.png"),
-	woman_lay_naked_pregnant_1 = load("res://files/aric_expansion_images/movement_icons/woman_lay_naked_pregnant_1.png"),
-	woman_lay_naked_pregnant_2 = load("res://files/aric_expansion_images/movement_icons/woman_lay_naked_pregnant_2.png"),
-	woman_lay_naked_pregnant_3 = load("res://files/aric_expansion_images/movement_icons/woman_lay_naked_pregnant_3.png"),
-	woman_walk_naked = load("res://files/aric_expansion_images/movement_icons/woman_walk_naked.png"),
-	woman_walk_naked_pregnant_1 = load("res://files/aric_expansion_images/movement_icons/woman_walk_naked_pregnant_1.png"),
-	woman_walk_naked_pregnant_2 = load("res://files/aric_expansion_images/movement_icons/woman_walk_naked_pregnant_2.png"),
-	woman_walk_naked_pregnant_3 = load("res://files/aric_expansion_images/movement_icons/woman_walk_naked_pregnant_3.png"),
-}
+func loadsettings():
+	var file = File.new()
+	var dir = Directory.new()
+	var retCode
+	
+	###---Added by Expansion---### Images Expanded
+	var baseFolders = {portraits = appDataDir +'portraits/', fullbody = appDataDir + 'bodies/', mods = appDataDir + 'mods/', fullbodynaked = appDataDir + 'bodiesnaked/', fullbodypreg = appDataDir + 'bodiespreg/'}
+	###---End Expansion---###
+	for i in baseFolders.values():
+		if !dir.dir_exists(i):
+			retCode = dir.make_dir_recursive(i)
+			printErrorCode("Creating folder " + i, retCode)
+		
+	if file.file_exists(settingsFile):
+		retCode = file.open(settingsFile, File.READ)
+		if retCode == OK:
+			var temp = str2var(file.get_as_text())
+			if typeof(temp) == TYPE_DICTIONARY:
+				for i in rules:
+					if temp.has(i):
+						rules[i] = temp[i]
+			else:
+				printErrorCode("settings file contains no data", ERR_FILE_CORRUPT)
+			file.close()
+		else:
+			printErrorCode("Reading file " + settingsFile, retCode)
+	else:
+		retCode = file.open(settingsFile, File.WRITE)
+		if retCode == OK:
+			file.store_line(var2str(rules))
+			file.close()
+		else:
+			printErrorCode("Writing file " + settingsFile, retCode)
 
-var sexuality_images = {
-	Null = null,
-	unknown = load("res://files/aric_expansion_images/sexuality_icons/sexuality_unknown.png"),
-	base_male = load("res://files/aric_expansion_images/sexuality_icons/base_male.png"),
-	base_female = load("res://files/aric_expansion_images/sexuality_icons/base_female.png"),
-	base_futa = load("res://files/aric_expansion_images/sexuality_icons/base_futa.png"),
-	male_1 = load("res://files/aric_expansion_images/sexuality_icons/male_1.png"),
-	male_2 = load("res://files/aric_expansion_images/sexuality_icons/male_2.png"),
-	male_3 = load("res://files/aric_expansion_images/sexuality_icons/male_3.png"),
-	female_1 = load("res://files/aric_expansion_images/sexuality_icons/female_1.png"),
-	female_2 = load("res://files/aric_expansion_images/sexuality_icons/female_2.png"),
-	female_3 = load("res://files/aric_expansion_images/sexuality_icons/female_3.png"),
-	futa_1 = load("res://files/aric_expansion_images/sexuality_icons/futa_1.png"),
-	futa_2 = load("res://files/aric_expansion_images/sexuality_icons/futa_2.png"),
-	futa_3 = load("res://files/aric_expansion_images/sexuality_icons/futa_3.png"),
-}
-###---End Expansion---###
+	if file.file_exists(progressFile):
+		retCode = file.open_encrypted_with_pass(progressFile, File.READ, 'tehpass')
+		if retCode == OK:
+			var storedsettings = file.get_var()
+			var temp = storedsettings.get('chars')
+			if temp:
+				for character in charactergallery:
+					if !temp.has(character):
+						continue
+					for part in charactergallery[character]:
+						if part in ['unlocked', 'nakedunlocked'] && temp[character].has(part):
+							charactergallery[character][part] = temp[character][part]
+						elif part == 'scenes':
+							for scene in range(temp[character][part].size()):
+								charactergallery[character][part][scene].unlocked = temp[character][part][scene].unlocked
 
-#The only functions in here are due to calling variables added via the Mod file when applied
+			temp = storedsettings.get('folders')
+			if temp:
+				for i in temp:
+					if temp[i].ends_with('/'):
+						baseFolders[i] = temp[i]
+					else:
+						baseFolders[i] = temp[i] + '/'
+
+			temp = storedsettings.get('savelist')
+			if temp:
+				for i in temp:
+					savelist[i] = temp[i]
+
+			file.close()
+		else:
+			printErrorCode("Reading file " + progressFile, retCode)
+	else:
+		retCode = file.open_encrypted_with_pass(progressFile, File.WRITE, 'tehpass')
+		if retCode == OK:
+			var data = {chars = charactergallery, folders = baseFolders, savelist = {}}
+			file.store_var(data)
+			file.close()
+		else:
+			printErrorCode("Writing file " + progressFile, retCode)
+	return baseFolders
+
+func slaves_set(person):
+	person.originstrue = person.origins
+	person.health = max(person.health, 5)
+	if person.ability.has('protect') == false:
+		person.ability.append("protect")
+		person.abilityactive.append("protect")
+	###---Added by Expansion---### Category: NPCs Expanded
+	if person.npcexpanded.timesmet > 0:
+		if person.npcexpanded.timesfought > 0:
+			person.fear = person.npcexpanded.timesfought*5
+		if person.npcexpanded.timesrescued > 0:
+			person.loyal = person.npcexpanded.timesrescued*5
+	if globals.state.relativesdata[person.id].state != "enslaved":
+		globals.state.relativesdata[person.id].state = "enslaved"
+	###---End Expansion---###
+	slaves.append(person)
+	if get_tree().get_current_scene().find_node('CharList'):
+		get_tree().get_current_scene().rebuild_slave_list()
+	if get_tree().get_current_scene().find_node('ResourcePanel'):
+		get_tree().get_current_scene().find_node('population').set_text(str(slavecount())) 
+	if globals.get_tree().get_current_scene().has_node("infotext"):
+		globals.get_tree().get_current_scene().infotext("New Character acquired: " + person.name_long(),'green')
 
 class resource:
 	var day = 1 setget day_set
@@ -149,16 +137,16 @@ class resource:
 		},
 		snails = {eggs = 0, auto = 'none', neweggs = 0, food = 0, sell = 0, hatch = 0, cookwithoutchef = false, foodperchef = 3, goldperegg = 25, goldpersnail = 250},
 		incubators = {
-			1: {name = "Incubator 1", level = 0, filled = false, growth = 0},
-			2: {name = "Incubator 2", level = 0, filled = false, growth = 0},
-			3: {name = "Incubator 3", level = 0, filled = false, growth = 0},
-			4: {name = "Incubator 4", level = 0, filled = false, growth = 0},
-			5: {name = "Incubator 5", level = 0, filled = false, growth = 0},
-			6: {name = "Incubator 6", level = 0, filled = false, growth = 0},
-			7: {name = "Incubator 7", level = 0, filled = false, growth = 0},
-			8: {name = "Incubator 8", level = 0, filled = false, growth = 0},
-			9: {name = "Incubator 9", level = 0, filled = false, growth = 0},
-			10: {name = "Incubator 10", level = 0, filled = false, growth = 0},
+			'1': {name = "Incubator 1", level = 0, filled = false, growth = 0},
+			'2': {name = "Incubator 2", level = 0, filled = false, growth = 0},
+			'3': {name = "Incubator 3", level = 0, filled = false, growth = 0},
+			'4': {name = "Incubator 4", level = 0, filled = false, growth = 0},
+			'5': {name = "Incubator 5", level = 0, filled = false, growth = 0},
+			'6': {name = "Incubator 6", level = 0, filled = false, growth = 0},
+			'7': {name = "Incubator 7", level = 0, filled = false, growth = 0},
+			'8': {name = "Incubator 8", level = 0, filled = false, growth = 0},
+			'9': {name = "Incubator 9", level = 0, filled = false, growth = 0},
+			'10': {name = "Incubator 10", level = 0, filled = false, growth = 0},
 			basecost = 200,
 			upgrademultiplier = 2.5,
 			upgrademax = 10,
@@ -762,6 +750,7 @@ class progress:
 		if globals.main && lostRope > 0:
 			globals.main.infotext(str(lostRope) + ' rope%s wore out from use' % ('s' if lostRope > 1 else ''),'red')
 		return numPersons - lostRope
+	
 
 static func count_sleepers():
 	var your_bed = 0
@@ -912,7 +901,7 @@ func impregnation(mother, father = null, unique = ''):
 		virility = clamp(fertility * virility, 1, 100)
 		cumprod = cumprod * penis_mod
 		mother.preg.womb.append({id = father_id, unique = father_unique, semen = cumprod, virility = virility, day = 0,})
-###---End Expansion---###
+
 
 func slavetooltip(person):
 	var text = ''
@@ -964,6 +953,9 @@ func slavetooltip(person):
 	if node.get_rect().end.y >= screen.size.y:
 		node.rect_global_position.y -= node.get_rect().end.y - screen.size.y
 
+###---Added by Expansion---### Kennels Expanded
+var sleepdict = {communal = {name = 'Communal Room'}, jail = {name = "Jail"}, personal = {name = 'Personal Room'}, your = {name = "Your bed"}, kennel = {name = "Dog Kennel"}}
+
 func save():
 	state.spelllist.clear()
 	state.itemlist.clear()
@@ -998,6 +990,7 @@ func save():
 	###---End Expansion---###
 	dict.player = inst2dict(player) 
 	return dict
+
 
 func load_game(text):
 	var savegame = File.new()
@@ -1141,6 +1134,119 @@ func load_game(text):
 		print("Using old save, attempting repair")
 		repairsave()
 
+	var personList = slaves + state.babylist
+	personList.append(player)
+	for guild in globals.guildslaves.values():
+		for person in guild:
+			personList.append(person)
+	if state.sebastianorder.taken:
+		personList.append(state.sebastianslave)
+	for person in personList:
+		if person.imageportait == null: # try to add portrait if slave doesn't have one
+			constructor.randomportrait(person)	
+
+
+###---Added by Expansion---### Only to load from Mods folder
+var expansion = loadModFile("AricsExpansion", "customScripts/expansion.gd").new()
+var expansionsetup = loadModFile("AricsExpansion", "customScripts/expansionsetup.gd").new()
+var expansionfarm = loadModFile("AricsExpansion", "customScripts/expansionfarm.gd").new()
+var expansiontalk = loadModFile("AricsExpansion", "customScripts/expansiontalk.gd").new()
+var backwardscompatibility = loadModFile("AricsExpansion", "customScripts/backwardscompatibility.gd").new()
+var expansionsettings = loadModFile("AricsExpansion", "customScripts/expansionsettings.gd").new()
+
+###---Added by Expansion---### General Arrays
+#Size Arrays
+var titssizearray = ['masculine','flat','small','average','big','huge','incredible','massive','gigantic','monstrous','immobilizing']
+var lipssizearray = ['masculine','thin','small','average','big','huge','plump','massive','monstrous','facepussy']
+var asssizearray = ['masculine','flat','small','average','big','huge']
+var vagsizearray = ['impenetrable','tiny','tight','average','loose','gaping']
+var assholesizearray = ['impenetrable','tiny','tight','average','loose','gaping']
+var penissizearray = ['micro','tiny','small','average','large','massive']
+var heightarrayexp = ['tiny','petite','short','average','tall','towering']
+var originsarrayexp = ['slave','poor','commoner','rich','atypical','noble']
+
+#Sexuality Arrays
+var kinseyscale = ['straight','mostlystraight','rarelygay','bi','rarelystraight','mostlygay','gay']
+
+#All Current Fetishes
+var fetishesarray = ['incest','lactation','drinkmilk','bemilked','milking','exhibitionism','drinkcum','wearcum','wearcumface','creampiemouth','creampiepussy','creampieass','pregnancy','oviposition','drinkpiss','wearpiss','pissing','otherspissing','bondage','dominance','submission','sadism','masochism']
+var fetishopinion = ['taboo','dirty','unacceptable','uncertain','acceptable','enjoyable','mindblowing']
+
+var restraintsarray = ['none','cuffed','shackled','fully','fullyexposed']
+
+#Expanded Towns
+var expandedtowns = ['wimborn','frostford','gorn','amberguard','shaliq','umbra']
+
+var expandedplayerspecs = {
+	Slaver = "+100% gold from selling captured slaves\n+33% gold reward from slave delivery tasks",
+	Hunter = "+100% gold drop from random encounters\n+20% gear drop chance\nBonus to preventing ambushes",
+	Alchemist = "Double potion production\nSelling potions earn 100% more gold\n[color=aqua]Start with an Alchemy Room unlocked[/color]",
+	Mage = "-50% mana cost of spells\nCombat spell deal 20% more damage",
+	Breeder = "Pregnancy chance for everyone increased by 25%\nBred Slaves sell for 200% more and receive 2x as many upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]"
+}
+
+###---Added by Expansion---### Movement Icons (replicated)
+var movementimages = {
+	Null = null,
+	man_crawl_clothed = load("res://files/aric_expansion_images/movement_icons/man_crawl_clothed.png"),
+	man_fly_clothed = load("res://files/aric_expansion_images/movement_icons/man_fly_clothed.png"),
+	man_lay_clothed = load("res://files/aric_expansion_images/movement_icons/man_lay_clothed.png"),
+	man_walk_clothed = load("res://files/aric_expansion_images/movement_icons/man_walk_clothed.png"),
+	man_crawl_naked = load("res://files/aric_expansion_images/movement_icons/man_crawl_naked.png"),
+	man_fly_naked = load("res://files/aric_expansion_images/movement_icons/man_fly_naked.png"),
+	man_lay_naked = load("res://files/aric_expansion_images/movement_icons/man_lay_naked.png"),
+	man_walk_naked = load("res://files/aric_expansion_images/movement_icons/man_walk_naked.png"),
+	woman_crawl_clothed = load("res://files/aric_expansion_images/movement_icons/woman_crawl_clothed.png"),
+	woman_crawl_clothed_pregnant_1 = load("res://files/aric_expansion_images/movement_icons/woman_crawl_clothed_pregnant_1.png"),
+	woman_crawl_clothed_pregnant_2 = load("res://files/aric_expansion_images/movement_icons/woman_crawl_clothed_pregnant_2.png"),
+	woman_crawl_clothed_pregnant_3 = load("res://files/aric_expansion_images/movement_icons/woman_crawl_clothed_pregnant_3.png"),
+	woman_fly_clothed = load("res://files/aric_expansion_images/movement_icons/woman_fly_clothed.png"),
+	woman_fly_clothed_pregnant_1 = load("res://files/aric_expansion_images/movement_icons/woman_fly_clothed_pregnant_1.png"),
+	woman_fly_clothed_pregnant_2 = load("res://files/aric_expansion_images/movement_icons/woman_fly_clothed_pregnant_2.png"),
+	woman_fly_clothed_pregnant_3 = load("res://files/aric_expansion_images/movement_icons/woman_fly_clothed_pregnant_3.png"),
+	woman_lay_clothed = load("res://files/aric_expansion_images/movement_icons/woman_lay_clothed.png"),
+	woman_lay_clothed_pregnant_1 = load("res://files/aric_expansion_images/movement_icons/woman_lay_clothed_pregnant_1.png"),
+	woman_lay_clothed_pregnant_2 = load("res://files/aric_expansion_images/movement_icons/woman_lay_clothed_pregnant_2.png"),
+	woman_lay_clothed_pregnant_3 = load("res://files/aric_expansion_images/movement_icons/woman_lay_clothed_pregnant_3.png"),
+	woman_walk_clothed = load("res://files/aric_expansion_images/movement_icons/woman_walk_clothed.png"),
+	woman_walk_clothed_pregnant_1 = load("res://files/aric_expansion_images/movement_icons/woman_walk_clothed_pregnant_1.png"),
+	woman_walk_clothed_pregnant_2 = load("res://files/aric_expansion_images/movement_icons/woman_walk_clothed_pregnant_2.png"),
+	woman_walk_clothed_pregnant_3 = load("res://files/aric_expansion_images/movement_icons/woman_walk_clothed_pregnant_3.png"),
+	woman_crawl_naked = load("res://files/aric_expansion_images/movement_icons/woman_crawl_naked.png"),
+	woman_crawl_naked_pregnant_1 = load("res://files/aric_expansion_images/movement_icons/woman_crawl_naked_pregnant_1.png"),
+	woman_crawl_naked_pregnant_2 = load("res://files/aric_expansion_images/movement_icons/woman_crawl_naked_pregnant_2.png"),
+	woman_crawl_naked_pregnant_3 = load("res://files/aric_expansion_images/movement_icons/woman_crawl_naked_pregnant_3.png"),
+	woman_fly_naked = load("res://files/aric_expansion_images/movement_icons/woman_fly_naked.png"),
+	woman_fly_naked_pregnant_1 = load("res://files/aric_expansion_images/movement_icons/woman_fly_naked_pregnant_1.png"),
+	woman_fly_naked_pregnant_2 = load("res://files/aric_expansion_images/movement_icons/woman_fly_naked_pregnant_2.png"),
+	woman_fly_naked_pregnant_3 = load("res://files/aric_expansion_images/movement_icons/woman_fly_naked_pregnant_3.png"),
+	woman_lay_naked = load("res://files/aric_expansion_images/movement_icons/woman_lay_naked.png"),
+	woman_lay_naked_pregnant_1 = load("res://files/aric_expansion_images/movement_icons/woman_lay_naked_pregnant_1.png"),
+	woman_lay_naked_pregnant_2 = load("res://files/aric_expansion_images/movement_icons/woman_lay_naked_pregnant_2.png"),
+	woman_lay_naked_pregnant_3 = load("res://files/aric_expansion_images/movement_icons/woman_lay_naked_pregnant_3.png"),
+	woman_walk_naked = load("res://files/aric_expansion_images/movement_icons/woman_walk_naked.png"),
+	woman_walk_naked_pregnant_1 = load("res://files/aric_expansion_images/movement_icons/woman_walk_naked_pregnant_1.png"),
+	woman_walk_naked_pregnant_2 = load("res://files/aric_expansion_images/movement_icons/woman_walk_naked_pregnant_2.png"),
+	woman_walk_naked_pregnant_3 = load("res://files/aric_expansion_images/movement_icons/woman_walk_naked_pregnant_3.png"),
+}
+
+var sexuality_images = {
+	Null = null,
+	unknown = load("res://files/aric_expansion_images/sexuality_icons/sexuality_unknown.png"),
+	base_male = load("res://files/aric_expansion_images/sexuality_icons/base_male.png"),
+	base_female = load("res://files/aric_expansion_images/sexuality_icons/base_female.png"),
+	base_futa = load("res://files/aric_expansion_images/sexuality_icons/base_futa.png"),
+	male_1 = load("res://files/aric_expansion_images/sexuality_icons/male_1.png"),
+	male_2 = load("res://files/aric_expansion_images/sexuality_icons/male_2.png"),
+	male_3 = load("res://files/aric_expansion_images/sexuality_icons/male_3.png"),
+	female_1 = load("res://files/aric_expansion_images/sexuality_icons/female_1.png"),
+	female_2 = load("res://files/aric_expansion_images/sexuality_icons/female_2.png"),
+	female_3 = load("res://files/aric_expansion_images/sexuality_icons/female_3.png"),
+	futa_1 = load("res://files/aric_expansion_images/sexuality_icons/futa_1.png"),
+	futa_2 = load("res://files/aric_expansion_images/sexuality_icons/futa_2.png"),
+	futa_3 = load("res://files/aric_expansion_images/sexuality_icons/futa_3.png"),
+}
+
 ###---Added by Expansion---### Farm Expanded
 func getVatMaxCapacity(type):
 	var vatmax = 0
@@ -1153,7 +1259,6 @@ func getVatMaxCapacity(type):
 	elif globals.state.mansionupgrades[type] >= 3:
 		vatmax = 500
 	return vatmax
-###---End Expansion---###
 
 ###---Added by Expansion---### Pregnancy Expanded | Added by Deviate
 func get_person(id):
@@ -1180,7 +1285,6 @@ func semen_volume(semen):
 	
 	traceFile('Semen Volume')
 	return rvar
-###---End of Expansion---###
 
 ###---Added by Expansion---### Pregnancy Expanded || Deviate Added / Aric Tweaked
 func ovulation_day(person):
@@ -1380,7 +1484,6 @@ func nightly_womb(person):
 						fertilize_egg(person,i.id,i.unique)
 	traceFile('nightly womb')
 	return
-###---End Expansion---###
 
 #Slime Conversion (Move to Expansion_slimebreeding after Split option)
 func slimeConversionCheck(mother, father):
@@ -1435,5 +1538,3 @@ func randomitemfromarray(source):
 
 func getfromarray(array, index):
 	return array[ clamp(index, 0, array.size()-1) ]
-###---End Expansion---###
-

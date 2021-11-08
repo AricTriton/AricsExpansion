@@ -456,11 +456,11 @@ func _on_slaveconfirm_pressed():
 			globals.resources.farmexpanded.vats[type].auto = 'vat'
 			globals.resources.farmexpanded.vats[type].autobuybottles = false
 		#Reset Incubators
-		if globals.resources.farmexpanded.has('incubators') && globals.resources.farmexpanded.incubators.has(1):
+		if globals.resources.farmexpanded.has('incubators') && globals.resources.farmexpanded.incubators.has('1'):
 			for num in [1,2,3,4,5,6,7,8,9,10]:
-				globals.resources.farmexpanded.incubators[num].level = 0
-				globals.resources.farmexpanded.incubators[num].filled = false
-				globals.resources.farmexpanded.incubators[num].growth = 0
+				globals.resources.farmexpanded.incubators[str(num)].level = 0
+				globals.resources.farmexpanded.incubators[str(num)].filled = false
+				globals.resources.farmexpanded.incubators[str(num)].growth = 0
 		#Reset Bottler
 		globals.resources.farmexpanded.bottler.level = 0
 		globals.resources.farmexpanded.bottler.totalproduced = 0
@@ -513,11 +513,11 @@ func _on_slaveconfirm_pressed():
 			globals.resources.farmexpanded.vats[type].auto = 'vat'
 			globals.resources.farmexpanded.vats[type].autobuybottles = false
 		#Reset Incubators
-		if globals.resources.farmexpanded.has('incubators') && globals.resources.farmexpanded.incubators.has(1):
+		if globals.resources.farmexpanded.has('incubators') && globals.resources.farmexpanded.incubators.has('1'):
 			for num in [1,2,3,4,5,6,7,8,9,10]:
-				globals.resources.farmexpanded.incubators[num].level = 0
-				globals.resources.farmexpanded.incubators[num].filled = false
-				globals.resources.farmexpanded.incubators[num].growth = 0
+				globals.resources.farmexpanded.incubators[str(num)].level = 0
+				globals.resources.farmexpanded.incubators[str(num)].filled = false
+				globals.resources.farmexpanded.incubators[str(num)].growth = 0
 		#Reset Bottler
 		globals.resources.farmexpanded.bottler.level = 0
 		globals.resources.farmexpanded.bottler.totalproduced = 0
