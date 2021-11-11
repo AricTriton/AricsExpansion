@@ -20,6 +20,7 @@ Please Note, if you didn't follow the Installation Steps, things will not work a
 This mod expands each individual character in a myriad of fun, interesting, and kinky ways.
 Basically...this mod does a whole lot. It can be somewhat clunky at times and bugs will likely pop up in some random places, but let me know and we'll resolve those together as best we can.
 
+
 -New Image Folders:
 Don't forget to add pictures to the new 'bodiesnude' and 'bodiespreg' in your %AppData%/Strive folder.
 The picture name should be identical as whatever body and portrait picture you want them attached to.
