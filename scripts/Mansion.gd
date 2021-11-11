@@ -1423,7 +1423,7 @@ func build_mansion_info():
 					text += "\nBegrudging Bodyguard"
 				text += ": " + createPersonURL(person) + "        |---|   Status   |---| " 
 				if person.metrics.win > 0:
-					text += "  |   [color=aqua]" + str(person.metrics.win) + "[/color] Battles Won"
+					text += "[color=aqua]" + str(person.metrics.win) + "[/color] Battles Won"
 					if person.metrics.capture > 0:
 						text += "; [color=aqua]" + str(person.metrics.capture) + "[/color] Enemies Captured"
 				text += "\nAwareness: [color=aqua]" + str(person.awareness()) + "[/color]   |   Health: "
@@ -1447,12 +1447,12 @@ func build_mansion_info():
 					text += "[color=green]" + str(person.energy) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
 				else:
 					text += "[color=red]" + str(person.energy) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
-				if person.ability.size > 2:
+				if person.ability.size() > 2:
 					text += "\nAbilities Known: [color=aqua]" + str(person.ability.size() -2) + "[/color]" 
 					if person.learningpoints > 0:
 						text += "     |    "
 				if person.learningpoints > 0:
-					text += "[color=lime]" + str(person.learningpoints) + "[/color][color=yellow] Learning Points Available[/color]"
+					text += "\n[color=lime]" + str(person.learningpoints) + "[/color][color=yellow] Learning Points Available[/color]"
 				text += "\n"
 	textnode.set_bbcode(text)
 	###---End Expansion---###

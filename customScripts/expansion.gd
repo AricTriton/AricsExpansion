@@ -1059,7 +1059,7 @@ func nameBound():
 	return text
 
 func nameBred():
-	var text = str(globals.randomitemfromarray(['bred','knocked up','impregnated','get pregnant','get impregnated','carry around a baby','have a baby','have a '+str(globals.randomitemfromarray(['','swollen','big','huge','unbearable','incredible']))+' '+str(globals.randomitemfromarray(['','pregnant','protruding','pot','filled up']))+' '+nameBelly()]))
+	var text = str(globals.randomitemfromarray(['bred','knocked up','impregnated','get pregnant','get impregnated','have a baby','have a '+str(globals.randomitemfromarray(['','swollen','big','huge','unbearable','incredible']))+' '+str(globals.randomitemfromarray(['','pregnant','protruding','pot','filled up']))+' '+nameBelly()]))
 	return text
 
 func nameBreed():
@@ -1067,11 +1067,11 @@ func nameBreed():
 	return text
 
 func nameBeBred():
-	var text = str(globals.randomitemfromarray(['be bred','be knocked up','be impregnated','get pregnant','get impregnated','carry around a baby','have a baby','have a '+str(globals.randomitemfromarray(['','swollen','big','huge','unbearable','incredible']))+' '+str(globals.randomitemfromarray(['','pregnant','protruding','pot','filled up']))+' belly']))
+	var text = str(globals.randomitemfromarray(['be bred','be knocked up','be impregnated','get pregnant','get impregnated','have a baby','have a '+str(globals.randomitemfromarray(['','swollen','big','huge','incredible']))+' '+str(globals.randomitemfromarray(['','pregnant','protruding','pot','filled up']))+' belly']))
 	return text
 
 func nameBeingBred():
-	var text = str(globals.randomitemfromarray(['being bred','being knocked up','being impregnated','getting pregnant','getting impregnated','carrying around a baby','having a baby','having a '+str(globals.randomitemfromarray(['','swollen','big','huge','unbearable','incredible']))+' '+str(globals.randomitemfromarray(['','pregnant','protruding','pot','filled up']))+' belly']))
+	var text = str(globals.randomitemfromarray(['being bred','being knocked up','being impregnated','getting pregnant','getting impregnated','having a baby','having a '+str(globals.randomitemfromarray(['','swollen','big','huge','incredible']))+' '+str(globals.randomitemfromarray(['','pregnant','protruding','pot','pot','pot']))+' belly']))
 	return text
 
 func nameStretching():

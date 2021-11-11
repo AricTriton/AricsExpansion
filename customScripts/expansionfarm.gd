@@ -194,10 +194,10 @@ func getFarmDescription(tempperson):
 	#Bedding
 	if person.dailytalk.has('farmmorning'):
 		person.dailytalk.append('farmmorning')
-		text += "You walk over to see the stall where $name sleeps. The " +str(person.race)+ " $child is curled up and sleeping " + getdescription(person, 'stallbedding')
+		text += "You walk over to see the stall where [color=aqua]$name[/color] sleeps. The " +str(person.race)+ " $child is curled up and sleeping " + getdescription(person, 'stallbedding')
 	#Work Station
 	else:
-		text += "You walk over to see the stall where $name sleeps. The " +str(person.race)+ " $child is " + getdescription(person, 'workstation')
+		text += "You walk over to see the stall where [color=aqua]$name[/color] sleeps. The " +str(person.race)+ " $child is " + getdescription(person, 'workstation')
 	
 	#Restrained
 	if person.farmexpanded.restrained == true:
@@ -1876,4 +1876,11 @@ func milkingContainment(person, value):
 		milkamt = round(rand_range(value*(spillpercent*.01), value))
 	return milkamt
 
+#---Stole from Mansion.gd
+func createPersonURL(person):
+	if person == null:
+		return "[color=yellow]Unassigned[/color]"
+	if person.away.duration != 0:
+		return "[color=aqua]" + person.name_short() + "[/color] [color=yellow](away)[/color]"
+	return "[color=aqua][url=id" + person.id + "]" + person.name_short() + "[/url][/color]"
 
