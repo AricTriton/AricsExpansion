@@ -249,14 +249,17 @@ func _on_talk_pressed(mode = 'talk'):
 			buttons.append({text = person.dictionary("You can call me whatever you want."), function = 'callorder', args = 'random', tooltip = "They will call you a randomly selected Master name."})
 		
 		#Nudity Options
-		var nudebuttontext = str(globals.randomitemfromarray(['Let’s Strip that ' + str(person.race) + ' body','Lets talk about ' + str(globals.randomitemfromarray(['Stripping','Nudity','your body']))]))
+		var nudebuttontext = str(globals.randomitemfromarray(['Strip that ' + str(person.race) + ' body','Show me your ' + str(globals.randomitemfromarray(['Naked Body','Chest','Genitals']))]))
 		buttons.append({text = person.dictionary(nudebuttontext), function = 'topicclothing', args = 'intro', tooltip = person.dictionary("Change $name's level of clothing.")})
-		
+
+		#Renaming Options
+#		buttons.append({text = str(globals.randomitemfromarray(['I want to change your name.','Your name is now...','I do not like your name...'])), function = '_on_talk_pressed', args = ''slave_rename_hub', tooltip = "Change the slave's name."})
+
 		#Job Skills
 		buttons.append({text = str(globals.randomitemfromarray(['Lets talk about your Job Skills','What Job Experience do you have?','What jobs have you been assigned to?'])), function = '_on_talk_pressed', args = 'general_slave_topics_jobskills', tooltip = "Display their relevant Job Skills."})
 		
 		buttons.append({text = str(globals.randomitemfromarray(['Release','Free','Remove','Set free'])) + person.dictionary(" $name"), function = 'release', tooltip = "You will lose this slave permanently."})
-		buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
+		buttons.append({text = str(globals.randomitemfromarray(['Go Back','Return','Previous Menu'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 		#---End Expansion---#
 	
 	#---Number of Children---#
@@ -302,53 +305,77 @@ func _on_talk_pressed(mode = 'talk'):
 	
 	elif mode == 'general_slave_topics_jobskills':
 		var firstskill = true
-		for i in person.jobskills:
-			if person.jobskills[i] > 0:
-				if firstskill == true:
-					text = str(expansion.getIntro(person)) + " $name begins rattling off $his past experience with jobs. You are able to glean the following from $him.\n"
-					firstskill = false
-				text += "\n[color=aqua]" + str(i).capitalize() + "[/color]: " + str(person.jobskills[i]) + " "
-				#Job Skill Detail
-				if i == 'trainer':
-					text += "| Affects the Chance of receiving a Critical Success Bonus while working with multiple Trainees. Maximum of 50% Chance"
-				elif i == 'trainee':
-					text += "| Affects the Chance of receiving a Critical Success Bonus while being Trained. Maximum of 50% Chance"
-				elif i == 'milking':
-					text += "| Affects the Chance of Manually Extracting Liquid from Cattle and Improves Cattle Reactions. "
-				elif i == 'stud':
-					text += "| Lowers the Energy Cost of Breeding Cattle. "
-				elif i == 'bottler':
-					text += "| Lowers the Energy Cost of Bottling Liquids and allows more Bottles completed per day. "
-				elif i == 'cook':
-					text += "| Affects the Chance of getting 3x Food per Liquid converted from the farm instead of 2x. - [color=aqua]" + str(person.jobskills.cook + (person.wit/2)) + "%[/color] Also affects the chance to gain Bonus Food per day.  [color=aqua]-" + str(clamp(person.jobskills.cook, 0, 50)) + "%[/color] "
-				elif i == 'milkmerchant':
-					text += "| Affects the Chance of increasing a Town's interest in Milk, increasing the overall value. - [color=aqua]" + str(person.jobskills.milkmerchant + person.wit) + "%[/color] "
-				elif i == 'farmmanager':
-					text += "| [color=red]Currently Unused due to Farm Changes[/color] "
-				elif i == 'sexworker':
-					text += "| Increases the bonus to Sex Work by [color=aqua]" + str(round(person.jobskills['sexworker']*.2)) + "[/color]. "
-				elif i == 'forager':
-					text += "| Decreases the chance of bringing back less food due to low Courage and increases the chance of finding Nature Essence. [color=aqua]- " + str((person.smaf * 3) + 2 + person.jobskills.forager) + "% Chance[/color] " 
-				elif i == 'hunter':
-					text += "| Decreases the chance of bringing back less food due to low Courage. "
-				elif i == 'nurse':
-					text += "| Increases Health Gained while working as a nurse for all patients. [color=aqua]" + str(round(person.jobskills.nurse/2)) + " Bonus Health Restored[/color] "
-				elif i == 'lumberjack':
-					text += "| Affects the Chance of receiving Bonus Gold per day. [color=aqua]- " + str(clamp(person.jobskills.lumberer + (person.energy*1), 1, 50)) + "% Chance[/color] "
-				elif i == 'combat':
-					text += "| Affects the Chance of succeeding at a special event to gain bonus gold per day. "
-				elif i in ['entertainer','merchant','mage']:
-					text += "| Affects the Chance of earning Bonus Gold per day. "
-				elif i == 'maid':
-					text += "| Affects the Chance of cleaning more than usual per day. "
-				elif i == 'pet':
-					text += "| Affects the number of Slaves per day that can be Serviced before losing Energy and gaining Stress. "
-		if firstskill == true:
-			text = str(expansion.getIntro(person)) + " $name thinks for a moment and shrugs.\n[color=yellow]-" + person.quirk("I'm not skilled at any jobs yet. ")
+		if person.sleep != 'jail':
+			for i in person.jobskills:
+				if person.jobskills[i] > 0:
+					if firstskill == true:
+						text = str(expansion.getIntro(person)) + "\n$name begins rattling off $his past experience with jobs. You are able to glean the following from $him.\n"
+						firstskill = false
+					text += "\n[color=aqua]" + str(i).capitalize() + "[/color]: " + str(person.jobskills[i]) + " "
+					#Job Skill Detail
+					if i == 'trainer':
+						text += "| Affects the Chance of receiving a Critical Success Bonus while working with multiple Trainees. Maximum of 50% Chance"
+					elif i == 'trainee':
+						text += "| Affects the Chance of receiving a Critical Success Bonus while being Trained. Maximum of 50% Chance"
+					elif i == 'milking':
+						text += "| Affects the Chance of Manually Extracting Liquid from Cattle and Improves Cattle Reactions. "
+					elif i == 'stud':
+						text += "| Lowers the Energy Cost of Breeding Cattle. "
+					elif i == 'bottler':
+						text += "| Lowers the Energy Cost of Bottling Liquids and allows more Bottles completed per day. "
+					elif i == 'cook':
+						text += "| Affects the Chance of getting 3x Food per Liquid converted from the farm instead of 2x. - [color=aqua]" + str(person.jobskills.cook + (person.wit/2)) + "%[/color] Also affects the chance to gain Bonus Food per day.  [color=aqua]-" + str(clamp(person.jobskills.cook, 0, 50)) + "%[/color] "
+					elif i == 'milkmerchant':
+						text += "| Affects the Chance of increasing a Town's interest in Milk, increasing the overall value. - [color=aqua]" + str(person.jobskills.milkmerchant + person.wit) + "%[/color] "
+					elif i == 'farmmanager':
+						text += "| [color=red]Currently Unused due to Farm Changes[/color] "
+					elif i == 'sexworker':
+						text += "| Increases the bonus to Sex Work by [color=aqua]" + str(round(person.jobskills['sexworker']*.2)) + "[/color]. "
+					elif i == 'forager':
+						text += "| Decreases the chance of bringing back less food due to low Courage and increases the chance of finding Nature Essence. [color=aqua]- " + str((person.smaf * 3) + 2 + person.jobskills.forager) + "% Chance[/color] " 
+					elif i == 'hunter':
+						text += "| Decreases the chance of bringing back less food due to low Courage. "
+					elif i == 'nurse':
+						text += "| Increases Health Gained while working as a nurse for all patients. [color=aqua]" + str(round(person.jobskills.nurse/2)) + " Bonus Health Restored[/color] "
+					elif i == 'lumberjack':
+						text += "| Affects the Chance of receiving Bonus Gold per day. [color=aqua]- " + str(clamp(person.jobskills.lumberer + (person.energy*1), 1, 50)) + "% Chance[/color] "
+					elif i == 'combat':
+						text += "| Affects the Chance of succeeding at a special event to gain bonus gold per day. "
+					elif i in ['entertainer','merchant','mage']:
+						text += "| Affects the Chance of earning Bonus Gold per day. "
+					elif i == 'maid':
+						text += "| Affects the Chance of cleaning more than usual per day. "
+					elif i == 'pet':
+						text += "| Affects the number of Slaves per day that can be Serviced before losing Energy and gaining Stress. "
+			if firstskill == true:
+				text = str(expansion.getIntro(person)) + " $name thinks for a moment and shrugs.\n[color=yellow]-" + person.quirk("I'm not skilled at any jobs yet. ")
+		else:
+			text = str(expansion.getIntro(person))  + "\n[color=yellow]-" + person.quirk(str(globals.randomitemfromarray(["I can't work while I'm trapping in here!","Work? You want to talk about work? I just want to be free!","If you let me go, maybe I can get some job experience."]))) + "[/color]"
 	
+	#----Rename Slave Topics TBK | Needs name, nickname, and surname popup option. Reuse nickname?
+#	elif mode == 'slave_rename_hub':
+#		text = str(expansion.getIntro(person)) + "\n[color=yellow]-"+ person.quirk(str(talk.introGeneral(person))) + "[/color]"
+	
+#		buttons.append({text = str(globals.randomitemfromarray(['I want to change your name.','Your name is now...','I do not like your name...'])), function = '_on_talk_pressed', args = 'slave_rename_hub', tooltip = "Change the slave's name."})
+#		buttons.append({text = str(globals.randomitemfromarray(['Go Back','Return','Previous Menu'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
+		
 	#---Sexual Slave Topics---#
 	elif mode == 'slave_sex_topics':
 		text = str(expansion.getIntro(person)) + "\n[color=yellow]-"+ person.quirk(str(talk.introGeneral(person))) + "[/color]"
+
+		if person.knowledge.has('sexuality'):
+			text += "\n\n[color=#d1b970][center]Sexuality[/center][/color]\n"
+			text += "[color=aqua]" + str(globals.expansion.getSexuality(person)) + "[/color] | "
+			if person.sexexpanded.sexualitylocked == false:
+				text += "[color=green]Unlocked[/color]"
+			else:
+				text += "[color=red]Unlocked[/color]"
+			
+		if !person.knownfetishes.empty():
+			text += "\n\n[color=#d1b970][center]Known Fetishes[/center][/color]\n"
+			for fetish in person.knownfetishes:
+				var fetishname = globals.expansion.getFetishDescription(str(fetish))
+				text += fetishname.capitalize() + ": " + "[color=aqua]" + str(person.fetish[fetish].capitalize())+ "[/color]\n"
 		
 		if !person.dailytalk.has('eventDrainCum'):
 			if person.cum.pussy > 0 || !person.preg.womb.empty():
@@ -1182,6 +1209,11 @@ func talkfetishes(mode=''):
 	
 	if mode == "introunknown":
 		text = str(expansion.getIntro(person)) + "\n[color=yellow]-"+ person.quirk(str(talk.introGeneral(person))) + "[/color]"
+		if !person.knownfetishes.empty():
+			text += "\n\n[color=#d1b970][center]Known Fetishes[/center][/color]\n"
+			for fetish in person.knownfetishes:
+				fetishname = globals.expansion.getFetishDescription(str(fetish))
+				text += fetishname.capitalize() + ": " + "[color=aqua]" + str(person.fetish[fetish].capitalize())+ "[/color]\n"
 		for i in globals.fetishesarray:
 			fetishname = globals.expansion.getFetishDescription(str(i))
 #			if person.dailytalk.find(i) < 0:
@@ -1199,6 +1231,11 @@ func talkfetishes(mode=''):
 			
 	if mode == "introknown":
 		text = str(expansion.getIntro(person)) + "\n[color=yellow]-"+ person.quirk(str(talk.introGeneral(person))) + "[/color]"
+		if !person.knownfetishes.empty():
+			text += "\n\n[color=#d1b970][center]Known Fetishes[/center][/color]\n"
+			for fetish in person.knownfetishes:
+				fetishname = globals.expansion.getFetishDescription(str(fetish))
+				text += fetishname.capitalize() + ": " + "[color=aqua]" + str(person.fetish[fetish].capitalize())+ "[/color]\n"
 		for i in globals.fetishesarray:
 			fetishname = globals.expansion.getFetishDescription(str(i))
 			if person.knownfetishes.find(i) >= 0:
@@ -1216,6 +1253,11 @@ func talkfetishes(mode=''):
 	#The Intro 
 	if mode == "intro":
 		text = str(expansion.getIntro(person)) + "\n[color=yellow]-"+ person.quirk(str(talk.introGeneral(person))) + "[/color]"
+		if !person.knownfetishes.empty():
+			text += "\n\n[color=#d1b970][center]Known Fetishes[/center][/color]\n"
+			for fetish in person.knownfetishes:
+				fetishname = globals.expansion.getFetishDescription(str(fetish))
+				text += fetishname.capitalize() + ": " + "[color=aqua]" + str(person.fetish[fetish].capitalize())+ "[/color]\n"	
 		if person.knownfetishes.size() > 0:
 			buttons.append({text = person.dictionary("About that fetish I mentioned before..."), function = 'talkfetishes', args = 'introknown', tooltip = person.dictionary("Encourage or Discourage a fetish.")})
 		buttons.append({text = person.dictionary("Let's talk about something new"), function = 'talkfetishes', args = 'introunknown', tooltip = person.dictionary("Learn how $name feels about a fetish.")})

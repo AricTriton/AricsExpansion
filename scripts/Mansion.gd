@@ -1403,13 +1403,75 @@ func build_mansion_info():
 	text += fillRoomText("\n\nYour jail has %s%s/%s[/color] cell%s filled.", sleepers.jail, globals.state.mansionupgrades.jailcapacity, 's')
 	if globals.state.farm >= 3:
 		text += fillRoomText("\nYour farm has %s%s/%s[/color] booth%s holding livestock.", sleepers.farm, variables.resident_farm_limit[globals.state.mansionupgrades.farmcapacity], 's')
-	text += "\n------------------------------------------------------------------------------"
 	textnode.set_bbcode(text)
+
+	###---Added by Expansion---### Combat Party Aren't Showing | Vanilla Bug? | Moved Location up here
+	text += "\n\n[center][color=#d1b970]---------------Adventuring Party---------------[/color][/center]"
+	if globals.state.playergroup.empty():
+		text += "\n[color=red]Nobody is assigned to follow you.[/color]\n"
+	else:
+		for i in globals.state.playergroup.duplicate():
+			var person = globals.state.findslave(i)
+			if person != null:
+				if person.loyal >= (person.obed+person.fear) * .55:
+					text += "\n[color=lime]Loyal Companion[/color]"
+				elif person.obed >= (person.loyal+person.fear) * .52:
+					text += "\n[color=green]Subserviant Slave[/color]"
+				elif person.fear >= (person.obed+person.obed) * .5:
+					text += "\n[color=red]Terrified Slave[/color]"
+				else:
+					text += "\nBegrudging Bodyguard"
+				text += ": " + createPersonURL(person) + "        |---|   Status   |---| " 
+				if person.metrics.win > 0:
+					text += "  |   [color=aqua]" + str(person.metrics.win) + "[/color] Battles Won"
+					if person.metrics.capture > 0:
+						text += "; [color=aqua]" + str(person.metrics.capture) + "[/color] Enemies Captured"
+				text += "\nAwareness: [color=aqua]" + str(person.awareness()) + "[/color]   |   Health: "
+				if person.health >= person.stats.health_max*.8:
+					text += "[color=lime]" + str(person.health) + "[/color] | [color=aqua]" + str(person.stats.health_max) + "[/color]"
+				elif person.health >= person.stats.health_max*.4:
+					text += "[color=green]" + str(person.health) + "[/color] | [color=aqua]" + str(person.stats.health_max) + "[/color]"
+				else:
+					text += "[color=red]" + str(person.health) + "[/color] | [color=aqua]" + str(person.stats.health_max) + "[/color]"
+				text += "  |  Stress: "
+				if person.stress >= person.stats.stress_max*.8:
+					text += "[color=red]" + str(round(person.stress)) + "[/color] | [color=aqua]" + str(person.stats.stress_max) + "[/color]"
+				elif person.stress >= person.stats.stress_max*.4:
+					text += "[color=green]" + str(round(person.stress)) + "[/color] | [color=aqua]" + str(person.stats.stress_max) + "[/color]"
+				else:
+					text += "[color=lime]" + str(round(person.stress)) + "[/color] | [color=aqua]" + str(person.stats.stress_max) + "[/color]"
+				text += "  |  Energy: "
+				if person.energy >= person.stats.energy_max*.8:
+					text += "[color=lime]" + str(person.energy) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
+				elif person.energy >= person.stats.energy_max*.4:
+					text += "[color=green]" + str(person.energy) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
+				else:
+					text += "[color=red]" + str(person.energy) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
+				
+				text += "\nAbilities Known: [color=aqua]" + str(person.ability.size()) + "[/color]" 
+				if person.learningpoints > 0:
+					text += "     |    [color=lime]" + str(person.learningpoints) + "[/color][color=yellow] Learning Points Available[/color]"
+				text += "\n"
+	textnode.set_bbcode(text)
+	###---End Expansion---###
 
 	var jobdict = {headgirl = null, jailer = null, farmmanager = null, cooking = null, nurse = null, labassist = null}
 	for i in globals.slaves:
 		if jobdict.has(i.work) && i.away.at != 'hidden':
 			jobdict[i.work] = i
+	
+	###---Added by Expansion---### Jobs Aren't Showing | Vanilla Bug?
+	text += "\n\n[center][color=#d1b970]---------------Head Mansion Staff---------------[/color][/center]"
+	if globals.slaves.size() >= 8:
+		text += "\nHeadgirl: " + createPersonURL(jobdict.headgirl)
+	text += "\nJailer: " + createPersonURL(jobdict.jailer)
+	if globals.state.farm >= 3:
+		text += "\nFarm Manager: " + createPersonURL(jobdict.farmmanager)
+	text += "\nChef: " + createPersonURL(jobdict.cooking)
+	text += "\nNurse: " + createPersonURL(jobdict.nurse)
+	text += "\nLab Assistant: " + createPersonURL(jobdict.labassist)
+	textnode.set_bbcode(text)
+	###---End Expansion---###
 
 	textnode.push_table(2)
 	if globals.slaves.size() >= 8:
@@ -1428,8 +1490,6 @@ func build_mansion_info():
 		addTableCell(textnode, "Lab Assistant: ", RichTextLabel.ALIGN_RIGHT)
 		addTableCell(textnode, createPersonURL(jobdict.labassist))
 	textnode.pop()
-
-	textnode.append_bbcode("\n------------------------------------------------------------------------------")
 
 	if globals.state.playergroup.empty():
 		###---Added by Expansion---### Added in \n to break up the text for the Dimensional Crystal block
@@ -1456,9 +1516,9 @@ func build_mansion_info():
 	
 	###---Added by Expansion---### Facilities Text Descriptions
 	if globals.expansionsettings.show_facilities_details_in_mansion == true:
-		text += "\n[center][color=#d1b970]-----Facilities Details------[/color][/center]\n"
+		text += "\n\n[center][color=#d1b970]---------------Facilities Details---------------[/color][/center]"
 		#---Pregnancy Expanded | The Crystal || TBK - Ensure No Overridden Text
-		text += "\n[color=#d1b970]-----The Dimensional Crystal------[/color] [color=aqua](" + str(globals.state.mansionupgrades.dimensionalcrystal) + ")[/color]\n"
+		text += "\n\n[color=#d1b970]-----The Dimensional Crystal------[/color] [color=aqua](" + str(globals.state.mansionupgrades.dimensionalcrystal) + ")[/color]\n"
 		text += "The Dimensional Crystal is located in the hallways beneath the Mansion. It is directly at the center of the Mansion and seems to be at exactly an equal distance from each end of the Mansion grounds. It seems to be a massive, perfectly symmetrical prism made out of a material that no one can identify. "
 		#Mode
 		if globals.state.thecrystal.mode == "light" && globals.state.mansionupgrades.dimensionalcrystal > 0:
@@ -1485,12 +1545,12 @@ func build_mansion_info():
 		
 		#Change When "Discovered"
 		if globals.state.thecrystal.research > 0:
-			text += "\n[color=#d1b970]Crystal Research[/color]\nResearch: [color=aqua]" + str(globals.state.thecrystal.research) + "[/color]/100 \nResearch is the chance of discovering a new Crystal Ability at night. "
+			text += "\n\n[color=#d1b970]Crystal Research[/color]\nResearch: [color=aqua]" + str(globals.state.thecrystal.research) + "[/color]/100 \nResearch is the chance of discovering a new Crystal Ability at night. "
 		if globals.state.thecrystal.abilities.empty():
 			text += "\nThe truth behind what all the Crystal can do and why it was put here in the first place is still a complete mystery."
 		else:
 			#Pregnancy Speeds
-			text += "\n[color=#d1b970]Powers of the Crystal[/color]"
+			text += "\n\n[color=#d1b970]Powers of the Crystal[/color]"
 			if globals.state.mansionupgrades.dimensionalcrystal >= 1 && globals.state.thecrystal.abilities.has('pregnancyspeed'):
 				text += "\nYou have learned how to use the magic of the Crystal to affect the [color=aqua]Speed of Pregnancies[/color] in the Mansion. "
 			elif globals.state.mansionupgrades.dimensionalcrystal >= 1 && !globals.state.thecrystal.abilities.has('pregnancyspeed'):
@@ -1510,20 +1570,20 @@ func build_mansion_info():
 					text += "\n\nYou have come to understand that sacrificing someone to the Crystal will feed it an amount equal to their level (reducing hunger) as well as restoring 1 life-force to the Crystal, partially healing it. "
 		#---Training Grounds
 		if globals.state.mansionupgrades.traininggrounds > 0:
-			text += "\n[color=#d1b970]-----Training Grounds------[/color] [color=aqua](" + str(globals.state.mansionupgrades.traininggrounds) + ")[/color]\n"
+			text += "\n\n[color=#d1b970]-----Training Grounds------[/color] [color=aqua](" + str(globals.state.mansionupgrades.traininggrounds) + ")[/color]\n"
 			text += "Outside of the mansion, a cleared section of the field is surrounded by a thin wooden fence. "
 			if globals.state.mansionupgrades.traininggrounds >= 4:
 				text += "Inside of the fence a few hay bales, training dummies, sandbags, crystal reflectors, and crates are set up to allow people to train their combat skills effectively. The side of the crate has a label reading Training Manuals."
-				text += "\nThe [color=aqua]Trainer[/color] and [color=aqua]Trainee[/color] jobs are [color=lime]Unlocked[/color]. [color=aqua]Training XP is Level Difference * 4 and the Chance to gain Learning Points becomes 20 + (Trainer Wit & Confidence/2) + (Trainee Wit & Courage/2).\nMax LP gained per day is 20.[/color]"
+				text += "\nThe [color=aqua]Trainer[/color] and [color=aqua]Trainee[/color] jobs are [color=lime]Unlocked[/color].\n[color=aqua]Training XP is Level Difference * 4 and the Chance to gain Learning Points becomes 20 + (Trainer Wit & Confidence/2) + (Trainee Wit & Courage/2).[/color]\nMax [color=aqua]Learning Points[/color] gained per person per day is [color=aqua]20[/color]."
 			elif globals.state.mansionupgrades.traininggrounds >= 3:
 				text += "Inside of the fence a few hay bales, training dummies and sandbags are set up to allow people to train their combat skills effectively."
-				text += "\nThe [color=aqua]Trainer[/color] and [color=aqua]Trainee[/color] jobs are [color=lime]Unlocked[/color]. [color=aqua]Training XP is Level Difference * 3 and the Chance to gain Learning Points becomes 10 + (Trainer Wit & Confidence/2) + (Trainee Wit & Courage/2).\nMax LP gained per day is 15.[/color]"
+				text += "\nThe [color=aqua]Trainer[/color] and [color=aqua]Trainee[/color] jobs are [color=lime]Unlocked[/color].\n[color=aqua]Training XP is Level Difference * 3 and the Chance to gain Learning Points becomes 10 + (Trainer Wit & Confidence/2) + (Trainee Wit & Courage/2).[/color]\nMax [color=aqua]Learning Points[/color] gained per person per day is [color=aqua]15[/color]."
 			elif globals.state.mansionupgrades.traininggrounds >= 2:
 				text += "Inside of the fence a few hay bales, training dummies and sandbags are set up to allow people to train their combat skills effectively."
-				text += "\nThe [color=aqua]Trainer[/color] and [color=aqua]Trainee[/color] jobs are [color=lime]Unlocked[/color]. [color=aqua]Training XP is Level Difference * 2 and the Chance to gain Learning Points becomes 10 + (Trainer Wit & Confidence/2) + (Trainee Wit & Courage/2).\nMax LP gained per day is 10.[/color]"
+				text += "\nThe [color=aqua]Trainer[/color] and [color=aqua]Trainee[/color] jobs are [color=lime]Unlocked[/color].\n[color=aqua]Training XP is Level Difference * 2 and the Chance to gain Learning Points becomes 10 + (Trainer Wit & Confidence/2) + (Trainee Wit & Courage/2).[/color]\nMax [color=aqua]Learning Points[/color] gained per person per day is [color=aqua]10[/color]."
 			else:
 				text += "Inside of the fence a few hay bales, training dummies and sandbags are set up to allow people to train their combat skills effectively."
-				text += "\nThe [color=aqua]Trainer[/color] and [color=aqua]Trainee[/color] jobs are [color=lime]Unlocked[/color]. [color=aqua]Training XP is Level Difference and the Chance to gain Learning Points is (Trainer Wit & Confidence/2) + (Trainee Wit & Courage/2).\nMax LP gained per day is 5.[/color]"
+				text += "\nThe [color=aqua]Trainer[/color] and [color=aqua]Trainee[/color] jobs are [color=lime]Unlocked[/color].\n[color=aqua]Training XP is Level Difference and the Chance to gain Learning Points is (Trainer Wit & Confidence/2) + (Trainee Wit & Courage/2).[/color]\nMax [color=aqua]Learning Points[/color] gained per person per day is [color=aqua]5[/color]."
 	
 #	Dreams?
 #	text += "\nSome report having seen faint visions inside of the Crystal's hardened shell, flashing inside of the glow. You have not seen it. Though you don't understand the Crystal, everyone seems to enjoy it. You love having the Crystal."
