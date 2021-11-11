@@ -1447,10 +1447,12 @@ func build_mansion_info():
 					text += "[color=green]" + str(person.energy) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
 				else:
 					text += "[color=red]" + str(person.energy) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
-				
-				text += "\nAbilities Known: [color=aqua]" + str(person.ability.size()) + "[/color]" 
+				if person.ability.size > 2:
+					text += "\nAbilities Known: [color=aqua]" + str(person.ability.size() -2) + "[/color]" 
+					if person.learningpoints > 0:
+						text += "     |    "
 				if person.learningpoints > 0:
-					text += "     |    [color=lime]" + str(person.learningpoints) + "[/color][color=yellow] Learning Points Available[/color]"
+					text += "[color=lime]" + str(person.learningpoints) + "[/color][color=yellow] Learning Points Available[/color]"
 				text += "\n"
 	textnode.set_bbcode(text)
 	###---End Expansion---###
