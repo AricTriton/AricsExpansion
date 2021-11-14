@@ -90,6 +90,15 @@ class member:
 		lewd = source.lewdness
 		consent = source.consent
 
+		###---Added by Expansion---###
+		sexuality = source.sexuality
+		#Wear and Tear
+		vaginasize = person.vagina
+		assholesize = person.asshole
+		vagTorn = person.dailyevents.has('vagTorn')
+		assTorn = person.dailyevents.has('assTorn')
+		###---Expansion End---###
+
 		if source.traits.has("Sex-crazed"):
 			effects.append("sexcrazed")
 		if isAnimal:
@@ -943,6 +952,26 @@ class member:
 			effects.erase('resist')
 			sceneref.get_node("Panel/sceneeffects").bbcode_text += sceneref.decoder(text, scenedict.givers, scenedict.takers) + '\n'
 
+<RemoveFrom 5 5>
+func dog():
+#	person.penis = globals.weightedrandom([['average',1],['big',1]])
+
+<AddTo 5>
+func dog():
+	person.penis = 'large'
+	person.balls = 'large'
+	globals.expansion.quickStrip(person) # --Ank: not sure if this is needed
+
+<RemoveFrom 7 7>
+func horse():
+#	person.penis = 'big'
+
+<AddTo 7>
+func horse():
+	person.penis = 'massive'
+	person.balls = 'large'
+	globals.expansion.quickStrip(person) # --Ank: not sure if this is needed
+
 func startsequence(actors, mode = null, secondactors = [], otheractors = []):
 	participants.clear()
 	secondactorcounter.clear()
@@ -956,22 +985,6 @@ func startsequence(actors, mode = null, secondactors = [], otheractors = []):
 		person.metrics.sex += 1
 		###---Added by Expansion---### Person Update
 		globals.expansion.updatePerson(person)
-		#Size Matters
-		if person.unique == 'dog':
-			person.penis = 'large'
-			person.balls = 'large'
-		elif person.unique == 'horse':
-			person.penis = 'massive'
-			person.balls = 'large'
-		#Wear and Tear
-		if person.dailyevents.has('vagTorn'):
-			person.vagTorn = true
-		else:
-			person.vagTorn = false
-		if person.dailyevents.has('assTorn'):
-			person.assTorn = true
-		else:
-			person.assTorn = false
 		#Temporarily Removes Clothes
 		globals.expansion.quickStrip(person)
 		###---Expansion End---###
