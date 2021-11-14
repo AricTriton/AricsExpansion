@@ -1247,7 +1247,10 @@ var descPenisSize = [
 func describePenis(group):
 	var limitsPenis = getAttribLimits(group, 'penis', refGenitaliaArray)
 	if limitsPenis[0] == limitsPenis[1]:
-		return getRandStr( descPenisSize[ clamp(limitsPenis[0],0,5) * 2 + int(areAllAttrib_E_val(group, C_AGE, C_CHILD)) ])
+		if limitsPenis[0] == -1: # handle strapon with default size
+			return getRandStr( descPenisSize[ 4 * 2 + int(areAllAttrib_E_val(group, C_AGE, C_CHILD)) ])
+		else:
+			return getRandStr( descPenisSize[ clamp(limitsPenis[0],0,5) * 2 + int(areAllAttrib_E_val(group, C_AGE, C_CHILD)) ])
 	return null
 ###---End Expansion---###
 

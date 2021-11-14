@@ -790,7 +790,8 @@ class member:
 				#Penis in Pussy Effects
 				if scenedict.scene.code in ['missionary','doggy','lotus','revlotus','spitroast','insertinturns']:
 					if scenedict.givers.has(self) && scenedict.takers.has(i):
-						difference = globals.penissizearray.find(person.penis) - globals.vagsizearray.find(i.vaginasize)
+						var temppenissize = globals.penissizearray.find(person.penis) if person.penis != null else 4 # handle strapon with default size
+						difference = temppenissize - globals.vagsizearray.find(i.vaginasize)
 						number = 1+(difference*.1)
 						values.sens *= number
 						values.lust *= number
@@ -806,7 +807,8 @@ class member:
 							elif display < 0 && scenedict.givers.size() <= 1:
 								text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
 					elif scenedict.takers.has(self) && scenedict.givers.has(i):
-						difference = globals.penissizearray.find(i.person.penis) - globals.vagsizearray.find(vaginasize)
+						var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != null else 4 # handle strapon with default size
+						difference = temppenissize - globals.vagsizearray.find(vaginasize)
 						number = 1+(difference*.1)
 						values.sens *= number
 						values.lust *= number
@@ -836,11 +838,11 @@ class member:
 										globals.addrelations(person, i.person, -round(rand_range(difference*5,difference*10)))
 										if scenedict.givers.size() <= 1:
 											text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [pussy2] suddenly {^rips:tears:breaks:starts bleeding}, sending waves of pain through [his2] body.[/color] "
-										person.stress += round(rand_range(difference,globals.penissizearray.find(i.person.penis)))
+										person.stress += round(rand_range(difference,temppenissize))
 									else:
 										if scenedict.takers.size() <= 1:
 											text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [pussy2] {^rips:tears:breaks} even further, causing [him2] excruciating pain.[/color] "
-										person.stress += round(rand_range(difference*2,globals.penissizearray.find(i.person.penis)*2))
+										person.stress += round(rand_range(difference*2,temppenissize*2))
 						#Display
 						if globals.state.perfectinfo == true:
 							display = difference*10
@@ -852,7 +854,8 @@ class member:
 				#Penis in Asshole Effects
 				if scenedict.scene.code in ['missionaryanal', 'doggyanal','lotusanal','revlotusanal','spitroastass','insertinturnsass']:
 					if scenedict.givers.has(self) && scenedict.takers.has(i):
-						difference = globals.penissizearray.find(person.penis) - globals.assholesizearray.find(i.assholesize)
+						var temppenissize = globals.penissizearray.find(person.penis) if person.penis != null else 4 # handle strapon with default size
+						difference = temppenissize - globals.assholesizearray.find(i.assholesize)
 						number = 1+(difference*.1)
 						values.sens *= number
 						values.lust *= number
@@ -868,7 +871,8 @@ class member:
 							elif display < 0 && scenedict.givers.size() <= 1:
 								text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
 					elif scenedict.takers.has(self) && scenedict.givers.has(i):
-						difference = globals.penissizearray.find(i.person.penis) - globals.assholesizearray.find(assholesize)
+						var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != null else 4 # handle strapon with default size
+						difference = temppenissize - globals.assholesizearray.find(assholesize)
 						number = 1+(difference*.1)
 						values.sens *= number
 						values.lust *= number
@@ -895,11 +899,11 @@ class member:
 										globals.addrelations(person, i.person, -round(rand_range(difference*5,difference*10)))
 										if scenedict.takers.size() <= 1:
 											text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [anus2] suddenly {^rips:tears:breaks:starts bleeding}, sending waves of pain through [his2] body.[/color]"
-										person.stress += round(rand_range(difference,globals.penissizearray.find(i.person.penis)))
+										person.stress += round(rand_range(difference,temppenissize))
 									else:
 										if scenedict.takers.size() <= 1:
 											text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [anus2] {^rips:tears:breaks} even further, causing [him2] excruciating pain.[/color] "
-										person.stress += round(rand_range(difference*2,globals.penissizearray.find(i.person.penis)*2))
+										person.stress += round(rand_range(difference*2,temppenissize*2))
 						#Display
 						if globals.state.perfectinfo == true:
 							display = difference*10
@@ -1884,7 +1888,7 @@ func characterspeech(scene, details = []):
 		else:
 			dict.painlike = [expandedspeechdict.painlike, 2.5]
 	#Incest Support / Family Matters
-	var relation = globals.expansion.relatedCheck(cp, partner.person)
+	var relation = 'unrelated' if partner == null else globals.expansion.relatedCheck(cp, partner.person)
 	if relation != 'unrelated' && cp != globals.player:
 		if globals.fetishopinion.find(cp.fetish.incest)-4 > 0:
 			dict.incestlike = [expandedspeechdict.incestlike, 2.5]
