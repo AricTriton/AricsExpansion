@@ -161,8 +161,6 @@ var sexuality_images = {
 	futa = '',
 }
 var knownfetishes = []
-var vagTorn = false
-var assTorn = false
 
 #Fetishes turn Stress into Lust for the relevant situation || ing means doing it to others
 #Creampie considered is holding cum inside the Hole
