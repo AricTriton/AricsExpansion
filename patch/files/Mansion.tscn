@@ -2871,16 +2871,6 @@ margin_bottom = 589.0
 texture = ExtResource( 64 )
 expand = true
 
-[node name="BorderFrameText" type="TextureRect" parent="MainScreen/mansion/farmpanel"]
-margin_left = 12.0
-margin_top = 12.0
-margin_right = 931.0
-margin_bottom = 42.0
-rect_clip_content = true
-mouse_filter = 0
-texture = SubResource( 18 )
-expand = true
-
 [node name="farminfo_panel" type="Panel" parent="MainScreen/mansion/farmpanel"]
 margin_left = 20.0
 margin_top = 54.0
@@ -2916,15 +2906,24 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -749.0
 margin_top = -179.0
-margin_right = -599.0
-margin_bottom = -29.0
-hint_tooltip = "Farm"
+margin_right = -602.0
+margin_bottom = -27.0
+hint_tooltip = "Open the Vats Panel. You will need Vats to store excess Milk/Piss/Cum to be able to Bottle, Refine, or Sell it."
 size_flags_horizontal = 2
 size_flags_vertical = 2
 texture_normal = ExtResource( 65 )
 texture_pressed = ExtResource( 65 )
 texture_hover = ExtResource( 65 )
 texture_disabled = ExtResource( 66 )
+expand = true
+
+[node name="BorderFrameText2" type="TextureRect" parent="MainScreen/mansion/farmpanel/vatsbutton"]
+margin_top = -3.0
+margin_right = 150.0
+margin_bottom = 177.0
+rect_clip_content = true
+mouse_filter = 2
+texture = SubResource( 18 )
 expand = true
 
 [node name="Label" type="Label" parent="MainScreen/mansion/farmpanel/vatsbutton"]
@@ -2938,14 +2937,6 @@ custom_colors/font_color = Color( 0.761719, 0.660181, 0.261841, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 text = "Storage Vats"
 
-[node name="BorderFrameText" type="TextureRect" parent="MainScreen/mansion/farmpanel/vatsbutton"]
-margin_right = 150.0
-margin_bottom = 175.0
-rect_clip_content = true
-mouse_filter = 2
-texture = SubResource( 18 )
-expand = true
-
 [node name="snailsbutton" type="TextureButton" parent="MainScreen/mansion/farmpanel"]
 anchor_left = 1.0
 anchor_top = 1.0
@@ -2955,7 +2946,7 @@ margin_left = -589.0
 margin_top = -179.0
 margin_right = -439.0
 margin_bottom = -29.0
-hint_tooltip = "Farm"
+hint_tooltip = "Manage any Snails you've caught, breed them, sell them, or cook them."
 size_flags_horizontal = 2
 size_flags_vertical = 2
 texture_normal = ExtResource( 67 )
@@ -2976,8 +2967,9 @@ custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 text = "Snail Pit"
 
 [node name="BorderFrameText" type="TextureRect" parent="MainScreen/mansion/farmpanel/snailsbutton"]
+margin_top = -1.19751
 margin_right = 150.0
-margin_bottom = 175.0
+margin_bottom = 173.802
 rect_clip_content = true
 mouse_filter = 2
 texture = SubResource( 18 )
@@ -2992,7 +2984,7 @@ margin_left = -909.0
 margin_top = -179.0
 margin_right = -759.0
 margin_bottom = -29.0
-hint_tooltip = "Farm"
+hint_tooltip = "See who all is working in the farm currently."
 size_flags_horizontal = 2
 size_flags_vertical = 2
 texture_normal = ExtResource( 69 )
@@ -3029,7 +3021,7 @@ margin_left = -164.0
 margin_top = -179.0
 margin_right = -14.0
 margin_bottom = -29.0
-hint_tooltip = "Farm"
+hint_tooltip = "Buy Farm Equipment. You will need somewhere for them to Sleep, Work (be milked/bred), and potentially tools for Farmhands to train them. You will also need something to Pump and Store the liquids milked from your livestock."
 size_flags_horizontal = 2
 size_flags_vertical = 2
 texture_normal = ExtResource( 71 )
@@ -3061,7 +3053,6 @@ texture = SubResource( 18 )
 expand = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MainScreen/mansion/farmpanel"]
-editor/display_folded = true
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -3102,7 +3093,6 @@ text = "name surname"
 align = 0
 
 [node name="slavetofarm" type="Panel" parent="MainScreen/mansion/farmpanel"]
-editor/display_folded = true
 visible = false
 anchor_left = 1.0
 anchor_top = 1.0
