@@ -897,6 +897,7 @@ func crystalconsequences(mode=''):
 		text += "You remain in front of the crystal by yourself. "
 		if !globals.state.thecrystal.abilities.has('understandsacrifice'):
 			text += "You stare into the swirling, ravenous void and see the bright, violet stream of $name's lifeforce fading into the crystal. You think you understand how the sacrifice works for the crystal. The hunger of the crystal seemed to have lessened by the same amount as $name's level, and it has gained $his lifeforce which may replace any that it has used before. The circle of life continues in the swirl of the crystal. "
+			globals.state.thecrystal.abilities.append('understandsacrifice')
 		globals.state.thecrystal.hunger -= person.level
 		globals.state.thecrystal.lifeforce += 1
 		get_tree().get_current_scene().close_dialogue()

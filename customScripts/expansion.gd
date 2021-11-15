@@ -1678,7 +1678,7 @@ func dailyPregnancy(person):
 			
 			if person.preg.duration >= variables.pregduration:
 				#Childbirth still checked/called in End of Day
-				text += "\n[center][color=aqua]$name went into labor .[/color][/center]"
+				text += "\n\n[center][color=yellow]$name went into Labor![/color][/center]\n"
 			else:
 				if rand_range(0,100) <= chancemorningsickness + person.swollen:
 					morningsickness = true

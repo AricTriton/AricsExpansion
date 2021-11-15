@@ -3,9 +3,11 @@ AricsExpansion Rebred v1.2
 <HOW TO CORRECTLY INSTALL THIS MOD>
 1) Extract Ankmairdor's BugFix v5 and AricExpansion v1 into your %AppData%/Strive/mods folder
     - Links are in "Shortcuts" if needed
+
 2) Verify that the extracted folders are "Strive-1.0d-Bugfix-V5a" and "AricsExpansion"
     - If they aren't, the correct folders are likely within the ones you extracted.
-2) Start the Game, Activate BugFix v5 (and ONLY this), and Exit Game
+
+3) Start the Game, Activate BugFix v5 (and ONLY this), and Exit Game
 4) Start the Game, Activate AricExpansion BENEATH BugFix v5, and Exit Game
 5) Start the Game, Make a New Game, SAVE as soon as possible, then LOAD that game you just created and saved
 6) You are ready to play!

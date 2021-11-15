@@ -47,9 +47,11 @@ func _ready():
 	rebuild_slave_list()
 	globals.player.consent = true
 	globals.spells.main = get_tree().get_current_scene()
-	get_node("birthpanel/raise/childpanel/child").connect('pressed', self, 'babyage', ['child'])
-	get_node("birthpanel/raise/childpanel/teen").connect('pressed', self, 'babyage', ['teen'])
-	get_node("birthpanel/raise/childpanel/adult").connect('pressed', self, 'babyage', ['adult'])
+	###---Added by Expansion---### Altered Birth Panel
+	get_node("birthpanel/childpanel/child").connect('pressed', self, 'babyage', ['child'])
+	get_node("birthpanel/childpanel/teen").connect('pressed', self, 'babyage', ['teen'])
+	get_node("birthpanel/childpanel/adult").connect('pressed', self, 'babyage', ['adult'])
+	###---End Expansion---###
 	#exploration
 	get_node("explorationnode").buttoncontainer = get_node("outside/buttonpanel/outsidebuttoncontainer")
 	get_node("explorationnode").button = get_node("outside/buttonpanel/outsidebuttoncontainer/buttontemplate")
@@ -1426,7 +1428,7 @@ func build_mansion_info():
 					text += "\n[color=red]Terrified Slave[/color]"
 				else:
 					text += "\nBegrudging Bodyguard"
-				text += ": " + createPersonURL(person) + "        |---|   Status   |---| " 
+				text += ":  " + createPersonURL(person) + "      |---|   Status   |---| " 
 				if person.metrics.win > 0:
 					text += "[color=aqua]" + str(person.metrics.win) + "[/color] Battles Won"
 					if person.metrics.capture > 0:
@@ -1627,17 +1629,9 @@ func childbirth(person,baby_id):
 	get_node("birthpanel").show()
 	baby = globals.state.findbaby(baby_id)
 	var text = ''
-	person.preg.fertility = 5
-	###---Added by Expansion---### Reset Pregnancy
+	###---Added by Expansion---### Add Metrics
 	if person.mind.secrets.has('currentpregnancy') && !person.knowledge.has('currentpregnancy'):
 		person.metrics.preg += 1
-	if person.knowledge.has('currentpregnancy'):
-		person.knowledge.erase('currentpregnancy')
-	if person.mind.secrets.has('currentpregnancy'):
-		person.mind.secrets.erase('currentpregnancy')
-	person.pregexp.babysize = 0
-	person.pregexp.incestbaby = false
-	person.pregexp.wantedpregnancy = false
 	if globals.state.mansionupgrades.mansionnursery >= 1:
 		if globals.player == person:
 			text = person.dictionary('[color=aqua]You[/color] gave birth to a ')
@@ -1647,61 +1641,154 @@ func childbirth(person,baby_id):
 		if globals.state.mansionupgrades.dimensionalcrystal >= 2:
 			text += baby.dictionary("\nYou see the octomarine remnants of magic slowly fading from $his skin. The Dimensional Crystal may have unlocked parts of $his DNA and given $him greater possible abilities than $his parents. ")
 		###---Added by Expansion---###
+		#Change the "0,5" to Lust/Orgasms,Stress+Pain*.5 ?
 		if person.pregexp.desiredoffspring - person.metrics.birth - rand_range(0,5) > 0:
-			#Change Dialogue
-			text += person.dictionary("\n\n[color=aqua]$name[/color] whimpers\n" + person.quirk("[color=yellow]-I don't mind having another baby[/color] "))
+			#Randomize Dialogue - TBK
+			text += person.dictionary("\n\n[color=aqua]$name[/color] " + str(globals.randomitemfromarray(['whimpers','pants','moans','says','meekly says'])) + "\n" + person.quirk("[color=yellow]-I need time to recover, of course, but I don't mind having another baby "))
 			if globals.expansion.relatedCheck(globals.player,baby) == 'father':
-				text += "with you.\n"
+				text += "with you.[/color]\n"
 			else:
-				text += "for you.\n"
+				text += "for you.[/color]\n"	
 		else:
-			#Change Dialogue
-			text += person.dictionary("\n\n[color=aqua]$name[/color] whimpers\n" + person.quirk("[color=yellow]-I don't think I really want to have another baby...[/color]\n"))
-		#Change the "0,5" to Lust/Orgasms,Stress+Pain*.5
+			#Randomize Dialogue - TBK
+			text += person.dictionary("\n\n[color=aqua]$name[/color] " + str(globals.randomitemfromarray(['whimpers','pants','moans','says','meekly says'])) + "\n" + person.quirk("[color=yellow]-I really don't want to have another baby. Please don't make me have another baby...[/color]\n"))
 			person.consentexp.pregnancy = false
-#		if globals.state.rank < 2:
-#			get_node("birthpanel/raise").set_disabled(true)
-#			text = text + "\nSadly, you can't allow to raise it, as your guild rank is too low. "
-#		else:
-		###---Added by Expansion---### Modified Text and Raising Cost
-		text = text + "\nWould you like to send it to another dimension to accelerate its growth? This will cost you either 100 gold and 25 mana or 500 gold if you can't afford the mana cost yourself. "
-		if globals.resources.gold >= 500 || globals.resources.gold >= 100 && globals.resources.mana >= 25:
-		###---Expansion End---###
+			person.consentexp.breeder = false
+			person.consentexp.incestbreeder = false
+		var acceptsacrifice = round(rand_range(0,100))
+		if person.knowledge.has('currentpregnancywanted') || person.pregexp.wantedpregnancy == true:
+			text += person.dictionary(person.quirk("[color=yellow]Will you keep my baby? Please? I want to be able to be in ")) + baby.dictionary("$his") + person.dictionary(person.quirk(" life.[/color]\n"))
+		elif globals.state.thecrystal.abilities.has('sacrifice') && (acceptsacrifice < (person.loyal+person.obed)*.5 || acceptsacrifice <= person.fear):
+			person.dailytalk.append('acceptedsacrifice')
+			text += person.dictionary(person.quirk("[color=yellow]I understand if you...have to do what you do with the [color=aqua]Crystal[/color]. I would rather you not, obviously, but if you have absolutely have to get rid of to keep the rest of us from being eaten or sacrificed...I won't hold it against you. If it is between me and the baby I didn't want to have...well, you understand.[/color]\n"))
+		#---Modified Text and Raising Cost
+		text += "\nThe power of the [color=aqua]Dimensional Crystal[/color] will help accelerate it's growth allowing for it to experience entire years in a matter of days as it rests in the [color=aqua]Nursery[/color] next to the [color=aqua]Crystal[/color]."
+		text += "\nWould you like to [color=aqua]Raise[/color] it? This will cost you either [color=aqua]500 Gold[/color], [color=aqua]25 Mana and 250 Gold[/color], or [color=aqua]50 Mana[/color] to allow it to grow up healthy.\nYou may also [color=aqua]Give the Baby Away[/color] for no cost or penalty. "
+		if globals.state.thecrystal.abilities.has('sacrifice'):
+			text += "\nYou can also [color=red]Sacrifice[/color] the baby to the [color=aqua]Crystal[/color]. This will kill the baby but embue the [color=aqua]Crystal[/color] with [color=aqua]1 Life[/color] and lessen [color=aqua]1-3 Hunger[/color]."
+			text += "\nHowever, [color=aqua]$name[/color] may hate you for this action depending on $his [color=aqua]Loyalty[/color] and will gain [color=aqua]Fear[/color]."
+		#Raise with Gold
+		if globals.resources.gold >= 500:
 			get_node("birthpanel/raise").set_disabled(false)
+			get_node("birthpanel/raise").set_tooltip("Spend 500 Gold to Raise the Baby")
 		else:
 			get_node("birthpanel/raise").set_disabled(true)
+			get_node("birthpanel/raise").set_tooltip("You cannot afford the cost of 500 Gold")
+		#Raise with Gold and Mana
+		if globals.resources.gold >= 250 && globals.resources.mana >= 25:
+			get_node("birthpanel/raisehybrid").set_disabled(false)
+			get_node("birthpanel/raisehybrid").set_tooltip("Spend 250 Gold and 25 Mana to Raise the Baby")
+		else:
+			get_node("birthpanel/raisehybrid").set_disabled(true)
+			get_node("birthpanel/raisehybrid").set_tooltip("You cannot afford the cost of 250 Gold and 25 Mana")
+		#Raise with Mana
+		if globals.resources.mana >= 50:
+			get_node("birthpanel/raisemana").set_disabled(false)
+			get_node("birthpanel/raisemana").set_tooltip("Spend 50 Mana to Raise the Baby")
+		else:
+			get_node("birthpanel/raisemana").set_disabled(true)
+			get_node("birthpanel/raisemana").set_tooltip("You cannot afford the cost of 50 Mana")
+		#Sacrifice Baby
+		if globals.state.thecrystal.abilities.has('sacrifice'):
+			get_node("birthpanel/sacrificebaby").show()
+			if globals.state.thecrystal.mode == "dark":
+				get_node("birthpanel/sacrificebaby").set_disabled(false)
+				get_node("birthpanel/sacrificebaby").set_tooltip("Sacrifice the Baby to the Dark Crystal to lower its Hunger by 1 to 3 and gain 1 Lifeforce")
+			else:
+				get_node("birthpanel/sacrificebaby").set_disabled(true)
+				get_node("birthpanel/sacrificebaby").set_tooltip("The Crystal is Light and will not currently accept Sacrifices")
+		else:
+			get_node("birthpanel/sacrificebaby").hide()
+		###---Expansion End---###
 	else:
 		if globals.player == person:
 			text = person.dictionary("You've had to use the town's hospital to give birth to your child. [color=red]Sadly, you can't keep it without Nursery Room and had to give it away.[/color]")
 		else:
 			text = person.dictionary("$name had to use the town's hospital to give birth to her child. [color=red]Sadly, you can't keep it without Nursery Room and had to give it away.[/color]")
 		get_node("birthpanel/raise").set_disabled(true)
+	
+	#---Added Portrait
+	get_node("birthpanel/portraitpanel/portrait").set_texture(null)
+	if person.imageportait != null && globals.loadimage(person.imageportait) != null:
+		get_node("birthpanel/portraitpanel/portrait").set_texture(globals.loadimage(person.imageportait))
+	elif globals.gallery.nakedsprites.has(person.unique):
+		if person.obed <= 50 || person.stress > 50:
+			get_node("birthpanel/portraitpanel/portrait").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothrape])
+		else:
+			get_node("birthpanel/portraitpanel/portrait").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothcons])
+	get_node("birthpanel/portraitpanel/portrait").show()
+	
 	get_node("birthpanel/birthtext").set_bbcode(text)
 
+#---Reset Stats after Pregnancy
+func reset_after_pregnancy(person):
+	person.preg.fertility = 5
+	if person.knowledge.has('currentpregnancy'):
+		person.knowledge.erase('currentpregnancy')
+	if person.mind.secrets.has('currentpregnancy'):
+		person.mind.secrets.erase('currentpregnancy')
+	if person.knowledge.has('currentpregnancywanted'):
+		person.knowledge.erase('currentpregnancywanted')
+	if birthmother.dailytalk.has('acceptedsacrifice'):
+		birthmother.dailytalk.erase('acceptedsacrifice')
+	person.pregexp.wantedpregnancy = false
+	person.pregexp.babysize = 0
+	person.pregexp.incestbaby = false
+
+###---Added by Expansion---### Childbirth Expanded
 func _on_giveaway_pressed():
+	if birthmother.knowledge.has('currentpregnancywanted') || birthmother.pregexp.wantedpregnancy == true:
+		birthmother.loyal -= round(rand_range(10,25))
+	reset_after_pregnancy(birthmother)
 	get_node("birthpanel").hide()
 	childbirth_loop(birthmother)
 
-###---End of Expansion---###
+func _on_sacrificebaby_pressed():
+	if birthmother.dailytalk.has('acceptedsacrifice'):
+		birthmother.dailytalk.erase('acceptedsacrifice')
+		birthmother.fear += round(rand_range(5,10))
+	else:
+		birthmother.loyal -= round(rand_range(15,30))
+		birthmother.fear += round(rand_range(20,50))
+	reset_after_pregnancy(birthmother)
+	globals.state.thecrystal.hunger -= round(rand_range(1,3))
+	globals.state.thecrystal.lifeforce += 1
+	get_node("birthpanel").hide()
+	childbirth_loop(birthmother)
 
 func _on_raise_pressed():
-	get_node("birthpanel/raise/childpanel").show()
-	###---Added by Expansion---### Raising Cost
-	if globals.resources.gold >= 100 && globals.resources.mana >= 25:
-		globals.resources.gold -= 100
-		globals.resources.mana -= 25
-	elif globals.resources.gold >= 500:
+	if globals.resources.gold >= 500:
 		globals.resources.gold -= 500
-	###---Expansion End---###
-	get_node("birthpanel/raise/childpanel/LineEdit").set_text(baby.name)
+	finish_raising()
+
+func _on_raisehybrid_pressed():
+	if globals.resources.gold >= 250 && globals.resources.mana >= 25:
+		globals.resources.gold -= 250
+		globals.resources.mana -= 25
+	finish_raising()	
+
+func _on_raisemana_pressed():
+	if globals.resources.mana >= 50:
+		globals.resources.mana -= 50
+	finish_raising()
+
+func finish_raising():
+	#Reset Pregnancy Stats
+	if birthmother.knowledge.has('currentpregnancywanted') || birthmother.pregexp.wantedpregnancy == true:
+		birthmother.loyal += round(rand_range(5,10))
+		birthmother.obed += round(rand_range(10,25))
+	reset_after_pregnancy(birthmother)
+	get_node("birthpanel/childpanel").show()
+	get_node("birthpanel/childpanel/LineEdit").set_text(baby.name)
 	if globals.rules.children != true:
-		get_node("birthpanel/raise/childpanel/child").hide()
+		get_node("birthpanel/childpanel/child").hide()
 	else:
-		get_node("birthpanel/raise/childpanel/child").show()
+		get_node("birthpanel/childpanel/child").show()
+###---End of Expansion---###
 
 func babyage(age):
-	baby.name = get_node("birthpanel/raise/childpanel/LineEdit").get_text()
-	if get_node("birthpanel/raise/childpanel/surnamecheckbox").is_pressed() == true:
+	baby.name = get_node("birthpanel/childpanel/LineEdit").get_text()
+	if get_node("birthpanel/childpanel/surnamecheckbox").is_pressed() == true:
 		baby.surname = globals.player.surname
 	###---Added by Expansion---### Size Support || Replaced Functions
 	if age == 'child':
@@ -1726,7 +1813,7 @@ func babyage(age):
 	globals.state.babylist.erase(baby)
 	baby = null
 	get_node("birthpanel").hide()
-	get_node("birthpanel/raise/childpanel").hide()
+	get_node("birthpanel/childpanel").hide()
 	childbirth_loop(birthmother)
 
 func _on_selfbutton_pressed():

@@ -389,8 +389,10 @@ func dailyFarm():
 			if !farmhand.jobskills.has('farmhand'):
 				farmhand.jobskills['farmhand'] = 0
 			farmhand.add_jobskill('farmhand', 1)
-			
-			text += "[color=#d1b970]\n\nLivestock: [color=aqua]" + str(cattle.name) + "[/color] | Worker: [color=aqua]" + (farmhand.name) + "[/color] \n[/color]"
+			#Correct Spacing
+			if allcattle.size() > 1 && allcattle.find(findcattle) != 0:
+				text += "\n"
+			text += "[color=#d1b970]\nLivestock: [color=aqua]" + cattle.dictionary("$name") + "[/color] | Worker: [color=aqua]" + farmhand.dictionary("$name") + "[/color][/color]"
 			
 			actionresult = 0
 			#Daily Action: Exhaust
@@ -550,7 +552,10 @@ func dailyFarm():
 			lustmod = clamp(round((cattle.lust-50)*.1), 0, 5) * 4
 			effort = 0
 			
-			text += "[color=#d1b970]\n\nLivestock: [color=aqua]" + str(cattle.name) + "[/color]\n[/color]"
+			#Correct Spacing
+			if allcattle.size() > 1 && allcattle.find(findcattle) != 0:
+				text += "\n"
+			text += "[color=#d1b970]\nLivestock: [color=aqua]" + cattle.dictionary("$name") + "[/color][/color]"
 			if cattle.farmexpanded.extractmilk.enabled == true:
 				#Invalid Check
 				if cattle.lactation == false:
@@ -1235,7 +1240,7 @@ func dailyFarm():
 					text += cattle.dictionary("\n[color=aqua]$name[/color] hates life as one of your livestock so much that $he approaches you and indicates that $he wants it to stop. You no longer have $his [color=aqua]Consent[/color] and $he might even resist you in the future. ")
 		
 	#---Sleep/Bedding Effects
-	text += "[color=#d1b970][center]\n\n-----Evening-----\n[/center][/color]"
+	text += "[color=#d1b970][center]\n\n-----Evening-----[/center][/color]"
 	for findcattle in allcattle:
 		cattle = globals.state.findslave(findcattle)
 		if cattle == null:
@@ -1405,7 +1410,7 @@ func dailyFarm():
 				globals.resources.gold -= difference * globals.expansionfarm.containerdict.bottle.cost
 				bottlespurchased += difference
 		else:
-			text += "[color=red]There was a shortage of available bottles. Your slaves were only able to bottle " + str(globals.resources.farmexpanded.containers.bottle) + " " + str(fluid) + " today. There are still " + str(totalbottlesneeded - globals.resources.farmexpanded.containers.bottle) + " waiting to be bottled.[/color]\n[color=aqua]Hint: This can be avoided by setting your Auto-Buy Bottles setting to a higher number than needed or to 0 for unlimited purchases. As long as you have the gold, you will be able to buy. "
+			text += "\n[color=red]There was a shortage of available bottles. Your slaves were only able to bottle " + str(globals.resources.farmexpanded.containers.bottle) + " " + str(fluid) + " today. There are still " + str(totalbottlesneeded - globals.resources.farmexpanded.containers.bottle) + " waiting to be bottled.[/color]\n[color=aqua]Hint: This can be avoided by setting your Auto-Buy Bottles setting to a higher number than needed or to 0 for unlimited purchases. As long as you have the gold, you will be able to buy. "
 			totalbottlesneeded = globals.resources.farmexpanded.containers.bottle
 			
 		#Begin Bottling
@@ -1480,7 +1485,7 @@ func dailyFarm():
 		
 		#Sort Produced Bottles (Always Refine then Sell)
 		if bottlesproduced > 0:
-			text += "\nIn all, " + str(bottlesproduced) + " bottles of " + str(fluid) + " were successfully produced today. These were prioritized to any designated to be refined for your use with any remainder added to the sales stockpile.\n"
+			text += "\n[color=yellow]In all, [color=lime]" + str(bottlesproduced) + " bottles[/color] of [color=aqua]" + str(fluid) + "[/color] were successfully produced today. These were prioritized to any designated to be [color=aqua]refined[/color] for your use with any remainder being added to the [color=aqua]sales stockpile[/color].[/color]\n"
 			globals.resources.farmexpanded.bottler.totalproduced += bottlesproduced
 			difference = round(bottlesproduced/2)
 			if globals.resources.farmexpanded.vats[fluid].bottle2refine <= bottlesproduced:

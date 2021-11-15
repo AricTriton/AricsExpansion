@@ -8686,53 +8686,120 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -262.0
+margin_left = -190.0
 margin_top = -68.0
-margin_right = -95.0
+margin_right = -23.0
 margin_bottom = -28.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-text = "Give baby away"
+text = "Give Away Baby"
 
 [node name="birthtext" type="RichTextLabel" parent="birthpanel"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -742.803
+margin_left = -743.0
 margin_top = -401.0
-margin_right = -23.8026
-margin_bottom = -139.0
+margin_right = -24.0
+margin_bottom = -111.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
+bbcode_enabled = true
 
 [node name="raise" type="Button" parent="birthpanel"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -682.0
+margin_left = -751.0
 margin_top = -68.0
-margin_right = -515.0
+margin_right = -584.0
 margin_bottom = -28.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-text = "Raise the baby"
+text = "Raise Baby (500G)"
 
-[node name="childpanel" type="Panel" parent="birthpanel/raise"]
+[node name="raisehybrid" type="Button" parent="birthpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -581.0
+margin_top = -68.0
+margin_right = -379.0
+margin_bottom = -28.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Raise Baby (100G + 25M)"
+
+[node name="raisemana" type="Button" parent="birthpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -376.0
+margin_top = -68.0
+margin_right = -224.0
+margin_bottom = -28.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Raise Baby (50M)"
+
+[node name="sacrificebaby" type="Button" parent="birthpanel"]
 visible = false
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -126.0
-margin_top = -395.0
-margin_right = 384.0
-margin_bottom = -11.0
+margin_left = -190.0
+margin_top = -108.0
+margin_right = -23.0
+margin_bottom = -68.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Sacrifice Baby"
+
+[node name="portraitpanel" type="Panel" parent="birthpanel"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -1013.0
+margin_top = 1.0
+margin_right = -773.0
+margin_bottom = -250.0
+mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
 
-[node name="child" type="Button" parent="birthpanel/raise/childpanel"]
+[node name="portrait" type="TextureRect" parent="birthpanel/portraitpanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 14.0
+margin_top = 12.0
+margin_right = -14.0
+margin_bottom = -12.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 75 )
+expand = true
+stretch_mode = 6
+
+[node name="childpanel" type="Panel" parent="birthpanel"]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -641.0
+margin_top = -423.0
+margin_right = -131.0
+margin_bottom = -39.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="child" type="Button" parent="birthpanel/childpanel"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -8745,7 +8812,7 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "Child"
 
-[node name="teen" type="Button" parent="birthpanel/raise/childpanel"]
+[node name="teen" type="Button" parent="birthpanel/childpanel"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -8758,7 +8825,7 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "Teen"
 
-[node name="adult" type="Button" parent="birthpanel/raise/childpanel"]
+[node name="adult" type="Button" parent="birthpanel/childpanel"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -8771,7 +8838,7 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "Adult"
 
-[node name="LineEdit" type="LineEdit" parent="birthpanel/raise/childpanel"]
+[node name="LineEdit" type="LineEdit" parent="birthpanel/childpanel"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -8782,9 +8849,9 @@ margin_right = -165.0
 margin_bottom = -151.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-placeholder_text = "name"
+placeholder_text = "First Name"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="birthpanel/raise/childpanel"]
+[node name="RichTextLabel" type="RichTextLabel" parent="birthpanel/childpanel"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -8799,7 +8866,7 @@ bbcode_enabled = true
 bbcode_text = "[center]Choose desired name and age at which point growth acceleration will stop.[/center]"
 text = "Choose desired name and age at which point growth acceleration will stop."
 
-[node name="surnamecheckbox" type="CheckBox" parent="birthpanel/raise/childpanel"]
+[node name="surnamecheckbox" type="CheckBox" parent="birthpanel/childpanel"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -12106,6 +12173,9 @@ current = true
 [connection signal="pressed" from="FinishDayPanel/FinishDayCloseButton" to="." method="_on_FinishDayCloseButton_pressed"]
 [connection signal="pressed" from="birthpanel/giveaway" to="." method="_on_giveaway_pressed"]
 [connection signal="pressed" from="birthpanel/raise" to="." method="_on_raise_pressed"]
+[connection signal="pressed" from="birthpanel/raisehybrid" to="." method="_on_raisehybrid_pressed"]
+[connection signal="pressed" from="birthpanel/raisemana" to="." method="_on_raisemana_pressed"]
+[connection signal="pressed" from="birthpanel/sacrificebaby" to="." method="_on_sacrificebaby_pressed"]
 [connection signal="visibility_changed" from="questnode" to="." method="_on_questnode_visibility_changed"]
 [connection signal="pressed" from="questnode/TabContainer/Repeatable Quests/questforfeit" to="." method="_on_questforfeit_pressed"]
 [connection signal="pressed" from="questnode/questsclosebutton" to="." method="_on_questsclosebutton_pressed"]
