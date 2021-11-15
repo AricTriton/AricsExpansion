@@ -969,13 +969,13 @@ func lube_get():
 func displayContentment():
 	var text = ""
 	if npcexpanded.contentment >= 5:
-		text = "happy"
+		text = "[color=lime]Happy[/color]"
 	elif npcexpanded.contentment >= 0:
-		text = "content"
+		text = "[color=green]Content[/color]"
 	elif npcexpanded.contentment >= -5:
-		text = "discontent"
+		text = "[color=red]Discontent[/color]"
 	else:
-		text = "miserable"
+		text = "[color=red]Miserable[/color]"
 	return text
 
 func checkContentmentLoss(type):

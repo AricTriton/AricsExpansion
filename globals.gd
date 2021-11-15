@@ -902,6 +902,35 @@ func impregnation(mother, father = null, unique = ''):
 		cumprod = cumprod * penis_mod
 		mother.preg.womb.append({id = father_id, unique = father_unique, semen = cumprod, virility = virility, day = 0,})
 
+func connectrelatives(person1, person2, way):
+	if person1 == null || person2 == null || person1.id == person2.id:
+		return
+	if !globals.state.relativesdata.has(person1.id):
+		createrelativesdata(person1)
+	if !globals.state.relativesdata.has(person2.id):
+		createrelativesdata(person2)
+	if way in ['mother','father']:
+		var entry = globals.state.relativesdata[person1.id]
+		for child in entry.children:
+			connectrelatives(person2, globals.state.relativesdata[child], 'sibling')
+		entry.children.append(person2.id)
+		entry = globals.state.relativesdata[person2.id]
+		entry[way] = person1.id
+		if typeof(person1) != TYPE_DICTIONARY && typeof(person2) != TYPE_DICTIONARY:
+			addrelations(person1, person2, 200)
+	elif way == 'sibling':
+		var entry = globals.state.relativesdata[person1.id]
+		var entry2 = globals.state.relativesdata[person2.id]
+		if str(entry.mother) == str(entry2.mother) && str(entry.father) == str(entry2.father):
+			if !entry.siblings.has(entry2.id):
+				entry.siblings.append(entry2.id)
+			if !entry2.siblings.has(entry.id):
+				entry2.siblings.append(entry.id)
+		else:
+			if !entry.halfsiblings.has(entry2.id):
+				entry.halfsiblings.append(entry2.id)
+			if !entry2.halfsiblings.has(entry.id):
+				entry2.halfsiblings.append(entry.id)
 
 func slavetooltip(person):
 	var text = ''

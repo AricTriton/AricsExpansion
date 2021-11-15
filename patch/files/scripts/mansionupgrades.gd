@@ -191,8 +191,8 @@ var dict = {
 		description3 = "Clear out a section of your farm to install a total of [color=aqua]3 Vats[/color].", 
 		description4 = "Clear out a section of your farm to install a total of [color=aqua]4 Vats[/color].", 
 		levels = 4,
-		pointscost = 15,
-		cost = [2500,5000,7500,10000],
+		pointscost = 10,
+		cost = [0,2500,5000,7500],
 	},
 	vatmilk = {
 		name = "Milk Vats",
@@ -201,8 +201,8 @@ var dict = {
 		description2 = "Upgrade your [color=aqua]Milk Vat[/color] to one that can store and preserve [color=aqua]250 units of milk[/color].", 
 		description3 = "Upgrade your [color=aqua]Milk Vat[/color] to one that can store and preserve [color=aqua]500 units of milk[/color].", 
 		levels = 3,
-		pointscost = 10,
-		cost = [1000,2500,5000],
+		pointscost = 1,
+		cost = [0,2500,5000],
 	},
 	vatsemen = {
 		name = "Semen Vats",
@@ -211,8 +211,8 @@ var dict = {
 		description2 = "Upgrade your [color=aqua]Semen Vat[/color] to one that can store and preserve [color=aqua]250 units of semen[/color].", 
 		description3 = "Upgrade your [color=aqua]Semen Vat[/color] to one that can store and preserve [color=aqua]500 units of semen[/color].", 
 		levels = 3,
-		pointscost = 10,
-		cost = [1000,2500,5000],
+		pointscost = 1,
+		cost = [0,2500,5000],
 	},
 	vatlube = {
 		name = "Lube Vats",
@@ -221,8 +221,8 @@ var dict = {
 		description2 = "Upgrade your [color=aqua]Lube Vat[/color] to one that can store and preserve [color=aqua]250 units of lube[/color].", 
 		description3 = "Upgrade your [color=aqua]Lube Vat[/color] to one that can store and preserve [color=aqua]500 units of lube[/color].", 
 		levels = 3,
-		pointscost = 10,
-		cost = [1000,2500,5000],
+		pointscost = 2,
+		cost = [0,2500,5000],
 	},
 	vatpiss = {
 		name = "Piss Vats",
@@ -232,7 +232,7 @@ var dict = {
 		description3 = "Upgrade your [color=aqua]Piss Vat[/color] to one that can store and preserve [color=aqua]500 units of piss[/color].", 
 		levels = 3,
 		pointscost = 10,
-		cost = [1000,2500,5000],
+		cost = [0,2500,5000],
 	},
 	bottler = {
 		name = "Bottler",
@@ -243,7 +243,7 @@ var dict = {
 		description4 = "Upgrade your [color=aqua]Bottling Machine[/color] to a high-grade machine that drastically aids in the energy it takes to bottle liquids.", 
 		description5 = "Upgrade your [color=aqua]Bottling Machine[/color] to the best machine available, potentially even removing any energy cost for bottling liquids.", 
 		levels = 5,
-		pointscost = 15,
+		pointscost = 10,
 		cost = [2000,4000,6000,8000,10000],
 	},
 	traininggrounds = {

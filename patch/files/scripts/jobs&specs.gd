@@ -717,7 +717,7 @@ func forage(person):
 	person.add_jobskill('forager', 1)
 	if person.cour < 50 && rand_range(0,100) + person.cour/5 < 33 - person.jobskills.forager:
 		food = food*rand_range(0.25, 0.75)
-		text += "Due to [color=yellow]lack of courage[/color], $he obtained less food than $he likely could have. \n"
+		text += "Due to [color=red]lack of courage[/color], $he obtained less food than $he likely could have. \n"
 	chance = (person.smaf * 3) + 2 + person.jobskills.forager
 	if rand_range(0,100) <= chance:
 		text += "$name has found nature's essence. "
@@ -743,7 +743,7 @@ func hunt(person):#agility, strength, endurance, courage
 	person.add_jobskill('hunter', 1)
 	if person.cour < 60 && rand_range(0,100) + person.cour/4 < 45 - person.jobskills.hunter:
 		food = food*rand_range(0.25, 0.50)
-		text +=  "Due to [color=yellow]lack of courage[/color], $he obtained less food than $he likely could have. \n"
+		text +=  "Due to [color=red]lack of courage[/color], $he obtained less food than $he likely could have. \n"
 	if person.race.find('Arachna') >= 0:
 		food = food*1.3
 	###---End Expansion---###

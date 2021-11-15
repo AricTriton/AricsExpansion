@@ -888,6 +888,19 @@ var traits = {
 			"Masochist"
 		]
 	},
+	"Undiscovered Trait": {
+		"name": "Undiscovered Trait",
+		"description": "$name acts strangely sometimes. You suspect that $he has a [color=aqua]Fetish[/color] influencing him that you have not discovered by talking to $him yet.\n\n[color=aqua]Hidden Trait: Talk to $him about Fetishes to Reveal[/color]",
+		"effect": {
+			
+		},
+		"tags": [
+			"expansiontrait",
+			"lockedtrait",
+		],
+		"conflict": [
+		]
+	},
 	#Movement Traits
 	"Movement: Flying": {
 		"name": "Movement: Flying",
