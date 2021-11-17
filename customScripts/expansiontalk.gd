@@ -341,6 +341,12 @@ func getMasterName(person):
 		names.append('Mmm')
 
 	text = globals.randomitemfromarray(names)
+	#Quick Fix to stop "Null" names
+	if text == "Null":
+		if globals.player == 'male':
+			text = "Master"
+		else:
+			text = "Mistress"
 	person.masternoun = str(text)
 
 var difficultyarray = ['None','Simple','Easy','Medium','Hard','Impossible']
