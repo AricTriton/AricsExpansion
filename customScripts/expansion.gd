@@ -28,9 +28,9 @@ var incompletefetishes = []
 #The chance that enemies will be related (if the same race)
 var npcrelatedchance = 75
 #Chance that Enemies will be the Parent if possible
-var parentchance = 75
+var parentchance = 85
 #Chance that NPCs get stronger when re-encountered
-var npclevelupchance = 50
+var npclevelupchance = 65
 
 #Chance that NPCs are re-encountered. They gain 1-5% each time they aren't.
 var enemyreencounterchancerelease = 5
@@ -834,6 +834,59 @@ func setFamily(person,person2):
 							globals.addrelations(tempperson, sharedrelative, relationlottery)
 						if !tempperson in globals.slaves:
 							tempperson.surname = person.surname
+
+#-----Match Genes
+var genealogies = ['human','gnome','elf','tribal_elf','dark_elf','orc','goblin','dragonkin','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime','bunny','dog','cow','cat','fox','horse','raccoon']
+
+func correctGenes(person):
+	var persondata
+	var percent = 0
+	var father
+	var mother
+	var person2
+	#Don't Change Previously Met NPCs
+	for check_met_before in ['timesfought', 'timesrescued', 'timesescaped']:
+		if person.npcexpanded[check_met_before] > 0:
+			return
+	if person in globals.slaves:
+		return
+	#Pull Relative Data | End if None Exists
+	if globals.state.relativesdata.has(person.id):
+		persondata = globals.state.relativesdata[person.id]
+	else:
+		return
+	#Check if Both Parents, then first Sibling, then just one parent
+	if (str(persondata['father']) != str(-1) && str(persondata['father']) != null) && (str(persondata['mother']) != str(-1) && str(persondata['mother']) != null):
+		father = globals.state.findslave(persondata['father'])
+		mother = globals.state.findslave(persondata['mother'])
+		for race in genealogies:
+			person.genealogy[race] = round((mother.genealogy[race] + father.genealogy[race]) * .5)
+			percent += person.genealogy[race]
+	elif !persondata.siblings.empty():
+		for trysibling in persondata.siblings:
+			person2 = globals.state.findslave(trysibling)
+			if person2 == null:
+				continue
+			for race in genealogies:
+				person.genealogy[race] = person2.genealogy[race]
+				percent += person.genealogy[race]
+			break
+	else:
+		for parent in ['father','mother']:
+			if str(persondata[parent]) != str(-1) && str(persondata[parent]) != null:
+				for race in genealogies:
+					person2 = globals.state.findslave(persondata[parent])
+					if person2 == null:
+						continue
+					person.genealogy[race] = person2.genealogy[race]
+					percent += person.genealogy[race]
+				break
+	
+	if percent > 0:
+		while percent != 100:
+			percent = globals.constructor.build_genealogy_equalize(person, percent)
+		globals.constructor.setRaceDisplay(person)
+	return
 
 ###---Conversations---###
 

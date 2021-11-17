@@ -250,7 +250,7 @@ func randomitemfromarray(source):
 		return source[rand_range(0,source.size())]
 
 func nameTits():
-	var text = str(randomitemfromarray(['boobs','breasts','tits','boobs','breasts','tits','knockers','udders']))
+	var text = str(randomitemfromarray(['boobs','breasts','tits','boobs','breasts','tits','udders']))
 	return text
 
 func namePenis():

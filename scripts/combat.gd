@@ -74,6 +74,7 @@ func start_battle(nosound = false):
 		combatantnodes.append(newbutton)
 	
 	###---Added by Expansion---### Category: NPCs Expanded | Enemies can be related
+	var relatedbaddies = false
 	for i in enemygroup:
 		#i.capture didn't work?
 		for k in enemygroup:
@@ -83,6 +84,7 @@ func start_battle(nosound = false):
 				#Setting Framework for Personality Matches later
 				if person.race == person2.race && rand_range(0,100) <= globals.expansion.npcrelatedchance:
 					globals.expansion.setFamily(person,person2)
+					relatedbaddies = true
 				else:
 					var bonusmin = 0
 					var bonusmax = 0
@@ -96,6 +98,11 @@ func start_battle(nosound = false):
 						bonusmax = 500
 						relationlottery = round(rand_range(bonusmin,bonusmax))
 					globals.addrelations(person, person2, relationlottery)
+
+	#Equalize Genes
+	for i in enemygroup:
+		if i.person != null:
+			globals.expansion.correctGenes(i.person)
 	###---End Expansion---###
 	
 	$grouppanel/skilline/skill.set_meta('skill', {})

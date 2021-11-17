@@ -454,7 +454,7 @@ func dailyFarm():
 				elif cattle.farmexpanded.workstation == 'rack':
 					text += cattle.dictionary("to hook $him into $his place on the metal rack for the day.\n ")
 				else:
-					text += cattle.dictionary("to get $him on $his hands and knees to begin.\n ")
+					text += cattle.dictionary("to help $him onto $his hands and knees to begin milking for the day.\n ")
 				struggle = -1
 			else:
 				text += cattle.dictionary("\n[color=aqua]" + str(cattle.name) + "[/color] [color=red]resisted[/color] [color=aqua]" + str(farmhand.name) + "[/color] ")

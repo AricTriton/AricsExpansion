@@ -1915,11 +1915,11 @@ func _on_farm_pressed(inputslave = null):
 			manager = i
 	if manager != null:
 		manager.work = 'farmmanager'
-		text = manager.dictionary('Your farm manager is ' + manager.name_long() + '.')
+		text = manager.dictionary('Your farm manager is [color=aqua]' + manager.name_long() + '[/color].')
 	else:
 		text = "[color=red]You have no assigned manager. Without manager you won't be able to receive farm income. [/color]"
 	if globals.state.mansionupgrades.farmhatchery > 0:
-		text = text + '\n\nYou have ' + str(globals.state.snails) + ' snails.'
+		text = text + '\n\nYou have [color=aqua]' + str(globals.state.snails) + '[/color] snails.'
 		if globals.state.snails == 0:
 			text += "\n[color=aqua]Search the woods north of Shaliq.[/color]"
 	var counter = 0

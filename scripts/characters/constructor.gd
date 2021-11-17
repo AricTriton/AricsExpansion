@@ -363,7 +363,10 @@ func set_genealogy(person):
 		person.race_secondary = newrace
 		#Set Percentage
 		random_number = allot_percentage('secondary')
-		random_number = clamp(random_number, 0, remaining_percent)
+		random_number = clamp(random_number, 10, remaining_percent)
+		#Reduce Random Genes < 10
+		if remaining_percent - random_number < 0 || remaining_percent - random_number < globals.expansionsettings.genealogy_equalizer:
+			random_number = remaining_percent
 		remaining_percent -= random_number
 		#Add to Genealogy
 		genealogy = genealogy_decoder(newrace)
@@ -377,7 +380,10 @@ func set_genealogy(person):
 		newrace = raceLottery(person)
 		#Set Percentage
 		random_number = allot_percentage('minor')
-		random_number = clamp(random_number, 0, remaining_percent)
+		random_number = clamp(random_number, 10, remaining_percent)
+		#Reduce Random Genes < 10
+		if remaining_percent - random_number < 0 || remaining_percent - random_number < globals.expansionsettings.genealogy_equalizer:
+			random_number = remaining_percent
 		remaining_percent -= random_number
 		#Add to Genealogy
 		genealogy = genealogy_decoder(newrace)
@@ -389,18 +395,6 @@ func set_genealogy(person):
 			totalgenealogy += person.genealogy[race]
 	while totalgenealogy != 100:
 		totalgenealogy = build_genealogy_equalize(person, totalgenealogy)
-	
-	#Equalize Minor Fractions
-#	for race in genealogies:
-#		if person.genealogy[race] > 0 && person.genealogy[race] < globals.expansionsettings.genealogy_equalizer:
-#			var greatest_gene = ''
-#			for test_greatest in genealogies:
-#				if greatest_gene == null && person.genealogy[test_greatest] > 0 && person.genealogy[greatest_gene].exists():
-#					greatest_gene = str(test_greatest)
-#				elif person.genealogy[greatest_gene] != null && person.genealogy[test_greatest] > person.genealogy[greatest_gene]:
-#					greatest_gene = test_greatest
-#			person.genealogy[greatest_gene] += person.genealogy[race]
-#			person.genealogy[race] = 0
 	
 	#Sibling Match Relatives
 	if person.npcexpanded.mansionbred == false && globals.state.relativesdata.has(person.id):
@@ -446,7 +440,7 @@ func allot_percentage(type):
 	elif type == 'secondary':
 		random_number = round(rand_range(15,50))
 	elif type == 'minor':
-		random_number = round(rand_range(1,29))
+		random_number = round(rand_range(10,29))
 	else:
 		random_number = round(rand_range(1,100))
 	
