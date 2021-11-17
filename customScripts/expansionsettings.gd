@@ -73,6 +73,7 @@ var changecrystalreq = 4
 
 #Automatic Crystal Lifeforce Chance
 var crystallifeforcerestorechance = 80
+var crystal_shatter_chance = 80
 
 
 #---Pregnancy Expanded
