@@ -106,7 +106,7 @@ func randomportrait(person):
 
 ###---Added by Expansion---### Added by Deviate - Hybrid Races
 func newbaby(mother,father):
-	var person = globals.newslave(mother.race, 'child', 'female', mother.origins)
+	var person = globals.newslave(mother.race, 'child', 'random', mother.origins)
 	var body_array = ['skin','tail','ears','wings','horns','arms','legs','bodyshape','haircolor','eyecolor','eyeshape','eyesclera']
 	var tacklearray = ['penis']
 	var temp
@@ -121,12 +121,12 @@ func newbaby(mother,father):
 	person.surname = mother.surname
 	
 	#Sex
-	if globals.rules.male_chance > 0 && rand_range(0, 100) < globals.rules.male_chance:
-		person.sex = 'male'
-	elif rand_range(0, 100) < globals.rules.futa_chance && globals.rules.futa == true:
-		person.sex = 'futanari'
-	else:
-		person.sex = 'female'
+	#if globals.rules.male_chance > 0 && rand_range(0, 100) < globals.rules.male_chance:
+	#	person.sex = 'male'
+	#elif rand_range(0, 100) < globals.rules.futa_chance && globals.rules.futa == true:
+	#	person.sex = 'futanari'
+	#else:
+	#	person.sex = 'female'
 
 	#Age
 	if globals.rules.children == true:
@@ -343,7 +343,7 @@ func set_genealogy(person):
 		person.race_type = 4
 	
 	#Set Primary Race
-	if person == globals.player || person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance:
+	if person == globals.player || person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon): #ralph2
 		random_number = allot_percentage('purebreed')
 	elif person.race.find('Halfkin') >= 0 || rand_range(0,100) <= globals.expansionsettings.randommixedbreedchance:
 		random_number = allot_percentage('primary_mixed')
@@ -628,9 +628,11 @@ func setRace(person):
 		person.race = caprace
 	elif currentrace in animal_races_array:
 		person.race_type = 3
-		if person.genealogy.horse >= 50:
+		if person.genealogy.horse >= highestpercent: #ralph3 - should fix instances of <50% Centaur dominant hybrids being born as 'Halfkin ' only for race
+		#if person.genealogy.horse >= 50:
 			person.race = 'Centaur'
-		elif person.genealogy.cow >= 50:
+		elif person.genealogy.cow >= highestpercent: #ralph3 - should fix instances of <50% Centaur dominant hybrids being born as 'Halfkin ' only for race
+		#elif person.genealogy.cow >= 50:
 			person.race = 'Taurus'
 		else:
 			#Beastkin/Halfkin Decoder
@@ -707,8 +709,10 @@ func setRaceDisplay(person):
 			text += ' | Fullblooded ' + secondaryrace + ' Freak of Nature'
 		elif secondaryracepercent >= 70:
 			text += ' | Mostly ' + secondaryrace + ' Freak of Nature'
-		elif primaryracepercent >= 50:
+		elif primaryracepercent >= 50 && secondaryracepercent >= 40: #ralph3
 			text += ' | Half ' + secondaryrace + ''
+		elif primaryracepercent >= 50: #ralph3
+			text += ' | Part ' + secondaryrace + '' #ralph3
 		else:
 			text += ' with ' + secondaryrace + ' features'
 	

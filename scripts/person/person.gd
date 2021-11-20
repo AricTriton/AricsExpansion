@@ -859,11 +859,12 @@ func calculateprice():
 
 	###---Added by Expansion---### Breeder Support
 	if npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
-		price *= 2
+		price *= 1.5 #ralph3
 	elif npcexpanded.mansionbred == true:
 		price = round(price*1.25)
 	###---End Expansion---###
-
+	bonus = bonus/2 #ralph4
+	
 	price = price*bonus
 
 	if price < 0:
@@ -884,7 +885,7 @@ func sellprice(alternative = false):
 	price = max(round(price), variables.priceminimumsell)
 	###---Added by Expansion---### Breeder Support
 	if npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
-		price *= 2
+		price *= 1.5 #ralph3
 	elif npcexpanded.mansionbred == true:
 		price = round(price*1.25)
 	###---End Expansion---###

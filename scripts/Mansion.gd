@@ -1760,6 +1760,95 @@ func _on_raise_pressed():
 	if globals.resources.gold >= 500:
 		globals.resources.gold -= 500
 	finish_raising()
+	
+#ralph - makes children not inherit parents sex traits and teens have lower chance to inherit them; also resets to Pliable
+func ClearBabyTraits(age, baby):
+	if age == 'child':
+		if baby.traits.has('Slutty') || baby.traits.has('Devoted'):
+			baby.trait_remove('Slutty')
+			baby.trait_remove('Devoted')
+			baby.add_trait('Pliable')
+		baby.trait_remove('Deviant')
+		baby.trait_remove('Pervert')
+		baby.trait_remove('Masochist')
+		baby.trait_remove('Sadist')
+		baby.trait_remove('Fickle')
+		baby.trait_remove('Likes it rough')
+		baby.trait_remove('Enjoys Anal')
+		baby.trait_remove('Grateful')
+		baby.trait_remove('Sex-crazed')
+	elif age == 'teen':
+		var chancetoremovetrait = 34
+		if baby.traits.has('Slutty') || baby.traits.has('Devoted'):
+			baby.trait_remove('Slutty')
+			baby.trait_remove('Devoted')
+			baby.add_trait('Pliable')
+		if baby.traits.has('Deviant') && rand_range(0,100) < chancetoremovetrait:
+			baby.trait_remove('Deviant')
+		if baby.traits.has('Pervert') && rand_range(0,100) < chancetoremovetrait:
+			baby.trait_remove('Pervert')
+		if baby.traits.has('Masochist') && rand_range(0,100) < chancetoremovetrait:
+			baby.trait_remove('Masochist')
+		if baby.traits.has('Sadist') && rand_range(0,100) < chancetoremovetrait:
+			baby.trait_remove('Sadist')
+		if baby.traits.has('Fickle') && rand_range(0,100) < chancetoremovetrait:
+			baby.trait_remove('Fickle')
+		if baby.traits.has('Likes it rough') && rand_range(0,100) < chancetoremovetrait:
+			baby.trait_remove('Likes it rough')
+		if baby.traits.has('Enjoys Anal') && rand_range(0,100) < chancetoremovetrait:
+			baby.trait_remove('Enjoys Anal')
+		if baby.traits.has('Grateful') && rand_range(0,100) < chancetoremovetrait:
+			baby.trait_remove('Grateful')
+		if baby.traits.has('Sex-crazed') && rand_range(0,100) < chancetoremovetrait*2:
+			baby.trait_remove('Sex-crazed')
+	elif age == 'adult':
+		if baby.traits.has('Slutty') || baby.traits.has('Devoted'):
+			baby.trait_remove('Slutty')
+			baby.trait_remove('Devoted')
+			baby.add_trait('Pliable')
+		if baby.traits.has('Sex-crazed') && rand_range(0,100) < 50:
+			baby.trait_remove('Sex-crazed')
+#/ralph
+
+func babyage(age):
+	baby.name = get_node("birthpanel/raise/childpanel/LineEdit").get_text()
+	if get_node("birthpanel/raise/childpanel/surnamecheckbox").is_pressed() == true:
+		baby.surname = globals.player.surname
+	###---Added by Expansion---### Size Support || Replaced Functions
+	if age == 'child':
+		baby.age = 'child'
+		baby.away.duration = variables.growuptimechild
+		if globals.state.spec == "Breeder": #ralph
+			baby.away.duration = clamp(int(baby.away.duration/2),1,999) #ralph
+	elif age == 'teen':
+		baby.age = 'teen'
+		baby.away.duration = variables.growuptimeteen
+		if globals.state.spec == "Breeder": #ralph
+			baby.away.duration = clamp(int(baby.away.duration/2),1,999) #ralph
+	elif age == 'adult':
+		baby.age = 'adult'
+		baby.away.duration = variables.growuptimeadult
+		if globals.state.spec == "Breeder": #ralph
+			baby.away.duration = clamp(int(baby.away.duration/2),1,999) #ralph
+	baby.away.at = 'growing'
+	baby.obed += 75
+	baby.loyal += 20
+	if baby.sex != 'male':
+		baby.vagvirgin = true
+	baby.assvirgin = true
+	baby.unique = null #ralph
+	ClearBabyTraits(age, baby) #ralph
+	globals.expansionsetup.setRaceBonus(baby, false) #ralph - needed to override certain inherited traits for certain hybrids including race_display
+	globals.expansionsetup.setRaceBonus(baby, true) #ralph
+	globals.slaves = baby
+	globals.state.relativesdata[baby.id].name = baby.name_long()
+	globals.state.relativesdata[baby.id].state = 'normal'
+
+	globals.state.babylist.erase(baby)
+	baby = null
+	get_node("birthpanel").hide()
+	get_node("birthpanel/raise/childpanel").hide()
+	childbirth_loop(birthmother)
 
 func _on_raisehybrid_pressed():
 	if globals.resources.gold >= 250 && globals.resources.mana >= 25:

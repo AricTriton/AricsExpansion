@@ -2,14 +2,45 @@
 func getslavedescription(tempperson, mode = 'default'):
 	showmode = mode
 	person = tempperson
-	###---Added by Expansion---### Person Expanded
+	###---Added by Expansion---###
 	globals.expansion.updatePerson(person)
 	###---Expansion End---###
-	var text = basics() + features() + genitals() + mods() + tattoo() + piercing() + onceperdayConvos()
+	var text = basics() + features() + genitals() + mods() + tattoo() + piercing()
 	if person.customdesc != '':
 		text += '\n\n' + person.customdesc
 	if person == globals.player:
 		text = person.dictionaryplayerplus(person.dictionaryplayer(text))
+		#ralph8
+		var array = []
+		var textcolor = ""
+		if person.preg.duration > 2:
+			text += "\n\nYou are now certain you are pregnant. If you had to guess you'd say " + str(globals.expansion.getTrimester(person)).capitalize() + " trimester."
+		elif person.preg.duration > 0:
+			text += "\n\nYou're not completely sure, but you think you might be pregnant."
+		if !person.traits.empty():
+			for i in person.traits:
+				array.append(i)
+			if array.size() == 1:
+				text += "\n\nYour new life has been quite interesting so far. You've aquired a trait: " + array[0] + "."
+			else:
+				var count = 0
+				text += "\n\nYour new life has been quite interesting so far. You've aquired some traits: "
+				for i in array:
+					count += 1
+					if count < array.size():
+						text += i + ", "
+					else:
+						text += "and " + i + "."
+		text += "\n\nYour mind wanders to sex and in comparing yourself to others, you suspect your fetishes are:\n"
+		for i in person.fetish:
+			if person.fetish[i] in ['mindblowing','enjoyable']:
+				textcolor = "[color=green]"
+			elif person.fetish[i] in ['acceptable','uncertain']:
+				textcolor = "[color=yellow]"
+			else:
+				textcolor = "[color=red]"
+			text += i.capitalize() + ": " + textcolor + person.fetish[i].capitalize() + "[/color]\n"
+		#/ralph8
 	else:
 		text = person.dictionary(text)
 
@@ -73,7 +104,7 @@ func features():
 	if globals.state.descriptsettings.appearance == true || showmode != 'default':
 		text = "\n" + text
 		#Face
-		text += "\n[color=#d1b970]Head:[/color]\n" + getdescription('hairlength') + getdescription('hairstyle') + getdescription("eyecolor") + getdescription("eyeshape") + getdescription('horns') + getdescription('ears') + getdescription('lips')
+		text += "\n[color=#d1b970]Head:[/color]\n" + getdescription('hairlength') + getdescription('hairstyle') + getdescription("eyesclera") + getdescription("eyecolor") + getdescription("eyeshape") + getdescription('horns') + getdescription('ears') + getdescription('lips') #ralph2
 		text += "\n" + globals.expansion.getCheeksDescription(person) + globals.expansion.getCumCoatedDescription(person,'face')
 		#Body
 		text += "\n[color=#d1b970]Body:[/color]\n" + getdescription('skin') + getdescription("skincov") + getdescription("wings") + getdescription("tail") + getdescription("height") + getdescription("asssize")
@@ -243,6 +274,40 @@ func getbeauty(justtext = false):
 	else:
 		return calculate
 
+func getBabyDescription(person):
+	#ralph2
+	var moreeyeinfo = ''
+	if person.eyesclera != 'normal':
+		moreeyeinfo = ' with ' + str(person.eyesclera) + ' sclera'
+	var text = '$He has ' + person.haircolor + ' hair and ' + person.eyecolor + ' eyes' + moreeyeinfo + '. $His skin is ' + person.skin + '. '#ralph2
+	#/ralph2
+	var dict = {
+		none = '',
+		plants = "It is covered in some leaves and green plant matter. ",
+		scales = "It is covered in a few scales. ",
+		feathers = "It has bird feathers in some places. ",
+		full_body_fur = "It shows the beginnings of fur. ",
+	}
+	text += dict[person.skincov]
+	if person.tail != 'none':
+		text += '$He appears to have a small tail, inherited from one of the parents. '
+	if person.horns != 'none':
+		text += '$He has pair of tiny horns on $his head. '
+	dict = {
+		human = 'normal',
+		short_furry = 'short and furry',
+		long_pointy_furry = 'long and furry',
+		pointy = 'pointy',
+		long_round_furry = 'of a bunny',
+		long_droopy_furry = 'of a bunny',
+		feathery = "feathery",
+		fins = 'fin-like',
+	}
+	text += '$His ears are ' + dict[person.ears] + '. '
+	
+	text = person.dictionary(text)
+	return text
+
 ###---Added by Expansion---###
 func randomitemfromarray(source):
 	if source.size() > 0:
@@ -364,6 +429,18 @@ var newdescriptions = {
 		normal = "",
 		slit = "$He has [color=aqua]vertical, animalistic pupils[/color]. "
 	},
+	#ralph2
+	eyesclera = {
+		normal = "",
+		yellow = 'Instead of whites, the sclera of $his eyes are entirely [color=aqua]yellow[/color]. ',
+		green = 'Instead of whites, the sclera of $his eyes are entirely [color=aqua]green[/color]. ',
+		black = 'Instead of whites, the sclera of $his eyes are entirely [color=aqua]black[/color]. ',
+		red = 'Instead of whites, the sclera of $his eyes are entirely [color=aqua]red[/color]. ',
+		glowing = '$His eyes glow with some luminous power. ',
+		default = '$He has no discernable pupils or irises. ', #this is intended for tiefling subspecies and  will be wrong if new colors are added (check expansionsetup.gd)
+		#default = 'Instead of whites, the sclera of $his eyes are entirely [color=aqua][eyesclera][/color]. ', #displays "[eyesclera]" instead of the color
+	},
+	#/ralph2
 	horns = {
 		none = '',
 		short = 'There is a pair of [color=aqua]tiny, pointed horns[/color] on top of $his head. ',

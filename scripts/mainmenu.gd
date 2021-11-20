@@ -3,7 +3,8 @@
 var hobbydescription = {
 	'Physical' : '[color=aqua]+1 Max Strength, +25 Courage[/color]\n\n$name is no stranger to fighting and tends to act boldly in many situations.',
 	'Etiquette' : "[color=aqua]+20 Confidence, +15 Charm[/color]\n\n$name has spent $his youth among elderly people and high society, learning how to be liked and present $himself while also feeling superior to commonfolk.",
-	'Magic' : "[color=aqua]+2 Max Magic, +25 Wit[/color]\n\n$name was a very curious child and spent a lot of $his time reading and studying various things, including magic.",
+	'Graceful' : "[color=aqua]+1 Max Agility, +10 Confidence[/color]\n\n$name was the fastest kid $he knew growing up and a natural when it came to hand-eye coordination in general.", #ralph3
+	'Magic' : "[color=aqua]+1 Max Magic, +25 Wit[/color]\n\n$name was a very curious child and spent a lot of $his time reading and studying various things, including magic.", #ralph3
 	'Servitude' : "[color=aqua]+1 Max Endurance, +35 Min Obedience, +20 Loyalty[/color]\n\n$name has spent $his youth in harsh training which lead to $him being more physically fit and respecting to $his superiors.",
 	'Curious' : "[color=aqua]Start with the [color=green]Gifted[/color] trait.[/color]\n\n$name spends $his time searching for answers and meaning in this crazy world. This has led $him to become more receptive to new skills and knowledge.",
 	'Genius' : "[color=aqua]Start with the [color=green]Clever[/color] trait and randomly either the [color=green]Responsive[/color] or [color=green]Gifted[/color] trait.[/color]\n[color=red]Gains either the Clumsy, Frail, or Weak trait.[/color]\n\n$name spends $his time studying and thinking and tends to not focus on physical activities.\n",
@@ -13,7 +14,7 @@ var hobbydescription = {
 }
 
 #Provides a container for Additional Hobbies
-var slaveHobbiesExpanded = ['Curious','Genius','Socialite','Waifu','Perfect Specimen']
+var slaveHobbiesExpanded = ['Graceful','Curious','Genius','Socialite','Waifu','Perfect Specimen'] #ralph3
 ###---Expansion End---###
 
 #Added Penis Sizes
@@ -294,9 +295,14 @@ func _on_slaveconfirm_pressed():
 	elif startSlaveHobby == 'Etiquette':
 		startSlave.conf += 20
 		startSlave.charm += 15
+	#ralph3
+	elif startSlaveHobby == 'Graceful':
+		startSlave.conf += 10
+		startSlave.stats.agi_max += 1
+	#/ralph3
 	elif startSlaveHobby == 'Magic':
 		startSlave.wit += 25
-		startSlave.stats.maf_max += 2
+		startSlave.stats.maf_max += 1 #ralph3
 	elif startSlaveHobby == 'Servitude':
 		startSlave.stats.end_max += 1
 		startSlave.loyal += 20

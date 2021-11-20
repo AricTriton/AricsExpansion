@@ -165,8 +165,9 @@ var racialstatbonuses = true
 
 #---Genealogy
 var genealogy_equalizer = 10
-var randompurebreedchance = 20
-var randommixedbreedchance = 40
+var randompurebreedchance = 10
+var randommixedbreedchance = 30
+var randompurebreedchanceuncommon = 60, #ralph2
 var secondaryhumanoidracialchance = 75
 var secondaryuncommonracialchance = 15
 var secondarybeastracialchance = 25
