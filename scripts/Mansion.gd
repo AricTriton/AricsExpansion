@@ -1762,53 +1762,50 @@ func _on_raise_pressed():
 	finish_raising()
 	
 #ralph - makes children not inherit parents sex traits and teens have lower chance to inherit them; also resets to Pliable
-func ClearBabyTraits(age, baby):
+func ClearBabyTraits(age):
 	if age == 'child':
 		if baby.traits.has('Slutty') || baby.traits.has('Devoted'):
-			baby.trait_remove('Slutty')
-			baby.trait_remove('Devoted')
+			baby.remove_trait('Slutty')
+			baby.remove_trait('Devoted')
 			baby.add_trait('Pliable')
-		baby.trait_remove('Deviant')
-		baby.trait_remove('Pervert')
-		baby.trait_remove('Masochist')
-		baby.trait_remove('Sadist')
-		baby.trait_remove('Fickle')
-		baby.trait_remove('Likes it rough')
-		baby.trait_remove('Enjoys Anal')
-		baby.trait_remove('Grateful')
-		baby.trait_remove('Sex-crazed')
+		baby.remove_trait('Deviant')
+		baby.remove_trait('Pervert')
+		baby.remove_trait('Masochist')
+		baby.remove_trait('Sadist')
+		baby.remove_trait('Likes it rough')
+		baby.remove_trait('Enjoys Anal')
+		baby.remove_trait('Grateful')
+		baby.remove_trait('Sex-crazed')
 	elif age == 'teen':
-		var chancetoremovetrait = 34
 		if baby.traits.has('Slutty') || baby.traits.has('Devoted'):
-			baby.trait_remove('Slutty')
-			baby.trait_remove('Devoted')
+			baby.remove_trait('Slutty')
+			baby.remove_trait('Devoted')
 			baby.add_trait('Pliable')
-		if baby.traits.has('Deviant') && rand_range(0,100) < chancetoremovetrait:
-			baby.trait_remove('Deviant')
-		if baby.traits.has('Pervert') && rand_range(0,100) < chancetoremovetrait:
-			baby.trait_remove('Pervert')
-		if baby.traits.has('Masochist') && rand_range(0,100) < chancetoremovetrait:
-			baby.trait_remove('Masochist')
-		if baby.traits.has('Sadist') && rand_range(0,100) < chancetoremovetrait:
-			baby.trait_remove('Sadist')
-		if baby.traits.has('Fickle') && rand_range(0,100) < chancetoremovetrait:
-			baby.trait_remove('Fickle')
-		if baby.traits.has('Likes it rough') && rand_range(0,100) < chancetoremovetrait:
-			baby.trait_remove('Likes it rough')
-		if baby.traits.has('Enjoys Anal') && rand_range(0,100) < chancetoremovetrait:
-			baby.trait_remove('Enjoys Anal')
-		if baby.traits.has('Grateful') && rand_range(0,100) < chancetoremovetrait:
-			baby.trait_remove('Grateful')
-		if baby.traits.has('Sex-crazed') && rand_range(0,100) < chancetoremovetrait*2:
-			baby.trait_remove('Sex-crazed')
+		if baby.traits.has('Deviant') && rand_range(0,100) < 75:
+			baby.remove_trait('Deviant')
+		if baby.traits.has('Pervert') && rand_range(0,100) < 50:
+			baby.remove_trait('Pervert')
+		if baby.traits.has('Masochist') && rand_range(0,100) < 50:
+			baby.remove_trait('Masochist')
+		if baby.traits.has('Sadist') && rand_range(0,100) < 50:
+			baby.remove_trait('Sadist')
+		if baby.traits.has('Likes it rough') && rand_range(0,100) < 50:
+			baby.remove_trait('Likes it rough')
+		if baby.traits.has('Enjoys Anal') && rand_range(0,100) < 50:
+			baby.remove_trait('Enjoys Anal')
+		if baby.traits.has('Grateful') && rand_range(0,100) < 50:
+			baby.remove_trait('Grateful')
+		if baby.traits.has('Sex-crazed') && rand_range(0,100) < 75:
+			baby.remove_trait('Sex-crazed')
 	elif age == 'adult':
 		if baby.traits.has('Slutty') || baby.traits.has('Devoted'):
-			baby.trait_remove('Slutty')
-			baby.trait_remove('Devoted')
+			baby.remove_trait('Slutty')
+			baby.remove_trait('Devoted')
 			baby.add_trait('Pliable')
 		if baby.traits.has('Sex-crazed') && rand_range(0,100) < 50:
-			baby.trait_remove('Sex-crazed')
+			baby.remove_trait('Sex-crazed')
 #/ralph
+
 
 func babyage(age):
 	baby.name = get_node("birthpanel/raise/childpanel/LineEdit").get_text()
@@ -1816,20 +1813,15 @@ func babyage(age):
 		baby.surname = globals.player.surname
 	###---Added by Expansion---### Size Support || Replaced Functions
 	if age == 'child':
+		ClearBabyTraits(age) #ralph
 		baby.age = 'child'
 		baby.away.duration = variables.growuptimechild
-		if globals.state.spec == "Breeder": #ralph
-			baby.away.duration = clamp(int(baby.away.duration/2),1,999) #ralph
 	elif age == 'teen':
+		ClearBabyTraits(age) #ralph
 		baby.age = 'teen'
 		baby.away.duration = variables.growuptimeteen
-		if globals.state.spec == "Breeder": #ralph
-			baby.away.duration = clamp(int(baby.away.duration/2),1,999) #ralph
 	elif age == 'adult':
-		baby.age = 'adult'
-		baby.away.duration = variables.growuptimeadult
-		if globals.state.spec == "Breeder": #ralph
-			baby.away.duration = clamp(int(baby.away.duration/2),1,999) #ralph
+		ClearBabyTraits(age) #ralph
 	baby.away.at = 'growing'
 	baby.obed += 75
 	baby.loyal += 20

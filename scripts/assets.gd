@@ -117,3 +117,6 @@ func getsexfeatures(person):
 	###---End Expansion---###
 ###---End Expansion---###
 
+func getrandomeyecolor():
+	return getrandomfromarray(['blue', 'green', 'brown', 'hazel', 'black', 'gray', 'purple', 'blue', 'amber', 'red', 'auburn'])
+

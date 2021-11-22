@@ -420,8 +420,19 @@ func getessence():
 	###---Expansion End---###
 	return essence
 
-
-
+#ralph
+func playercleartraits():
+	spec = null
+	while !traits.empty():
+		trait_remove(traits.back())
+	for i in ['str_base','agi_base', 'maf_base', 'end_base']:
+		stats[i] = 0
+	for i in ['str_mod','agi_mod','maf_mod','end_mod']:
+		stats[i] = 0	
+	skillpoints = 2
+	level = 1
+	xp = 0
+#/ralph
 
 func health_set(value):
 	###---Added by Expansion---### Crystal | Added Death Prevention
@@ -1119,7 +1130,12 @@ func get_birth_amount_name():
 func get_race_display():
 	var rvar = ''
 	if race != race_display:
-		rvar = ' (' + race_display + ')'
+		if race_display in globals.dictionary.hybriddict:
+			var temp1 = "[color=yellow]Subspecies: "
+			var temp2 = "[/color]"
+			rvar = ' (' + temp1 + race_display + temp2 + ')'
+		else:
+			rvar = ' (' + race_display + ')'
 	
 	return rvar
 
@@ -1130,10 +1146,11 @@ func get_genealogy():
 	
 	if genealogy[temprace] >= 100:
 		description = "$He is obviously a pure specimen of a full-blooded " + race + ".\n\n"
-	elif genealogy[temprace] >= 70:
-		description = "$He appears to be primarily a " + race + ", though $he has certain physical features that may suggest that $he is unlikely to be a from a purely " + race + " bloodline.\n\n"
 	elif genealogy[temprace] >= 50:
-		description = "$He appears to be a mixed blooded mongrol, though $he seems to have more " + race + " blood in $him than anything else.\n\n"
+		if race_display in globals.dictionary.hybriddict:
+			description = globals.dictionary.hybriddict[race_display]
+		else:
+			description = "$He appears to be primarily a " + race + ", though $he has certain physical features that may suggest that $he is unlikely to be a from a purely " + race + " bloodline.\n\n"
 	elif genealogy[temprace] >= 30:
 		description = "$His features are such a mix that it is only on very close inspection that $his " + race + " heritage shines through.\n\n"
 	else:

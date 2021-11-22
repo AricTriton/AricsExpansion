@@ -51,6 +51,80 @@ func _process_stage6_sex_options():
 		get_node("TextureFrame/newgame/stage6/balls").set_disabled(true)
 		get_node("TextureFrame/newgame/stage6/balls").add_item('none')
 
+
+#QMod - Renamed, tweaked variable initialization
+func _ready_newgame_creator():
+	#Connect UI
+	#Connect stage selection buttons
+	for i in get_node("TextureFrame/newgame/stagespanel/VBoxContainer").get_children():
+		if i.get_name() != 'cancel':
+			i.connect("pressed", self, '_select_stage', [i])
+	
+	#Connect text entry boxes	
+	for i in get_tree().get_nodes_in_group("lookline"):  
+		i.connect("text_changed", self, '_lookline_text', [i])
+	
+	#Connect list options
+	for i in get_tree().get_nodes_in_group("lookoption"):  
+		i.connect("item_selected", self, '_option_select', [i])
+	
+	#Connect stat up/down buttons	
+	for i in get_tree().get_nodes_in_group("statup"):  
+		i.connect("pressed",self,'statup',[i])		
+	for i in get_tree().get_nodes_in_group("statdown"):
+		i.connect("pressed",self,'statdown',[i])
+	
+	#Connect slave name entry boxes
+	for i in ["TextureFrame/newgame/stage8/slavename", "TextureFrame/newgame/stage8/slavesurname"]:
+		var temp = get_node(i)
+		temp.connect("text_changed", self, '_slavename_text', [temp])
+
+	#Connect slave customization options
+	for i in get_tree().get_nodes_in_group("slaveoption"):  
+		i.connect("item_selected",self,'_slave_option', [i])
+	
+	#Connect game options/settings
+	for i in get_tree().get_nodes_in_group("startoption"):  
+		i.connect("pressed",self,'_option_toggle',[i])
+	
+	#Connect virgin option
+	get_node("TextureFrame/newgame/stage6/virgin").connect("pressed", self, '_virgin_press')
+	
+	#Initialize newgame variables
+	player = globals.newslave(playerDefaults.race, playerDefaults.age, playerDefaults.sex, playerDefaults.origins) #Prefer to use a constructor/builder
+	#ralph
+	player.playercleartraits()
+	#/ralph
+	player.hairstyle = 'straight'
+	player.beautybase = variables.playerstartbeauty
+	
+	startSlave = globals.newslave(slaveDefaults.race, slaveDefaults.age, slaveDefaults.sex, slaveDefaults.origins) #Prefer a constructor/builder
+	startSlave.cleartraits()
+	startSlave.beautybase = variables.characterstartbeauty
+	startSlave.memory = slaveBackgrounds.back()
+	
+	globals.resources.panel = null #Clear global variables
+	globals.showalisegreet = false
+
+	_build_player_portraits() #Build Player portrait list
+
+func regenerateplayer():
+	var imageportait = player.imageportait
+	player = globals.newslave(player.race, player.age, player.sex, 'slave')
+	globals.player = player
+	#ralph
+	player.playercleartraits()
+	#/ralph
+	player.unique = 'player'
+	player.imageportait = imageportait
+	player.imagefull = null
+	player.beautybase = variables.playerstartbeauty
+	playerBonusStatPoints = variables.playerbonusstatpoint
+	for i in ['str','agi','maf','end']:
+		player.stats[i+'_max'] = 4
+	_update_stage5()
+
+
 ###---Added by Expansion---### Traits to Forbidden
 #QMod - Refactor
 func _process_stage6_body_options():
@@ -145,6 +219,25 @@ func _process_stage6_body_options():
 		get_node("TextureFrame/newgame/stage6/vagina").add_item('none')
 
 	###---End Expansion---###
+
+
+func _select_stage(button):
+	#Check character creation - player or first slave
+	if stage >= 7 && button.get_position_in_parent() < 7: #Moving from first slave creation back to player creation
+		player = globals.player #Restore previously customized player character
+		startSlave.cleartraits() #Clear starting slave selected trait(s)
+		startSlave.memory = slaveBackgrounds[0]
+		startSlaveHobby = slaveHobbies[0]
+	
+	if stage >= 6: #If backtracking after reaching player specialization stage
+		var spec = player.spec
+		#ralph
+		player.playercleartraits()
+		#/ralph
+		
+	#Update stage and advance
+	self.stage = button.get_position_in_parent()
+
 
 func _update_stage6():
 	###---Added by Expansion---### Quick Strip
