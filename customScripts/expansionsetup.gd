@@ -286,10 +286,23 @@ func setSexuality(person):
 
 func setDesiredOffspring(person):
 	#Maximum of 10 + Siblings
-	var number = round(rand_range(0,4))
-	if person.race.find("Beastkin") > 0:
+	var number = round(rand_range(-2,4))
+	#Age
+	if person.age == "child":
+		number += round(rand_range(-2,1))
+	elif person.age == "teen":
+		number += round(rand_range(-2,3))
+	elif person.age == "adult":
+		number += round(rand_range(-3,4))
+	#Races
+	if person.race.find("Beastkin") > 0 || person.race.find("Goblin") > 0:
 		number += round(rand_range(0,2))
-	#Add for Siblings
+	#Traits
+	if person.traits.has("Fertile"):
+		number += round(rand_range(1,3))
+	elif person.traits.has("Infertile"):
+		number += round(rand_range(-3,-1))
+	#Add Some for Siblings
 	var persondata
 	if globals.state.relativesdata.has(person.id):
 		persondata = globals.state.relativesdata[person.id]
@@ -297,8 +310,14 @@ func setDesiredOffspring(person):
 		globals.createrelativesdata(person)
 		persondata = globals.state.relativesdata[person.id]
 	for i in persondata:
-		number += rand_range(.05,.15)
-	person.pregexp.desiredoffspring = round(number)
+		number += rand_range(-.5,.5)
+	number = clamp(round(number), 0, 12)
+	#Assign Breeding Fetish
+	if number > 0:
+		person.fetish.pregnancy = globals.fetishopinion[clamp(2 + round(number/3), 2, 6)]
+	else:
+		person.fetish.pregnancy = globals.fetishopinion.[round(0,1)]
+	person.pregexp.desiredoffspring = number
 
 func setLubrication(person):
 	person.lubrication = round(rand_range(1,4))

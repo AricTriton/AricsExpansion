@@ -1638,14 +1638,14 @@ func talkconsent(mode=''):
 		#Count Acceptance
 		var livestockcounter = 0
 		if person.lactation == true && person.knowledge.has('lactating'):
-			livestockcounter += 1
+			livestockcounter += 3
 		if person.checkFetish('bemilked', 1) == true:
-			livestockcounter += 5
+			livestockcounter += 3
 		if person.lactating.pressure > 0:
-			livestockcounter += round(person.lactating.pressure/2)
+			livestockcounter += round(person.lactating.pressure * .25)
 		if person.checkFetish('submission', 1) == true:
 			livestockcounter += 1
-		if rand_range(0,100) <= (person.loyal*.5) + (person.obed*.25) + (livestockcounter*10) + globals.expansionsettings.baselivestockconsentchance:
+		if rand_range(0,100) <= (person.loyal*.35) + (person.obed*.25) + (livestockcounter*10) + globals.expansionsettings.baselivestockconsentchance:
 			#Change Dialogue
 			text += str(expansion.getIntro(person)) + "[color=yellow]-"+person.quirk("If that is really what you want for me, I trust you. I...I won't fight you if that is what you want from me.")+"[/color]"
 			person.consentexp.livestock = true
@@ -1684,7 +1684,9 @@ func talkconsent(mode=''):
 		#Livestock
 		if globals.state.farm >= 3 && (person.consentexp.breeder == true || person.consentexp.stud == true) && !person.dailytalk.has('consentlivestock') && person.consentexp.livestock == false:
 			buttons.append({text = person.dictionary("Would you willingly work in the Farm as livestock?"), function = 'talkconsent', args = 'livestock'})
-		
+	
+	if mode != "intro":
+		buttons.append({text = person.dictionary("While we are discussing Consent..."), function = 'talkconsent', args = 'intro'})
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 	if nakedspritesdict.has(person.unique):
 		if person.consent:

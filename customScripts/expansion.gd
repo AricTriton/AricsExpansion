@@ -1798,7 +1798,7 @@ func dailyBioClock(person):
 	elif person.age == "adult":
 		person.instinct.reproduce += round(rand_range(2,3))
 	#Racial
-	if person.race.find("Beastkin") >= 0:
+	if person.race.find("Beastkin") >= 0 || person.race.find("Goblin") >= 0:
 		person.instinct.reproduce += round(rand_range(1,2))
 	#Traits (3-5)
 	if person.traits.has("Fertile"):
@@ -1979,6 +1979,12 @@ func dailyUpdate(person):
 		if person.cum.body > 0:
 			text += "\n$name had " +str(nameCum())+ " stuck to $his body and washed it off while bathing. "
 			person.cum.body = 0
+		if person.cum.ass > 0:
+			text += "\n$name had " +str(nameCum())+ " still in $his " + str(nameAsshole()) + " and washed it all out while bathing. "
+			person.cum.ass = 0
+		if person.cum.pussy > 0:
+			text += "\n$name had " +str(nameCum())+ " still in $his " + str(namePussy()) + " and washed it all out while bathing. "
+			person.cum.pussy = 0
 		#Semen Clearing for Fun Times
 		for i in person.preg.womb:
 			person.preg.womb.erase(i)
