@@ -357,7 +357,6 @@ func dailyFarm():
 	#---Empty Positions Check
 	if allcattle.empty():
 		text += "[color=red]No Cattle were present for milking in the Farm today.[/color]\n"
-		return text
 	
 	#Farm Manager Substitutes for Empty Positions
 	if farmmanager != null && farmhands.empty():
@@ -569,7 +568,7 @@ func dailyFarm():
 				if globals.expansionsettings.perfectinfo == true:
 					text += cattle.dictionary("\n[color=aqua]$name[/color] has the following stats: ")
 					if cattle.lactating.hyperlactation == true:
-						text += "[color=aqua]Hyperlactation[/color] | "
+						text += "[color=lime]Hyperlactation[/color] | "
 					text +=  "Milk Storage: " +str(cattle.lactating.milkstorage)+ " | Milk Regeneration: " +str(cattle.lactating.regen)+ ""
 					if cattle.lactating.pressure > 0:
 						text += " | Pressure = " +str(cattle.lactating.pressure)+ "\n "
@@ -583,16 +582,16 @@ func dailyFarm():
 					if extractorsdict.has(cattle.farmexpanded.extractmilk.method):
 						extractionmod = rand_range(extractorsdict[cattle.farmexpanded.extractmilk.method].low, extractorsdict[cattle.farmexpanded.extractmilk.method].high)
 					else:
-						extractionmod = round(rand_range(0, 100))*.01
+						extractionmod = rand_range(0,1)
 						print("Milk Extractor not found for Cattle ID " + str(cattle.id) + ". Random 0-100 substituted")
 				else:
 					#Manual Extraction
 					text += cattle.dictionary("$He was milked manually today by ") + milkmaid.dictionary("[color=aqua]$name[/color]. ")
-					effort = round(rand_range(0,milkmaid.send))
-					milkmaid.energy -= 1 + round(effort)
-					milkmaid.add_jobskill('milking', 1 + round(effort*.35))
-					text += milkmaid.dictionary("[color=aqua]$name[/color] spent [color=aqua]" + str(round(effort)) + " Energy[/color] milking ") + cattle.dictionary("[color=aqua]$name[/color]. ")
-					extractionmod = clamp(milkmaid.jobskills.milking * effort, 0, 100)
+					effort = round(rand_range(1, milkmaid.send+1))
+					milkmaid.energy -= effort
+					milkmaid.add_jobskill('milking', round(effort*.25))
+					text += milkmaid.dictionary("[color=aqua]$name[/color] spent [color=aqua]" + str(effort) + " Energy[/color] milking ") + cattle.dictionary("[color=aqua]$name[/color]. ")
+					extractionmod = clamp(milkmaid.jobskills.milking * .25, 0, effort)
 				
 				cattle.farmexpanded.timesmilked += 1
 				
@@ -659,7 +658,7 @@ func dailyFarm():
 						globals.addrelations(cattle, milkmaid, rand_range(10,20))
 						text += cattle.dictionary("[color=aqua]$name[/color] didn't mind being milked today. ")
 						cattle.farmexpanded.extractmilk.opinion.append('obeyed')
-				elif cattle.farmexpanded.resistance > -1:
+				elif cattle.farmexpanded.resistance >= 0:
 					if cattle.traits.has('Masochist') || cattle.traits.has('Submissive'):
 						text += cattle.dictionary("[color=aqua]$name[/color] resisted being milked and would have hated $his treatment, but being mistreated turns $him on. $He has gained [color=green]" + str(gain) + " Lust[/color].\n ")
 						cattle.farmexpanded.extractmilk.opinion.append('accepted')
@@ -683,7 +682,7 @@ func dailyFarm():
 					else:
 						globals.addrelations(cattle, milkmaid, rand_range(-20,-40))
 				#Add Milkmaid Relations
-				if cattle.farmexpanded.resistance <= 0 || cattle.farmexpanded.resistance > -1 && (milkmaid.traits.has('Sadist') || milkmaid.traits.has('Dominant')):
+				if cattle.farmexpanded.resistance <= 0 || cattle.farmexpanded.resistance >= 0 && (milkmaid.traits.has('Sadist') || milkmaid.traits.has('Dominant')):
 					globals.addrelations(milkmaid, cattle, rand_range(20,40))
 				else:
 					globals.addrelations(milkmaid, cattle, rand_range(-20,-40))
@@ -1023,7 +1022,7 @@ func dailyFarm():
 					if extractorsdict.has(cattle.farmexpanded.extractcum.method):
 						extractionmod = rand_range(extractorsdict[cattle.farmexpanded.extractcum.method].low, extractorsdict[cattle.farmexpanded.extractcum.method].high)
 					else:
-						extractionmod = round(rand_range(0, 100))*.01
+						extractionmod = rand_range(0, 1)
 						print("Cum Extractor not found for Cattle ID " + str(cattle.id) + ". Random 0-100 substituted")
 					#Add Orgasms
 					extraorgasms = (globals.expansionfarm.extractorsarray.find(cattle.farmexpanded.extractcum.method))*3
@@ -1033,11 +1032,11 @@ func dailyFarm():
 				else:
 					#Manual Extraction
 					text += cattle.dictionary("[color=aqua]$name[/color]'s cum was collected by ") + milkmaid.dictionary("[color=aqua]$name[/color]. ")
-					effort = round(rand_range(0,milkmaid.send))
-					milkmaid.energy -= 1 + effort
-					milkmaid.add_jobskill('milking', 1 + round(effort*.35))
+					effort = round(rand_range(1,milkmaid.send+1))
+					milkmaid.energy -= effort
+					milkmaid.add_jobskill('milking', round(effort*.25))
 					text += milkmaid.dictionary("[color=aqua]$name[/color] spent [color=aqua]" + str(effort) + " Energy[/color] pleasuring ") + cattle.dictionary("[color=aqua]$name[/color] to collect $his cum. ")
-					extractionmod = clamp(milkmaid.jobskills.milking * effort, 0, 100)
+					extractionmod = clamp(milkmaid.jobskills.milking * .25, 0, effort)
 					#Add Orgasms
 					extraorgasms = effort
 					while extraorgasms > 0:
@@ -1064,26 +1063,26 @@ func dailyFarm():
 					text += cattle.dictionary("[color=aqua]$name[/color] had [color=aqua]" + str(semen) + " Semen[/color] extracted out of $his " + str(globals.expansion.namePenis()) + " today.\n ")
 				
 				if cattle.vagina != "none" && cattle.cum.pussy > 0:
-					semen = round(cattle.cum.pussy * extractionmod)
+					semen = clamp(round(cattle.cum.pussy * extractionmod), 0, cattle.cum.pussy)
 					cattle.cum.pussy -= semen
 					semenproduced += semen
 					text += cattle.dictionary("[color=aqua]$name[/color] had [color=aqua]" + str(semen) + " Semen[/color] extracted from $his " + str(globals.expansion.namePussy()) + " today that had been left inside of $him.\n ")
 				
 				if cattle.asshole != "none" && cattle.cum.ass > 0:
-					semen = round(cattle.cum.ass * extractionmod)
+					semen = clamp(round(cattle.cum.ass * extractionmod), 0, cattle.cum.ass)
 					cattle.cum.ass -= semen
 					semenproduced += semen
 					text += cattle.dictionary("[color=aqua]$name[/color] had [color=aqua]" + str(semen) + " Semen[/color] extracted from $his " + str(globals.expansion.nameAsshole()) + " today that had been left inside of $him.\n ")
 				
 				#Lubricant Produced
 				if cattle.vagina != "none":
-					var lube = round((cattle.pregexp.cumprod*corgasms) * extractionmod)
+					var lube = clamp(round((cattle.pregexp.cumprod*corgasms) * extractionmod), 0, globals.vagsizearray.find(cattle.vagina)*5)
 					#Futa Dillution
 					if globals.expansionsettings.futacumweakened == true && cattle.penis != "none":
 						lube = round(lube*globals.expansionsettings.futacumweakenedpercentage)
 					lube = clamp(lube, 1, 100)
 					lubeproduced = lube
-					text += cattle.dictionary("[color=aqua]$name[/color] had [color=aqua]" + str(lube) + " Lube[/color] extracted from $his " + str(globals.expansion.namePussy()) + " as " + str(globals.expansion.nameHelplessOrgasmPreface()) + "" + str(globals.expansion.nameHelplessOrgasm()) + ".\n ")
+					text += cattle.dictionary("[color=aqua]$name[/color] had [color=aqua]" + str(lubeproduced) + " Lube[/color] extracted from $his " + str(globals.expansion.namePussy()) + " as " + str(globals.expansion.nameHelplessOrgasmPreface()) + "" + str(globals.expansion.nameHelplessOrgasm()) + ".\n ")
 				
 				text += setFate(cattle, 'extractcum')
 				
@@ -1116,17 +1115,18 @@ func dailyFarm():
 					if extractorsdict.has(cattle.farmexpanded.extractpiss.method):
 						extractionmod = rand_range(extractorsdict[cattle.farmexpanded.extractpiss.method].low, extractorsdict[cattle.farmexpanded.extractpiss.method].high)
 					else:
-						extractionmod = round(rand_range(0, 100))*.01
+						extractionmod = rand_range(0, 1)
 						print("Piss Extractor not found for Cattle ID " + str(cattle.id) + ". Random 0-100 substituted")
 				else:
 					#Manual Extraction
 					text += milkmaid.dictionary("[color=aqua]$name[/color] forced ") + cattle.dictionary("[color=aqua]$name[/color] to drink throughout the day. Occassionally they would press against $his bladder, forcing $him to let helplessly let loose a warm stream which ") + milkmaid.dictionary("[color=aqua]$name[/color] would collect. ")
+					var pissextractmod = (globals.fetishopinion.find(milkmaid.fetish.otherspissing))*.5
 					if milkmaid.checkFetish('otherspissing') == true:
-						effort = globals.fetishopinion.find(milkmaid.fetish.otherspissing) + 1
+						effort = round(1, globals.fetishopinion.find(milkmaid.fetish.otherspissing) + 1)
 						globals.addrelations(milkmaid, cattle, rand_range(10,30))
 						text += milkmaid.dictionary("[color=aqua]$name[/color] got off on seeing ") + cattle.dictionary("[color=aqua]$name[/color] forced to piss in front of ") + milkmaid.dictionary("$him and made sure that it happened as much as possible today. ")
 					else:
-						effort = round(rand_range(1,2))
+						effort = round(rand_range(.25,1))
 						if milkmaid.checkContentmentLoss('med') == true:
 							text += milkmaid.dictionary("[color=aqua]$name[/color] felt disgusted by having to deal with someone else's piss and lost [color=aqua]Contentment[/color].")
 						if rand_range(0,100) <= milkmaid.loyal:
@@ -1135,7 +1135,7 @@ func dailyFarm():
 						else:
 							text += milkmaid.dictionary("[color=aqua]$name[/color] seemed upset at you specifically for making $him do that. ")
 							globals.addrelations(milkmaid, cattle, rand_range(10,30))
-					extractionmod = clamp(effort, 0, 100)
+					extractionmod = clamp(pissextractmod, .25, effort)
 				
 				var temppiss = round(rand_range(1,globals.heightarrayexp.find(cattle.height)))
 				#Production
@@ -1715,6 +1715,10 @@ func milkMarket(person, town, totalbottles):
 			globals.state.townsexpanded[town].milkvalue += .2
 		else:
 			globals.state.townsexpanded[town].milkvalue += .1
+	
+	#Don't Undersell Check
+	if profit <= bottlessold * globals.expansionfarm.containerdict.bottle.cost:
+		profit = bottlessold * (globals.expansionfarm.containerdict.bottle.cost + 1)
 	
 	text += person.dictionary("$He made a total profit of [color=aqua]" +str(profit)+ " Gold[/color] today. ")
 	
