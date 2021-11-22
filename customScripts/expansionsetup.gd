@@ -316,7 +316,7 @@ func setDesiredOffspring(person):
 	if number > 0:
 		person.fetish.pregnancy = globals.fetishopinion[clamp(2 + round(number/3), 2, 6)]
 	else:
-		person.fetish.pregnancy = globals.fetishopinion.[round(0,1)]
+		person.fetish.pregnancy = globals.fetishopinion[round(rand_range(0,1))]
 	person.pregexp.desiredoffspring = number
 
 func setLubrication(person):

@@ -7244,6 +7244,52 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 caret_blink = true
 
+[node name="slaverename" type="Popup" parent="MainScreen/slave_tab/stats"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -359.0
+margin_top = -398.0
+margin_right = -52.0
+margin_bottom = -272.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="MainScreen/slave_tab/stats/slaverename"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 44 )
+expand = true
+
+[node name="Label" type="Label" parent="MainScreen/slave_tab/stats/slaverename"]
+margin_left = 33.0
+margin_top = 16.0
+margin_right = 283.0
+margin_bottom = 32.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "What is their new name?"
+align = 1
+
+[node name="slaverename" type="Button" parent="MainScreen/slave_tab/stats/slaverename"]
+margin_left = 75.0
+margin_top = 76.0
+margin_right = 234.0
+margin_bottom = 115.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Confirm"
+
+[node name="LineEdit" type="LineEdit" parent="MainScreen/slave_tab/stats/slaverename"]
+margin_left = 50.0
+margin_top = 42.0
+margin_right = 261.0
+margin_bottom = 72.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+caret_blink = true
+
 [node name="statustext" type="RichTextLabel" parent="MainScreen/slave_tab/stats"]
 anchor_top = 1.0
 anchor_right = 1.0
@@ -12144,6 +12190,7 @@ current = true
 [connection signal="pressed" from="MainScreen/slave_tab/stats/selectspellpanel/spellusebutton" to="MainScreen/slave_tab/stats" method="_on_spellusebutton_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/selectspellpanel/spellcancelbutton" to="MainScreen/slave_tab/stats" method="_on_spellcancelbutton_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/callorder/callconfirm" to="MainScreen/slave_tab/stats" method="_on_callconfirm_pressed"]
+[connection signal="pressed" from="MainScreen/slave_tab/stats/slaverename/slaverename" to="MainScreen/slave_tab/stats" method="_on_slaverename_pressed"]
 [connection signal="meta_clicked" from="MainScreen/slave_tab/stats/basics/slavedescript" to="MainScreen/slave_tab" method="_on_slavedescript_meta_clicked"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/basics/fullbodycheck" to="MainScreen/slave_tab" method="_on_fullbodycheck_pressed"]
 [connection signal="item_selected" from="MainScreen/slave_tab/stats/customization/hairstyle" to="MainScreen/slave_tab" method="_on_hairstyle_item_selected"]
