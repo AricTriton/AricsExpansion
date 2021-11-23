@@ -1,0 +1,35 @@
+<---Changelog--->
+NEW FEATURES
+<Crystal>
+Added new ability "Attunement" to Crystal Level 0
+Added new ability "Second Wind" to Crystal Level 2.
+Lowered Immortality from rank 4 to 3.
+Added Shatter Chance to Crystal (Default 80). Now theres a slight chance it won't shatter.
+Altered Daily Lifeforce Regain: If Light, +1 if <= Upgrade Level. Chance at a Bonus +1 based on Researcher Strength (if over 40 wits) and it's still under the Upgrade Level.
+Increased the total Crystal Upgrade size to 10. Lowered the cost slightly.
+
+<Talk Menu>
+Added a new "Rename Slave" option in the Talk Menu.
+
+<ElPresidente's Items>
+Added ElPresidente's New Items, Item Weight Rebalancing, and modifications adding those items to the Stores, Combat Encounters, and Chests.
+
+BUGFIXES
+<Colored Text>
+Colored in Manager and Snails in Farm Intro Text
+Started Colorizing End of Day Text
+
+<Farm>
+Temporary Check to ensure that Milk Merchants never sell bottles of milk for less than the cost of the bottle itself (it'll sell at a minimum of bottle cost + 1 just in case).
+
+Corrected Milkmaid ExtractionMod issues.
+Effort is now 1 to 1+milkmaid's Endurance (energy cost is as well).
+The extraction modifier is their milking jobskill * .25 that clamps at a minimum of 0, maximum of their Effort.
+
+Fixed Farmhand and Cattle Name displays to be consistent in End of Day report
+
+<Semen Storage>
+It clears all cum in an ass and and pussy when bathing now like it was supposed to.
+
+<Traits>
+Fixed the him in Undiscovered to $him. Reported by Darkness.
