@@ -1,0 +1,50 @@
+v1.2 Changelog
+
+NEW FEATURES
+
+<Person Expanded>
+
+Once Per Day Notifications: Shows a list of once per day notifications at the bottom of the Person Inspection in the Mansion Updated the Consent Criteria to be more intuitive, like not being able to ask about pregnancy until you've gotten consent for sex. This should help with the frustration of trying to optimize your day and feel like you've missed one of your once per day options. (description.gd / statstab.gd)
+Improved Dialogue: Improved the Fetish checks for better immersion. Reorganized Chat Buttons to be more intuitive. Added a Return to Previous Screen to Sexual Topics. Added the current Sexuality to the Sexuality Talk Options. (statstab.gd)
+<Mansion Improvements>
+
+Facility Descriptions: Set the Facility Description for the Dimensional Crystal behind a setting called show_facilities_details_in_mansion, default true. If enabled, it will show the familiar Dimensional Crystal mansion text as well as the new Training Grounds. It is set up to easily add text descriptions added for any other facilities in the future for a full, quick detailed glance at your entire mansion's facilities. (mansion.gd)
+Fixed/Added the Jobs and PlayerGroup Panel for some QOL.
+Farm Panel Improvements (including in-game help/guide).
+Made the Farm Start easier by reducing the cost of Vats, shifting most of that to Field, and reducing the starting cost for the first Vat to 0. Improving Vats retains a cost.
+<Exploration>
+
+Improved Text for the post-combat scene for easier reading. (exploration.gd)
+<Fetishes>
+
+The game will now automatically update Traits per Fetishes (specifically for Dominance, Submission, Sadism, and Masochism). Discovering, Encouraging, and Discouraging Fetishes can manipulate these traits now.
+These traits will be hinted at with a trait called "Undiscovered Trait"
+<Childbirth>
+
+Altered Panel. You now have 3 primary "Raise" options: 500 Gold, 250 Gold and 25 Mana, or 50 Mana. You also have 2 "give away" options, though the second (sacrifice the baby to the dark crystal) is hidden until the relevant ability is researched at the Crystal.
+Added Mother's Portrait to the Panel. Enabled BBText and added coloration to the Panel for legibility.
+BUGFIXES
+
+Several by Ankmairdor (unlisted)
+
+<Slave Inspect>
+
+Fixed the duplicated "her breasts are" text. (description.gd)
+<Talk>
+
+Fixed the duplicated images in the Talk menu by replacing 'pos1' calls with the new 'slave' position. Fixed by Ankmairdor (statstab.gd)
+<The Crystal>
+
+Fixed Issue with HeadGirls being able to change the pregnancy speed without the ability. - (statstab.gd)
+<Mansion Upgrades>
+
+Improved Readability of Training Grounds description - (mansionupgrades.gd)
+<Quests>
+
+Fixed Line 1827 issue of Taurus' reverting to needing up to an exact tit size and not accepting larger. Reported by DKRust, Fixed by Ankmairdor (outside.gd)
+<Pregnancy>
+
+Fixed Abortion causing CTD. Reported by Chiurra, Fixed by Ankmairdor. (person.gd)
+<Other>
+
+Removed dating.gd from patch files. Duplicate of the one in mods and had some old, pre-fixed changed remaining. (/patch/files/dating.gd)
