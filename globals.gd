@@ -1387,6 +1387,9 @@ func fertilize_egg(mother, father_id, father_unique):
 	###Get/Build Father
 	if father_id != null && father_id != '-1' && !father_unique in ['','dog','horse']:
 		father = globals.state.findslave(father_id)
+		#If Father disappeared from the World
+		if father == null:
+			father = globals.newslave(randomfromarray(globals.allracesarray), 'adult', 'male')
 	else:
 		father = globals.newslave(globals.allracesarray[rand_range(0,globals.allracesarray.size())], 'adult', 'male')
 		father.id = '-1'

@@ -2,7 +2,7 @@
 
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
-var modversion = 1.2
+var modversion = 1.3
 
 #---Debug Tools (True/False)
 var perfectinfo = false
@@ -73,6 +73,7 @@ var changecrystalreq = 4
 
 #Automatic Crystal Lifeforce Chance
 var crystallifeforcerestorechance = 80
+var crystal_shatter_chance = 80
 
 
 #---Pregnancy Expanded

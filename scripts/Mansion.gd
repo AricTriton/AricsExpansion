@@ -410,9 +410,14 @@ func _on_end_pressed():
 		text0.set_bbcode(text0.get_bbcode() + text + "")
 	###---End Expansion---###
 
-	###---Added by Expansion---### Category: Daily Update | Management First
+	###---Added by Expansion---### Category: Daily Update | Management First | Spacing
+	var first_slave_processed = true
 	for person in globals.slaves:
 		if person.work in ['headgirl','farmmanager']:
+			if first_slave_processed == true:
+				first_slave_processed = false
+			else:
+				text += "\n"
 			text += globals.expansion.dailyUpdate(person)
 	###---Expansion End---###
 
@@ -441,6 +446,10 @@ func _on_end_pressed():
 
 		###---Added by Expansion---### Update Player, Towns, and People
 		if !person.work in ['headgirl','farmmanager']:
+			if first_slave_processed == true:
+				first_slave_processed = false
+			else:
+				text += "\n"
 			text += globals.expansion.dailyUpdate(person)
 		###---End Expansion---###
 	
@@ -522,11 +531,11 @@ func _on_end_pressed():
 								if globals.state.reputation[i] < -10 && randf() < 0.33:
 									person.obed -= max(abs(globals.state.reputation[i])*2 - person.loyal/6,0)
 									person.loyal -= rand_range(1,3)
-									text += "[color=#ff4949]$name has been influenced by local townfolk, which is hostile towards you. [/color]\n"
+									text += "[color=#ff4949]$name has been influenced by local townfolk, which are hostile towards you. [/color]\n"
 								elif globals.state.reputation[i] > 10 && randf() < 0.2:
 									person.obed += abs(globals.state.reputation[i])
 									person.loyal += rand_range(1,3)
-									text += "[color=green]$name has been influenced by local townfolk, which is loyal towards you. [/color]\n"
+									text += "[color=green]$name has been influenced by local townfolk, which are loyal towards you. [/color]\n"
 						text += workdict.text
 						###---Added by Expansion---### Ank BugFix v4a
 						if person.spec == 'housekeeper' && person.work in ['cooking','library','nurse','maid']:
@@ -560,7 +569,9 @@ func _on_end_pressed():
 						i.duration -= 1
 					if i.duration <= 0:
 						if i.code == 'captured':
-							text0.set_bbcode(text0.get_bbcode() + person.dictionary('$name grew accustomed to your ownership.\n'))
+							###---Added by Expansion---### Colorized
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary('[color=aqua]$name[/color][color=yellow] grew accustomed to your ownership.[/color]\n'))
+							###---Expansion End---###
 						person.add_effect(i, true)
 				if i.has("ondayend"):
 					globals.effects.call(i.ondayend, person)
@@ -601,12 +612,14 @@ func _on_end_pressed():
 					if ii != person && ii.loyal < 30 && ii.traits.find('Loner') < 0:
 						ii.obed += -(person.charm/3)
 			if person.obed < 50 && person.loyal < 25 && person.sleep != 'jail'&& person.sleep != 'farm'&& person.brand != 'advanced':
+				###---Added by Expansion---### Colorized
 				if randf() < 0.3 && globals.resources.food > 34:
-					text0.set_bbcode(text0.get_bbcode()+person.dictionary('You notice that some of your food is gone.\n'))
+					text0.set_bbcode(text0.get_bbcode()+person.dictionary('[color=red]You notice that some of your food is gone.[/color]\n'))
 					globals.resources.food -= rand_range(35,70)
 				elif randf() < 0.3 && globals.resources.gold > 19:
-					text0.set_bbcode(text0.get_bbcode()+person.dictionary('You notice that some of your gold is missing.\n'))
+					text0.set_bbcode(text0.get_bbcode()+person.dictionary('[color=red]You notice that some of your gold is missing.[/color]\n'))
 					globals.resources.gold -= rand_range(20,40)
+				###---End Expansion---###
 			if person.obed < 25 && person.sleep != 'jail' && person.sleep != 'farm' && person.tags.has('noescape') == false:
 				var escape = 0
 				var stay = 0
@@ -961,7 +974,9 @@ func _on_end_pressed():
 				person.energy += rand_range(20,30) + person.send*6
 
 				if person.away.duration == 0:
-					text0.set_bbcode(text0.get_bbcode() + person.dictionary("$name returned to the mansion and went back to $his duty. \n"))
+					###---Added by Expansion---### Colorized & Fixed Duplicate
+					text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] returned to the mansion and went back to $his duty. \n"))
+					###---End Expansion---###
 					var sleepChange = false
 					if person.sleep != 'communal':
 						match person.sleep:
@@ -977,10 +992,11 @@ func _on_end_pressed():
 									person.job = 'rest'
 					if sleepChange:
 						person.sleep = 'communal'
-						text0.set_bbcode(text0.get_bbcode() + person.dictionary("$name's sleeping place is no longer available so $he has moved to the communal area. \n"))
+						###---Added by Expansion---### Colorized
+						text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name's[/color] sleeping place is no longer available so $he has moved to the communal area. \n"))
+						###---End Expansion---###
 			###---End Expansion---###
 					person.away.at = ''
-					text0.set_bbcode(text0.get_bbcode() + person.dictionary("$name returned to the mansion and went back to $his duty. \n"))
 				for i in person.effects.values():
 					if i.has('duration') && i.code != 'captured':
 						###---Added by Expansion---### Hybrid Support && Ank BugFix v4
@@ -1552,31 +1568,66 @@ func build_mansion_info():
 			elif globals.state.thecrystal.hunger > 0:
 				text += "You have a sense of unease when gazing into the Crystal. It seems to be...hungry. It wants to...consume. "
 		
-		#Change When "Discovered"
+		#---Research
 		if globals.state.thecrystal.research > 0:
 			text += "\n\n[color=#d1b970]Crystal Research[/color]\nResearch: [color=aqua]" + str(globals.state.thecrystal.research) + "[/color]/100 \nResearch is the chance of discovering a new Crystal Ability at night. "
+		#Attunement
+		if globals.state.thecrystal.abilities.size() > 0 && !globals.state.thecrystal.abilities.has('attunement'):
+			text += "\n[color=green]Inspiration[/color]: You think that you can [color=aqua]Attune[/color] yourself to the [color=aqua]Crystal[/color]. "
+		#Preg Speed
+		if globals.state.mansionupgrades.dimensionalcrystal >= 1 && !globals.state.thecrystal.abilities.has('pregnancyspeed'):
+			text += "\n[color=green]Inspiration[/color]: You know that the [color=aqua]Crystal[/color] can affect the [color=aqua]Speed of Pregnancies[/color], but are not yet sure how to make it work. "
+		#Second Wind
+		if globals.state.mansionupgrades.dimensionalcrystal >= 2 && !globals.state.thecrystal.abilities.has('secondwind'):
+			text += "\n[color=green]Inspiration[/color]: You think you may be able to learn how to make the [color=aqua]Crystal[/color] to revive you and your slaves to half health from a fatal blow in combat once per day."
+		#Death Prevention
+		if globals.state.mansionupgrades.dimensionalcrystal >= 3 && !globals.state.thecrystal.abilities.has('immortality'):
+			text += "\n[color=green]Inspiration[/color]: You believe that the [color=aqua]Crystal[/color] can grant [color=aqua]Immortality[/color], but are not yet sure how."
+		#Sacrifice
+		if globals.state.thecrystal.mode == "dark" && !globals.state.thecrystal.abilities.has('sacrifice'):
+			text += "\n[color=red]Dark Inspiration[/color]: There must be some way to [color=red]Sacrifice[/color] something to the [color=aqua]Crystal[/color] to sate its [color=aqua]Hunger[/color] for [color=aqua]Lifeforce[/color], but you are not yet sure how to do that."
+		#---Powers
 		if globals.state.thecrystal.abilities.empty():
 			text += "\nThe truth behind what all the Crystal can do and why it was put here in the first place is still a complete mystery."
 		else:
-			#Pregnancy Speeds
 			text += "\n\n[color=#d1b970]Powers of the Crystal[/color]"
-			if globals.state.mansionupgrades.dimensionalcrystal >= 1 && globals.state.thecrystal.abilities.has('pregnancyspeed'):
-				text += "\nYou have learned how to use the magic of the Crystal to affect the [color=aqua]Speed of Pregnancies[/color] in the Mansion. "
-			elif globals.state.mansionupgrades.dimensionalcrystal >= 1 && !globals.state.thecrystal.abilities.has('pregnancyspeed'):
-				text += "\nYou have learned that the Crystal can affect the Speed of Pregnancies, but are not yet sure how to make it work. "
-			#Immortality
-			if globals.state.mansionupgrades.dimensionalcrystal >= 4 && globals.state.thecrystal.abilities.has('immortality'):
-				text += "\nYou have learned how to use the magic of the Crystal to grant temporary [color=aqua]Immortality[/color] to people inside the Mansion. "
-			elif globals.state.mansionupgrades.dimensionalcrystal >= 4 && !globals.state.thecrystal.abilities.has('immortality'):
-				text += "\nYou have learned that the Crystal can grant Immortality, but are not yet sure how."
-			#Sacrifice
+			#Attunement
+			if globals.state.thecrystal.abilities.has('attunement'):
+				text += "\nYou understand the basic properties of the [color=aqua]Crystal[/color]. "
+				#Color
+				text += "\n    [color=#d1b970]Color[/color]: " + globals.fastif(globals.state.thecrystal.mode == "light", "[color=aqua]Light[/color]", "[color=red]Dark[/color]")
+				if globals.state.thecrystal.mode == "dark":
+					text += "; The [color=aqua]Crystal[/color] is [color=red]Dark[/color], so there is a chance that it may consume a [color=aqua]Researcher[/color] to sate its [color=aqua]Hunger[/color] by an amount equal to their [color=aqua]Level[/color] and [color=aqua]1 Lifeforce[/color]. If it has no [color=aqua]Hunger[/color] and [color=aqua]0+ Lifeforce[/color], it may repair itself."
+				#Lifeforce
+				text += "\n    [color=#d1b970]Lifeforce[/color]: " + globals.fastif(globals.state.thecrystal.lifeforce >= 0, "[color=lime]" +str(globals.state.thecrystal.lifeforce) + "[/color]", "[color=red]" +str(globals.state.thecrystal.lifeforce) + "[/color]")
+				if globals.state.thecrystal.mode == "light":
+					text += "; The [color=aqua]Crystal[/color] may grow [color=red]Dark[/color] if it ever has negative [color=aqua]Lifeforce[/color]. It will restore [color=aqua]1 Lifeforce[/color] Daily. If it is still below its [color=aqua]Level[/color], it has a [color=aqua]Chance[/color] to gain [color=aqua]+2[/color] equal to a [color=aqua]Researcher's Wits[/color] as long as they are over a minimum of [color=aqua]40[/color]."
+				else:
+					text += "; The [color=aqua]Crystal[/color] will not restore any [color=aqua]Lifeforce[/color] Daily and must be fed slaves to recover [color=aqua]Lifeforce[/color]."
+				#Hunger
+				if globals.state.thecrystal.hunger != 0:
+					text += "\n    [color=#d1b970]Hunger[/color]: " + globals.fastif(globals.state.thecrystal.hunger > 0, "[color=red]" +str(globals.state.thecrystal.hunger) + "[/color]", "[color=lime]" +str(globals.state.thecrystal.hunger) + "[/color]")
+					text += "; The [color=aqua]Crystal[/color] will consume [color=aqua]Lifeforce[/color] daily equal to its [color=aqua]Hunger[/color]. "
+					if globals.state.thecrystal.mode == "dark":
+						text += "Its [color=aqua]Hunger[/color] grows by [color=red]1[/color] Daily. It must have a [color=aqua]Hunger[/color] of [color=aqua]0 or less[/color] to turn [color=aqua]Light[/color] again."
+				text += "\n"
+			#Pregnancy Speeds
+			if globals.state.thecrystal.abilities.has('pregnancyspeed'):
+				text += "\nYou have learned how to use the magic of the [color=aqua]Crystal[/color] to affect the [color=aqua]Speed of Pregnancies[/color] in the Mansion. "
+			#Second Wind (1/Day Combat Revive)
+			if globals.state.thecrystal.abilities.has('secondwind'):
+				text += "\nYou have learned how to harness the magic of the [color=aqua]Crystal[/color] to revive you and your slaves to half health from a fatal blow in combat once per day. You know this will increase the [color=aqua]Crystal's Hunger[/color] and diminish any [color=aqua]Lifeforce[/color] stored within it."
+			#Immortality (Death Prevention)
+			if globals.state.thecrystal.abilities.has('immortality'):
+				text += "\nYou have learned how to use the magic of the [color=aqua]Crystal[/color] to grant temporary [color=aqua]Immortality[/color] to people inside the Mansion and in combat with you. "
+			#Sacrifice (Restore Lifeforce)
 			if globals.state.thecrystal.abilities.has('sacrifice'):
-				text += "\nYou know how to sacrifice your slaves sate the hunger of the Crystal with their life-force. You understand that each level a slave has will provide more essence for the Crystal to consume, and that the Crystal can never fully heal while hungry. "
+				text += "\nYou know how to sacrifice your slaves sate the hunger of the [color=aqua]Crystal[/color] with their life-force. You understand that each level a slave has will provide more essence for the [color=aqua]Crystal[/color] to consume, and that the [color=aqua]Crystal[/color] can never fully heal while hungry. "
 				if globals.state.thecrystal.hunger > 0:
 					text += "\n\nCrystal's Hunger: [color=aqua]" + str(globals.state.thecrystal.hunger) + "[/color]"
 				
 				if globals.state.thecrystal.abilities.has('understandsacrifice'):
-					text += "\n\nYou have come to understand that sacrificing someone to the Crystal will feed it an amount equal to their level (reducing hunger) as well as restoring 1 life-force to the Crystal, partially healing it. "
+					text += "\n\nYou have come to understand that sacrificing someone to the [color=aqua]Crystal[/color] will feed it an amount equal to their level (reducing hunger) as well as restoring 1 life-force to the [color=aqua]Crystal[/color], partially healing it. "
 		#---Training Grounds
 		if globals.state.mansionupgrades.traininggrounds > 0:
 			text += "\n\n[color=#d1b970]-----Training Grounds------[/color] [color=aqua](" + str(globals.state.mansionupgrades.traininggrounds) + ")[/color]\n"

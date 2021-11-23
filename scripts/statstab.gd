@@ -248,12 +248,12 @@ func _on_talk_pressed(mode = 'talk'):
 		else:
 			buttons.append({text = person.dictionary("You can call me whatever you want."), function = 'callorder', args = 'random', tooltip = "They will call you a randomly selected Master name."})
 		
+		#Renaming Options
+		buttons.append({text = str(globals.randomitemfromarray(['I want to change your name.','Your name is now...','I do not like your name...'])), function = 'slave_rename_hub', args = 'intro', tooltip = "Change the slave's name."})
+		
 		#Nudity Options
 		var nudebuttontext = str(globals.randomitemfromarray(['Strip that ' + str(person.race) + ' body','Show me your ' + str(globals.randomitemfromarray(['Naked Body','Chest','Genitals']))]))
 		buttons.append({text = person.dictionary(nudebuttontext), function = 'topicclothing', args = 'intro', tooltip = person.dictionary("Change $name's level of clothing.")})
-
-		#Renaming Options
-#		buttons.append({text = str(globals.randomitemfromarray(['I want to change your name.','Your name is now...','I do not like your name...'])), function = '_on_talk_pressed', args = ''slave_rename_hub', tooltip = "Change the slave's name."})
 
 		#Job Skills
 		buttons.append({text = str(globals.randomitemfromarray(['Lets talk about your Job Skills','What Job Experience do you have?','What jobs have you been assigned to?'])), function = '_on_talk_pressed', args = 'general_slave_topics_jobskills', tooltip = "Display their relevant Job Skills."})
@@ -354,12 +354,6 @@ func _on_talk_pressed(mode = 'talk'):
 		else:
 			text = str(expansion.getIntro(person))  + "\n[color=yellow]-" + person.quirk(str(globals.randomitemfromarray(["I can't work while I'm trapping in here!","Work? You want to talk about work? I just want to be free!","If you let me go, maybe I can get some job experience."]))) + "[/color]"
 		buttons.append({text = str(globals.randomitemfromarray(['Go Back','Return','Previous Menu'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	#----Rename Slave Topics TBK | Needs name, nickname, and surname popup option. Reuse nickname?
-#	elif mode == 'slave_rename_hub':
-#		text = str(expansion.getIntro(person)) + "\n[color=yellow]-"+ person.quirk(str(talk.introGeneral(person))) + "[/color]"
-	
-#		buttons.append({text = str(globals.randomitemfromarray(['I want to change your name.','Your name is now...','I do not like your name...'])), function = '_on_talk_pressed', args = 'slave_rename_hub', tooltip = "Change the slave's name."})
-#		buttons.append({text = str(globals.randomitemfromarray(['Go Back','Return','Previous Menu'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 		
 	#---Sexual Slave Topics---#
 	elif mode == 'slave_sex_topics':
@@ -474,6 +468,66 @@ func _on_callconfirm_pressed():
 	text += "$name " + str(expansion.getExpression(person)) + " at you and says\n" + person.quirk("[color=yellow]-" + str(globals.randomitemfromarray(['Of course','Certainly','As you wish','As you command','Fine','Alright','If that is your wish'])) + ", $master.[/color]")
 	person.randomname = false
 	person.masternoun = get_node("callorder/LineEdit").get_text()
+	get_tree().get_current_scene().close_dialogue()
+	get_tree().get_current_scene().popup(person.dictionary(text))
+
+#Rename Slave
+var pending_slave_rename = ""
+
+func slave_rename_hub(mode = ''):
+	var state = true
+	var sprite = []
+	var buttons = []
+	var text = ""
+	if mode == 'intro':
+		text = str(expansion.getIntro(person)) + "\n[color=yellow]-"+ person.quirk(str(talk.introGeneral(person))) + "[/color]\n\nWhich name would you like to change?"
+		buttons.append({text = "Your First name is now...", function = 'slave_rename_hub', args = 'first', tooltip = "Change the slave's first name."})
+		buttons.append({text = "Your Last name is now...", function = 'slave_rename_hub', args = 'surname', tooltip = "Change the slave's last name."})
+		buttons.append({text = "Your Nickname is now...", function = 'slave_rename_hub', args = 'nickname', tooltip = "Change the slave's nickname. Same as in Customize Slave."})
+	elif mode == 'first':
+		get_node("slaverename").popup()
+		get_node("slaverename/Label").set_text(person.dictionary("What should $name's new First name be? It is currently " + str(person.name)))
+		get_node("slaverename/LineEdit").set_text(person.name)
+		pending_slave_rename = "first"
+	elif mode == 'surname':
+		get_node("slaverename").popup()
+		get_node("slaverename/Label").set_text(person.dictionary("What should $name's new Last name be? It is currently " + str(person.surname)))
+		get_node("slaverename/LineEdit").set_text(person.surname)
+		pending_slave_rename = "surname"
+	elif mode == 'nickname':
+		get_node("slaverename").popup()
+		get_node("slaverename/Label").set_text(person.dictionary("What should $name's new Nickname be? It is currently " + str(person.nickname)))
+		get_node("slaverename/LineEdit").set_text(person.nickname)
+		pending_slave_rename = "nickname"
+	
+	#Return Buttons`
+	if mode != "intro":
+		buttons.append({text = "Regarding another of your names...", function = 'slave_rename_hub', args = 'intro', tooltip = "Change another part of the slave's name."})
+	buttons.append({text = str(globals.randomitemfromarray(['Go Back','Return','Previous Menu'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
+	if nakedspritesdict.has(person.unique):
+		if person.consent:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+		else:
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+	elif person.imagefull != null:
+		sprite = [[person.imagefull,'slave','opac']]
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().rebuild_slave_list()
+	get_parent().slavetabopen()
+
+func _on_slaverename_pressed():
+	get_node("slaverename").visible = false
+	var text = "You demand that $he accept this as $his new name. "
+	text += "$name " + str(expansion.getExpression(person)) + " at you and says\n" + person.quirk("[color=yellow]-" + str(globals.randomitemfromarray(['As you wish','As you command','Fine','Alright','If that is your wish'])) + ", $master.[/color]")
+	if pending_slave_rename == "first":
+		person.name = get_node("slaverename/LineEdit").get_text()
+		pending_slave_rename = ""
+	elif pending_slave_rename == "surname":
+		person.surname = get_node("slaverename/LineEdit").get_text()
+		pending_slave_rename = ""
+	elif pending_slave_rename == "nickname":
+		person.nickname = get_node("slaverename/LineEdit").get_text()
+		pending_slave_rename = ""
 	get_tree().get_current_scene().close_dialogue()
 	get_tree().get_current_scene().popup(person.dictionary(text))
 
@@ -1638,14 +1692,14 @@ func talkconsent(mode=''):
 		#Count Acceptance
 		var livestockcounter = 0
 		if person.lactation == true && person.knowledge.has('lactating'):
-			livestockcounter += 1
+			livestockcounter += 3
 		if person.checkFetish('bemilked', 1) == true:
-			livestockcounter += 5
+			livestockcounter += 3
 		if person.lactating.pressure > 0:
-			livestockcounter += round(person.lactating.pressure/2)
+			livestockcounter += round(person.lactating.pressure * .25)
 		if person.checkFetish('submission', 1) == true:
 			livestockcounter += 1
-		if rand_range(0,100) <= (person.loyal*.5) + (person.obed*.25) + (livestockcounter*10) + globals.expansionsettings.baselivestockconsentchance:
+		if rand_range(0,100) <= (person.loyal*.35) + (person.obed*.25) + (livestockcounter*10) + globals.expansionsettings.baselivestockconsentchance:
 			#Change Dialogue
 			text += str(expansion.getIntro(person)) + "[color=yellow]-"+person.quirk("If that is really what you want for me, I trust you. I...I won't fight you if that is what you want from me.")+"[/color]"
 			person.consentexp.livestock = true
@@ -1684,7 +1738,9 @@ func talkconsent(mode=''):
 		#Livestock
 		if globals.state.farm >= 3 && (person.consentexp.breeder == true || person.consentexp.stud == true) && !person.dailytalk.has('consentlivestock') && person.consentexp.livestock == false:
 			buttons.append({text = person.dictionary("Would you willingly work in the Farm as livestock?"), function = 'talkconsent', args = 'livestock'})
-		
+	
+	if mode != "intro":
+		buttons.append({text = person.dictionary("While we are discussing Consent..."), function = 'talkconsent', args = 'intro'})
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 	if nakedspritesdict.has(person.unique):
 		if person.consent:

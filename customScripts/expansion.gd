@@ -856,9 +856,10 @@ func correctGenes(person):
 	else:
 		return
 	#Check if Both Parents, then first Sibling, then just one parent
-	if (str(persondata['father']) != str(-1) && str(persondata['father']) != null) && (str(persondata['mother']) != str(-1) && str(persondata['mother']) != null):
+	if str(persondata['father']) != str(-1) && str(persondata['mother']) != str(-1):
 		father = globals.state.findslave(persondata['father'])
 		mother = globals.state.findslave(persondata['mother'])
+	if father != null && mother != null:
 		for race in genealogies:
 			person.genealogy[race] = round((mother.genealogy[race] + father.genealogy[race]) * .5)
 			percent += person.genealogy[race]
@@ -1731,7 +1732,7 @@ func dailyPregnancy(person):
 			
 			if person.preg.duration >= variables.pregduration:
 				#Childbirth still checked/called in End of Day
-				text += "\n\n[center][color=yellow]$name went into Labor![/color][/center]\n"
+				text += "[center][color=yellow]$name went into Labor![/color][/center]\n"
 			else:
 				if rand_range(0,100) <= chancemorningsickness + person.swollen:
 					morningsickness = true
@@ -1797,7 +1798,7 @@ func dailyBioClock(person):
 	elif person.age == "adult":
 		person.instinct.reproduce += round(rand_range(2,3))
 	#Racial
-	if person.race.find("Beastkin") >= 0:
+	if person.race.find("Beastkin") >= 0 || person.race.find("Goblin") >= 0:
 		person.instinct.reproduce += round(rand_range(1,2))
 	#Traits (3-5)
 	if person.traits.has("Fertile"):
@@ -1854,49 +1855,64 @@ func dailyCrystal():
 	var text = ""
 	globals.state.thecrystal.power = globals.state.mansionupgrades.dimensionalcrystal
 
-	if globals.state.thecrystal.lifeforce < 0 && globals.state.thecrystal.mode == "light":
+	if globals.state.thecrystal.lifeforce < 0 && globals.state.thecrystal.mode == "light" && rand_range(0,100) <= globals.expansionsettings.crystal_shatter_chance:
 		globals.state.thecrystal.mode = "dark"
 		text += "\n[center][color=red]At exactly midnight, everyone in the Mansion woke up. Some found that their nose was bleeding, others reported their skin crawling, and still others claimed to have horrific nightmares of being eaten alive. A brief investigation found that the Dimensional Crystal has dark, shadowy veins running through it like deep cracks. The color seems to be a darker purple and the glow seen coming off the Crystal and people seem to have those same dark, shadowy tendrils. Everyone returned to their beds, though sleep came uneasily and was wrought with nightmares.[/color][/center]\n"
 	elif globals.state.thecrystal.lifeforce >= 0 && globals.state.thecrystal.hunger <= 0 && globals.state.thecrystal.mode == "dark":
 		globals.state.thecrystal.mode = "light"
-		text += "\n[center][color=green]At exactly midnight, everyone woke up in a blissful, body-shaking orgasm. Everyone rushed back to the Dimensional Crystal to find it glowing a pure, violet light with no trace of the shadowy tendrils running through it. Dreams were lovely and bright tonight.[/color][/center]\n"
+		text += "\n[center][color=lime]At exactly midnight, everyone woke up in a blissful, body-shaking orgasm. Everyone rushed back to the Dimensional Crystal to find it glowing a pure, violet light with no trace of the shadowy tendrils running through it. Dreams were lovely and bright tonight.[/color][/center]\n"
 
 	if globals.state.thecrystal.mode == "dark":
-		if globals.state.thecrystal.hunger < globals.state.thecrystal.power:
+		if globals.state.thecrystal.hunger <= globals.state.thecrystal.power:
 			globals.state.thecrystal.hunger += 1
 		if globals.state.thecrystal.lifeforce < 0 && rand_range(0,100) <= globals.expansionsettings.crystallifeforcerestorechance:
 			globals.state.thecrystal.lifeforce += 1
-			globals.state.thecrystal.hunger += 2
+			globals.state.thecrystal.hunger += 1
 	else:
 		#Strengthen the Crystal
-		if globals.state.thecrystal.hunger < 0:
+		if globals.state.thecrystal.hunger > 0:
 			globals.state.thecrystal.lifeforce -= globals.state.thecrystal.hunger
 			globals.state.thecrystal.hunger = 0
-		if globals.state.thecrystal.lifeforce < globals.state.mansionupgrades.dimensionalcrystal:
+		#Daily Regain
+		if globals.state.thecrystal.lifeforce <= globals.state.mansionupgrades.dimensionalcrystal:
 			globals.state.thecrystal.lifeforce += 1
-
+		if rand_range(40,100) <= globals.state.thecrystal.research && globals.state.thecrystal.lifeforce < globals.state.mansionupgrades.dimensionalcrystal:
+			globals.state.thecrystal.lifeforce += 1
+	
+	if globals.state.thecrystal.abilities.size() > 0 && !globals.state.thecrystal.abilities.has('attunement'):
+		if rand_range(50,100) <= globals.state.thecrystal.research:
+			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
+			text += "You dream deeply. You are standing before the Crystal in your Mansion and staring deeply into the flowing energy within it. As you watch, the energy begins to split and separate itself into understandable forms. You see the [color=aqua]Coloration[/color] of the [color=aqua]Crystal[/color]. You see the latent [color=aqua]Lifeforce[/color] inside it and the [color=red]Hunger[/color] consuming those trapped souls. You feel [color=green]Attuned[/color] to the [color=aqua]Crystal[/color]. "
+			globals.state.thecrystal.abilities.append('attunement')	
+	
 	if globals.state.mansionupgrades.dimensionalcrystal >= 1 && !globals.state.thecrystal.abilities.has('pregnancyspeed'):
 		if rand_range(35,100) <= globals.state.thecrystal.research:
-			text += "\n[center][color=green]The Crystal grants you a Secret[/color][/center]\n"
+			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
 			text += "You dream that you are the Crystal. You feel life moving within your walls. Life grows. You love life. You are life. You see the growing sprouts and water them with words. They burst out of their seeds and grow mightily. You bask in their life.\nYou awaken and write down the words uttered in your dream. You have been granted the secret of [color=green]Altering Pregnancy Speeds[/color]. "
 			globals.state.thecrystal.abilities.append('pregnancyspeed')
-
-	elif globals.state.mansionupgrades.dimensionalcrystal >= 4 && !globals.state.thecrystal.abilities.has('immortality'):
+	
+	elif globals.state.mansionupgrades.dimensionalcrystal >= 2 && !globals.state.thecrystal.abilities.has('secondwind'):
 		if rand_range(50,100) <= globals.state.thecrystal.research:
-			text += "\n[center][color=green]The Crystal grants you a Secret[/color][/center]\n"
+			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
+			text += "You dream of standing in a great field of combat. You look down and see arrows, blades, and magic blasts have destroyed parts of your body. Despite it all, you feel a resurgence of energy within you. You have been hurt...but you will fight again. You MUST fight on. \n[color=lime]You have been granted the secret of [color=green]Second Wind[/color], allowing you personally to survive 1 fatal blow in combat daily.[/color] "
+			globals.state.thecrystal.abilities.append('secondwind')
+
+	elif globals.state.mansionupgrades.dimensionalcrystal >= 3 && !globals.state.thecrystal.abilities.has('immortality'):
+		if rand_range(50,100) <= globals.state.thecrystal.research:
+			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
 			text += "You dream that you are the Crystal. You feel each soul living within the warmth of your glow. You see a shadowy, skeletal entity sneak within your glow and raise a long scythe above one of your beings. You mutter a series of words and sent a part of your essence to banish the entity.\nWhen you awaken, you write the words down. You have been granted the secret of [color=green]Immortality[/color]. "
 			globals.state.thecrystal.abilities.append('immortality')
 	
-	elif globals.state.thecrystal.mode == "dark" && !globals.state.thecrystal.abilities.has('sacrifice'):
-		if rand_range(-10,100) <= globals.state.thecrystal.research:
-			text += "\n[center][color=green]The Crystal grants you a Secret[/color][/center]\n"
+	elif (globals.state.thecrystal.mode == "dark" || globals.state.thecrystal.lifeforce <= 0) && !globals.state.thecrystal.abilities.has('sacrifice'):
+		if rand_range(-25,100) <= globals.state.thecrystal.research:
+			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
 			text += "You dream that you are famished. You look down and see your ribs poking through your skin. Hunger. You need hunger. You need LIFE! You sit in a corner and wait. A rat scurries into your view.\nLife. Life for you.\nYou rush forward and snap the creatures neck. You sink your teeth in and feel your hunger subside. "
 			text += "\n\n[color=yellow]-Good. Good. You know hunger too. You know what it is to consume life.[/color]\nThe voice ripples through you and you see teeth. You look up into it's gaping maw and squeak. Your tail squishes back and forth in a panic and you try to move. But the tentacles around you body aren't going to let you escape. As you feel yourself approach the teeth, you feel your rat-like body crumple and you wake up. For better or worse, you now know two things. You know how you can feed the Crystal. And now, you know you must."
 			globals.state.thecrystal.abilities.append('sacrifice')
 	
-	elif globals.state.thecrystal.mode == "dark" && globals.state.thecrystal.abilities.has('sacrifice') && !globals.state.thecrystal.abilities.has('understandsacrifice'):
+	elif globals.state.thecrystal.abilities.has('sacrifice') && !globals.state.thecrystal.abilities.has('understandsacrifice'):
 		if rand_range(0,100) <= globals.state.thecrystal.research:
-			text += "\n[center][color=green]The Crystal grants you a Secret[/color][/center]\n"
+			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
 			text += "You dream that you standing in front of the Crystal. It extends a tendril and gently touches the body of a lifeless human beside you. The tendril extends into the body's mouth, slithers through her body, and stands the corpse up like a puppet on a string. It then violently rips its tendril out of the corpse's mouth. The human woman opens her eyes and screams herself back to life. "
 			text += "You look in amazement as the woman turns to walk off. You look at the crystal and see cracks and veins start to appear in it's surface. You see a tendril reach out towards you.\nYou open your mouth to protest 'I am still alive!' and a loud bleating erupts from your lips. It reaches into your open mouth and extends through your body. You sense it draining every one of your levels to restore it's hunger, then finally take your lifeforce back into it. As your soul splits off from your body, you see the cracks and veins healing. "
 			text += "You now understand how the sacrifices work. "
@@ -1922,6 +1938,10 @@ func dailyUpdate(person):
 	person.dailytalk.clear()
 
 	updatePerson(person)
+	#Header
+	if person != globals.player:
+		text += person.dictionary("[color=#d1b970][center]$name[/center][/color]\n")
+	
 	#Pregnancy Dailies
 	temptext = dailyPregnancy(person)
 	if temptext != null:
@@ -1959,6 +1979,12 @@ func dailyUpdate(person):
 		if person.cum.body > 0:
 			text += "\n$name had " +str(nameCum())+ " stuck to $his body and washed it off while bathing. "
 			person.cum.body = 0
+		if person.cum.ass > 0:
+			text += "\n$name had " +str(nameCum())+ " still in $his " + str(nameAsshole()) + " and washed it all out while bathing. "
+			person.cum.ass = 0
+		if person.cum.pussy > 0:
+			text += "\n$name had " +str(nameCum())+ " still in $his " + str(namePussy()) + " and washed it all out while bathing. "
+			person.cum.pussy = 0
 		#Semen Clearing for Fun Times
 		for i in person.preg.womb:
 			person.preg.womb.erase(i)
@@ -2054,18 +2080,17 @@ func dailyUpdate(person):
 
 	#Consent Changes: Will Change to Giving Consent in Dialogue Only
 	if person.consentexp.incest == false && person.fetish.incest in ['mindblowing','enjoyable','acceptable']:
-		text += "$name seems to be talking differently about $his thoughts on [color=aqua]Incest[/color]. $He doesn't seem to mind it anymore."
+		text += "\n$name seems to be talking differently about $his thoughts on [color=aqua]Incest[/color]. $He doesn't seem to mind it anymore."
 		person.consentexp.incest = true
 
 	#---Reclothe if Able and Unrestrained
 	if person.restrained == "none" && person != globals.player:
 		if person.rules.nudity == false:
-			text += "\n"
 			if person.exposed.chest == true && person.exposed.chestforced == false && person.fetish.exhibitionism in ['dirty','taboo','none']:
-				text += "$name covered $his tits. "
+				text += "\n$name covered $his tits. "
 				person.exposed.chest = false
 			if person.exposed.genitals == true && person.exposed.genitalsforced == false && person.fetish.exhibitionism in ['dirty','taboo','none'] && person.rules.nudity == false:
-				text += "$name covered $his "
+				text += "\n$name covered $his "
 				if person.penis != "none":
 					text += "penis"
 					if person.vagina != "none":
@@ -2075,7 +2100,7 @@ func dailyUpdate(person):
 				text += ". "
 				person.exposed.genitals = false
 			if person.exposed.ass == true && person.exposed.assforced == false && person.fetish.exhibitionism in ['dirty','taboo','none'] && person.rules.nudity == false:
-				text += "$name covered $his ass. "
+				text += "\n$name covered $his ass. "
 				person.exposed.ass = false
 		#Will try to Undress
 		elif person.rules.nudity == true && person.exposed.chest == false || person.rules.nudity == true && person.exposed.genitals == false || person.rules.nudity == true && person.exposed.ass == false:
@@ -2085,10 +2110,10 @@ func dailyUpdate(person):
 					if i.code == 'captured':
 						captured = i.duration/2
 				if (((person.obed-50) + (person.fear-50))) + person.loyal < 100*captured:
-					text += "[color=red]$name refused to strip naked as you demanded and broke your rules.[/color]\n"
+					text += "\n[color=red]$name refused to strip naked as you demanded and broke your rules.[/color]"
 					person.dailyevents.append('brokerulenudity')
 				else:
-					text += "[color=green]$name[/color] stripped " + str(nameNaked()) + " " + str(globals.randomitemfromarray(['slowly','eagerly','quickly'])) + " as per your rules."
+					text += "\n[color=green]$name[/color] stripped " + str(nameNaked()) + " " + str(globals.randomitemfromarray(['slowly','eagerly','quickly'])) + " as per your rules."
 					person.dailyevents.append('followedrulenudity')
 					person.exposed.chest = true
 					person.exposed.genitals = true
@@ -2112,19 +2137,19 @@ func dailyUpdate(person):
 				if rand_range(0,100) <= lipincreasechance:
 					person.add_trait('Lisp')
 					person.npcexpanded.temptraits.append('Lisp')
-					text += "\n$name has started talking with a [color=red]Lisp[/color] due to the unnaturally swollen size of $his lips.\n"
+					text += "\n$name has started talking with a [color=red]Lisp[/color] due to the unnaturally swollen size of $his lips."
 			else:
 				if rand_range(0,100) <= lipincreasechance*.5 || person.traits.has('Lisp') && person.npcexpanded.temptraits.has('lisp') && rand_range(0,100) <= lipincreasechance:
 					person.add_trait('Mute')
 					person.npcexpanded.temptraits.append('Mute')
-					text += "\n$name is no longer able to speak due to $his massive lips. $He is now [color=red]Mute[/color].\n"
+					text += "\n$name is no longer able to speak due to $his massive lips. $He is now [color=red]Mute[/color]."
 		elif person.npcexpanded.temptraits.has('Mute') && person.traits.has('Mute'):
 			if rand_range(0,100) <= globals.expansionsettings.lipstraitbasechance - (5-liparray.find(person.lips)*10):
 				person.add_trait('Lisp')
 				person.npcexpanded.temptraits.append('Lisp')
 				person.trait_remove('Mute')
 				person.npcexpanded.temptraits.remove('Mute')
-				text += "\n$name seems to be able to audibly talk through $his massive lips again. $He is no longer [color=red]Mute[/color] and now merely speaks with a heavy [color=red]Lisp[/color].\n"
+				text += "\n$name seems to be able to audibly talk through $his massive lips again. $He is no longer [color=red]Mute[/color] and now merely speaks with a heavy [color=red]Lisp[/color]."
 		elif person.npcexpanded.temptraits.has('Lisp') && person.traits.has('Lisp'):
 			if rand_range(0,100) <= globals.expansionsettings.lipstraitbasechance - (5-liparray.find(person.lips)*5):
 				person.trait_remove('Lisp')
@@ -2194,7 +2219,7 @@ func dailyTighten(person,hole='all'):
 				clamper = globals.vagsizearray.find(person.vagina)-1
 				number = clamp(clamper,0,globals.vagsizearray.size()-1)
 				person.vagina = globals.vagsizearray[number]
-				text += "\n[color=green]$name's " +str(namePussy())+ " naturally tightened today. It is now " + str(person.vagina) + ".[/color]"
+				text += "[color=green]$name's " +str(namePussy())+ " naturally tightened today. It is now " + str(person.vagina) + ".[/color]\n"
 	#Check Asshole
 	if hole in ['all','asshole'] && person.asshole != "none" && rand_range(0,100) <= globals.expansionsettings.analtightenchance * ageinverted:
 		averagesize = age + round((1+height)*.5) + mod
@@ -2207,7 +2232,7 @@ func dailyTighten(person,hole='all'):
 				clamper = globals.assholesizearray.find(person.asshole)-1
 				number = clamp(clamper,0,globals.assholesizearray.size()-1)
 				person.asshole = globals.assholesizearray[number]
-				text += "\n[color=green]$name's " +str(nameAsshole())+ " naturally tightened today. It is now " + str(person.asshole) + ".[/color]\n"
+				text += "[color=green]$name's " +str(nameAsshole())+ " naturally tightened today. It is now " + str(person.asshole) + ".[/color]\n"
 	return text
 
 #---Category: Better NPCs---#
