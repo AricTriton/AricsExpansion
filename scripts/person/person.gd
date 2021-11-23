@@ -838,6 +838,10 @@ func calculateprice():
 		bonus += variables.pricebonusvirgin
 	if sex == 'futanari':
 		bonus += variables.pricebonusfuta
+	###---Added by Expansion---### centerflag982 - added dickgirl bonus
+	if sex == 'dickgirl':
+		bonus += variables.pricebonusdickgirl
+	###---End Expansion---###
 	for i in get_traits():
 		if i.tags.has('detrimental'):
 			bonus += variables.pricebonusbadtrait
@@ -940,6 +944,29 @@ func abortion():
 	while !preg.unborn_baby.empty():
 		globals.miscarriage(self)
 ###---End Expansion---###
+
+###---Added by Expansion---### centerflag982 - allows dickgirls to be identified
+func checksex():
+	var male = false
+	var female = false
+	var hasTits = false
+
+	if penis != 'none':
+		male = true
+	if vagina != 'none':
+		female = true
+	if titssize != 'masculine':
+		hasTits = true
+
+	if male && female:
+		sex = 'futanari'
+	elif male && hasTits:
+		sex = 'dickgirl'
+	elif male:
+		sex = 'male'
+	else:
+		sex = 'female'
+###---End Expansion---###				  
 
 ###---Added by Expansion---### SetGet
 

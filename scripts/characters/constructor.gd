@@ -10,6 +10,17 @@ var genealogies = ['human','gnome','elf','tribal_elf','dark_elf','orc','goblin',
 var genealogies_beastfree = ['human','gnome','elf','tribal_elf','dark_elf','orc','goblin','dragonkin','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime',]
 ###---End Expansion---###
 
+###---Added by Expansion---### centerflag982 - dickgirls can generate in world
+func getrandomsex(person):
+	if globals.rules.male_chance > 0 && rand_range(0, 100) < globals.rules.male_chance:
+		person.sex = 'male'
+	elif rand_range(0, 100) < globals.rules.futa_chance && globals.rules.futa == true:
+		person.sex = 'futanari'
+	elif rand_range(0, 100) < globals.rules.dickgirl_chance && globals.rules.dickgirl == true:
+		person.sex = 'dickgirl'
+	else:
+		person.sex = 'female'
+###---Added by Expansion---###
 func newslave(race, age, sex, origins = 'slave'):
 	var temp
 	var temp2
@@ -125,6 +136,10 @@ func newbaby(mother,father):
 		person.sex = 'male'
 	elif rand_range(0, 100) < globals.rules.futa_chance && globals.rules.futa == true:
 		person.sex = 'futanari'
+	###---Added by Expansion---### centerflag982 - dickgirls can generate
+	elif rand_range(0, 100) < globals.rules.dickgirl_chance && globals.rules.dickgirl == true:
+		person.sex = 'dickgirl'
+	###---End Expansion---###
 	else:
 		person.sex = 'female'
 
@@ -136,11 +151,13 @@ func newbaby(mother,father):
 
 	#Body
 	for i in body_array:
-		if person.sex == 'female':
+		###---Added by Expansion---### centerflag982 - dickgirls take after their mothers
+		if person.sex == 'female' || person.sex == 'dickgirl':
 			if rand_range(0,10) > 3:
 				person[i] = mother[i]
 			else:
 				person[i] = father[i]
+		###---End Expansion---###
 		else:
 			if rand_range(0,10) > 3:
 				person[i] = father[i]
@@ -148,7 +165,8 @@ func newbaby(mother,father):
 				person[i] = mother[i]
 	
 	#Male Genitals
-	if person.sex == 'male' || (person.sex == 'futanari' && globals.rules.futaballs == true):
+	###---Added by Expansion---### centerflag982 - added dickgirl check				
+	if person.sex == 'male' || person.sex == 'dickgirl' || (person.sex == 'futanari' && globals.rules.futaballs == true):
 		tacklearray.append('balls')
 		
 		if person.sex != 'futanari':
@@ -162,7 +180,7 @@ func newbaby(mother,father):
 
 		temp = globals.titssizearray.find(father.titssize)-father.pregexp.titssizebonus+round(rand_range(-1,1))
 		person.titssize = globals.titssizearray[temp]
-
+	###---End Expansion---###
 	#Female Genitals
 	if person.sex in ['female','futanari']:
 		temp = globals.vagsizearray.find(mother.vagina)+round(rand_range(-3,1))

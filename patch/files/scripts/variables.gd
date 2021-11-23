@@ -65,6 +65,9 @@ var priceperbasebeauty = 2.5
 var priceperbonusbeauty = 1.5
 var pricebonusvirgin = 0.15
 var pricebonusfuta = 0.1
+###---Added by Expansion---### centerflag982
+var pricebonusdickgirl = 0.05
+###---End Expansion---###					
 var pricebonusbadtrait = -0.1
 var pricebonustoxicity = -0.33
 var priceuncivilized = -0.5

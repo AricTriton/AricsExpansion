@@ -378,7 +378,8 @@ func mutate(power=2):
 					text += "$name's dick shape has changed. "
 					randNewPartFromArray(person, 'penistype', globals.penistypearray)		
 			3:
-				if !globals.rules.futaballs && person.sex != 'male':
+				### centerflag982 - added dickgirl check
+				if !globals.rules.futaballs && (person.sex != 'male' || person.sex != 'dickgirl'):
 					if person.balls != 'none':
 						person.balls = 'none'
 						text += "$name's scrotum has shrunk to nothing. "

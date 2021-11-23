@@ -721,11 +721,13 @@ func setFamily(person,person2):
 			bonusmin = -200
 			bonusmax = 900
 			isparent = true
-		elif person.sex in ['male','futanari'] && str(person2data.father) == str(-1):
+		###---Added by Expansion---### centerflag982 - added dickgirl check
+		elif person.sex in ['male','futanari','dickgirl'] && str(person2data.father) == str(-1):
 			globals.connectrelatives(person, person2, 'father')
 			bonusmin = -200
 			bonusmax = 900
 			isparent = true
+		###---End Expansion---###
 	if isparent == true:
 		#Name them
 		if !persondata.children.empty():
@@ -3392,30 +3394,31 @@ func testSexualCompatibility(person, target, sexuality = ''):
 	if person == null:
 		return
 	#Match Sexuality to Person (Accounting for Futas)
+	###---centerflag982 - added dickgirl check---###
 	if target != null and person != target:
 		if person.sex == target.sex:
 			samesex = true
-		elif person.sex == 'futanari' || target.sex == 'futanari':
+		elif person.sex in ['futanari','dickgirl'] || target.sex in ['futanari','dickgirl']:
 			if futaconsideration == 'both':
 				samesex = true
 			elif futaconsideration == 'male':
-				if person.sex in ['male','futanari'] && target.sex in ['male','futanari']:
+				if person.sex in ['male','futanari','dickgirl'] && target.sex in ['male','futanari','dickgirl']:
 					samesex = true
 			elif futaconsideration == 'female':
-				if person.sex in ['female','futanari'] && target.sex in ['female','futanari']:
+				if person.sex in ['female','futanari','dickgirl'] && target.sex in ['female','futanari','dickgirl']:
 					samesex = true
 	#Test Stated Sexuality
 	elif sexuality != '':
 		if person.sex == sexuality:
 			samesex = true
-		elif person.sex == 'futanari' || sexuality == 'futanari':
+		elif person.sex in ['futanari','dickgirl'] || sexuality in ['futanari','dickgirl']:
 			if futaconsideration == 'both':
 				samesex = true
 			elif futaconsideration == 'male':
-				if person.sex in ['male','futanari'] && sexuality in ['male','futanari']:
+				if person.sex in ['male','futanari','dickgirl'] && sexuality in ['male','futanari','dickgirl']:
 					samesex = true
 			elif futaconsideration == 'female':
-				if person.sex in ['female','futanari'] && sexuality in ['female','futanari']:
+				if person.sex in ['female','futanari','dickgirl'] && sexuality in ['female','futanari','dickgirl']:
 					samesex = true
 	else:
 		return compatibility

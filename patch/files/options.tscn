@@ -1,0 +1,772 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://files/theme.tres" type="Theme" id=1]
+[ext_resource path="res://files/scripts/options.tres.gd" type="Script" id=2]
+[ext_resource path="res://files/theme slavetab.tres" type="Theme" id=3]
+
+[sub_resource type="StreamTexture" id=1]
+flags = 4
+load_path = "res://.import/2.png-4cf966d13a2c7ebfca9f08501bafd5bd.stex"
+
+[node name="options" type="Panel"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -377.0
+margin_top = -258.0
+margin_right = 463.0
+margin_bottom = 297.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="TabContainer" type="TabContainer" parent="."]
+margin_left = 5.0
+margin_top = 12.0
+margin_right = 835.0
+margin_bottom = 567.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+tab_align = 0
+
+[node name="Settings" type="Tabs" parent="TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 40.0
+margin_right = -10.0
+margin_bottom = -10.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="TabContainer/Settings"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 823.0
+margin_top = -13.0
+margin_right = 544.0
+margin_bottom = 317.0
+rect_rotation = 90.0
+texture = SubResource( 1 )
+expand = true
+
+[node name="fadinganimation" type="CheckBox" parent="TabContainer/Settings"]
+margin_left = 20.0
+margin_top = 70.0
+margin_right = 322.0
+margin_bottom = 97.0
+hint_tooltip = "Fade to black on window transition"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Use animation on screen change"
+
+[node name="spritesindialogues" type="CheckBox" parent="TabContainer/Settings"]
+margin_left = 20.0
+margin_top = 97.0
+margin_right = 264.0
+margin_bottom = 124.0
+hint_tooltip = "Show custom character sprites during dialogues?"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Show Sprites in Dialogues"
+
+[node name="randomcustomportraits" type="CheckBox" parent="TabContainer/Settings"]
+margin_left = 20.0
+margin_top = 151.0
+margin_right = 264.0
+margin_bottom = 178.0
+hint_tooltip = "The game will attempt to assign a random portrait when generating a new slave
+Portraits are selected from default portrait folder
+Available portraits are based on paths (including both file and folder names) similarities to slave's race
+I.e. Elf1.jpg might be assigned to any elf, while elfhumanorc.jpg can be assigned to any of elves, humans and orcs.
+If there's no similarities, no portrait will be assigned. If there's only 1 similarity, it will be assigned to every new slave of that race."
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Use random portraits"
+
+[node name="thumbnails" type="CheckBox" parent="TabContainer/Settings"]
+margin_left = 20.0
+margin_top = 178.0
+margin_right = 264.0
+margin_bottom = 205.0
+hint_tooltip = "The game will create thumbnails from user portraits and body images on first attempt
+This can save some RAM when using very big user image folders."
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Create Thumbnails"
+
+[node name="Label2" type="Label" parent="TabContainer/Settings"]
+margin_left = 482.0
+margin_top = 61.0
+margin_right = 609.0
+margin_bottom = 81.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Main Font Size"
+
+[node name="fullscreen" type="CheckBox" parent="TabContainer/Settings"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = -462.0
+margin_right = 205.0
+margin_bottom = -435.0
+hint_tooltip = "Switch to full screen mode"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Fullscreen Mode"
+
+[node name="fontsize" type="SpinBox" parent="TabContainer/Settings"]
+margin_left = 403.0
+margin_top = 51.0
+margin_right = 481.0
+margin_bottom = 89.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+min_value = 10.0
+max_value = 24.0
+value = 10.0
+
+[node name="musicslider" type="HSlider" parent="TabContainer/Settings"]
+margin_left = 424.0
+margin_top = 125.0
+margin_right = 581.0
+margin_bottom = 142.0
+size_flags_horizontal = 2
+value = 1.0
+
+[node name="Label3" type="Label" parent="TabContainer/Settings/musicslider"]
+margin_left = 14.0
+margin_top = -25.0
+margin_right = 146.0
+margin_bottom = -5.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Music Volume"
+
+[node name="soundslider" type="HSlider" parent="TabContainer/Settings"]
+margin_left = 424.0
+margin_top = 175.0
+margin_right = 581.0
+margin_bottom = 192.0
+size_flags_horizontal = 2
+value = 1.0
+
+[node name="Label3" type="Label" parent="TabContainer/Settings/soundslider"]
+margin_left = 14.0
+margin_top = -25.0
+margin_right = 146.0
+margin_bottom = -5.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Sound Volume"
+
+[node name="instantcombatanimation" type="CheckBox" parent="TabContainer/Settings"]
+margin_left = 20.0
+margin_top = 124.0
+margin_right = 264.0
+margin_bottom = 151.0
+hint_tooltip = "Show custom character sprites during dialogues?"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Skip combat animation"
+
+[node name="Game" type="Tabs" parent="TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 40.0
+margin_right = -10.0
+margin_bottom = -10.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="TabContainer/Game"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 823.0
+margin_top = -13.0
+margin_right = 544.0
+margin_bottom = 317.0
+rect_rotation = 90.0
+texture = SubResource( 1 )
+expand = true
+
+[node name="furry" type="CheckBox" parent="TabContainer/Game"]
+margin_left = 20.0
+margin_top = 66.0
+margin_right = 90.0
+margin_bottom = 93.0
+hint_tooltip = "Allow random generation of furry characters"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Furry"
+
+[node name="furrynipples" type="CheckBox" parent="TabContainer/Game"]
+margin_left = 135.0
+margin_top = 66.0
+margin_right = 480.0
+margin_bottom = 93.0
+hint_tooltip = "Furry characters will posses more nipples"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Additional nipples on furry characters"
+
+[node name="futa" type="CheckBox" parent="TabContainer/Game"]
+margin_left = 20.0
+margin_top = 39.0
+margin_right = 84.0
+margin_bottom = 66.0
+hint_tooltip = "Allow random generation of futanari characters"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Futa"
+
+[node name="dickgirl" type="CheckBox" parent="TabContainer/Game"]
+margin_left = 361.0
+margin_top = 39.0
+margin_right = 458.0
+margin_bottom = 66.0
+hint_tooltip = "Allow random generation of dickgirl characters"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Dickgirl"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="futaballs" type="CheckBox" parent="TabContainer/Game"]
+margin_left = 135.0
+margin_top = 39.0
+margin_right = 317.0
+margin_bottom = 66.0
+hint_tooltip = "Random futanari characters will be generated with testicles"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Futa with testicles"
+
+[node name="slaverguildallraces" type="CheckBox" parent="TabContainer/Game"]
+margin_left = 20.0
+margin_top = 93.0
+margin_right = 365.0
+margin_bottom = 120.0
+hint_tooltip = "This option will allow starting town's slavers' guild to offer slaves of any possible race. 
+Turning this off will only make it offer local races."
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Allow all possible races in slavers guild"
+
+[node name="receiving" type="CheckBox" parent="TabContainer/Game"]
+margin_left = 20.0
+margin_top = 120.0
+margin_right = 295.0
+margin_bottom = 147.0
+hint_tooltip = "This option will enable unlock of sex options
+which put you on receiving side i.e. be fucked in the ass"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Enable Receiving Sex Options"
+
+[node name="children" type="CheckBox" parent="TabContainer/Game"]
+margin_left = 20.0
+margin_top = 174.0
+margin_right = 210.0
+margin_bottom = 201.0
+hint_tooltip = "Turn on 'childlike' age for characters."
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Childlike characters"
+
+[node name="permadeath" type="CheckBox" parent="TabContainer/Game"]
+margin_left = 20.0
+margin_top = 147.0
+margin_right = 175.0
+margin_bottom = 174.0
+hint_tooltip = "Members of your party reaching 0 hp in combat will die 
+instead of going on the rest"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Permadeath"
+
+[node name="noadults" type="CheckBox" parent="TabContainer/Game"]
+margin_left = 223.0
+margin_top = 174.0
+margin_right = 452.0
+margin_bottom = 201.0
+hint_tooltip = "Turn off 'adult' characters generation."
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Disable adult characters"
+
+[node name="malesslider" type="HSlider" parent="TabContainer/Game"]
+editor/display_folded = true
+margin_left = 18.0
+margin_top = 254.0
+margin_right = 253.0
+margin_bottom = 270.0
+size_flags_horizontal = 2
+value = 1.0
+rounded = true
+tick_count = 10
+ticks_on_borders = true
+
+[node name="malesliderlabel" type="Label" parent="TabContainer/Game"]
+margin_left = 18.0
+margin_top = 230.0
+margin_right = 259.0
+margin_bottom = 250.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Gender occurrence balance: "
+
+[node name="futaslider" type="HSlider" parent="TabContainer/Game"]
+editor/display_folded = true
+margin_left = 18.0
+margin_top = 300.0
+margin_right = 253.0
+margin_bottom = 316.0
+hint_tooltip = "Futas occur only among females"
+size_flags_horizontal = 2
+value = 1.0
+rounded = true
+tick_count = 10
+ticks_on_borders = true
+
+[node name="futasliderlabel" type="Label" parent="TabContainer/Game"]
+margin_left = 18.0
+margin_top = 276.0
+margin_right = 240.0
+margin_bottom = 296.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Random futa occurrence: "
+
+[node name="dickgirlslider" type="HSlider" parent="TabContainer/Game"]
+margin_left = 18.0
+margin_top = 346.0
+margin_right = 253.0
+margin_bottom = 362.0
+hint_tooltip = "Dickgirls occur only among females"
+size_flags_horizontal = 2
+value = 1.0
+rounded = true
+tick_count = 10
+ticks_on_borders = true
+
+[node name="dickgirlsliderlabel" type="Label" parent="TabContainer/Game"]
+margin_left = 18.0
+margin_top = 322.0
+margin_right = 275.0
+margin_bottom = 342.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Random dickgirl occurrence: "
+
+[node name="Label 3" type="Label" parent="TabContainer/Game"]
+margin_left = -3.0
+margin_top = 12.0
+margin_right = 827.0
+margin_bottom = 32.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Random Slave Generation Settings"
+align = 1
+
+[node name="Label4" type="Label" parent="TabContainer/Game"]
+margin_left = 29.0
+margin_top = 372.0
+margin_right = 187.0
+margin_bottom = 392.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Alise on Day End"
+align = 1
+
+[node name="aliseoption" type="OptionButton" parent="TabContainer/Game"]
+margin_left = 20.0
+margin_top = 392.0
+margin_right = 199.0
+margin_bottom = 431.0
+hint_tooltip = "When to show Alise on Day End Popup"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Always"
+items = [ "Always", null, false, -1, null, "After Daily Event", null, false, -1, null, "Never", null, false, -1, null ]
+selected = 0
+
+[node name="Supporter section" type="Tabs" parent="TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 40.0
+margin_right = -10.0
+margin_bottom = -10.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="TabContainer/Supporter section"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 823.0
+margin_top = -13.0
+margin_right = 544.0
+margin_bottom = 317.0
+rect_rotation = 90.0
+texture = SubResource( 1 )
+expand = true
+
+[node name="Label1" type="Label" parent="TabContainer/Supporter section"]
+margin_left = -3.0
+margin_top = 187.0
+margin_right = 827.0
+margin_bottom = 207.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Supporter password"
+align = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Supporter section"]
+margin_left = 61.0
+margin_top = 11.0
+margin_right = 762.0
+margin_bottom = 75.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+bbcode_enabled = true
+bbcode_text = "To unlock more options, become a suporter on [color=yellow][url=patreon]Patreon[/url][/color]. For more information please refer to the Patreon page. "
+text = "To unlock more options, become a suporter on Patreon. For more information please refer to the Patreon page. "
+
+[node name="cheats" type="Button" parent="TabContainer/Supporter section"]
+margin_left = 308.0
+margin_top = 256.0
+margin_right = 521.0
+margin_bottom = 295.0
+hint_tooltip = "Password is available for patrons."
+size_flags_horizontal = 2
+size_flags_vertical = 2
+disabled = true
+text = "Access supporter panel"
+
+[node name="cheatpassword" type="LineEdit" parent="TabContainer/Supporter section"]
+margin_left = 350.0
+margin_top = 211.0
+margin_right = 474.0
+margin_bottom = 249.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+placeholder_text = "Enter password"
+caret_blink = true
+
+[node name="cheatpasswordenter" type="Button" parent="TabContainer/Supporter section"]
+margin_left = 487.0
+margin_top = 212.0
+margin_right = 580.0
+margin_bottom = 251.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Confirm"
+
+[node name="supporterpanel" type="AcceptDialog" parent="TabContainer/Supporter section"]
+margin_left = 327.0
+margin_top = 312.0
+margin_right = 1100.0
+margin_bottom = 565.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+window_title = "Thank you!"
+dialog_text = "You are now registered as a supporter! Thank you for helping to make this game greater!"
+
+[node name="Done" type="Button" parent="."]
+margin_left = 367.0
+margin_top = 516.0
+margin_right = 477.0
+margin_bottom = 555.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Confirm"
+
+[node name="screenpopup" type="Popup" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -614.0
+margin_top = -369.0
+margin_right = -228.0
+margin_bottom = -171.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="Panel" type="Panel" parent="screenpopup"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -386.0
+margin_top = -198.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="screenpopup/Panel"]
+margin_left = 27.0
+margin_top = 24.0
+margin_right = 358.0
+margin_bottom = 124.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+bbcode_enabled = true
+bbcode_text = "[center]Screen changed. Save new mode?[/center]"
+text = "Screen changed. Save new mode?"
+
+[node name="confirm" type="Button" parent="screenpopup/Panel"]
+margin_left = 42.0
+margin_top = 136.0
+margin_right = 154.0
+margin_bottom = 175.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Confirm"
+
+[node name="cancel" type="Button" parent="screenpopup/Panel"]
+margin_left = 227.0
+margin_top = 136.0
+margin_right = 339.0
+margin_bottom = 175.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Cancel"
+
+[node name="cheatpanel" type="Panel" parent="."]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -747.0
+margin_top = -492.0
+margin_right = 2.0
+margin_bottom = 44.0
+rect_min_size = Vector2( 688, 448 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 3 )
+
+[node name="close" type="Button" parent="cheatpanel"]
+margin_left = 311.0
+margin_top = 473.0
+margin_right = 421.0
+margin_bottom = 513.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Close"
+
+[node name="cheatgold" type="Button" parent="cheatpanel"]
+margin_left = 16.0
+margin_top = 50.0
+margin_right = 166.0
+margin_bottom = 90.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Set Gold"
+
+[node name="cheatfood" type="Button" parent="cheatpanel"]
+margin_left = 16.0
+margin_top = 93.0
+margin_right = 166.0
+margin_bottom = 133.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Set Food"
+
+[node name="cheatmana" type="Button" parent="cheatpanel"]
+margin_left = 16.0
+margin_top = 137.0
+margin_right = 166.0
+margin_bottom = 177.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Set Mana"
+
+[node name="removepopcap" type="Button" parent="cheatpanel"]
+margin_left = 16.0
+margin_top = 185.0
+margin_right = 266.0
+margin_bottom = 225.0
+hint_tooltip = "Huge population may impact performance greatly"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Remove population limits"
+
+[node name="addupgradepoint" type="Button" parent="cheatpanel"]
+margin_left = 16.0
+margin_top = 227.0
+margin_right = 266.0
+margin_bottom = 267.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Add 5 Upgrade Points"
+
+[node name="unlockspells" type="Button" parent="cheatpanel"]
+margin_left = 139.0
+margin_top = 11.0
+margin_right = 256.0
+margin_bottom = 43.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Unlock all spells"
+
+[node name="selectslave" type="Button" parent="cheatpanel"]
+margin_left = 504.0
+margin_top = 30.0
+margin_right = 621.0
+margin_bottom = 62.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Select Slave"
+
+[node name="maxloyalty" type="Button" parent="cheatpanel"]
+margin_left = 346.0
+margin_top = 64.0
+margin_right = 496.0
+margin_bottom = 104.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Max Loyalty"
+
+[node name="maxobed" type="Button" parent="cheatpanel"]
+margin_left = 347.0
+margin_top = 109.0
+margin_right = 499.0
+margin_bottom = 149.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Max Obedience"
+
+[node name="maxlewd" type="Button" parent="cheatpanel"]
+margin_left = 348.0
+margin_top = 155.0
+margin_right = 498.0
+margin_bottom = 195.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Max Lewdness"
+
+[node name="maxlust" type="Button" parent="cheatpanel"]
+margin_left = 348.0
+margin_top = 200.0
+margin_right = 498.0
+margin_bottom = 240.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Max Lust"
+
+[node name="nostress" type="Button" parent="cheatpanel"]
+margin_left = 348.0
+margin_top = 249.0
+margin_right = 498.0
+margin_bottom = 289.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Remove Stress"
+
+[node name="addskillpoints" type="Button" parent="cheatpanel"]
+margin_left = 348.0
+margin_top = 299.0
+margin_right = 498.0
+margin_bottom = 339.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Add Skillpoint"
+
+[node name="addlearnpoints" type="Button" parent="cheatpanel"]
+margin_left = 348.0
+margin_top = 349.0
+margin_right = 498.0
+margin_bottom = 389.0
+hint_tooltip = "Adds 10 learning points"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Add L.Point"
+
+[node name="addlevel" type="Button" parent="cheatpanel"]
+margin_left = 348.0
+margin_top = 399.0
+margin_right = 498.0
+margin_bottom = 439.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Add Level"
+
+[node name="levelup" type="Button" parent="cheatpanel"]
+margin_left = 17.0
+margin_top = 269.0
+margin_right = 267.0
+margin_bottom = 309.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Add Skillpoint"
+
+[node name="unlockgallery" type="Button" parent="cheatpanel"]
+margin_left = 17.0
+margin_top = 314.0
+margin_right = 267.0
+margin_bottom = 354.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Fully Unlock Gallery"
+
+[node name="selectedslavelabel" type="Label" parent="cheatpanel"]
+margin_left = 518.0
+margin_top = 93.0
+margin_right = 653.0
+margin_bottom = 113.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Selected slave - "
+
+[node name="SpinBox" type="SpinBox" parent="cheatpanel"]
+margin_left = 14.0
+margin_top = 13.0
+margin_right = 125.0
+margin_bottom = 37.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+max_value = 500000.0
+step = 100.0
+value = 100.0
+rounded = true
+
+[connection signal="pressed" from="TabContainer/Settings/fullscreen" to="." method="_on_fullscreen_pressed"]
+[connection signal="value_changed" from="TabContainer/Settings/fontsize" to="." method="_on_fontsize_value_changed"]
+[connection signal="value_changed" from="TabContainer/Game/malesslider" to="." method="_on_malesslider_value_changed"]
+[connection signal="value_changed" from="TabContainer/Game/futaslider" to="." method="_on_futaslider_value_changed"]
+[connection signal="value_changed" from="TabContainer/Game/dickgirlslider" to="." method="_on_dickgirlslider_value_changed"]
+[connection signal="item_selected" from="TabContainer/Game/aliseoption" to="." method="_on_aliseoption_item_selected"]
+[connection signal="meta_clicked" from="TabContainer/Supporter section/RichTextLabel" to="." method="_on_RichTextLabel_meta_clicked"]
+[connection signal="pressed" from="TabContainer/Supporter section/cheats" to="." method="_on_cheats_pressed"]
+[connection signal="pressed" from="TabContainer/Supporter section/cheatpasswordenter" to="." method="_on_cheatpasswordenter_pressed"]
+[connection signal="pressed" from="Done" to="." method="_on_Done_pressed"]
+[connection signal="pressed" from="screenpopup/Panel/confirm" to="." method="_on_confirm_pressed"]
+[connection signal="pressed" from="screenpopup/Panel/cancel" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="cheatpanel/close" to="." method="_on_close_pressed"]
+[connection signal="pressed" from="cheatpanel/cheatgold" to="." method="_on_cheatgold_pressed"]
+[connection signal="pressed" from="cheatpanel/cheatfood" to="." method="_on_cheatfood_pressed"]
+[connection signal="pressed" from="cheatpanel/cheatmana" to="." method="_on_cheatmana_pressed"]
+[connection signal="pressed" from="cheatpanel/removepopcap" to="." method="_on_removepopcap_pressed"]
+[connection signal="pressed" from="cheatpanel/addupgradepoint" to="." method="_on_addupgradepoint_pressed"]
+[connection signal="pressed" from="cheatpanel/unlockspells" to="." method="_on_unlockspells_pressed"]
+[connection signal="pressed" from="cheatpanel/selectslave" to="." method="_on_selectslave_pressed"]
+[connection signal="pressed" from="cheatpanel/maxloyalty" to="." method="_on_maxloyalty_pressed"]
+[connection signal="pressed" from="cheatpanel/maxobed" to="." method="_on_maxobed_pressed"]
+[connection signal="pressed" from="cheatpanel/maxlewd" to="." method="_on_maxlewd_pressed"]
+[connection signal="pressed" from="cheatpanel/maxlust" to="." method="_on_maxlust_pressed"]
+[connection signal="pressed" from="cheatpanel/nostress" to="." method="_on_nostress_pressed"]
+[connection signal="pressed" from="cheatpanel/addskillpoints" to="." method="_on_addskillpoints_pressed"]
+[connection signal="pressed" from="cheatpanel/addlearnpoints" to="." method="_on_addlearnpoints_pressed"]
+[connection signal="pressed" from="cheatpanel/addlevel" to="." method="_on_addlevel_pressed"]
+[connection signal="pressed" from="cheatpanel/levelup" to="." method="_on_levelup_pressed"]
+[connection signal="pressed" from="cheatpanel/unlockgallery" to="." method="_on_unlockgallery_pressed"]

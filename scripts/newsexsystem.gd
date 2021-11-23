@@ -173,30 +173,32 @@ class member:
 					#Sexuality Shift
 					if person.sex == i.person.sex:
 						sexualityshift += .25
+					###---Added by Expansion---### centerflag982 - added dickgirl checks
 					elif person.sex != i.person.sex:
-						if i.person.sex == 'futanari':
+						if i.person.sex == 'futanari' || i.person.sex == 'dickgirl':
 							if globals.expansionsettings.futasexualityshift == 'bi':
 								if globals.kinseyscale.find(person.sexuality) < 3:
 									sexualityshift += .25
 								else:
 									sexualityshift -= .25
 							elif globals.expansionsettings.futasexualityshift == 'male':
-								if person.sex in ['male','futanari']:
+								if person.sex in ['male','futanari','dickgirl']:
 									sexualityshift += .25
 								else:
 									sexualityshift -= .25
 							else:
-								if person.sex in ['female','futanari']:
+								if person.sex in ['female','futanari','dickgirl']:
 									sexualityshift += .25
 								else:
 									sexualityshift -= .25
 						else:
 							sexualityshift -= .25
 					#Old Method
-#					if person.sex == i.person.sex || person.sex in ['male','futa'] && i.person.sex in ['male','futa'] || person.sex in ['female','futa'] && i.person.sex in ['female','futa']:
+#					if person.sex == i.person.sex || person.sex in ['male','futanari','dickgirl'] && i.person.sex in ['male','futanari','dickgirl'] || person.sex in ['female','futanari','dickgirl'] && i.person.sex in ['female','futanari','dickgirl']:
 #						sexualityshift += .5
-#					elif person.sex != i.person.sex || person.sex in ['male','futa'] && i.person.sex in ['female','futa'] || person.sex in ['female','futa'] && i.person.sex in ['male','futa']:
+#					elif person.sex != i.person.sex || person.sex in ['male','futanari','dickgirl'] && i.person.sex in ['female','futanari','dickgirl'] || person.sex in ['female','futanari','dickgirl'] && i.person.sex in ['male','futanari','dickgirl']:
 #						sexualityshift -= .5
+					###---End Expansion---###
 				if i != self && person != globals.player:
 					#Incest
 					if globals.state.relativesdata.has(i.person.id) && globals.state.relativesdata.has(person.id):
@@ -220,25 +222,27 @@ class member:
 					#Sexuality Shift
 					if person.sex == i.person.sex:
 						sexualityshift += .15
+					###---Added by Expansion---### centerflag982 - added dickgirl checks
 					elif person.sex != i.person.sex:
-						if i.person.sex == 'futanari':
+						if i.person.sex == 'futanari' || i.person.sex == 'dickgirl':
 							if globals.expansionsettings.futasexualityshift == 'bi':
 								if globals.kinseyscale.find(person.sexuality) < 3:
 									sexualityshift += .15
 								else:
 									sexualityshift -= .15
 							elif globals.expansionsettings.futasexualityshift == 'male':
-								if person.sex in ['male','futanari']:
+								if person.sex in ['male','futanari','dickgirl']:
 									sexualityshift += .15
 								else:
 									sexualityshift -= .15
 							else:
-								if person.sex in ['female','futanari']:
+								if person.sex in ['female','futanari','dickgirl']:
 									sexualityshift += .15
 								else:
 									sexualityshift -= .15
 						else:
 							sexualityshift -= .15
+					###---End Expansion---###
 				if i != self && person != globals.player:
 					#Incest
 					if globals.state.relativesdata.has(i.person.id) && globals.state.relativesdata.has(person.id):
@@ -671,25 +675,27 @@ class member:
 				#Sexuality Shift
 				if person.sex == i.person.sex:
 					sexmatch = true
+				###---Added by Expansion---### centerflag982 - added dickgirl checks
 				elif person.sex != i.person.sex:
-					if i.person.sex == 'futanari':
+					if i.person.sex == 'futanari' || i.person.sex == 'dickgirl':
 						if globals.expansionsettings.futasexualityshift == 'bi':
 							if globals.kinseyscale.find(person.sexuality) < 3:
 								sexmatch = true
 							else:
 								sexmatch = false
 						elif globals.expansionsettings.futasexualityshift == 'male':
-							if person.sex in ['male','futanari']:
+							if person.sex in ['male','futanari','dickgirl']:
 								sexmatch = true
 							else:
 								sexmatch = false
 						else:
-							if person.sex in ['female','futanari']:
+							if person.sex in ['female','futanari','dickgirl']:
 								sexmatch = true
 							else:
 								sexmatch = false
 					else:
 						sexmatch = false
+				###---End Expansion---###
 				#Max of 110 Currently. Add "Size Queen/Etc" for Fetishes/Likes in the Future, then Sens/Lust multipliers as well
 #				text += "[color=aqua]Sexuality Check:[/color] "
 				if success == true:
@@ -2191,10 +2197,12 @@ func endencounter():
 					index = globals.kinseyscale.find(i.person.sexuality)+shift
 					i.person.sexuality = globals.getfromarray(globals.kinseyscale,index)
 				var sexname = 'none'
-				if i.person.sex in ['male','futanari']:
+				###---Added by Expansion---### centerflag982 - added dickgirl checks
+				if i.person.sex in ['male','futanari','dickgirl']:
 					sexname = 'female'
-				elif i.person.sex in ['female','futanari']:
+				elif i.person.sex in ['female','futanari','dickgirl']:
 					sexname = 'male'
+				###---End Expansion---###
 				if shift < 0:
 					text += i.person.dictionary("\n\n$name looks around the area that you " +str(globals.randomitemfromarray(['fucked','had sex in','got nasty','did the deed','pounded it out','knocked boots']))+" in and seems to think for a moment.")
 					text += i.person.quirk(i.person.dictionary("\n[color=yellow]-I "+str(globals.randomitemfromarray(['feel','think that I am','can tell that I am','am so much','definitely am','feel much']))+" more attracted to " +str(sexname)+"s now after this experience. I feel " +str(globals.expansion.getSexuality(i.person))+" now.[/color]"))
@@ -2218,10 +2226,12 @@ func endencounter():
 					i.person.sexuality = globals.getfromarray(globals.kinseyscale,index)
 				if shift < 0:
 					var sexname = 'none'
-					if i.person.sex in ['male','futanari']:
+					###---Added by Expansion---### centerflag982 - added dickgirl checks
+					if i.person.sex in ['male','futanari','dickgirl']:
 						sexname = 'female'
-					elif i.person.sex in ['female','futanari']:
+					elif i.person.sex in ['female','futanari','dickgirl']:
 						sexname = 'male'
+					###---End Expansion---###
 					text += "\nYou feel more attracted to " +str(sexname)+ "s after this experience. You now feel [color=aqua]" +str(globals.expansion.getSexuality(i.person))+"[/color]."
 		###---End Expansion---###
 

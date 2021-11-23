@@ -76,7 +76,10 @@ func slavegear(person):
 	get_node("gearpanel").visible = true
 	var sex
 	var race
-	sex = person.sex.replace('futanari','female')
+	###---Added by Expansion---### centerflag982 - accounting for dickgirls
+	var sexTemp = person.sex.replace('futanari','female')
+	sex = sexTemp.replace('dickgirl','female')
+	###---Expansion End---###			 
 	race = person.race
 	###---Added by Expansion---### Races Expanded
 	if person.findRace(['Dark Elf', 'Tribal Elf']):
