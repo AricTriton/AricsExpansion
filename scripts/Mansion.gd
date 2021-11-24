@@ -1757,6 +1757,15 @@ func childbirth(person,baby_id):
 		else:
 			text = person.dictionary("$name had to use the town's hospital to give birth to her child. [color=red]Sadly, you can't keep it without Nursery Room and had to give it away.[/color]")
 		get_node("birthpanel/raise").set_disabled(true)
+		###---Added by Expansion---### Disable if no nursery
+		get_node("birthpanel/raise").set_disabled(true)
+		get_node("birthpanel/raise").set_tooltip("You have no Nursery. You can build one in Mansion Upgrades.")
+		get_node("birthpanel/raisehybrid").set_disabled(true)
+		get_node("birthpanel/raisehybrid").set_tooltip("You have no Nursery. You can build one in Mansion Upgrades.")
+		get_node("birthpanel/raisemana").set_disabled(true)
+		get_node("birthpanel/raisemana").set_tooltip("You have no Nursery. You can build one in Mansion Upgrades.")
+		get_node("birthpanel/sacrificebaby").hide()
+		###---End Expansion---###
 	
 	#---Added Portrait
 	get_node("birthpanel/portraitpanel/portrait").set_texture(null)
