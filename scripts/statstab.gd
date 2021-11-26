@@ -1273,7 +1273,8 @@ func talkfetishes(mode=''):
 				text += fetishname.capitalize() + ": " + "[color=aqua]" + str(person.fetish[fetish].capitalize())+ "[/color]\n"
 		for i in globals.fetishesarray:
 			fetishname = globals.expansion.getFetishDescription(str(i))
-#			if person.dailytalk.find(i) < 0:
+			if globals.expansionsettings.unwantedfetishes.empty() == false && i in globals.expansionsettings.unwantedfetishes:
+				continue
 			#Discover Fetishes
 			if person.knownfetishes.find(i) < 0:
 				tempbuttons.append({text = str(globals.randomitemfromarray([person.dictionary('What do you think about '),person.dictionary('How do you feel about ')]) + fetishname), function = 'talkfetishes', args = str(i), tooltip = person.dictionary("Ask $name their opinion about " + fetishname)})
