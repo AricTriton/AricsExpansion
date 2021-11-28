@@ -315,7 +315,7 @@ func kiss(person, counter):
 	var text = ''
 	text += "You gently kiss [name2] on the cheek. "
 	###---Added by Expansion---### Family Expanded | Incest Check
-	var related = globals.expansion.relatedCheck(person,globals.player)
+	var related = str(globals.expansion.relatedCheck(person,globals.player))
 	var incest = globals.expansion.checkIncest(person)
 	
 	if (self.mood + incest >= 4 || person.loyal + incest >= 15):
@@ -323,12 +323,12 @@ func kiss(person, counter):
 		self.mood += 3
 		person.lust += 1
 		if related != 'unrelated':
-			text += "[he2] " + str(globals.randomitemfromarray(['whispers','mumbles','quickly says','says','quietly says'])) + " " + person.quirk("\n[color=yellow]-I can not believe I am considering " + globals.expansion.nameKissing() + " my " + str(related) + ". ")
+			text += "[he2] " + str(globals.randomitemfromarray(['whispers','mumbles','quickly says','says','quietly says'])) + " " + person.quirk("\n[color=yellow]-I can not believe I am considering " + globals.expansion.nameKissing() + " my " + related + ". ")
 	else:
 		self.mood -= 2
 		text += "[he2] abruptly stops you, showing [his2] disinterest. "
 		if related != 'unrelated':
-			text += "[he2] looks at you shocked. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " start " + globals.expansion.nameKissing() + " my " + str(related) + ". ")
+			text += "[he2] looks at you shocked. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " start " + globals.expansion.nameKissing() + " my " + related + ". ")
 	###---End Expansion---###
 	return text
 

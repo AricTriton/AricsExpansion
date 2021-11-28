@@ -520,12 +520,34 @@ class combatant:
 		#draw()
 		scene.floattext(node.rect_global_position, str(difference), color)
 		if hp <= 0 && state != 'defeated':
-			defeat()
+			#---Second Wind
+			if group == 'player' && globals.state.thecrystal.abilities.has('secondwind') && !person.dailyevents.has('crystal_second_wind'):
+				if person == globals.player:
+					scene.combatlog += "\n[color=#ff4949]You are struck a fatal blow, but the magic of the [color=aqua]Crystal[/color] swirls around you, restoring you to [color=lime]half health[/color]. [/color]"
+					globals.state.thecrystal.hunger += 1
+					hp += round(hpmax*.5)
+					person.dailyevents.append('crystal_second_wind')
+					if globals.state.thecrystal.abilities.has('attunement'):
+						scene.combatlog += "\n[color=#ff4949]The [color=aqua]Crystal's Hunger[/color] grows to [color=red]" + str(globals.state.thecrystal.hunger) + "[/color]. It cannot restore you like this again today.[/color] "
+					else:
+						scene.combatlog += "\n[color=#ff4949]The [color=aqua]Crystal[/color] cannot restore you like this again today.[/color] "
+				else:
+					scene.combatlog += "\n[color=#ff4949]" + person.name + " is struck a fatal blow, but the magic of the [color=aqua]Crystal[/color] swirls around them, restoring them to [color=lime]half health[/color]. [/color]"
+					globals.state.thecrystal.hunger += 1
+					hp += round(hpmax*.5)
+					person.dailyevents.append('crystal_second_wind')
+					if globals.state.thecrystal.abilities.has('attunement'):
+						scene.combatlog += "\n[color=#ff4949]The [color=aqua]Crystal's Hunger[/color] grows to [color=red]" + str(globals.state.thecrystal.hunger) + "[/color]. It cannot restore " + person.name + " like this again today.[/color] "
+					else:
+						scene.combatlog += "\n[color=#ff4949]The [color=aqua]Crystal[/color] cannot restore " + person.name + " like this again today.[/color] "
+			else:
+				defeat()
 	
 	func health_get():
 		return hp
 	
 	func defeat():
+		###---Added by Expansion---### Combat Death Prevention
 		state = 'defeated'
 		scene.defeatanimation(self)
 		yield(scene, 'defeatfinished')
@@ -559,19 +581,29 @@ class combatant:
 					_slave.away.at = 'rest'
 					_slave.work = 'rest'
 					globals.state.playergroup.erase(person.id)
+				elif globals.state.thecrystal.preventsdeath == true:
+					scene.combatlog += "\n[color=#ff4949]" + _slave.name + " has been defeated, but " + _slave.name + "'s death was prevented by the magic of the [color=aqua]Crystal[/color]. [/color]"
+					scene.combatlog +=  "\n[color=#ff4949]The [color=aqua]Crystal's Lifeforce[/color] [color=red]decreases by 1[/color]. [/color]"
+					globals.state.thecrystal.lifeforce -= 1
+					_slave.stats.health_cur = 15
+					_slave.away.duration = 3
+					_slave.away.at = 'rest'
+					_slave.work = 'rest'
+					globals.state.playergroup.erase(person.id)
 				else:
 					scene.combatlog += "\n[color=#ff4949]" + _slave.name + " has died. [/color]"
 					globals.state.playergroup.erase(person.id)
 					for i in globals.state.playergroup:
 						globals.state.findslave(i).stress += rand_range(25,40)
 					_slave.death()
+			###---End Expansion---###
 		else:
 			scene.repositionanimation()
 		animationplaying = false
 		scene.ongoinganimation = false
 		scene.emit_signal("defeat2finished")
 		scene.endcombatcheck()
-
+	
 	func escape():
 		state = 'escaped'
 		if group == 'enemy':

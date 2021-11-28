@@ -46,7 +46,7 @@ rope = {
 	cost = 15,
 	type = 'supply',
 	amount = 0,
-	weight = 5,
+	weight = 3,
 	reqs = true,
 },
 torch = {
@@ -98,7 +98,7 @@ lockpick = {
 	cost = 20,
 	type = 'supply',
 	amount = 0,
-	weight = 3,
+	weight = 2,
 	reqs = true,
 },
 
@@ -522,7 +522,7 @@ clothsundress = {
 	cost = 75,
 	type = 'gear',
 	subtype = 'costume',
-	weight = 5,
+	weight = 2,
 	amount = 0,
 },
 clothmaid = {
@@ -537,7 +537,7 @@ clothmaid = {
 	cost = 75,
 	type = 'gear',
 	subtype = 'costume',
-	weight = 5,
+	weight = 3,
 	amount = 0,
 },
 clothkimono = {
@@ -545,13 +545,13 @@ clothkimono = {
 	name = 'Kimono',
 	icon = "res://files/images/items/clothkimono.png",
 	description = "Brightly colored foreign clothes which are pretty popular for certain people.",
-	effect = [{type = 'onequip', effect = 'beauty', effectvalue = 10, descript = "Slightly increases beauty"}],
+	effect = [{type = 'onequip', effect = 'beauty', effectvalue = 10, descript = "Slightly increases beauty"},{type = 'onequip', effect = 'luxury', effectvalue = 5, descript = "Slightly increases luxury (+5)"}],
 	recipe = '',
 	reqs = null,
-	cost = 150,
+	cost = 250,
 	type = 'gear',
 	subtype = 'costume',
-	weight = 5,
+	weight = 3,
 	amount = 0,
 },
 clothmiko = {
@@ -565,7 +565,7 @@ clothmiko = {
 	cost = 200,
 	type = 'gear',
 	subtype = 'costume',
-	weight = 5,
+	weight = 4,
 	amount = 0,
 },
 armorninja = {
@@ -579,7 +579,7 @@ armorninja = {
 	cost = 200,
 	type = 'gear',
 	subtype = 'armor',
-	weight = 5,
+	weight = 4,
 	amount = 0,
 },
 clothpet = {
@@ -593,23 +593,25 @@ clothpet = {
 	cost = 250,
 	type = 'gear',
 	subtype = 'costume',
-	weight = 5,
+	weight = 2,
 	amount = 0,
 },
-clothchain = {
-	code = 'clothchain',
-	name = 'Chainmail Bikini',
-	icon = null,
-	description = "Sexy “armor” that emphasizes the physical fitness of the wearer. Contrary to popular belief it is an impractical choice for protective wear.",
-	effect = [{type = 'incombat', effect = 'armor', effectvalue = 1, descript = "+1 Armor"}],
+###---Added by Expansion---### ElPresidente
+clothchainbikini = {
+	code = 'clothchainbikini',
+	name = 'Chainmail Bikini',	
+	icon = "res://files/aric_expansion_images/items/chainbikini1.png",
+	description = "Sexy armored underwear that emphasizes the physical fitness of the wearer. Contrary to popular belief, it is an impractical choice for protective wear. It has been known to chafe, however.",
+	effect = [{type = 'incombat', effect = 'armor', effectvalue = 1, descript = "+1 Armor"},{type = 'onendday', effect = 'chainbikinieffect', descript = "Gains Lust and Lewdness Daily; Gains Stress Daily"}],
 	recipe = '',
 	reqs = null,
 	cost = 250,
 	type = 'gear',
-	subtype = 'costume',
-	weight = 5,
+	subtype = 'underwear',
+	weight = 3,
 	amount = 0,
 },
+###---End Expansion---###
 clothbutler = {
 	code = 'clothbutler',
 	name = 'Butlers Uniform',
@@ -621,7 +623,7 @@ clothbutler = {
 	cost = 75,
 	type = 'gear',
 	subtype = 'costume',
-	weight = 5,
+	weight = 4,
 	amount = 0,
 },
 clothbedlah = {
@@ -635,7 +637,7 @@ clothbedlah = {
 	cost = 250,
 	type = 'gear',
 	subtype = 'costume',
-	weight = 5,
+	weight = 3,
 	amount = 0,
 },
 underwearplain = {
@@ -663,7 +665,7 @@ underwearlacy = {
 	cost = 100,
 	type = 'gear',
 	subtype = 'underwear',
-	weight = 5,
+	weight = 2,
 	amount = 0,
 },
 underwearboxers = {
@@ -677,7 +679,7 @@ underwearboxers = {
 	cost = 100,
 	type = 'gear',
 	subtype = 'underwear',
-	weight = 5,
+	weight = 2,
 	amount = 0,
 },
 armorleather = {
@@ -685,15 +687,31 @@ armorleather = {
 	name = 'Leather Armor',
 	icon = "res://files/images/items/armorleather.png",
 	description = "Suit of tanned leather, providing some protection while not restricting movement too much.",
-	effect = [{type = 'incombat', effect = 'protection', effectvalue = 20, descript = "20% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 3, descript = "+3 Armor"}],
+	effect = [{type = 'incombat', effect = 'protection', effectvalue = 20, descript = "20% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 2, descript = "+2 Armor"}],
 	recipe = '',
 	reqs = null,
 	cost = 100,
 	type = 'gear',
 	subtype = 'armor',
-	weight = 5,
+	weight = 3,
 	amount = 0,
 },
+###---Added by Expansion---### ElPresidente Items
+armorpadded = {
+	code = 'armorpadded',
+	name = 'Padded Armor',
+	icon = "res://files/aric_expansion_images/items/armorpadded2.png",
+	description = "A step up from leather armor made from multiple layers of linen. It is effective, comfortable, and cheap, making it incredibly common.",
+	effect = [{type = 'incombat', effect = 'protection', effectvalue = 25, descript = "25% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 4, descript = "+4 Armor"}],
+	recipe = '',
+	reqs = null,
+	cost = 150,
+	type = 'gear',
+	subtype = 'armor',
+	weight = 4,
+	amount = 0,
+},
+###---End Expansion---###
 armorchain = {
 	code = 'armorchain',
 	name = 'Chain Armor',
@@ -705,7 +723,7 @@ armorchain = {
 	cost = 250,
 	type = 'gear',
 	subtype = 'armor',
-	weight = 5,
+	weight = 8,
 	amount = 0,
 },
 armorelvenchain = {
@@ -722,20 +740,78 @@ armorelvenchain = {
 	weight = 5,
 	amount = 0,
 },
+###---Added by Expansion---### ElPresidente Items
 armorplate = {
 	code = 'armorplate',
 	name = 'Plate Armor',
 	icon = "res://files/images/items/armorplate.png",
-	description = "An old, durable suit of plate armor. Protects the wearer against most physical damage. ",
+	description = "An old, durable suit of plate armor. Protects the wearer against most physical damage. \n[color=yellow]Requirements: 1 Strength, 3 Endurance[/color]",
 	effect = [{type = 'incombat', effect = 'protection', effectvalue = 60, descript = "60% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 10, descript = "+10 Armor"}],
 	recipe = '',
-	reqs = null,
+	reqs = [{reqstat = 'send', oper = 'gte', reqvalue = 3},{reqstat = 'sstr', oper = 'gte', reqvalue = 1}],
 	cost = 750,
 	type = 'gear',
 	subtype = 'armor',
-	weight = 5,
+	weight = 10,
 	amount = 0,
 },
+armorhalfplate = {
+	code = 'armorhalfplate',
+	name = "Half-Plate",
+	icon = "res://files/aric_expansion_images/items/halfplate.png",
+	description = "A combination of chaimail with plate covering only the most vital areas. Slightly cheaper and lighter than full plate, requiring less experience to use it. \n[color=yellow]Requirements: 1 Strength, 2 Endurance[/color]",
+	effect = [{type = 'incombat', effect = 'protection', effectvalue = 50, descript = "50% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 8, descript = "+8 Armor"}],
+	recipe = '',
+	reqs = [{reqstat = 'send', oper = 'gte', reqvalue = 2},{reqstat = 'sstr', oper = 'gte', reqvalue = 1}],
+	cost = 600,
+	type = 'gear',
+	subtype = 'armor',
+	weight = 8,
+	amount = 0,
+},
+armorelvenhalfplate = {
+	code = 'armorelvenhalfplate',
+	name = "Elven Half-Plate",
+	icon = "res://files/aric_expansion_images/items/elven_halfplate.png",
+	description = "This highly efficient armor sacrifices no durabiltiy to achive lighter weight than it's human counterpart. \n[color=yellow]Requirements: 1 Agility, 1 Endurance[/color]",
+	effect = [{type = 'incombat', effect = 'protection', effectvalue = 45, descript = "45% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 8, descript = "+8 Armor"}],
+	recipe = '',
+	reqs = [{reqstat = 'sagi', oper = 'gte', reqvalue = 1},{reqstat = 'send', oper = 'gte', reqvalue = 1}],
+	cost = 700,
+	type = 'gear',
+	subtype = 'armor',
+	weight = 7,
+	amount = 0,
+},
+armorfieldplate = {
+	code = 'armorfieldplate',
+	name = "Field Plate Armor",
+	icon = "res://files/aric_expansion_images/items/fieldplate.png",
+	description = "A magnificent suit of ornate field plate armor. Provides some of the best protection money can buy.\n[color=yellow]Requirements: 2 Strength, 2 Endurance[/color]",
+	effect = [{type = 'incombat', effect = 'protection', effectvalue = 70, descript = "70% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 10, descript = "+10 Armor"}],
+	recipe = '',
+	reqs = [{reqstat = 'sstr', oper = 'gte', reqvalue = 2},{reqstat = 'send', oper = 'gte', reqvalue = 2}],
+	cost = 1500,
+	type = 'gear',
+	subtype = 'armor',
+	weight = 9,
+	amount = 0,
+},
+armormagerobe = {
+	code = 'armormagerobe',
+	name = "Archmages Robe",
+	icon = "res://files/aric_expansion_images/items/archhmagerobe.png",
+	description = "These runed robes do not restrict movement and amplify their wearer's inate Magic. However, they were not designed for combat and provide little protection.",
+	effect = [{type = 'incombat', effect = 'protection', effectvalue = 20, descript = "20% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 2, descript = "+2 Armor"},{type = 'onequip', id = 'armormaf', effect = 'maf', effectvalue = 2, descript = "+2 Magic Affinity"}],
+	recipe = '',
+	reqs = null,
+	cost = 350,
+	type = 'gear',
+	subtype = 'armor',
+	weight = 4,
+	amount = 0,
+},
+###---End Expansion---###
 armorrobe = {
 	code = 'armorrobe',
 	name = "Wizard's Robe",
@@ -761,7 +837,7 @@ weapondaggerrust = {
 	cost = 10,
 	type = 'gear',
 	subtype = 'weapon',
-	weight = 5,
+	weight = 2,
 	amount = 0,
 },
 weapondagger = {
@@ -775,7 +851,7 @@ weapondagger = {
 	cost = 50,
 	type = 'gear',
 	subtype = 'weapon',
-	weight = 5,
+	weight = 2,
 	amount = 0,
 },
 weaponsword = {
@@ -789,23 +865,39 @@ weaponsword = {
 	cost = 150,
 	type = 'gear',
 	subtype = 'weapon',
-	weight = 5,
+	weight = 4,
 	amount = 0,
 },
+###---Added by Expansion---### ElPresidente Items
 weaponclaymore = {
 	code = 'weaponclaymore',
 	name = 'Claymore',
 	icon = "res://files/images/items/weaponclaymore.png",
-	description = "Large, two-handed sword for extra punch. Slows the wielder a little due to its size and weight.\n[color=yellow]Requirements: 4 Strength[/color] ",
-	effect = [{type = 'incombat', effect = 'damage', effectvalue = 12, descript = "+12 Damage"}, {type = 'incombat', id = 'weaponspeed', effect = 'speed', effectvalue = -3, descript = "-3 speed"}],
+	description = "Large greatsword designed with a more aerodynamic design to minimize weight while still capable of delivering a heavy blow.\n[color=yellow]Requirements: 3 Strength[/color] ",
+	effect = [{type = 'incombat', effect = 'damage', effectvalue = 9, descript = "+9 Damage"},{type = 'incombat', id = 'weaponspeed', effect = 'speed', effectvalue = -1, descript = "-1 Speed"}],
 	recipe = '',
-	reqs = [{reqstat = 'sstr', oper = 'gte', reqvalue = 4}],
-	cost = 450,
+	reqs = [{reqstat = 'sstr', oper = 'gte', reqvalue = 3}],
+	cost = 400,
 	type = 'gear',
 	subtype = 'weapon',
 	weight = 5,
 	amount = 0,
 },
+weapongreatsword = {
+	code = 'weapongreatsword',
+	name = 'Greatsword',
+	icon = "res://files/aric_expansion_images/items/zweihander.png",
+	description = "Massive two-handed sword with a long reach. Slows the wielder due to its size and weight, but capable of delivering devastating blows.\n[color=yellow]Requirements: 4 Strength[/color] ",
+	effect = [{type = 'incombat', effect = 'damage', effectvalue = 12, descript = "+12 Damage"},{type = 'incombat', id = 'weaponspeed', effect = 'speed', effectvalue = -3, descript = "-3 Speed"}],
+	recipe = '',
+	reqs = [{reqstat = 'sstr', oper = 'gte', reqvalue = 4}],
+	cost = 500,
+	type = 'gear',
+	subtype = 'weapon',
+	weight = 7,
+	amount = 0,
+},
+###---End Expansion---###
 weaponaynerisrapier = {
 	code = 'weaponaynerisrapier',
 	name = "Ayneris's Rapier",
@@ -818,9 +910,81 @@ weaponaynerisrapier = {
 	cost = 500,
 	type = 'gear',
 	subtype = 'weapon',
+	weight = 4,
+	amount = 0,
+},
+###---Added by Expansion---### ElPresidente Items
+weaponrunesword = {
+	code = 'weaponrunesword',
+	name = 'Runesword',
+	icon = "res://files/aric_expansion_images/items/ornate_sword_1.png",
+	description = "A sword made for an ancient order of spellblades that is engraved with runes that help focus magical power. These weapons are now hard to find and unusable by anyone without some magical affinity.\n[color=yellow]Requirements: 2 Agility, 1 Magic[/color]",
+	effect = [{type = 'incombat', effect = 'damage', effectvalue = 7, descript = "+7 Damage"}, {type = 'onequip', effect = 'maf', effectvalue = 1, descript = "+1 Magic Affinity"}],
+	recipe = '',
+	reqs = [{reqstat = 'sagi', oper = 'gte', reqvalue = 2},{reqstat = 'smaf', oper = 'gte', reqvalue = 1}],
+	cost = 550,
+	type = 'gear',
+	subtype = 'weapon',
+	weight = 4,
+	amount = 0,
+},
+weaponceremonialsword = {
+	code = 'weaponceremonialsword',
+	name = "Ceremonial Sword",
+	icon = "res://files/aric_expansion_images/items/ornate_sword_2.png",
+	description = "More work of art than weapon, this blade has a beautifully decorated golden hilt. Unlike most ceremonial weaponry, this is blade seems to be completely functional in combat as well.\n[color=yellow]Requirements: 2 Agility[/color]",
+	effect = [{type = 'incombat', effect = 'damage', effectvalue = 7, descript = "+7 Damage"}, {type = 'onequip', effect = 'luxury', effectvalue = 10, descript = "Increases luxury (+10)"}],
+	recipe = '',
+	reqs = [{reqstat = 'sagi', oper = 'gte', reqvalue = 2}],
+	cost = 750,
+	type = 'gear',
+	subtype = 'weapon',
+	weight = 4,
+	amount = 0,
+},
+weaponancientsword = {
+	code = 'weaponancientsword',
+	name = "Ancient Sword",
+	icon = "res://files/aric_expansion_images/items/ornate_sword_3.png",
+	description = "This blade has clearly seen hundreds of battles, yet remains sharp and functional. Holding it reminds the wielder of its previous victories as well as its prior defeats.\n[color=yellow]Requirements: 1 Strength, 2 Agility[/color]",
+	effect = [{type = 'incombat', effect = 'damage', effectvalue = 8, descript = "+8 Damage"},{type = 'onendday', effect = 'ancientswordeffect', descript = "Increase Confidence or Fear by the end of a day based on Courage."}],
+	recipe = '',
+	reqs = [{reqstat = 'sstr', oper = 'gte', reqvalue = 1},{reqstat = 'sagi', oper = 'gte', reqvalue = 2}],
+	cost = 500,
+	type = 'gear',
+	subtype = 'weapon',
 	weight = 5,
 	amount = 0,
 },
+accbooklife = {
+	code = 'accbooklife',
+	name = 'Book of Life',
+	icon = "res://files/aric_expansion_images/items/book_life.png",
+	description = "This ancient book contains wisdom, tips, and helpful reminders for Mages.",
+	effect = [{type = 'onequip', effect = 'wit', effectvalue = 15, descript = "Increases wit (+15)"},{type = 'onequip', effect = 'maf', effectvalue = 1, descript = "+1 Magic Affinity"}],
+	recipe = '',
+	reqs = null,
+	cost = 800,
+	type = 'gear',
+	subtype = 'accessory',
+	weight = 2,
+	amount = 0,
+},
+accelvenboots = {
+	code = 'accelvenboots',
+	name = 'Elven Boots',
+	icon = "res://files/aric_expansion_images/items/elvenboots.png",
+	description = "Exquisite Elven-made boots that are not only comfortable, but also seem to hasten your step and make your steps less tiring.",
+	effect = [{type = 'onequip', effect = 'energy', effectvalue = 20, descript = "+20 Energy"},{type = 'incombat', effect = 'speed', effectvalue = 2, descript = "+2 Speed"}],
+	recipe = '',
+	reqs = null,
+	cost = 750,
+	type = 'gear',
+	subtype = 'accessory',
+	weight = 2,
+	amount = 0,
+},
+###---End Expansion---###
 accgoldring = {
 	code = 'accgoldring',
 	name = 'Golden Ring',
@@ -832,7 +996,7 @@ accgoldring = {
 	cost = 250,
 	type = 'gear',
 	subtype = 'accessory',
-	weight = 5,
+	weight = 1,
 	amount = 0,
 },
 accslavecollar = {
@@ -846,7 +1010,7 @@ accslavecollar = {
 	cost = 150,
 	type = 'gear',
 	subtype = 'accessory',
-	weight = 5,
+	weight = 2,
 	amount = 0,
 },
 acchandcuffs = {
@@ -860,7 +1024,7 @@ acchandcuffs = {
 	cost = 250,
 	type = 'gear',
 	subtype = 'accessory',
-	weight = 5,
+	weight = 2,
 	amount = 0,
 },
 acctravelbag = {
@@ -889,7 +1053,7 @@ weaponelvensword = {
 	cost = 250,
 	type = 'gear',
 	subtype = 'weapon',
-	weight = 5,
+	weight = 4,
 	amount = 0,
 },
 accamuletruby = {
@@ -897,13 +1061,13 @@ accamuletruby = {
 	name = 'Ruby Amulet',
 	icon = "res://files/images/items/amuletruby.png",
 	description = "A luxury piece of jewelry with a trace of magic. ",
-	effect = [{type = 'incombat', effect = 'damage', effectvalue = 2, descript = "+2 Damage"}],
+	effect = [{type = 'incombat', effect = 'damage', effectvalue = 2, descript = "+2 Damage"},{type = 'onequip', effect = 'luxury', effectvalue = 5, descript = "Increases luxury (+5)"}],
 	recipe = '',
 	reqs = null,
 	cost = 400,
 	type = 'gear',
 	subtype = 'accessory',
-	weight = 2,
+	weight = 1,
 	amount = 0,
 },
 accamuletemerald = {
@@ -911,13 +1075,13 @@ accamuletemerald = {
 	name = 'Emerald Amulet',
 	icon = "res://files/images/items/amuletemerald.png",
 	description = "A luxury piece of jewelry with a trace of magic. ",
-	effect = [{type = 'onequip', effect = 'health', effectvalue = 15, descript = "+15 Health"}],
+	effect = [{type = 'onequip', effect = 'health', effectvalue = 15, descript = "+15 Health"},{type = 'onequip', effect = 'luxury', effectvalue = 5, descript = "Increases luxury (+5)"}],
 	recipe = '',
 	reqs = null,
 	cost = 400,
 	type = 'gear',
 	subtype = 'accessory',
-	weight = 2,
+	weight = 1,
 	amount = 0,
 },
 weaponnaturestaff = {
@@ -945,7 +1109,7 @@ armortentacle = {
 	cost = 500,
 	type = 'gear',
 	subtype = 'armor',
-	weight = 5,
+	weight = 9,
 	amount = 0,
 	enchant = 'unique',
 },
@@ -960,7 +1124,7 @@ clothtentacle = {
 	cost = 200,
 	type = 'gear',
 	subtype = 'underwear',
-	weight = 5,
+	weight = 3,
 	amount = 0,
 	enchant = '',
 },
@@ -969,7 +1133,7 @@ armorrogue = {
 	name = "Rogue's Armor",
 	icon = "res://files/images/items/roguearmor.png",
 	description = "An unearthy semi-living object which can be weared. Feeds on the fluids of wearer which periodically stimulates in private places. ",
-	effect = [{type = 'incombat', effect = 'protection', effectvalue = 45, descript = "45% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 8, descript = "+8 Armor"},{type = 'onequip', effect = 'energy', effectvalue = 20, descript = "+20 Energy"}],
+	effect = [{type = 'incombat', effect = 'protection', effectvalue = 45, descript = "45% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 7, descript = "+7 Armor"},{type = 'onequip', effect = 'energy', effectvalue = 20, descript = "+20 Energy"}],
 	recipe = '',
 	reqs = null,
 	cost = 500,
@@ -998,22 +1162,22 @@ weaponhammer = {
 	code = 'weaponhammer',
 	name = "Great Hammer",
 	icon = "res://files/images/items/weaponhammer.png",
-	description = "A mighty weapon designed to deal with armored targets. \n[color=yellow]Requirements: 4 Strength[/color] ",
-	effect = [{type = 'incombat', effect = 'damage', effectvalue = 10, descript = "+10 Damage"},{type = 'incombatphyattack', effect = 'protpenetration', effectvalue = 1, descript = 'Ignores protection'}],
+	description = "A mighty weapon designed to deal with armored targets, but it is sluggish and heavy. \n[color=yellow]Requirements: 3 Strength[/color] ",
+	effect = [{type = 'incombat', effect = 'damage', effectvalue = 14, descript = "+14 Damage"},{type = 'incombatphyattack', effect = 'protpenetration', effectvalue = 1, descript = 'Ignores protection'},{type = 'incombat', id = 'weaponspeed', effect = 'speed', effectvalue = -5, descript = "-5 speed"}],
 	recipe = '',
-	reqs = [{reqstat = 'sstr', oper = 'gte', reqvalue = 4}],
+	reqs = [{reqstat = 'sstr', oper = 'gte', reqvalue = 3}],
 	cost = 350,
 	type = 'gear',
 	subtype = 'weapon',
-	weight = 5,
+	weight = 6,
 	amount = 0,
 },
 weaponkatana = {
 	code = 'weaponkatana',
 	name = "Eastern Sword",
 	icon = "res://files/images/items/9.png",
-	description = "A long sword originates from eastern lands. \n[color=yellow]Requirements: 3 Agility[/color] ",
-	effect = [{type = 'incombat', effect = 'damage', effectvalue = 9, descript = "+9 Damage"}, {type = 'onequip', effect = 'end', effectvalue = 1, descript = '+1 Endurance'}],
+	description = "A long sword originates from eastern lands. Its sharp edge allows a user to compensate for their strength with speed and precision.\n[color=yellow]Requirements: 3 Agility[/color] ",
+	effect = [{type = 'incombat', effect = 'damage', effectvalue = 8, descript = "+8 Damage"},{type = 'onequip', effect = 'str', effectvalue = 2, descript = '+2 Strength'},{type = 'onequip', effect = 'end', effectvalue = 1, descript = '+1 Endurance'}],
 	recipe = '',
 	reqs = [{reqstat = 'sagi', oper = 'gte', reqvalue = 3}],
 	cost = 500,
@@ -1033,7 +1197,7 @@ weaponshortsword = {
 	cost = 500,
 	type = 'gear',
 	subtype = 'weapon',
-	weight = 5,
+	weight = 4,
 	amount = 0,
 },
 armorredcloak = {
@@ -1048,7 +1212,7 @@ armorredcloak = {
 	enchant = 'unique',
 	type = 'gear',
 	subtype = 'armor',
-	weight = 5,
+	weight = 8,
 	amount = 0,
 },
 armorcarapace= {
@@ -1062,7 +1226,7 @@ armorcarapace= {
 	cost = 600,
 	type = 'gear',
 	subtype = 'armor',
-	weight = 5,
+	weight = 7,
 	amount = 0,
 },
 accessoryneck = {
@@ -1076,7 +1240,7 @@ accessoryneck = {
 	cost = 500,
 	type = 'gear',
 	subtype = 'accessory',
-	weight = 5,
+	weight = 2,
 	amount = 0,
 },
 zoebook = {
@@ -1130,7 +1294,7 @@ aydajewel = {
 	weight = 0,
 	obtainreqs = 'globals.state.sidequests.ayda == 14',
 },
-###---Added by Expansion---###
+###---Added by Expansion---### Farm Expanded
 hyperlactationpot = {
 	code = 'hyperlactationpot',
 	name = 'Hyperlactation Potion',
@@ -1219,100 +1383,102 @@ sedative = {
 }
 
 var recipeaphrodisiac = {
-basicsolutioning = 1,
-taintedessenceing = 1,
-bestialessenceing = 1,
+	basicsolutioning = 1,
+	taintedessenceing = 1,
+	bestialessenceing = 1,
 }
 
 var recipehairgrowth = {
-basicsolutioning = 1,
-natureessenceing = 1,
-bestialessenceing = 1
+	basicsolutioning = 1,
+	natureessenceing = 1,
+	bestialessenceing = 1
 }
 
 var recipematuringpot = {
-majoruspot = 1,
-magicessenceing = 2,
-natureessenceing = 1
+	majoruspot = 1,
+	magicessenceing = 2,
+	natureessenceing = 1
 }
 
 var recipeyouthingpot = {
-minoruspot = 1,
-magicessenceing = 2,
-basicsolutioning = 2
+	minoruspot = 1,
+	magicessenceing = 2,
+	basicsolutioning = 2
 }
 
 var recipeminoruspot = {
-basicsolutioning = 1,
-taintedessenceing = 2,
-fluidsubstanceing = 1
+	basicsolutioning = 1,
+	taintedessenceing = 2,
+	fluidsubstanceing = 1
 }
 
 var recipemajoruspot = {
-basicsolutioning = 1,
-bestialessenceing = 2,
-natureessenceing = 1
+	basicsolutioning = 1,
+	bestialessenceing = 2,
+	natureessenceing = 1
 }
 
 var recipeamnesiapot = {
-basicsolutioning = 1,
-fluidsubstanceing = 1,
-taintedessenceing = 1
+	basicsolutioning = 1,
+	fluidsubstanceing = 1,
+	taintedessenceing = 1
 }
 
 var recipeoblivionpot = {
-amnesiapot = 1,
-magicessenceing = 1,
-fluidsubstanceing = 2
+	amnesiapot = 1,
+	magicessenceing = 1,
+	fluidsubstanceing = 2
 }
 
 var recipelactationpot = {
-basicsolutioning = 1,
-bestialessenceing = 2,
-natureessenceing = 1
+	basicsolutioning = 1,
+	bestialessenceing = 2,
+	natureessenceing = 1
 }
 
 var recipestimulantpot = {
-basicsolutioning = 1,
-fluidsubstanceing = 1,
-natureessenceing = 1
+	basicsolutioning = 1,
+	fluidsubstanceing = 1,
+	natureessenceing = 1
 }
+
 var recipedeterrentpot = {
-basicsolutioning = 1,
-fluidsubstanceing = 1,
-taintedessenceing = 1
+	basicsolutioning = 1,
+	fluidsubstanceing = 1,
+	taintedessenceing = 1
 }
 
 var recipemiscariagepot = {
-basicsolutioning = 1,
-taintedessenceing = 2
+	basicsolutioning = 1,
+	taintedessenceing = 2
 }
 
 var reciperegressionpot = {
-basicsolutioning = 2,
-amnesiapot = 1,
-youthingpot = 1
+	basicsolutioning = 2,
+	amnesiapot = 1,
+	youthingpot = 1
 }
+
 var recipeaphroditebrew = {
-aphrodisiac = 2,
-stimulantpot = 1,
-taintedessenceing = 2
+	aphrodisiac = 2,
+	stimulantpot = 1,
+	taintedessenceing = 2
 }
 var recipeclaritypot = {
-oblivionpot = 1,
-regressionpot = 1,
+	oblivionpot = 1,
+	regressionpot = 1,
 }
 
 ###---Added by Expansion---###
 var recipehyperlactationpot = {
-lactationpot = 1,
-bottledmilk = 3
+	lactationpot = 1,
+	bottledmilk = 3
 }
 
 var recipesedative = {
-basicsolutioning = 1,
-taintedessenceing = 1,
-bottledmilk = 1
+	basicsolutioning = 1,
+	taintedessenceing = 1,
+	bottledmilk = 1
 }
 ###---End Expansion
 
@@ -1458,8 +1624,24 @@ func bedlaheffect(person):
 	person.charm += rand_range(1,3)
 	return text
 
+###---Added by Expansion---### ElPresidente's Items
+func ancientswordeffect(person):
+	var text = person.dictionary("$name finds $himself examining the blade at $his side throughout the day. ")
+	if person.cour > 40:
+		text += person.dictionary("The still-sharp blade gives $him confidence that $he will survive many battles as well while wielding it.\n")
+		person.conf_base += round(rand_range(1,3))
+	else:
+		text += person.dictionary("The ancient bloodstains on its metal blade makes $him wonder when that is all $he will be as well and $he grows fearful.\n")
+		person.fear += round(rand_range(3,5))
+	return text
+
 func chainbikinieffect(person):
-	return
+	var text = person.dictionary("$name's skimpy bikini increases $his arousal and lewdness, but also provides stress as it chafes $him.\n")
+	person.stress += round(rand_range(2,5))
+	person.lust += round(rand_range(2,5))
+	person.lewdness += round(rand_range(1,3))
+	return text
+###---End Expansion---###
 
 func butleruniformeffect(person):
 	person.obed += rand_range(5,10)
@@ -1691,6 +1873,9 @@ func beautyeffect():
 		text = person.dictionary('You order $name to apply Beauty Mixture to $his face, which will make $his skin smoother and hides visible flaws.')
 	
 	person.add_effect(globals.effectdict.beautypot)
+	###---Added by Expansion---### ElPresidente
+	person.beautybase += 5
+	###---End Expansion---###
 	return text
 
 var currentpotion = ''

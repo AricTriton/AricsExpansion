@@ -3,12 +3,12 @@ extends Node
 
 var enemygrouppools = {
 	treasurechest = {
-		units = [['wolf',1,1]], awareness = -10, captured = null, special = 'treasurechest',
+		units = [['wolf',1,1]], awareness = 0, captured = null, special = 'treasurechest',
 		description = 'You find a small [color=aqua]treasure chest[/color].',
 		descriptionambush = '',
 	},
 	blockedsection = {
-		units = [['wolf',1,1]], awareness = -10, captured = null, special = 'blockedsection',
+		units = [['wolf',1,1]], awareness = 0, captured = null, special = 'blockedsection',
 		description = 'You find a small [color=aqua]treasure chest[/color].',
 		descriptionambush = '',
 	},
@@ -23,7 +23,7 @@ var enemygrouppools = {
 		descriptionambush = 'You are attacked by a pack of [color=aqua]dangerous dire wolves[/color].',
 	},
 	wolveswithperson = {
-		units = [['wolf',4,8]], awareness = -10, captured = ['thugvictim'], special = null,
+		units = [['wolf',4,8]], awareness = 0, captured = ['thugvictim'], special = null,
 		description = 'You come across a [color=aqua]group of wolves[/color] attacking a lost [color=yellow]$capturedrace[/color].',
 		descriptionambush = 'You are attacked by a [color=aqua]small pack of wolves[/color].',
 	},
@@ -38,11 +38,11 @@ var enemygrouppools = {
 		descriptionambush =  "As you walk through the wilderness, you hear a fierce roar. It seems you provoked a [color=aqua]bear[/color] by getting into its territory. It breaks out of the woodwork and goes for an attack.",
 	},
 	plantseasy = {
-		units = [['plant',2,3]], awareness = -10, captured = null, special = null,
+		units = [['plant',2,3]], awareness = 0, captured = null, special = null,
 		description = 'You come across a bunch of [color=aqua]hostile, animated plants[/color]. ',
 	},
 	plantswithperson = {
-		units = [['plant',3,6]], awareness = -10, captured = ['thugvictim'], special = null,
+		units = [['plant',3,6]], awareness = 0, captured = ['thugvictim'], special = null,
 		description = 'You spot a bunch of frenzied, [color=aqua]man-eating plants[/color] seizing a [color=yellow]$capturedrace $capturedchild[/color]. ',
 	},
 	fewcougars = {
@@ -61,7 +61,7 @@ var enemygrouppools = {
 		descriptionambush =  "You are attacked by a [color=aqua]group of giant spiders[/color].",
 	},
 	oozesgroup = {
-		units = [['ooze',2,3]], awareness = -10, captured = null, special = null,
+		units = [['ooze',2,3]], awareness = 0, captured = null, special = null,
 		description = "You come across a [color=aqua]group of ooze monsters[/color]. ",
 	},
 	banditseasy = {
@@ -70,7 +70,7 @@ var enemygrouppools = {
 		descriptionambush = 'You are attacked by a [color=aqua]small group of stray bandits[/color]. ',
 	},
 	thugseasy = {
-		units = [['bandit',2,2]], awareness = -10, captured = ['thugvictim'], special = null,
+		units = [['bandit',2,2]], awareness = 0, captured = ['thugvictim'], special = null,
 		description = 'You come across a [color=aqua]pair of thugs[/color] bullying a [color=yellow]bystander[/color]. They are busy right now, so you could pass them by unnoticed... ',
 	},
 	banditsmedium = {
@@ -84,17 +84,17 @@ var enemygrouppools = {
 		descriptionambush = 'You are attacked by a [color=aqua]large group of stray bandits[/color]. ',
 	},
 	CaliBossSlaver = {
-		units = [['slaver',1,1]], awareness = -10, captured = null, special = null,
+		units = [['slaver',1,1]], awareness = 0, captured = null, special = null,
 		description = 'You spot a [color=aqua]small group of stray bandits[/color]. They seem to be unaware of your presence as of yet. ',
 		descriptionambush = 'You are attacked by a [color=aqua]small group of stray bandits[/color]. ',
 	},
 	CaliStrayBandit = {
-		units = [['bandit',1,1]], awareness = -10, captured = null, special = null,
+		units = [['bandit',1,1]], awareness = 0, captured = null, special = null,
 		description = 'You spot a [color=aqua]small group of stray bandits[/color]. They seem to be unaware of your presence as of yet. ',
 		descriptionambush = 'You are attacked by a [color=aqua]small group of stray bandits[/color]. ',
 	},
 	banditcamp = {
-		units = [['bandit',6,8],['banditleader', 1,2]], awareness = -10, captured = ['banditcampcaptured', 'banditcampcaptured'], special = null,
+		units = [['bandit',6,8],['banditleader', 1,2]], awareness = 0, captured = ['banditcampcaptured', 'banditcampcaptured'], special = null,
 		description = 'You come across a [color=aqua]bandit encampment[/color]. You can spot numerous watchmen moving around and a few captives too, which are likely to be sold for slaves soon. ',
 	},
 	elfguards = {
@@ -103,11 +103,11 @@ var enemygrouppools = {
 		descriptionambush = 'You are attacked by a [color=aqua]small group of elven warriors[/color]. ',
 	},
 	fairy = {
-		units = [['fairy',1,1]], awareness = -10, captured = null, special = null,
+		units = [['fairy',1,1]], awareness = 0, captured = null, special = null,
 		description = 'You spot a lone [color=aqua]wild fairy $child[/color] floating through the woods. ',
 	},
 	fairyfew = {
-		units = [['fairy',2,4]], awareness = -10, captured = null, special = null, escape = 7,
+		units = [['fairy',2,4]], awareness = 0, captured = null, special = null, escape = 7,
 		description = 'You spot a [color=aqua]small group of wild fairies[/color] playing around. ',
 		descriptionescape = "A group of wild fairies escapes from you before you get close to them. ",
 	},
@@ -117,50 +117,41 @@ var enemygrouppools = {
 		descriptionambush = "A [color=aqua]group of cave goblins[/color] jumps on you. ",
 	},
 	dryad = {
-		units = [['dryad',1,1]], awareness = -10, captured = null, special = null,
+		units = [['dryad',1,1]], awareness = 0, captured = null, special = null,
 		description = 'You spot a wild [color=aqua]$race $child[/color] walking through the woods.',
 	},
-	dryad2 = {
-		units = [['dryad2',2,4]], awareness = 20, captured = null, special = null, #ralph4
-		description = 'You spot a group of bark-armored dryads apparently searching the woods for intruders.', #ralph4
-		descriptionambush = 'You are attacked by [color=aqua]wild defenders of the forest[/color]. ', #ralph4
-	}, #ralph4
-	nereidgroup = {units = [['nereidgroup',2,6]], awareness = 30, captured = null, special = null, #ralph4
-		description = 'You spot a small group of Nereid scouts armed and armored primarily with coral.', #ralph4
-		descriptionambush = 'You are attacked by [color=aqua]Nereid Skirmishers[/color] attempting to secure the beachhead for their kind. ', #ralph4
-	}, #ralph4
-	monstergirl = {units = [['monstergirl',1,1]], awareness = 15, captured = null, special = null, escape = 6, #ralph4
+	monstergirl = {
+		units = [['monstergirl',1,1]], awareness = 0, captured = null, special = null, escape = 6,
 		description =  "You come across a rare [color=aqua]$race monster $child[/color]. $He hasn't spotted you yet. ",
-		descriptionambush = 'You are attacked by a frenzied [color=aqua]$race $child[/color] in search of mate. ', #ralph4
 		descriptionescape = "A wild $race escapes from you before you get close to $him. ",
 	},
 	monstergirlfew = {
-		units = [['monstergirl',2,4]], awareness = -10, captured = null, special = null, escape = 12,
+		units = [['monstergirl',2,4]], awareness = 0, captured = null, special = null, escape = 12,
 		description =  "You spot a [color=aqua]small group of wild $race[/color] playing around.  ",
 		descriptionescape = "A group of [color=aqua]wild $race[/color] escapes from you before you get close to them. ",
 	},
 	harpy = {
-		units = [['harpy',1,1]], awareness = -10, captured = null, special = null,
+		units = [['harpy',1,1]], awareness = 0, captured = null, special = null,
 		description =  "You come across a [color=aqua]$race monster $child[/color]. $He hasn't spotted you yet. ",
 	},
 	slaverseasy = {
-		units = [['slaver',2,3]], awareness = -10, captured = ['slavervictim'], special = 'slaversenc',
+		units = [['slaver',2,3]], awareness = 0, captured = ['slavervictim'], special = 'slaversenc',
 		description = "You spot a group of [color=aqua]$unitnumber slavers[/color] leading a [color=yellow]sole victim[/color]. You can't make out any more details without getting closer.",
 	},
 	slaversmedium = {
-		units = [['slaver',3,5]], awareness = -10, captured = ['slavervictim', 'slavervictim'], special = 'slaversenc',
+		units = [['slaver',3,5]], awareness = 0, captured = ['slavervictim', 'slavervictim'], special = 'slaversenc',
 		description = "You spot a group of [color=aqua]$unitnumber slavers[/color] leading a few recently [color=yellow]captured victims[/color]. You can't say much about them without getting closer.",
 	},
 	peasant = {
-		units = [['peasant',1,1]], awareness = -10, captured = null, special = null,
+		units = [['peasant',1,1]], awareness = 0, captured = null, special = null,
 		description = "You meet a lone [color=aqua]$race $child[/color], native to these lands. $He seems to be unaware of your presence as of yet. ",
 	},
 	peasantgroup = {
-		units = [['peasant',2,3]], awareness = -10, captured = null, special = null,
+		units = [['peasant',2,3]], awareness = 0, captured = null, special = null,
 		description = "You meet a group of [color=aqua]$unitnumber strangers[/color], native to these lands. They seem to be unaware of your presence as of yet. ",
 	},
 	travelersgroup = {
-		units = [['traveller',2,3]], awareness = -10, captured = null, special = null,
+		units = [['traveller',2,3]], awareness = 0, captured = null, special = null,
 		description = "You meet a group of [color=aqua]$unitnumber travellers[/color] moving by on the road. They seem to be unaware of your presence as of yet. ",
 	},
 	troglodytesmall = {
@@ -179,15 +170,15 @@ var enemygrouppools = {
 		descriptionambush = 'You are attacked by a [color=aqua]mutant[/color]. ',
 	},
 	gembeetle = {
-		units = [['gembeetle',1,1]], awareness = -10, captured = null, special = null,
+		units = [['gembeetle',1,1]], awareness = 0, captured = null, special = null,
 		description = "You spot an unusual creature. A shiny, [color=aqua]multicolored bug[/color] of significant size. ",
 	},
 	bossgolem = {
-		units = [['bossgolem',1,1]], awareness = -10, captured = null, special = null,
+		units = [['bossgolem',1,1]], awareness = 0, captured = null, special = null,
 		description = "Golem Boss",
 	},
 	bosswyvern = {
-		units = [['bosswyvern',1,1]], awareness = -10, captured = null, special = null,
+		units = [['bosswyvern',1,1]], awareness = 0, captured = null, special = null,
 		description = "Wyvern Boss",
 	},
 	dragonwhelps = {
@@ -231,23 +222,23 @@ var enemygrouppools = {
 		descriptionambush = 'You are attacked by an intangible [color=aqua]shadows[/color]. ',
 	},
 	cultistswithperson = {
-		units = [['cultist',3,6]], awareness = -10, captured = ['banditcampcaptured'], special = null,
+		units = [['cultist',3,6]], awareness = 0, captured = ['banditcampcaptured'], special = null,
 		description = 'You spot a group of cultists, harshly abusing a single person. Thankfully, they seem to not notice you yet. ',
 	},
 	possesedwithdragonkin = {
-		units = [['possessed',3,6]], awareness = -10, captured = ['dragonkincaptured'], special = null,
+		units = [['possessed',3,6]], awareness = 0, captured = ['dragonkincaptured'], special = null,
 		description = 'You spot a group of possessed, guarding a rebellious dragonkin. Thankfully, they seem to not notice you yet. ',
 	},
 	bossdragon = {
-		units = [['bossdragon',1,1]], awareness = -10, captured = null, special = null,
+		units = [['bossdragon',1,1]], awareness = 0, captured = null, special = null,
 		description = "Dragon Boss",
 	},
 	bosscultist = {
-		units = [['cultist',1,1],['cultboss',1,1],['cultist',1,1]], awareness = -10, captured = null, special = null,
+		units = [['cultist',1,1],['cultboss',1,1],['cultist',1,1]], awareness = 0, captured = null, special = null,
 		description = "Cultist Leader",
 	},
 	finalboss = {
-		units = [['finalboss',1,1]], awareness = -10, captured = null, special = null,
+		units = [['finalboss',1,1]], awareness = 0, captured = null, special = null,
 		description = "",
 	},
 	bookmutants = {
@@ -255,84 +246,84 @@ var enemygrouppools = {
 		description = 'Group of mutants',
 	},
 	tishaquestenemy = {
-		units = [['banditleader',1,1],['bandit',3,3]], awareness = -10, captured = null, special = null,
+		units = [['banditleader',1,1],['bandit',3,3]], awareness = 0, captured = null, special = null,
 		description = "",
 	},
 	ivranquestenemy = {
-		units = [['ivran',1,1],['elfguard',4,4]], awareness = -10, captured = null, special = null,
+		units = [['ivran',1,1],['elfguard',4,4]], awareness = 0, captured = null, special = null,
 		description = "",
 	},
 	ayneris1 = {
-		units = [['ayneris',1,1],['elfguard',3,3]], awareness = -10, captured = null, special = null,
+		units = [['ayneris',1,1],['elfguard',3,3]], awareness = 0, captured = null, special = null,
 		description = "",
 	},
 	ayneris2 = {
-		units = [['ayneris',1,1],['elfguard',7,7]], awareness = -10, captured = null, special = null,
+		units = [['ayneris',1,1],['elfguard',7,7]], awareness = 0, captured = null, special = null,
 		description = "",
 	},
 	frostforddryadquest = {
-		units = [['direwolf',6,6],['plant',4,4]], awareness = -10, captured = null, special = null,
+		units = [['direwolf',6,6],['plant',4,4]], awareness = 0, captured = null, special = null,
 		description = "",
 	},
 	frostfordzoequest = {
-		units = [['marauder',9,9]], awareness = -10, captured = null, special = null,
+		units = [['marauder',9,9]], awareness = 0, captured = null, special = null,
 		description = "",
 	},
 	finaleelves = {
-		units = [['elfguard',7,7],['elfleader',3,3]], awareness = -10, captured = null, special = null,
+		units = [['elfguard',7,7],['elfleader',3,3]], awareness = 0, captured = null, special = null,
 		description = "",
 	},
 	finaleslavers = {
-		units = [['marauder',8,8],['marauderleader',2,2]], awareness = -10, captured = null, special = null,
+		units = [['marauder',8,8],['marauderleader',2,2]], awareness = 0, captured = null, special = null,
 		description = "",
 	},
 	finaledavid = {
-		units = [['david',1,1],['investigator',4,4]], awareness = -10, captured = null, special = null,
+		units = [['david',1,1],['investigator',4,4]], awareness = 0, captured = null, special = null,
 		description = "",
 	},
 	finalegarthor = {
-		units = [['garthor',1,1],['orcwarrior',7,7]], awareness = -10, captured = null, special = null,
+		units = [['garthor',1,1],['orcwarrior',7,7]], awareness = 0, captured = null, special = null,
 		description = "",
 	},
 	finalehade = {
-		units = [['hademerc',3,3],['hade',1,1],['hademerc',3,3]], awareness = -10, captured = null, special = null,
+		units = [['hademerc',3,3],['hade',1,1],['hademerc',3,3]], awareness = 0, captured = null, special = null,
 		description = "",
 	},
 	finalecouncil = {
-		units = [['orderprotector',4,4],['councilboss',1,1],['orderprotector',4,4]], awareness = -10, captured = null, special = null,
+		units = [['orderprotector',4,4],['councilboss',1,1],['orderprotector',4,4]], awareness = 0, captured = null, special = null,
 		description = "",
 	},
 
 	wimbornguards = {
-		units = [['wimbornpatrol',3,4]], awareness = -10, captured = null, special = null,
-		description = "You have been spotted by a [color=aqua]patrolling militia[/color] group from Wimborn.\nIt seems they are inclined to take you to task despite your station. ", #ralph4 - added 2nd line
+		units = [['wimbornpatrol',3,4]], awareness = 0, captured = null, special = null,
+		description = "You have been spotted by a [color=aqua]patrolling militia[/color] group from Wimborn. ",
 	},
 	wimbornguardsmany = {
-		units = [['wimbornpatrol',7,10]], awareness = -10, captured = null, special = null,
-		description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Wimborn.\nIt seems they are inclined to take you to task despite your station. ", #ralph4 - added 2nd line
+		units = [['wimbornpatrol',7,10]], awareness = 0, captured = null, special = null,
+		description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Wimborn. ",
 	},
 	gornguards = {
-		units = [['gornpatrol',3,4]], awareness = -10, captured = null, special = null,
-		description = "You have been spotted by a [color=aqua]patrolling militia[/color] group from Gorn.\nIt seems they are inclined to take you to task despite your station. ", #ralph4 - added 2nd line
+		units = [['gornpatrol',3,4]], awareness = 0, captured = null, special = null,
+		description = "You have been spotted by a [color=aqua]patrolling militia[/color] group from Gorn. ",
 	},
 	gornguardsmany = {
-		units = [['gornpatrol',7,10]], awareness = -10, captured = null, special = null,
-		description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Gorn.\nIt seems they are inclined to take you to task despite your station. ", #ralph4 - added 2nd line
+		units = [['gornpatrol',7,10]], awareness = 0, captured = null, special = null,
+		description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Gorn. ",
 	},
 	frostfordguards = {
-		units = [['frostfordpatrol',3,4]], awareness = -10, captured = null, special = null,
-		description = "You have been spotted by a [color=aqua]patrolling militia[/color] group from Frostford.\nIt seems they are inclined to take you to task despite your station. ", #ralph4 - added 2nd line
+		units = [['frostfordpatrol',3,4]], awareness = 0, captured = null, special = null,
+		description = "You have been spotted by a [color=aqua]patrolling militia[/color] group from Frostford. ",
 	},
 	frostfordguardsmany = {
-		units = [['frostfordpatrol',7,10]], awareness = -10, captured = null, special = null,
-		description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Frostford.\nIt seems they are inclined to take you to task despite your station. ", #ralph4 - added 2nd line
+		units = [['frostfordpatrol',7,10]], awareness = 0, captured = null, special = null,
+		description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Frostford. ",
 	},
 	amberguardguards = {
-		units = [['amberguardpatrol',3,4]], awareness = -10, captured = null, special = null,
+		units = [['amberguardpatrol',3,4]], awareness = 0, captured = null, special = null,
 		description = "You have been spotted by a [color=aqua]patrolling militia[/color] group from Amberguard. ",
 	},
 	amberguardguardsmany = {
-		units = [['amberguardpatrol',7,10]], awareness = -10, captured = null, special = null,
+		units = [['amberguardpatrol',7,10]], awareness = 0, captured = null, special = null,
 		description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Amberguard. ",
 	},
 }
@@ -742,43 +733,6 @@ var enemypool = {
 		gear = 'forest',
 		skills = [],
 	},
-	dryad2 = {
-		name = 'Dryad',
-		code = 'dryad2',
-		faction = 'monster',
-		icon = load("res://files/images/enemies/dryadm.png"),
-		iconalt = load("res://files/images/enemies/dryadf.png"),
-		special = '',
-		capture = true,
-		capturerace = [['Dryad',100]],
-		captureoriginspool = [{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
-		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 4}],
-		capturesex = ['any'],
-		rewardpool = {natureessenceing = 35},
-		rewardgold = [5,10],
-		rewardexp = 30,
-		stats = {health = 150, power = 6, speed = 24, energy = 60, armor = 4, magic = 0, abilities = ['attack']},
-		gear = 'forest',
-		skills = [],
-		},
-	nereidgroup = {
-		name = 'Nereid',
-		code = 'nereidgroup',
-		faction = 'monster',
-		icon = null,
-		special = '',
-		capture = true,
-		capturerace = [['Nereid',100]],
-		captureoriginspool = [{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
-		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 6}],
-		capturesex = ['any'],
-		rewardpool = {},
-		rewardgold = [5,20],
-		rewardexp = 30,
-		stats = {health = 200, power = 25, speed = 30, energy = 100, armor = 7, magic = 3, abilities = ['attack','stunattack']},
-		gear = 'medbandits',
-		skills = [],
-		},
 	monstergirl = {
 		name = 'Monster ',
 		code = 'monstergirl',
@@ -788,17 +742,15 @@ var enemypool = {
 		capture = true,
 		capturerace = ['area'],
 		captureoriginspool = [{value = 'rich', weight = 1},{value = 'commoner', weight = 3},{value = 'poor', weight = 2}],
-		#captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 4}], #ralph4
-		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 6}], #ralph4
+		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 4}],
 		capturesex = ['any'],
 		rewardpool = {},
 		rewardgold = [5,10],
 		rewardexp = 25,
-		stats = {health = 200, power = 25, speed = 25, energy = 50, armor = 2, magic = 1, abilities = ['attack','stunattack']},
+		stats = {health = 100, power = 15, speed = 22, energy = 50, armor = 2, magic = 1, abilities = ['attack']},
 		gear = 'medbandits',
 		skills = [],
-		},
-		#/ralph4
+	},
 	bandit = {
 		name = 'Bandit',
 		code = 'bandit',
@@ -1222,32 +1174,33 @@ var enemypool = {
 	},
 }
 
+###---Added by Expansion---### ElPresidente Items
 var enemyequips = {
 	weakbandits = {
-		armor = [['nothing', 10], ['armorleather',10], ['armorchain', 1], ['armorleather+', 1]],
+		armor = [['nothing', 10], ['armorleather',10], ['armorchain', 1], ['armorleather+', 1],['armorpadded', 5]],
 		weapon = [['weapondagger',10], ['weaponsword', 2], ['weapondagger+', 2]],
 		abilities = [],
 	},
 	medbandits = {
-		armor = [['armorleather+',3], ['armorchain', 3], ['armorchain+', 1], ['armorninja', 0.5], ['armorrogue', 0.1]],
+		armor = [['armorleather+',3], ['armorchain', 3], ['armorchain+', 1], ['armorninja', 0.5], ['armorrogue', 0.1],['armorpadded', 5],['armorpadded+', 1],['armorhalfplate',1]],
 		weapon = [['weaponsword', 4], ['weaponsword+', 1], ['weapondagger+', 2], ['weaponhammer', 0.1]],
 		accessory = [['accamuletruby', 1], ['nothing',10]],
 		abilities = [],
 	},
 	strongbandits = {
-		armor = [['armorchain', 8], ['armorchain+', 2], ['armorninja', 1], ['armorninja+', 0.1], ['armorrogue', 0.2], ['armorplate', 0.5], ['armorplate+', 0.1]],
+		armor = [['armorchain', 8], ['armorchain+', 2], ['armorninja', 1], ['armorninja+', 0.1], ['armorrogue', 0.2], ['armorplate', 0.5], ['armorplate+', 0.1],['armorhalfplate',1]],
 		weapon = [['weaponsword', 4], ['weaponsword+', 1], ['weaponclaymore', 2], ['weaponclaymore+', 0.3], ['weaponhammer', 1], ['weaponhammer+', 0.2]],
 		accessory = [['accamuletruby', 1], ['accamuletemerald',1], ['accamuletruby+', 0.3], ['accamuletemerald+',0.3]],
 		abilities = [],
 	},
 	elfs = {
-		armor = [['armorchain', 3], ['armorchain+', 1], ['armorelvenchain', 10], ['armorelvenchain+', 2]],
-		weapon = [['weaponelvensword', 4], ['weaponelvensword+', 1], ['weapondagger+', 2]],
-		accessory = [['accamuletemerald', 1], ['accamuletemerald+', 1],['nothing',10]],
+		armor = [['armorchain', 3], ['armorchain+', 1], ['armorelvenchain', 10], ['armorelvenchain+', 2],['armorelvenhalfplate', 0.25], ['armorelvenhalfplate+', 0.1]],
+		weapon = [['weaponelvensword', 4], ['weaponelvensword+', 1], ['weapondagger+', 2],['weaponancientsword', 4], ['weaponancientsword+',0.5]],
+		accessory = [['accamuletemerald', 1], ['accamuletemerald+', 1],['accelvenboots', 1],['nothing',10]],
 		abilities = [],
 	},
 	peasant = {
-		armor = [['nothing', 25],['armorleather',10], ['armorleather+', 1]],
+		armor = [['nothing', 25],['armorleather',10], ['armorleather+', 1],['armorpadded', 5]],
 		weapon = [['nothing', 7],['weapondagger',10], ['weapondagger+', 2]],
 		abilities = [],
 	},
@@ -1258,10 +1211,11 @@ var enemyequips = {
 		abilities = [],
 	},
 	guard = {
-		armor = [ ['armorchain', 10], ['armorchain+', 3], ['armorplate',1], ['armorplate+', 0.3]],
-		weapon = [['weaponsword', 5], ['weaponsword+', 1],  ['weaponhammer', 1], ['weaponhammer+', 0.2]],
+		armor = [ ['armorchain', 10], ['armorchain+', 3], ['armorplate',1], ['armorhalfplate',1], ['armorplate+', 0.3]],
+		weapon = [['weaponsword', 5], ['weaponsword+', 1],  ['weaponhammer', 1], ['weaponhammer+', 0.2], ['weaponceremonialsword', 1], ['weaponggreatsword', 1], ['weaponggreatsword', 0.25]],
 		accessory = [['accgoldring', 1], ['nothing',10]],
 		abilities = [],
 	},
 }
+###---End Expansion---###
 
