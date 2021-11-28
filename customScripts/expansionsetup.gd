@@ -481,8 +481,18 @@ func setLactation(person):
 						person.add_trait("Milk Glands 1")
 				traitchance -= 1
 
-###---Added by Expansion---### Deviate Concept Tweaked
+#ralph4
+func cleargenes(person):
+	for race in person.genealogy:
+		person.genealogy[race] = 0
+#/ralph4
+
+###---Added by Expansion---### Deviate Concept Tweaked ###Ralphomod### tweaked further
 func setRaceBonus(person, increasestats):
+	var count_races = 0
+	var hybridtype = "" #set person.race_display at bottom and make sure to assign hybridtype for every unique combo below
+	#var somethingtoremoveshortstack
+	var thisrace = 'human'
 	var bonus_strength = 0
 	var bonus_agility = 0
 	var bonus_magic = 0
@@ -493,563 +503,1646 @@ func setRaceBonus(person, increasestats):
 	var bonus_charm = 0
 	var bonus_beauty = 0
 	var bonus_fertility = 0
-	
+	var bonus_titssize = 0
+	var bonus_penissize = 0
+	var bonus_vagsize = 0
+	var bonus_ballssize = 0
+	var bonus_asssize = 0
+	var bonus_height = 0
+	var bonus_elasticity = 0
+	var bonus_pliability = 0
+	var bonus_lewdness = 0
+	#as coded now, the following incur a chance of losing the original slave's stats if different than these defaults
+	var bonus_catpenis = false
+	var bonus_dogpenis = false
+	var bonus_horsepenis = false
+	var bonus_skincov = 'none'
+	var bonus_skin = 'fair' #unless a variable is implemented to store previous person.skin, a reset applied to person.skin will only result in 'fair'
+	var bonus_eyesclera = 'normal'
+	var bonus_horns = 'none'
+	var bonus_tail = 'none'
+	var bonus_wings = 'none'
+	var bonus_furcolor = 'none'
+	var bonus_ears = 'human'
+	var fire = 0
+	var wind = 0
+	var water = 0
+	var earth = 0	
+	var nature = 0
+	var corruption = 0
+
 	var addstats = increasestats
 	
 	if person == null:
 		print("Invalid Person for Setting Racial Bonus")
 		return
 	
-	###ANK'S FIX? This + Dictionary?
-#	for race in genealogy:
-#		if genealogy[race] > 0:
-#			descript += race.replace('_',' ').capitalize() + " : " + str(genealogy[race]) + "%\n"
-	###
+	#ralph4 - fix unique npc genealogies
+	if person.unique != null:
+		if person.unique == 'Melissa':
+			cleargenes(person)
+			person.genealogy.human = 100
+		elif person.unique == 'Cali':
+			cleargenes(person)
+			person.genealogy.dog = 70
+			person.genealogy.human = 30
+		elif person.unique in ['Emily','Tisha']:
+			cleargenes(person)
+			person.genealogy.human = 84
+			person.genealogy.gnome = 2
+			person.genealogy.elf = 2
+			person.genealogy.fairy = 2
+			person.genealogy.bunny = 2
+			person.genealogy.raccoon = 2
+			person.genealogy.fox = 2
+			person.genealogy.cat = 2
+			person.genealogy.dog = 2
+		elif person.unique == 'Chloe':
+			cleargenes(person)
+			person.genealogy.gnome = 96
+			person.genealogy.fairy = 4
+		elif person.unique == 'Yris':
+			cleargenes(person)
+			person.genealogy.cat = 70
+			person.genealogy.human = 30
+		elif person.unique == 'Maple':
+			cleargenes(person)
+			person.genealogy.fairy = 100
+		elif person.unique == 'Ayneris':
+			cleargenes(person)
+			person.genealogy.elf = 100
+		elif person.unique == 'Ayda':	
+			cleargenes(person)
+			person.genealogy.dark_elf = 100			
+		elif person.unique == 'Zoe':
+			cleargenes(person)
+			person.genealogy.dog = 100
+	#/ralph4
 	
+	#Ralph - 
+	#testing results: player only has this function run on it when generated and before person.unique is set: end result stat_mod's at random. Fix: new playercleartraits() that zero's out stat_mod's
+	#work around - Starting Slave was having stats set per >50% code below instead of ==100% for seraph race
+	#person.level += 10 #test
+	person.stats.str_mod = 0	
+	person.stats.agi_mod = 0
+	person.stats.maf_mod = 0
+	person.stats.end_mod = 0
+	#person.stats.str_base = 0	
+	#person.stats.agi_base = 0
+	#person.stats.maf_base = 0
+	#person.stats.end_base = 0
+	person.stats.cour_racial = 0
+	person.stats.conf_racial = 0
+	person.stats.wit_racial = 0
+	person.stats.charm_racial = 0
+	#for i in person.traits: #added to reapply traits (eg. 'Robust' endurance bonus was removed by the above)
+	#	
+	#	person.remove_trait(trait)
+	#	person.add_trait(trait)
+	if person.traits.has('Weak'):
+		person.stats.str_mod -= 2
+	if person.traits.has('Strong'):
+		person.stats.str_mod += 2
+	if person.traits.has('Quick'):
+		person.stats.agi_mod += 2
+	if person.traits.has('Clumsy'):
+		person.stats.agi_mod -= 2
+	if person.traits.has('Responsive'):
+		person.stats.maf_mod += 2
+	if person.traits.has('Magic Deaf'):
+		person.stats.maf_mod -= 2
+	if person.traits.has('Robust'):
+		person.stats.end_mod += 2
+	if person.traits.has('Frail'):
+		person.stats.end_mod -= 2
+	if person.unique == 'startslave':
+		globals.constructor.forceFullblooded(person) #may not be needed; haven't fully tested
+		#person.skillpoints += 10
+		#hybridtype = 'Imp'
+	#/ralph
+		
+	#Count the person's races - used in Human >50% Hybrids bonus stat calcs
+	for race in person.genealogy:
+		if person.genealogy[race] > 0:
+			count_races += 1		
+
+	###ANK'S FIX? This + Dictionary? ###Ralpho: "I changed it; hopefully might still work if needed, but better check before using"
+	#for race in person.genealogy: 
+	#	if person.genealogy[race] > 0:
+	#		descript += race.replace('_',' ').capitalize() + " : " + str(genealogy[race]) + "%\n"
+	###
+
+	#assign elemental values
+	fire += (person.genealogy.dragonkin*1.0 + person.genealogy.demon*0.75 + person.genealogy.seraph*0.5 + 0.25*(person.genealogy.dark_elf + person.genealogy.orc + person.genealogy.dog + person.genealogy.fox + person.genealogy.lamia))/100
+	wind += (person.genealogy.harpy*1.0 + person.genealogy.fairy*0.75 + person.genealogy.seraph*0.5 + 0.25*(person.genealogy.elf + person.genealogy.arachna + person.genealogy.cat + person.genealogy.raccoon))/100
+	water += (person.genealogy.nereid*1.0 + person.genealogy.scylla*0.75 + 0.5*(person.genealogy.slime + person.genealogy.lamia) + 0.25*(person.genealogy.cow + person.genealogy.dryad + person.genealogy.drow))/100
+	earth += (person.genealogy.gnome*1.0 + person.genealogy.goblin*0.75+ 0.5*(person.genealogy.bunny + person.genealogy.arachna) + 0.25*(person.genealogy.cow + person.genealogy.horse + person.genealogy.dryad + person.genealogy.lamia))/100
+	nature += (1.0*(person.genealogy.dryad + person.genealogy.fairy + person.genealogy.goblin) + 0.75*(person.genealogy.dark_elf + person.genealogy.fox + person.genealogy.raccoon) + 0.5*(person.genealogy.elf + person.genealogy.drow + person.genealogy.nereid + person.genealogy.harpy + person.genealogy.dragonkin + person.genealogy.arachna + person.genealogy.lamia + person.genealogy.slime + person.genealogy.cat + person.genealogy.dog + person.genealogy.bunny + person.genealogy.horse) + 0.25*(person.genealogy.human + person.genealogy.gnome + person.genealogy.orc + person.genealogy.scylla + person.genealogy.cow))/100
+	corruption += (1.0*(person.genealogy.demon + person.genealogy.gnome + person.genealogy.goblin) + 0.75*(person.genealogy.orc + person.genealogy.scylla + person.genealogy.harpy + person.genealogy.dragonkin + person.genealogy.arachna) + 0.5*(person.genealogy.drow + person.genealogy.nereid + person.genealogy.cow + person.genealogy.lamia + person.genealogy.horse) + 0.25*(person.genealogy.elf + person.genealogy.dark_elf + person.genealogy.cat + person.genealogy.dog + person.genealogy.bunny + person.genealogy.fox + person.genealogy.raccoon))/100
+	corruption -= person.genealogy.slime
+	
+	#assign racial bonuses
 #	if person.npcexpanded.racialbonusesapplied == false && addstats == true || person.npcexpanded.racialbonusesapplied == true && addstats == false:
 	if person.genealogy.human > 0:
+		thisrace = 'Human'
 		if person.genealogy.human >= 100:
-			bonus_strength += .6
-			bonus_agility += .6
-			bonus_magic += .6
-			bonus_endurance += 1.8
-		elif person.genealogy.human >= 70:
-			bonus_strength += .4
-			bonus_agility += .4
-			bonus_magic += .4
-			bonus_endurance += 1.4
-		elif person.genealogy.human >= 50:
-			bonus_strength += .4
-			bonus_agility += .4
-			bonus_magic += .4
-			bonus_endurance += .6
-		elif person.genealogy.human >= 30:
-			bonus_strength += .2
-			bonus_agility += .2
-			bonus_magic += .2
-			bonus_endurance += .4
-		else:
-			bonus_strength += .1
-			bonus_agility += .1
-			bonus_magic += .1
-			bonus_endurance += .2
-	
-	if person.genealogy.gnome > 0:
-		if person.genealogy.gnome >= 100:
-			bonus_wit += 20
-			bonus_magic += 1
-			bonus_endurance += 2
-		elif person.genealogy.gnome >= 70:
-			bonus_wit += 20
+			bonus_strength += 1
+			bonus_agility += 1
 			bonus_magic += 1
 			bonus_endurance += 1
-		elif person.genealogy.gnome >= 50:
-			bonus_wit += 15
-			bonus_magic += 1
-			bonus_endurance += .4
-		elif person.genealogy.gnome >= 30:
-			bonus_wit += 10
-			bonus_magic += .4
-			bonus_endurance += .2
+			if person.sex in ['male']:	
+				bonus_height += 1
+		elif person.genealogy.human >= 50 && person.race == thisrace:
+			bonus_strength += person.genealogy.human/110 + person.genealogy.human*pow(count_races,1.2)/1000 - 0.6 + fire
+			bonus_agility += person.genealogy.human/110 + person.genealogy.human*pow(count_races,1.2)/1000 - 0.6 + wind
+			bonus_magic += person.genealogy.human/110 + person.genealogy.human*pow(count_races,1.2)/1000 - 0.6 + water
+			bonus_endurance += person.genealogy.human/110 + person.genealogy.human*pow(count_races,1.2)/1000 - 0.6 + earth
+			if person.sex in ['male']:
+				bonus_height += person.genealogy.human/100
 		else:
-			bonus_wit += 5
-			bonus_magic += .2
-			bonus_endurance += .2
-	
+			bonus_strength += person.genealogy.human/150
+			bonus_agility += person.genealogy.human/150
+			bonus_magic += person.genealogy.human/150
+			bonus_endurance += person.genealogy.human/150
+			if person.sex in ['male']:
+				bonus_height += person.genealogy.human/100
+			
+	if person.genealogy.gnome > 0:
+		thisrace = 'Gnome'
+		if person.genealogy.gnome >= 100:
+			bonus_agility += 1
+			bonus_magic += 1
+			bonus_endurance += 2
+			bonus_wit += 20
+			bonus_penissize -= 1
+			bonus_vagsize -= 1
+			bonus_ballssize -= 1
+		elif person.genealogy.gnome >= 50 && person.race == thisrace:
+			bonus_wit += person.genealogy.gnome/5
+			bonus_magic += earth + (nature - 0.25)*4
+			bonus_endurance += person.genealogy.gnome/50
+			if person.genealogy.demon >= 40 && person.sex == 'male': #Imp
+				hybridtype = 'Imp'
+				bonus_agility += 2.5
+				bonus_fertility += person.genealogy.demon/2.5
+				bonus_penissize += 2
+				bonus_ballssize += 1
+				bonus_asssize -= 1
+				bonus_pliability += 1
+				bonus_elasticity += 2
+				bonus_lewdness += person.genealogy.demon
+				person.add_trait('Sex-crazed') #not reversible
+				if person.tail == 'none':
+					bonus_tail = 'demon'
+				if person.skin in ['pale', 'fair', 'olive', 'tan', 'brown', 'dark', 'none']:
+					bonus_skin = 'red'
+				if person.horns == 'none':
+					bonus_horns = 'short'
+				if person.wings == 'none':
+					bonus_wings = 'leather_red'
+			elif person.genealogy.bunny >= 40:
+				hybridtype = 'Mousekin'
+				bonus_agility += 1.5
+				bonus_fertility += person.genealogy.bunny/2
+				bonus_penissize -= 2
+				bonus_ballssize += 1
+				bonus_vagsize -= 1
+				bonus_titssize -= 1
+				bonus_asssize -= 1
+				bonus_ears = 'short_furry'
+				bonus_tail = 'mouse'
+				bonus_skincov = 'full_body_fur'
+				if person.genealogy.bunny >=40 && person.genealogy.bunny < 43:
+					bonus_furcolor = 'gray'
+				elif person.genealogy.bunny >=43 && person.genealogy.bunny < 46:
+					bonus_furcolor = 'black'
+				elif person.genealogy.bunny >=46 && person.genealogy.bunny < 48:
+					bonus_furcolor = 'brown'	
+				else:	
+					bonus_furcolor = 'white'
+				person.add_trait('Small Eater') #not reversible
+			else:
+				bonus_agility += (person.genealogy.bunny + person.genealogy.harpy)/33 + (1 - corruption)*2
+				bonus_endurance -= person.genealogy.harpy/33 + (1 - corruption)*2 #offset by any hollow bird bones
+				bonus_vagsize -= person.genealogy.gnome/125
+				bonus_penissize -= person.genealogy.gnome/125
+				bonus_ballssize -= person.genealogy.gnome/125		
+		else:
+			bonus_endurance += person.genealogy.gnome/50
+			bonus_wit += person.genealogy.gnome/5
+			if person.genealogy.goblin >= 50 || person.genealogy.fairy >= 50 || person.genealogy.harpy >= 50: #no need to make 'em smaller if they're already a small race
+				bonus_titssize -= 0
+				bonus_penissize -= 0
+				bonus_vagsize -= 0
+				bonus_ballssize -= 0
+				bonus_height -= 0
+			elif person.genealogy.elf >= 50 || person.genealogy.dark_elf >= 50 || person.genealogy.drow >= 50:
+				bonus_titssize -= person.genealogy.gnome/200 
+				bonus_penissize -= person.genealogy.gnome/100
+				bonus_vagsize -= person.genealogy.gnome/200
+				bonus_ballssize -= person.genealogy.gnome/200
+				bonus_height -= person.genealogy.gnome/40
+			else:	
+				bonus_titssize -= person.genealogy.gnome/50 
+				bonus_penissize -= person.genealogy.gnome/25
+				bonus_vagsize -= person.genealogy.gnome/50
+				bonus_ballssize -= person.genealogy.gnome/50
+				bonus_height -= person.genealogy.gnome/20				
+			
 	#Long-Ears
-	#Elf 
+	#Elf   
 	if person.genealogy.elf > 0:
+		thisrace = 'Elf'
 		if person.genealogy.elf >= 100:
-			bonus_agility += 3
-			bonus_charm += 10
-		elif person.genealogy.elf >= 70:
 			bonus_agility += 2
+			bonus_magic += 2
+			bonus_beauty += 10
+			bonus_fertility -= 10
 			bonus_charm += 10
-		elif person.genealogy.elf >= 50:
-			bonus_agility += 1
-			bonus_charm += 5
-		elif person.genealogy.elf >= 30:
-			bonus_agility += 1
+			bonus_titssize -= 1
+			bonus_penissize -= 1
+			bonus_asssize -= 1
+		elif person.genealogy.elf >= 50 && person.race == thisrace:
+			if person.genealogy.dryad >= 40: #Hulderfolk
+				if person.sex == 'male':
+					hybridtype = 'Huldrekall'
+					bonus_strength += 0.5
+					bonus_agility += 2.5
+					bonus_endurance += 0.5
+					bonus_beauty -= 40
+					bonus_charm -= 10
+				else:
+					hybridtype = 'Nymph'
+					bonus_agility += 0.5
+					bonus_magic += 1.5
+					bonus_beauty += 30
+					bonus_charm += 10
+			elif water >= 0.4 && person.sex != 'male': #Siren
+				hybridtype = 'Siren'
+				bonus_beauty += 30
+				bonus_charm += 20
+				person.trait_remove('Mute')
+				person.add_trait('Pretty Voice')
+			else:
+				bonus_strength += (corruption - 0.25)*4 + fire
+				bonus_agility += person.genealogy.elf/50 + (nature - 0.5)*4 - (corruption - 0.25)*4
+				bonus_magic += wind*4 + water
+				bonus_endurance += earth
+				bonus_beauty += person.genealogy.elf/10
+				bonus_charm += person.genealogy.elf/10
+				bonus_fertility -= person.genealogy.elf/10
+				bonus_titssize -= person.genealogy.elf/120 
+				bonus_penissize -= person.genealogy.elf/120
+				bonus_asssize -= person.genealogy.elf/120
 		else:
-			bonus_agility += .4
-	
-	#Dark Elf
+			bonus_agility += person.genealogy.elf/50
+			bonus_beauty += person.genealogy.elf/10
+			bonus_fertility -= person.genealogy.elf/10
+			bonus_charm += person.genealogy.elf/10
+			bonus_asssize -= person.genealogy.elf/50
+			if person.genealogy.fairy >= 50 || person.genealogy.goblin >= 50 || person.genealogy.gnome >= 50 || person.genealogy.dark_elf >= 50 || person.genealogy.drow >= 50: #no need to make 'em smaller if they're already a small race
+				bonus_titssize -= 0
+				bonus_penissize -= 0
+			else:	
+				bonus_titssize -= person.genealogy.elf/50 
+				bonus_penissize -= person.genealogy.elf/50
+	#Drow
+	if person.genealogy.drow > 0:
+		thisrace = 'Drow'
+		if person.genealogy.drow >= 100:
+			bonus_strength += 1
+			bonus_agility += 1
+			bonus_magic += 2
+			bonus_beauty += 10
+			bonus_fertility -= 15
+			bonus_wit += 10
+			bonus_penissize -= 1	
+		elif person.genealogy.drow >= 50 && person.race == thisrace:
+			if water >= 0.4 && person.sex != 'male': #undine
+				hybridtype = 'Undine'	
+				bonus_strength += 0.5
+				bonus_magic += 1.5
+				bonus_endurance += 0.5
+				bonus_beauty += 10
+				bonus_titssize += 1
+				if person.skincov == 'none':
+					bonus_skincov = 'scales'
+				person.add_trait('Soaker') #not reversible
+				if !person.skin in ['pale blue', 'blue', 'purple']:
+					bonus_skin = 'blue'
+			elif person.genealogy.dryad >= 40: #Hulderfolk
+				if person.sex == 'male':
+					hybridtype = 'Huldrekall'
+					bonus_strength += 0.5
+					bonus_agility += 0.5
+					bonus_magic += 1.5
+					bonus_beauty -= 40
+					bonus_charm -= 10
+				else:
+					hybridtype = 'Nymph'
+					bonus_agility += 0.5
+					bonus_magic += 1.5
+					bonus_beauty += 30
+					bonus_charm += 10
+			else:
+				bonus_strength += fire*4*(.75 + nature) - (corruption - 0.5)*2 - 0.1
+				bonus_agility += person.genealogy.drow/100 + wind*4*(0.75 + nature) - (corruption - 0.5)*2 - 0.1
+				bonus_magic += person.genealogy.drow/100 + water*5*(0.75 + nature) - (corruption - 0.5)*2 - 0.1
+				bonus_endurance += earth*4*(0.75 + nature) - (corruption - 0.5)*2 - 0.1
+				bonus_beauty += person.genealogy.drow/6.667 - corruption*10
+				bonus_fertility -= person.genealogy.drow/10 + corruption*10
+				bonus_wit += person.genealogy.drow/10
+				bonus_charm -= (corruption - 0.5)*40
+				bonus_titssize -= person.genealogy.drow/200
+				bonus_penissize -= person.genealogy.drow/150
+		else:
+			bonus_agility += person.genealogy.drow/100
+			bonus_magic += person.genealogy.drow/100
+			bonus_beauty += person.genealogy.drow/10
+			bonus_fertility -= person.genealogy.drow/10
+			bonus_wit += person.genealogy.drow/10
+			if person.genealogy.fairy >= 50 || person.genealogy.goblin >= 50 || person.genealogy.gnome >= 50 || person.genealogy.elf >= 50 || person.genealogy.dark_elf >= 50: #no need to make 'em smaller if they're already a small race
+				bonus_titssize -= 0
+				bonus_penissize -= 0
+			else:	
+				bonus_titssize -= person.genealogy.drow/150
+				bonus_penissize -= person.genealogy.drow/75
+
+	#Dark Elf   
 	if person.genealogy.dark_elf > 0:
+		thisrace = 'Dark Elf'
 		if person.genealogy.dark_elf >= 100:
-			bonus_magic += 1
-			bonus_agility += 2
-			bonus_wit += 10
-		elif person.genealogy.dark_elf >= 70:
-			bonus_magic += 1
-			bonus_agility += 1
-			bonus_wit += 10
-		elif person.genealogy.dark_elf >= 50:
-			bonus_magic += 1
-			bonus_agility += .4
-			bonus_wit += 5
-		elif person.genealogy.dark_elf >= 30:
-			bonus_magic += 1
-			bonus_agility += .2
-		else:
-			bonus_magic += .2
-			bonus_agility += .2
-	
-	#Tribal Elf
-	if person.genealogy.tribal_elf > 0:
-		if person.genealogy.tribal_elf >= 100:
-			bonus_confidence += 20
 			bonus_strength += 1
 			bonus_agility += 2
-		elif person.genealogy.tribal_elf >= 70:
+			bonus_endurance += 1
+			bonus_beauty += 10
+			bonus_fertility -= 10
 			bonus_confidence += 20
-			bonus_strength += 1
-			bonus_agility += 1
-		elif person.genealogy.tribal_elf >= 50:
-			bonus_confidence += 15
-			bonus_strength += 1
-			bonus_agility += .4
-		elif person.genealogy.tribal_elf >= 30:
-			bonus_confidence += 10
-			bonus_strength += .4
-			bonus_agility += .2
+			bonus_penissize -= 1
+		elif person.genealogy.dark_elf >= 50 && person.race == thisrace:
+			bonus_confidence += person.genealogy.dark_elf/5
+			if fire >= 0.4: #ifrit
+				hybridtype = 'Ifrit'	
+				bonus_strength += 2.5
+				bonus_agility += 0.5
+				bonus_magic -= 2
+				if person.horns == 'none':
+					bonus_horns = 'curved'
+				if person.tail == 'none':
+					bonus_tail = 'demon'
+				if !person.skin in ['black', 'dark', 'tan']:
+					bonus_skin = 'red'
+			elif person.genealogy.dryad >= 40: #Hulderfolk
+				if person.sex == 'male':
+					hybridtype = 'Huldrekall'
+					bonus_strength += 1.5
+					bonus_agility += 1.5
+					bonus_endurance += 0.5
+					bonus_beauty -= 40
+					bonus_charm -= 10
+				else:
+					hybridtype = 'Nymph'
+					bonus_agility += 0.5
+					bonus_magic += 1.5
+					bonus_beauty += 30
+					bonus_charm += 10
+			else:
+				bonus_strength += fire*4 - (corruption - 0.25)*6 #(.86*.25+.14*.25)*4 = 1 - (.25*64+.5*.25+11)/100-.25*6 = 0   = 1 + 0 + .14
+				bonus_agility += person.genealogy.dark_elf/50 + (nature - 0.75)*5.333 + wind #(.53*.75+.36*.5+.04*1) = 1.06-.71
+				bonus_magic += (corruption - 0.25)*6 + water
+				bonus_endurance += earth #.0425 + .17
+				bonus_beauty += person.genealogy.dark_elf/10
+				bonus_fertility -= person.genealogy.dark_elf/10
+				bonus_titssize -= person.genealogy.dark_elf/200
+				bonus_penissize -= person.genealogy.dark_elf/150
+				bonus_asssize -= person.genealogy.dark_elf/200
 		else:
-			bonus_confidence += 5
-			bonus_strength += .2
-			bonus_agility += .2
-	
+			bonus_agility += person.genealogy.dark_elf/50
+			bonus_beauty += person.genealogy.dark_elf/10
+			bonus_fertility -= person.genealogy.dark_elf/10
+			bonus_confidence += person.genealogy.dark_elf/5
+			bonus_asssize -= person.genealogy.dark_elf/100
+			if person.genealogy.fairy >= 50 || person.genealogy.goblin >= 50 || person.genealogy.gnome >= 50 || person.genealogy.elf >= 50 || person.genealogy.drow >= 50: #no need to make 'em smaller if they're already a small race
+				bonus_titssize -= 0
+				bonus_penissize -= 0
+			else:	
+				bonus_titssize -= person.genealogy.dark_elf/150
+				bonus_penissize -= person.genealogy.dark_elf/75
+
 	#Greenskins 
 	#Orcs
+	#\n\nBreeding Note: Orcs are a lucrative side business for many breeders in the guild. Pure blood's are preferred by many a warlord and make stolid infantrymen, but it is a well known phenomena for orcish warbands to raid villages with little other motivation than to carry off attractive females of other species to mate with, unfortunately diluting their warrior heritage. The guild's secret to avid intraspecies copulation is to throw just a little elf into the mix.
+	#\n\nBreeding Note: Breeding orcs presents a lucrative opportunity for breeders in the guild. Pure bloods make stolid soldiers, but it is a well known phenomena for orcish warbands to raid villages with little other motivation than to carry off attractive females of other species to mate with, unfortunately diluting their warrior heritage. The guild's secret to avid intraspecies copulation is to throw just a little elf into the mix.
 	if person.genealogy.orc > 0:
+		thisrace = 'Orc'
 		if person.genealogy.orc >= 100:
-			bonus_strength += 3
-			bonus_courage += 10
-		if person.genealogy.orc >= 70:
 			bonus_strength += 2
+			bonus_endurance += 2
+			bonus_beauty -= 10
 			bonus_courage += 10
-		elif person.genealogy.orc >= 70:
-			bonus_strength += 2
-			bonus_courage += 10
-		elif person.genealogy.orc >= 50:
-			bonus_strength += 1.4
-			bonus_courage += 5
-		elif person.genealogy.orc >= 30:
-			bonus_strength += 1
+			bonus_vagsize += 1
+			bonus_height += 1
+		elif person.genealogy.orc >= 50 && person.race == thisrace:
+			var ElvishBlood = (person.genealogy.elf + person.genealogy.dark_elf + person.genealogy.drow)/15
+			bonus_beauty += ElvishBlood
+			bonus_beauty -= person.genealogy.orc/10 + (corruption - .75)*40
+			bonus_courage += person.genealogy.orc/10
+			bonus_vagsize += 1
+			if (person.genealogy.dog + person.genealogy.fox) >= 40: #gnoll
+				hybridtype = 'Gnoll'
+				bonus_skincov = 'full_body_fur'
+				if person.furcolor == 'none':
+					if person.genealogy.fox >= 30:
+						bonus_furcolor = 'orange'
+					elif person.genealogy.dog >= 30:
+						bonus_furcolor = 'gray'
+					else:
+						bonus_furcolor = 'brown'
+				bonus_strength += person.genealogy.orc/50 + person.genealogy.dog/50 + person.genealogy.fox/100
+				bonus_agility += person.genealogy.dog/50 + person.genealogy.fox/25
+				bonus_endurance += person.genealogy.orc/100
+				bonus_height += person.genealogy.dog/50 + person.genealogy.fox/100
+			elif (person.genealogy.lamia + person.genealogy.dragonkin + person.genealogy.arachna/2) >= 40: #lizardman
+				hybridtype = 'Lizardman'
+				bonus_skincov = 'scales'
+				bonus_tail = 'snake tail'
+				bonus_strength += person.genealogy.orc/50 + person.genealogy.lamia/80 + person.genealogy.dragonkin/50
+				bonus_agility += person.genealogy.dragonkin/80 + person.genealogy.lamia/40
+				bonus_magic += person.genealogy.dragonkin/40 + person.genealogy.lamia/20
+				bonus_endurance += person.genealogy.orc/100 + person.genealogy.dragonkin/40 + person.genealogy.lamia/40
+			elif earth >= 0.25: #troll - The combination of accelerated orcish wound recovery and a massive constitution led this hybrid to be dubbed Troll.
+				hybridtype = 'Troll'
+				bonus_endurance += 3.5
+				bonus_beauty -= corruption*10
+				bonus_asssize += 1
+				bonus_vagsize += 2
+				bonus_height += 2
+			else:
+				bonus_strength += person.genealogy.orc/100 + fire*4 + (corruption - 0.75)*4
+				bonus_agility += (.75 - corruption)*4
+				bonus_endurance += person.genealogy.orc/100 + (nature - 0.25)*3.84
+				bonus_height += person.genealogy.orc/100
 		else:
-			bonus_strength += .4
-	
-	#Goblin 
+			bonus_strength += person.genealogy.orc/100
+			bonus_endurance += person.genealogy.orc/100
+			bonus_beauty -= person.genealogy.orc/10
+			bonus_courage += person.genealogy.orc/10
+			bonus_height += person.genealogy.orc/40
+			if person.genealogy.dog >= 50 || person.genealogy.demon >= 50 || person.genealogy.horse >= 50 || person.genealogy.cow >= 50 || person.genealogy.dragonkin >= 50: #no need to make it bigger if they're already a hung race
+				bonus_penissize += 0
+			else:	
+				bonus_penissize += person.genealogy.orc/50
+
+	#Goblin
+	#\n\nBreeding Note: Goblins are frequently underestimated, often to the mortal peril of their detractors. Though any relation to elves is pure speculation, breeders of the guild have noted marked compatibility. Additionally, goblin blood is often mutanagenic and in certain combinations offspring barely resembles their progenitors. 
+	#It's rumored that long ago goblins were made to breed with orcs to quickly produce armies of hobgoblins, powerful from birth but much like mules in that they were seldom capable of siring offspring of their own.
 	if person.genealogy.goblin > 0:
+		thisrace = 'Goblin'
 		if person.genealogy.goblin >= 100:
-			bonus_fertility += 40
+			bonus_strength += 2
 			bonus_agility += 1
+			bonus_magic += 1
+			bonus_fertility += 50
+			bonus_titssize -= 1 
+			bonus_penissize -= 1
+			bonus_pliability += 2
+			bonus_lewdness += 10
+			bonus_beauty -= 20
+		elif person.genealogy.goblin >= 50 && person.race == thisrace:
+			if person.skin in ['pale', 'fair', 'olive', 'tan', 'brown', 'dark']:
+				bonus_skin = 'green'
+			bonus_beauty += (0.75 - corruption)*50 - person.genealogy.goblin/5
+			bonus_titssize -= person.genealogy.goblin/100 
+			bonus_penissize += person.genealogy.orc/40
+			bonus_pliability += person.genealogy.goblin/50
+			bonus_lewdness += person.genealogy.goblin/10
+			bonus_fertility += nature*50
+			bonus_height += (100 - person.genealogy.goblin - person.genealogy.fairy - person.genealogy.gnome)/20
+			if person.genealogy.dragonkin >= 30: #kobold
+				hybridtype = 'Kobold'
+				bonus_skincov = 'scales'
+				if person.horns == 'none':
+					bonus_horns = 'short'
+				bonus_tail = 'dragon'
+				bonus_agility += 1.5
+				bonus_magic += 1.5
+				bonus_wit += person.genealogy.dragonkin/5
+			elif person.genealogy.fairy >= 40: #gremlin
+				hybridtype = 'Gremlin'
+				bonus_agility += 1.5
+				bonus_magic += 0.5
+				bonus_endurance -= 1
+				bonus_beauty -= 10
+				bonus_fertility += nature*25 #extra
+				bonus_wit += 10
+				bonus_charm -= 15
+				bonus_height -= bonus_height #any added by tall races still happens below
+				bonus_titssize -= 1 
+				bonus_penissize -= 1
+				bonus_elasticity += 2
+				bonus_lewdness += 20
+				person.add_trait('Scoundrel') #not reversible
+			elif person.genealogy.goblin >= 70 && person.genealogy.dark_elf >= 20: #red cap
+				hybridtype = 'Redcap'
+				bonus_strength += 2.5
+				bonus_agility += 0.5
+				bonus_wit += 10
+				bonus_charm -= 10
+				bonus_height += 1.4
+				person.add_trait('Nimble') #not reversible
+			elif person.genealogy.orc > 0 && (person.genealogy.lamia + person.genealogy.arachna + person.genealogy.slime) > 0: #Hobgoblin: It's said that long ago in times of war goblins could be made to breed with orcs to quickly produce armies of hobgoblins. The hobs could be quite powerful but much like mules in that they seldom sired offspring of their own
+				hybridtype = 'Hobgoblin'
+				bonus_strength += person.genealogy.orc*(person.genealogy.lamia + person.genealogy.arachna + person.genealogy.slime)/150
+				bonus_wit -= 20
+				bonus_charm -= 20
+				bonus_beauty -= 20
+				person.trait_remove('Fertile') #non-reversible
+				person.add_trait('Infertile') #non-reversible
+				bonus_fertility -= 100 + person.genealogy.orc*3
+				if person.eyesclera == 'normal':
+					bonus_eyesclera = 'black'
+				bonus_height += person.genealogy.orc/20
+			else:
+				bonus_strength += person.genealogy.goblin/100 + earth*1.333 - (0.75 - corruption)*5
+				bonus_agility += person.genealogy.goblin/100 + (0.75 - corruption)*5
+		else:
+			bonus_strength += person.genealogy.goblin/100
+			bonus_agility += person.genealogy.goblin/100
+			bonus_beauty -= person.genealogy.goblin/5
+			bonus_pliability += person.genealogy.goblin/50
+			bonus_lewdness += person.genealogy.goblin/10
+			if person.genealogy.gnome >= 50 || person.genealogy.fairy >= 50 || person.genealogy.harpy >= 50: #no need to make 'em smaller if they're already a small race
+				bonus_titssize -= 0
+				bonus_penissize -= 0
+				bonus_height -= 0
+			elif person.genealogy.elf >= 50 || person.genealogy.dark_elf >= 50 || person.genealogy.drow >= 50:
+				bonus_titssize -= person.genealogy.goblin/100 
+				bonus_penissize -= person.genealogy.goblin/100
+				bonus_height -= person.genealogy.goblin/50
+			else:	
+				bonus_titssize -= person.genealogy.goblin/50 
+				bonus_penissize -= person.genealogy.goblin/50
+				bonus_height -= person.genealogy.goblin/25
+
+	#Dryad    
+	if person.genealogy.dryad > 0:
+		thisrace = 'Dryad'
+		if person.genealogy.dryad >= 100:
 			bonus_strength += 1
-		elif person.genealogy.goblin >= 70:
-			bonus_fertility += 30
-			bonus_agility += 1
-			bonus_strength += .4
-		elif person.genealogy.goblin >= 50:
-			bonus_fertility += 25
-			bonus_agility += 1
-			bonus_strength += .4
-		elif person.genealogy.goblin >= 30:
-			bonus_fertility += 20
-			bonus_agility += .4
-			bonus_strength += .2
+			bonus_magic += 2
+			bonus_endurance += 1
+		elif person.genealogy.dryad >= 50 && person.race == thisrace:
+			if water >= 0.35 && person.sex in ['female', 'futanari']: #Naiad
+				hybridtype = 'Naiad'
+				bonus_agility += 2.5
+				bonus_charm += 10
+				bonus_beauty += 15
+				bonus_vagsize -= 1
+				bonus_pliability += 2
+				bonus_lewdness += 25
+				person.skincov = 'none' #can't be rolled back like bonus_ stats, but can't have Naiads looking like Dryads right?
+				person.eyesclera = 'normal' #can't be rolled back like bonus_ stats, but can't have Naiads looking like Dryads right?
+			elif person.genealogy.gnome*person.genealogy.cow >= 400: #Ent
+				hybridtype = 'Ent'
+				bonus_strength += 1.5
+				bonus_endurance += 1.5
+				bonus_penissize += 2 #george of the jungle was warned
+				bonus_ballssize += 2
+				bonus_vagsize += 3
+				bonus_titssize += 5
+				bonus_height += 2
+				bonus_skincov = 'plants'
+				bonus_skin = 'brown'
+				person.add_trait('Sturdy') #not reversible
+			elif fire >= 0.3:
+				bonus_strength += (water)*4 + (1 + fire)*(1 + corruption)*1.75
+				bonus_magic += person.genealogy.dryad/100 + (earth - 0.25)*4 - (1 + fire)*(1 + corruption)
+				bonus_endurance += person.genealogy.dryad/100 + (nature - 1)*4 - (1 + fire)*(1 + corruption)
+			elif corruption >= 0.37: #Spriggan
+				hybridtype = 'Spriggan'
+				bonus_strength += 2.5
+				bonus_endurance += 0.5
+				bonus_charm -= 20
+				bonus_beauty -= 20
+				if person.skincov == 'none':
+					bonus_skincov = 'plants'
+				if person.skin != 'green':
+					bonus_skin = 'brown'
+			else:
+				bonus_strength += (water)*4 + (1 + fire)*(1 + corruption)*1.75
+				bonus_magic += person.genealogy.dryad/100 + (earth - 0.25)*4 - (1 + fire)*(1 + corruption)
+				bonus_endurance += person.genealogy.dryad/100 + (nature - 1)*4 - (1 + fire)*(1 + corruption)
 		else:
-			bonus_fertility += 10
-			bonus_agility += .2
-			bonus_strength += .1
-	
+			bonus_magic += person.genealogy.dryad/100
+			bonus_endurance += person.genealogy.dryad/100
+
 	#Aquatic
-	#Nereid 
+	#Nereid    
 	if person.genealogy.nereid > 0:
+		thisrace = 'Nereid'
 		if person.genealogy.nereid >= 100:
-			bonus_beauty += 25
-			bonus_charm += 15
-			bonus_magic += 2
-		elif person.genealogy.nereid >= 70:
+			bonus_strength += 1
+			bonus_magic += 3
 			bonus_beauty += 20
-			bonus_charm += 15
-			bonus_magic += 1
-		elif person.genealogy.nereid >= 50:
-			bonus_beauty += 15
+			bonus_courage -= 10
 			bonus_charm += 10
-			bonus_magic += .4
-		elif person.genealogy.nereid >= 30:
-			bonus_beauty += 10
-			bonus_charm += 5
-			bonus_magic += .2
+			if person.sex != 'male':
+				bonus_height += 1
+		elif person.genealogy.nereid >= 50 && person.race == thisrace: 
+			if nature >= 0.7 && person.sex in ['female']: #Ciguapa
+				hybridtype = 'Ciguapa'
+				bonus_strength += 1.5
+				bonus_magic += 1.5
+				bonus_beauty += 25
+				bonus_wit += 10
+				bonus_charm += 20
+				person.trait_remove('Pretty Voice')
+				person.add_trait('Mute')
+				person.trait_remove('Masochist')
+				person.add_trait('Sadist')
+				if person.tail == 'fish':
+					person.tail = 'none' #not reversible, but can't have this Dominican folkbabe with a fish tail
+			elif person.genealogy.arachna >= 40 && person.sex in ['male']: #Lobsterman
+				hybridtype = 'Lobsterman'
+				bonus_strength += 0.5
+				bonus_endurance += 2.5
+				bonus_magic -= 1
+				bonus_beauty -= 10
+				bonus_courage += 10
+				bonus_charm -= 10
+				bonus_height += 1
+				person.add_trait('Sturdy') #not reversible
+				if !person.tail in ['fish', 'none']: 
+					bonus_tail = 'fish' #not reversible for other tail types, but can't have Lobster with a cat tail or something
+				bonus_skincov = 'scales'
+				if !person.skin in ['blue', 'brown', 'dark', 'green', 'teal', 'black']:
+					bonus_skin = 'red'
+				#person.mods['augmentfur'] = 'augmentfur' #not reversible as applied - just adding to stack up some armor
+				#person.add_effect(globals.effectdict.augmentfur) 
+				#person.mods['augmentscales'] = 'augmentscales' #not reversible as applied
+				#person.add_effect(globals.effectdict.augmentscales) 
+			elif person.genealogy.dragonkin >= 40: #Battle Toad 
+				hybridtype = 'Toadkin'
+				bonus_strength += 2.5
+				bonus_agility += 0.5
+				bonus_magic -= 0.5
+				bonus_pliability += 1
+				person.tail = 'none' #not reversible as applied
+				if person.traits.has('Natural Beauty'):
+					person.remove_trait('Natural Beauty') #not reversible
+				person.add_trait('Blemished') #not reversible
+				person.mods['augmenttongue'] = 'augmenttongue' #not reversible as applied				
+				if person.sex == 'male':
+					bonus_courage += 25
+				if !person.skin in ['green', 'jelly', 'teal']:
+					bonus_skin = 'green'
+			elif person.genealogy.lamia >= 40: #Frog 
+				hybridtype = 'Frogkin'
+				bonus_strength += 0.5
+				bonus_agility += 1.5
+				bonus_pliability += 1
+				person.tail = 'none' #not reversible as applied
+				person.mods['augmenttongue'] = 'augmenttongue' #not reversible as applied				
+				if !person.skin in ['green', 'jelly', 'teal']:
+					bonus_skin = 'jelly'
+			elif corruption >= 0.6: #Kappa
+				hybridtype = 'Kappa'
+				bonus_agility += 2.5
+				bonus_beauty -= 10
+				bonus_height -= 2
+				bonus_lewdness += 25
+				bonus_penissize -= 1
+				bonus_ballssize -= 1
+				bonus_asssize -= 1
+				bonus_titssize -= 2
+				bonus_vagsize -= 1
+				person.tail = 'none' #not reversible
+				if person.skincov == 'none':
+					bonus_skincov = 'scales'
+				if !person.skin in ['blue', 'brown', 'green', 'teal']:
+					bonus_skin = 'green'	
+			else:
+				var reptilian = (person.genealogy.dragonkin + person.genealogy.lamia)/100 #Breeding with reptilian species results in offspring more accostomed to the land
+				bonus_strength += water + reptilian*2.5
+				bonus_agility += reptilian*2
+				bonus_magic += person.genealogy.nereid/50 - abs(nature - 0.5)*4 + (corruption - 0.5)*4 #mana corruption; incompatible with land based nature magic
+				bonus_endurance += reptilian*2 + (0.5 - corruption)*4
+				bonus_beauty += person.genealogy.nereid/4 - corruption*10
+				bonus_courage -= person.genealogy.nereid/10 #Nereid avoid sailors and contact in general
+				bonus_charm += person.genealogy.nereid/10
+				if person.sex != 'male':
+					bonus_height += person.genealogy.nereid/100
 		else:
-			bonus_beauty += 5
-			bonus_charm += 5
-			bonus_magic += .2
+			bonus_magic += person.genealogy.nereid/50
+			bonus_beauty += person.genealogy.nereid/5
+			bonus_courage -= person.genealogy.nereid/10
+			bonus_charm += person.genealogy.nereid/10
+			if person.sex != 'male':
+				bonus_height += person.genealogy.nereid/100
 	
-	#Scylla 
-	if person.genealogy.scylla > 0:
+	#Scylla     
+	if person.genealogy.scylla > 0: # && person.unique != 'player': #Ralph2 - workaround for bug where Player received Scylla pure-blood bonuses
+		thisrace = 'Scylla'
 		if person.genealogy.scylla >= 100:
-			bonus_confidence += 20
+			bonus_strength += 1
+			bonus_agility += 1
 			bonus_magic += 2
-			bonus_agility += 1
-		elif person.genealogy.scylla >= 70:
 			bonus_confidence += 20
-			bonus_magic += 1
-			bonus_agility += 1
-		elif person.genealogy.scylla >= 50:
-			bonus_confidence += 20
-			bonus_magic += 1
-			bonus_agility += 1
-		elif person.genealogy.scylla >= 30:
-			bonus_confidence += 15
-			bonus_magic += 1
-			bonus_agility += .4
+		elif person.genealogy.scylla >= 50 && person.race == thisrace:
+			if person.genealogy.dryad >= 40 && person.sex != 'male': #Alraune
+				hybridtype = 'Alraune'
+				bonus_magic += 1.5
+				bonus_endurance += 0.5
+				bonus_charm += 20
+				bonus_skincov = 'plants'
+				person.add_trait('Small Eater') #not reversible
+				if person.traits.has('Spoiled'):
+					person.remove_trait('Spoiled') #not reversible
+				else:
+					person.add_trait('Ascetic') #not reversible
+				if person.genealogy.dryad % 2 != 0 && person.skin in ['pale', 'fair', 'olive', 'tan', 'brown', 'dark', 'none']:
+					bonus_skin = 'green'
+			elif corruption >= 0.85 && person.sex != 'female': #Tentacle
+				hybridtype = 'Tentacle'
+				bonus_endurance += 1.5
+				if person.traits.has('Natural Beauty'):
+					person.remove_trait('Natural Beauty') #not reversible
+				person.add_trait('Sex-crazed') #not reversible
+				person.add_trait('Blemished') #not reversible
+				bonus_lewdness += 25
+				bonus_tail = 'tentacles'
+				if person.skin in ['pale', 'fair', 'olive', 'tan', 'brown', 'dark', 'none']:
+					bonus_skin = 'pink'
+			else:
+				bonus_strength += (corruption - 0.75)*16
+				bonus_agility += person.genealogy.scylla/100 + person.genealogy.arachna/30 + person.genealogy.horse/60 #Octovigor!
+				bonus_magic += person.genealogy.scylla/100 + water*1.5 - (corruption - 0.75)*5.333
+				bonus_endurance += nature*1.95 + person.genealogy.arachna/60 + person.genealogy.horse/120
+				bonus_fertility += person.genealogy.harpy/2 #get on the egg train CHOOO CHOOOOOO!
+				bonus_confidence += person.genealogy.scylla/5 + (corruption - 0.75)*50
 		else:
-			bonus_magic += .2
-			bonus_agility += .2
+			bonus_agility += person.genealogy.scylla/100
+			bonus_magic += person.genealogy.scylla/100
+			bonus_confidence += person.genealogy.scylla/5
 	
 	#Aerials
 	#Fairy
+	#\n\nBreeding Note: Properly trained Fae make fine assistants, but are typically unsuited to combat being weak of arm and frail of constitution aside from their stature. These shortcomings can be mitigated to some degree  however through crossbreeding with other winged races for enhanced aerodynamics or with hardier specimens of similar stature.
 	if person.genealogy.fairy > 0:
+		thisrace = 'Fairy'
 		if person.genealogy.fairy >= 100:
-			bonus_magic += 3
-			bonus_charm += 10
-		elif person.genealogy.fairy >= 70:
+			bonus_agility += 2
 			bonus_magic += 2
 			bonus_charm += 10
-		elif person.genealogy.fairy >= 50:
-			bonus_magic += 1.4
-			bonus_charm += 5
-		elif person.genealogy.fairy >= 30:
-			bonus_magic += 1
+			bonus_titssize -= 1
+			bonus_penissize -= 1
+			bonus_asssize -= 1
+			bonus_pliability += 1
+			if person.sex in ['female', 'futanari']:
+				bonus_lewdness += 10
+		elif person.genealogy.fairy >= 50 && person.race == thisrace:
+			bonus_pliability += person.genealogy.fairy/100
+			bonus_titssize -= person.genealogy.fairy/100
+			bonus_penissize -= person.genealogy.fairy/150
+			bonus_asssize -= person.genealogy.fairy/100
+			if person.sex in ['female', 'futanari']:
+				bonus_lewdness += person.genealogy.fairy/10
+			if wind >= 0.82: #sylph
+				hybridtype = 'Sylph'
+				bonus_agility += 2.5
+				bonus_wings = 'insect'
+			#elif water >= 0.3 && corruption >= 0.3: #Winter Fae / Unseelie
+			#	hybridtype = 'Unseelie'
+			#	if person.skin in ['olive', 'tan', 'brown', 'dark', 'none', 'red']:
+			#		bonus_skin = 'pale_blue'
+			#elif fire >= 0.3 && corruption < 0.35: #Summer Fae / Seelie
+			#	hybridtype = 'Seelie'
+			#	if person.skin in ['pale', 'fair', 'blue', 'pale_blue', 'teal', 'none']:
+			#		bonus_skin = 'yellow'
+			else:
+				var wingedones = (person.genealogy.harpy + person.genealogy.seraph + person.genealogy.dragonkin + person.genealogy.demon)/100
+				bonus_strength += corruption*4
+				bonus_agility += (wind - 0.25)*2 + wingedones*2 #enhanced aerodynamics
+				bonus_magic += person.genealogy.fairy/50 + (nature - 1) - corruption*4
+				bonus_endurance += corruption*4
+				bonus_charm += person.genealogy.fairy/10
 		else:
-			bonus_magic += .4
-	
-	#Harpy
+			bonus_magic += person.genealogy.fairy/50
+			bonus_charm += person.genealogy.fairy/10
+			if person.sex in ['female', 'futanari']:
+				bonus_lewdness += person.genealogy.fairy/10
+			if person.genealogy.gnome >= 50 || person.genealogy.goblin >= 50 || person.genealogy.harpy >= 50: #no need to make 'em smaller if they're already a small race
+				bonus_titssize -= 0
+				bonus_penissize -= 0
+				bonus_height -= 0
+			elif person.genealogy.elf >= 50 || person.genealogy.dark_elf >= 50 || person.genealogy.drow >= 50:
+				bonus_titssize -= person.genealogy.fairy/50
+				bonus_penissize -= person.genealogy.fairy/50
+				bonus_height -= person.genealogy.fairy/40
+			else:
+				bonus_titssize -= person.genealogy.fairy/25
+				bonus_penissize -= person.genealogy.fairy/25
+				bonus_height -= person.genealogy.fairy/20
+
+	#Harpy   
+	#\n\nBreeding Note: Most study into Harpy breeding has been focused on enhanced physical characteristics. The most successful attempts have involved combining the mutanagenic effects of Demon heritage and one or more predatory beastkin species.
 	if person.genealogy.harpy > 0:
+		thisrace = 'Harpy'
 		if person.genealogy.harpy >= 100:
+			bonus_strength += 1
+			bonus_agility += 2
+			bonus_magic += 1
+			bonus_fertility += 20
 			bonus_courage += 25
-			bonus_agility += 1
-			bonus_magic += 2
-		elif person.genealogy.harpy >= 70:
-			bonus_courage += 20
-			bonus_agility += 1
-			bonus_magic += 1
-		elif person.genealogy.harpy >= 50:
-			bonus_courage += 15
-			bonus_agility += 1
-			bonus_magic += .4
-		elif person.genealogy.harpy >= 30:
-			bonus_courage += 10
-			bonus_agility += .4
-			bonus_magic += .2
+			bonus_height -= 1
+			if person.sex in ['female', 'futanari']:
+				bonus_lewdness += 10
+		elif person.genealogy.harpy >= 50 && person.race == thisrace:
+			if earth >= 0.3: #Gargoyle - gotta be fans of the show out there
+				hybridtype = 'Gargoyle'
+				bonus_strength += 1.5
+				bonus_endurance += 2.5
+				bonus_titssize -= 1
+				if !person.wings in ['leather_red']:
+					bonus_wings = 'leather_black'
+				if person.tail == 'none':
+					bonus_tail = 'dragon'
+				if person.horns == 'none':
+					bonus_horns = 'short'
+				if person.skin in ['pale', 'fair', 'olive', 'tan', 'brown', 'dark', 'none']:
+					bonus_skin = 'pale_blue'
+			else:
+				var predatoryraces = (person.genealogy.cat + person.genealogy.fox + person.genealogy.dog)/100
+				bonus_strength += predatoryraces*4 + (corruption - 0.75)*4
+				bonus_agility += person.genealogy.harpy/50 + predatoryraces*3
+				bonus_magic += wind + (nature - 0.5)*4 + (0.75 - corruption)*4
+				bonus_fertility += person.genealogy.harpy/5 #get on the egg train CHOOO CHOOOOOO!
+				bonus_courage += person.genealogy.harpy/4
+				if person.sex in ['female', 'futanari']:
+					bonus_lewdness += person.genealogy.harpy/10
 		else:
-			bonus_agility += .2
-			bonus_magic += .2
+			bonus_agility += person.genealogy.harpy/50
+			bonus_courage += person.genealogy.harpy/4
+			if person.sex in ['female', 'futanari']:
+				bonus_lewdness += person.genealogy.harpy/10
+			if person.genealogy.gnome >= 50 || person.genealogy.goblin >= 50 || person.genealogy.fairy >= 50: #no need to make 'em smaller if they're already a small race
+				bonus_titssize -= 0
+				bonus_penissize -= 0
+			elif person.genealogy.elf >= 50 || person.genealogy.dark_elf >= 50 || person.genealogy.drow >= 50:
+				bonus_titssize -= person.genealogy.harpy/50
+				bonus_penissize -= person.genealogy.harpy/50
+			else:
+				bonus_titssize -= person.genealogy.harpy/25
+				bonus_penissize -= person.genealogy.harpy/25
+				bonus_height -= person.genealogy.harpy/50
 	
-	#Seraph
+	#Seraph   
+	#\n\nBreeding Note: Specimens are still somewhat rare so results have not been corroberated, but one breeder has noted that the minds of Seraph dominant hybrids are heavily influenced by the instincts of their minority ancestors. Additionally, he notes that Seraph suffer a sensitivity to mana corrupted blood similar to Drow.
+	#The minds of Seraph dominant hybrids are heavily influenced by secondary ancestry. Seraph-demon hybrids suffer from some form of mana corruption, but strangely gnomish blood barely manifests itself although similarly corrupted. This anomaly has been studied by one particularly curious mage breeder, but to date no one has presented a plausible hypothesis as to why this might be.
 	if person.genealogy.seraph > 0:
+		thisrace = 'Seraph'
 		if person.genealogy.seraph >= 100:
-			bonus_beauty += 30
+			bonus_strength += 1
+			bonus_agility += 1
 			bonus_magic += 2
-			bonus_endurance += 1
-		elif person.genealogy.seraph >= 70:
 			bonus_beauty += 25
-			bonus_magic += 1
-			bonus_endurance += 1
-		elif person.genealogy.seraph >= 50:
-			bonus_beauty += 20
-			bonus_magic += 1
-			bonus_endurance += .4
-		elif person.genealogy.seraph >= 30:
-			bonus_beauty += 15
-			bonus_magic += .4
-			bonus_endurance += .2
+			person.trait_remove('Pervert') #not reversible
+			person.trait_remove('Deviant') #not reversible
+			person.trait_remove('Fickle') #not reversible
+			person.add_trait('Prude') #not reversible
+		elif person.genealogy.seraph >= 50 && person.race == thisrace:
+			if corruption < 0.1:
+				person.trait_remove('Pervert') #not reversible
+				person.trait_remove('Deviant') #not reversible
+				person.trait_remove('Fickle') #not reversible
+				person.add_trait('Prude') #not reversible
+			if corruption >= 0.4:
+				hybridtype = 'Nephilim'
+				person.wings = 'none'
+				bonus_strength += 1.5
+				bonus_endurance += 1.5
+				bonus_beauty += (1 - corruption)*person.genealogy.seraph/4
+			#elif :
+			#	hybridtype = 'Fravashi'
+			#	add bodyguard specialty
+			#elif nature >= 0.2 && ?:
+			#	hybridtype = 'Ishim'	
+			else:	
+				bonus_strength += (fire - 0.5)*4
+				bonus_agility += person.genealogy.seraph/100 + (wind - 0.25)*4
+				bonus_magic += person.genealogy.seraph/50 + nature*3 
+				bonus_beauty += person.genealogy.seraph/4
+				#doublecheck
+				bonus_fertility += (person.genealogy.cow + person.genealogy.bunny*2 + person.genealogy.arachna/2)*(nature*2 - corruption*2)
+				bonus_courage += (person.genealogy.dog/2 - person.genealogy.bunny/2 + person.genealogy.horse/2 - person.genealogy.nereid/2)*(nature*2 - corruption*2)
+				bonus_confidence += (person.genealogy.lamia/2 + person.genealogy.scylla/2)*(nature*2 - corruption*2)
+				bonus_wit += (person.genealogy.fox/2 + person.genealogy.raccoon/2)*(nature*2 - corruption*2)
+				bonus_charm += (person.genealogy.cat/2 + person.genealogy.fox/2 + person.genealogy.nereid/2)*(nature*2 - corruption*2)
+				if person.genealogy.demon*nature >= 4:
+					bonus_eyesclera = 'glowing'
+					bonus_strength += (fire - 0.5)*4
+					bonus_agility += (wind - 0.5)*12
+					bonus_magic += nature*corruption*25 - nature*3
+				elif person.genealogy.demon >= 30:
+					bonus_eyesclera = 'black'
+					bonus_lewdness += person.genealogy.demon
+					if person.tail == 'none':
+						bonus_tail = 'demon'
+					if person.sex != 'male':
+						if person.traits.has('Clever'):
+							person.remove_trait('Clever') #not reversible
+						person.add_trait('Ditzy') #not reversible
+						bonus_beauty -= 30
+					else:
+						if person.traits.has('Prude'):
+							person.remove_trait('Prude') #not reversible
+						person.add_trait('Pervert') #not reversible
 		else:
-			bonus_beauty += 10
-			bonus_magic += .2
-			bonus_endurance += .2
+			bonus_magic += person.genealogy.seraph/50
+			bonus_beauty += person.genealogy.seraph/4
 	
-	#Demon
+	#Demon    
+	##\n\nBreeding Note: Similar to Goblins, demonic progeny are often subject to mutation. Though there is much debate as to the source, Demon mana is clearly tainted and when invested in Demon dominant hybrids often causes them to take on animalistic physical traits from their secondary ancestry. Additionally, one breeder with Seraph stock claims mating them with Demons has an atavistic effect and appears to potentially amplify these traits.
+	#The corrupted mana invested in Demon dominant hybrids often cause them to take on animalistic traits from secondary ancestry. Curiously, secondary seraph ancestry has an atavistic effect and potentially amplifying the effect.
 	if person.genealogy.demon > 0:
+		thisrace = 'Demon'
 		if person.genealogy.demon >= 100:
+			bonus_strength += 2
+			bonus_agility += 1
+			bonus_magic += 1
 			bonus_charm += 25
-			bonus_strength += 1
-			bonus_magic += 2
-		elif person.genealogy.demon >= 70:
-			bonus_charm += 20
-			bonus_strength += 1
-			bonus_magic += 1
-		elif person.genealogy.demon >= 50:
-			bonus_charm += 15
-			bonus_strength += .4
-			bonus_magic += 1
-		elif person.genealogy.demon >= 30:
-			bonus_charm += 10
-			bonus_strength += .2
-			bonus_magic += .4
+			if person.sex == 'male':
+				bonus_lewdness += 5
+				bonus_charm -= 5
+		elif person.genealogy.demon >= 50 && person.race == thisrace:
+			if person.genealogy.orc >= 40: #Ogre/Oni
+				hybridtype = 'Ogre'
+				bonus_strength += 1.5
+				bonus_endurance += 1.5
+				bonus_courage += 10
+				bonus_wit -= 10
+				bonus_penissize += 2
+				bonus_ballssize += 2
+				bonus_vagsize += 1.4
+				bonus_titssize += 1.4
+				bonus_height += 2
+				bonus_beauty -= 15
+				person.tail = 'none' #not reversible
+				if person.horns != null: 
+					bonus_horns = 'long_straight' #not reversible
+				else:
+					bonus_horns = 'short'
+			elif person.genealogy.bunny >= 40: #Succubus/Incubus
+				if person.sex == 'male':
+					hybridtype = 'Incubus'
+					bonus_magic += 1.5
+					bonus_endurance += 0.5
+					bonus_beauty += 10
+					person.add_trait('Pliable') #not reversible
+					bonus_lewdness += person.genealogy.demon
+					bonus_penissize += 1
+					bonus_ballssize += 1
+					bonus_pliability += 2
+				else:
+					hybridtype = 'Succubus'
+					bonus_magic += 1.5
+					bonus_agility += 0.5
+					bonus_beauty += 10
+					person.add_trait('Pliable') #not reversible
+					bonus_lewdness += person.genealogy.demon
+					bonus_titssize += .5
+					bonus_pliability += 2
+					bonus_elasticity += 1
+			elif water >= 0.4 && person.sex in ['female', 'futanari']: #Rusalka - more commonly described as a water succubus though more vengeful and less expressly horny
+				hybridtype = 'Rusalka'
+				bonus_magic += 1.5
+				bonus_strength += 0.5
+				bonus_charm += 20
+				bonus_beauty += 15
+				bonus_lewdness += 10
+				person.trait_remove('Masochist') #not reversible
+				person.add_trait('Sadist') #not reversible
+			#elif corruption >= 0.95 && nature >= 0.45:
+				#hybridtype = 'Devourer'
+				#bonus_eyesclera = 'red'
+				#bonus_charm -= person.genealogy.demon/4
+				#bonus_strength += 1.5
+				#bonus_agility += 1.5
+			elif person.genealogy.seraph >= 40: #fix person.shade to match seraph later
+				bonus_charm -= 10
+				bonus_eyesclera = 'black'
+				person.horns = 'none'
+				person.tail = 'none'
+				person.trait_remove('Pervert') #not reversible
+				person.trait_remove('Deviant') #not reversible
+				person.trait_remove('Fickle') #not reversible
+				person.add_trait('Prude') #not reversible
+				if person.sex != 'male':
+					hybridtype = 'Suckubus'
+					bonus_titssize += .5
+					bonus_pliability += 2
+					bonus_elasticity += 1
+					bonus_wings = 'feathered_white'
+					person.add_trait('Clingy') #not reversible
+					person.trait_remove('Mute') #not reversible
+					person.add_trait('Foul Mouth') #not reversible	
+				else:
+					hybridtype = 'Incubore'
+					bonus_penissize += 1
+					bonus_ballssize += 1
+					bonus_wings = 'feathered_black'
+					person.add_trait('Monogamous') #not reversible
+					person.add_trait('Passive') #not reversible
+			else:
+				bonus_strength += person.genealogy.demon/100 + (person.genealogy.dog/100 + person.genealogy.cat/100 + person.genealogy.arachna/100 + person.genealogy.cow/100 + person.genealogy.dragonkin/50)*(1+nature)*(1+nature)*corruption #max dragonkin ~1.4 +.5 + 1 ~= 3 ; arachna 50% = .6835 + .5 + .5
+				bonus_agility += (fire - 0.375)*3.95 + (person.genealogy.cat/100 + person.genealogy.fox/50 + person.genealogy.horse/100 + person.genealogy.lamia/100 + person.genealogy.dog/100)*(1+nature)*(1+nature)*corruption #max dragonkin 2
+				bonus_magic += person.genealogy.demon/100 - (1 - corruption)*2 + (1 - (1+nature)*(1+nature)*corruption) #up to 2.25 with 50% goblin ; arachna .25 + 1.367
+				bonus_endurance += (person.genealogy.cow/100 + person.genealogy.horse/100 + person.genealogy.arachna/100)*(1+nature)*(1+nature)*corruption #max arachna 50% = .6835 + .5
+				bonus_charm += person.genealogy.demon/4
 		else:
-			bonus_charm += 4
-			bonus_strength += .2
-			bonus_magic += .2
-	
+			bonus_strength += person.genealogy.demon/100
+			bonus_magic += person.genealogy.demon/100
+			bonus_charm += person.genealogy.demon/4
+			if person.genealogy.dog >= 50 || person.genealogy.demon >= 50 || person.genealogy.horse >= 50 || person.genealogy.cow >= 50 || person.genealogy.dragonkin >= 50: #no need to make it bigger if they're already a hung race	
+				bonus_penissize += 0
+			else:	
+				bonus_penissize += person.genealogy.demon/100
+				
 	#Monstrous
-	#Dragonkin
+	#Dragonkin    
+	#\n\nBreeding Note: The creation of new Dragonkin is the pinnacle of modern magic. Previously research subjects were only very rarely obtained, but now breeders on the cutting edge of racial husbandry within the guild are rushing to discover what potential might be manifest in Dragonkin hybrids. It is truly an exciting time to be a mage!
 	if person.genealogy.dragonkin > 0:
+		thisrace = 'Dragonkin'
 		if person.genealogy.dragonkin >= 100:
-			bonus_strength += 1.6
+			bonus_strength += 2
+			bonus_agility += 1
 			bonus_magic += 1
-			bonus_endurance += 1
-		elif person.genealogy.dragonkin >= 70:
-			bonus_strength += 1.4
-			bonus_magic += 0.4
-			bonus_endurance += 1
-		elif person.genealogy.dragonkin >= 50:
-			bonus_strength += 1
-			bonus_magic += 0.2
-			bonus_endurance += 1
-		elif person.genealogy.dragonkin >= 30:
-			bonus_strength += 1
-			bonus_magic += 0.2
-			bonus_endurance += .4
+			bonus_courage += 10
+			if person.traits.has('Ascetic'):
+				person.remove_trait('Ascetic')
+			else:
+				person.add_trait('Spoiled')
+			if person.sex in ['male']:
+				bonus_height += 1
+		elif person.genealogy.dragonkin >= 50 && person.race == thisrace:
+			if person.genealogy.lamia >= 40: #Salamander
+				hybridtype = 'Salamander'
+				bonus_agility += 0.5
+				bonus_magic += 2.5
+				if person.tail == 'none':
+					bonus_tail = 'dragon'
+				if person.skin in ['pale', 'fair', 'none', 'green', 'teal']:
+					bonus_skin = 'red'
+			elif person.genealogy.demon >= 20 && (person.genealogy.demon + person.genealogy.dragonkin) >= 90: #Tiefling
+				hybridtype = 'Tiefling'
+				bonus_endurance -= 1
+				bonus_charm += 15
+				bonus_eyesclera = person.eyecolor
+				person.skincov = 'none' #not reversible
+				if person.skin in ['pale', 'fair', 'olive', 'tan', 'brown', 'dark', 'none']:
+					bonus_skin = 'red'
+				if person.tail == 'none':
+					bonus_tail = 'dragon'
+				if person.horns == 'none':
+					bonus_horns = 'curved'
+				if person.genealogy.demon < 35:
+					bonus_strength += 1.5
+					bonus_agility += 0.5
+					bonus_magic -= 2
+					if person.traits.has('Responsive'):
+						person.remove_trait('Responsive')
+					else:
+						person.add_trait('Magic Deaf')
+					if person.skin == 'red':
+						bonus_wings = 'leather_red'
+					else:
+						bonus_wings = 'leather_black'
+				else:
+					bonus_agility += 0.5
+					bonus_magic += 1.5
+					person.wings = 'none' #not reversible
+			elif water >= 0.4: #Sharkkin
+				hybridtype = 'Sharkkin'
+				bonus_strength += 1.5
+				bonus_agility += 1.5
+				bonus_magic -= 1
+				bonus_titssize -= 1
+				bonus_skincov = 'scales'
+				person.wings = 'none' #not reversible
+				person.horns = 'none' #non-reversible
+				bonus_tail = 'fish'
+				if person.eyesclera == 'normal':
+					bonus_eyesclera = 'black'
+				if person.skin in ['pale', 'fair', 'olive', 'tan', 'brown', 'dark', 'teal']:
+					bonus_skin = 'gray'
+			else:
+				bonus_strength += person.genealogy.dragonkin/50
+				bonus_agility += fire
+				bonus_magic += (corruption - 0.75)*16 #range: -4 to 2
+				bonus_endurance += (nature - 0.5)*4 - (corruption - 0.5)*8 	#min 1 - 3 = -2 ; max fairy or dryad -> .25*8 - (.375-.5)*8 = 1 + 1 = 2
+				bonus_fertility += person.genealogy.harpy/2 #get on the egg train CHOOO CHOOOOOO!
+				if person.sex in ['male']:
+					bonus_height += person.genealogy.dragonkin/100
+				else:
+					bonus_strength -= 1
+					bonus_agility += 1
+				if corruption >= 0.75 && person.traits.has('Ascetic'):
+					person.remove_trait('Ascetic')
+				elif corruption >= 0.75:
+					person.add_trait('Spoiled')					
 		else:
-			bonus_strength += .4
-			bonus_magic += 0.2
-			bonus_endurance += .2
-	
+			bonus_strength += person.genealogy.dragonkin/50
+			bonus_courage += person.genealogy.dragonkin/10
+			if person.sex in ['male']:
+				bonus_height += person.genealogy.dragonkin/100
+			if person.genealogy.dog >= 50 || person.genealogy.demon >= 50 || person.genealogy.horse >= 50 || person.genealogy.cow >= 50 || person.genealogy.orc >= 50: #no need to make it bigger if they're already a hung race
+				bonus_penissize += 0
+			else:	
+				bonus_penissize += person.genealogy.dragonkin/75
+
 	#Arachna
+	#\n\nBreeding Note: Arachna have not displayed any synergies with other races to date and seem to make poor hybrids, but few breeders have had the opportunity to mate Arachna with more exotic species so more experimentation is needed.
 	if person.genealogy.arachna > 0:
+		thisrace = 'Arachna'
 		if person.genealogy.arachna >= 100:
-			bonus_strength += 2
-			bonus_agility += 1.6
-		elif person.genealogy.arachna >= 70:
-			bonus_strength += 1
-			bonus_agility += 1.4
-		elif person.genealogy.arachna >= 50:
 			bonus_strength += 1
 			bonus_agility += 1
-		elif person.genealogy.arachna >= 30:
-			bonus_strength += .4
-			bonus_agility += 1
+			bonus_magic += 1
+			bonus_endurance += 1 #do you have any idea how much stamina it takes to build a complete spider web?   Well?   Huh?   Do ya?
+			if person.sex != 'male':
+				bonus_height += 1.4
+			else:
+				bonus_height -= 1.4
+		elif person.genealogy.arachna >= 50 && person.race == thisrace:
+			bonus_beauty -= person.genealogy.scylla/2.5 #Octovigor! not pretty babies though...
+			bonus_fertility += person.genealogy.harpy/2 #get on the egg train CHOOO CHOOOOOO!
+			if water >= 0.4: #Crabkin
+				hybridtype = 'Crabkin'
+				bonus_strength += 1.5
+				bonus_endurance += 1.5
+				bonus_courage += 10
+				person.tail = 'none' #not reversible
+				person.add_trait('Sturdy') #not reversible
+				if person.sex in ['male']:
+					bonus_height += (100 - person.genealogy.arachna)/50
+				if person.skin in ['pale', 'fair', 'olive', 'tan', 'brown', 'dark', 'none']:
+					bonus_skin = 'orange'
+				#if person.skincov == 'none':
+				#	bonus_skincov = 'scales'
+			elif person.genealogy.fairy >= 40:
+				hybridtype = 'Bee'
+				bonus_magic += 1.5
+				bonus_endurance += 0.5
+				bonus_eyesclera = 'black'
+				bonus_height -= 2
+				person.add_trait('Clingy') #not reversible
+				if person.sex != 'male':
+					person.add_trait('Hard Worker') #not reversible
+			#elif person.genealogy.lamia >= 40: #Centipede
+			#	hybridtype = 'Centipede'
+			#	bonus_agility += 2.5
+			#	bonus_endurance += 2.5
+			#	person.tail = 'none' #not reversible
+			else: #50%gobo .27,1,2,1.24; harpy .4,3.5,0,0; fairy 2.3,.4,3,0; seraph 2.27,0,0,0
+				bonus_strength += person.genealogy.arachna/77 - (corruption - 0.7)*5 #0.65 to 1.3  +  -1.05 to 1.95  fairy 2.6
+				bonus_agility += (wind - 0.125)*5 + (corruption - 0.75)*4 #wind 0 to 1.875 corruption -1.5 to 0.5    fairy 
+				bonus_magic += (nature - 0.5)*8 #- to 2
+				bonus_endurance += person.genealogy.arachna/100 + (earth - 0.5)*5.9 #0.5 to 1   +   -1.475 to 1.475
+				if person.sex in ['female']:
+					bonus_height += person.genealogy.arachna/100
+				if person.sex in ['male']:
+					bonus_height -= person.genealogy.arachna/100
 		else:
-			bonus_strength += .2
-			bonus_agility += .4
+			bonus_strength += person.genealogy.arachna/100
+			bonus_endurance += person.genealogy.arachna/100
+			if person.sex != 'male':
+				bonus_height += 1.4*person.genealogy.arachna/100
+			else:
+				bonus_height -= 1.4*person.genealogy.arachna/100
 	
-	#Lamia 
+	#Lamia     
+	#\n\nBreeding Note: Though little organized study of Lamia crossbreeding has occured, it has been confirmed that the species is compatable with humanoids. Some breeders speculate that several unique mutations of Lamia are the source of various folklore and myths regarding intelligent monsters whose common physical attribute is the single foot or tail as opposed to a bipedal hindquarters.
 	if person.genealogy.lamia > 0:
+		thisrace = 'Lamia'
 		if person.genealogy.lamia >= 100:
+			bonus_strength += 1
+			bonus_agility += 1
+			bonus_magic += 1
+			bonus_endurance += 1
 			bonus_confidence += 25
-			bonus_strength += 2
-			bonus_magic += 1
-		elif person.genealogy.lamia >= 70:
-			bonus_confidence += 20
-			bonus_strength += 1
-			bonus_magic += 1
-		elif person.genealogy.lamia >= 50:
-			bonus_confidence += 15
-			bonus_strength += 1
-			bonus_magic += .4
-		elif person.genealogy.lamia >= 30:
-			bonus_confidence += 10
-			bonus_strength += .6
-			bonus_magic += .2
+			bonus_elasticity += 2
+			bonus_pliability += 1
+			bonus_vagsize -= 1
+		elif person.genealogy.lamia >= 50 && person.race == thisrace:
+			bonus_fertility += person.genealogy.harpy/2 #get on the egg train CHOOO CHOOOOOO!
+			bonus_vagsize -= person.genealogy.lamia/100
+			if person.genealogy.slime >= 20: #slug
+				hybridtype = 'Slugkin'
+				bonus_strength += 0.5
+				bonus_endurance += 0.5
+				bonus_wit -= 10
+				person.add_trait('Soaker') #not reversible
+				bonus_elasticity += 2
+				bonus_pliability += 3
+				bonus_asssize += 2
+				bonus_titssize += 1
+				person.skincov = 'none' #not reversible
+				if !person.skin in ['blue', 'pale blue', 'green', 'pale', 'fair', 'tan', 'teal', 'jelly', 'purple', 'red', 'orange', 'yellow', 'none']:
+					bonus_skin = 'jelly'
+			elif person.genealogy.nereid >= 40: #merfolk - $He appears to be Merfolk, a subspecies of Lamia that differs from the legends in that it is actually as comfortable on land as in the sea, its tail fins providing surprisingly little impediment to serpentine terrestrial locomotion. 
+				hybridtype = 'Merfolk'
+				bonus_strength += 0.5
+				bonus_magic += 2.5
+				bonus_tail = 'fish'
+			elif person.genealogy.drow >= 40: #Naga - $He appears to be a Naga, a reclusive cobra-hooded subterranian subspecies of Lamia of which little is known. 
+				hybridtype = 'Naga'
+				bonus_strength += 0.5
+				bonus_magic += 1.5
+				bonus_courage += 10
+				bonus_elasticity += person.genealogy.lamia/50
+				bonus_pliability += person.genealogy.lamia/100
+				bonus_skincov = 'scales'
+			else:
+				bonus_strength += fire*4 - (corruption - 0.5)*4 + person.genealogy.dragonkin/50 + person.genealogy.cat/100 + person.genealogy.dog/100 + person.genealogy.arachna/100
+				bonus_agility += person.genealogy.lamia/100 - (corruption - 0.5)*4 + person.genealogy.harpy/50 + person.genealogy.cat/100 + person.genealogy.dog/100 + person.genealogy.fox/50
+				bonus_magic += person.genealogy.lamia/100 + (water - 0.5)*4 + (nature -0.5)*4 + (corruption - 0.5)*8
+				bonus_endurance += (earth - 0.25)*4 + person.genealogy.arachna/100
+				bonus_confidence += person.genealogy.lamia/4
+				bonus_elasticity += person.genealogy.lamia/50
+				bonus_pliability += person.genealogy.lamia/100
 		else:
-			bonus_strength += .4
-			bonus_magic += .2
-	
-	if person.genealogy.dryad > 0:
-		if person.genealogy.dryad >= 100:
+			bonus_strength += person.genealogy.lamia/100
+			bonus_magic += person.genealogy.lamia/100
+			bonus_confidence += person.genealogy.lamia/4
+			bonus_elasticity += person.genealogy.lamia/25
+			bonus_pliability += person.genealogy.lamia/50
+			bonus_vagsize -= person.genealogy.lamia/50
+
+#Cat
+	if person.genealogy.cat > 0:
+		if person.genealogy.cat >= 100:
 			bonus_strength += 2
-			bonus_magic += 1
-			bonus_endurance += 1
-		elif person.genealogy.dryad >= 70:
-			bonus_strength += .6
-			bonus_magic += 1
-			bonus_endurance += 1
-		elif person.genealogy.dryad >= 50:
-			bonus_strength += .4
-			bonus_magic += 1
-			bonus_endurance += .6
-		elif person.genealogy.dryad >= 30:
-			bonus_strength += .2
-			bonus_magic += .6
-			bonus_endurance += .4
+			bonus_agility += 2
+			bonus_charm += 15
+			if person.sex in ['male', 'futanari']:
+				bonus_catpenis = true
+			if person.sex in ['female', 'futanari']:
+				bonus_height -= 1		
+		elif person.genealogy.cat >= 50 && person.race in ['Beastkin Cat', 'Halfkin Cat']:
+			if person.sex in ['male', 'futanari']:
+				bonus_catpenis = true
+			if (person.genealogy.lamia + person.genealogy.dragonkin) >= 40: #Manticore - It should be noted that this hybrid is not to be confused with the rare monster of the same name.  In point of fact, the cat-lamia hybrid's tail is simply reptilian.
+				hybridtype = 'Manticore'
+				bonus_strength += 0.5
+				bonus_agility += 1.5
+				bonus_endurance += 0.5
+				bonus_height += 1
+				bonus_tail = 'dragon'
+				bonus_catpenis = false
+			elif corruption >= 0.52 && person.sex in ['female', 'futanari']: #Nekomata
+				hybridtype = 'Nekomata'
+				bonus_strength += 1.5
+				bonus_agility += 1.5
+				#person.add_trait('Nimble') #not reversible
+			else:
+				bonus_strength += person.genealogy.cat/100 + (corruption - 0.25)*4 	#50% 0.5 + 2.5 (+3.5gob; 0 fairy)
+				bonus_agility += person.genealogy.cat/100 + wind*4 					#50% max wind-> 0.5 + 2.5 (+1gob; +2.5 fairy)
+				bonus_endurance += (nature - 0.5)*8 - (corruption - 0.25)*4 		#50% 2 + 2.5 (-0.5gob; +2.5 fairy)
+				bonus_charm += person.genealogy.cat/6.66
 		else:
-			bonus_strength += .2
-			bonus_magic += .4
-			bonus_endurance += .2
+			bonus_strength += person.genealogy.cat/100
+			bonus_agility += person.genealogy.cat/100
+			bonus_charm += person.genealogy.cat/6.66
+			if person.sex in ['female', 'futanari']:
+				bonus_height -= person.genealogy.cat/100
 	
-	#Slime
+	#Wolf
+	if person.genealogy.dog > 0:
+		if person.genealogy.dog >= 100:
+			bonus_strength += 2
+			bonus_agility += 1
+			bonus_endurance += 1
+			bonus_courage += 10
+			if person.sex in ['male']:
+				bonus_height += 1
+				bonus_dogpenis = true
+		elif person.genealogy.dog >= 50 && person.race in ['Beastkin Wolf', 'Halfkin Wolf']:
+			bonus_strength += person.genealogy.dog/100 + fire*4
+			bonus_agility += person.genealogy.dog/100 - (corruption - 0.25)*4
+			bonus_endurance += (nature - 0.5)*4 + (corruption - 0.25)*4
+			bonus_courage += person.genealogy.dog/10
+			if person.sex in ['male']:
+				bonus_height += person.genealogy.dog/100
+				bonus_dogpenis = true
+			if corruption >= 0.6:
+				hybridtype = 'Werewolf'
+				bonus_strength += 0.5
+				bonus_endurance += 0.5
+				bonus_skincov = 'full_body_fur'
+				if person.furcolor == 'none':
+					bonus_furcolor = 'gray'
+			elif person.genealogy.demon >= 40: #Hellhound - Lupus Infernus
+				hybridtype = 'Infernus'
+				bonus_strength += 1.45
+				bonus_endurance += 0.5
+				bonus_skincov = 'full_body_fur'
+				bonus_furcolor = 'black'
+				bonus_eyesclera = 'red'
+			elif corruption < 0.2:
+				hybridtype = 'Dog'
+			else:
+				if person.genealogy.orc >= 50 || person.genealogy.demon >= 50 || person.genealogy.horse >= 50 || person.genealogy.cow >= 50 || person.genealogy.dragonkin >= 50: #no need to make it bigger if they're already a hung race			
+					bonus_penissize += 0
+				else:	
+					bonus_penissize += person.genealogy.dog/75
+		else:
+			bonus_strength += person.genealogy.dog/100
+			bonus_agility += person.genealogy.dog/100
+			bonus_courage += person.genealogy.dog/10
+			if person.genealogy.orc >= 50 || person.genealogy.demon >= 50 || person.genealogy.horse >= 50 || person.genealogy.cow >= 50 || person.genealogy.dragonkin >= 50: #no need to make it bigger if they're already a hung race			
+				bonus_penissize += 0
+			else:	
+				bonus_penissize += person.genealogy.dog/75
+				
+	#Fox
+	if person.genealogy.fox > 0:
+		if person.genealogy.fox >= 100:
+			bonus_agility += 2
+			bonus_magic += 2
+			bonus_beauty += 5
+			bonus_wit += 20
+			bonus_charm += 20
+			bonus_dogpenis = true
+		elif person.genealogy.fox >= 50 && person.race in ['Beastkin Fox', 'Halfkin Fox']:
+			bonus_beauty += person.genealogy.fox/20
+			bonus_wit += person.genealogy.fox/5
+			bonus_charm += person.genealogy.fox/5
+			if (person.genealogy.seraph >= 20 && person.genealogy.fox >= 70) || (fire >= 0.3 && wind >= 0.2): #Kitsune - $He appears to be a normal foxkin, but exhibits heightened magical aptitude and many claim that the shadows they cast have multiple tails.
+				hybridtype = 'Kitsune'
+				bonus_agility += 1.5
+				bonus_magic += 2.5
+				bonus_beauty += 5
+			else:
+				bonus_strength += (0.75 - nature)*7.9
+				bonus_agility += person.genealogy.fox/50 + (nature - 0.5)*4
+				bonus_magic += fire*4 + (nature - 0.75)*8 + abs(corruption - 0.25)*3.9 # 0.5 to 2.5 fromfire -3 to 1 fromnature; max1.5fromcorrupt
+		else:
+			bonus_agility += person.genealogy.fox/50
+			bonus_beauty += person.genealogy.fox/20
+			bonus_wit += person.genealogy.fox/5
+			bonus_charm += person.genealogy.fox/5
+	
+	#Tanuki
+	if person.genealogy.raccoon > 0: #Tanuki are generally compatible with any non-beast race that might be thought of as a guardian of the forest.
+		if person.genealogy.raccoon >= 100:
+			bonus_agility += 1
+			bonus_magic += 2
+			bonus_endurance += 1
+			bonus_wit += 20
+			bonus_ballssize += 3
+		elif person.genealogy.raccoon >= 50 && person.race in ['Beastkin Tanuki', 'Halfkin Tanuki']:
+			if corruption >= 0.6:
+				hybridtype = 'Werebear'
+				bonus_strength += 1.5
+				bonus_endurance += 2.5
+				bonus_skincov = 'full_body_fur'
+				if person.furcolor == 'none':
+					bonus_furcolor = 'brown'
+				bonus_height += 3
+				bonus_ballssize += person.genealogy.raccoon/33
+			else:
+				var forestprotector = (person.genealogy.elf + person.genealogy.dark_elf + person.genealogy.fox/2 + person.genealogy.drow/2)/100
+				bonus_strength += forestprotector*(1 + nature)
+				bonus_agility += wind*4
+				bonus_magic += person.genealogy.raccoon/50 + forestprotector*(1 + nature)*2 - (corruption - 0.25)*4
+				bonus_endurance += forestprotector*(1 + nature) + (corruption - 0.25)*4
+				bonus_wit += person.genealogy.raccoon/5
+				bonus_ballssize += person.genealogy.raccoon/33
+		else:
+			bonus_magic += person.genealogy.raccoon/50
+			bonus_wit += person.genealogy.raccoon/5
+			bonus_ballssize += person.genealogy.raccoon/20
+	
+	#Centaur
+	#\n\nBreeding Note: Centaur make poor spellcasters, but are potent as warriors. While they are commonly used as the minority race in hybrids to enhance various male attributes, Centaur dominant hybrids exhibit few synergies with other races aside from Taurus which serve to enhance the endurance of the offspring.
+	if person.genealogy.horse > 0:
+		thisrace = 'Centaur'
+		if person.genealogy.horse >= 100:
+			bonus_strength += 1
+			bonus_agility += 1
+			bonus_endurance += 2
+			bonus_courage += 20
+			bonus_penissize += 1
+			bonus_ballssize += 1
+			bonus_vagsize += 2
+			bonus_asssize += 1
+			if person.sex in ['male']:
+				bonus_height += 1
+				bonus_horsepenis = true
+		elif person.genealogy.horse >= 50 && person.race == thisrace:
+			bonus_courage += person.genealogy.horse/5
+			bonus_penissize += person.genealogy.horse/100
+			bonus_ballssize += person.genealogy.horse/100
+			bonus_vagsize += person.genealogy.horse/50
+			bonus_asssize += person.genealogy.horse/150
+			if person.sex in ['male']:
+				bonus_height += person.genealogy.horse/100
+				bonus_horsepenis = true
+			if water >= 0.4 && person.sex in ['male']: #Kelpie
+				hybridtype = 'Kelpie'
+				bonus_strength += 0.5
+				bonus_agility += 0.5
+				bonus_magic += 1.5
+				bonus_endurance += 0.5
+				person.skincov = 'none' #not reversible
+				if !person.tail in ['fish', 'horse']:
+					bonus_tail = 'horse'
+				if !person.skin in ['blue', 'pale blue', 'green', 'brown', 'teal', 'jelly', 'purple']:
+					bonus_skin = 'black'
+			elif corruption >= 0.7:
+				hybridtype = 'Bicorn'
+				bonus_strength += 1.5
+				bonus_agility += 0.5
+				bonus_endurance += 1.5
+				bonus_horns = 'curved'
+			elif corruption < 0.3:
+				hybridtype = 'Pegasus'
+				bonus_agility += 1.5
+				bonus_magic += 2.5
+				if person.skin in ['black', 'dark']:
+					bonus_wings = 'feathered_black'
+				elif person.skin in ['brown', 'tan', 'olive']:
+					bonus_wings = 'feathered_brown'
+				else:
+					bonus_wings = 'feathered_white'
+			else:
+				var shortstackraces = person.genealogy.goblin + person.genealogy.gnome + person.genealogy.fairy
+				bonus_strength += earth*4 + (corruption - 0.5)*4 + (nature - 0.5)*(person.genealogy.orc + person.genealogy.arachna + person.genealogy.dragonkin)/12.5
+				bonus_agility += person.genealogy.horse/100 + (nature - 0.5)*(person.genealogy.elf + person.genealogy.dark_elf + person.genealogy.drow/2 + person.genealogy.scylla + person.genealogy.cat/2 + person.genealogy.dog/2 + person.genealogy.fox/2 + person.genealogy.bunny/2 + + person.genealogy.raccoon/4)/12.5
+				bonus_magic += (0.5 - corruption)*12
+				bonus_endurance += person.genealogy.horse/100 + (corruption - 0.5)*4 + (nature - 0.5)*(person.genealogy.orc + person.genealogy.arachna + person.genealogy.cow)/12.5
+				bonus_strength -= shortstackraces/50
+				bonus_agility -= shortstackraces/50
+				bonus_endurance -= shortstackraces/50
+		else:
+			bonus_agility += person.genealogy.horse/100
+			bonus_endurance += person.genealogy.horse/100
+			bonus_courage += person.genealogy.horse/5
+			bonus_ballssize += person.genealogy.horse/50
+			bonus_vagsize += person.genealogy.horse/100
+			bonus_asssize += person.genealogy.horse/150
+			if person.genealogy.dog >= 50 || person.genealogy.demon >= 50 || person.genealogy.orc >= 50 || person.genealogy.cow >= 50 || person.genealogy.dragonkin >= 50: #no need to make it bigger if they're already a hung race
+				bonus_penissize += 0
+			else:	
+				bonus_penissize += person.genealogy.horse/34
+				
+	#Taurus    
+	if person.genealogy.cow > 0:
+		thisrace = 'Taurus'
+		if person.genealogy.cow >= 100:
+			bonus_strength += 2
+			bonus_agility += 1
+			bonus_endurance += 1
+			bonus_fertility += 20
+			bonus_titssize += 2
+			bonus_ballssize += 1
+			if person.sex in ['male']:
+				bonus_height += 1
+			else:
+				bonus_asssize += person.genealogy.cow/100
+		elif person.genealogy.cow >= 50 && person.race == thisrace:
+			bonus_strength += person.genealogy.cow/100 + earth*.25
+			bonus_endurance += person.genealogy.cow/100 + (nature - 0.25)*4
+			bonus_fertility += person.genealogy.cow/5
+			bonus_titssize += person.genealogy.cow/80
+			bonus_ballssize += person.genealogy.cow/100
+			bonus_asssize += person.genealogy.cow/100
+			if person.sex in ['male']:
+				bonus_height += person.genealogy.cow/150
+				if person.genealogy.horse >= 25:
+					bonus_horsepenis = true
+			if person.genealogy.horse >= 15 && person.genealogy.orc >= 15: #minotaur
+				hybridtype = 'Minotaur'
+				bonus_strength += (person.genealogy.horse + person.genealogy.orc)/50
+				bonus_endurance += (person.genealogy.horse + person.genealogy.orc)/50
+				bonus_skincov = 'full_body_fur'				
+				if person.sex in ['male']:
+					bonus_horsepenis = true
+					bonus_penissize += person.genealogy.horse/20 + person.genealogy.orc/30
+					bonus_ballssize += person.genealogy.cow/100 + person.genealogy.horse/100
+					bonus_height += person.genealogy.horse*person.genealogy.orc/250
+				else:
+					bonus_height += person.genealogy.horse*person.genealogy.orc/500
+				if (person.genealogy.orc - person.genealogy.horse) > 10:
+					bonus_furcolor = 'green'
+				elif (person.genealogy.horse - person.genealogy.orc) > 10:
+					bonus_furcolor = 'white'
+				elif (person.genealogy.orc - person.genealogy.horse) > 5:
+					bonus_furcolor = 'black'
+				elif (person.genealogy.horse - person.genealogy.orc) > 5:
+					bonus_furcolor = 'gray'
+				else:
+					bonus_furcolor = 'brown'
+			#elif person.sex != 'male' && ????? #juggernaut
+			#	hybridtype = 'Juggernaut'
+			#	bonus_titssize += ????
+			else: #predator vs prey genealogy determines aggressive potential vs docile sturdiness
+				var _predatorstrength = abs(corruption - 0.5)*16
+				var _preystrength = abs(corruption - 0.5)*8
+				if corruption > 0.5:
+					var _temp = _predatorstrength
+					_predatorstrength = _preystrength
+					_preystrength = _temp
+				bonus_strength += _predatorstrength*(person.genealogy.cat/100 + person.genealogy.dog/100 + person.genealogy.fox/100 + person.genealogy.arachna/100 + person.genealogy.lamia/100 + person.genealogy.harpy/100 + person.genealogy.dragonkin/100) - _preystrength*(person.genealogy.bunny/100 + person.genealogy.horse/100)
+				bonus_endurance += _predatorstrength*(person.genealogy.bunny/100 + person.genealogy.horse/100) - _preystrength*(person.genealogy.cat/100 + person.genealogy.dog/100 + person.genealogy.fox/100 + person.genealogy.arachna/100 + person.genealogy.lamia/100 + person.genealogy.harpy/100 + person.genealogy.dragonkin/100)
+		else:
+			bonus_strength += person.genealogy.cow/100
+			bonus_endurance += person.genealogy.cow/100
+			bonus_fertility += person.genealogy.cow/5
+			bonus_ballssize += person.genealogy.cow/50
+			bonus_asssize += person.genealogy.cow/100
+			if person.genealogy.seraph >= 50 || person.genealogy.demon >= 50 || person.genealogy.horse >= 50 || person.genealogy.cow >= 50 || person.genealogy.orc >= 50: #no need to make it bigger if they're already a hung race
+				bonus_titssize += 0
+			else:	
+				bonus_titssize += person.genealogy.cow/40
+			if person.genealogy.dog >= 50 || person.genealogy.demon >= 50 || person.genealogy.horse >= 50 || person.genealogy.orc >= 50 || person.genealogy.dragonkin >= 50: #no need to make it bigger if they're already a hung race
+				bonus_penissize += 0
+			else:	
+				bonus_penissize += person.genealogy.cow/50
+
+	#Slime     
 	if person.genealogy.slime > 0:
+		thisrace = 'Slime'
 		if person.genealogy.slime >= 100:
 			bonus_strength += 1
 			bonus_agility += 1
 			bonus_magic += 1
-			bonus_endurance += 2
-		elif person.genealogy.slime >= 70:
-			bonus_strength += 1
-			bonus_agility += .6
-			bonus_magic += .6
-			bonus_endurance += 2
-		elif person.genealogy.slime >= 50:
-			bonus_strength += 1
-			bonus_agility += .4
-			bonus_magic += .4
-			bonus_endurance += 1.6
-		elif person.genealogy.slime >= 30:
-			bonus_strength += .6
-			bonus_agility += .2
-			bonus_magic += .2
 			bonus_endurance += 1
-		else:
-			bonus_strength += .2
-			bonus_agility += .2
-			bonus_magic += .2
-			bonus_endurance += .4
-	
-	#Cat 
-	if person.genealogy.cat > 0:
-		if person.genealogy.cat >= 100:
-			bonus_charm += 15
-			bonus_agility += 2
-			bonus_endurance += 1
-		elif person.genealogy.cat >= 70:
-			bonus_charm += 15
-			bonus_agility += 1.4
-			bonus_endurance += 1
-		elif person.genealogy.cat >= 50:
-			bonus_charm += 10
-			bonus_agility += 1
-			bonus_endurance += .4
-		elif person.genealogy.cat >= 30:
-			bonus_charm += 5
-			bonus_agility += .6
-			bonus_endurance += .2
-		else:
-			bonus_agility += .4
-			bonus_endurance += .2
-	
-	#Wolf 
-	if person.genealogy.dog > 0:
-		if person.genealogy.dog >= 100:
-			bonus_courage += 10
-			bonus_strength += 1
-			bonus_agility += 2
-		elif person.genealogy.dog >= 70:
-			bonus_courage += 10
-			bonus_strength += 1
-			bonus_agility += 1
-		elif person.genealogy.dog >= 50:
-			bonus_courage += 5
-			bonus_strength += 1
-			bonus_agility += .4
-		elif person.genealogy.dog >= 30:
-			bonus_strength += .6
-			bonus_agility += .2
-		else:
-			bonus_strength += .4
-			bonus_agility += .2
-	
-	#Bunny
+			bonus_elasticity += 3
+			bonus_pliability += 2
+			bonus_vagsize -= 1
+			person.add_trait('Soaker') #not reversible
+		elif person.genealogy.slime >= 50 && person.race == thisrace: #needs rework if slimes become able to interbreed with other races - for now, never used
+			bonus_strength += person.genealogy.slime/100
+			bonus_agility += person.genealogy.scylla/100 + person.genealogy.horse/100 + person.genealogy.arachna/100
+			bonus_magic += person.genealogy.slime/100 + person.genealogy.nereid/100
+			bonus_endurance += person.genealogy.slime/100 + person.genealogy.nereid/100 + person.genealogy.scylla/100
+			bonus_elasticity += person.genealogy.slime/33
+			bonus_pliability += person.genealogy.slime/50
+			bonus_ballssize += bonus_ballssize
+			bonus_vagsize -= person.genealogy.slime/100
+			person.add_trait('Soaker') #not reversible
+			if person.genealogy.cat >= 25:
+				bonus_catpenis = true
+			if (person.genealogy.dog + person.genealogy.fox) >= 25:
+				bonus_dogpenis = true
+			if (person.genealogy.horse + person.genealogy.cow) >= 25:
+				bonus_horsepenis = true		
+		else: #needs rework if slimes become able to interbreed with other races - for now, never used
+			bonus_strength += person.genealogy.slime/100
+			bonus_magic += person.genealogy.slime/100
+			bonus_endurance += person.genealogy.slime/100
+			bonus_elasticity += person.genealogy.slime/25
+			bonus_pliability += person.genealogy.slime/25
+			if person.genealogy.slime >= 35:
+				person.add_trait('Soaker') #not reversible
+				bonus_ballssize += bonus_ballssize
+				
+	#Bunny     #max stats 3533 14 W11/14 M7/8.5	#Bunnies are lovers, not fighters.  The only attribute they excel in is their agility which they only use for two things: running and... well you can probably guess; however bunnies and rabbit dominant hybrids in particular remain extremely popular as they often exhibit exaggerated sexual characteristics depending on what they've been bred with of course.
 	if person.genealogy.bunny > 0:
 		if person.genealogy.bunny >= 100:
-			bonus_fertility += 30
-			bonus_agility += 3
-		elif person.genealogy.bunny >= 70:
-			bonus_fertility += 30
 			bonus_agility += 2
-		elif person.genealogy.bunny >= 50:
-			bonus_fertility += 25
-			bonus_agility += 2
-		elif person.genealogy.bunny >= 30:
-			bonus_fertility += 20
-			bonus_agility += 1
-		else:
-			bonus_fertility += 10
-			bonus_agility += .4
-	
-	#Fox
-	if person.genealogy.fox > 0:
-		if person.genealogy.fox >= 100:
-			bonus_charm += 20
-			bonus_wit += 20
-			bonus_agility += 2
-		elif person.genealogy.fox >= 70:
-			bonus_charm += 20
-			bonus_wit += 20
-			bonus_agility += 1
-		elif person.genealogy.fox >= 50:
-			bonus_charm += 15
-			bonus_wit += 15
-			bonus_agility += 1
-		elif person.genealogy.fox >= 30:
-			bonus_charm += 10
-			bonus_wit += 10
-			bonus_agility += .6
-		else:
-			bonus_charm += 5
-			bonus_wit += 5
-			bonus_agility += .2
-	
-	#Tanuki
-	if person.genealogy.raccoon > 0:
-		if person.genealogy.raccoon >= 100:
-			bonus_wit += 20
-			bonus_agility += 2
-			bonus_magic += 1
-		elif person.genealogy.raccoon >= 70:
-			bonus_wit += 20
-			bonus_agility += 1
-			bonus_magic += 1
-		elif person.genealogy.raccoon >= 50:
-			bonus_wit += 15
-			bonus_agility += 1
-			bonus_magic += .6
-		elif person.genealogy.raccoon >= 30:
-			bonus_wit += 10
-			bonus_agility += .4
-			bonus_magic += .2
-		else:
-			bonus_agility += .2
-			bonus_magic += .2
-	
-	#Centaur
-	if person.genealogy.horse > 0:
-		if person.genealogy.horse >= 100:
-			bonus_courage += 20
-			bonus_strength += 1
 			bonus_endurance += 2
-		elif person.genealogy.horse >= 70:
-			bonus_courage += 20
-			bonus_strength += 1
-			bonus_endurance += 1
-		elif person.genealogy.horse >= 50:
-			bonus_courage += 15
-			bonus_strength += 1
-			bonus_endurance += .6
-		elif person.genealogy.horse >= 30:
-			bonus_courage += 10
-			bonus_strength += .6
-			bonus_endurance += .4
+			bonus_fertility += 50
+			bonus_courage -= 10
+			bonus_ballssize += 1
+			bonus_pliability += 1
+			bonus_lewdness += 25
+		elif person.genealogy.bunny >= 50 && person.race in ['Beastkin Bunny', 'Halfkin Bunny']:
+			bonus_strength += (nature + 0.25)*bonus_strength
+			bonus_agility += person.genealogy.bunny/50 + (nature + 0.25)*bonus_agility #50% max 1 + 1+1 = 3 Agil++race
+			bonus_magic += (nature + 0.25)*bonus_magic
+			bonus_endurance += (earth - 0.25)*4 + (nature + 0.25)*bonus_endurance #50% max 2 + 1+1 = 4 gnome
+			bonus_beauty += bonus_beauty
+			bonus_fertility += person.genealogy.bunny/2 + (corruption - 0.25)*bonus_fertility
+			bonus_courage -= person.genealogy.bunny/10
+			bonus_ballssize += (corruption - 0.25)*bonus_ballssize + person.genealogy.bunny/100
+			bonus_titssize += (corruption - 0.25)*bonus_titssize
+			bonus_penissize += (corruption - 0.25)*bonus_penissize
+			bonus_asssize += (corruption - 0.25)*bonus_asssize
+			bonus_elasticity += (corruption - 0.25)*bonus_elasticity
+			bonus_pliability += (corruption - 0.25)*bonus_pliability + person.genealogy.bunny/100
+			bonus_lewdness += (corruption - 0.25)*bonus_lewdness + person.genealogy.bunny/4
 		else:
-			bonus_strength += .4
-			bonus_endurance += .2
+			bonus_agility += person.genealogy.bunny/50
+			bonus_fertility += person.genealogy.bunny/2
+			bonus_courage -= person.genealogy.bunny/10
+			bonus_ballssize += person.genealogy.bunny/50
+			bonus_pliability += person.genealogy.bunny/50
+			bonus_lewdness += person.genealogy.bunny/4
 	
-	#Taurus 
-	if person.genealogy.cow > 0:
-		if person.genealogy.cow >= 100:
-			bonus_fertility += 20
-			bonus_endurance += 3
-		elif person.genealogy.cow >= 70:
-			bonus_fertility += 20
-			bonus_endurance += 2
-		elif person.genealogy.cow >= 50:
-			bonus_fertility += 15
-			bonus_endurance += 1.6
-		elif person.genealogy.cow >= 30:
-			bonus_fertility += 10
-			bonus_endurance += 1
-		else:
-			bonus_endurance += .4
-	
+	if person.sex == 'male': #little boys born with big asses... workaround
+		person.asssize = globals.asssizearray[clamp(globals.asssizearray.find(person.asssize) - 1, 0, globals.asssizearray.size()-1)]
 	var somethingchanged = false
 	if addstats == true:
 		if bonus_strength > 0:
@@ -1064,24 +2157,89 @@ func setRaceBonus(person, increasestats):
 		if bonus_endurance > 0:
 			person.stats.end_mod += round(bonus_endurance)
 			somethingchanged = true
-		if bonus_courage > 0:
+		if bonus_courage != 0:
 			person.stats.cour_racial += round(bonus_courage)
 			somethingchanged = true
-		if bonus_confidence > 0:
+		if bonus_confidence != 0:
 			person.stats.conf_racial += round(bonus_confidence)
 			somethingchanged = true
-		if bonus_wit > 0:
+		if bonus_wit != 0:
 			person.stats.wit_racial += round(bonus_wit)
 			somethingchanged = true
-		if bonus_charm > 0:
+		if bonus_charm != 0:
 			person.stats.charm_racial += round(bonus_charm)
 			somethingchanged = true
-		if bonus_beauty > 0:
+		if bonus_beauty != 0:
 			person.beautybase += round(bonus_beauty)
 			somethingchanged = true
-		if bonus_fertility > 0:
+		if bonus_fertility != 0:
 			person.preg.bonus_fertility += round(bonus_fertility)
 			somethingchanged = true
+		if bonus_titssize != 0 && person.unique == null && person.sex in ['female', 'futanari']:
+			person.titssize = globals.titssizearray[clamp(globals.titssizearray.find(person.titssize) + round(bonus_titssize), 0, globals.titssizearray.size()-1)]
+			somethingchanged = true
+		if bonus_penissize != 0 && person.unique == null && person.sex in ['male', 'futanari']:
+			person.penis = globals.penissizearray[clamp(globals.penissizearray.find(person.penis) + round(bonus_penissize), 0, globals.penissizearray.size()-1)]
+			somethingchanged = true
+		if bonus_ballssize != 0 && person.unique == null && (person.sex in ['male'] || (person.sex in ['futanari'] && globals.rules.futaballs == true)):
+			person.balls = globals.penissizearray[clamp(globals.penissizearray.find(person.balls) + round(bonus_ballssize), 0, globals.penissizearray.size()-1)]
+			somethingchanged = true	
+		if bonus_vagsize != 0 && person.unique == null && person.sex in ['female', 'futanari']:
+			person.vagina = globals.vagsizearray[clamp(globals.vagsizearray.find(person.vagina) + round(bonus_vagsize), 0, globals.vagsizearray.size()-1)]
+			somethingchanged = true	
+		if bonus_height != 0 && person.unique == null:
+			person.height = globals.heightarray[clamp(globals.heightarray.find(person.height) + round(bonus_height), 0, globals.heightarray.size()-1)]
+			somethingchanged = true
+		if bonus_asssize != 0 && person.unique == null && person.sex in ['female', 'futanari']:
+			person.asssize = globals.asssizearray[clamp(globals.asssizearray.find(person.asssize) + round(bonus_asssize), 0, globals.asssizearray.size()-1)]
+			somethingchanged = true
+		if person.unique == null && person.sex in ['male', 'futanari']:
+			if bonus_catpenis:
+				person.penistype = 'feline'
+				somethingchanged = true
+			if bonus_dogpenis:
+				person.penistype = 'canine'
+				somethingchanged = true
+			if bonus_horsepenis:
+				person.penistype = 'equine'
+				somethingchanged = true
+		if bonus_skincov != 'none' && person.unique == null:
+			person.skincov = bonus_skincov
+			somethingchanged = true
+		if bonus_skin != 'fair' && person.unique == null:
+			person.skin = bonus_skin
+			somethingchanged = true
+		if bonus_ears != 'human' && person.unique == null:
+			person.ears = bonus_ears
+			somethingchanged = true
+		if bonus_eyesclera != 'normal' && person.unique == null:
+			person.eyesclera = bonus_eyesclera
+			somethingchanged = true
+		if bonus_horns != 'none' && person.unique == null:
+			person.horns = bonus_horns
+			somethingchanged = true
+		if bonus_tail != 'none' && person.unique == null:
+			person.tail = bonus_tail
+			somethingchanged = true
+		if bonus_wings != 'none' && person.unique == null:
+			person.wings = bonus_wings
+			somethingchanged = true
+		if bonus_furcolor != 'none' && person.unique == null:
+			person.furcolor = bonus_furcolor
+			somethingchanged = true
+		if bonus_lewdness != 0 && person.unique == null:
+			person.lewdness += round(bonus_lewdness)
+			somethingchanged = true
+		if bonus_pliability != 0:
+			person.sexexpanded.pliability += bonus_pliability
+			somethingchanged = true
+		if bonus_elasticity != 0:
+			person.sexexpanded.elasticity += bonus_elasticity
+			somethingchanged = true		
+		if hybridtype != "":
+			person.race_display = hybridtype
+			somethingchanged = true
+			
 		if somethingchanged == true:
 			person.npcexpanded.racialbonusesapplied = true
 	else:
@@ -1097,25 +2255,85 @@ func setRaceBonus(person, increasestats):
 		if bonus_endurance > 0:
 			person.stats.end_mod -= round(bonus_endurance)
 			somethingchanged = true
-		if bonus_courage > 0:
+		if bonus_courage != 0:
 			person.stats.cour_racial -= round(bonus_courage)
 			somethingchanged = true
-		if bonus_confidence > 0:
+		if bonus_confidence != 0:
 			person.stats.conf_racial -= round(bonus_confidence)
 			somethingchanged = true
-		if bonus_wit > 0:
+		if bonus_wit != 0:
 			person.stats.wit_racial -= round(bonus_wit)
 			somethingchanged = true
-		if bonus_charm > 0:
+		if bonus_charm != 0:
 			person.stats.charm_racial -= round(bonus_charm)
 			somethingchanged = true
-		if bonus_beauty > 0:
+		if bonus_beauty != 0:
 			person.beautybase -= round(bonus_beauty)
 			somethingchanged = true
-		if bonus_fertility > 0:
+		if bonus_fertility != 0:
 			person.preg.bonus_fertility -= round(bonus_fertility)
 			somethingchanged = true
-		
+		if bonus_titssize != 0 && person.unique == null && person.sex in ['female', 'futanari']:
+			person.titssize = globals.titssizearray[clamp(globals.titssizearray.find(person.titssize) - round(bonus_titssize), 0, globals.titssizearray.size()-1)]
+			somethingchanged = true
+		if bonus_penissize != 0 && person.unique == null && person.sex in ['male', 'futanari']:
+			person.penis = globals.penissizearray[clamp(globals.penissizearray.find(person.penis) - round(bonus_penissize), 0, globals.penissizearray.size()-1)]
+			somethingchanged = true
+		if bonus_ballssize != 0 && person.unique == null && (person.sex in ['male'] || (person.sex in ['futanari'] && globals.rules.futaballs == true)):
+			person.balls = globals.penissizearray[clamp(globals.penissizearray.find(person.balls) - round(bonus_ballssize), 0, globals.penissizearray.size()-1)]
+			somethingchanged = true	
+		if bonus_vagsize != 0 && person.unique == null && person.sex in ['female', 'futanari']:
+			person.vagina = globals.vagsizearray[clamp(globals.vagsizearray.find(person.vagina) - round(bonus_vagsize), 0, globals.vagsizearray.size()-1)]
+			somethingchanged = true			
+		if bonus_height != 0 && person.unique == null:
+			person.height = globals.heightarray[clamp(globals.heightarray.find(person.height) - round(bonus_height), 0, globals.heightarray.size()-1)]
+			somethingchanged = true
+		if bonus_asssize != 0 && person.unique == null && person.sex in ['female', 'futanari']:
+			person.asssize = globals.asssizearray[clamp(globals.asssizearray.find(person.asssize) - round(bonus_asssize), 0, globals.asssizearray.size()-1)]
+			somethingchanged = true
+		if person.unique == null && person.sex in ['male', 'futanari']:
+			if bonus_catpenis || bonus_dogpenis || bonus_horsepenis:
+				person.penistype = 'human'
+				somethingchanged = true
+		if bonus_skincov != 'none' && person.unique == null: #only bonus_skincov applied to races that normally have 'none'
+			person.skincov = 'none'
+			somethingchanged = true
+		if bonus_skin != 'fair' && person.unique == null: #future - assign variable so original skin color could be saved/restored
+			person.skin = 'fair'
+			somethingchanged = true
+		if bonus_ears != 'human' && person.unique == null:
+			person.ears = 'human'
+			somethingchanged = true
+		if bonus_eyesclera != 'normal' && person.unique == null: #only bonus_eyesclera applied to races that normally have 'normal'
+			person.eyesclera = 'normal'
+			somethingchanged = true
+		if bonus_horns != 'none' && person.unique == null:
+			person.horns = 'none'
+			somethingchanged = true
+		if bonus_tail != 'none' && person.unique == null:
+			person.tail = 'none'
+			somethingchanged = true
+		if bonus_wings != 'none' && person.unique == null:
+			person.wings = 'none'
+			somethingchanged = true
+		if bonus_furcolor != 'none' && person.unique == null: #only bonus_furcolor applied to races that normally have 'none' and have added skincov = 'full_body_fur'
+			person.furcolor = 'none'
+			somethingchanged = true
+		if bonus_lewdness != 0 && person.unique == null:
+			person.lewdness -= round(bonus_lewdness)
+			somethingchanged = true
+		if bonus_pliability != 0:
+			person.sexexpanded.pliability -= bonus_pliability
+			somethingchanged = true
+		if bonus_elasticity != 0:
+			person.sexexpanded.elasticity -= bonus_elasticity
+			somethingchanged = true	
+		if hybridtype != "":
+			person.race_display = person.race #hybrid info can be lost if setracebonus(person,-1) is called, but as of version 9.7, this should only be via slime conversion
+			somethingchanged = true
+			
 		if somethingchanged == true:
-			person.npcexpanded.racialbonusesapplied = false
+			person.npcexpanded.racialbonusesapplied = true
+	###/end Ralphomod
 	
+#func AddSSRecipe

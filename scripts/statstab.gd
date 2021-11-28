@@ -1233,7 +1233,19 @@ func talkfetishes(mode=''):
 	var tempbuttons = []
 	#Incomplete Fetish Variables
 	var invalidfetishfound = false
-	var incompletefetishtext = "\n\n\n[color=red]Aric's Note: The following fetishes have no current mechanical value. They may be implimented in the future but were implimented using another, more specific fetish instead. They are only for roleplay purposes at the moment. Any other fetishes that appear are have at least 1 fetish check and provide a mechanical benefit somewhere in the game. [/color]"
+	var incompletefetishtext = "\n\n\n[color=red]Aric's Note: The following fetishes have no current mechanical value. They may be implemented in the future but were implimented using another, more specific fetish instead. They are only for roleplay purposes at the moment. Any other fetishes that appear are have at least 1 fetish check and provide a mechanical benefit somewhere in the game. [/color]"
+	#ralph7
+	var fetishstatus = "\n\n" + person.name + " has the following known fetishes:\n"
+	var textcolor = ""
+	for i in person.knownfetishes:
+		if person.fetish[i] in ['mindblowing','enjoyable']:
+			textcolor = "[color=green]"
+		elif person.fetish[i] in ['acceptable','uncertain']:
+			textcolor = "[color=yellow]"
+		else:
+			textcolor = "[color=red]"
+		fetishstatus += str(i).capitalize() + ": " + textcolor + person.fetish[i].capitalize() + "[/color]\n"
+	#/ralph7
 	
 	#The Fetish Response
 	var fetishname
@@ -1711,6 +1723,42 @@ func talkconsent(mode=''):
 	if mode == "intro":
 		#Change Dialogue
 		text += "[color=red]Consent Topics are once per day. If Consent failed, you can try again tomorrow.[/color]\n\n[color=yellow]-What did you want to talk about?[/color]"
+		#ralph7
+		var consentstatus = "\n\n" + person.name + " has consented to the following:\n"
+		if person.consentexp.party:
+			consentstatus += "$He will [color=green]fight[/color] for you.\n"
+		else:
+			consentstatus += "$He will [color=red]not  fight[/color] for you.\n"
+		if person.consent:
+			consentstatus += "$He has given consent to [color=green]have  sex[/color] with you.\n"
+		else:
+			consentstatus += "$He has not given consent to [color=red]have  sex[/color] with you.\n"
+		if person.consentexp.pregnancy && person.preg.has_womb && globals.player.penis != "none":
+			consentstatus += "$He has given consent to [color=green]be  impregnated[/color] by you.\n"
+		elif person.preg.has_womb && globals.player.penis != "none":
+			consentstatus += "$He has not given consent to [color=red]be  impregnated[/color] by you.\n"
+		if person.consentexp.stud && person.penis != "none":
+			consentstatus += "$He has agreed to [color=green]stud[/color] for you and will impregnate other slaves.\n"
+		elif person.penis != "none":
+			consentstatus += "$He has not agreed to [color=red]stud[/color] for you and does not want to father children with other slaves.\n"
+		if person.consentexp.breeder && person.preg.has_womb:
+			consentstatus += "$He has agreed to [color=green]be  bred[/color] by other slaves for you.\n"
+		elif person.preg.has_womb:
+			consentstatus += "$He has not agreed to [color=green]be  bred[/color] by other slaves for you.\n"
+		if person.consentexp.incest:
+			consentstatus += "$He has consented to have [color=green]incestuous  sex[/color].\n"
+		else:
+			consentstatus += "$He has not consented to have [color=red]incestuous  sex[/color].\n"
+		if person.consentexp.incestbreeder && person.preg.has_womb:
+			consentstatus += "$He has consented to [color=green]be  bred  by  family[/color].\n"
+		elif person.preg.has_womb:
+			consentstatus += "$He has not consented to [color=red]be  bred  by  family[/color].\n"
+		if person.consentexp.livestock && globals.state.farm >= 3:
+			consentstatus += "$He has consented to [color=green]be  livestock[/color].\n"
+		elif globals.state.farm >= 3:
+			consentstatus += "$He has not consented to [color=red]be  livestock[/color].\n"
+		text += consentstatus
+		#/ralph7
 		#Party Up Consent
 		if !person.dailytalk.has('consentparty') && person.consentexp.party == false:
 			buttons.append({text = person.dictionary("Will you travel and fight with me?"), function = 'talkconsent', args = 'party'})
@@ -1718,7 +1766,7 @@ func talkconsent(mode=''):
 		if !person.dailytalk.has('consent') && person.consent == false:
 			buttons.append({text = person.dictionary("Are you willing to have sex with me?"), function = 'talkconsent', args = 'sexual'})
 		#Pregnancy Consent (With Player)
-		if person.consent == true && !person.dailytalk.has('consentpregnant') && person.consentexp.pregnancy == false:
+		if !person.dailytalk.has('consentpregnant') && person.consentexp.pregnancy == false:
 			if person.preg.has_womb == true && globals.player.penis != "none":
 				buttons.append({text = person.dictionary("I want to impregnate you"), function = 'talkconsent', args = 'pregnancy'})
 		#Breeding Stud
@@ -1733,10 +1781,10 @@ func talkconsent(mode=''):
 		if !person.dailytalk.has('consentincest') && person.consentexp.incest == false:
 			buttons.append({text = person.dictionary("Will you "+str(expansion.nameSex())+" with family members?"), function = 'talkconsent', args = 'incest'})
 		#Incest Breeder
-		if person.consentexp.incest == true && (person.consentexp.breeder == true || person.consentexp.stud == true) && !person.dailytalk.has('consentincestbreeder') && person.consentexp.incestbreeder == false:
+		if !person.dailytalk.has('consentincestbreeder') && person.consentexp.incestbreeder == false && person.consentexp.incest == true:
 			buttons.append({text = person.dictionary("Will you "+str(expansion.nameBeBred())+" by relatives?"), function = 'talkconsent', args = 'incestbreeder'})
 		#Livestock
-		if globals.state.farm >= 3 && (person.consentexp.breeder == true || person.consentexp.stud == true) && !person.dailytalk.has('consentlivestock') && person.consentexp.livestock == false:
+		if !person.dailytalk.has('consentlivestock') && globals.state.farm >= 3 && person.consentexp.livestock == false:
 			buttons.append({text = person.dictionary("Would you willingly work in the Farm as livestock?"), function = 'talkconsent', args = 'livestock'})
 	
 	if mode != "intro":
