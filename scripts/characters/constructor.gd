@@ -1,8 +1,8 @@
 
 ###---Added by Expansion---### Deviate
 var animal_races_array = ['bunny','dog','cow','cat','fox','horse','raccoon']
-var humanoid_races_array = ['Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome','Goblin','Demon','Dragonkin']
-var uncommon_races_array = ['Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla']
+var humanoid_races_array = ['Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome','Goblin','Demon']
+var uncommon_races_array = ['Dragonkin','Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla']
 var beast_races_array = ['Centaur','Taurus','Beastkin Cat','Beastkin Fox','Beastkin Wolf','Beastkin Bunny','Beastkin Tanuki','Halfkin Cat','Halfkin Fox','Halfkin Wolf','Halfkin Bunny','Halfkin Tanuki']
 var magic_races_array = ['Slime']
 var races_beastfree_darkelf_free = ['Human','Elf','Dark Elf','Orc','Gnome','Goblin','Demon','Dragonkin','Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla','Slime']
@@ -87,6 +87,29 @@ func newslave(race, age, sex, origins = 'slave'):
 	globals.traceFile('newslave')
 	
 	return person
+
+func changerace(person, race = null):
+	var races = globals.races
+	var personrace
+	if race == null:
+		personrace = person.race.replace('Halfkin','Beastkin')
+	else:
+		personrace = race
+	for i in races[personrace]:
+		if i in ['description', 'details']:
+			continue
+		if i in ['marketup', 'marketdown']: #ralph5
+			continue #ralph5
+		if typeof(races[personrace][i]) == TYPE_ARRAY:
+			person[i] = globals.randomfromarray(races[personrace][i])
+		elif typeof(races[personrace][i]) == TYPE_DICTIONARY:
+			if person.get(i) == null:
+				continue
+			for k in (races[personrace][i]):
+				person[i][k] = races[personrace][i][k]
+		else:
+			if person.get(i) != null:
+				person[i] = races[personrace][i]
 
 func randomportrait(person):
 	var array = []
@@ -272,7 +295,10 @@ func newbaby(mother,father):
 			person.add_trait(i)
 	
 	if rand_range(0,100) <= variables.babynewtraitchance:
-		person.add_trait(globals.origins.traits('any').name)
+		if rand_range(0,100) <= 20: # 1 in 5 chance
+			person.add_trait(globals.origins.traits('unique').name)
+		else:
+			person.add_trait(globals.origins.traits('any').name)
 	
 	person.npcexpanded.mansionbred = true
 	
@@ -533,7 +559,7 @@ func raceLottery(person):
 		if person.genealogy[temprace] == 0 && rand_range(0,100) <= globals.expansionsettings.secondaryuncommonracialchance + sametypeweight:
 			raceoptions.append(i)
 		elif person.genealogy[temprace] > 0:
-			sametypeweight += round(person.genealogy[temprace]/2)
+			sametypeweight += round(person.genealogy[temprace]/4)
 	sametypeweight = 0
 	for i in beast_races_array:
 		temprace = genealogy_decoder(i)
@@ -555,13 +581,20 @@ func raceLottery(person):
 #Tweaked by Aric
 func build_genealogy(person, mother, father):
 	var percent = 0
-	
+	#ralph9 add randomness to babies genes from toxicity of parents; high toxicity -> more chance for variance in which genes are passed
+	var remainder
 	for race in genealogies:
-		person.genealogy[race] = round((mother.genealogy[race] + father.genealogy[race]) * .5)
-		percent += person.genealogy[race]
-	
+		#ralph8 add a tiny bit of randomization and fix 99% and 100% parents never yielding pureblood child
+		if rand_range(0,100) >= 50: 
+			person.genealogy[race] = round((mother.genealogy[race] + father.genealogy[race]) * .49999999)
+			percent += person.genealogy[race]
+		else:
+			person.genealogy[race] = round((mother.genealogy[race] + father.genealogy[race]) * .5)
+			percent += person.genealogy[race]
+		#/ralph8
 	while percent != 100:
 		percent = build_genealogy_equalize(person, percent)
+	#/ralph9
 	globals.traceFile('build genealogy')
 	return
 

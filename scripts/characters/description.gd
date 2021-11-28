@@ -521,7 +521,8 @@ var newdescriptions = {
 		"snake tail" : '',
 		tentacles = '',
 		horse = '',
-		"spider abdomen" : ''
+		"spider abdomen" : '',
+		mouse = 'Below $his waist, you spot a slim [color=aqua]mouse tail[/color] covered in a fine thin layer of fuzz. '
 	},
 	height = {
 		tiny = '$His stature is [color=aqua]' + str(randomitemfromarray(['extremely small','tiny','itty bitty'])) + '[/color], barely half the size of a normal person. ',

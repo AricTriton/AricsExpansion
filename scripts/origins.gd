@@ -9,6 +9,13 @@ func traits(tag):
 			if traits[i]['tags'].has('secondary') != true && traits[i]['tags'].has('expansiontrait') != true:
 			###---Expansion End---###
 				rval.append(traits[i])
+	#ralph
+	elif tag == 'unique':
+		for i in traits:
+			if traits[i]['tags'].has('unique') == true && traits[i]['tags'].has('expansiontrait') != true:
+			###---Expansion End---###
+				rval.append(traits[i])
+	#/ralph
 	else:
 #warning-ignore:unused_variable
 		var temp = traits.keys()

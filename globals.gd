@@ -412,6 +412,7 @@ class progress:
 	var alisecloth = 'normal'
 	var decisions = []
 	var lorefound = []
+	var racemarketsat = {} #ralph5 - variable to track market saturation of various races (sell a lot of one race and its pricing goes down, etc.)
 	var relativesdata = {}
 	var descriptsettings = {full = true, basic = true, appearance = true, genitals = true, piercing = true, tattoo = true, mods = true}
 	###---Added by Expansion---### Dimensional Crystal & Farm Expanded
@@ -726,6 +727,14 @@ class progress:
 					count -= max(globals.itemdict[item].amount, 0)
 					globals.itemdict[item].amount = 0
 		return count
+		
+	#ralph5
+	func setupracemarketsat():
+		for race in globals.races:
+			if !racemarketsat.has(race):
+				racemarketsat[race] = globals.races[race].pricemod
+				#print(race + " added to racemarketsat with value: " + str(racemarketsat[race]))
+	#/ralph5
 
 	# calculates and returns the number of ropes recovered after use, mainly for adding to appropriate inventory. displays infotext if ropes are lost
 	func calcRecoverRope(numPersons, usedFor = 'capture'):
@@ -1002,6 +1011,8 @@ func slavetooltip(person):
 	if node.get_rect().end.y >= screen.size.y:
 		node.rect_global_position.y -= node.get_rect().end.y - screen.size.y
 
+var longtails = ['cat','fox','wolf','demon','dragon','scruffy','snake tail','racoon','mouse']
+var alltails = ['cat','fox','wolf','bunny','bird','demon','dragon','scruffy','snake tail','racoon','mouse']
 ###---Added by Expansion---### Kennels Expanded
 var sleepdict = {communal = {name = 'Communal Room'}, jail = {name = "Jail"}, personal = {name = 'Personal Room'}, your = {name = "Your bed"}, kennel = {name = "Dog Kennel"}}
 
@@ -1297,6 +1308,13 @@ var sexuality_images = {
 	futa_3 = load("res://files/aric_expansion_images/sexuality_icons/futa_3.png"),
 }
 
+var playerspecs = {
+	Slaver = "+100% gold from selling captured slaves\n+33% gold reward from slave delivery tasks",
+	Hunter = "+100% gold drop from random encounters\n+20% gear drop chance\nBonus to preventing ambushes",
+	Alchemist = "Start with an alchemy room\nDouble potion production\nSelling potions earn 100% more gold",
+	Mage = "Combat spell deal 20% more damage", #ralph3
+}
+
 ###---Added by Expansion---### Farm Expanded
 func getVatMaxCapacity(type):
 	var vatmax = 0
@@ -1556,9 +1574,11 @@ func slimeConversionCheck(mother, father):
 				strongestgenes = baby.genealogy[genes]
 		
 		if rand_range(0,100) + conversionstrength > strongestgenes:
+			#ralph
+			expansionsetup.setRaceBonus(baby, false)
 			baby.race = 'Slime'
 			baby.race_type == 4
-			expansionsetup.setRaceBonus(baby, false)
+			#/ralph
 			for genes in baby.genealogy:
 				if genes != 'slime' && baby.genealogy[genes] > 0:
 					baby.genealogy[genes] = 0

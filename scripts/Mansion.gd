@@ -74,6 +74,7 @@ func _ready():
 		get_node("tutorialnode").starttutorial()
 		globals.state.tutorialcomplete = true
 	
+	globals.state.setupracemarketsat() #ralph5
 	if globals.showalisegreet == true:
 		alisegreet()
 	elif globals.gameloaded == true:
@@ -1090,29 +1091,21 @@ func _on_end_pressed():
 	#####          Outside Events
 
 
-	for guild in globals.guildslaves:
-		var slaves = globals.guildslaves[guild]
-		count = round(clamp(0.25, 0.75, 0.01 * slaves.size() + rand_range(0.1, 0.4)) * slaves.size())
-		###---Added by Expansion---### Ank BugFix v4a
-		var idx
-		var removeId
-		var tempslave
-		for i in range(count):
-			idx = randi() % (slaves.size()*7/4) % slaves.size()
-			removeId = slaves[idx].id
-			for id in slaves[idx].relations:
-				tempslave = globals.state.findslave(id)
-				if tempslave:
-					tempslave.relations.erase(removeId)
-			slaves.remove(idx)
-		###---End Expansion---###
-			 
-		if slaves.size() < 4:
-			get_node("outside").newslaveinguild(2, guild)
-		if slaves.size() < 10 && randf() < 0.85:
-			get_node("outside").newslaveinguild(1, guild)
-		if randf() < 0.5:
-			get_node("outside").newslaveinguild(1, guild)
+	for i in globals.guildslaves:
+		var tempcount = 0 #ralph6
+		for person in globals.guildslaves[i]:
+			count = 0
+			#if randf() < 0.2: #ralph6
+			#	globals.guildslaves[i].remove(count)  #ralph6
+			count += 1
+			if rand_range(0,100) <= 20: #ralph6
+				globals.guildslaves[i].remove(tempcount)  #ralph6
+			tempcount += 1 #ralph6
+		if globals.guildslaves[i].size() < 4:
+			get_node("outside").newslaveinguild(1, i, 'rand') #ralph5 added 3rd entry
+		if globals.guildslaves[i].size() < 6 && randf() > 0.25:
+			get_node("outside").newslaveinguild(1, i, 'rand') #ralph5 added 3rd entry
+			
 	if globals.state.sebastianorder.duration > 0:
 		globals.state.sebastianorder.duration -= 1
 		if globals.state.sebastianorder.duration == 0:
@@ -1194,6 +1187,66 @@ func _on_end_pressed():
 		text = text + 'Your food storage shrank by [color=aqua]' + str(start_food - globals.resources.food) + '[/color] units of food.\n'
 	else:
 		text = text + 'Your food storage grew by [color=aqua]' + str(globals.resources.food - start_food) + '[/color] units of food.\n'
+	#ralph5 - daily market price recovery and chance of big market change for one race
+	text = text + "\n\n Market pricing for slaves increased somewhat to suit demand.\n"
+	for i in globals.races:
+		if globals.state.racemarketsat[i] < globals.races[i].pricemod:
+			globals.state.racemarketsat[i] = clamp(globals.state.racemarketsat[i] + max(0.01,(1-globals.state.racemarketsat[i])*0.25),0.5,globals.races[i].pricemod) #under 1.0, recovers quickly toward 1 - over 1.0 increase 0.1 every 10 days
+	if rand_range(0,100) > 0: #chance of a market event occuring to affect one races prices
+		var temprandom = rand_range(0.25,1.0) #magnitude of ratio change
+		var temprace
+		var tempcount = 0.0
+		var tempracecount = 0.0
+		var tempracearray = []
+		var tempracearray2 = []
+		for i in globals.guildslaves:
+			for person in globals.guildslaves[i]:
+				if !tempracearray.has(person.race.replace('Halfkin', 'Beastkin')):
+					tempracearray.append(person.race.replace('Halfkin', 'Beastkin')) #create array or races currently for sale
+		temprace = tempracearray[rand_range(0,tempracearray.size()-1)] #select available race for price decrease or else: below (increase)
+		if rand_range(0,100) < 30: #chance specific race increase/decrease
+			if rand_range(0,100) < 50: #chance for price decrease
+				if rand_range(0,100) <= 20: #chance for price decrease due to sudden supply
+					#determine how amny to add; increase price; add them to a guild
+					for i in globals.guildslaves: #get count of temprace for sale at the guilds
+						for person in globals.guildslaves[i]:
+							if temprace == person.race.replace('Halfkin', 'Beastkin'):
+								tempracecount += 1
+					tempracecount = max(min(tempracecount*2,10),4)-int(rand_range(0,1)) #set number of slaves to be added with scarce races added to less
+					var town = globals.randomitemfromarray(['wimborn','gorn','frostford','umbra'])
+					#globals.get_tree().get_current_scene().get_node("outside").newslaveinguild(tempracecount,town,temprace)
+					get_node("outside").newslaveinguild(tempracecount,town,temprace)
+					text = text + "An anonymous party floods the slave guild in [color=yellow]" + town + "[/color] with [color=yellow]" + str(tempracecount) + "[/color][color=aqua]" + globals.races[temprace].plural + "[/color]. Prices drop.\n"
+					var racepricemod = 1
+					var racepricemodchange = 0
+					for i in tempracecount: #decrease price ratio for temprace for each sold (same amount as when player sells)
+						racepricemod = globals.state.racemarketsat[temprace.replace('Halfkin', 'Beastkin')]
+						racepricemodchange = (racepricemod - 0.5)*0.1 #the bigger the premium the more the premium will be decreased
+						racepricemod = clamp(racepricemod - racepricemodchange,0.5,5)
+						globals.state.racemarketsat[temprace] = racepricemod
+				else: #chance for simple price decrease
+					globals.state.racemarketsat[temprace] = clamp(globals.state.racemarketsat[temprace] - temprandom,0.5,5)
+					text = text + str(globals.races[temprace].marketdown[rand_range(0,globals.races[temprace].marketdown.size())])
+					print("decrease price: " + str(globals.races[temprace].marketdown[rand_range(0,globals.races[temprace].marketdown.size())]))
+			elif rand_range(0,100) < 80: #simple price increase for race missing from slave guilds
+				for i in globals.races:
+					if !i in tempracearray:
+						tempracearray2.append(i) #create array of races not currently for sale
+				if tempracearray2 != null:
+					temprace = tempracearray2[rand_range(0,tempracearray.size()-1)] #select available race for price increase
+					globals.state.racemarketsat[temprace] = clamp(globals.state.racemarketsat[temprace] + temprandom,0.5,5)
+					text = text + str(globals.races[temprace].marketup[rand_range(0,globals.races[temprace].marketup.size())])
+					print("increase price: " + str(globals.races[temprace].marketup[rand_range(0,globals.races[temprace].marketup.size())]))
+			else: #price increase due to all existing race slaves being sold from slave guilds
+				for guild in globals.guildslaves:
+					for person in globals.guildslaves[guild].duplicate():
+						if person.race.replace('Halfkin', 'Beastkin') == temprace:
+							var start_size = globals.guildslaves[guild].size()
+							globals.guildslaves[guild].erase(person)
+							tempcount += 1.0
+				text = text + "Demand skyrockets after an unknown party purchases every [color=aqua]" + temprace + "[/color] on the market.\n"
+				globals.state.racemarketsat[temprace] = clamp(globals.races[temprace].pricemod + min(0.5,tempcount*0.1),0.5,5)
+	#/ralph5
 	text0.set_bbcode(text0.get_bbcode() + text)
 	globals.state.sexactions = ceil(globals.player.send/2.0) + variables.basesexactions
 	globals.state.nonsexactions = ceil(globals.player.send/2.0) + variables.basenonsexactions
@@ -1765,45 +1818,45 @@ func _on_raise_pressed():
 func ClearBabyTraits(age):
 	if age == 'child':
 		if baby.traits.has('Slutty') || baby.traits.has('Devoted'):
-			baby.remove_trait('Slutty')
-			baby.remove_trait('Devoted')
+			baby.trait_remove('Slutty')
+			baby.trait_remove('Devoted')
 			baby.add_trait('Pliable')
-		baby.remove_trait('Deviant')
-		baby.remove_trait('Pervert')
-		baby.remove_trait('Masochist')
-		baby.remove_trait('Sadist')
-		baby.remove_trait('Likes it rough')
-		baby.remove_trait('Enjoys Anal')
-		baby.remove_trait('Grateful')
-		baby.remove_trait('Sex-crazed')
+		baby.trait_remove('Deviant')
+		baby.trait_remove('Pervert')
+		baby.trait_remove('Masochist')
+		baby.trait_remove('Sadist')
+		baby.trait_remove('Likes it rough')
+		baby.trait_remove('Enjoys Anal')
+		baby.trait_remove('Grateful')
+		baby.trait_remove('Sex-crazed')
 	elif age == 'teen':
 		if baby.traits.has('Slutty') || baby.traits.has('Devoted'):
-			baby.remove_trait('Slutty')
-			baby.remove_trait('Devoted')
+			baby.trait_remove('Slutty')
+			baby.trait_remove('Devoted')
 			baby.add_trait('Pliable')
 		if baby.traits.has('Deviant') && rand_range(0,100) < 75:
-			baby.remove_trait('Deviant')
+			baby.trait_remove('Deviant')
 		if baby.traits.has('Pervert') && rand_range(0,100) < 50:
-			baby.remove_trait('Pervert')
+			baby.trait_remove('Pervert')
 		if baby.traits.has('Masochist') && rand_range(0,100) < 50:
-			baby.remove_trait('Masochist')
+			baby.trait_remove('Masochist')
 		if baby.traits.has('Sadist') && rand_range(0,100) < 50:
-			baby.remove_trait('Sadist')
+			baby.trait_remove('Sadist')
 		if baby.traits.has('Likes it rough') && rand_range(0,100) < 50:
-			baby.remove_trait('Likes it rough')
+			baby.trait_remove('Likes it rough')
 		if baby.traits.has('Enjoys Anal') && rand_range(0,100) < 50:
-			baby.remove_trait('Enjoys Anal')
+			baby.trait_remove('Enjoys Anal')
 		if baby.traits.has('Grateful') && rand_range(0,100) < 50:
-			baby.remove_trait('Grateful')
+			baby.trait_remove('Grateful')
 		if baby.traits.has('Sex-crazed') && rand_range(0,100) < 75:
-			baby.remove_trait('Sex-crazed')
+			baby.trait_remove('Sex-crazed')
 	elif age == 'adult':
 		if baby.traits.has('Slutty') || baby.traits.has('Devoted'):
-			baby.remove_trait('Slutty')
-			baby.remove_trait('Devoted')
+			baby.trait_remove('Slutty')
+			baby.trait_remove('Devoted')
 			baby.add_trait('Pliable')
 		if baby.traits.has('Sex-crazed') && rand_range(0,100) < 50:
-			baby.remove_trait('Sex-crazed')
+			baby.trait_remove('Sex-crazed')
 #/ralph
 
 

@@ -13,18 +13,19 @@ var questgiveawayslave
 #onready var sideQuestTexts = globals.sideQuestTexts
 
 func _ready():
+	###---Added by Expansion---### Removed via Ank BugFix v4
 	if globals.guildslaves.wimborn.size() < 2:
 		var rand = round(rand_range(4,6))
-		newslaveinguild(rand, 'wimborn')
+		newslaveinguild(rand, 'wimborn', 'rand') #ralph5 added 3rd entry
 	if globals.guildslaves.gorn.size() < 2:
 		var rand = round(rand_range(4,6))
-		newslaveinguild(rand, 'gorn')
+		newslaveinguild(rand, 'gorn', 'rand') #ralph5 added 3rd entry
 	if globals.guildslaves.frostford.size() < 2:
 		var rand = round(rand_range(4,6))
-		newslaveinguild(rand, 'frostford')
+		newslaveinguild(rand, 'frostford', 'rand') #ralph5 added 3rd entry
 	if globals.guildslaves.umbra.size() < 4:
 		var rand = round(rand_range(4,6))
-		newslaveinguild(rand, 'umbra')
+		newslaveinguild(rand, 'umbra', 'rand') #ralph5 added 3rd entry
 	for i in ['armor','weapon','costume','accessory','underwear']:
 		$playergrouppanel/characterinfo.get_node(i).connect('mouse_entered',self,'iteminfo',[i])
 		$playergrouppanel/characterinfo.get_node(i).connect('mouse_exited',self,'iteminfoclose')
@@ -563,31 +564,44 @@ func outskirts():
 ############## person GUILD
 
 
-func newslaveinguild(number, town = 'wimborn'):
+func newslaveinguild(number, town = 'wimborn', raceadd = 'Human'): #ralph5 added 3rd entry: raceadd
 	while number > 0:
 		var racearray
 		var race
 		var origin
 		var originpool 
 		if town == 'wimborn':
-			racearray = [[globals.getracebygroup("wimborn"),1],['Dark Elf', 1],['Tribal Elf', 1.5],['Elf', 2],['Human', 6]]
+			#racearray = [[globals.getracebygroup("wimborn"),1],['Halfkin Tanuki', 1],['Dragonkin', 1.5],['Arachna', 2],['Scylla', 6]] #test
+			racearray = [[globals.getracebygroup("wimborn"),1],['Tribal Elf', 1],['Dark Elf', 1],['Elf', 4],['Human', 8]] #ralph5
 		elif town == 'gorn':
-			racearray = [[globals.getracebygroup("gorn"),1],['Centaur', 1],['Human', 2],['Goblin', 2],['Orc', 5]]
+			racearray = [[globals.getracebygroup("gorn"),1],['Centaur', 1],['Human', 2],['Goblin', 4],['Orc', 6],['Dark Elf', 2]] #ralph5 changed weights, added dark elves
 		elif town == 'frostford':
-			racearray = [[globals.getracebygroup("frostford"),1],['Human', 1.5],['Halfkin Wolf', 3],['Beastkin Wolf', 5]]
+			#racearray = [[globals.getracebygroup("frostford"),1],['Human', 1.5],['Halfkin Wolf', 3],['Beastkin Wolf', 5]] #ralph5
+			racearray = [[globals.getracebygroup("frostford"),1],['Human', 3],['Halfkin Wolf', 5],['Beastkin Wolf', 8],['Halfkin Cat', 5],['Halfkin Bunny', 1]] #ralph5
 		elif town == 'umbra':
-			racearray = [[globals.randomfromarray(globals.allracesarray),1]]
+			racearray = [[globals.allracesarray[rand_range(0,globals.allracesarray.size())],1]]
 		if globals.rules.slaverguildallraces == true && globals.state.sandbox == true:
 			originpool = ['slave','poor','commoner','rich','noble']
-			origin = globals.randomfromarray(originpool)
-			race = globals.randomfromarray(globals.allracesarray)
-		else:
+			origin = originpool[rand_range(0,originpool.size())]
+			race = globals.allracesarray[rand_range(0,globals.allracesarray.size())]
+		elif raceadd == 'rand': #ralph5 changed from    else:
 			race = globals.weightedrandom(racearray)
 			if town == 'umbra':
 				originpool = [['noble', 1],['rich',2],['commoner',3], ['poor', 3], ['slave',1]]
 			else:
 				originpool = [['rich',1], ['commoner',3], ['poor', 6], ['slave', 6]]
 			origin = globals.weightedrandom(originpool)
+		#ralph5
+		else:
+			race = raceadd
+			if race in ['Beastkin Tanuki','Beastkin Fox','Beastkin Bunny','Beastkin Wolf','Beastkin Cat'] && rand_range(0,100) < 50:
+				race = race.replace('Beastkin','Halfkin')
+			if town == 'umbra':
+				originpool = [['noble', 1],['rich',2],['commoner',3], ['poor', 3], ['slave',1]]
+			else:
+				originpool = [['rich',1], ['commoner',3], ['poor', 6], ['slave', 6]]
+			origin = globals.weightedrandom(originpool)
+		#/ralph5
 		var newslave = globals.newslave(race, 'random', 'random', origin)
 		if town == 'umbra':
 			newslave.obed = rand_range(0,80)
@@ -608,6 +622,36 @@ func setcharacter(text):
 		if $charactersprite.modulate.a != 1:
 			get_parent().nodeunfade($charactersprite, 0.3)
 	
+func marketsattext():
+	#ralph5
+	var sattext = ""
+	var starttext = ""
+	var endtext = ""
+	var extrazero = ".0"
+	var racetext
+	var marketrate = 1
+	sattext = "\n\nA sign board lists current relative pricing by race:\n"
+	for i in globals.races:
+		marketrate = round(globals.state.racemarketsat[i]*100)/100
+		racetext = i.replace('Beastkin', '')
+		if marketrate < 0.9:
+			starttext = "[color=red]"
+			endtext = "[/color]"
+		elif marketrate >= 2.0:
+			starttext = "[color=green]"
+			endtext = "[/color]"
+		else:
+			starttext = "[color=yellow]"
+			endtext = "[/color]"
+		if !marketrate in [0,1,2,3,4,5,6,7,8,9,10]:
+			sattext = sattext + "Price x " + starttext + str(marketrate) + endtext + " for [color=aqua]" + racetext + endtext + "\n"
+		else:
+			sattext = sattext + "Price x " + starttext + str(marketrate) + extrazero + endtext + " for [color=aqua]" + racetext + endtext + "\n"
+	return sattext
+		#print("Market pricing for " + str(i) + "'s increased by" + str(max(0.01,(1-globals.state.racemarketsat[i])*0.25)) + " from " + str(globals.state.racemarketsat[i]))
+		#globals.state.racemarketsat[i] = clamp(globals.state.racemarketsat[i] + max(0.01,(1-globals.state.racemarketsat[i])*0.25),0.5,globals.races[i].pricemod) #under 1.0, recovers quickly toward 1 - over 1.0 increase 0.1 every 10 days
+		#print("to " + str(globals.state.racemarketsat[i]) + "\n")
+	#/ralph5	
 
 func slaveguild(guild = 'wimborn'):
 	mindread = false
@@ -641,13 +685,14 @@ func slaveguild(guild = 'wimborn'):
 			text += "\n\nMaple gives you a playful, warm look."
 		elif globals.state.sidequests.maple == 7:
 			text = "You enter through the guild’s doors, and are greeted once again by the busy sights and sounds of customers, slaves, and workers shuffling around at blistering speeds. You give a polite bow to one of the receptionists and grab a pen to sign in."
+		text = text + marketsattext() #ralph5
 		mansion.maintext = globals.player.dictionary(text)
 		buildbuttons(array)
 	elif guild == 'gorn':
 		clearselection()
 		setcharacter('goblin')
 		slavearray = globals.guildslaves.gorn
-		mansion.maintext = globals.player.dictionaryplayer("Huge part of supposed guild takes a makeshift platform and tents on the outside with few half-empty cages. In the middle, you can see a presentation podium which is easily observable from main street. Despite Gorn being very different from common, primarily human-populated towns, it still directly follows Mage's Order directives — race diversity and casual slavery are very omnipresent. \n\nAs you walk in, one of the goblin receptionists quickly recognizes you as an Order member and hastily grabs your attention, sensing a profitable customer.\n\n— $sir interested in some heat-tolerant 'orkers? *chuckles* Or you are in preference of short girls? We quite often get those as well, for every taste and color!")
+		mansion.maintext = globals.player.dictionaryplayer("A huge part of the supposed guild is taken up by a makeshift platform and tents with a few half-empty cages. In the middle, you can see a presentation podium which is easily observable from main street. Despite Gorn being very different from primarily human-populated towns, it still very much follows Mage Order directives — race diversity and casual slavery are omnipresent. \n\nAs you walk in, one of the goblin receptionists hastily grabs your attention, sensing a profitable customer.\n\n— $sir interested in some heat-tolerant 'orkers? *chuckles* Or you are in preference of short girls? We quite often get those as well, for every taste and color!" + marketsattext()) #ralph5
 		var array = [{name = 'See slaves for sale',function = 'slaveguildslaves', args = 'gorn'}, {name = 'Offer your servants',function = 'sellslavelist', args = 'gorn'}, {name = 'See custom requests', function = 'slaveguildquests'},{name = 'Services for Slaves',function = 'slaveservice'}]
 		#Old Event Hooks
 		if globals.state.sidequests.emily in [14,15]:
@@ -684,8 +729,11 @@ func slaveguild(guild = 'wimborn'):
 		text = "A humble local guild building is bright and warm inside. Just as the whole of Frostford, this place is serene in its mood compared to what you are used to. "
 		if globals.state.mainquest >= 2:
 			text += "Realizing you belong to the Mage's Order, the attendant politely greets you and asks how she may assist you. "
+		text = text + marketsattext() #ralph5
 		mansion.maintext = globals.player.dictionaryplayer(text)
+		###---Added by Expansion---### Ank BugFix v4
 		var array = [{name = 'See slaves for sale',function = 'slaveguildslaves', args = 'frostford'},{name = 'Offer your servants',function = 'sellslavelist', args = 'frostford'}, {name = 'See custom requests', function = 'slaveguildquests'}, {name = 'Services for Slaves',function = 'slaveservice'}, {name = 'Leave', function = 'tofrostford'}]
+		###---End Expansion---###
 		buildbuttons(array)
 	get_node("playergrouppanel/VBoxContainer").visible = false
 	if globals.spelldict.mindread.learned == false:
@@ -777,11 +825,13 @@ var guildlocation
 func slaveguildslaves(location):
 	guildlocation = location
 	get_node("slavebuypanel").visible = true
-	var cost = 5
-	if globals.state.spec == 'Mage':
-		cost = cost/2
+	var cost = 1
+	#ralph
+	#if globals.state.spec == 'Mage':
+	#	cost = cost/2
 	get_node("slavebuypanel/mindreadbutton").text = "Use Mind Read (" +str(cost)+ ")"
-	get_node("slavebuypanel/mindreadbutton").hint_tooltip = "Allows to see more information about the slaves.\nCosts " +str(cost)+ " mana"
+	get_node("slavebuypanel/mindreadbutton").hint_tooltip = "Allows to see more information about all the slaves.\nCosts " +str(cost)+ " mana"
+	#/ralph
 	get_node("slavebuypanel/mindreadbutton").disabled = mindread == true || globals.spelldict.mindread.learned == false || globals.resources.mana < cost
 	var slavelist = get_node("slavebuypanel/slavebuypanel/ScrollContainer/VBoxContainer")
 	var slavebutton = get_node("slavebuypanel/slavebuypanel/ScrollContainer/VBoxContainer/slavebutton")
@@ -937,12 +987,20 @@ func _on_purchasebutton_pressed():
 	slaveguildslaves(guildlocation)
 	clearselection('buy')
 
-
-
 func _on_slavesellbutton_pressed():
 	var upgradefromslave = false
 	var text = ''
+	var racepricemodchange = 0 #ralph5
+	var racepricemod = 1 #ralph5
 	globals.resources.gold += selectedslaveprice
+	#ralph5
+	racepricemod = globals.state.racemarketsat[selectedslave.race.replace('Halfkin', 'Beastkin')] #ralph5
+	racepricemodchange = (racepricemod - 0.5)*0.1 #the bigger the premium the more the premium will be decreased
+	#print("Pricemod for " + selectedslave.race + " is " + str(racepricemod))
+	racepricemod = clamp(racepricemod - racepricemodchange,0.5,5)
+	globals.state.racemarketsat[selectedslave.race] = racepricemod
+	#print("Sold 1 " + selectedslave.race + "   Pricemod decreased " + str(racepricemodchange) + " to " + str(racepricemod))
+	#/ralph5
 	if selectedslave.obed >= 90 && selectedslave.fromguild == false && selectedslave.effects.has('captured') == false:
 		upgradefromslave = true
 		###---Added by Expansion---###
@@ -977,7 +1035,7 @@ func _on_slavesellbutton_pressed():
 				reputationloss[1][1] += 10
 			###---End Expansion---###
 			reputationloss = globals.weightedrandom(reputationloss)
-			globals.state.reputation[reputationloss] -= 4
+			globals.state.reputation[reputationloss] -= 18 #ralph   originally was 4
 			text += "[color=yellow]Your reputation has suffered from this deal. [/color]\n"
 	if globals.guildslaves.has(guildlocation):
 		globals.guildslaves[guildlocation].append(selectedslave)
@@ -2839,16 +2897,27 @@ func _on_capturedmindread_pressed():
 func _on_quicksell_pressed():
 	var text = ''
 	var gold = 0
-	var array = globals.state.capturedgroup
-	globals.state.capturedgroup = []
+	var array = []
+	#ralph5
+	var racepricemodchange = 0
+	var racepricemod = 1
+	#/ralph5
+	for i in globals.state.capturedgroup:
+		array.append(i)
 	for i in array:
 		gold += i.sellprice()*.9 #ralph3
+		#ralph5
+		racepricemod = globals.state.racemarketsat[i.race.replace('Halfkin', 'Beastkin')]
+		#print("Pricemod for " + i.race + " is " + str(racepricemod))
+		racepricemodchange = (racepricemod - 0.5)*0.1 #the bigger the premium the more the premium will be decreased
+		racepricemod = clamp(racepricemod - racepricemodchange,0.5,5)
+		globals.state.racemarketsat[i.race.replace('Halfkin', 'Beastkin')] = racepricemod
+		#print("Sold 1 " + i.race + "   Pricemod decreased " + str(racepricemodchange) + " to " + str(racepricemod))
+		#/ralph5
 		globals.state.capturedgroup.erase(i)
 	main.popup('You furtively delivered your captives to the local slaver guild. This earned you [color=yellow]' + str(gold) + '[/color] gold. ')
-	globals.state.backpack.stackables.rope = globals.state.backpack.stackables.get('rope', 0) + globals.state.calcRecoverRope(array.size())
 	globals.resources.gold += gold
 	_on_details_pressed()
-	playergrouppanel()
 
 var lowcrime = ["theft","banditry","robbery","smuggling","poaching","assualt","assualt","indecent exposure","vandalism","fraud","threats against one of higher caste","threats upon a member of the guard","defacing a public monument","theft of livestock","harboring an escaped slave","banditry","banditry","banditry","banditry","banditry","banditry","banditry","banditry","aiding and abetting a known fugitive","trespassing","fencing stolen goods","sale of counterfeit potions","impersonating a guard","vagrancy","robbery","robbery","robbery","robbery","theft","theft","theft","theft","obstruction of justice","forgery"]
 var midcrime = ["manslaughter","armed robbery","kidnapping","desertion","murder","assualt on a town guard","rape","removal of a slave brand","incitation to rebellion","assault of one of higher caste","impersonating a member of the mage guild"]

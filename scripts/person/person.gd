@@ -844,7 +844,8 @@ func calculateprice():
 	var bonus = 1
 	price = beautybase*variables.priceperbasebeauty + beautytemp*variables.priceperbonusbeauty
 	price += (level-1)*variables.priceperlevel
-	price = price*globals.races[race.replace('Halfkin', 'Beastkin')].pricemod
+	#price = price*globals.races[race.replace('Halfkin', 'Beastkin')].pricemod #ralph5
+	price = price*globals.state.racemarketsat[race.replace('Halfkin', 'Beastkin')] #ralph5
 	if vagvirgin == true:
 		bonus += variables.pricebonusvirgin
 	if sex == 'futanari':

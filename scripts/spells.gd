@@ -21,7 +21,7 @@ var spelllist = {
 		name = 'Mind Reading',
 		description = 'Enhances your mind to be more cunning towards others. Allows to get accurate information about other characters. ',
 		effect = 'mindreadeffect',
-		manacost = 3,
+		manacost = 1, #/ralph
 		req = 0,
 		price = 100,
 		personal = true,
@@ -35,7 +35,7 @@ var spelllist = {
 		name = 'Sedation',
 		description = "Eases target's stress and fear.",
 		effect = 'sedationeffect',
-		manacost = 10,
+		manacost = 20, #/ralph
 		req = 0,
 		price = 200,
 		personal = true,
@@ -91,7 +91,7 @@ var spelllist = {
 		name = 'Dream',
 		description = 'Puts target into deep, restful sleep. ',
 		effect = 'dreameffect',
-		manacost = 20,
+		manacost = 5, #/ralph
 		req = 0,
 		price = 350,
 		personal = true,
@@ -104,7 +104,7 @@ var spelllist = {
 		name = 'Entrancement',
 		description = 'Makes target more susceptible to suggestions and easier to acquire various kinks.',
 		effect = 'entrancementeffect',
-		manacost = 15,
+		manacost = 10, #/ralph
 		req = 10,
 		price = 400,
 		personal = true,
@@ -117,7 +117,7 @@ var spelllist = {
 		name = 'Fear',
 		description = 'Invokes subconscious feel of terror onto the target. Can be effective punishment. ',
 		effect = 'feareffect',
-		manacost = 10,
+		manacost = 20, #/ralph
 		req = 0,
 		price = 250,
 		personal = true,
@@ -143,7 +143,7 @@ var spelllist = {
 		name = 'Mutation',
 		description = 'Enforces mutation onto target. Results may vary drastically. ',
 		effect = 'mutateeffect',
-		manacost = 15,
+		manacost = 10, #/ralph
 		req = 2,
 		price = 400,
 		personal = true,
@@ -208,7 +208,7 @@ var spelllist = {
 		name = 'Invigorate',
 		description = "Restores caster's and target's energy by using mana and target body's potential. Builds up target's stress. Can be used in wild. ",
 		effect = 'invigorateeffect',
-		manacost = 5,
+		manacost = 20, #/ralph
 		req = 2,
 		price = 300,
 		personal = true,
@@ -221,7 +221,7 @@ var spelllist = {
 		name = 'Summon Tentacle',
 		description = 'Summons naughty tentacles from the otherworld for a short time. Can make up for a very effective punishment.',
 		effect = 'tentacleeffect',
-		manacost = 35,
+		manacost = 20, #/ralph
 		req = 10,
 		price = 650,
 		personal = true,
@@ -271,12 +271,9 @@ var spelllist = {
 	},
 ###---End Expansion---###
 }
-
+	
 func spellcost(spell):
-	var cost = spell.manacost
-	if globals.state.spec == 'Mage':
-		cost = cost/2
-	return cost
+	return spell.manacost*2
 
 func mindreadeffect():
 	var spell = globals.spelldict.mindread
@@ -331,6 +328,61 @@ var dictChangeParts = {
 	21 : ['haircolor', globals.allhaircolors, "hair color"],
 	22 : ['ears', globals.allears, "ear shape"],
 }
+
+#ralph
+func invigorateeffect():
+	var text = ''
+	var spell = globals.spelldict.invigorate
+	globals.resources.mana -= spellcost(spell)
+	if person.unique != 'player':
+		person.energy += person.stats.energy_max/2
+		person.stress += max(rand_range(25,35)-globals.player.smaf*4, 10)
+		globals.player.energy += 50
+		text = person.dictionary("You cast Invigorate on $name. Your and $his energy is partly restored. $His stress has increased. ")
+	else:
+		if person.health >= person.stats.health_max/2 && person.health > 30:
+			person.health -= rand_range(20,30)
+			globals.player.energy += 50
+			text = person.dictionary("You cast Invigorate on yourself. You cut your palm using your own blood as the catalyst for the spell. Your energy is partly restored at the cost of a small amount of your health. ")
+		else:
+			globals.player.energy += 25
+			text = person.dictionary("You cast Invigorate on yourself and make a sputtering gasp, coughing up a little blood. You're not in any shape for this. Your energy is partly restored, but not as much as you hoped. ")
+	return text
+#/ralph
+
+func feareffect():
+	var text = "You grab hold of $name's shoulders and hold $his gaze. At first, $he’s calm, but the longer you stare into $his eyes, the more $he trembles in fear. Soon, panic takes over $his stare. "
+	var spell = globals.spelldict.fear
+	globals.resources.mana -= spellcost(spell)
+	person.fear += 20+caster.smaf*10
+	person.stress += max(5, 20-caster.smaf*3)
+	if person.effects.has('captured') == true:
+		text += "\n[color=green]$name becomes less rebellious towards you.[/color]"
+		person.effects.captured.duration -= 1+globals.player.smaf/3
+	text = (person.dictionary(text))
+	return text
+
+func tentacleeffect():
+	var spell = globals.spelldict.summontentacle
+	var text = "As you finish chanting the spell, a stream of tentacles emerge from small breach in air. "
+	if person.unique == 'Zoe':
+		text += "\n\n[color=yellow]—No... Please NO![/color]\n\n"
+	
+	text += "They quickly seize $name by the limbs and free $him from the clothes. You observe how $name is being toyed and raped by tentacles. After a couple of orgasms the tentacles disappear from reality and you make sure that $name learned this lesson well before leaving."
+	person.obed += 75
+	person.fear += 90
+	person.lewdness += 5 #ralph
+	person.lust -= rand_range(20,30)
+	if person.vagvirgin == true:
+		person.vagvirgin = false
+	if !person.traits.has("Deviant"):
+		person.loyal -= 20
+		person.stress += rand_range(30,50)
+	if person.unique == 'Zoe':
+		person.loyal = 0
+		text += "\n\n[color=yellow]—How could you...?[/color]"
+	
+	return person.dictionary(text)
 
 func mutate(power=2):
 	###---Added by Expansion---### Size Expanded
