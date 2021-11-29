@@ -151,6 +151,11 @@ func backwardsCompatibility(person):
 	
 	person.expansionversion = globals.expansionsettings.modversion
 
+func unique_Fullblooded(person):
+	if person.unique != '' && !person.race.find('Halfkin') >= 0:
+		globals.constructor.forceFullblooded(person)
+	return
+
 func versionv0_9_5(person):
 	
 	if !person.metrics.has('animalpartners'):
@@ -176,10 +181,6 @@ func versionv0_9_5(person):
 		person.preg['offspring_count'] = 0
 	if !person.preg.has('unborn_baby'):
 		person.preg['unborn_baby'] = []
-	
-	return
-
-func versionv1_1(person):
 	
 	return
 

@@ -477,6 +477,14 @@ var specs = {
 		descriptreqs = "Confidence and charm 50+, Grade: Commoner and above, not Uncivilized",
 		reqs = "person.conf >= 50 && person.charm >= 50 && person.origins in ['commoner','rich','noble'] && !person.traits.has('Uncivilized')"
 	},
+	hucow = {
+		name = "Hucow",
+		code = 'hucow',
+		descript = "Hucows are sentient beings trained to become subservient cattle. They are trained to accept that their value is no more than the fluids they produce. They are never happier than when they are being milked on a Farm. ",
+		descriptbonus = "Receives the Best Outcomes while serving as Livestock on a Farm. Being forced to only Moo restores Confidence. Loses Stress instead of gaining Stress from poor Bedding.",
+		descriptreqs = "Consent to Serve as Livestock; Confidence and Wit below 50",
+		reqs = "person.consentexp.livestock == true && person.conf <= 50 && person.wit < 50"
+	},
 }
 
 ###---Added by Expansion---### Vacation Req Modification / Pregnancy Request TK Here and requests by Level

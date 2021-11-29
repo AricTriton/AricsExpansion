@@ -1521,6 +1521,7 @@ func energy_cur(value):
 func toxicity(value):
 	person.energy -= value
 	return ''
+
 func beauty(value):
 	person.beautytemp += value
 
@@ -2124,11 +2125,6 @@ func toggleStrNeg(value):
 		return value + '-'
 ###---End Expansion---###
 
-###---Added by Expansion---### Ank BugFix v4a
-func toxicity(value):
-	person.toxicity -= value
-	return ''
-###---End Expansion---###
 
 func sortitems(first, second):
 	var type = ['potion','ingredient']

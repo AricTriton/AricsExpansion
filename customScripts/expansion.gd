@@ -1160,8 +1160,8 @@ func getChest(person):
 	if person.titssize == "masculine":
 		text = str(globals.randomitemfromarray(['chest','torso','pecs']))
 	else:
-		if rand_range(0,1) >= .5:
-			text = str(person.titssize) + " "
+		if rand_range(0,1) >= .25:
+			text = str(person.titssize.capitalize()) + " "
 		text += str(nameTits())
 	return text
 
