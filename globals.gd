@@ -980,6 +980,10 @@ func slavetooltip(person):
 	###---Added by Expansion---### Movement Icons
 	node.get_node("movement").set_texture(movementimages[str(expansion.getMovementIcon(person))])
 	node.get_node("movement").visible = true
+	if person.preg.duration > 0:
+		node.get_node("pregnancy").visible = true
+	else:
+		node.get_node("pregnancy").visible = false
 	###---End Expansion---###
 	
 	text = 'Traits: '

@@ -1,4 +1,4 @@
-[gd_scene load_steps=211 format=2]
+[gd_scene load_steps=212 format=2]
 
 [ext_resource path="res://files/scripts/Mansion.gd" type="Script" id=1]
 [ext_resource path="res://files/backgrounds/mansion.png" type="Texture" id=2]
@@ -135,8 +135,9 @@
 [ext_resource path="res://files/buttons/inventory/37.png" type="Texture" id=133]
 [ext_resource path="res://files/buttons/sexicons/male.png" type="Texture" id=134]
 [ext_resource path="res://files/buttons/mainscreen/30.png" type="Texture" id=135]
-[ext_resource path="res://files/buttons/inventory/33.png" type="Texture" id=136]
-[ext_resource path="res://files/buttons/mainscreen/1.png" type="Texture" id=137]
+[ext_resource path="res://files/aric_expansion_images/pregnancy_icons/pregnancy_icon.png" type="Texture" id=136]
+[ext_resource path="res://files/buttons/inventory/33.png" type="Texture" id=137]
+[ext_resource path="res://files/buttons/mainscreen/1.png" type="Texture" id=138]
 
 [sub_resource type="StyleBoxTexture" id=1]
 texture = ExtResource( 40 )
@@ -7581,8 +7582,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Aphrodisiac in food"
 
 [node name="silence" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"advrules",
 "slaverules",
+"advrules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -7599,8 +7600,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Enforced Silence"
 
 [node name="pet" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"advrules",
 "slaverules",
+"advrules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -7619,8 +7620,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Pet Behavior"
 
 [node name="masturbation" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"advrules",
 "slaverules",
+"advrules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -7638,8 +7639,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "No Masturbation"
 
 [node name="nudity" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"advrules",
 "slaverules",
+"advrules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -11921,6 +11922,16 @@ texture = ExtResource( 135 )
 expand = true
 stretch_mode = 6
 
+[node name="pregnancy" type="TextureRect" parent="slavetooltip"]
+margin_left = 340.0
+margin_top = 160.0
+margin_right = 380.0
+margin_bottom = 200.0
+mouse_filter = 2
+texture = ExtResource( 136 )
+expand = true
+stretch_mode = 6
+
 [node name="itemtooltip" type="Popup" parent="."]
 margin_left = 484.0
 margin_top = 181.0
@@ -11934,7 +11945,7 @@ size_flags_vertical = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-texture = ExtResource( 136 )
+texture = ExtResource( 137 )
 expand = true
 
 [node name="text" type="RichTextLabel" parent="itemtooltip"]
@@ -11994,7 +12005,7 @@ margin_bottom = 8.0
 mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 137 )
+texture = ExtResource( 138 )
 expand = true
 __meta__ = {
 "_edit_lock_": true
