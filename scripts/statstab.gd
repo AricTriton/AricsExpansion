@@ -358,7 +358,8 @@ func _on_talk_pressed(mode = 'talk'):
 	#---Sexual Slave Topics---#
 	elif mode == 'slave_sex_topics':
 		text = str(expansion.getIntro(person)) + "\n[color=yellow]-"+ person.quirk(str(talk.introGeneral(person))) + "[/color]"
-
+		
+		#Known Sexuality
 		if person.knowledge.has('sexuality'):
 			text += "\n\n[color=#d1b970][center]Sexuality[/center][/color]\n"
 			text += "[color=aqua]" + str(globals.expansion.getSexuality(person)) + "[/color] | "
@@ -366,12 +367,20 @@ func _on_talk_pressed(mode = 'talk'):
 				text += "[color=green]Unlocked[/color]"
 			else:
 				text += "[color=red]Locked[/color]"
-			
+		
+		#Known Fetishes
 		if !person.knownfetishes.empty():
 			text += "\n\n[color=#d1b970][center]Known Fetishes[/center][/color]\n"
 			for fetish in person.knownfetishes:
 				var fetishname = globals.expansion.getFetishDescription(str(fetish))
 				text += fetishname.capitalize() + ": " + "[color=aqua]" + str(person.fetish[fetish].capitalize())+ "[/color]\n"
+		#Undiscovered Trait Fetishes
+		if person.dailytalk.has('hint_dominance') || person.dailytalk.has('hint_submissive') || person.dailytalk.has('hint_sadism') || person.dailytalk.has('hint_masochism'):
+			text += "\n\n[color=#d1b970][center]Undiscovered Trait[/center][/color]"
+			if person.dailytalk.has('hint_dominance') || person.dailytalk.has('hint_submissive'):
+				text += "\nYou get the feeling that $name may feel strongly about [color=aqua]Control[/color]."
+			if person.dailytalk.has('hint_sadism') || person.dailytalk.has('hint_masochism'):
+				text += "\nYou get the feeling that $name may feel strongly about [color=aqua]Pain[/color]."
 		
 		if !person.dailytalk.has('eventDrainCum'):
 			if person.cum.pussy > 0 || !person.preg.womb.empty():
@@ -387,7 +396,7 @@ func _on_talk_pressed(mode = 'talk'):
 		else:
 			buttons.append({text = str(globals.randomitemfromarray(['Regarding your sexuality...'])), function = 'talkSexualityShiftToggle', args = 'intro', tooltip = "Lock or Unlock their Sexuality."})
 		#Fetishes
-		if !person.dailytalk.has('talkfetishes'):
+		if !person.dailytalk.has('talk_new_fetish') && !person.dailytalk.has('talk_change_fetish'):
 			buttons.append({text = str(globals.randomitemfromarray(['What are you into?','Will you tell me your fetishes?','I would like to know your fetishes','Can we talk about your fetishes?'])), function = 'talkfetishes', args = 'intro', tooltip = person.dictionary("Ask about $name's fetishes. -Available Once per Day")})
 		
 		buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
@@ -1239,7 +1248,7 @@ func talkfetishes(mode=''):
 	var fetishname
 	if !mode in ["intro",'introknown','introunknown']:
 		fetishname = globals.expansion.getFetishDescription(str(mode))
-		person.dailytalk.append('talkfetishes')
+		person.dailytalk.append('talk_new_fetish')
 		#Add the Accept/Refuse/Barter later
 		if person.knownfetishes.find(mode) >= 0:
 			person.dailyevents.append(mode)
@@ -1248,9 +1257,9 @@ func talkfetishes(mode=''):
 			
 		else:
 			#Resistance Check
+			person.knownfetishes.append(mode)
 			if person.checkFetish(mode, 3):
 				person.dailytalk.append(mode)
-				person.knownfetishes.append(mode)
 				if str(person.fetish[mode]) == 'mindblowing':
 					text = person.quirk("[color=yellow]-Oh, " + fetishname + "?! I absolutely love " + fetishname + "! It is absolutely " + str(person.fetish[mode]).capitalize() + "!!![/color]")
 					
@@ -1311,13 +1320,22 @@ func talkfetishes(mode=''):
 	#The Intro 
 	if mode == "intro":
 		text = str(expansion.getIntro(person)) + "\n[color=yellow]-"+ person.quirk(str(talk.introGeneral(person))) + "[/color]"
+		#Known Fetishes
 		if !person.knownfetishes.empty():
 			text += "\n\n[color=#d1b970][center]Known Fetishes[/center][/color]\n"
 			for fetish in person.knownfetishes:
 				fetishname = globals.expansion.getFetishDescription(str(fetish))
 				text += fetishname.capitalize() + ": " + "[color=aqua]" + str(person.fetish[fetish].capitalize())+ "[/color]\n"	
-		buttons.append({text = person.dictionary("Let's talk about something new"), function = 'talkfetishes', args = 'introunknown', tooltip = person.dictionary("Learn how $name feels about a fetish.")})
-		if person.knownfetishes.size() > 0:
+		#Undiscovered Trait
+		if person.dailytalk.has('hint_dominance') || person.dailytalk.has('hint_submissive') || person.dailytalk.has('hint_sadism') || person.dailytalk.has('hint_masochism'):
+			text += "\n\n[color=#d1b970][center]Undiscovered Trait[/center][/color]"
+			if person.dailytalk.has('hint_dominance') || person.dailytalk.has('hint_submissive'):
+				text += "\nYou get the feeling that $name may feel strongly about [color=aqua]Control[/color]."
+			if person.dailytalk.has('hint_sadism') || person.dailytalk.has('hint_masochism'):
+				text += "\nYou get the feeling that $name may feel strongly about [color=aqua]Pain[/color]."
+		if !person.dailytalk.has('talk_new_fetish'):
+			buttons.append({text = person.dictionary("Let's talk about something new"), function = 'talkfetishes', args = 'introunknown', tooltip = person.dictionary("Learn how $name feels about a fetish.")})
+		if person.knownfetishes.size() > 0 && !person.dailytalk.has('talk_change_fetish'):
 			buttons.append({text = person.dictionary("Regarding that fetish you told me about..."), function = 'talkfetishes', args = 'introknown', tooltip = person.dictionary("Encourage or Discourage a Fetish.")})
 		
 		if globals.expansion.incompletefetishes.size() > 0:
@@ -1350,8 +1368,8 @@ func talkFetishEncourage(mode=''):
 	var topic = str(mode)
 	var fetishname = globals.expansion.getFetishDescription(str(mode))
 	var fetishmod = 1 + (person.loyal*.01)
-	person.dailytalk.append('talkfetishes')
-	person.dailytalk.append(mode)
+	person.dailytalk.append('talk_change_fetish')
+	person.dailyevents.append(mode)
 	#Resistance Check
 	if person.checkFetish(mode):
 		person.setFetish(mode, fetishmod)
@@ -1379,8 +1397,8 @@ func talkFetishDiscourage(mode=''):
 	
 	var fetishname = globals.expansion.getFetishDescription(str(mode))
 	var fetishmod = -1 *(1+(person.loyal*.01))
-	person.dailytalk.append('talkfetishes')
-	person.dailytalk.append(mode)
+	person.dailytalk.append('talk_change_fetish')
+	person.dailyevents.append(mode)
 	
 	#Resistance Check
 	if person.checkFetish(mode):
