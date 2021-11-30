@@ -2,7 +2,7 @@
 
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
-var modversion = 1.2
+var modversion = 1.4
 
 #---Debug Tools (True/False)
 var perfectinfo = false
@@ -73,6 +73,7 @@ var changecrystalreq = 4
 
 #Automatic Crystal Lifeforce Chance
 var crystallifeforcerestorechance = 80
+var crystal_shatter_chance = 80
 
 
 #---Pregnancy Expanded
@@ -133,6 +134,10 @@ var livestockloseconsentchance = 20
 
 
 #---Fetishes
+#Unwanted Fetishes - Disables them from showing in the Fetish Talk menu
+#Copy/Paste any you don't want into the 'unwantedfetishes' array below: ['incest','lactation','drinkmilk','bemilked','milking','exhibitionism','drinkcum','wearcum','wearcumface','creampiemouth','creampiepussy','creampieass','pregnancy','oviposition','drinkpiss','wearpiss','pissing','otherspissing','bondage','dominance','submission','sadism','masochism']
+var unwantedfetishes = []
+
 #FetishDifficulty is what Fetish*10 is multiplied by for the Chance of Success
 var fetishdifficulty = 2
 

@@ -477,6 +477,14 @@ var specs = {
 		descriptreqs = "Confidence and charm 50+, Grade: Commoner and above, not Uncivilized",
 		reqs = "person.conf >= 50 && person.charm >= 50 && person.origins in ['commoner','rich','noble'] && !person.traits.has('Uncivilized')"
 	},
+	hucow = {
+		name = "Hucow",
+		code = 'hucow',
+		descript = "Hucows are sentient beings trained to become subservient cattle. They are trained to accept that their value is no more than the fluids they produce. They are never happier than when they are being milked on a Farm. ",
+		descriptbonus = "Receives the Best Outcomes while serving as Livestock on a Farm. Being forced to only Moo restores Confidence. Loses Stress instead of gaining Stress from poor Bedding.",
+		descriptreqs = "Consent to Serve as Livestock; Confidence and Wit below 50",
+		reqs = "person.consentexp.livestock == true && person.conf <= 50 && person.wit < 50"
+	},
 }
 
 ###---Added by Expansion---### Vacation Req Modification / Pregnancy Request TK Here and requests by Level
@@ -1148,7 +1156,7 @@ func whorewimborn(person):
 	if person.mods.has("augmenttongue"):
 		gold = gold * 1.15
 	if person.lewdness < 15:
-		text += "\nThe owner of the brothel complained that $name does not have sufficient skill and didn't satisfy many customers. $His salary was cut by half. \n"
+		text += "The owner of the brothel complained that $name does not have sufficient skill and didn't satisfy many customers. [color=red]$His salary was cut by half.[/color] \n"
 		gold = gold/2
 		person.metrics.sex += round(rand_range(1,3))
 		person.metrics.randompartners += round(rand_range(1,2))
@@ -1248,7 +1256,7 @@ func fucktoywimborn(person):
 	if person.mods.has("augmenttongue"):
 		gold = gold * 1.15
 	if person.lewdness < 45:
-		text += "\nThe owner of the brothel complained that $name does not have sufficient skill and didn't satisfy many customers. $His salary was cut by half. \n"
+		text += "The owner of the brothel complained that $name does not have sufficient skill and didn't satisfy many customers. [color=red]$His salary was cut by half.[/color] \n"
 		person.metrics.sex += round(rand_range(2,4))
 		gold = gold/2
 		person.metrics.randompartners += round(rand_range(1,4))
@@ -1395,13 +1403,13 @@ func trainer(person):
 	elif globals.state.mansionupgrades.traininggrounds > 2:
 		bonuslpchance = 10
 	
-	text += "[color=aqua]$name[/color] worked in the training fields as a [color=aqua]Trainer[/color] today. "
+	text += "[color=aqua]$name[/color] worked in the training fields as a [color=aqua]Trainer[/color] today.\n "
 	
 	for trainee in globals.slaves:
 		if trainee.work == "trainee" && trainee.away.duration == 0:
-			text += trainee.dictionary("\n[color=aqua]$name[/color] was assigned as a [color=aqua]Trainee[/color] and came to learn from ") + "$him. "
+			text += trainee.dictionary("[color=aqua]$name[/color] was assigned as a [color=aqua]Trainee[/color] and came to learn from ") + "$him. "
 			if trainee.level >= person.level || trainee.metrics.win >= person.metrics.win:
-				text += trainee.dictionary("[color=red]Unfortunately, $he couldn't learn anything from ") + "$him " + trainee.dictionary("as $he knew everything $his teacher had to impart to $him already. The [color=aqua]Trainer[/color] will need to be at a higher level and have won more total battles than $him to teach $him anything else.[/color] ")
+				text += trainee.dictionary("[color=red]Unfortunately, $he couldn't learn anything from ") + "$him " + trainee.dictionary("as $he knew everything $his teacher had to impart to $him already. The [color=aqua]Trainer[/color] will need to be at a higher level and have won more total battles than $him to teach $him anything else.[/color]\n ")
 			elif traineestaught > person.level * 2:
 				text += "[color=red]Unfortunately, there were too many [color=aqua]Trainees[/color] assigned to [color=aqua]$name[/color] today. Despite $his best efforts, $he was unable to make the time to teach " + trainee.dictionary("[color=aqua]$name[/color] anything. [/color]")
 			else:
@@ -1429,7 +1437,7 @@ func trainer(person):
 					text += "\n[color=aqua]$name[/color] had an incredible day learning today. $He ended up gaining an additional [color=green]" + str(globals.state.mansionupgrades.traininggrounds*2) + " " + str(reward).capitalize() + "[/color] as a bonus as $he simply excelled today. "
 	
 	if traineestaught == 0:
-		text += "No suitable [color=aqua]Trainees[/color] were available today. $He was able to take the day off and rest instead. $He recovered [color=green]20 Stress[/color] and healed [color=green]15 Health[/color] today."
+		text += "\nNo suitable [color=aqua]Trainees[/color] were available today. $He was able to take the day off and rest instead. $He recovered [color=green]20 Stress[/color] and healed [color=green]15 Health[/color] today."
 		person.health += 15
 		person.stress -= 20
 	else:

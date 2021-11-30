@@ -1,4 +1,7 @@
 
+###---Added by Expansion---### Hucow Specialization
+var specarray = ['geisha','ranger','executor','bodyguard','assassin','housekeeper','trapper','nympho','merchant','tamer','hucow']
+###---End Expansion---###
 
 var gradeimages = {
 	"slave" : load("res://files/buttons/mainscreen/40.png"),
@@ -8,6 +11,23 @@ var gradeimages = {
 	atypical = load("res://files/buttons/mainscreen/40.png"), ###---Added by Expansion---###
 	noble = load("res://files/buttons/mainscreen/44.png"),
 }
+
+###---Added by Expansion---###
+var specimages = {
+	Null = null,
+	geisha = load("res://files/buttons/mainscreen/33.png"),
+	ranger = load("res://files/buttons/mainscreen/37.png"),
+	executor = load("res://files/buttons/mainscreen/38.png"),
+	bodyguard = load("res://files/buttons/mainscreen/31.png"),
+	assassin = load("res://files/buttons/mainscreen/30.png"),
+	housekeeper = load("res://files/buttons/mainscreen/34.png"),
+	trapper = load("res://files/buttons/mainscreen/39.png"),
+	nympho = load("res://files/buttons/mainscreen/36.png"),
+	merchant = load("res://files/buttons/mainscreen/35.png"),
+	tamer = load("res://files/buttons/mainscreen/32.png"),
+	hucow = load("res://files/aric_expansion_images/specialization_icons/cow_icon.png"),
+}
+###---End Expansion---###
 
 func loadsettings():
 	var file = File.new()
@@ -960,6 +980,10 @@ func slavetooltip(person):
 	###---Added by Expansion---### Movement Icons
 	node.get_node("movement").set_texture(movementimages[str(expansion.getMovementIcon(person))])
 	node.get_node("movement").visible = true
+	if person.preg.duration > 0:
+		node.get_node("pregnancy").visible = true
+	else:
+		node.get_node("pregnancy").visible = false
 	###---End Expansion---###
 	
 	text = 'Traits: '
@@ -1387,6 +1411,9 @@ func fertilize_egg(mother, father_id, father_unique):
 	###Get/Build Father
 	if father_id != null && father_id != '-1' && !father_unique in ['','dog','horse']:
 		father = globals.state.findslave(father_id)
+		#If Father disappeared from the World
+		if father == null:
+			father = globals.newslave(randomfromarray(globals.allracesarray), 'adult', 'male')
 	else:
 		father = globals.newslave(globals.allracesarray[rand_range(0,globals.allracesarray.size())], 'adult', 'male')
 		father.id = '-1'

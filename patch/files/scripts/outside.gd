@@ -2009,12 +2009,13 @@ func tishaquest():
 
 #################### Markets
 
+###---Added by Expansion---### ElPresidente Items
 var shops = {
 	wimbornmarket = {
 		code = 'wimbornmarket',
 		sprite = 'merchant',
 		name = "Wimborn's Market",
-		items = ['teleportwimborn','food','supply','bandage','rope','torch','teleportseal', 'basicsolutioning','hairdye', 'aphrodisiac' ,'beautypot', 'magicessenceing', 'natureessenceing','armorleather','armorchain','weapondagger','weaponsword','clothsundress','clothmaid','clothbutler','underwearlacy','underwearboxers', 'acctravelbag'],
+		items = ['teleportwimborn','food','supply','bandage','rope','torch','teleportseal', 'basicsolutioning','hairdye', 'aphrodisiac' ,'beautypot', 'magicessenceing', 'natureessenceing','armorleather','armorchain','weapondagger','weaponsword','weaponceremonialsword','clothsundress','clothmaid','clothbutler','underwearlacy','underwearboxers', 'acctravelbag'],
 		selling = true
 	},
 	shaliqshop = {
@@ -2027,14 +2028,14 @@ var shops = {
 		code = 'gornmarket',
 		sprite = 'centaur',
 		name = "Gorn's Market",
-		items = ['teleportgorn','food', 'supply','bandage','rope','teleportseal','magicessenceing',"armorleather",'armorchain','weaponclaymore','weaponhammer','clothbedlah','accslavecollar','acchandcuffs'],
+		items = ['teleportgorn','food', 'supply','bandage','rope','teleportseal','magicessenceing',"armorleather",'armorchain','weaponclaymore','weaponhammer','clothbedlah','accslavecollar','acchandcuffs','armorpadded'],
 		selling = true
 	},
 	frostfordmarket = {
 		code = 'frostfordmarket',
 		sprite = 'frostfordtrader',
 		name = "Frostford's Market",
-		items = ['aydabrandy','teleportfrostford', 'supply','bandage','rope','torch','teleportseal', 'basicsolutioning','bestialessenceing','clothpet', 'weaponsword','accgoldring', 'acctravelbag'],
+		items = ['aydabrandy','teleportfrostford', 'supply','bandage','rope','torch','teleportseal', 'basicsolutioning','bestialessenceing','clothpet', 'weaponsword','weaponclaymore','weapongreatsword','accgoldring', 'acctravelbag'],
 		selling = true
 	},
 	aydashop = {
@@ -2047,7 +2048,7 @@ var shops = {
 	amberguardmarket = {
 		code = 'amberguardmarket',
 		name = "Amberguard's Market",
-		items = ['teleportamberguard','beautypot','bestialessenceing','magicessenceing','fluidsubstanceing','armorelvenchain','armorrobe'],
+		items = ['teleportamberguard','beautypot','bestialessenceing','magicessenceing','fluidsubstanceing','armorelvenchain','armorrobe','clothchainbikini','accelvenboots'],
 		selling = true
 	},
 	sebastian = {
@@ -2067,10 +2068,11 @@ var shops = {
 	blackmarket = {
 		code = 'blackmarket',
 		name = 'Black Market',
-		items = ['aydabook','lockpick','accslavecollar','acchandcuffs','armorleather','armorchain','weaponsword','weaponhammer','armortentacle'],
+		items = ['aydabook','lockpick','accslavecollar','acchandcuffs','armorleather','armorchain','weaponsword','weaponhammer','armortentacle','clothchainbikini','oblivionpot'],
 		selling = true
 	},
 }
+###---End Expansion---###
 
 func market():
 	var array = [{name = 'Market stalls (shop)', function = 'shopinitiate', args = 'wimbornmarket'}, {name = 'Return', function = 'town'}]
