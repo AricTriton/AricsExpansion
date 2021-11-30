@@ -1,0 +1,26 @@
+NEW FEATURES
+<Pregnancy Tooltip>
+Added a Pregnancy Icon to the Slave Tooltip (when you hover over them in the list) to let you know at a glance who is pregnant or not. (Requested Feature)
+
+<ExpansionSettings>
+Added an option called "unwantedfetishes". Add any fetishes from the list above it into the array to prevent them from showing up in the Fetishes Talk Menu.
+
+<Fetishes>
+Fixed the Fetishes Attached to Traits for Dominance and Sadism not triggering correctly.
+Switches Unite! Dominance/Submission and Sadism/Masochism are no longer mutually exclusive. Just like real like, Switches can be a thing.
+Added a Hint feature to guide players towards what may be "Undiscovered" about the trait in the Talk menu.
+
+Fetishes can now be Discovered (New Fetish) and Changed (Encourage/Discouraged) Once Per Day (ie: 1 New, 1 Changed). It was slowing things down a little too much.
+
+<Farm>
+Added TitsSize in Slave Inspect and Lactation Hint
+
+<Specialization>
+Added a new Hucow specialization. Similar to Nympho, this is a job specific Specialization geared specifically to ensuring the best results for slaves in the Cattle position.
+
+BUGFIXES
+<Items>
+Fixed the issues in Exploration.gd and items.gd related to the new ElPresidente items (and the missed changes to items.gd)
+
+<Talk Panel>
+Fixed the Naked Images not always showing correctly for Unique Characters

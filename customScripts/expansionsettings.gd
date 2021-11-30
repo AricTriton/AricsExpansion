@@ -2,7 +2,7 @@
 
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
-var modversion = 1.4
+var modversion = 1.5
 
 #---Debug Tools (True/False)
 var perfectinfo = false
