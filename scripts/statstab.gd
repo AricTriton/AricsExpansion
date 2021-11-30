@@ -358,7 +358,8 @@ func _on_talk_pressed(mode = 'talk'):
 	#---Sexual Slave Topics---#
 	elif mode == 'slave_sex_topics':
 		text = str(expansion.getIntro(person)) + "\n[color=yellow]-"+ person.quirk(str(talk.introGeneral(person))) + "[/color]"
-
+		
+		#Known Sexuality
 		if person.knowledge.has('sexuality'):
 			text += "\n\n[color=#d1b970][center]Sexuality[/center][/color]\n"
 			text += "[color=aqua]" + str(globals.expansion.getSexuality(person)) + "[/color] | "
@@ -366,12 +367,20 @@ func _on_talk_pressed(mode = 'talk'):
 				text += "[color=green]Unlocked[/color]"
 			else:
 				text += "[color=red]Locked[/color]"
-			
+		
+		#Known Fetishes
 		if !person.knownfetishes.empty():
 			text += "\n\n[color=#d1b970][center]Known Fetishes[/center][/color]\n"
 			for fetish in person.knownfetishes:
 				var fetishname = globals.expansion.getFetishDescription(str(fetish))
 				text += fetishname.capitalize() + ": " + "[color=aqua]" + str(person.fetish[fetish].capitalize())+ "[/color]\n"
+		#Undiscovered Trait Fetishes
+		if person.dailytalk.has('hint_dominance') || person.dailytalk.has('hint_submissive') || person.dailytalk.has('hint_sadism') || person.dailytalk.has('hint_masochism'):
+			text += "\n\n[color=#d1b970][center]Undiscovered Trait[/center][/color]"
+			if person.dailytalk.has('hint_dominance') || person.dailytalk.has('hint_submissive'):
+				text += "\nYou get the feeling that $name may feel strongly about [color=aqua]Control[/color]."
+			if person.dailytalk.has('hint_sadism') || person.dailytalk.has('hint_masochism'):
+				text += "\nYou get the feeling that $name may feel strongly about [color=aqua]Pain[/color]."
 		
 		if !person.dailytalk.has('eventDrainCum'):
 			if person.cum.pussy > 0 || !person.preg.womb.empty():
@@ -387,7 +396,7 @@ func _on_talk_pressed(mode = 'talk'):
 		else:
 			buttons.append({text = str(globals.randomitemfromarray(['Regarding your sexuality...'])), function = 'talkSexualityShiftToggle', args = 'intro', tooltip = "Lock or Unlock their Sexuality."})
 		#Fetishes
-		if !person.dailytalk.has('talkfetishes'):
+		if !person.dailytalk.has('talk_new_fetish') || !person.dailytalk.has('talk_change_fetish'):
 			buttons.append({text = str(globals.randomitemfromarray(['What are you into?','Will you tell me your fetishes?','I would like to know your fetishes','Can we talk about your fetishes?'])), function = 'talkfetishes', args = 'intro', tooltip = person.dictionary("Ask about $name's fetishes. -Available Once per Day")})
 		
 		buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
@@ -504,13 +513,17 @@ func slave_rename_hub(mode = ''):
 	if mode != "intro":
 		buttons.append({text = "Regarding another of your names...", function = 'slave_rename_hub', args = 'intro', tooltip = "Change another part of the slave's name."})
 	buttons.append({text = str(globals.randomitemfromarray(['Go Back','Return','Previous Menu'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -583,13 +596,17 @@ func eventPregnancyReveal(mode=''):
 	if !mode in ['introtold','introdiscovered']:
 		buttons.append({text = str(globals.randomitemfromarray(['Anyways, like we were saying','As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main talk screen."})
 
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -660,13 +677,17 @@ func eventLactation(mode=''):
 	if !mode in ['introtold','introdiscovered']:
 		buttons.append({text = str(globals.randomitemfromarray(['Anyways, like we were saying','As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main talk screen."})
 
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -707,13 +728,17 @@ func eventWantedPregnancy(mode=''):
 	#Return after Choice
 	if mode != 'intro':
 		buttons.append({text = str(globals.randomitemfromarray(['As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main talk screen."})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -751,13 +776,17 @@ func eventIncestConsentGiven(mode=''):
 	#Return after Choice
 	if mode != 'intro':
 		buttons.append({text = str(globals.randomitemfromarray(['As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main talk screen."})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -795,13 +824,17 @@ func eventIncestConsentRemoved(mode=''):
 	#Return after Choice
 	if mode != 'intro':
 		buttons.append({text = str(globals.randomitemfromarray(['As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main talk screen."})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -864,13 +897,17 @@ func thecrystal(mode=''):
 	#Return after Choice
 	if blockreturn == false:
 		buttons.append({text = str(globals.randomitemfromarray(['Nothing. Lets go back.'])), function = '_on_talk_pressed', tooltip = "Return to the main Talk screen."})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -917,13 +954,17 @@ func crystalimmortalitytoggle(mode=''):
 	#Return after Choice
 	if finish == true:
 		buttons.append({text = str(globals.randomitemfromarray(['As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main Talk screen."})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -970,13 +1011,17 @@ func crystalconsequences(mode=''):
 		return
 	#Return after Choice
 #	buttons.append({text = str(globals.randomitemfromarray(['As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main Talk screen."})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -1002,13 +1047,17 @@ func headgirltopics(mode=''):
 		buttons.append({text = person.dictionary("Remove the Crystal's hold on Death."), function = 'crystalimmortalitytoggle', args = 'disable', tooltip = "Re-enable death inside of your Mansion."})
 	
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -1075,13 +1124,17 @@ func pregspeedchange(mode = ''):
 		buttons.append({text = person.dictionary("On second thought..."), function = 'pregspeedchange', args = 'start'})
 		
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -1177,13 +1230,17 @@ func farmmanagertopics(mode=''):
 
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 	
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -1213,13 +1270,17 @@ func oneperdayconvos(mode=''):
 		buttons.append({text = str(globals.randomitemfromarray(['About how many kids you want...','Talk with me about children','About how many children you want to have...'])), function = '_on_talk_pressed', args = 'general_slave_topics_numberofkidsknown', tooltip = "Raise or Lower the number of Children they want to have."})
 	
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -1239,7 +1300,7 @@ func talkfetishes(mode=''):
 	var fetishname
 	if !mode in ["intro",'introknown','introunknown']:
 		fetishname = globals.expansion.getFetishDescription(str(mode))
-		person.dailytalk.append('talkfetishes')
+		person.dailytalk.append('talk_new_fetish')
 		#Add the Accept/Refuse/Barter later
 		if person.knownfetishes.find(mode) >= 0:
 			person.dailyevents.append(mode)
@@ -1248,9 +1309,9 @@ func talkfetishes(mode=''):
 			
 		else:
 			#Resistance Check
+			person.knownfetishes.append(mode)
 			if person.checkFetish(mode, 3):
 				person.dailytalk.append(mode)
-				person.knownfetishes.append(mode)
 				if str(person.fetish[mode]) == 'mindblowing':
 					text = person.quirk("[color=yellow]-Oh, " + fetishname + "?! I absolutely love " + fetishname + "! It is absolutely " + str(person.fetish[mode]).capitalize() + "!!![/color]")
 					
@@ -1273,7 +1334,8 @@ func talkfetishes(mode=''):
 				text += fetishname.capitalize() + ": " + "[color=aqua]" + str(person.fetish[fetish].capitalize())+ "[/color]\n"
 		for i in globals.fetishesarray:
 			fetishname = globals.expansion.getFetishDescription(str(i))
-#			if person.dailytalk.find(i) < 0:
+			if globals.expansionsettings.unwantedfetishes.empty() == false && i in globals.expansionsettings.unwantedfetishes:
+				continue
 			#Discover Fetishes
 			if person.knownfetishes.find(i) < 0:
 				tempbuttons.append({text = str(globals.randomitemfromarray([person.dictionary('What do you think about '),person.dictionary('How do you feel about ')]) + fetishname), function = 'talkfetishes', args = str(i), tooltip = person.dictionary("Ask $name their opinion about " + fetishname)})
@@ -1310,13 +1372,22 @@ func talkfetishes(mode=''):
 	#The Intro 
 	if mode == "intro":
 		text = str(expansion.getIntro(person)) + "\n[color=yellow]-"+ person.quirk(str(talk.introGeneral(person))) + "[/color]"
+		#Known Fetishes
 		if !person.knownfetishes.empty():
 			text += "\n\n[color=#d1b970][center]Known Fetishes[/center][/color]\n"
 			for fetish in person.knownfetishes:
 				fetishname = globals.expansion.getFetishDescription(str(fetish))
 				text += fetishname.capitalize() + ": " + "[color=aqua]" + str(person.fetish[fetish].capitalize())+ "[/color]\n"	
-		buttons.append({text = person.dictionary("Let's talk about something new"), function = 'talkfetishes', args = 'introunknown', tooltip = person.dictionary("Learn how $name feels about a fetish.")})
-		if person.knownfetishes.size() > 0:
+		#Undiscovered Trait
+		if person.dailytalk.has('hint_dominance') || person.dailytalk.has('hint_submissive') || person.dailytalk.has('hint_sadism') || person.dailytalk.has('hint_masochism'):
+			text += "\n\n[color=#d1b970][center]Undiscovered Trait[/center][/color]"
+			if person.dailytalk.has('hint_dominance') || person.dailytalk.has('hint_submissive'):
+				text += "\nYou get the feeling that $name may feel strongly about [color=aqua]Control[/color]."
+			if person.dailytalk.has('hint_sadism') || person.dailytalk.has('hint_masochism'):
+				text += "\nYou get the feeling that $name may feel strongly about [color=aqua]Pain[/color]."
+		if !person.dailytalk.has('talk_new_fetish'):
+			buttons.append({text = person.dictionary("Let's talk about something new"), function = 'talkfetishes', args = 'introunknown', tooltip = person.dictionary("Learn how $name feels about a fetish.")})
+		if person.knownfetishes.size() > 0 && !person.dailytalk.has('talk_change_fetish'):
 			buttons.append({text = person.dictionary("Regarding that fetish you told me about..."), function = 'talkfetishes', args = 'introknown', tooltip = person.dictionary("Encourage or Discourage a Fetish.")})
 		
 		if globals.expansion.incompletefetishes.size() > 0:
@@ -1329,13 +1400,17 @@ func talkfetishes(mode=''):
 	if tempbuttons.size() > 0:
 		for i in tempbuttons:
 			buttons.append(i)
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -1349,8 +1424,8 @@ func talkFetishEncourage(mode=''):
 	var topic = str(mode)
 	var fetishname = globals.expansion.getFetishDescription(str(mode))
 	var fetishmod = 1 + (person.loyal*.01)
-	person.dailytalk.append('talkfetishes')
-	person.dailytalk.append(mode)
+	person.dailytalk.append('talk_change_fetish')
+	person.dailyevents.append(mode)
 	#Resistance Check
 	if person.checkFetish(mode):
 		person.setFetish(mode, fetishmod)
@@ -1359,13 +1434,17 @@ func talkFetishEncourage(mode=''):
 		text = person.quirk("[color=yellow]-No. No, I think that " + fetishname + " is " + str(person.fetish[mode]) + ".[/color]")
 	
 	buttons.append({text = str(globals.randomitemfromarray(['As we were saying...','Anyways...','On another note...'])), function = '_on_talk_pressed', tooltip = "Go back to the main conversation."})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -1378,8 +1457,8 @@ func talkFetishDiscourage(mode=''):
 	
 	var fetishname = globals.expansion.getFetishDescription(str(mode))
 	var fetishmod = -1 *(1+(person.loyal*.01))
-	person.dailytalk.append('talkfetishes')
-	person.dailytalk.append(mode)
+	person.dailytalk.append('talk_change_fetish')
+	person.dailyevents.append(mode)
 	
 	#Resistance Check
 	if person.checkFetish(mode):
@@ -1389,13 +1468,17 @@ func talkFetishDiscourage(mode=''):
 		text = person.quirk("[color=yellow]-No. No, I think that " + fetishname + " is " + str(person.fetish[mode]) + ".[/color]")
 	
 	buttons.append({text = str(globals.randomitemfromarray(['As we were saying...','Anyways...','On another note...'])), function = '_on_talk_pressed', tooltip = "Go back to the main conversation."})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -1424,13 +1507,17 @@ func talkSexualityShiftToggle(mode=''):
 	
 	buttons.append({text = str(globals.randomitemfromarray(['While we are on that topic...'])), function = '_on_talk_pressed', args = 'slave_sex_topics', tooltip = "Go back to the previous screen"})
 	buttons.append({text = str(globals.randomitemfromarray(['As we were saying...','Anyways...','On another note...'])), function = '_on_talk_pressed', tooltip = "Go back to the main conversation."})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -1529,13 +1616,17 @@ func eventDrainCum(mode = ''):
 	else:
 		buttons.append({text = person.dictionary('Force $him to lick up the cum puddle'), function = 'eventDrainCum', args = 'lickuppuddle', tooltip = person.dictionary("Force $him to lick up the puddle - End Event")})
 		buttons.append({text = person.dictionary('Walk away from the cum puddle'), function = 'eventDrainCum', args = 'leavepuddle', tooltip = "Leave the cum puddle for someone else, add to mansion cleaning duties - End Event"})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -1742,13 +1833,17 @@ func talkconsent(mode=''):
 	if mode != "intro":
 		buttons.append({text = person.dictionary("While we are discussing Consent..."), function = 'talkconsent', args = 'intro'})
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -1901,13 +1996,17 @@ func topicclothing(mode=''):
 			buttons.append({text = person.dictionary("Cover your " + str(expansion.nameAsshole())), function = 'topicclothing', args = 'clothe ass', tooltip = person.dictionary("Cover $his " + str(expansion.nameAsshole()))})
 	expansion.updateBodyImage(person)
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -1986,13 +2085,17 @@ func cheatButton(mode = ''):
 		text += "Day gained. Days Pregnant now " + str(person.preg.duration) + ". "
 	
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
@@ -2013,13 +2116,17 @@ func cheatButtonAddItem(mode = ''):
 		globals.state.unstackables[str(tmpitem.id)] = tmpitem
 	
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	if nakedspritesdict.has(person.unique):
-		if person.consent:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave']]
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave']]
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
 	elif person.imagefull != null:
 		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()

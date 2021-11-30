@@ -1160,8 +1160,8 @@ func getChest(person):
 	if person.titssize == "masculine":
 		text = str(globals.randomitemfromarray(['chest','torso','pecs']))
 	else:
-		if rand_range(0,1) >= .5:
-			text = str(person.titssize) + " "
+		if rand_range(0,1) >= .25:
+			text = str(person.titssize.capitalize()) + " "
 		text += str(nameTits())
 	return text
 
@@ -3538,62 +3538,66 @@ func getTreatment(person):
 ###---Expansion End---###
 
 func setTraitsperFetish(person):
-	#S/M
-	if globals.fetishopinion.find(person.fetish.sadism) > globals.fetishopinion.find(person.fetish.masochism):
-		#Sadist
-		if person.knownfetishes.has('sadism'):
-			if globals.fetishopinion.find(person.fetish.sadism) >= 5 && !person.traits.has('Sadist'):
-				person.add_trait('Sadist')
-				if person.traits.has('Undiscovered Trait'):
-					person.trait_remove('Undiscovered Trait')
-			elif globals.fetishopinion.find(person.fetish.sadism) <= 4 && person.traits.has('Sadist'):
-				person.trait_remove('Sadist')
-			if person.traits.has('Masochist'):
-				person.trait_remove('Masochist')
-		else:
-			if !person.traits.has('Undiscovered Trait'):
-				person.add_trait('Undiscovered Trait')
-	else:
-		#Masochist
-		if person.knownfetishes.has('masochism'):
-			if globals.fetishopinion.find(person.fetish.masochism) >= 5 && !person.traits.has('Masochist'):
-				person.add_trait('Masochist')
-				if person.traits.has('Undiscovered Trait'):
-					person.trait_remove('Undiscovered Trait')
-			elif globals.fetishopinion.find(person.fetish.masochism) <= 4 && person.traits.has('Masochist'):
-				person.trait_remove('Masochist')
-			if person.traits.has('Sadist'):
-				person.trait_remove('Sadist')
-		else:
-			if !person.traits.has('Undiscovered Trait'):
-				person.add_trait('Undiscovered Trait')
-	#D/S
-	if globals.fetishopinion.find(person.fetish.dominance) > globals.fetishopinion.find(person.fetish.submission):
-		#Dominant
+	#---D/S
+	#Dominant
+	if globals.fetishopinion.find(person.fetish.dominance) >= 5 && !person.traits.has('Dominant'):
 		if person.knownfetishes.has('dominance'):
-			if globals.fetishopinion.find(person.fetish.dominance) >= 5 && !person.traits.has('Dominant'):
-				person.add_trait('Dominant')
-				if person.traits.has('Undiscovered Trait'):
-					person.trait_remove('Undiscovered Trait')
-			elif globals.fetishopinion.find(person.fetish.dominance) <= 4 && person.traits.has('Dominant'):
-				person.trait_remove('Dominant')
-			if person.traits.has('Submissive'):
-				person.trait_remove('Submissive')
+			person.add_trait('Dominant')
+			if person.traits.has('Undiscovered Trait'):
+				person.trait_remove('Undiscovered Trait')
+			if person.dailytalk.has('hint_dominance'):
+				person.dailytalk.erase('hint_dominance')
 		else:
 			if !person.traits.has('Undiscovered Trait'):
 				person.add_trait('Undiscovered Trait')
-	else:
-		#Submissive
+			if !person.dailytalk.has('hint_dominance'):
+				person.dailytalk.append('hint_dominance')
+	elif globals.fetishopinion.find(person.fetish.dominance) <= 4 && person.traits.has('Dominant'):
+		person.trait_remove('Dominant')
+	#Submissive
+	if globals.fetishopinion.find(person.fetish.submission) >= 5 && !person.traits.has('Submissive'):
 		if person.knownfetishes.has('submission'):
-			if globals.fetishopinion.find(person.fetish.submission) >= 5 && !person.traits.has('Submissive'):
-				person.add_trait('Submissive')
-				if person.traits.has('Undiscovered Trait'):
-					person.trait_remove('Undiscovered Trait')
-			elif globals.fetishopinion.find(person.fetish.submission) <= 4 && person.traits.has('Submissive'):
-				person.trait_remove('Submissive')
-			if person.traits.has('Dominant'):
-				person.trait_remove('Dominant')
+			person.add_trait('Submissive')
+			if person.traits.has('Undiscovered Trait'):
+				person.trait_remove('Undiscovered Trait')
+			if person.dailytalk.has('hint_submissive'):
+				person.dailytalk.erase('hint_submissive')
 		else:
 			if !person.traits.has('Undiscovered Trait'):
 				person.add_trait('Undiscovered Trait')
+			if !person.dailytalk.has('hint_submissive'):
+				person.dailytalk.append('hint_submissive')
+	elif globals.fetishopinion.find(person.fetish.submission) <= 4 && person.traits.has('Submissive'):
+		person.trait_remove('Submissive')
+	#---S/M
+	#Sadist
+	if globals.fetishopinion.find(person.fetish.sadism) >= 5 && !person.traits.has('Sadist'):
+		if person.knownfetishes.has('sadism'):
+			person.add_trait('Sadist')
+			if person.traits.has('Undiscovered Trait'):
+				person.trait_remove('Undiscovered Trait')
+			if person.dailytalk.has('hint_sadism'):
+				person.dailytalk.erase('hint_sadism')
+		else:
+			if !person.traits.has('Undiscovered Trait'):
+				person.add_trait('Undiscovered Trait')
+			if !person.dailytalk.has('hint_sadism'):
+				person.dailytalk.append('hint_sadism')
+	elif globals.fetishopinion.find(person.fetish.sadism) <= 4 && person.traits.has('Sadist'):
+		person.trait_remove('Sadist')
+	#Masochist
+	if globals.fetishopinion.find(person.fetish.masochism) >= 5 && !person.traits.has('Masochist'):
+		if person.knownfetishes.has('masochism'):
+			person.add_trait('Masochist')
+			if person.traits.has('Undiscovered Trait'):
+				person.trait_remove('Undiscovered Trait')
+			if person.dailytalk.has('hint_masochism'):
+				person.dailytalk.erase('hint_masochism')
+		else:
+			if !person.traits.has('Undiscovered Trait'):
+				person.add_trait('Undiscovered Trait')
+			if !person.dailytalk.has('hint_masochism'):
+				person.dailytalk.append('hint_masochism')
+	elif globals.fetishopinion.find(person.fetish.masochism) <= 4 && person.traits.has('Masochist'):
+		person.trait_remove('Masochist')
 	return

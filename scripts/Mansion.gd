@@ -1757,6 +1757,15 @@ func childbirth(person,baby_id):
 		else:
 			text = person.dictionary("$name had to use the town's hospital to give birth to her child. [color=red]Sadly, you can't keep it without Nursery Room and had to give it away.[/color]")
 		get_node("birthpanel/raise").set_disabled(true)
+		###---Added by Expansion---### Disable if no nursery
+		get_node("birthpanel/raise").set_disabled(true)
+		get_node("birthpanel/raise").set_tooltip("You have no Nursery. You can build one in Mansion Upgrades.")
+		get_node("birthpanel/raisehybrid").set_disabled(true)
+		get_node("birthpanel/raisehybrid").set_tooltip("You have no Nursery. You can build one in Mansion Upgrades.")
+		get_node("birthpanel/raisemana").set_disabled(true)
+		get_node("birthpanel/raisemana").set_tooltip("You have no Nursery. You can build one in Mansion Upgrades.")
+		get_node("birthpanel/sacrificebaby").hide()
+		###---End Expansion---###
 	
 	#---Added Portrait
 	get_node("birthpanel/portraitpanel/portrait").set_texture(null)
@@ -2537,7 +2546,7 @@ func farmassignpanel(person):
 #			get_node("MainScreen/mansion/farmpanel/slavetofarm/addhen").set_disabled(false)
 #			get_node("MainScreen/mansion/farmpanel/slavetofarm/addhen").set_tooltip("")
 	
-	get_node("MainScreen/mansion/farmpanel/slavetofarm/slaveassigntext").set_bbcode("[color=#d1b970][center]Breasts[/center][/color]\nTits Size : [color=aqua]" + person.titssize.capitalize() + "[/color]\nLactation: " +globals.fastif(person.lactation == true, '[color=lime]present[/color]', '[color=#ff4949]not present[/color]')+ '. \nHyper-Lactation: ' +globals.fastif(person.lactating.hyperlactation == true, '[color=lime]present[/color]', '[color=#ff4949]not present[/color]')+ '. \n\n[color=#d1b970][center]Genitals[/center][/color]\nPenis: ' +globals.fastif(person.penis != 'none', '[color=green]present[/color]', '[color=#ff4949]not present[/color]')+ '. \nVagina: ' +globals.fastif(person.vagina != 'none', '[color=green]present[/color]', '[color=#ff4949]not present[/color]')+ '.')
+	get_node("MainScreen/mansion/farmpanel/slavetofarm/slaveassigntext").set_bbcode("[color=#d1b970][center]Breasts[/center][/color]\nTits Size : [color=aqua]" + person.titssize.capitalize() + "[/color]\nLactation: " +globals.fastif(person.lactation == true, '[color=lime]present[/color]', '[color=#ff4949]not present[/color]')+ '. \nHyper-Lactation: ' +globals.fastif(person.lactating.hyperlactation == true, '[color=lime]present[/color]', '[color=#ff4949]not present[/color]')+ '. \n\n[color=#d1b970][center]Genitals[/center][/color]\nPenis: ' +globals.fastif(person.penis != 'none', '[color=green]present[/color]', '[color=#ff4949]not present[/color]')+ '. \nVagina: ' +globals.fastif(person.vagina != 'none', '[color=green]present[/color]', '[color=#ff4949]not present[/color]')+ '.\n\n' +globals.fastif(person.spec == 'hucow', '[color=lime]Trained Hucow[/color]', ''))
 	
 	###---Added by Expansion---### Display Image and Text | Ankmairdor's BugFix v4
 	#Image

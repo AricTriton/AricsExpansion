@@ -78,10 +78,10 @@ var traits = {
 		"tags": [
 			"sexual",
 			"mental",
-			"perversy"
+			"perversy",
+			"lockedtrait"
 		],
 		"conflict": [
-			"Sadist"
 		]
 	},
 	"Deviant": {
@@ -470,10 +470,10 @@ var traits = {
 			"obed_mod": -0.2
 		},
 		"tags": [
-			"mental"
+			"mental",
+			"lockedtrait"
 		],
 		"conflict": [
-			"Submissive"
 		]
 	},
 	"Submissive": {
@@ -486,10 +486,10 @@ var traits = {
 			"obed_mod": 0.4
 		},
 		"tags": [
-			"mental"
+			"mental",
+			"lockedtrait"
 		],
 		"conflict": [
-			"Dominant"
 		]
 	},
 	"Infertile": {
@@ -882,10 +882,10 @@ var traits = {
 		"tags": [
 			"sexual",
 			"mental",
-			"perversy"
+			"perversy",
+			"lockedtrait"
 		],
 		"conflict": [
-			"Masochist"
 		]
 	},
 	"Undiscovered Trait": {
