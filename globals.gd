@@ -432,6 +432,7 @@ class progress:
 	var alisecloth = 'normal'
 	var decisions = []
 	var lorefound = []
+	var racemarketsat = {} #ralph5 - variable to track market saturation of various races (sell a lot of one race and its pricing goes down, etc.)
 	var relativesdata = {}
 	var descriptsettings = {full = true, basic = true, appearance = true, genitals = true, piercing = true, tattoo = true, mods = true}
 	###---Added by Expansion---### Dimensional Crystal & Farm Expanded
@@ -746,6 +747,14 @@ class progress:
 					count -= max(globals.itemdict[item].amount, 0)
 					globals.itemdict[item].amount = 0
 		return count
+		
+	#ralph5
+	func setupracemarketsat():
+		for race in globals.races:
+			if !racemarketsat.has(race):
+				racemarketsat[race] = globals.races[race].pricemod
+				#print(race + " added to racemarketsat with value: " + str(racemarketsat[race]))
+	#/ralph5
 
 	# calculates and returns the number of ropes recovered after use, mainly for adding to appropriate inventory. displays infotext if ropes are lost
 	func calcRecoverRope(numPersons, usedFor = 'capture'):
@@ -770,8 +779,28 @@ class progress:
 		if globals.main && lostRope > 0:
 			globals.main.infotext(str(lostRope) + ' rope%s wore out from use' % ('s' if lostRope > 1 else ''),'red')
 		return numPersons - lostRope
-	
 
+func addrelations(person, person2, value):
+	if person == player || person2 == player || person == person2 || person == null || person2 == null: #ralph9  - eliminates harmless script error pointed out by Ank
+		return
+	if person.relations.has(person2.id) == false: #ralph4 - keep getting errors pointing here
+		person.relations[person2.id] = 0
+	if person2.relations.has(person.id) == false:
+		person2.relations[person.id] = 0
+	if person.relations[person2.id] > 500 && value > 0 && checkifrelatives(person, person2):
+		value = value/1.5
+	elif person.relations[person2.id] < -500 && value < 0 && checkifrelatives(person,person2):
+		value = value/1.5
+	if (person.race.find('Otter') >= 0 || person2.race.find('Otter') >= 0) && value > 0: # /Capitulize
+		person.relations[person2.id] += value*1.5 # /Capitulize
+	else: # /Capitulize
+		person.relations[person2.id] += value
+	person.relations[person2.id] = clamp(person.relations[person2.id], -1000, 1000)
+	person2.relations[person.id] = person.relations[person2.id]
+	if person.relations[person2.id] < -200 && value < 0:
+		person.stress += rand_range(4,8)
+		person2.stress += rand_range(4,8)
+	
 static func count_sleepers():
 	var your_bed = 0
 	var personal_room = 0
@@ -1006,6 +1035,8 @@ func slavetooltip(person):
 	if node.get_rect().end.y >= screen.size.y:
 		node.rect_global_position.y -= node.get_rect().end.y - screen.size.y
 
+var longtails = ['cat','fox','wolf','demon','dragon','scruffy','snake tail','racoon','mouse']
+var alltails = ['cat','fox','wolf','bunny','bird','demon','dragon','scruffy','snake tail','racoon','mouse']
 ###---Added by Expansion---### Kennels Expanded
 var sleepdict = {communal = {name = 'Communal Room'}, jail = {name = "Jail"}, personal = {name = 'Personal Room'}, your = {name = "Your bed"}, kennel = {name = "Dog Kennel"}}
 
@@ -1234,8 +1265,9 @@ var expandedplayerspecs = {
 	Slaver = "+100% gold from selling captured slaves\n+33% gold reward from slave delivery tasks",
 	Hunter = "+100% gold drop from random encounters\n+20% gear drop chance\nBonus to preventing ambushes",
 	Alchemist = "Double potion production\nSelling potions earn 100% more gold\n[color=aqua]Start with an Alchemy Room unlocked[/color]",
-	Mage = "-50% mana cost of spells\nCombat spell deal 20% more damage",
-	Breeder = "Pregnancy chance for everyone increased by 25%\nBred Slaves sell for 200% more and receive 2x as many upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]"
+	Mage = "Combat spell deal 20% more damage",
+	#Breeder = "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for 200% more and receive 2x as many upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]"
+	Breeder = "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for 20% more gold and provide 20% more upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]" #ralph3
 }
 
 ###---Added by Expansion---### Movement Icons (replicated)
@@ -1298,6 +1330,13 @@ var sexuality_images = {
 	futa_1 = load("res://files/aric_expansion_images/sexuality_icons/futa_1.png"),
 	futa_2 = load("res://files/aric_expansion_images/sexuality_icons/futa_2.png"),
 	futa_3 = load("res://files/aric_expansion_images/sexuality_icons/futa_3.png"),
+}
+
+var playerspecs = {
+	Slaver = "+100% gold from selling captured slaves\n+33% gold reward from slave delivery tasks",
+	Hunter = "+100% gold drop from random encounters\n+20% gear drop chance\nBonus to preventing ambushes",
+	Alchemist = "Start with an alchemy room\nDouble potion production\nSelling potions earn 100% more gold",
+	Mage = "Combat spell deal 20% more damage", #ralph3
 }
 
 ###---Added by Expansion---### Farm Expanded
@@ -1562,9 +1601,11 @@ func slimeConversionCheck(mother, father):
 				strongestgenes = baby.genealogy[genes]
 		
 		if rand_range(0,100) + conversionstrength > strongestgenes:
+			#ralph
+			expansionsetup.setRaceBonus(baby, false)
 			baby.race = 'Slime'
 			baby.race_type == 4
-			expansionsetup.setRaceBonus(baby, false)
+			#/ralph
 			for genes in baby.genealogy:
 				if genes != 'slime' && baby.genealogy[genes] > 0:
 					baby.genealogy[genes] = 0

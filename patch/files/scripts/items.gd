@@ -10,18 +10,18 @@ func enchantrand(item, number = 1):
 	enchantscript.addrandomenchant(item, number)
 
 var itemlist = {
-	food = {
-		code = 'food',
-		name = 'Provisions',
-		icon = load("res://files/images/items/food.png"),
-		description = "Various assortments of preserved food servable for daily ration. Mostly stale, yet in high demand. \nPrice for 20 units.",
-		effect = "foodpurchase",
-		recipe = '',
-		cost = 10,
-		type = 'dummy',
-		amount = 0,
-		reqs = true,
-	},
+  food = {
+    code = 'food',
+    name = 'Provisions',
+    icon = load("res://files/images/items/food.png"),
+    description = "Various assortments of preserved food servable for daily ration. Mostly stale, yet in high demand. \nPrice for 20 units.",
+    effect = "foodpurchase",
+    recipe = '',
+    cost = 40,
+    type = 'dummy',
+    amount = 0,
+    reqs = true,
+  },
 	supply = {
 		code = 'supply',
 		name = 'Supplies',

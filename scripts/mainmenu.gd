@@ -3,7 +3,8 @@
 var hobbydescription = {
 	'Physical' : '[color=aqua]+1 Max Strength, +25 Courage[/color]\n\n$name is no stranger to fighting and tends to act boldly in many situations.',
 	'Etiquette' : "[color=aqua]+20 Confidence, +15 Charm[/color]\n\n$name has spent $his youth among elderly people and high society, learning how to be liked and present $himself while also feeling superior to commonfolk.",
-	'Magic' : "[color=aqua]+2 Max Magic, +25 Wit[/color]\n\n$name was a very curious child and spent a lot of $his time reading and studying various things, including magic.",
+	'Graceful' : "[color=aqua]+1 Max Agility, +10 Confidence[/color]\n\n$name was the fastest kid $he knew growing up and a natural when it came to hand-eye coordination in general.", #ralph3
+	'Magic' : "[color=aqua]+1 Max Magic, +25 Wit[/color]\n\n$name was a very curious child and spent a lot of $his time reading and studying various things, including magic.", #ralph3
 	'Servitude' : "[color=aqua]+1 Max Endurance, +35 Min Obedience, +20 Loyalty[/color]\n\n$name has spent $his youth in harsh training which lead to $him being more physically fit and respecting to $his superiors.",
 	'Curious' : "[color=aqua]Start with the [color=green]Gifted[/color] trait.[/color]\n\n$name spends $his time searching for answers and meaning in this crazy world. This has led $him to become more receptive to new skills and knowledge.",
 	'Genius' : "[color=aqua]Start with the [color=green]Clever[/color] trait and randomly either the [color=green]Responsive[/color] or [color=green]Gifted[/color] trait.[/color]\n[color=red]Gains either the Clumsy, Frail, or Weak trait.[/color]\n\n$name spends $his time studying and thinking and tends to not focus on physical activities.\n",
@@ -13,7 +14,7 @@ var hobbydescription = {
 }
 
 #Provides a container for Additional Hobbies
-var slaveHobbiesExpanded = ['Curious','Genius','Socialite','Waifu','Perfect Specimen']
+var slaveHobbiesExpanded = ['Graceful','Curious','Genius','Socialite','Waifu','Perfect Specimen'] #ralph3
 ###---Expansion End---###
 
 #Added Penis Sizes
@@ -49,6 +50,80 @@ func _process_stage6_sex_options():
 		get_node("TextureFrame/newgame/stage6/penis").add_item('none')
 		get_node("TextureFrame/newgame/stage6/balls").set_disabled(true)
 		get_node("TextureFrame/newgame/stage6/balls").add_item('none')
+
+
+#QMod - Renamed, tweaked variable initialization
+func _ready_newgame_creator():
+	#Connect UI
+	#Connect stage selection buttons
+	for i in get_node("TextureFrame/newgame/stagespanel/VBoxContainer").get_children():
+		if i.get_name() != 'cancel':
+			i.connect("pressed", self, '_select_stage', [i])
+	
+	#Connect text entry boxes	
+	for i in get_tree().get_nodes_in_group("lookline"):  
+		i.connect("text_changed", self, '_lookline_text', [i])
+	
+	#Connect list options
+	for i in get_tree().get_nodes_in_group("lookoption"):  
+		i.connect("item_selected", self, '_option_select', [i])
+	
+	#Connect stat up/down buttons	
+	for i in get_tree().get_nodes_in_group("statup"):  
+		i.connect("pressed",self,'statup',[i])		
+	for i in get_tree().get_nodes_in_group("statdown"):
+		i.connect("pressed",self,'statdown',[i])
+	
+	#Connect slave name entry boxes
+	for i in ["TextureFrame/newgame/stage8/slavename", "TextureFrame/newgame/stage8/slavesurname"]:
+		var temp = get_node(i)
+		temp.connect("text_changed", self, '_slavename_text', [temp])
+
+	#Connect slave customization options
+	for i in get_tree().get_nodes_in_group("slaveoption"):  
+		i.connect("item_selected",self,'_slave_option', [i])
+	
+	#Connect game options/settings
+	for i in get_tree().get_nodes_in_group("startoption"):  
+		i.connect("pressed",self,'_option_toggle',[i])
+	
+	#Connect virgin option
+	get_node("TextureFrame/newgame/stage6/virgin").connect("pressed", self, '_virgin_press')
+	
+	#Initialize newgame variables
+	player = globals.newslave(playerDefaults.race, playerDefaults.age, playerDefaults.sex, playerDefaults.origins) #Prefer to use a constructor/builder
+	#ralph
+	player.playercleartraits()
+	#/ralph
+	player.hairstyle = 'straight'
+	player.beautybase = variables.playerstartbeauty
+	
+	startSlave = globals.newslave(slaveDefaults.race, slaveDefaults.age, slaveDefaults.sex, slaveDefaults.origins) #Prefer a constructor/builder
+	startSlave.cleartraits()
+	startSlave.beautybase = variables.characterstartbeauty
+	startSlave.memory = slaveBackgrounds.back()
+	
+	globals.resources.panel = null #Clear global variables
+	globals.showalisegreet = false
+
+	_build_player_portraits() #Build Player portrait list
+
+func regenerateplayer():
+	var imageportait = player.imageportait
+	player = globals.newslave(player.race, player.age, player.sex, 'slave')
+	globals.player = player
+	#ralph
+	player.playercleartraits()
+	#/ralph
+	player.unique = 'player'
+	player.imageportait = imageportait
+	player.imagefull = null
+	player.beautybase = variables.playerstartbeauty
+	playerBonusStatPoints = variables.playerbonusstatpoint
+	for i in ['str','agi','maf','end']:
+		player.stats[i+'_max'] = 4
+	_update_stage5()
+
 
 ###---Added by Expansion---### Traits to Forbidden
 #QMod - Refactor
@@ -144,6 +219,25 @@ func _process_stage6_body_options():
 		get_node("TextureFrame/newgame/stage6/vagina").add_item('none')
 
 	###---End Expansion---###
+
+
+func _select_stage(button):
+	#Check character creation - player or first slave
+	if stage >= 7 && button.get_position_in_parent() < 7: #Moving from first slave creation back to player creation
+		player = globals.player #Restore previously customized player character
+		startSlave.cleartraits() #Clear starting slave selected trait(s)
+		startSlave.memory = slaveBackgrounds[0]
+		startSlaveHobby = slaveHobbies[0]
+	
+	if stage >= 6: #If backtracking after reaching player specialization stage
+		var spec = player.spec
+		#ralph
+		player.playercleartraits()
+		#/ralph
+		
+	#Update stage and advance
+	self.stage = button.get_position_in_parent()
+
 
 func _update_stage6():
 	###---Added by Expansion---### Quick Strip
@@ -294,9 +388,14 @@ func _on_slaveconfirm_pressed():
 	elif startSlaveHobby == 'Etiquette':
 		startSlave.conf += 20
 		startSlave.charm += 15
+	#ralph3
+	elif startSlaveHobby == 'Graceful':
+		startSlave.conf += 10
+		startSlave.stats.agi_max += 1
+	#/ralph3
 	elif startSlaveHobby == 'Magic':
 		startSlave.wit += 25
-		startSlave.stats.maf_max += 2
+		startSlave.stats.maf_max += 1 #ralph3
 	elif startSlaveHobby == 'Servitude':
 		startSlave.stats.end_max += 1
 		startSlave.loyal += 20
