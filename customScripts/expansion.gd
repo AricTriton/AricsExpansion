@@ -1972,7 +1972,26 @@ func dailyUpdate(person):
 		text += "\n$name had " +str(nameCum())+ " still in $his mouth and washed it out. "
 		person.cum.mouth= 0
 	
-	if person.rules.personalbath == true:
+	#---Daily Baths
+	#Player (Auto)
+	if person == globals.player:
+		var triggered_cum_cleaning = false
+		if person.cum.face > 0:
+			triggered_cum_cleaning = true
+			person.cum.face = 0
+		if person.cum.body > 0:
+			triggered_cum_cleaning = true
+			person.cum.body = 0
+		if person.cum.ass > 0:
+			triggered_cum_cleaning = true
+			person.cum.ass = 0
+		if person.cum.pussy > 0:
+			triggered_cum_cleaning = true
+			person.cum.pussy = 0
+		if triggered_cum_cleaning == true:
+			text += "\nYou still had " +str(nameCum())+ " on you, so you washed it all out while taking your daily bath. "
+	#Bath (Cleans All)
+	elif person.rules.personalbath == true:
 		if person.cum.face > 0:
 			text += "\n$name had " +str(nameCum())+ " on $his face from the day's activities and washed it off while bathing. "
 			person.cum.face = 0
@@ -1988,6 +2007,7 @@ func dailyUpdate(person):
 		#Semen Clearing for Fun Times
 		for i in person.preg.womb:
 			person.preg.womb.erase(i)
+	#Chance to Clean
 	else:
 		if person.cum.face > 15:
 			text += "\n$name had " +str(nameCum())+ " on $his face from the day's activities and washed it off. "

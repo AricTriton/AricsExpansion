@@ -1616,7 +1616,7 @@ func ancientswordeffect(person):
 	var text = person.dictionary("$name finds $himself examining the blade at $his side throughout the day. ")
 	if person.cour > 40:
 		text += person.dictionary("The still-sharp blade gives $him confidence that $he will survive many battles as well while wielding it.\n")
-		person.conf_base += round(rand_range(1,3))
+		person.conf += round(rand_range(1,3))
 	else:
 		text += person.dictionary("The ancient bloodstains on its metal blade makes $him wonder when that is all $he will be as well and $he grows fearful.\n")
 		person.fear += round(rand_range(3,5))
