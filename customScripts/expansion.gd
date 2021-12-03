@@ -2147,10 +2147,10 @@ func dailyUpdate(person):
 	#Chance to Add/Remove Lisp or Mute due to oversized Lips
 	if person.npcexpanded.temptraits.find('vocaltraitdelay') >= 0:
 		person.npcexpanded.temptraits.remove('vocaltraitdelay')
-	elif globals.lipssizearray.find(person.lips) >= 5:
+	elif globals.lipssizearray.find(person.lips) >= 6:
 		var delays = round(rand_range(0,3)) + globals.lipssizearray.find(person.lips)
 		var liparray = globals.lipssizearray
-		var lipincreasechance = globals.expansionsettings.lipstraitbasechance + (5*(liparray.find(person.lips)-5))
+		var lipincreasechance = globals.expansionsettings.lipstraitbasechance + (10*(liparray.find(person.lips)-6))
 		#Check for Negative
 		if person.traits.has('Mute') == false:
 			if person.traits.has('Lisp') == false:
@@ -2164,14 +2164,14 @@ func dailyUpdate(person):
 					person.npcexpanded.temptraits.append('Mute')
 					text += "\n$name is no longer able to speak due to $his massive lips. $He is now [color=red]Mute[/color]."
 		elif person.npcexpanded.temptraits.has('Mute') && person.traits.has('Mute'):
-			if rand_range(0,100) <= globals.expansionsettings.lipstraitbasechance - (5-liparray.find(person.lips)*10):
+			if rand_range(0,100) <= lipincreasechance:
 				person.add_trait('Lisp')
 				person.npcexpanded.temptraits.append('Lisp')
 				person.trait_remove('Mute')
 				person.npcexpanded.temptraits.remove('Mute')
 				text += "\n$name seems to be able to audibly talk through $his massive lips again. $He is no longer [color=red]Mute[/color] and now merely speaks with a heavy [color=red]Lisp[/color]."
 		elif person.npcexpanded.temptraits.has('Lisp') && person.traits.has('Lisp'):
-			if rand_range(0,100) <= globals.expansionsettings.lipstraitbasechance - (5-liparray.find(person.lips)*5):
+			if rand_range(0,100) <= lipincreasechance:
 				person.trait_remove('Lisp')
 				person.npcexpanded.temptraits.remove('Lisp')
 				text += "\n$name seems to be able to talk unhindered again. $He no longer seems to have a lisp."

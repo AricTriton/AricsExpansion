@@ -1212,7 +1212,7 @@ var enemyequips = {
 	},
 	guard = {
 		armor = [ ['armorchain', 10], ['armorchain+', 3], ['armorplate',1], ['armorhalfplate',1], ['armorplate+', 0.3]],
-		weapon = [['weaponsword', 5], ['weaponsword+', 1],  ['weaponhammer', 1], ['weaponhammer+', 0.2], ['weaponceremonialsword', 1], ['weaponggreatsword', 1], ['weaponggreatsword', 0.25]],
+		weapon = [['weaponsword', 5], ['weaponsword+', 1],  ['weaponhammer', 1], ['weaponhammer+', 0.2], ['weaponceremonialsword', 1], ['weapongreatsword', 1], ['weapongreatsword+', 0.25]],
 		accessory = [['accgoldring', 1], ['nothing',10]],
 		abilities = [],
 	},

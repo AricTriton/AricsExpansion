@@ -21,7 +21,7 @@ var ihavebloodygoodtaste = false
 var uniqueslavesautopartyconsent = false
 
 #Lip Size Increase Change (Chance is array-5*10, ie: plump and bigger give 10)
-var lipstraitbasechance = 25
+var lipstraitbasechance = 20
 
 #Base Bonus or Penalty for Attraction Checks for PCs
 var playerattractionmodifier = 20
