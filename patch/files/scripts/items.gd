@@ -1292,7 +1292,7 @@ var itemlist = {
 	hyperlactationpot = {
 		code = 'hyperlactationpot',
 		name = 'Hyperlactation Potion',
-		icon = load("res://files/aric_expansion_images/items/hyperlactation.png"),
+		icon = load("res://files/aric_expansion_images/potions/rendrassa_hyperlactation_bottle.png"),
 		description = "Stimulates the milk glands of a lactating person to cause overwhelming lactation OR forces someone who isn't lactating to start lactating. Can permanently impair normal behavior and requires consistant milking.",
 		effect = 'hyperlactationpoteffect',
 		recipe = 'recipehyperlactationpot',
@@ -1306,7 +1306,7 @@ var itemlist = {
 	bottledmilk = {
 		code = 'bottledmilk',
 		name = 'Bottled Milk',
-		icon = load("res://files/aric_expansion_images/items/milk_bottle_trans.png"),
+		icon = load("res://files/aric_expansion_images/potions/rendrassa_milk_bottle.png"),
 		description = "Milk that has been refined and bottled. During the refining process, it has gained the properties to restore some [color=aqua]Energy[/color] as well the possibility to restore some significant [color=aqua]Stress[/color]. ",
 		effect = 'milkeffect',
 		recipe = '',
@@ -1320,7 +1320,7 @@ var itemlist = {
 	bottledsemen = {
 		code = 'bottledsemen',
 		name = 'Bottled Semen',
-		icon = load("res://files/aric_expansion_images/items/milk_bottle_trans.png"),
+		icon = load("res://files/aric_expansion_images/potions/rendrassa_cum_bottle.png"),
 		description = "Semen that has been refined and bottled. During the refining process, it has gained the properties to restore minor [color=aqua]Energy[/color] as well as make the drinker feel [color=aqua]Lewd[/color] by drinking it. ",
 		effect = 'semeneffect',
 		recipe = '',
@@ -1334,7 +1334,7 @@ var itemlist = {
 	bottledlube = {
 		code = 'bottledlube',
 		name = 'Bottled Lube',
-		icon = load("res://files/aric_expansion_images/items/milk_bottle_trans.png"),
+		icon = load("res://files/aric_expansion_images/potions/rendrassa_lube_bottle.png"),
 		description = "Vaginal Fluid that has been refined and bottled. During the refining process, it has gained the properties to restore minor [color=aqua]Energy[/color] as well as make the drinker feel [color=aqua]Lewd[/color] by drinking it. ",
 		effect = 'lubeeffect',
 		recipe = '',
@@ -1348,7 +1348,7 @@ var itemlist = {
 	bottledpiss = {
 		code = 'bottledpiss',
 		name = 'Bottled Piss',
-		icon = load("res://files/aric_expansion_images/items/milk_bottle_trans.png"),
+		icon = load("res://files/aric_expansion_images/potions/rendrassa_piss_bottle.png"),
 		description = "Urine that has been refined and bottled. During the refining process, it has gained the properties to restore [color=aqua]Energy[/color] as well as make the drinker feel incredibly [color=aqua]Lewd[/color] by drinking it. ",
 		effect = 'pisseffect',
 		recipe = '',

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/hyperlactation.png-15dd5322bbdcea8a5f5d2982b0905a6e.stex"
+path="res://.import/rendrassa_lube_bottle.png-6bfa4f34c657d8d511987a3d534ce86b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://files/aric_expansion_images/items/hyperlactation.png"
-dest_files=[ "res://.import/hyperlactation.png-15dd5322bbdcea8a5f5d2982b0905a6e.stex" ]
+source_file="res://files/aric_expansion_images/potions/rendrassa_lube_bottle.png"
+dest_files=[ "res://.import/rendrassa_lube_bottle.png-6bfa4f34c657d8d511987a3d534ce86b.stex" ]
 
 [params]
 
