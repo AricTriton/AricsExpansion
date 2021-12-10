@@ -573,7 +573,7 @@ func setRaceBonus(person, increasestats):
 			person.genealogy.elf = 100
 		elif person.unique == 'Ayda':	
 			cleargenes(person)
-			person.genealogy.dark_elf = 100			
+			person.genealogy.tribal_elf = 100			
 		elif person.unique == 'Zoe':
 			cleargenes(person)
 			person.genealogy.dog = 100
@@ -633,12 +633,12 @@ func setRaceBonus(person, increasestats):
 	###
 
 	#assign elemental values
-	fire += (person.genealogy.dragonkin*1.0 + person.genealogy.demon*0.75 + person.genealogy.seraph*0.5 + 0.25*(person.genealogy.dark_elf + person.genealogy.orc + person.genealogy.dog + person.genealogy.fox + person.genealogy.lamia))/100
+	fire += (person.genealogy.dragonkin*1.0 + person.genealogy.demon*0.75 + person.genealogy.seraph*0.5 + 0.25*(person.genealogy.tribal_elf + person.genealogy.orc + person.genealogy.dog + person.genealogy.fox + person.genealogy.lamia))/100
 	wind += (person.genealogy.harpy*1.0 + person.genealogy.fairy*0.75 + person.genealogy.seraph*0.5 + 0.25*(person.genealogy.elf + person.genealogy.arachna + person.genealogy.cat + person.genealogy.raccoon))/100
-	water += (person.genealogy.nereid*1.0 + person.genealogy.scylla*0.75 + 0.5*(person.genealogy.slime + person.genealogy.lamia) + 0.25*(person.genealogy.cow + person.genealogy.dryad))/100
+	water += (person.genealogy.nereid*1.0 + person.genealogy.scylla*0.75 + 0.5*(person.genealogy.slime + person.genealogy.lamia) + 0.25*(person.genealogy.cow + person.genealogy.dryad + person.genealogy.dark_elf))/100
 	earth += (person.genealogy.gnome*1.0 + person.genealogy.goblin*0.75+ 0.5*(person.genealogy.bunny + person.genealogy.arachna) + 0.25*(person.genealogy.cow + person.genealogy.horse + person.genealogy.dryad + person.genealogy.lamia))/100
-	nature += (1.0*(person.genealogy.dryad + person.genealogy.fairy + person.genealogy.goblin) + 0.75*(person.genealogy.dark_elf + person.genealogy.fox + person.genealogy.raccoon) + 0.5*(person.genealogy.elf + person.genealogy.nereid + person.genealogy.harpy + person.genealogy.dragonkin + person.genealogy.arachna + person.genealogy.lamia + person.genealogy.slime + person.genealogy.cat + person.genealogy.dog + person.genealogy.bunny + person.genealogy.horse) + 0.25*(person.genealogy.human + person.genealogy.gnome + person.genealogy.orc + person.genealogy.scylla + person.genealogy.cow))/100
-	corruption += (1.0*(person.genealogy.demon + person.genealogy.gnome + person.genealogy.goblin) + 0.75*(person.genealogy.orc + person.genealogy.scylla + person.genealogy.harpy + person.genealogy.dragonkin + person.genealogy.arachna) + 0.5*(person.genealogy.nereid + person.genealogy.cow + person.genealogy.lamia + person.genealogy.horse) + 0.25*(person.genealogy.elf + person.genealogy.dark_elf + person.genealogy.cat + person.genealogy.dog + person.genealogy.bunny + person.genealogy.fox + person.genealogy.raccoon))/100
+	nature += (1.0*(person.genealogy.dryad + person.genealogy.fairy + person.genealogy.goblin) + 0.75*(person.genealogy.tribal_elf + person.genealogy.fox + person.genealogy.raccoon) + 0.5*(person.genealogy.elf + person.genealogy.dark_elf + person.genealogy.nereid + person.genealogy.harpy + person.genealogy.dragonkin + person.genealogy.arachna + person.genealogy.lamia + person.genealogy.slime + person.genealogy.cat + person.genealogy.dog + person.genealogy.bunny + person.genealogy.horse) + 0.25*(person.genealogy.human + person.genealogy.gnome + person.genealogy.orc + person.genealogy.scylla + person.genealogy.cow))/100
+	corruption += (1.0*(person.genealogy.demon + person.genealogy.gnome + person.genealogy.goblin) + 0.75*(person.genealogy.orc + person.genealogy.scylla + person.genealogy.harpy + person.genealogy.dragonkin + person.genealogy.arachna) + 0.5*(person.genealogy.dark_elf + person.genealogy.nereid + person.genealogy.cow + person.genealogy.lamia + person.genealogy.horse) + 0.25*(person.genealogy.elf + person.genealogy.tribal_elf + person.genealogy.cat + person.genealogy.dog + person.genealogy.bunny + person.genealogy.fox + person.genealogy.raccoon))/100
 	corruption -= person.genealogy.slime
 	
 	#assign racial bonuses
@@ -736,7 +736,7 @@ func setRaceBonus(person, increasestats):
 				bonus_vagsize -= 0
 				bonus_ballssize -= 0
 				bonus_height -= 0
-			elif person.genealogy.elf >= 50 || person.genealogy.dark_elf >= 50:
+			elif person.genealogy.elf >= 50 || person.genealogy.tribal_elf >= 50 || person.genealogy.dark_elf >= 50:
 				bonus_titssize -= person.genealogy.gnome/200 
 				bonus_penissize -= person.genealogy.gnome/100
 				bonus_vagsize -= person.genealogy.gnome/200
@@ -800,17 +800,79 @@ func setRaceBonus(person, increasestats):
 			bonus_fertility -= person.genealogy.elf/10
 			bonus_charm += person.genealogy.elf/10
 			bonus_asssize -= person.genealogy.elf/50
-			if person.genealogy.fairy >= 50 || person.genealogy.goblin >= 50 || person.genealogy.gnome >= 50 || person.genealogy.dark_elf >= 50: #no need to make 'em smaller if they're already a small race
+			if person.genealogy.fairy >= 50 || person.genealogy.goblin >= 50 || person.genealogy.gnome >= 50 || person.genealogy.tribal_elf || person.genealogy.dark_elf >= 50: #no need to make 'em smaller if they're already a small race
 				bonus_titssize -= 0
 				bonus_penissize -= 0
 			else:	
 				bonus_titssize -= person.genealogy.elf/50 
 				bonus_penissize -= person.genealogy.elf/50
-
-	#Dark Elf   
+	
+	#Dark Elf
 	if person.genealogy.dark_elf > 0:
 		thisrace = 'Dark Elf'
 		if person.genealogy.dark_elf >= 100:
+			bonus_strength += 1
+			bonus_agility += 1
+			bonus_magic += 2
+			bonus_beauty += 10
+			bonus_fertility -= 15
+			bonus_wit += 10
+			bonus_penissize -= 1	
+		elif person.genealogy.dark_elf >= 50 && person.race == thisrace:
+			if water >= 0.4 && person.sex != 'male': #undine
+				hybridtype = 'Undine'	
+				bonus_strength += 0.5
+				bonus_magic += 1.5
+				bonus_endurance += 0.5
+				bonus_beauty += 10
+				bonus_titssize += 1
+				if person.skincov == 'none':
+					bonus_skincov = 'scales'
+				person.add_trait('Soaker') #not reversible
+				if !person.skin in ['pale blue', 'blue', 'purple']:
+					bonus_skin = 'blue'
+			elif person.genealogy.dryad >= 40: #Hulderfolk
+				if person.sex == 'male':
+					hybridtype = 'Huldrekall'
+					bonus_strength += 0.5
+					bonus_agility += 0.5
+					bonus_magic += 1.5
+					bonus_beauty -= 40
+					bonus_charm -= 10
+				else:
+					hybridtype = 'Nymph'
+					bonus_agility += 0.5
+					bonus_magic += 1.5
+					bonus_beauty += 30
+					bonus_charm += 10
+			else:
+				bonus_strength += fire*4*(.75 + nature) - (corruption - 0.5)*2 - 0.1
+				bonus_agility += person.genealogy.dark_elf/100 + wind*4*(0.75 + nature) - (corruption - 0.5)*2 - 0.1
+				bonus_magic += person.genealogy.dark_elf/100 + water*5*(0.75 + nature) - (corruption - 0.5)*2 - 0.1
+				bonus_endurance += earth*4*(0.75 + nature) - (corruption - 0.5)*2 - 0.1
+				bonus_beauty += person.genealogy.dark_elf/6.667 - corruption*10
+				bonus_fertility -= person.genealogy.dark_elf/10 + corruption*10
+				bonus_wit += person.genealogy.dark_elf/10
+				bonus_charm -= (corruption - 0.5)*40
+				bonus_titssize -= person.genealogy.dark_elf/200
+				bonus_penissize -= person.genealogy.dark_elf/150
+		else:
+			bonus_agility += person.genealogy.dark_elf/100
+			bonus_magic += person.genealogy.dark_elf/100
+			bonus_beauty += person.genealogy.dark_elf/10
+			bonus_fertility -= person.genealogy.dark_elf/10
+			bonus_wit += person.genealogy.dark_elf/10
+			if person.genealogy.fairy >= 50 || person.genealogy.goblin >= 50 || person.genealogy.gnome >= 50 || person.genealogy.elf >= 50 || person.genealogy.tribal_elf >= 50: #no need to make 'em smaller if they're already a small race
+				bonus_titssize -= 0
+				bonus_penissize -= 0
+			else:	
+				bonus_titssize -= person.genealogy.dark_elf/150
+				bonus_penissize -= person.genealogy.dark_elf/75
+
+	#Tribal Elf   
+	if person.genealogy.tribal_elf > 0:
+		thisrace = 'Tribal Elf'
+		if person.genealogy.tribal_elf >= 100:
 			bonus_strength += 1
 			bonus_agility += 2
 			bonus_endurance += 1
@@ -818,8 +880,8 @@ func setRaceBonus(person, increasestats):
 			bonus_fertility -= 10
 			bonus_confidence += 20
 			bonus_penissize -= 1
-		elif person.genealogy.dark_elf >= 50 && person.race == thisrace:
-			bonus_confidence += person.genealogy.dark_elf/5
+		elif person.genealogy.tribal_elf >= 50 && person.race == thisrace:
+			bonus_confidence += person.genealogy.tribal_elf/5
 			if fire >= 0.4: #ifrit
 				hybridtype = 'Ifrit'	
 				bonus_strength += 2.5
@@ -847,26 +909,26 @@ func setRaceBonus(person, increasestats):
 					bonus_charm += 10
 			else:
 				bonus_strength += fire*4 - (corruption - 0.25)*6 #(.86*.25+.14*.25)*4 = 1 - (.25*64+.5*.25+11)/100-.25*6 = 0   = 1 + 0 + .14
-				bonus_agility += person.genealogy.dark_elf/50 + (nature - 0.75)*5.333 + wind #(.53*.75+.36*.5+.04*1) = 1.06-.71
+				bonus_agility += person.genealogy.tribal_elf/50 + (nature - 0.75)*5.333 + wind #(.53*.75+.36*.5+.04*1) = 1.06-.71
 				bonus_magic += (corruption - 0.25)*6 + water
 				bonus_endurance += earth #.0425 + .17
-				bonus_beauty += person.genealogy.dark_elf/10
-				bonus_fertility -= person.genealogy.dark_elf/10
-				bonus_titssize -= person.genealogy.dark_elf/200
-				bonus_penissize -= person.genealogy.dark_elf/150
-				bonus_asssize -= person.genealogy.dark_elf/200
+				bonus_beauty += person.genealogy.tribal_elf/10
+				bonus_fertility -= person.genealogy.tribal_elf/10
+				bonus_titssize -= person.genealogy.tribal_elf/200
+				bonus_penissize -= person.genealogy.tribal_elf/150
+				bonus_asssize -= person.genealogy.tribal_elf/200
 		else:
-			bonus_agility += person.genealogy.dark_elf/50
-			bonus_beauty += person.genealogy.dark_elf/10
-			bonus_fertility -= person.genealogy.dark_elf/10
-			bonus_confidence += person.genealogy.dark_elf/5
-			bonus_asssize -= person.genealogy.dark_elf/100
+			bonus_agility += person.genealogy.tribal_elf/50
+			bonus_beauty += person.genealogy.tribal_elf/10
+			bonus_fertility -= person.genealogy.tribal_elf/10
+			bonus_confidence += person.genealogy.tribal_elf/5
+			bonus_asssize -= person.genealogy.tribal_elf/100
 			if person.genealogy.fairy >= 50 || person.genealogy.goblin >= 50 || person.genealogy.gnome >= 50 || person.genealogy.elf >= 50: #no need to make 'em smaller if they're already a small race
 				bonus_titssize -= 0
 				bonus_penissize -= 0
 			else:	
-				bonus_titssize -= person.genealogy.dark_elf/150
-				bonus_penissize -= person.genealogy.dark_elf/75
+				bonus_titssize -= person.genealogy.tribal_elf/150
+				bonus_penissize -= person.genealogy.tribal_elf/75
 
 	#Greenskins 
 	#Orcs
@@ -882,7 +944,7 @@ func setRaceBonus(person, increasestats):
 			bonus_vagsize += 1
 			bonus_height += 1
 		elif person.genealogy.orc >= 50 && person.race == thisrace:
-			var ElvishBlood = (person.genealogy.elf + person.genealogy.dark_elf)/15
+			var ElvishBlood = (person.genealogy.elf + person.genealogy.tribal_elf)/15
 			bonus_beauty += ElvishBlood
 			bonus_beauty -= person.genealogy.orc/10 + (corruption - .75)*40
 			bonus_courage += person.genealogy.orc/10
@@ -981,7 +1043,7 @@ func setRaceBonus(person, increasestats):
 				bonus_elasticity += 2
 				bonus_lewdness += 20
 				person.add_trait('Scoundrel') #not reversible
-			elif person.genealogy.goblin >= 70 && person.genealogy.dark_elf >= 20: #red cap
+			elif person.genealogy.goblin >= 70 && person.genealogy.tribal_elf >= 20: #red cap
 				hybridtype = 'Redcap'
 				bonus_strength += 2.5
 				bonus_agility += 0.5
@@ -1014,7 +1076,7 @@ func setRaceBonus(person, increasestats):
 				bonus_titssize -= 0
 				bonus_penissize -= 0
 				bonus_height -= 0
-			elif person.genealogy.elf >= 50 || person.genealogy.dark_elf >= 50:
+			elif person.genealogy.elf >= 50 || person.genealogy.tribal_elf >= 50:
 				bonus_titssize -= person.genealogy.goblin/100 
 				bonus_penissize -= person.genealogy.goblin/100
 				bonus_height -= person.genealogy.goblin/50
@@ -1274,7 +1336,7 @@ func setRaceBonus(person, increasestats):
 				bonus_titssize -= 0
 				bonus_penissize -= 0
 				bonus_height -= 0
-			elif person.genealogy.elf >= 50 || person.genealogy.dark_elf >= 50:
+			elif person.genealogy.elf >= 50 || person.genealogy.tribal_elf >= 50:
 				bonus_titssize -= person.genealogy.fairy/50
 				bonus_penissize -= person.genealogy.fairy/50
 				bonus_height -= person.genealogy.fairy/40
@@ -1327,7 +1389,7 @@ func setRaceBonus(person, increasestats):
 			if person.genealogy.gnome >= 50 || person.genealogy.goblin >= 50 || person.genealogy.fairy >= 50: #no need to make 'em smaller if they're already a small race
 				bonus_titssize -= 0
 				bonus_penissize -= 0
-			elif person.genealogy.elf >= 50 || person.genealogy.dark_elf >= 50:
+			elif person.genealogy.elf >= 50 || person.genealogy.tribal_elf >= 50 || person.genealogy.dark_elf >= 50:
 				bonus_titssize -= person.genealogy.harpy/50
 				bonus_penissize -= person.genealogy.harpy/50
 			else:
@@ -1336,7 +1398,7 @@ func setRaceBonus(person, increasestats):
 				bonus_height -= person.genealogy.harpy/50
 	
 	#Seraph   
-	#\n\nBreeding Note: Specimens are still somewhat rare so results have not been corroberated, but one breeder has noted that the minds of Seraph dominant hybrids are heavily influenced by the instincts of their minority ancestors. Additionally, he notes that Seraph suffer a sensitivity to mana corrupted blood similar to Drow.
+	#\n\nBreeding Note: Specimens are still somewhat rare so results have not been corroberated, but one breeder has noted that the minds of Seraph dominant hybrids are heavily influenced by the instincts of their minority ancestors. Additionally, he notes that Seraph suffer a sensitivity to mana corrupted blood similar to Dark Elves.
 	#The minds of Seraph dominant hybrids are heavily influenced by secondary ancestry. Seraph-demon hybrids suffer from some form of mana corruption, but strangely gnomish blood barely manifests itself although similarly corrupted. This anomaly has been studied by one particularly curious mage breeder, but to date no one has presented a plausible hypothesis as to why this might be.
 	if person.genealogy.seraph > 0:
 		thisrace = 'Seraph'
@@ -1693,7 +1755,7 @@ func setRaceBonus(person, increasestats):
 				bonus_strength += 0.5
 				bonus_magic += 2.5
 				bonus_tail = 'fish'
-			#elif person.genealogy.drow >= 40: #Naga - $He appears to be a Naga, a reclusive cobra-hooded subterranian subspecies of Lamia of which little is known. 
+			#elif person.genealogy.dark_elf >= 40: #Naga - $He appears to be a Naga, a reclusive cobra-hooded subterranian subspecies of Lamia of which little is known. 
 				#hybridtype = 'Naga'
 				#bonus_strength += 0.5
 				#bonus_magic += 1.5
@@ -1850,7 +1912,7 @@ func setRaceBonus(person, increasestats):
 				bonus_height += 3
 				bonus_ballssize += person.genealogy.raccoon/33
 			else:
-				var forestprotector = (person.genealogy.elf + person.genealogy.dark_elf + person.genealogy.fox/2)/100
+				var forestprotector = (person.genealogy.elf + person.genealogy.tribal_elf + person.genealogy.fox/2)/100
 				bonus_strength += forestprotector*(1 + nature)
 				bonus_agility += wind*4
 				bonus_magic += person.genealogy.raccoon/50 + forestprotector*(1 + nature)*2 - (corruption - 0.25)*4
@@ -1917,7 +1979,7 @@ func setRaceBonus(person, increasestats):
 			else:
 				var shortstackraces = person.genealogy.goblin + person.genealogy.gnome + person.genealogy.fairy
 				bonus_strength += earth*4 + (corruption - 0.5)*4 + (nature - 0.5)*(person.genealogy.orc + person.genealogy.arachna + person.genealogy.dragonkin)/12.5
-				bonus_agility += person.genealogy.horse/100 + (nature - 0.5)*(person.genealogy.elf + person.genealogy.dark_elf + person.genealogy.scylla + person.genealogy.cat/2 + person.genealogy.dog/2 + person.genealogy.fox/2 + person.genealogy.bunny/2 + + person.genealogy.raccoon/4)/12.5
+				bonus_agility += person.genealogy.horse/100 + (nature - 0.5)*(person.genealogy.elf + person.genealogy.tribal_elf + person.genealogy.scylla + person.genealogy.cat/2 + person.genealogy.dog/2 + person.genealogy.fox/2 + person.genealogy.bunny/2 + + person.genealogy.raccoon/4)/12.5
 				bonus_magic += (0.5 - corruption)*12
 				bonus_endurance += person.genealogy.horse/100 + (corruption - 0.5)*4 + (nature - 0.5)*(person.genealogy.orc + person.genealogy.arachna + person.genealogy.cow)/12.5
 				bonus_strength -= shortstackraces/50
