@@ -39,7 +39,7 @@ var races = {
 		ears = ['pointy'],
 		haircolor = ['white', 'green', 'purple', 'blue', 'blond', 'red', 'auburn'],
 		description = "Elves are famous among the various races for the legends and stories of ancient times, when elves held a similar status to modern humans. These tales speak of elves as arrogant, and in command of powerful nature magic, but ultimately spelling their own downfall in some great act of folly.\n\nModern elves bear few connections to their ancestors beyond physical appearance and a close connection to nature. In stark contrast, their lives are often fairly humble and reclusive, generally staying deep within forests. There is no evidence to suggest any inherent magic found in modern elves, but this hardly impedes their popularity.",
-		details = "[color=aqua]Racial trait: Improves obedience when allowed to lead during sex sequence.[/color]\n\n[color=yellow]Stat potential: Strength - 2, Agility - 3, Magic - 5, Endurance - 3 [/color]\n\nBreeding Note:\nThere are multiple opportunities to breed superior Elf hybrids. Elves in general owe some of their amazing finesse and grace of movement to their fine bone structure in addition to a simple advantage of reflex and though cut off from destructive magic, elves still gain some benefit from any secondary ancestry attuned to elemental forces.\n\n[color=yellow]Racial Stat Bonus:\nAgility++ \nPure Blood Bonus:\nMagic+\nOther Racial Characteristics:\nBeauty+, Fertility-, Charm+ [/color]\n[color=red]Elemental Modifiers\n25% Wind \nElemental Bonuses:\nWind (Magic+) [/color]\n[color=green]Nature Magic Saturation:\n50% \nNature Bonus:\nAgility+ [/color]\n[color=purple]Mana Corruption:\n25% \nHigher Corruption:\nStrength+, Agility- \nLower Corruption:\nAgility+ [/color]\n[color=aqua]Breeding Quirks:\nGains minor stat bonuses from all elements \nPossible Mutations:\nHuldrekall, Nymph, Siren [/color]",
+		details = "[color=aqua]Racial trait: Improves obedience when allowed to lead during sex sequence.[/color]\n\n[color=yellow]Stat potential: Strength - 2, Agility - 5, Magic - 4, Endurance - 2 [/color]\n\nBreeding Note:\nThere are multiple opportunities to breed superior Elf hybrids. Elves in general owe some of their amazing finesse and grace of movement to their fine bone structure in addition to a simple advantage of reflex and though cut off from destructive magic, elves still gain some benefit from any secondary ancestry attuned to elemental forces.\n\n[color=yellow]Racial Stat Bonus:\nAgility++ \nPure Blood Bonus:\nMagic+\nOther Racial Characteristics:\nBeauty+, Fertility-, Charm+ [/color]\n[color=red]Elemental Modifiers\n25% Wind \nElemental Bonuses:\nWind (Magic+) [/color]\n[color=green]Nature Magic Saturation:\n50% \nNature Bonus:\nAgility+ [/color]\n[color=purple]Mana Corruption:\n25% \nHigher Corruption:\nStrength+, Agility- \nLower Corruption:\nAgility+ [/color]\n[color=aqua]Breeding Quirks:\nGains minor stat bonuses from all elements \nPossible Mutations:\nHuldrekall, Nymph, Siren [/color]",
 		pricemod = 1.5,
 		#ralph5
 		marketup = ["Demand for [color=aqua]elves[/color] is up.\n"],
@@ -58,48 +58,18 @@ var races = {
 		sebastian = false,
 		shade = {male = "res://files/buttons/inventory/shades/Elf_M.png", female = "res://files/buttons/inventory/shades/Elf_F.png"},
 		stats = {str_max = 2,
-		agi_max = 3,
-		maf_max = 5,
-		end_max = 3}
+		agi_max = 5,
+		maf_max = 4,
+		end_max = 2}
 	},
 	'Dark Elf' : {
 		surname = names.elfsurname,
-		description = "Elves are famous among the various races for the legends and stories of ancient times, when elves held a similar status to modern humans. These tales speak of elves as arrogant, and in command of powerful nature magic, but ultimately spelling their own downfall in some great act of folly.\n\nDark elves belong to less known tribes, rumored to be separated from main groups and living in warmer regions.\n\nBreeding Note:\nElves in general owe some of their amazing finesse and grace of movement to their fine bone structure in addition to a simple advantage of reflex. Compared to other elves, dark elves make for mediocre spell casters, but dark elves that inherit bloodlines infused with fire, wind, or nature magic can harness this power more directly provided another race acts as a catalyst.",
-		details = "[color=aqua]Racial trait: Temporal effects from potions and spells last longer.[/color]\n\n[color=yellow]Stat potential: Strength - 3, Agility - 5, Magic - 3, Endurance - 2 [/color]\n\nBreeding Note:\nElves in general owe some of their amazing finesse and grace of movement to their fine bone structure in addition to a simple advantage of reflex. Compared to other elves, dark elves make for mediocre spell casters, but are often physically more formidable.\n\n\n[color=yellow]Racial Stat Bonus:\nAgility++ \nPure Blood Bonus:\nEndurance+\nOther Racial Characteristics:\nBeauty+, Fertility-, Confidence++ [/color]\n[color=red]Elemental Modifiers\n25% Fire \nElemental Bonuses:\nFire (Strength+) [/color]\n[color=green]Nature Magic Saturation:\n75% \nNature Bonus:\nAgility+ [/color]\n[color=purple]Mana Corruption:\n25% \nHigher Corruption:\nMagic+, Strength- \nLower Corruption:\nMagic-, Strength+ [/color]\n[color=aqua]Breeding Quirks:\nGains minor stat bonuses from all elements \nPossible Mutations:\nHuldrekall, Nymph, Ifrit [/color]",
-		pricemod = 1.5,
-		#ralph5
-		marketup = ["Demand for [color=aqua]dark elves[/color] is up.\n","The capitol is going through a serious phase of forest fever. Demand for [color=aqua]dark elves[/color] is up.\n"],
-		marketdown = ["[color=aqua]Dark elves[/color] just aren't in as much demand lately. Prices fall.\n"],
-		single = " elf",
-		plural = " elves",
-		singlepos = " elf's",
-		pluralpos = " elves'",
-		#/ralph5
-		startingrace = true,
-		wimbornrace = true,
-		gornrace = false,
-		frostfordrace = false,
-		banditrace = true,
-		uncivilized = false,
-		sebastian = true,
-		ears = ['pointy'],
-		skin = ['tan', 'brown', 'dark'],
-		eyecolor = ['blue', 'green', 'amber', 'red', 'purple'],
-		haircolor = ['white', 'green', 'purple', 'blue', 'blond', 'red', 'auburn'],
-		shade = {male = "res://files/buttons/inventory/shades/Elf_M.png", female = "res://files/buttons/inventory/shades/Elf_F.png"},
-		stats = {str_max = 3,
-		agi_max = 5,
-		maf_max = 3,
-		end_max = 2}
-	},
-	Drow = {
-		surname = names.elfsurname,
-		description = "Drow are a race, considered a branching species of elf. Little is known about their history and motherland, if they ever had one at all, as their underground cities are spread thin across multiple continents, and are even more difficult to enter than to locate.\n\nBeyond a preference for isolation and their general appearance, drow are quite different from their cousins in both attitude and culture. However, what sets them apart most is the unusual pigmentation of their skin; a dark colors with occasional blue tint. The unusual pigmentation is the subject of much debate and speculation, with theories ranging from natural mutation, to the byproduct of ancient beings.",
-		details = "[color=aqua]Racial trait: sexual actions give 20% more mana.[/color]\n\n[color=yellow]Stat potential: Strength - 2, Agility - 5, Magic - 5, Endurance - 2 [/color]\n\nBreeding Note:\nElves in general owe some of their amazing finesse and grace of movement to their fine bone structure in addition to a simple advantage of reflex. As a consequence of their original purpose, in most lands they are thought to be infertile outside their race and in addition to their enhanced affinity for all elements Drow are known to be particularly sensitive to mana corruption. This presents a potential double-edged sword in that offspring resulting from unions with corrupted bloodlines often suffer distinct shortcomings.\n\n\n[color=yellow]Racial Stat Bonus:\nAgility+, Magic+ \nPure Blood Bonus:\nStrength+\nOther Racial Characteristics:\nBeauty+, Fertility-, Wit+ [/color]\n[color=red]Elemental Modifiers\n25% Water \nElemental Bonuses:\nFire(Str+), Wind(Agi+), Water(Mag+), Earth(End+) [/color]\n[color=green]Nature Magic Saturation:\n50% \nNature Bonus:\nAmplifies Elemental Bonuses [/color]\n[color=purple]Mana Corruption:\n50% \nHigher Corruption:\nAll stats-, Beauty-, Fertility-, Charm- \nLower Corruption:\nAll stats+ based on elemental make-up, Charm+ [/color]\n[color=aqua]Breeding Quirks:\nGains stat bonuses from all elements \nPossible Mutations:\nHuldrekall, Nymph, Undine [/color]",
+		description = "Dark Elves are a race, considered a branching species of elf. Little is known about their history and motherland, if they ever had one at all, as their underground cities are spread thin across multiple continents, and are even more difficult to enter than to locate.\n\nBeyond a preference for isolation and their general appearance, Dark Elves are quite different from their cousins in both attitude and culture. However, what sets them apart most is the unusual pigmentation of their skin; a dark colors with occasional blue tint. The unusual pigmentation is the subject of much debate and speculation, with theories ranging from natural mutation, to the byproduct of ancient beings.",
+		details = "[color=aqua]Racial trait: sexual actions give 20% more mana.[/color]\n\n[color=yellow]Stat potential: Strength - 2, Agility - 5, Magic - 5, Endurance - 2 [/color]\n\nBreeding Note:\nElves in general owe some of their amazing finesse and grace of movement to their fine bone structure in addition to a simple advantage of reflex. As a consequence of their original purpose, in most lands they are thought to be infertile outside their race and in addition to their enhanced affinity for all elements Dark Elves are known to be particularly sensitive to mana corruption. This presents a potential double-edged sword in that offspring resulting from unions with corrupted bloodlines often suffer distinct shortcomings.\n\n\n[color=yellow]Racial Stat Bonus:\nAgility+, Magic+ \nPure Blood Bonus:\nStrength+\nOther Racial Characteristics:\nBeauty+, Fertility-, Wit+ [/color]\n[color=red]Elemental Modifiers\n25% Water \nElemental Bonuses:\nFire(Str+), Wind(Agi+), Water(Mag+), Earth(End+) [/color]\n[color=green]Nature Magic Saturation:\n50% \nNature Bonus:\nAmplifies Elemental Bonuses [/color]\n[color=purple]Mana Corruption:\n50% \nHigher Corruption:\nAll stats-, Beauty-, Fertility-, Charm- \nLower Corruption:\nAll stats+ based on elemental make-up, Charm+ [/color]\n[color=aqua]Breeding Quirks:\nGains stat bonuses from all elements \nPossible Mutations:\nHuldrekall, Nymph, Undine [/color]",
 		pricemod = 2.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]drow[/color] is up.\n","[color=aqua]Drow[/color] are the latest status symbols for up and coming mages. Slavers simply cannot keep up with demand.\n","A consortium of mages is attempting to create a new species and [color=aqua]drow[/color] are in higher demand for their mana output.\n"],
-		marketdown = ["[color=aqua]Drow[/color] just aren't selling for what they used to.\n","Rumors abound that sex with subterranean species promotes the cockrot. Demand for [color=aqua]drows[/color] falls.\n"],
+		marketup = ["Demand for [color=aqua]dark elves[/color] is up.\n","[color=aqua]Dark Elves[/color] are the latest status symbols for up and coming mages. Slavers simply cannot keep up with demand.\n","A consortium of mages is attempting to create a new species and [color=aqua]dark elves[/color] are in higher demand for their mana output.\n"],
+		marketdown = ["[color=aqua]Dark Elves[/color] just aren't selling for what they used to.\n","Rumors abound that sex with subterranean species promotes the cockrot. Demand for [color=aqua]dark elves[/color] falls.\n"],
 		single = " elf",
 		plural = " elves",
 		singlepos = " elf's",
@@ -123,12 +93,12 @@ var races = {
 	},
 	'Tribal Elf' : {
 		surname = names.elfsurname,
-		description = "Elves are famous among the various races for the legends and stories of ancient times, when elves held a similar status to modern humans. These tales speak of elves as arrogant, and in command of powerful nature magic, but ultimately spelling their own downfall in some great act of folly.\n\nTribal elves belong to less known tribes, rumored to be separated from main groups and living in warmer regions.",
-		details = "[color=aqua]Racial trait: Temporal effects from potions and spells last longer.[/color]\n\n[color=yellow]Stat potential: Strength - 4, Agility - 5, Magic - 3, Endurance - 4 [/color]",
+		description = "Elves are famous among the various races for the legends and stories of ancient times, when elves held a similar status to modern humans. These tales speak of elves as arrogant, and in command of powerful nature magic, but ultimately spelling their own downfall in some great act of folly.\n\nTribal elves are rumored to have separated split from their elven cousins long ago and generally live in warmer regions.\n\nBreeding Note:\nElves in general owe some of their amazing finesse and grace of movement to their fine bone structure in addition to a simple advantage of reflex. Compared to other elves, tribal elves make for mediocre spell casters, but tribal elves that inherit bloodlines infused with fire, wind, or nature magic can harness this power more directly provided another race acts as a catalyst.",
+		details = "[color=aqua]Racial trait: Temporal effects from potions and spells last longer.[/color]\n\n[color=yellow]Stat potential: Strength - 3, Agility - 5, Magic - 3, Endurance - 2 [/color]\n\nBreeding Note:\nElves in general owe some of their amazing finesse and grace of movement to their fine bone structure in addition to a simple advantage of reflex. Compared to other elves, tribal elves make for mediocre spell casters, but are often physically more formidable.\n\n\n[color=yellow]Racial Stat Bonus:\nAgility++ \nPure Blood Bonus:\nEndurance+\nOther Racial Characteristics:\nBeauty+, Fertility-, Confidence++ [/color]\n[color=red]Elemental Modifiers\n25% Fire \nElemental Bonuses:\nFire (Strength+) [/color]\n[color=green]Nature Magic Saturation:\n75% \nNature Bonus:\nAgility+ [/color]\n[color=purple]Mana Corruption:\n25% \nHigher Corruption:\nMagic+, Strength- \nLower Corruption:\nMagic-, Strength+ [/color]\n[color=aqua]Breeding Quirks:\nGains minor stat bonuses from all elements \nPossible Mutations:\nHuldrekall, Nymph, Ifrit [/color]",
 		pricemod = 1.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]drow[/color] is up.\n","[color=aqua]Drow[/color] are the latest status symbols for up and coming mages. Slavers simply cannot keep up with demand.\n","A consortium of mages is attempting to create a new species and [color=aqua]drow[/color] are in higher demand for their mana output.\n"],
-		marketdown = ["[color=aqua]Drow[/color] just aren't selling for what they used to.\n","Rumors abound that sex with subterranean species promotes the cockrot. Demand for [color=aqua]drows[/color] falls.\n"],
+		marketup = ["Demand for [color=aqua]tribal elves[/color] is up.\n","The capitol is going through a serious phase of forest fever. Demand for [color=aqua]tribal elves[/color] is up.\n"],
+		marketdown = ["[color=aqua]Tribal elves[/color] just aren't in as much demand lately. Prices fall.\n"],
 		single = " elf",
 		plural = " elves",
 		singlepos = " elf's",
@@ -146,11 +116,10 @@ var races = {
 		eyecolor = ['blue', 'green', 'amber', 'red', 'purple'],
 		haircolor = ['white', 'green', 'purple', 'blue', 'blond', 'red', 'auburn'],
 		shade = {male = "res://files/buttons/inventory/shades/Elf_M.png", female = "res://files/buttons/inventory/shades/Elf_F.png"},
-		stats = {
-			str_max = 4,
-			agi_max = 5,
-			maf_max = 3,
-			end_max = 4,
+		stats = {str_max = 3,
+		agi_max = 5,
+		maf_max = 3,
+		end_max = 2}
 		},
 	},
 	Orc = {
@@ -272,7 +241,7 @@ var races = {
 	Seraph = {
 		ears = ['pointy'],
 		description = "Seraphs were named because of their similarity in appearance to angels, the winged servants of divinity spoken of in myth. The reclusiveness of seraphs has led to a lack of research, but common theories are that they are a subspecies of harpy, an artificial race created accidentally many generations ago, or the descendants of an alien race that migrated from somewhere within the outer planes.\n\nSimilar to demons, seraphs seem to exhibit many behavioral traits in line with their mythic counterparts, such as a prudish nature and a slight inclination towards public service, though it’s unknown if these traits are universal, or if they come down to an individual basis.",
-		details = "[color=aqua]Racial trait: +4 speed in combat[/color]\n\n[color=yellow]Stat potential: Strength - 3, Agility - 3, Magic - 5, Endurance - 3 [/color]\n\nBreeding Note:\nSpecimens are still somewhat rare so results have not been corroberated, but one mage has noted that the minds of Seraph dominant hybrids are heavily influenced by the baser instincts of the races they are bred with. Additionally, he notes that Seraph suffer a sensitivity to mana corrupted blood similar to Drow.\n\n[color=yellow]Racial Stat Bonus:\nMagic++ \nPure Blood Bonus:\nStrength+\nOther Racial Characteristics:\nBeauty++ [/color]\n[color=red]Elemental Modifiers\n50% Fire, 50% Wind \nElemental Bonuses:\nFire (Strength+) Wind (Agility+) [/color]\n[color=green]Nature Magic Saturation:\n0% \nNature Bonus:\nMagic+, Fertility&Mental stats++ depending on races [/color]\n[color=purple]Mana Corruption:\n0% \nHigher Corruption:\nMagic-, Fertility&Mental stats-- depending on races \nLower Corruption:\nN/A [/color]\n[color=aqua]Breeding Quirks:\nBreeding with Demons is forbidden in Seraph societies \nPossible Mutations:\nNephilim [/color]",
+		details = "[color=aqua]Racial trait: +4 speed in combat[/color]\n\n[color=yellow]Stat potential: Strength - 3, Agility - 3, Magic - 5, Endurance - 3 [/color]\n\nBreeding Note:\nSpecimens are still somewhat rare so results have not been corroberated, but one mage has noted that the minds of Seraph dominant hybrids are heavily influenced by the baser instincts of the races they are bred with. Additionally, he notes that Seraph suffer a sensitivity to mana corrupted blood similar to Dark Elves.\n\n[color=yellow]Racial Stat Bonus:\nMagic++ \nPure Blood Bonus:\nStrength+\nOther Racial Characteristics:\nBeauty++ [/color]\n[color=red]Elemental Modifiers\n50% Fire, 50% Wind \nElemental Bonuses:\nFire (Strength+) Wind (Agility+) [/color]\n[color=green]Nature Magic Saturation:\n0% \nNature Bonus:\nMagic+, Fertility&Mental stats++ depending on races [/color]\n[color=purple]Mana Corruption:\n0% \nHigher Corruption:\nMagic-, Fertility&Mental stats-- depending on races \nLower Corruption:\nN/A [/color]\n[color=aqua]Breeding Quirks:\nBreeding with Demons is forbidden in Seraph societies \nPossible Mutations:\nNephilim [/color]",
 		pricemod = 2.5,
 		#ralph5
 		marketup = ["Demand for [color=aqua]seraphs[/color] is up.\n","Word is that an arena boss from across the sea has started an aerial league and has been buying up [color=aqua]seraphs[/color].\n"],
