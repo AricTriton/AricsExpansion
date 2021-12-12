@@ -825,10 +825,9 @@ var guildlocation
 func slaveguildslaves(location):
 	guildlocation = location
 	get_node("slavebuypanel").visible = true
-	var cost = 1
-	#ralph
-	#if globals.state.spec == 'Mage':
-	#	cost = cost/2
+	var cost = globals.expansionsettings.mindread_manacost
+	if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction:
+		cost = cost/2
 	get_node("slavebuypanel/mindreadbutton").text = "Use Mind Read (" +str(cost)+ ")"
 	get_node("slavebuypanel/mindreadbutton").hint_tooltip = "Allows to see more information about all the slaves.\nCosts " +str(cost)+ " mana"
 	#/ralph
@@ -1035,7 +1034,7 @@ func _on_slavesellbutton_pressed():
 				reputationloss[1][1] += 10
 			###---End Expansion---###
 			reputationloss = globals.weightedrandom(reputationloss)
-			globals.state.reputation[reputationloss] -= 18 #ralph   originally was 4
+			globals.state.reputation[reputationloss] -= globals.expansionsettings.reputation_loss
 			text += "[color=yellow]Your reputation has suffered from this deal. [/color]\n"
 	if globals.guildslaves.has(guildlocation):
 		globals.guildslaves[guildlocation].append(selectedslave)

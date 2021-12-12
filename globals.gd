@@ -1265,7 +1265,7 @@ var expandedplayerspecs = {
 	Slaver = "+100% gold from selling captured slaves\n+33% gold reward from slave delivery tasks",
 	Hunter = "+100% gold drop from random encounters\n+20% gear drop chance\nBonus to preventing ambushes",
 	Alchemist = "Double potion production\nSelling potions earn 100% more gold\n[color=aqua]Start with an Alchemy Room unlocked[/color]",
-	Mage = "Combat spell deal 20% more damage",
+	Mage = "Combat spell deal 20% more damage\n(If Ralph's not used)-50% mana cost of spells",
 	#Breeder = "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for 200% more and receive 2x as many upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]"
 	Breeder = "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for 20% more gold and provide 20% more upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]" #ralph3
 }
