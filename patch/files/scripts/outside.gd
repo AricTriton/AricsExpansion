@@ -825,8 +825,8 @@ var guildlocation
 func slaveguildslaves(location):
 	guildlocation = location
 	get_node("slavebuypanel").visible = true
-	var cost = globals.expansionsettings.mindread_manacost
-	if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction:
+	var cost = globals.expansionsettings.mindread_manacost*globals.expansionsettings.spellcost
+	if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction[0]:
 		cost = cost/2
 	get_node("slavebuypanel/mindreadbutton").text = "Use Mind Read (" +str(cost)+ ")"
 	get_node("slavebuypanel/mindreadbutton").hint_tooltip = "Allows to see more information about all the slaves.\nCosts " +str(cost)+ " mana"

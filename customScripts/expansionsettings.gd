@@ -17,7 +17,7 @@ var ihavebloodygoodtaste = false
 
 #---Ralph Edition Changes | Makes the game a little more difficult
 #Mage Specialization Manacost Reduction
-var mage_mana_reduction = false		# Original - true
+var mage_mana_reduction = [false, "Combat spell deal 20% more damage"]		# Original - [true, "-50% mana cost of spells\nCombat spell deal 20% more damage"]
 
 #Spellcost Changes
 var spellcost = 2 					# Original - 1, This is a multiplicative that applies to all spellcosts.

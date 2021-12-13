@@ -274,7 +274,7 @@ var spelllist = {
 	
 func spellcost(spell):
 	var cost = spell.manacost
-	if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction:
+	if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction[0]:
 		cost = cost/2
 	return cost*globals.expansionsettings.spellcost
 
