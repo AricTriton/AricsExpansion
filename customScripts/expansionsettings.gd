@@ -17,39 +17,33 @@ var ihavebloodygoodtaste = false
 
 #---Ralph Edition Changes | Makes the game a little more difficult
 #Mage Specialization Manacost Reduction
-var mage_mana_reduction = [false, "Combat spell deal 20% more damage"]		# Original - [true, "-50% mana cost of spells\nCombat spell deal 20% more damage"]
+var mage_mana_reduction = true
+												# Ralph's - [false, "Combat spell deal 20% more damage"]
 
 #Spellcost Changes
-var spellcost = 2 					# Original - 1, This is a multiplicative that applies to all spellcosts.
-var mindread_manacost = 1			# Original - 3
-var sedation_manacost = 20			# Original - 10
-var dream_manacost = 5				# Original - 20
-var entrancement_manacost = 10		# Original - 15
-var fear_manacost = 20				# Original - 10
-var mutate_manacost = 10			# Original - 15
-var invigorate_manacost = 20		# Original - 5
-var summontentacle_manacost = 20	# Original - 35
+var spellcost = 1 								# Ralph's - 2, This is a multiplicative that applies to all spellcosts.
 
 #Spell Tweak Effects
-var reduce_rebellion_with_fear = 3	# Original - 1, This divides by the players magic affinity to determine how much rebellion is reduced.
-var summontentacle_lewdness = 5		# Original - 0, Make... them... lewd...
+var reduce_rebellion_with_fear = 1				# Ralph's - 3, This divides by the players magic affinity to determine how much rebellion is reduced.
+var summontentacle_lewdness = 0					# Ralph's - 5, Make... them... lewd...
 
 #Reputation Tweak
-var reputation_loss = -18			# Original - -4, How much your reputation suffers when you sell a bad slave to Sebastian.
+var reputation_loss = -4						# Ralph's - -18, How much your reputation suffers when you sell a bad slave to Sebastian.
 
 #Food Tweak Effects
-var food_experience = 1				# Original = 2, How much experience a slave earns from cooking, equal to the amount of slaves the player owns multiplied by this number.
-var food_difficulty = true			# Original = false, 
-var food_market_cost = 40			# Original = 10
+var food_experience = 2							# Ralph's = 1, How much experience a slave earns from cooking, equal to the amount of slaves the player owns multiplied by this number.
+var food_difficulty = false						# Ralph's = true, 
 
-var func_forage_tweaks = [3,2,5,1.5,2]			# Original - [4,20,25,1.2,5]
+var func_forage_tweaks = [4,20,25,1.2,5]		
+												# Ralph's - [3,2,5,1.5,2]
 												# In order: represents how much base food is divided, 
 												# how much additional food is multipled in min(food, max(person.sstr+person.send, -1)*[this number]+5), 
 												# how much additional food is added in min(food, max(person.sstr+person.send, -1)*2+[this number]),
 												# how much being a ranger multiplies the food gained,
 												# and how much experience is gained by dividing by the amount of food gained total.
 
-var func_hunt_tweaks = [1,3,8,1.4,1.5,3,5,3]	# Original - [2,5,10,1.3,1.25,30,40,7]
+var func_hunt_tweaks = [2,5,10,1.3,1.25,30,40,7]
+												# Ralph's - [1,3,8,1.4,1.5,3,5,3]
 												# In order: represents the minimum random range that a person can obtain base food,
 												# the minimum random range a person can obtain food multiplied by endurance,
 												# the maximum random range a person can obtain food multiplied by endurance,
@@ -58,6 +52,50 @@ var func_hunt_tweaks = [1,3,8,1.4,1.5,3,5,3]	# Original - [2,5,10,1.3,1.25,30,40
 												# how much additional food is multiplied in round(min(food, max(person.sstr+person.send, -1)*[this number]+5))
 												# how much additional food is added in round(min(food, max(person.sstr+person.send, -1)*3+[this number]))
 												# and how much experience is gained by dividing the amount of food gained total.
+
+"""
+Applies Ralph's tweaks to the game, making it a slightly more challenging experience.
+Feel free to change as you see fit!
+"""
+func applyTweaks():
+	mage_mana_reduction = false
+
+	# Ralph likes his increased mana costs
+	spellcost = 2
+
+	applySpellManacostTweaks()
+
+	#Spell Tweak Effects
+	reduce_rebellion_with_fear = 3
+	summontentacle_lewdness = 5
+
+	#Reputation Tweak
+	reputation_loss = -18
+
+	#Food Tweak Effects
+	food_experience = 1
+	food_difficulty = true
+	
+	applyItemMarketCostTweaks()
+	
+	func_forage_tweaks = [3,2,5,1.5,2]
+
+	func_hunt_tweaks = [1,3,8,1.4,1.5,3,5,3]
+
+# Apply Manacost Tweaks here.
+func applySpellManacostTweaks():
+	globals.spelldict.mindread.manacost = 1			# Original - globals.spelldict.mindread.manacost = 3
+	globals.spelldict.sedation.manacost = 20		# Original - globals.spelldict.sedation.manacost = 10
+	globals.spelldict.dream.manacost = 5			# Original - globals.spelldict.dream.manacost = 20
+	globals.spelldict.entrancement.manacost = 10	# Original - globals.spelldict.entrancement.manacost = 15
+	globals.spelldict.fear.manacost = 20			# Original - globals.spelldict.fear.manacost = 10
+	globals.spelldict.mutate.manacost = 10			# Original - globals.spelldict.mutate.manacost = 15
+	globals.spelldict.invigorate.manacost = 20		# Original - globals.spelldict.invigorate.manacost = 5
+	globals.spelldict.summontentacle.manacost = 20	# Original - globals.spelldict.summontentacle.manacost = 35
+
+# Apply Market Item Tweaks here.
+func applyItemMarketCostTweaks():
+	globals.itemdict.food.cost = 40					# Original - 10
 
 
 #---Person Expanded (True/False)

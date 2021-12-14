@@ -105,6 +105,19 @@ func loadsettings():
 			printErrorCode("Writing file " + progressFile, retCode)
 	return baseFolders
 
+func clearstate():
+	state = progress.new()
+	slaves.clear()
+	events = load("res://files/scripts/events.gd").new()
+	items = load("res://files/scripts/items.gd").new()
+	itemdict = items.itemlist
+	spells = load("res://files/scripts/spells.gd").new()
+	spelldict = spells.spelllist
+	if useRalphsTweaks:
+		expansionsettings.applyItemMarketCostTweaks()
+		expansionsettings.applySpellManacostTweaks()
+	resources.reset()
+
 func slaves_set(person):
 	person.originstrue = person.origins
 	person.health = max(person.health, 5)
@@ -1236,6 +1249,7 @@ var expansionsetup = loadModFile("AricsExpansion", "customScripts/expansionsetup
 var expansionfarm = loadModFile("AricsExpansion", "customScripts/expansionfarm.gd").new()
 var expansiontalk = loadModFile("AricsExpansion", "customScripts/expansiontalk.gd").new()
 var backwardscompatibility = loadModFile("AricsExpansion", "customScripts/backwardscompatibility.gd").new()
+var useRalphsTweaks = false
 var expansionsettings = loadModFile("AricsExpansion", "customScripts/expansionsettings.gd").new()
 
 ###---Added by Expansion---### General Arrays
@@ -1265,7 +1279,7 @@ var expandedplayerspecs = {
 	Slaver = "+100% gold from selling captured slaves\n+33% gold reward from slave delivery tasks",
 	Hunter = "+100% gold drop from random encounters\n+20% gear drop chance\nBonus to preventing ambushes",
 	Alchemist = "Double potion production\nSelling potions earn 100% more gold\n[color=aqua]Start with an Alchemy Room unlocked[/color]",
-	Mage = expansionsettings.mage_mana_reduction[1],
+	Mage = ("Combat spell deal 20% more damage" if useRalphsTweaks else "-50% mana cost of spells\nCombat spell deal 20% more damage"),
 	#Breeder = "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for 200% more and receive 2x as many upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]"
 	Breeder = "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for 20% more gold and provide 20% more upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]" #ralph3
 }
@@ -1338,6 +1352,12 @@ var playerspecs = {
 	Alchemist = "Start with an alchemy room\nDouble potion production\nSelling potions earn 100% more gold",
 	Mage = "Combat spell deal 20% more damage", #ralph3
 }
+
+func _ready():
+	var temp
+	if useRalphsTweaks:
+		expansionsettings.applyTweaks()
+		print(expansionsettings.spellcost)
 
 ###---Added by Expansion---### Farm Expanded
 func getVatMaxCapacity(type):

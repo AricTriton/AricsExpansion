@@ -813,7 +813,7 @@ func cooking(person):
 	var text = ''
 	var gold = 0
 	var food = 0
-	person.xp += globals.slavecount * globals.expansionsettings.food_experience
+	person.xp += globals.slavecount() * globals.expansionsettings.food_experience
 	if globals.resources.food < 200:
 		if globals.expansionsettings.food_difficulty:
 			if globals.resources.gold/2 >= globals.state.foodbuy:

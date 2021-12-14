@@ -584,7 +584,7 @@ func newslaveinguild(number, town = 'wimborn', raceadd = 'Human'): #ralph5 added
 			originpool = ['slave','poor','commoner','rich','noble']
 			origin = originpool[rand_range(0,originpool.size())]
 			race = globals.allracesarray[rand_range(0,globals.allracesarray.size())]
-		elif raceadd == 'rand': #ralph5 changed from    else:
+		elif raceadd == 'rand': #ralph5 changed from else:
 			race = globals.weightedrandom(racearray)
 			if town == 'umbra':
 				originpool = [['noble', 1],['rich',2],['commoner',3], ['poor', 3], ['slave',1]]
@@ -826,7 +826,7 @@ func slaveguildslaves(location):
 	guildlocation = location
 	get_node("slavebuypanel").visible = true
 	var cost = globals.expansionsettings.mindread_manacost*globals.expansionsettings.spellcost
-	if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction[0]:
+	if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction:
 		cost = cost/2
 	get_node("slavebuypanel/mindreadbutton").text = "Use Mind Read (" +str(cost)+ ")"
 	get_node("slavebuypanel/mindreadbutton").hint_tooltip = "Allows to see more information about all the slaves.\nCosts " +str(cost)+ " mana"
