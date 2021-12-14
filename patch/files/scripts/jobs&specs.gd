@@ -715,7 +715,7 @@ func rest(person):
 func forage(person):
 	var text = '$name went to the forest in search of wild edibles.\n'
 	var food = rand_range(15,25) - min(globals.resources.day/10,10)
-	food += person.wit/3 #ralph2
+	food += person.wit/globals.expansionsettings.func_forage_tweaks[0]
 	###---Added by Expansion---### Hybrid Support
 	if person.race.find('Dryad') >= 0:
 		food = food*1.4
@@ -734,34 +734,36 @@ func forage(person):
 		text += "\n"
 		globals.itemdict.natureessenceing.amount += 1
 	###---Added by Expansion---### Ank Bugfix v4
-	food = min(food, max(person.sstr+person.send, -1)*2+5)
+	food = min(food, max(person.sstr+person.send, -1)*globals.expansionsettings.func_forage_tweaks[1]+globals.expansionsettings.func_forage_tweaks[2])
 	###---End Expansion---###
 	if person.spec == 'ranger':
-		food *= 1.5
+		food *= globals.expansionsettings.func_forage_tweaks[3]
 	food = round(food)
 	text += '$He brought back [color=aqua]'+ str(food) + '[/color] units of food.\n'
-	person.xp += food/2
+	person.xp += food/globals.expansionsettings.func_forage_tweaks[4]
 	var dict = {text = text, food = food}
 	
 	return dict
 
 func hunt(person):#agility, strength, endurance, courage
 	var text = "$name went to the forest to search for wild animals.\n"
-	var food = person.awareness(true)*rand_range(1,4) + max(0,person.send*rand_range(3,8))
-	if person.cour < 60 && rand_range(0,100) + person.cour/4 < 45:
+	var food = person.awareness(true)*rand_range(globals.expansionsettings.func_hunt_tweaks[0],4) + max(0,person.send*rand_range(globals.expansionsettings.func_hunt_tweaks[1],globals.expansionsettings.func_hunt_tweaks[2]))
+	###---Added by Expanion---### Job Skills && Hybrid Support
+	person.add_jobskill('hunter', 1)
+	if person.cour < 60 && rand_range(0,100) + person.cour/4 < 45 - person.jobskills.hunter:
 		food = food*rand_range(0.25, 0.50)
-		text +=  "Due to [color=yellow]lack of courage[/color], $he obtained less food than $he could. \n"
+		text +=  "Due to a [color=red]lack of courage[/color], $he obtained less food than $he could have. \n"
 	###---Added by Expansion---### Hybrid Support
 	if person.race.find('Arachna') >= 0:
-		food = food*1.4
+		food = food*globals.expansionsettings.func_hunt_tweaks[3]
 	###---End Expansion---###
 	if person.spec in ['ranger','trapper']:
-		food *= 1.5
+		food *= globals.expansionsettings.func_hunt_tweaks[4]
 	###---Added by Expansion---### Ank Bugfix v4
-	food = round(min(food, max(person.sstr+person.send, -1)*3+5))
+	food = round(min(food, max(person.sstr+person.send, -1)*globals.expansionsettings.func_hunt_tweaks[5]+globals.expansionsettings.func_hunt_tweaks[6]))
 	###---End Expansion---###
 	globals.itemdict.supply.amount += round(food/12)
-	person.xp += food/3
+	person.xp += food/globals.expansionsettings.func_hunt_tweaks[7]
 	text += "In the end $he brought [color=aqua]" + str(round(food)) + "[/color] food and [color=yellow]" + str(round(food/12)) + "[/color] supplies. \n"
 	if person.smaf * 3 + 3 >= rand_range(0,100):
 		text += "$name has found bestial essence. \n"
@@ -811,14 +813,22 @@ func cooking(person):
 	var text = ''
 	var gold = 0
 	var food = 0
-	person.xp += globals.slaves.size()
+	person.xp += globals.slavecount * globals.expansionsettings.food_experience
 	if globals.resources.food < 200:
-		if globals.resources.gold/2 >= globals.state.foodbuy:
-			text = '$name went to purchase groceries and brought back new food supplies.\n'
-			gold = -globals.state.foodbuy*2
-			food = globals.state.foodbuy
+		if globals.expansionsettings.food_difficulty:
+			if globals.resources.gold/2 >= globals.state.foodbuy:
+				text = '$name went to purchase groceries and brought back new food supplies.\n'
+				gold = -globals.state.foodbuy*2
+				food = globals.state.foodbuy
+			else:
+				text = '$name complained about the lack of food and no money to supply the kitchen on $his own.\n'
 		else:
-			text = '$name complained about the lack of food and no money to supply the kitchen on $his own.\n'
+			if globals.resources.gold >= globals.state.foodbuy/2:	
+				text = '$name went to purchase groceries and brought back new food supplies.\n'	
+				gold = -globals.state.foodbuy/2	
+				food = globals.state.foodbuy	
+			else:	
+				text = '$name complained about the lack of food and no money to supply the kitchen on $his own.\n'	
 	###---Added by Expansion---### Job Skills
 	var bonusfood = 0
 	person.add_jobskill('cook', 1)

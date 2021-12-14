@@ -21,7 +21,7 @@ var spelllist = {
 		name = 'Mind Reading',
 		description = 'Enhances your mind to be more cunning towards others. Allows to get accurate information about other characters. ',
 		effect = 'mindreadeffect',
-		manacost = 1, #/ralph
+		manacost = globals.expansionsettings.mindread_manacost,
 		req = 0,
 		price = 100,
 		personal = true,
@@ -35,7 +35,7 @@ var spelllist = {
 		name = 'Sedation',
 		description = "Eases target's stress and fear.",
 		effect = 'sedationeffect',
-		manacost = 20, #/ralph
+		manacost = globals.expansionsettings.sedation_manacost,
 		req = 0,
 		price = 200,
 		personal = true,
@@ -91,7 +91,7 @@ var spelllist = {
 		name = 'Dream',
 		description = 'Puts target into deep, restful sleep. ',
 		effect = 'dreameffect',
-		manacost = 5, #/ralph
+		manacost = globals.expansionsettings.dream_manacost,
 		req = 0,
 		price = 350,
 		personal = true,
@@ -104,7 +104,7 @@ var spelllist = {
 		name = 'Entrancement',
 		description = 'Makes target more susceptible to suggestions and easier to acquire various kinks.',
 		effect = 'entrancementeffect',
-		manacost = 10, #/ralph
+		manacost = globals.expansionsettings.entrancement_manacost,
 		req = 10,
 		price = 400,
 		personal = true,
@@ -117,7 +117,7 @@ var spelllist = {
 		name = 'Fear',
 		description = 'Invokes subconscious feel of terror onto the target. Can be effective punishment. ',
 		effect = 'feareffect',
-		manacost = 20, #/ralph
+		manacost = globals.expansionsettings.fear_manacost,
 		req = 0,
 		price = 250,
 		personal = true,
@@ -143,7 +143,7 @@ var spelllist = {
 		name = 'Mutation',
 		description = 'Enforces mutation onto target. Results may vary drastically. ',
 		effect = 'mutateeffect',
-		manacost = 10, #/ralph
+		manacost = globals.expansionsettings.mutate_manacost,
 		req = 2,
 		price = 400,
 		personal = true,
@@ -208,7 +208,7 @@ var spelllist = {
 		name = 'Invigorate',
 		description = "Restores caster's and target's energy by using mana and target body's potential. Builds up target's stress. Can be used in wild. ",
 		effect = 'invigorateeffect',
-		manacost = 20, #/ralph
+		manacost = globals.expansionsettings.invigorate_manacost,
 		req = 2,
 		price = 300,
 		personal = true,
@@ -273,7 +273,10 @@ var spelllist = {
 }
 	
 func spellcost(spell):
-	return spell.manacost*2
+	var cost = spell.manacost
+	if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction[0]:
+		cost = cost/2
+	return cost*globals.expansionsettings.spellcost
 
 func mindreadeffect():
 	var spell = globals.spelldict.mindread
@@ -358,7 +361,7 @@ func feareffect():
 	person.stress += max(5, 20-caster.smaf*3)
 	if person.effects.has('captured') == true:
 		text += "\n[color=green]$name becomes less rebellious towards you.[/color]"
-		person.effects.captured.duration -= 1+globals.player.smaf/3
+		person.effects.captured.duration -= 1+globals.player.smaf/globals.expansionsettings.reduce_rebellion_with_fear
 	text = (person.dictionary(text))
 	return text
 
@@ -371,7 +374,7 @@ func tentacleeffect():
 	text += "They quickly seize $name by the limbs and free $him from the clothes. You observe how $name is being toyed and raped by tentacles. After a couple of orgasms the tentacles disappear from reality and you make sure that $name learned this lesson well before leaving."
 	person.obed += 75
 	person.fear += 90
-	person.lewdness += 5 #ralph
+	person.lewdness += globals.expansionsettings.summontentacle_lewdness #/ralph
 	person.lust -= rand_range(20,30)
 	if person.vagvirgin == true:
 		person.vagvirgin = false

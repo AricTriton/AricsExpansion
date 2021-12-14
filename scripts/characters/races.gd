@@ -120,7 +120,6 @@ var races = {
 		agi_max = 5,
 		maf_max = 3,
 		end_max = 2}
-		},
 	},
 	Orc = {
 		surname = names.orcsurname,
