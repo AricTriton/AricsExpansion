@@ -35,7 +35,7 @@ var reduce_rebellion_with_fear = 3	# Original - 1, This divides by the players m
 var summontentacle_lewdness = 5		# Original - 0, Make... them... lewd...
 
 #Reputation Tweak
-var reputation_loss = -18			# Original - 4, How much your reputation suffers when you sell a bad slave to Sebastian.
+var reputation_loss = -18			# Original - -4, How much your reputation suffers when you sell a bad slave to Sebastian.
 
 #Food Tweak Effects
 var food_experience = 1				# Original = 2, How much experience a slave earns from cooking, equal to the amount of slaves the player owns multiplied by this number.
