@@ -761,6 +761,10 @@ func dictionary(text):
 	string = string.replace('$master', getMasterNoun())
 	string = string.replace('[haircolor]', haircolor)
 	string = string.replace('[eyecolor]', eyecolor)
+	var idx = string.find('$stutter') # "$stutter$master" may produce "M-Master"
+	while idx >= 0:
+		string = string.left(idx) + string.substring(idx + 8, randi() % 2 + 1) + "-" + string.right(idx + 8)
+		idx = string.find('$stutter')
 	return string
 
 func countluxury():

@@ -17,7 +17,7 @@ func newslave(race, age, sex, origins = 'slave'):
 	if race == 'randomcommon':
 		race = globals.getracebygroup("starting")
 	elif race == 'randomany':
-		race = globals.randomfromarray(globals.allracesarray)
+		race = globals.getracebygroup("active")
 	person.race = race
 	person.age = getage(age)
 	person.mindage = person.age
@@ -87,22 +87,6 @@ func newslave(race, age, sex, origins = 'slave'):
 	globals.traceFile('newslave')
 	
 	return person
-
-func randomportrait(person):
-	var array = []
-	var racenames = person.race.split(" ")
-	###---Added by Expansion---### Ank Bugfix v4
-	var extensions = ["png","jpg","webp"]
-	for i in globals.dir_contents(globals.setfolders.portraits):
-		if !i.get_extension() in extensions:
-			continue
-	###---End Expansion---###
-		for k in racenames:
-			if i.findn(k) >= 0:
-				array.append(i)
-				continue
-	if array.size() > 0:
-		person.imageportait = array[randi()%array.size()]
 
 ###---Added by Expansion---### Added by Deviate - Hybrid Races
 func newbaby(mother,father):

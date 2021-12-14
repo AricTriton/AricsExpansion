@@ -971,7 +971,7 @@ var enemypool = {
 		rewardpool = {gold = 20},
 		rewardgold = [5,10],
 		rewardexp = 40,
-		stats = {health = 95, power = 26, speed = 24, energy = 50, armor = 5, magic = 3, abilities = ['attack'], passives = ['doubleattack25']},
+		stats = {health = 110, power = 26, speed = 25, energy = 50, armor = 5, magic = 3, abilities = ['attack', 'aimedstrike'], passives = ['doubleattack50']},
 		gear = 'weakbandits',
 		skills = [],
 	},

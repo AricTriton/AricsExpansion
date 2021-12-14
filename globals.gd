@@ -808,6 +808,26 @@ static func count_sleepers():
 	###---End Expansion---###
 	return rval
 
+# race_unique : [penis_mod, cumprod]
+var fatherRaceMods = {
+	'bunny': [.3, 3],
+	'cat': [.4, 4],
+	'cow': [.6, 6],
+	'dog': [.5, 5],
+	'fox': [.4, 4],
+	'horse': [.3, 6],
+	'raccoon': [.4, 4],
+}
+# size : penis_mod
+var fatherSizeMods = {
+	'micro': .1,
+	'tiny': .2,
+	'small': .3,
+	'average': .4,
+	'large': .5,
+	'massive': .6,
+}
+
 ###---Added by Expansion---### Pregnancy Expanded | Reworked by Deviate
 func impregnation(mother, father = null, unique = ''):
 	var penis_mod = .025
@@ -825,32 +845,12 @@ func impregnation(mother, father = null, unique = ''):
 #		expansion_slimebreeding.slimeConversionCheck(mother, father)
 	else:
 		if father != null:
-			if father.id != null:
-				father_id = father.id
-			else:
-				father_id = '-1'
+			father_id = father.id if father.id != null else '-1'
 			father_unique = father.unique
-			if father.unique == 'bunny':
-				penis_mod = .3
-				cumprod = 3
-			elif father.unique == 'cat':
-				penis_mod = .4
-				cumprod = 4
-			elif father.unique == 'cow':
-				penis_mod = .6
-				cumprod = 6
-			elif father.unique == 'dog':
-				penis_mod = .5
-				cumprod = 5
-			elif father.unique == 'fox':
-				penis_mod = .4
-				cumprod = 4
-			elif father.unique == 'horse':
-				penis_mod = .3
-				cumprod = 6
-			elif father.unique == 'raccoon':
-				penis_mod = .4
-				cumprod = 4
+			var ref = fatherRaceMods.get(father_unique)
+			if ref != null:
+				penis_mod = ref[0]
+				cumprod = ref[1]
 			else:
 				cumprod = father.pregexp.cumprod
 				
@@ -862,64 +862,24 @@ func impregnation(mother, father = null, unique = ''):
 				fertility += (father.preg.fertility + father.preg.bonus_fertility)
 				
 				if father.traits.has("Fertile"):
-					fertility = fertility * 1.5
+					fertility *= 1.5
 				elif father.traits.has("Infertile"):
-					fertility = fertility * 0.5
+					fertility *= 0.5
 				
-				if father.penis == 'micro':
-					penis_mod = .1
-				elif father.penis == 'tiny':
-					penis_mod = .2
-				elif father.penis == 'small':
-					penis_mod = .3
-				elif father.penis == 'average':
-					penis_mod = .4
-				elif father.penis == 'large':
-					penis_mod = .5
-				elif father.penis == 'massive':
-					penis_mod = .6
-		elif unique == 'bunny':
-			father_id = '-1'
-			father_unique = unique
-			penis_mod = .3
-			cumprod = 3
-		elif unique == 'cat':
-			father_id = '-1'
-			father_unique = unique
-			penis_mod = .4
-			cumprod = 4
-		elif unique == 'cow':
-			father_id = '-1'
-			father_unique = unique
-			penis_mod = .6
-			cumprod = 6
-		elif unique == 'dog':
-			father_id = '-1'
-			father_unique = unique
-			penis_mod = .5
-			cumprod = 5
-		elif unique == 'fox':
-			father_id = '-1'
-			father_unique = unique
-			penis_mod = .4
-			cumprod = 4
-		elif unique == 'horse':
-			father_id = '-1'
-			father_unique = unique
-			penis_mod = .3
-			cumprod = 6
-		elif unique == 'raccoon':
-			father_id = '-1'
-			father_unique = unique
-			penis_mod = .4
-			cumprod = 4
+				penis_mod = fatherSizeMods.get(father.penis, .025)
 		else:
 			father_id = '-1'
-			penis_mod = round(rand_range(1,6))
-			penis_mod = (penis_mod*.1)
-			cumprod = round(rand_range(1,7))
+			var ref = fatherRaceMods.get(unique)
+			if ref != null:
+				father_unique = unique
+				penis_mod = ref[0]
+				cumprod = ref[1]
+			else:
+				penis_mod = round(rand_range(1,6))
+				penis_mod = penis_mod * .1
+				cumprod = round(rand_range(1,7))
 		virility = clamp(fertility * virility, 1, 100)
-		cumprod = cumprod * penis_mod
+		cumprod *= penis_mod
 		mother.preg.womb.append({id = father_id, unique = father_unique, semen = cumprod, virility = virility, day = 0,})
 
 func connectrelatives(person1, person2, way):
@@ -967,7 +927,7 @@ func slavetooltip(person):
 	node.get_node("name").text = person.name_long()
 	if globals.player == person:
 		node.get_node("name").set('custom_colors/font_color', Color(1,1,0))
-		node.get_node("name").text = "Master " + node.get_node("name").text
+		node.get_node("name").text = globals.state.defaultmasternoun + " " + node.get_node("name").text
 	else:
 		node.get_node("name").set('custom_colors/font_color', Color(1,1,1))
 	if person != globals.player:
@@ -1196,7 +1156,7 @@ func load_game(text):
 		personList.append(state.sebastianslave)
 	for person in personList:
 		if person.imageportait == null: # try to add portrait if slave doesn't have one
-			constructor.randomportrait(person)	
+			constructor.randomportrait(person)
 
 
 ###---Added by Expansion---### Only to load from Mods folder
@@ -1413,9 +1373,9 @@ func fertilize_egg(mother, father_id, father_unique):
 		father = globals.state.findslave(father_id)
 		#If Father disappeared from the World
 		if father == null:
-			father = globals.newslave(randomfromarray(globals.allracesarray), 'adult', 'male')
+			father = globals.newslave('randomany', 'adult', 'male')
 	else:
-		father = globals.newslave(globals.allracesarray[rand_range(0,globals.allracesarray.size())], 'adult', 'male')
+		father = globals.newslave('randomany', 'adult', 'male')
 		father.id = '-1'
 		
 		if father_unique != null:
@@ -1449,21 +1409,9 @@ func fertilize_egg(mother, father_id, father_unique):
 	
 	#Consent/Wanted Pregnancy Check
 	if father.id == player.id:
-		if mother.consentexp.pregnancy == true:
-			mother.pregexp.wantedpregnancy = true
-		else:
-			mother.pregexp.wantedpregnancy = false
+		mother.pregexp.wantedpregnancy = mother.consentexp.pregnancy
 	else:
-		if expansion.relatedCheck(mother,father) == "unrelated":
-			if mother.consentexp.breeder == true:
-				mother.pregexp.wantedpregnancy = true
-			else:
-				mother.pregexp.wantedpregnancy = false
-		else:
-			if mother.consentexp.incestbreeder == true:
-				mother.pregexp.wantedpregnancy = true
-			else:
-				mother.pregexp.wantedpregnancy = false
+		mother.pregexp.wantedpregnancy = mother.consentexp['breeder' if expansion.relatedCheck(mother,father) == "unrelated" else 'incestbreeder']
 
 	baby = constructor.newbaby(mother, father)
 
@@ -1506,9 +1454,9 @@ func nightly_womb(person):
 	var fertility = round(100 + (person.preg.fertility + person.preg.bonus_fertility) * person.pregexp.eggstr)
 	
 	if person.traits.has("Fertile"):
-		fertility = fertility * 1.5
+		fertility *= 1.5
 	elif person.traits.has("Infertile"):
-		fertility = fertility * 0.5
+		fertility *= 0.5
 	
 	ovulation_day(person)
 	
@@ -1589,8 +1537,8 @@ func slimeConversionCheck(mother, father):
 #I can't remember if I added this or found it elsewhere. Sorry if I didn't!
 func randomitemfromarray(source):
 	if source.size() > 0:
-		#source[randi() % source.size()] Old
-		return source[rand_range(0,source.size())]
+		return source[randi() % source.size()]
+	return null
 
 func getfromarray(array, index):
 	return array[ clamp(index, 0, array.size()-1) ]

@@ -1,22 +1,29 @@
 
-func create(code):
-	if characters.has(code):
-		var _slave = globals.newslave(characters[code].basics[0], characters[code].basics[1],characters[code].basics[2],characters[code].basics[3])
-		_slave.cleartraits()
-		_slave.imagefull = null
-		if _slave.age == 'child' && globals.rules.children == false:
-			_slave.age = 'teen'
-		for i in characters[code]:
-			if i in _slave:
-				_slave[i] = characters[code][i]
-			elif i in _slave.stats:
-				_slave.stats[i] = characters[code][i]
+func create(name):
+	var refChar = characters.get(name)
+	if characters.has(name):
+		var person = globals.newslave(refChar.basics[0], refChar.basics[1],refChar.basics[2],refChar.basics[3])
+		person.cleartraits()
+		person.imagefull = null
+		if person.age == 'child' && globals.rules.children == false:
+			person.age = 'teen'
+		for i in refChar:
+			if i == 'traits':
+				for j in refChar[i]:
+					person.add_trait(j)
+			elif i in person:
+				person[i] = refChar[i]
+			elif i in person.stats:
+				person.stats[i] = refChar[i]
+			elif i != 'basics':
+				globals.printErrorCode("Gallery character improper attribute: " + str(i) + " on " + name)
 		###---Added by Expansion---### Unique Genealogy Fixer
-		uniqueGenealogyFixer(_slave)
+		uniqueGenealogyFixer(person)
 		###---End Expansion---###
-		return _slave
+		return person
 	else:
-		return "Character not found: " + code
+		globals.printErrorCode("Gallery character not found: " + name)
+		return null
 
 ###---Added by Expansion---### Unique Genealogy Fixer
 func uniqueGenealogyFixer(_slave):
@@ -38,5 +45,3 @@ func uniqueGenealogyFixer(_slave):
 		globals.expansionsetup.setRaceBonus(_slave, true)
 	globals.constructor.setRaceDisplay(_slave)
 ###---End Expansion---###
-
-}
