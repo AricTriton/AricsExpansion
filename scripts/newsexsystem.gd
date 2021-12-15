@@ -665,7 +665,6 @@ class member:
 			var text = ''
 			if i != self:
 				#Checks Attraction, SexMatch
-				var success = globals.expansion.getSexualAttraction(person,i.person)
 				#Match Sexuality (to account for Futas)
 				var sexmatch = false
 				#Sexuality Shift
@@ -674,36 +673,27 @@ class member:
 				elif person.sex != i.person.sex:
 					if i.person.sex == 'futanari':
 						if globals.expansionsettings.futasexualityshift == 'bi':
-							if globals.kinseyscale.find(person.sexuality) < 3:
-								sexmatch = true
-							else:
-								sexmatch = false
+							sexmatch = globals.kinseyscale.find(person.sexuality) < 3
 						elif globals.expansionsettings.futasexualityshift == 'male':
-							if person.sex in ['male','futanari']:
-								sexmatch = true
-							else:
-								sexmatch = false
+							sexmatch = person.sex in ['male','futanari']
 						else:
-							if person.sex in ['female','futanari']:
-								sexmatch = true
-							else:
-								sexmatch = false
+							sexmatch = person.sex in ['female','futanari']
 					else:
 						sexmatch = false
 				#Max of 110 Currently. Add "Size Queen/Etc" for Fetishes/Likes in the Future, then Sens/Lust multipliers as well
 #				text += "[color=aqua]Sexuality Check:[/color] "
-				if success == true:
-					if sexmatch == false:
-						sexualityshift -= rand_range(.1,.15)
-					elif sexmatch == true:
+				if globals.expansion.getSexualAttraction(person,i.person) == true:
+					if sexmatch == true:
 						sexualityshift += rand_range(.1,.15)
+					else:
+						sexualityshift -= rand_range(.1,.15)
 					values.sens *= rand_range(.95,1.05)
 					values.lust *= rand_range(.95,1.05)
 				else:
-					if sexmatch == false:
-						sexualityshift -= rand_range(.05,.5)
-					elif sexmatch == true:
+					if sexmatch == true:
 						sexualityshift += rand_range(.05,.5)
+					else:
+						sexualityshift -= rand_range(.05,.5)
 					values.sens *= rand_range(.4,.6)
 					values.lust *= rand_range(.4,.6)
 				#---End Sexuality Check
@@ -1196,8 +1186,7 @@ func rebuildparticipantslist():
 	for i in givers:
 		for k in takers:
 			#Giver Attraction
-			var success = globals.expansion.getSexualAttraction(i.person,k.person)
-			if success == true:
+			if globals.expansion.getSexualAttraction(i.person,k.person) == true:
 				text += '\n[color=yellow]' + i.name + '[/color] is attracted to ' + '[color=aqua]' + k.name + '[/color] and will enjoy interactions with ' + k.person.dictionary(' $him.')
 			else:
 				text += '\n[color=yellow]' + i.name + "[/color] is [color=red]not[/color] attracted to " + '[color=aqua]' + k.name + "[/color] and will not enjoy interactions with " + k.person.dictionary(' $him.')
@@ -1209,8 +1198,7 @@ func rebuildparticipantslist():
 				if i.person != globals.player:
 					text += '\n[color=yellow]' + i.name + i.person.dictionary('[/color] feels that being with $his [color=aqua]') + str(related) + '[/color], [color=aqua]' + k.name + '[/color], would be ' + str(i.person.fetish.incest) + '.'
 			#Taker Attraction
-			success = globals.expansion.getSexualAttraction(k.person,i.person)
-			if success == true:
+			if globals.expansion.getSexualAttraction(k.person,i.person) == true:
 				text += '\n[color=aqua]' + k.name + '[/color] is attracted to ' + '[color=aqua]' + i.name + '[/color] and will enjoy interactions with ' + i.person.dictionary(' $him.')
 			else:
 				text += '\n[color=aqua]' + k.name + "[/color] is [color=red]not[/color] attracted to " + '[color=aqua]' + i.name + "[/color] and will not enjoy interactions with " + i.person.dictionary(' $him.')
@@ -1657,20 +1645,20 @@ func startscene(scenescript, cont = false, pretext = ''):
 			if scenescript.giverpart == 'vagina':
 				i.person.vagvirgin = false
 				if i.person.vagina == 'normal':
-					i.person.vagina = globals.vagsizearray[rand_range(0,globals.vagsizearray.size())]
+					i.person.vagina = globals.randomfromarray(globals.vagsizearray)
 			elif scenescript.giverpart == 'anus':
 				i.person.assvirgin = false
 				if i.person.asshole == 'normal':
-					i.person.asshole = globals.assholesizearray[rand_range(0,globals.assholesizearray.size())]
+					i.person.asshole = globals.randomfromarray(globals.assholesizearray)
 		for i in takers:
 			if scenescript.takerpart == 'vagina':
 				i.person.vagvirgin = false
 				if i.person.vagina == 'normal':
-					i.person.vagina = globals.vagsizearray[rand_range(0,globals.vagsizearray.size())]
+					i.person.vagina = globals.randomfromarray(globals.vagsizearray)
 			elif scenescript.takerpart == 'anus':
 				i.person.assvirgin = false
 				if i.person.asshole == 'normal':
-					i.person.asshole = globals.assholesizearray[rand_range(0,globals.assholesizearray.size())]
+					i.person.asshole = globals.randomfromarray(globals.assholesizearray)
 	###---End Expansion---###
 	
 	

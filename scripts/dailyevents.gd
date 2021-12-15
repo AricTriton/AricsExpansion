@@ -1,46 +1,4 @@
 
-###---Added by Expansion---### Ank BugFix v4a
-<RemoveFrom 7 7>
-func prositutebuyout(stage = 0):
-		#globals.slaves.remove(globals.slaves.find(person))
-
-<AddTo 7>
-func prositutebuyout(stage = 0):
-		person.removefrommansion()
-
-<RemoveFrom 15 15>
-func prositutebuyout(stage = 0):
-			#globals.slaves.remove(globals.slaves.find(person))
-
-<AddTo 15>
-func prositutebuyout(stage = 0):
-			person.removefrommansion()
-
-<RemoveFrom 32 32>
-func kidnap(stage = 0):
-			#globals.slaves.remove(globals.slaves.find(person))
-
-<AddTo 32>
-func kidnap(stage = 0):
-			person.removefrommansion()
-
-<RemoveFrom 35 35>
-func kidnap(stage = 0):
-		#globals.slaves.remove(globals.slaves.find(person))
-
-<AddTo 35>
-func kidnap(stage = 0):
-		person.removefrommansion()
-
-
-<RemoveFrom 11 11>
-func devotedevent(stage = 0):
-		#showntext = eventstext[currentevent][stage]
-
-<AddTo 11>
-func devotedevent(stage = 0):
-		showntext = dictionary(eventstext[currentevent][stage])
-###---End Expansion---###
 
 func play(stage = 0):
 	var tempbuttons

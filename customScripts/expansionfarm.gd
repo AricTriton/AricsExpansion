@@ -5,13 +5,13 @@ extends Node
 ###---Contains Functions for the Farm Expansion---###
 
 var settings = {
-#---Farm Worker Determination
-#Skill: Most Skilled Chosen / Energy: Most Energy Chosen / Equal: Cycles Through All Available
-herders = 'equal',
-milkmaids = 'equal',
-studs = 'equal',
-#Adds a flat Lust bonus to Breeders. Orgasm per 100. Below 100 may not give an Orgasm
-basebreedlust = 75,
+	#---Farm Worker Determination
+	#Skill: Most Skilled Chosen / Energy: Most Energy Chosen / Equal: Cycles Through All Available
+	herders = 'equal',
+	milkmaids = 'equal',
+	studs = 'equal',
+	#Adds a flat Lust bonus to Breeders. Orgasm per 100. Below 100 may not give an Orgasm
+	basebreedlust = 75,
 }
 
 #Farm Arrays
@@ -92,44 +92,44 @@ var roll = 0
 var reactiondict = {
 	henreaction = {
 		nointerest = {
-		horny = "$He actually seems disappointed that no snail found $him attractive enough to breed.",
-		pleading = "$He seems relieved that there isn't a snail pounding $his [pussy] right now. [color=yellow]\n-Oh thank goodness...[/color]",
-		horrified = "$He seems to be in shock as $he looks around at the disinterested snails with $his [pussy] completely vulnerable."
+			horny = "$He actually seems disappointed that no snail found $him attractive enough to breed.",
+			pleading = "$He seems relieved that there isn't a snail pounding $his [pussy] right now. [color=yellow]\n-Oh thank goodness...[/color]",
+			horrified = "$He seems to be in shock as $he looks around at the disinterested snails with $his [pussy] completely vulnerable."
 		},
 		attracted = {
-		horny = "$He seems to be turned on by the situation. $He keeps slightly wiggling $his hips invitingly while staring at the snail, and it looks like $his [pussy] is dripping wet.",
-		pleading = "$He watches the approaching snail with a panic. $He keeps shouting and pleading with it to go away and just leave $him alone. [color=yellow]\n-Please, just go away![/color]",
-		horrified = "$He seems to be in shock and is merely watching $his fate slowly approach $him."
+			horny = "$He seems to be turned on by the situation. $He keeps slightly wiggling $his hips invitingly while staring at the snail, and it looks like $his [pussy] is dripping wet.",
+			pleading = "$He watches the approaching snail with a panic. $He keeps shouting and pleading with it to go away and just leave $him alone. [color=yellow]\n-Please, just go away![/color]",
+			horrified = "$He seems to be in shock and is merely watching $his fate slowly approach $him."
 		},
 		fucking = {
-		horny = "$He is pushing $his [pussy] against the snail and grinding it. $He has obviously fully embraced the situation and lets out a happy squeal as $he cums with a loud squealching noise.",
-		pleading = "$He starts begging you and the farm manager to stop this in a deep, breathy whimper as the snail starts to flood $his brain with aphrodesiacs. [color=yellow]\n-S-stop this! P-please! I...I...NGH![/color]",
-		horrified = "$He has $his eyes closed and keep trying to resist. It is obviously not working. $He suddenly arches $his back and shudders, then looks even more horrified that $he just came from this."
+			horny = "$He is pushing $his [pussy] against the snail and grinding it. $He has obviously fully embraced the situation and lets out a happy squeal as $he cums with a loud squealching noise.",
+			pleading = "$He starts begging you and the farm manager to stop this in a deep, breathy whimper as the snail starts to flood $his brain with aphrodesiacs. [color=yellow]\n-S-stop this! P-please! I...I...NGH![/color]",
+			horrified = "$He has $his eyes closed and keep trying to resist. It is obviously not working. $He suddenly arches $his back and shudders, then looks even more horrified that $he just came from this."
 		},
 		inseminated = {
-		horny = "Not all of that cum seems to be from the snail, however. As you watch, $he is so overcome with pleasure from the oozing feeling between $his legs that $he sprays out a little stream of cum from $his [pussy].",
-		pleading = "$He is whimpering and cowering pitifully as $his body leaks fluids. $He whines at you. [color=yellow]\n-It coming out is a good thing, right?[/color]",
-		horrified = "$He is gasping and as pale as a ghost. $He can't seem to stop staring blankly as $his own oozing orifice."
+			horny = "Not all of that cum seems to be from the snail, however. As you watch, $he is so overcome with pleasure from the oozing feeling between $his legs that $he sprays out a little stream of cum from $his [pussy].",
+			pleading = "$He is whimpering and cowering pitifully as $his body leaks fluids. $He whines at you. [color=yellow]\n-It coming out is a good thing, right?[/color]",
+			horrified = "$He is gasping and as pale as a ghost. $He can't seem to stop staring blankly as $his own oozing orifice."
 		},
 		impregnated = {
-		horny = "$He is laying back with a little smile. $He seems to have fully accepted the situation.",
-		pleading = "$He looks over at you and pouts. [color=yellow]\n-Its not too late, right? It...it can be stopped?[/color]",
-		horrified = "$He seems to be in shock still. [color=yellow]\n-Wh-what's happening to me?/color]"
+			horny = "$He is laying back with a little smile. $He seems to have fully accepted the situation.",
+			pleading = "$He looks over at you and pouts. [color=yellow]\n-Its not too late, right? It...it can be stopped?[/color]",
+			horrified = "$He seems to be in shock still. [color=yellow]\n-Wh-what's happening to me?/color]"
 		},
 		swollen = {
-		horny = "$He seems to be enjoying the feeling of the mass inside of $him. $He is slowly rubbing $his [pussy] while touching $his belly fondly.",
-		pleading = "$He is merely laying there while rubbing $his belly meekly. As you get closer, you hear $him whispering to $his belly. [color=yellow]\n-Just come right out and make it easy for me, please?[/color]",
-		horrified = "$He seems to be in extreme discomfort. As you watch, $he loses control of $his bladder and starts gushing all over $himself from the pressure."
+			horny = "$He seems to be enjoying the feeling of the mass inside of $him. $He is slowly rubbing $his [pussy] while touching $his belly fondly.",
+			pleading = "$He is merely laying there while rubbing $his belly meekly. As you get closer, you hear $him whispering to $his belly. [color=yellow]\n-Just come right out and make it easy for me, please?[/color]",
+			horrified = "$He seems to be in extreme discomfort. As you watch, $he loses control of $his bladder and starts gushing all over $himself from the pressure."
 		},
 		wriggling = {
-		horny = "$He seems unable to stop touching $himself as $his belly squirms. $He watches a lump rise and fall in $his stomach while rubbing $his clit furiously and moaning loudly.",
-		pleading = "$He seems to be in denial as $his stomach writhes and moves. $He keeps pleading to get out of the pit and for it all to stop. Reality will come sliding out of $him soon enough.",
-		horrified = "$He is pale-faced and obviously trying to keep from vomiting as $his stomach writhes. $He watches as a slimey leg slips out of $his [pussy] and back inside, then loses it at last.",
+			horny = "$He seems unable to stop touching $himself as $his belly squirms. $He watches a lump rise and fall in $his stomach while rubbing $his clit furiously and moaning loudly.",
+			pleading = "$He seems to be in denial as $his stomach writhes and moves. $He keeps pleading to get out of the pit and for it all to stop. Reality will come sliding out of $him soon enough.",
+			horrified = "$He is pale-faced and obviously trying to keep from vomiting as $his stomach writhes. $He watches as a slimey leg slips out of $his [pussy] and back inside, then loses it at last.",
 		},
 		birth = {
-		horny = "$He seems to be enjoying $himself. As $his pussy pushes out the snail, $he moans and shudders in a violent orgasm.",
-		pleading = "$He seems to be completely in shock as $he sobs and whimpers pitifully. $He just keeps saying [color=yellow]\n-Not again, please! Please, no more![/color]",
-		horrified = "$He is passed out cold with $his eyes still open. You see no signs of consciousness as $his body violently shakes and squirts again as the snail exits fully."
+			horny = "$He seems to be enjoying $himself. As $his pussy pushes out the snail, $he moans and shudders in a violent orgasm.",
+			pleading = "$He seems to be completely in shock as $he sobs and whimpers pitifully. $He just keeps saying [color=yellow]\n-Not again, please! Please, no more![/color]",
+			horrified = "$He is passed out cold with $his eyes still open. You see no signs of consciousness as $his body violently shakes and squirts again as the snail exits fully."
 		},
 	},
 }
@@ -143,11 +143,10 @@ var snailgrowth = ['nointerest','attracted','fucking','inseminated','impregnated
 
 #Used by most scripts: var farmmanager = getFarmManager()
 func getFarmManager():
-	var farmmanager
 	for i in globals.slaves:
 		if i.work == 'farmmanager':
-			farmmanager = i
-			return farmmanager
+			return i
+	return null
 
 var person
 
@@ -156,15 +155,15 @@ var person
 
 var descriptions = {
 	stallbedding = {
-	dirt = "in the corner of $his stall. $He is sleeping directly on the dirt and the dirt clings to $his shivering naked body. ",
-	hay = "on a pile of hay that has been spread out to make an uncomfortable looking bed. ",
-	cot = "on a small, metal cot that has been erected in the corner of the room. It is barely big enough for $his body and $his arms and legs are hanging off of the sides. ",
-	bed = "on a small wooden bed in the corner of the room. It seems to be sized just right to allow $him to sleep comfortably. ",
+		dirt = "in the corner of $his stall. $He is sleeping directly on the dirt and the dirt clings to $his shivering naked body. ",
+		hay = "on a pile of hay that has been spread out to make an uncomfortable looking bed. ",
+		cot = "on a small, metal cot that has been erected in the corner of the room. It is barely big enough for $his body and $his arms and legs are hanging off of the sides. ",
+		bed = "on a small wooden bed in the corner of the room. It seems to be sized just right to allow $him to sleep comfortably. ",
 	},
 	workstation = {
-	free = "on all fours. ",
-	rack = "locked inside of a metal milking rack. ",
-	cage = "locked inside of a tight metal cage. $He seems to be completely unable to move or shift and the metal is digging into different parts of $his body all over. ",
+		free = "on all fours. ",
+		rack = "locked inside of a metal milking rack. ",
+		cage = "locked inside of a tight metal cage. $He seems to be completely unable to move or shift and the metal is digging into different parts of $his body all over. ",
 	},
 #	extractionmethod = {
 #	buckets = "$name's udders are milked by hand into [color=aqua]wooden buckets[/color]. These wooden buckets leak often and usually leak up to half of what it holds.",
@@ -175,14 +174,14 @@ var descriptions = {
 #	mysticalpumps = "$name's udders are attached to [color=aqua]magically infused automatic pumps[/color] via suction cups and almost never clog. The pumps have small, glowing crystals around the suction cups which occassionally flash brightly. The pumps are completely silent, though the flashes are accompanied by moans and a violent gushing sound as milk explodes from $his nipples."
 #	},
 	henresult = {
-	nointerest = "$name doesn't seem to have gained the interest of any snails today.",
-	attracted = "$name has a snail sliding slowly toward $his exposed pussy.",
-	fucking = "$name has a snail on $him currently. You see the snail's slimey [penis] sliding sloppily into $his waiting [pussy].",
-	inseminated = "$name has a pile of slimey, gloopy gunk oozing out of $his [pussy] right now. It appears $he was recently inseminated.",
-	impregnated = "$name has a small bump in $his belly. It is obvious that $he has been successfully bred and is pregnant.",
-	swollen = "$name's belly is incredibly swollen. $He looks incredibly uncomfortable as it sways back and forth.",
-	wriggling = "$name's stomach is wriggling and churning with life inside. $He is going to pop very soon.",
-	birth = "$name's pussy is spurting and oozing fluids and slime constantly. You watch as a baby snail slides through $his gaping pussy lips to a gush of viscous fluid. You doubt if even $name knows if that was piss, embreotic fluid, or something from the snail itself.",
+		nointerest = "$name doesn't seem to have gained the interest of any snails today.",
+		attracted = "$name has a snail sliding slowly toward $his exposed pussy.",
+		fucking = "$name has a snail on $him currently. You see the snail's slimey [penis] sliding sloppily into $his waiting [pussy].",
+		inseminated = "$name has a pile of slimey, gloopy gunk oozing out of $his [pussy] right now. It appears $he was recently inseminated.",
+		impregnated = "$name has a small bump in $his belly. It is obvious that $he has been successfully bred and is pregnant.",
+		swollen = "$name's belly is incredibly swollen. $He looks incredibly uncomfortable as it sways back and forth.",
+		wriggling = "$name's stomach is wriggling and churning with life inside. $He is going to pop very soon.",
+		birth = "$name's pussy is spurting and oozing fluids and slime constantly. You watch as a baby snail slides through $his gaping pussy lips to a gush of viscous fluid. You doubt if even $name knows if that was piss, embreotic fluid, or something from the snail itself.",
 	},
 }
 
@@ -266,7 +265,7 @@ func getFarmDescription(tempperson):
 #			elif person.work == 'hen':
 #				text = getdescription('breedingspace') + getdescription('breedingmethod') #getEvent &or Reaction
 	text = person.dictionary(text)
-	decode(text)
+	#decode(text)
 	return text
 
 #Run Decoder after Descriptions
@@ -277,7 +276,6 @@ func decode(text):
 
 #Modified from Description.gd
 func getdescription(person, value):
-	var text
 	if value == 'field':
 		#Field
 		if globals.state.mansionupgrades.farmfield >= 2:
@@ -288,14 +286,12 @@ func getdescription(person, value):
 			value = 'openfield'
 
 	if descriptions.has(value) && descriptions[value].has(person.farmexpanded[value]):
-		text = descriptions[value][person.farmexpanded[value]]
-		text = text.split('|',true)
-		text = text[rand_range(0,text.size())]
+		return globals.randomitemfromarray( descriptions[value][ person.farmexpanded[value] ].split('|',true) )
 	elif descriptions.has(value) && descriptions[value].has('default'):
-		text = descriptions[value].default
+		return descriptions[value].default
 	else:
-		text = "[color=red]Error at getting description for " + value + ": " + person.farmexpanded[value] + '[/color]. '
-	return text
+		return "[color=red]Error at getting description for " + value + ": " + person.farmexpanded[value] + '[/color]. '
+
 ###---End Expansion---###
 
 #---Full Milking Function
@@ -331,6 +327,10 @@ func dailyFarm():
 	var bottler = null
 	var bottlers = []
 	var actionresult = 0
+	#QuickRefs
+	var refSnails = globals.resources.farmexpanded.snails
+	var refVats = globals.resources.farmexpanded.vats
+	var refContainers = globals.resources.farmexpanded.containers
 	
 	#---Assign NPC Roles
 	for person in globals.slaves:
@@ -340,16 +340,16 @@ func dailyFarm():
 				farmmanager = person
 				person.add_jobskill('farmmanager')
 			#Assign Farmhands
-			if person.work == 'farmhand':
+			elif person.work == 'farmhand':
 				farmhands.append(person.id)
 			#Assign Milkmaids
-			if person.work == 'milkmaid':
+			elif person.work == 'milkmaid':
 				milkmaids.append(person.id)
 			#Assign Milkmerchants
-			if person.work == 'milkmerchant':
+			elif person.work == 'milkmerchant':
 				milkmerchants.append(person.id)
 			#Assign Cattle
-			if person.sleep == 'farm' && person.away.duration == 0 && person.work == 'cow':
+			if person.sleep == 'farm' && person.work == 'cow':
 				allcattle.append(person.id)
 			#Assign Breeders/Studs
 			if person.farmexpanded.breeding.status == "both":
@@ -368,10 +368,11 @@ func dailyFarm():
 		text += "[color=red]No Cattle were present for milking in the Farm today.[/color]\n"
 	
 	#Farm Manager Substitutes for Empty Positions
-	if farmmanager != null && farmhands.empty():
-		farmhands.append(farmmanager.id)
-	if farmmanager != null && milkmaids.empty():
-		milkmaids.append(farmmanager.id)
+	if farmmanager != null:
+		if farmhands.empty():
+			farmhands.append(farmmanager.id)
+		if milkmaids.empty():
+			milkmaids.append(farmmanager.id)
 	
 	var canwork = true
 	#End if No Positions and No Farm Manager
@@ -398,42 +399,42 @@ func dailyFarm():
 				farmhand.jobskills['farmhand'] = 0
 			farmhand.add_jobskill('farmhand', 1)
 			#Correct Spacing
-			if allcattle.size() > 1 && allcattle.find(findcattle) != 0:
+			if allcattle.find(findcattle) != 0:
 				text += "\n"
-			text += "[color=#d1b970]\nLivestock: [color=aqua]" + cattle.dictionary("$name") + "[/color] | Worker: [color=aqua]" + farmhand.dictionary("$name") + "[/color][/color]"
+			text += "[color=#d1b970]\nLivestock: [color=aqua]$name[/color] | Worker: [color=aqua]" + farmhand.name_short() + "[/color][/color]"
 			
 			if cattle.spec == 'hucow':
-				cattle.dictionary("\n[color=aqua]$name[/color] is a trained [color=aqua]Hucow[/color].")
+				text += "\n[color=aqua]$name[/color] is a trained [color=aqua]Hucow[/color]."
 				
 			actionresult = 0
 			#Daily Action: Exhaust
 			if cattle.farmexpanded.dailyaction == 'exhaust':
 				actionresult = round(cattle.energy/2) - (cattle.send*2)
 				cattle.energy -= actionresult
-				text += cattle.dictionary("\n[color=aqua]$name[/color] was forced to run around the fields for the first part of the morning to try and tire $him out. $He lost [color=red]" + str(actionresult) + " Energy[/color] from the exercise and should be easier for your workers to manage today. ")
+				text += "\n[color=aqua]$name[/color] was forced to run around the fields for the first part of the morning to try and tire $him out. $He lost [color=red]" + str(actionresult) + " Energy[/color] from the exercise and should be easier for your workers to manage today. "
 				if cattle.checkContentmentLoss('med') == true:
-					text += cattle.dictionary("$He seemed to be upset by being forced to exercise today and has lost [color=aqua]Contentment[/color]. ")
+					text += "$He seemed to be upset by being forced to exercise today and has lost [color=aqua]Contentment[/color]. "
 			#Daily Action: Inspection
 			if cattle.farmexpanded.dailyaction == 'inspection':
-				text += cattle.dictionary("\n[color=aqua]$name[/color] was paraded out in front of the entire farm. Everyone available gathered around and inspected $his body and intimate parts with close scrutiny. ")
+				text += "\n[color=aqua]$name[/color] was paraded out in front of the entire farm. Everyone available gathered around and inspected $his body and intimate parts with close scrutiny. "
 				if cattle.checkFetish('exhibitionism') == true || cattle.spec == 'hucow':
 					cattle.setFetish('exhibitionism', 1)
 					actionresult = round(cattle.beauty*.1)
 					actionresult = clamp(actionresult, 1, 10)
 					cattle.conf += actionresult
-					text += cattle.dictionary("$He seemed to actually enjoy the attention that $he got from everyone and seemed to gain [color=green]" +str(actionresult) + " Confidence[/color] in $himself. ")
+					text += "$He seemed to actually enjoy the attention that $he got from everyone and seemed to gain [color=green]" +str(actionresult) + " Confidence[/color] in $himself. "
 					if cattle.checkContentmentLoss('low') == true:
-						text += cattle.dictionary("Despite the fact that $he seemed to enjoy it in the end, it still was not pleasant standing shivering and naked in front of everyone. $He has lost [color=aqua]Contentment[/color]. ")
+						text += "Despite the fact that $he seemed to enjoy it in the end, it still was not pleasant standing shivering and naked in front of everyone. $He has lost [color=aqua]Contentment[/color]. "
 					else:
 						cattle.npcexpanded.contentment += 1
-						text += cattle.dictionary("$He really seemed to enjoy it the public humiliation and seemed visibly aroused while shivering and naked in front of everyone at the farm. $He has gained [color=aqua]Contentment[/color]. ")
+						text += "$He really seemed to enjoy it the public humiliation and seemed visibly aroused while shivering and naked in front of everyone at the farm. $He has gained [color=aqua]Contentment[/color]. "
 				else:
 					actionresult = round((100-cattle.beauty)*.1)
 					actionresult = clamp(actionresult, 1, 10)
 					cattle.conf -= actionresult
-					text += cattle.dictionary("$He seemed very upset as everyone pointed out every tiny imperfection on $his body. The experience seemed to shake his [color=aqua]Confidence[/color] and $he lost [color=red]" +str(actionresult) + " Confidence[/color] in $himself. ")
+					text += "$He seemed very upset as everyone pointed out every tiny imperfection on $his body. The experience seemed to shake his [color=aqua]Confidence[/color] and $he lost [color=red]" +str(actionresult) + " Confidence[/color] in $himself. "
 					if cattle.checkContentmentLoss('high') == true:
-						text += cattle.dictionary("$He seemed very upset by the humiliation of standing shivering and naked in front of everyone. $He has lost [color=aqua]Contentment[/color]. ")
+						text += "$He seemed very upset by the humiliation of standing shivering and naked in front of everyone. $He has lost [color=aqua]Contentment[/color]. "
 			
 					
 			#Inject Sedative
@@ -441,61 +442,61 @@ func dailyFarm():
 				if globals.itemdict.sedative.amount > 0:
 					globals.itemdict.sedative.amount -= 1
 					cattle.farmexpanded.sedative += 1
-					text += farmhand.dictionary("\n[color=aqua]$name[/color] successfully dosed ") + cattle.dictionary("[color=aqua]$name[/color] with a [color=aqua]Sedative[/color] as instructed. ")
+					text += "\n[color=aqua]" + farmhand.name_short() + "[/color] successfully dosed [color=aqua]$name[/color] with a [color=aqua]Sedative[/color] as instructed. "
 				else:
-					text += farmhand.dictionary("\n[color=aqua]$name[/color] tried to give ") + cattle.dictionary("[color=aqua]$name[/color] $his dose of [color=aqua]Sedative[/color] as instructed, but [color=red]none were available[/color]. ")
+					text += "\n[color=aqua]" + farmhand.name_short() + "[/color] tried to give [color=aqua]$name[/color] $his dose of [color=aqua]Sedative[/color] as instructed, but [color=red]none were available[/color]. "
 			
 			#Sedative Effects
 			if cattle.farmexpanded.sedative > 0:
 				cattle.farmexpanded.sedative -= 1
-				text += cattle.dictionary("[color=aqua]$name[/color]'s body was flooded by the [color=aqua]Sedative[/color] inside of $him. $His energy has been halved. ")
+				text += "[color=aqua]$name[/color]'s body was flooded by the [color=aqua]Sedative[/color] inside of $him. $His energy has been halved. "
 				cattle.energy = round(cattle.energy*.5)
 			
 			#Resistance Factors
-			var mentresist = (((cattle.conf + cattle.wit)/2) * (cattle.cour*.001))
+			var mentresist = ((cattle.conf + cattle.wit)/2) * (cattle.cour*.001)
 			mentresist = clamp(mentresist, 1 ,100)
 			var physresist = (1 + cattle.sstr + cattle.sagi)*(cattle.energy*.01)
 			physresist = clamp(physresist, 1, 100)
 			
 			#Herd Cattle (Determine Resistance)
 			if cattle.checkFetish('submission', 1.25) == true || cattle.consentexp.livestock == true || mentresist <= 0 || cattle.spec == 'hucow':
-				text += cattle.dictionary("\n[color=aqua]" + cattle.dictionary("$name") + "[/color] [color=lime]peacefully[/color] allowed [color=aqua]" + farmhand.dictionary("$name") + "[/color] ")
+				text += "\n[color=aqua]$name[/color] [color=lime]peacefully[/color] allowed [color=aqua]" + farmhand.name_short() + "[/color] "
 				if cattle.farmexpanded.workstation == 'cage':
-					text += cattle.dictionary("to lock him into the tight, metal cage for the day.\n ")
+					text += "to lock $him into the tight, metal cage for the day.\n "
 				elif cattle.farmexpanded.workstation == 'rack':
-					text += cattle.dictionary("to hook $him into $his place on the metal rack for the day.\n ")
+					text += "to hook $him into $his place on the metal rack for the day.\n "
 				else:
-					text += cattle.dictionary("to help $him onto $his hands and knees to begin milking for the day.\n ")
+					text += "to help $him onto $his hands and knees to begin milking for the day.\n "
 				struggle = -1
 			else:
-				text += cattle.dictionary("\n[color=aqua]" + cattle.dictionary("$name") + "[/color] [color=red]resisted[/color] [color=aqua]" + farmhand.dictionary("$name") + "[/color] ")
+				text += "\n[color=aqua]$name[/color] [color=red]resisted[/color] [color=aqua]" + farmhand.name_short() + "[/color] "
 				if cattle.farmexpanded.workstation == 'cage':
-					text += cattle.dictionary("as $he was locked into the tight, metal cage for the day. $He was barely able to move once inside of the cage.")
+					text += "as $he was locked into the tight, metal cage for the day. $He was barely able to move once inside of the cage."
 					struggle = globals.expansionsettings.cagestrugglemod + mentresist + physresist
 					if rand_range(0,100) <= globals.expansionsettings.cagedamagechance + physresist:
 						cattle.health -= round(clamp(physresist, 0, cattle.health/2))
-						text += cattle.dictionary("[color=aqua]$name[/color] lost [color=red]" + str(round(physresist)) + " Health [/color] from struggling inside of the cage. ")
+						text += "[color=aqua]$name[/color] lost [color=red]" + str(round(physresist)) + " Health [/color] from struggling inside of the cage. "
 				elif cattle.farmexpanded.workstation == 'rack':
-					text += cattle.dictionary("as $he was hooked into $his place on the metal rack for the day. $He was held so $his valuable privates could be accessed, though $he found that $he could still wiggle around to cause trouble. ")
+					text += "as $he was hooked into $his place on the metal rack for the day. $He was held so $his valuable privates could be accessed, though $he found that $he could still wiggle around to cause trouble. "
 					struggle = globals.expansionsettings.rackstrugglemod + mentresist + physresist
 				else:
-					text += cattle.dictionary("as $he was forced to stay still on $his hands and knees while $he was used like an animal today. ")
+					text += "as $he was forced to stay still on $his hands and knees while $he was used like an animal today. "
 					struggle = globals.expansionsettings.freestrugglemod + mentresist + physresist
 				cattle.energy -= round(physresist)
-				text += cattle.dictionary("\n[color=aqua]$name[/color] spent [color=red]" + str(round(physresist)) + " Energy [/color] struggling against ") + farmhand.dictionary("[color=aqua]$name[/color]. ")
+				text += "\n[color=aqua]$name[/color] spent [color=red]" + str(round(physresist)) + " Energy [/color] struggling against [color=aqua]" + farmhand.name_short() + "[/color]. "
 
 				#Keep Restrained
 				if cattle.farmexpanded.restrained == true:
 					struggle += globals.expansionsettings.restrainedstrugglemod
 					cattle.stress += round(mentresist)
-					text += cattle.dictionary("\n[color=aqua]$name[/color] gained [color=red]" + str(round(mentresist)) + " Stress [/color] struggling against the restraints $he was kept in all day. ")
+					text += "\n[color=aqua]$name[/color] gained [color=red]" + str(round(mentresist)) + " Stress [/color] struggling against the restraints $he was kept in all day. "
 					if cattle.checkContentmentLoss('high') == true:
-						text += cattle.dictionary("$He was obviously very upset by being unable to move and has lost [color=aqua]Contentment[/color].")
+						text += "$He was obviously very upset by being unable to move and has lost [color=aqua]Contentment[/color]."
 				struggle -= farmhand.sstr
 				struggle = clamp(struggle, 0, 9)
 				if farmhand.energy >= struggle:
 					farmhand.energy -= round(struggle)
-					text += farmhand.dictionary("\n[color=aqua]$name[/color] spent [color=red]" + str(round(struggle)) + " Energy [/color] subduing the struggling cattle.\n ")
+					text += "\n[color=aqua]" + farmhand.name_short() + "[/color] spent [color=red]" + str(round(struggle)) + " Energy [/color] subduing the struggling cattle.\n "
 			cattle.farmexpanded.resistance = struggle
 
 			#Add Relations
@@ -515,25 +516,27 @@ func dailyFarm():
 				if globals.itemdict.aphrodisiac.amount > 0:
 					globals.itemdict.aphrodisiac.amount -= 1
 					cattle.farmexpanded.aphrodisiac += 1
-					text += farmhand.dictionary("\n[color=aqua]$name[/color] successfully dosed ") + cattle.dictionary("[color=aqua]$name[/color] with [color=aqua]Aphrodisiac[/color] as instructed. ")
+					text += "\n[color=aqua]" + farmhand.name_short() + "[/color] successfully dosed [color=aqua]$name[/color] with [color=aqua]Aphrodisiac[/color] as instructed. "
 				else:
-					text += farmhand.dictionary("\n[color=aqua]$name[/color] tried to give ") + cattle.dictionary("[color=aqua]$name[/color] $his dose of [color=aqua]Aphrodisiac[/color] as instructed, but [color=red]none were available[/color]. ")
+					text += "\n[color=aqua]" + farmhand.name_short() + "[/color] tried to give [color=aqua]$name[/color] $his dose of [color=aqua]Aphrodisiac[/color] as instructed, but [color=red]none were available[/color]. "
 			elif cattle.farmexpanded.aphrodisiac > 0:
 				cattle.farmexpanded.aphrodisiac -= 1
 				if cattle.farmexpanded.aphrodisiac <= 0:
-					text += cattle.dictionary("[color=aqua]$name[/color]'s body shook off the lingering [color=aqua]Aphrodisiac[/color] in $his system and returned to normal. ")
+					text += "[color=aqua]$name[/color]'s body shook off the lingering [color=aqua]Aphrodisiac[/color] in $his system and returned to normal. "
 				elif rand_range(0,1) <= .2:
-					text += cattle.dictionary("[color=aqua]$name[/color]'s body is still feeling the lingering effects of the [color=aqua]Aphrodisiac[/color] in $his system. ")
+					text += "[color=aqua]$name[/color]'s body is still feeling the lingering effects of the [color=aqua]Aphrodisiac[/color] in $his system. "
 			
 			#Aphrodisiac Effects
 			if cattle.farmexpanded.aphrodisiac > 0:
 				var aphroeffect = clamp(cattle.farmexpanded.aphrodisiac * 5, 0, 100)
-				text += cattle.dictionary("[color=aqua]$name[/color]'s body was flooded by the [color=aqua]Aphrodisiac[/color] inside of $him. $His lust is enflamed by " + str(aphroeffect) + ". ")
+				text += "[color=aqua]$name[/color]'s body was flooded by the [color=aqua]Aphrodisiac[/color] inside of $him. $His lust is enflamed by " + str(aphroeffect) + ". "
 				cattle.lust += aphroeffect
 				if rand_range(0,100) <= aphroeffect:
-					text += cattle.dictionary("[color=aqua]$name[/color]'s wits are so clouded by the flood of [color=aqua]Aphrodisiac[/color] that they have permanently dulled. It may be a good idea to take $him off of them for a while to prevent further damage. ")
+					text += "[color=aqua]$name[/color]'s wits are so clouded by the flood of [color=aqua]Aphrodisiac[/color] that they have permanently dulled. It may be a good idea to take $him off of them for a while to prevent further damage. "
 					cattle.wit -= 3
 					cattle.lewdness += 3
+
+			text = cattle.dictionary(text)
 		
 		#---Milk Cattle
 		var milkproduced = 0
@@ -564,21 +567,21 @@ func dailyFarm():
 			effort = 0
 			
 			#Correct Spacing
-			if allcattle.size() > 1 && allcattle.find(findcattle) != 0:
+			if allcattle.find(findcattle) != 0:
 				text += "\n"
-			text += "[color=#d1b970]\nLivestock: [color=aqua]" + cattle.dictionary("$name") + "[/color][/color]"
+			text += "[color=#d1b970]\nLivestock: [color=aqua]$name[/color][/color]"
 			if cattle.farmexpanded.extractmilk.enabled == true:
 				#Invalid Check
 				if cattle.lactation == false:
-					text += cattle.dictionary("\n[color=red]$name is not currently lactating.[/color] ")
+					text += "\n[color=red]$name is not currently lactating.[/color] "
 					continue
 				elif cattle.lactating.milkstorage <= 0:
-					text += cattle.dictionary("\n[color=red]$name did not successfully produce any milk today.[/color] ")
+					text += "\n[color=red]$name did not successfully produce any milk today.[/color] "
 					continue
 				
 				#Perfect Info
 				if globals.expansionsettings.perfectinfo == true:
-					text += cattle.dictionary("\n[color=aqua]$name[/color] has the following stats: ")
+					text += "\n[color=aqua]$name[/color] has the following stats: "
 					if cattle.lactating.hyperlactation == true:
 						text += "[color=lime]Hyperlactation[/color] | "
 					text +=  "Milk Storage: " +str(cattle.lactating.milkstorage)+ " | Milk Regeneration: " +str(cattle.lactating.regen)+ ""
@@ -586,10 +589,10 @@ func dailyFarm():
 						text += " | Pressure = " +str(cattle.lactating.pressure)+ "\n "
 				
 				#Container Description
-				text += cattle.dictionary("\n[color=aqua]$name[/color] was prepped for [color=aqua]milking[/color]. " + str(containerdict[cattle.farmexpanded.extractmilk.container].description) + " " + str(globals.expansion.nameTitsMilking()) + ". ")
+				text += "\n[color=aqua]$name[/color] was prepped for [color=aqua]milking[/color]. " + str(containerdict[cattle.farmexpanded.extractmilk.container].description) + " " + str(globals.expansion.nameTitsMilking()) + ". "
 				#Determine Milk Extraction Method
 				if cattle.farmexpanded.extractmilk.method != 'hand':
-					text += cattle.dictionary("$His milk [color=aqua]" + str(extractorsdict[cattle.farmexpanded.extractmilk.method].description) + "[/color]. ") + milkmaid.dictionary("[color=aqua]$name[/color] assisted in retrieving the extracted milk.. ")
+					text += "$His milk [color=aqua]" + str(extractorsdict[cattle.farmexpanded.extractmilk.method].description) + "[/color]. [color=aqua]" + milkmaid.name_short() + "[/color] assisted in retrieving the extracted milk. "
 					#Automatic Extraction
 					if extractorsdict.has(cattle.farmexpanded.extractmilk.method):
 						extractionmod = rand_range(extractorsdict[cattle.farmexpanded.extractmilk.method].low, extractorsdict[cattle.farmexpanded.extractmilk.method].high)
@@ -598,11 +601,11 @@ func dailyFarm():
 						print("Milk Extractor not found for Cattle ID " + str(cattle.id) + ". Random 0-100 substituted")
 				else:
 					#Manual Extraction
-					text += cattle.dictionary("$He was milked manually today by ") + milkmaid.dictionary("[color=aqua]$name[/color]. ")
+					text += "$He was milked manually today by [color=aqua]" + milkmaid.name_short() + "[/color]. "
 					effort = round(rand_range(1, milkmaid.send+1))
 					milkmaid.energy -= effort
 					milkmaid.add_jobskill('milking', round(effort*.25))
-					text += milkmaid.dictionary("[color=aqua]$name[/color] spent [color=aqua]" + str(effort) + " Energy[/color] milking ") + cattle.dictionary("[color=aqua]$name[/color]. ")
+					text += "[color=aqua]" + milkmaid.name_short() + "[/color] spent [color=aqua]" + str(effort) + " Energy[/color] milking [color=aqua]$name[/color]. "
 					extractionmod = clamp(milkmaid.jobskills.milking * .25, 0, effort)
 				
 				cattle.farmexpanded.timesmilked += 1
@@ -610,7 +613,7 @@ func dailyFarm():
 				#Pressure Production (100% Extraction)
 				milkproduced = cattle.lactating.pressure
 				if cattle.lactating.pressure > 0:
-					text += cattle.dictionary("$His " + globals.expansion.getChest(cattle) + " were swollen beyond their normal capacity. $His " + globals.expansion.nameTits() + " exploded with [color=green]" + str(cattle.lactating.pressure) + "[/color] Milk as soon as the milking started. ")
+					text += "$His " + globals.expansion.getChest(cattle) + " were swollen beyond their normal capacity. $His " + globals.expansion.nameTits() + " exploded with [color=green]" + str(cattle.lactating.pressure) + "[/color] Milk as soon as the milking started. "
 					cattle.lactating.milkstorage -= cattle.lactating.pressure
 					cattle.lactating.pressure = 0
 				
@@ -621,41 +624,41 @@ func dailyFarm():
 					lactationbonus = clamp(cattle.metrics.preg*.05, .05, 2)
 					extraproduction = round(cattle.lactating.milkstorage * lactationbonus)
 					if cattle.knowledge.has('currentpregnancy'):
-						text += cattle.dictionary("$He was able to produce more milk than normal today due to $his [color=aqua]pregnancy[/color]. $His [color=aqua]" + str(cattle.metrics.preg) + "[/color] pregnancies have altered $his body to produce milk at a greater rate throughout the day. ")
+						text += "$He was able to produce more milk than normal today due to $his [color=aqua]pregnancy[/color]. $His [color=aqua]" + str(cattle.metrics.preg) + "[/color] pregnancies have altered $his body to produce milk at a greater rate throughout the day. "
 					else:
-						text += cattle.dictionary("$He continued to produce milk far longer than $he was expected to today. ")
+						text += "$He continued to produce milk far longer than $he was expected to today. "
 						if farmmanager != null && rand_range(0,100) <= farmmanager.wit + farmmanager.jobskills.farmmanager:
-							text += farmmanager.dictionary("[color=aqua]$name[/color] suspects that [color=aqua]" + str(cattle.name) + "[/color] is [color=aqua]pregnant[/color]. $He tests the cow while it is being milked and confirms the happy news. ")
+							text += farmmanager.dictionary("[color=aqua]$name[/color] suspects that [color=aqua]" + cattle.name_short() + "[/color] is [color=aqua]pregnant[/color]. $He tests the cow while it is being milked and confirms the happy news. ")
 							farmmanager.add_jobskill('farmmanager')
 							cattle.knowledge.append('currentpregnancy')
 						else:
-							text += farmmanager.dictionary("[color=aqua]$name[/color] isn't sure why yet. ")
+							text += "[color=aqua]$" + farmmanager.name_short() + "[/color] isn't sure why yet. "
 				if cattle.lactating.hyperlactation == true:
 					lactationbonus = clamp(cattle.lactating.duration*.2, .2, 5)
 					extraproduction = round(cattle.lactating.milkstorage * lactationbonus)
-					text += cattle.dictionary("Just when $he thought that $he had no more milk $he could possible give, $his tits continued pouring out even more. The [color=aqua]Hyperlactation[/color] serum is forcing $his body to produce longer than it normally would and the results will only get better the longer $he continues lactating. ")
-					if cattle.lactating.duration >= 5:
-						text += cattle.dictionary("$His breasts gushed out around [color=aqua]five times[/color] the amount of milk that $he may naturally be able to produce. You suspect that even with the serum, $he is producing at $his body's maximum capacity. ")
-					elif cattle.lactating.duration >= 4:
-						text += cattle.dictionary("$His breasts gushed out around [color=aqua]four times[/color] the amount of milk that $he may naturally be able to produce. ")
-					elif cattle.lactating.duration >= 3:
-						text += cattle.dictionary("$His breasts gushed out around [color=aqua]three times[/color] the amount of milk that $he may naturally be able to produce. ")
-					elif cattle.lactating.duration >= 2:
-						text += cattle.dictionary("$His breasts gushed out around [color=aqua]twice[/color] the amount of milk that $he may naturally be able to produce. ")
+					text += "Just when $he thought that $he had no more milk $he could possible give, $his tits continued pouring out even more. The [color=aqua]Hyperlactation[/color] serum is forcing $his body to produce longer than it normally would and the results will only get better the longer $he continues lactating. "
+					if lactationbonus >= 5:
+						text += "$His breasts gushed out around [color=aqua]five times[/color] the amount of milk that $he may naturally be able to produce. You suspect that even with the serum, $he is producing at $his body's maximum capacity. "
+					elif lactationbonus >= 4:
+						text += "$His breasts gushed out around [color=aqua]four times[/color] the amount of milk that $he may naturally be able to produce. "
+					elif lactationbonus >= 3:
+						text += "$His breasts gushed out around [color=aqua]three times[/color] the amount of milk that $he may naturally be able to produce. "
+					elif lactationbonus >= 2:
+						text += "$His breasts gushed out around [color=aqua]twice[/color] the amount of milk that $he may naturally be able to produce. "
 				
 				#Extraction Addition
 				if cattle.farmexpanded.resistance <= 0 || cattle.farmexpanded.extractmilk.fate != "undecided" || cattle.spec == 'hucow':
 					milkproduced += clamp(round((cattle.lactating.milkstorage + extraproduction) * extractionmod), 0, 50)
-					text += cattle.dictionary("[color=aqua]$name[/color] allowed $himself to be milked without resistance and produced [color=green]" + str(milkproduced) + "[/color] Milk in total. ")
+					text += "[color=aqua]$name[/color] allowed $himself to be milked without resistance and produced [color=green]" + str(milkproduced) + "[/color] Milk in total. "
 					cattle.lactating.milkstorage -= milkproduced
 					if cattle.lactating.milkstorage > 0:
-						text += cattle.dictionary("$He seems to have about [color=aqua]" + str(cattle.lactating.milkstorage) + "[/color] remaining that wasn't able to be extracted today. ")
+						text += "$He seems to have about [color=aqua]" + str(cattle.lactating.milkstorage) + "[/color] remaining that wasn't able to be extracted today. "
 				else:
 					milkproduced += clamp(round(((cattle.lactating.milkstorage + extraproduction) * extractionmod) * (cattle.farmexpanded.resistance*.1)), 0, 50)
-					text += cattle.dictionary("[color=aqua]$name[/color] [color=red]resisted[/color] milking today. This interfered with the milking process and $he only produced [color=green]" + str(milkproduced) + "[/color] Milk total. ")
+					text += "[color=aqua]$name[/color] [color=red]resisted[/color] milking today. This interfered with the milking process and $he only produced [color=green]" + str(milkproduced) + "[/color] Milk total. "
 					cattle.lactating.milkstorage -= milkproduced
 					if cattle.lactating.milkstorage > 0:
-						text += cattle.dictionary("$He seems to have about [color=aqua]" + str(cattle.lactating.milkstorage) + "[/color] remaining that wasn't able to be extracted today. ")
+						text += "$He seems to have about [color=aqua]" + str(cattle.lactating.milkstorage) + "[/color] remaining that wasn't able to be extracted today. "
 
 				
 				#Cattle Reaction && Relations
@@ -663,16 +666,16 @@ func dailyFarm():
 				if cattle.checkFetish('bemilked', 1.5) == true || cattle.spec == 'hucow':
 					if milkmaid != null && (rand_range(0,100) <= (cattle.obed-100) + (milkmaid.charm + milkmaid.jobskills.milking)):
 						globals.addrelations(cattle, milkmaid, rand_range(20,40))
-						text += milkmaid.dictionary("[color=aqua]$name[/color] made it enjoyable for ") + cattle.dictionary("[color=aqua]$name[/color] to be milked today. $He has gained [color=green]" + str(gain) + " Lust[/color] ")
+						text += "[color=aqua]" + milkmaid.name_short() + "[/color] made it enjoyable for [color=aqua]$name[/color] to be milked today. $He has gained [color=green]" + str(gain) + " Lust[/color] "
 						cattle.farmexpanded.extractmilk.opinion.append('accepted')
 						cattle.lust += gain
 					else:
 						globals.addrelations(cattle, milkmaid, rand_range(10,20))
-						text += cattle.dictionary("[color=aqua]$name[/color] didn't mind being milked today. ")
+						text += "[color=aqua]$name[/color] didn't mind being milked today. "
 						cattle.farmexpanded.extractmilk.opinion.append('obeyed')
 				elif cattle.farmexpanded.resistance >= 0:
 					if cattle.traits.has('Masochist') || cattle.traits.has('Submissive'):
-						text += cattle.dictionary("[color=aqua]$name[/color] resisted being milked and would have hated $his treatment, but being mistreated turns $him on. $He has gained [color=green]" + str(gain) + " Lust[/color].\n ")
+						text += "[color=aqua]$name[/color] resisted being milked and would have hated $his treatment, but being mistreated turns $him on. $He has gained [color=green]" + str(gain) + " Lust[/color].\n "
 						cattle.farmexpanded.extractmilk.opinion.append('accepted')
 						cattle.lust += gain
 						if milkmaid != null && (rand_range(0,100) <= (cattle.obed-100) + (milkmaid.charm + milkmaid.jobskills.milking)):
@@ -681,13 +684,13 @@ func dailyFarm():
 							globals.addrelations(cattle, milkmaid, rand_range(10,20))
 					else:
 						var stressgain = round(rand_range(1,5))
-						text += cattle.dictionary("[color=aqua]$name[/color] was stressed out by being milked today. $He has gained [color=red]" + str(gain) + " Stress[/color].\n ")
+						text += "[color=aqua]$name[/color] was stressed out by being milked today. $He has gained [color=red]" + str(gain) + " Stress[/color].\n "
 						cattle.farmexpanded.extractmilk.opinion.append('forced')
 						cattle.stress += gain
 						if milkmaid != null:
 							globals.addrelations(cattle, milkmaid, rand_range(-20,-40))
 				else:
-					text += cattle.dictionary("[color=aqua]$name[/color] let $himself be milked today obediently, though $he didn't like it. ")
+					text += "[color=aqua]$name[/color] let $himself be milked today obediently, though $he didn't like it. "
 					cattle.farmexpanded.extractmilk.opinion.append('obeyed')
 					if milkmaid != null && (rand_range(0,100) <= (cattle.obed-100) + (milkmaid.charm + milkmaid.jobskills.milking)):
 						globals.addrelations(cattle, milkmaid, rand_range(20,40))
@@ -708,12 +711,12 @@ func dailyFarm():
 					if milkproduced > container.size:
 						milkproduced = container.size
 					milkproduced -= round(rand_range(milkproduced*.1,milkproduced*.5))
-					text += milkmaid.dictionary("Unfortunately, $name [color=red]spilled[/color] the " + str(containerdict[cattle.farmexpanded.extractmilk.container].name) + " of milk on the way back to the Vat and only delivered [color=aqua]" + str(milkproduced) + "[/color] Milk. The " + str(container.name) + " had a [color=aqua]" + str(container.spillchance) + "[/color] chance of spilling. \n")
+					text += "Unfortunately, " + milkmaid.name_short() + " [color=red]spilled[/color] the " + str(containerdict[cattle.farmexpanded.extractmilk.container].name) + " of milk on the way back to the Vat and only delivered [color=aqua]" + str(milkproduced) + "[/color] Milk. The " + str(container.name) + " had a [color=aqua]" + str(container.spillchance) + "[/color] chance of spilling. \n"
 				
 				#Generic/Racial Milk Sorting
 				###Add Racial Milk Here (if Hand Milked)
 				
-				globals.resources.farmexpanded.vats.milk.new += milkproduced
+				refVats.milk.new += milkproduced
 				#globals.resources.milk += milkproduced
 			
 			
@@ -722,12 +725,12 @@ func dailyFarm():
 				actionresult = round(cattle.lust*round(rand_range(1.25,2)))
 				cattle.lust += actionresult
 				cattle.lewdness += 1
-				text += cattle.dictionary("\n[color=aqua]$name[/color] was teased and stimulated all over $his body today to keep $him in a constant state of arousal. $He gained [color=green]" + str(actionresult) + " Lust[/color] over the course of the day, giving $him a total of [color=green]" + str(cattle.lust) + " Lust[/color]. ")
+				text += "\n[color=aqua]$name[/color] was teased and stimulated all over $his body today to keep $him in a constant state of arousal. $He gained [color=green]" + str(actionresult) + " Lust[/color] over the course of the day, giving $him a total of [color=green]" + str(cattle.lust) + " Lust[/color]. "
 				if cattle.checkContentmentLoss('low') == true:
-					text += cattle.dictionary("The constant stimulation left $him feeling hot, weak, and dehydrated. The forced arousal ended up being less pleasant than natural arousal and $he lost [color=aqua]Contentment[/color]. ")
+					text += "The constant stimulation left $him feeling hot, weak, and dehydrated. The forced arousal ended up being less pleasant than natural arousal and $he lost [color=aqua]Contentment[/color]. "
 				else:
 					cattle.npcexpanded.contentment += 1
-					text += cattle.dictionary("The constant stimulation left $him feeling sexy and tingly. The forced arousal overwhelmed $him and $he gained [color=aqua]Contentment[/color]. ")
+					text += "The constant stimulation left $him feeling sexy and tingly. The forced arousal overwhelmed $him and $he gained [color=aqua]Contentment[/color]. "
 			
 			var clust = cattle.lust
 			#Breeding
@@ -743,7 +746,7 @@ func dailyFarm():
 				
 				if stud != null:
 					#Start Sex
-					text += stud.dictionary("\n[color=aqua]$name[/color] fucked ") + cattle.dictionary("[color=aqua]$name[/color] during the day today. ")
+					text += "\n[color=aqua]" + stud.name_short() + "[/color] fucked [color=aqua]$name[/color] during the day today. "
 					cattle.lastsexday = globals.resources.day
 					stud.lastsexday = globals.resources.day
 					stud.add_jobskill('stud', 1)
@@ -765,53 +768,53 @@ func dailyFarm():
 					
 					#Fetishes
 					if !cattle.npcexpanded.restrained.empty():
-						text += cattle.dictionary("[color=aqua]$name[/color] was restrained during their breeding encounter ")
+						text += "[color=aqua]$name[/color] was restrained during their breeding encounter "
 						if cattle.checkFetish('bondage', 1) == true:
-							text += cattle.dictionary("and [color=green]enjoyed[/color] the fact that $he was bound. ")
+							text += "and [color=green]enjoyed[/color] the fact that $he was bound. "
 							clust *= 1.1
 						else:
-							text += cattle.dictionary("and [color=red]didn't like[/color] the fact that $he was bound. ")
+							text += "and [color=red]didn't like[/color] the fact that $he was bound. "
 							clust *= .9
 							cattle.stress += round(rand_range(0,2))
 							
-						text += stud.dictionary("[color=aqua]$name[/color] ")
+						text += "[color=aqua]" + stud.name_short() + "[/color] "
 						if stud.checkFetish('bondage', 1.5) == true:
-							text += cattle.dictionary("[color=green]enjoyed[/color] the fact that [color=aqua]$name[/color] was bound and helpless. ")
+							text += "[color=green]enjoyed[/color] the fact that [color=aqua]$name[/color] was bound and helpless. "
 							slust *= 1.1
 						else:
-							text += cattle.dictionary("[color=red]didn't like[/color] the fact that [color=aqua]$name[/color] was bound and helpless. ")
+							text += "[color=red]didn't like[/color] the fact that [color=aqua]$name[/color] was bound and helpless. "
 							slust *= .9
 							stud.stress += round(rand_range(0,2))
 					
 					if cattle.checkFetish('submission', 1) == true || cattle.spec == 'hucow':
-						text += cattle.dictionary("[color=aqua]$name[/color] [color=green]enjoyed[/color] being forced to submit to ")
+						text += "[color=aqua]$name[/color] [color=green]enjoyed[/color] being forced to submit to "
 						clust *= 1.1
 					else:
-						text += cattle.dictionary("[color=aqua]$name[/color] [color=red]didn't like[/color] being forced to submit to ")
+						text += "[color=aqua]$name[/color] [color=red]didn't like[/color] being forced to submit to "
 						clust *= .9
 						cattle.stress += round(rand_range(0,2))
 					
 					if stud.checkFetish('dominance', 1) == true || stud.spec == 'hucow':
-						text += stud.dictionary("[color=aqua]$name[/color], who $he [color=green]enjoyed[/color] acting dominantly today. ")
+						text += "[color=aqua]" + stud.name_short() + "[/color], who $he [color=green]enjoyed[/color] acting dominantly today. "
 						slust *= 1.1
 					else:
-						text += stud.dictionary("[color=aqua]$name[/color], who [color=red]didn't like[/color] acting dominantly today. ")
+						text += "[color=aqua]" + stud.name_short() + "[/color], who [color=red]didn't like[/color] acting dominantly today. "
 						slust *= .9
 						stud.stress += round(rand_range(0,2))
 					
 					if stud.checkFetish('creampiepussy', 2) == true || stud.spec == 'hucow':
-						text += stud.dictionary("[color=aqua]$name[/color] [color=green]relished[/color] getting to fill up ") + cattle.dictionary("$his " + globals.expansion.namePussy() + ". ")
+						text += "[color=aqua]" + stud.name_short() + "[/color] [color=green]relished[/color] getting to fill up $his " + globals.expansion.namePussy() + ". "
 						slust *= 1.1
 					else:
-						text += stud.dictionary("[color=aqua]$name[/color] was [color=red]worried[/color] about cumming inside of ") + cattle.dictionary("$his " + globals.expansion.namePussy() + ". ")
+						text += "[color=aqua]" + stud.name_short() + "[/color] was [color=red]worried[/color] about cumming inside of $his " + globals.expansion.namePussy() + ". "
 						slust *= .9
 						stud.stress += round(rand_range(0,2))
 					
 					if cattle.checkFetish('pregnancy', 2) == true || cattle.spec == 'hucow':
-						text += cattle.dictionary("[color=aqua]$name[/color] seemed [color=green]excited[/color] to be impregnated. ")
+						text += "[color=aqua]$name[/color] seemed [color=green]excited[/color] to be impregnated. "
 						clust *= 1.1
 					else:
-						text += cattle.dictionary("[color=aqua]$name[/color] was [color=red]worried[/color] about getting pregnant. ")
+						text += "[color=aqua]$name[/color] was [color=red]worried[/color] about getting pregnant. "
 						clust *= .9
 						cattle.stress += round(rand_range(0,2))
 						
@@ -832,7 +835,7 @@ func dailyFarm():
 					effort = clamp(effort, 0, stud.energy - 20)
 					stud.energy -= effort
 					
-					text += stud.dictionary("[color=aqua]$name[/color] spent [color=aqua]" + str(effort) + "[/color] Energy while fucking ") + cattle.dictionary("[color=aqua]$name[/color]. \n")
+					text += "[color=aqua]" + stud.name_short() + "[/color] spent [color=aqua]" + str(effort) + "[/color] Energy while fucking [color=aqua]$name[/color]. \n"
 					
 					#Trigger Orgasms (Capture Fluids)
 					while clust >= 100:
@@ -864,34 +867,34 @@ func dailyFarm():
 					globals.addrelations(stud, cattle, stud.sexexp.orgasmpartners[cattle.id])
 					
 					#Breeding Text
-					text += stud.dictionary("[color=aqua]$name[/color] " + str(globals.expansion.namePenisCumming()) + " into ") + cattle.dictionary("[color=aqua]$name[/color] [color=green]" + str(sorgasms) + "[/color] times, while " + str(globals.expansion.nameHelplessOrgasmPreface()) + "" + str(globals.expansion.nameHelplessOrgasm()) + " [color=green]" + str(corgasms) + "[/color] times. ")
+					text += "[color=aqua]" + stud.name_short() + "[/color] " + str(globals.expansion.namePenisCumming()) + " into [color=aqua]$name[/color] [color=green]" + str(sorgasms) + "[/color] times, while " + str(globals.expansion.nameHelplessOrgasmPreface()) + "" + str(globals.expansion.nameHelplessOrgasm()) + " [color=green]" + str(corgasms) + "[/color] times. "
 				else:
-					text += cattle.dictionary("[color=aqua]$name[/color] was assigned to be bred today but no [color=aqua]stud[/color] was available today. ")
+					text += "[color=aqua]$name[/color] was assigned to be bred today but no [color=aqua]stud[/color] was available today. "
 			
 			#---Breed Snails
 			if cattle.farmexpanded.breeding.status == 'snails' || cattle.farmexpanded.breeding.snails == true:
 				var snaileggs = 0
 				var snaileggcounter = 0
 				var snailsuccess = false
-				text += cattle.dictionary("\n[color=aqua]$name[/color]'s "+ str(globals.expansion.namePussy()) +" was assigned to be filled with snail eggs today. ")
+				text += "\n[color=aqua]$name[/color]'s "+ str(globals.expansion.namePussy()) +" was assigned to be filled with snail eggs today. "
 				#Return if Error
 				if cattle.vagina == 'none':
-					text += cattle.dictionary("This was obviously a mistake as [color=red]$he has no " + str(globals.expansion.namePussy()) + "[/color]. ")
+					text += "This was obviously a mistake as [color=red]$he has no " + str(globals.expansion.namePussy()) + "[/color]. "
 				else:
 					if cattle.checkFetish('pregnancy',.5) || cattle.checkFetish('oviposition',1.5) || (cattle.lust >= 50 || cattle.lewdness >= 50) && cattle.wit <= 20 || cattle.spec == 'hucow':
 						snailsuccess = true
-						text += cattle.dictionary("[color=aqua]$name[/color] willingly spread $his legs as the snail approached today, allowing it's slimy ovipositor to squirm its way to $his " + str(globals.expansion.namePussy()) + ". ")
+						text += "[color=aqua]$name[/color] willingly spread $his legs as the snail approached today, allowing it's slimy ovipositor to squirm its way to $his " + str(globals.expansion.namePussy()) + ". "
 					elif cattle.farmexpanded.restrained == true || cattle.farmexpanded.workstation in ['rack','cage']:
 						snailsuccess = true
-						text += cattle.dictionary("[color=aqua]$name[/color] tried to squirm away from the snail as it's slimy ovipositor traced up $his legs to $his helpless " + str(globals.expansion.namePussy()) + ", but $he was unable to get away. ")
+						text += "[color=aqua]$name[/color] tried to squirm away from the snail as it's slimy ovipositor traced up $his legs to $his helpless " + str(globals.expansion.namePussy()) + ", but $he was unable to get away. "
 					else:
 						if rand_range(0,100) <= globals.expansionsettings.chancetokillsnail + cattle.sstr + cattle.sagi + cattle.smaf:
 							globals.state.snails -= 1
 							cattle.farmexpanded.breeding.status = 'none'
 							cattle.farmexpanded.breeding.snails = false
-							cattle.dictionary("[color=aqua]$name[/color] fought, squirmed, and resisted the snail with all of $his might. During $his struggles, $he accidentally kicked a soft, vulnerable part of the snail. The poor creature was killed instantly. [color=aqua]If you wish for this cow to breed snails, you must assign it a new snail. [/color]")
+							text += "[color=aqua]$name[/color] fought, squirmed, and resisted the snail with all of $his might. During $his struggles, $he accidentally kicked a soft, vulnerable part of the snail. The poor creature was killed instantly. [color=aqua]If you wish for this cow to breed snails, you must assign it a new snail. [/color]"
 						else:
-							text += cattle.dictionary("[color=aqua]$name[/color] fled, squirmed, and resisted the snail with all of $his might. The snail left dissatisfied, unable to lay its eggs inside of $him. ")
+							text += "[color=aqua]$name[/color] fled, squirmed, and resisted the snail with all of $his might. The snail left dissatisfied, unable to lay its eggs inside of $him. "
 						
 				#Successfully Filled
 				if snailsuccess == true:
@@ -911,9 +914,9 @@ func dailyFarm():
 						snaileggcounter += 1
 						clust -= 100
 					
-					text += cattle.dictionary("$He moaned and groaned as [color=aqua]" +str(snaileggs)+ " eggs[/color] were pushed through the ovipositor into $his wet and waiting " + str(globals.expansion.namePussy()) + ". ")
+					text += "$He moaned and groaned as [color=aqua]" +str(snaileggs)+ " eggs[/color] were pushed through the ovipositor into $his wet and waiting " + str(globals.expansion.namePussy()) + ". "
 					if snaileggcounter > 0:
-						text += cattle.dictionary("The sensation of the eggs filling $him up, protruding $his belly, and sending spurts of wet, warm slime gushing inside of $his body was so intense that $he orgasmed " +str(snaileggcounter)+ " times while $he was being filled up. ")
+						text += "The sensation of the eggs filling $him up, protruding $his belly, and sending spurts of wet, warm slime gushing inside of $his body was so intense that $he orgasmed " +str(snaileggcounter)+ " times while $he was being filled up. "
 				
 				#Egg Labor
 				if snaileggs > 0:
@@ -923,9 +926,9 @@ func dailyFarm():
 					effort = 0
 					var saidoversized = false
 					var saidnormal = false
-					text += cattle.dictionary("After the snail slid away and left its prey bulging with eggs, $he felt something shift inside of $him. $His stomach, not able to contain the mixture of snail-slime and eggs, began going into violent contractions. ")
+					text += "After the snail slid away and left its prey bulging with eggs, $he felt something shift inside of $him. $His stomach, not able to contain the mixture of snail-slime and eggs, began going into violent contractions. "
 					snaileggcounter = snaileggs
-					text += cattle.dictionary("\n[color=aqua]$name[/color] was in full labor the eggs were coming out whether $he wanted them to or not. ")
+					text += "\n[color=aqua]$name[/color] was in full labor the eggs were coming out whether $he wanted them to or not. "
 					while snaileggcounter > 0:
 						var labordifficulty = globals.expansionsettings.snailegglabordifficulty
 						if snaileggcounter > globals.vagsizearray.find(cattle.vagina):
@@ -934,59 +937,59 @@ func dailyFarm():
 							#Text Check
 							if globals.expansionsettings.snailegglabordetails == true && saidoversized == false:
 								saidoversized = true
-								text += cattle.dictionary("$He was stretched and bloated by the sheer number of eggs filling $his body. $He was so full that they were going to slide and pop out of $him no matter if $he pushed or not. ")
+								text += "$He was stretched and bloated by the sheer number of eggs filling $his body. $He was so full that they were going to slide and pop out of $him no matter if $he pushed or not. "
 							if rand_range(0,100) <= globals.expansionsettings.snailegglaborpainchance + (labordifficulty*5) - cattle.farmexpanded.breeding.eggsbirthed:
 								#Pain
 								laborpain += labordifficulty
 								if globals.expansionsettings.snailegglabordetails == true:
-									text += cattle.dictionary("An egg stretched $him open painfully as it exited $him and plopped to the ground.\n ")
+									text += "An egg stretched $him open painfully as it exited $him and plopped to the ground.\n "
 							elif rand_range(0,100) <= globals.expansionsettings.snailegglaborpleasurechance + (labordifficulty*5) + cattle.farmexpanded.breeding.eggsbirthed:
 								#Pleasure
 								laborlust += labordifficulty
 								if globals.expansionsettings.snailegglabordetails == true:
-									text += cattle.dictionary("$He suddenly gasped in pleasure as an egg slid down $his pussy, rubbing $his throbbing inside all the way down. With a loud moan, the egg split $his lips and slid out of $him.\n ")
+									text += "$He suddenly gasped in pleasure as an egg slid down $his pussy, rubbing $his throbbing inside all the way down. With a loud moan, the egg split $his lips and slid out of $him.\n "
 							#Layed
 							snaileggcounter -= 1
 						else:
 							labordifficulty += round(rand_range(-globals.expansionsettings.snailegglaborvariable,globals.expansionsettings.snailegglaborvariable))
 							if globals.expansionsettings.snailegglabordetails == true && saidnormal == false:
 								saidnormal = true
-								text += cattle.dictionary("There were just enough eggs to fill $his pussy. $He felt $his body contracting to push out the eggs and knew that birthing these eggs was entirely left to $him. ")
+								text += "There were just enough eggs to fill $his pussy. $He felt $his body contracting to push out the eggs and knew that birthing these eggs was entirely left to $him. "
 							#Push
 							effort = round(rand_range(1,3))
 							if globals.expansionsettings.snailegglabordetails == true:
 								if effort == 1:
-									text += cattle.dictionary("$He pushed a little but couldn't muster enough energy to squeeze $his stuffed pussy hard. ")
+									text += "$He pushed a little but couldn't muster enough energy to squeeze $his stuffed pussy hard. "
 								elif effort == 2:
-									text += cattle.dictionary("$He grunted and pushed hard, even holding $his breath as $he tried to force the foreign entity from $his body. ")
+									text += "$He grunted and pushed hard, even holding $his breath as $he tried to force the foreign entity from $his body. "
 								else:
-									text += cattle.dictionary("$He screamed and pushed as hard as $he could. $He held $his breath as $he gave it his all, only breathing again after $his face was completely flushed and sweat glistened off of $him. ")
+									text += "$He screamed and pushed as hard as $he could. $He held $his breath as $he gave it his all, only breathing again after $his face was completely flushed and sweat glistened off of $him. "
 							cattle.energy -= clamp(cattle.sstr * effort, 1, 10)
 							laborresult += clamp(cattle.sstr * effort, 1, 10)
 							#Layed
 							if laborresult >= labordifficulty:
 								if globals.expansionsettings.snailegglabordetails == true:
-									text += cattle.dictionary("With a satisfying squelch, $he managed to birth another snail egg from $his throbbing " + str(globals.expansion.namePussy()) + ".\n " )
+									text += "With a satisfying squelch, $he managed to birth another snail egg from $his throbbing " + str(globals.expansion.namePussy()) + ".\n " 
 								snaileggcounter -= 1
 								laborresult = 0
 								#Pleasure
 								if rand_range(0,100) <= globals.expansionsettings.snailegglaborpleasurechance + (labordifficulty*5) + cattle.farmexpanded.breeding.eggsbirthed:
 									laborlust += labordifficulty + effort
 									if globals.expansionsettings.snailegglabordetails == true:
-										text += cattle.dictionary("The egg was accompanied by a small gush as $he moaned helplessly as pleasure wracked $his body from the sensation of the egg-laying. ")
+										text += "The egg was accompanied by a small gush as $he moaned helplessly as pleasure wracked $his body from the sensation of the egg-laying. "
 							else:
 								if globals.expansionsettings.snailegglabordetails == true:
 									if laborresult < labordifficulty/3:
-										text += cattle.dictionary("$He gasped for breath as $he tried to work up the energy for another push, feeling the egg that barely made any progress. ")
+										text += "$He gasped for breath as $he tried to work up the energy for another push, feeling the egg that barely made any progress. "
 									elif laborresult < labordifficulty/1.5:
-										text += cattle.dictionary("$He sniffed and whimpered as $he felt the egg still stuck inside of him, just under halfway through $his sore walls. ")
+										text += "$He sniffed and whimpered as $he felt the egg still stuck inside of him, just under halfway through $his sore walls. "
 									else:
-										text += cattle.dictionary("$His mouth hung open and $he didn't even notice the drool dripping from $his mouth as $he mindlessly squeezed, gasped for air, then squeezed again on the egg lodged inside of $his body. ")
+										text += "$His mouth hung open and $he didn't even notice the drool dripping from $his mouth as $he mindlessly squeezed, gasped for air, then squeezed again on the egg lodged inside of $his body. "
 								#Pain
 								if rand_range(0,100) <= globals.expansionsettings.snailegglaborpainchance + ((labordifficulty-laborresult)*5) - cattle.farmexpanded.breeding.eggsbirthed:
 									laborpain += labordifficulty + effort
 									if globals.expansionsettings.snailegglabordetails == true:
-										text += cattle.dictionary("$He grunted and sobbed in pain as $his insides violently contracted around the egg still stuck inside stretched out $him open. ")
+										text += "$He grunted and sobbed in pain as $his insides violently contracted around the egg still stuck inside stretched out $him open. "
 					
 					clust += laborlust
 					#Laying Orgasms
@@ -994,7 +997,7 @@ func dailyFarm():
 						corgasms += 1
 						clust -= 100
 					if corgasms > 0:
-						text += cattle.dictionary("\nThe sensations were so intense that you are certain [color=aqua]$name[/color] orgasmed from the whole experience at least " +str(corgasms)+" times. ")
+						text += "\nThe sensations were so intense that you are certain [color=aqua]$name[/color] orgasmed from the whole experience at least " +str(corgasms)+" times. "
 					
 					var cattleendurance = clamp(cattle.send, 1, 100)
 					
@@ -1002,34 +1005,34 @@ func dailyFarm():
 					if laborlust >= laborpain:
 						laborresult = laborlust - laborpain
 						if cattle.checkFetish('oviposition', laborresult):
-							text += cattle.dictionary("\n[color=aqua]$name[/color] pleasurable experience seems more open to the idea of breeding snails in the future. ")
+							text += "\n[color=aqua]$name[/color] pleasurable experience seems more open to the idea of breeding snails in the future. "
 						#Bad Result
 						if (laborpain / cattleendurance) - corgasms > 0 && globals.expansionsettings.snailegglaborbadresult:
 							cattle.stress += (laborpain / cattleendurance) - corgasms
-							text += cattle.dictionary("\n[color=aqua]$name[/color]'s body was stressed by laying [color=aqua]" + str(snaileggs) + " eggs[/color] but otherwise unaffected. ")
+							text += "\n[color=aqua]$name[/color]'s body was stressed by laying [color=aqua]" + str(snaileggs) + " eggs[/color] but otherwise unaffected. "
 					else:
 						laborresult = laborpain - laborlust
 						if cattle.checkFetish('oviposition', -laborresult) == false:
-							text += cattle.dictionary("\n[color=aqua]$name[/color]'s painful experience seems less open to the idea of breeding snails in the future. ")
+							text += "\n[color=aqua]$name[/color]'s painful experience seems less open to the idea of breeding snails in the future. "
 							cattle.setFetish('oviposition', -1)
 						#Bad Result
 						if globals.expansionsettings.snailegglaborbadresult:
 							cattle.stress += round((laborpain / cattleendurance) - corgasms*.5)
 							cattle.health -= round(cattle.health*.1)
-							text += cattle.dictionary("\n[color=aqua]$name[/color]'s body was both stressed and slightly injured by laying [color=aqua]" + str(snaileggs) + " eggs[/color]. [color=red]$His health has declined[/color]. ")
+							text += "\n[color=aqua]$name[/color]'s body was both stressed and slightly injured by laying [color=aqua]" + str(snaileggs) + " eggs[/color]. [color=red]$His health has declined[/color]. "
 					
 					cattle.farmexpanded.breeding.eggsbirthed += snaileggs
-					globals.resources.farmexpanded.snails.neweggs += snaileggs
+					refSnails.neweggs += snaileggs
 			
 			#Capture Fluids from Orgasms
 			if cattle.farmexpanded.extractcum.enabled == true:
 				var extraorgasms = 0
 				
 				#Container Description
-				text += cattle.dictionary("\n\n[color=aqua]$name[/color] was prepped to have $his [color=aqua]cum[/color] collected. " + str(containerdict[cattle.farmexpanded.extractcum.container].description) + " " + str(globals.expansion.getGenitals(cattle)) + ". ")
+				text += "\n\n[color=aqua]$name[/color] was prepped to have $his [color=aqua]cum[/color] collected. " + str(containerdict[cattle.farmexpanded.extractcum.container].description) + " " + str(globals.expansion.getGenitals(cattle)) + ". "
 				#Extraction Method
 				if cattle.farmexpanded.extractcum.method != 'hand':
-					text += cattle.dictionary("$His cum [color=aqua]" + str(extractorsdict[cattle.farmexpanded.extractcum.method].description) + "[/color]. ")
+					text += "$His cum [color=aqua]" + str(extractorsdict[cattle.farmexpanded.extractcum.method].description) + "[/color]. "
 					#Automatic Extraction
 					if extractorsdict.has(cattle.farmexpanded.extractcum.method):
 						extractionmod = rand_range(extractorsdict[cattle.farmexpanded.extractcum.method].low, extractorsdict[cattle.farmexpanded.extractcum.method].high)
@@ -1037,17 +1040,17 @@ func dailyFarm():
 						extractionmod = rand_range(0,1)
 						print("Cum Extractor not found for Cattle ID " + str(cattle.id) + ". Random 0-100 substituted")
 					#Add Orgasms
-					extraorgasms = (globals.expansionfarm.extractorsarray.find(cattle.farmexpanded.extractcum.method))*3
+					extraorgasms = (extractorsarray.find(cattle.farmexpanded.extractcum.method))*3
 					while extraorgasms > 0:
 						clust += round(rand_range(25,150))
 						extraorgasms -= 1
 				else:
 					#Manual Extraction
-					text += cattle.dictionary("[color=aqua]$name[/color]'s cum was collected by ") + milkmaid.dictionary("[color=aqua]$name[/color]. ")
+					text += "[color=aqua]$name[/color]'s cum was collected by [color=aqua]" + milkmaid.name_short() + "[/color]. "
 					effort = round(rand_range(1,milkmaid.send+1))
 					milkmaid.energy -= effort
 					milkmaid.add_jobskill('milking', round(effort*.25))
-					text += milkmaid.dictionary("[color=aqua]$name[/color] spent [color=aqua]" + str(effort) + " Energy[/color] pleasuring ") + cattle.dictionary("[color=aqua]$name[/color] to collect $his cum. ")
+					text += "[color=aqua]" + milkmaid.name_short() + "[/color] spent [color=aqua]" + str(effort) + " Energy[/color] pleasuring [color=aqua]$name[/color] to collect $his cum. "
 					extractionmod = clamp(milkmaid.jobskills.milking * .25, 0, effort)
 					#Add Orgasms
 					extraorgasms = effort
@@ -1072,19 +1075,19 @@ func dailyFarm():
 						semen = round(semen*globals.expansionsettings.futacumweakenedpercentage)
 					
 					semenproduced += semen
-					text += cattle.dictionary("[color=aqua]$name[/color] had [color=aqua]" + str(semen) + " Semen[/color] extracted out of $his " + str(globals.expansion.namePenis()) + " today.\n ")
+					text += "[color=aqua]$name[/color] had [color=aqua]" + str(semen) + " Semen[/color] extracted out of $his " + str(globals.expansion.namePenis()) + " today.\n "
 				
 				if cattle.vagina != "none" && cattle.cum.pussy > 0:
 					semen = clamp(round(cattle.cum.pussy * extractionmod), 0, cattle.cum.pussy)
 					cattle.cum.pussy -= semen
 					semenproduced += semen
-					text += cattle.dictionary("[color=aqua]$name[/color] had [color=aqua]" + str(semen) + " Semen[/color] extracted from $his " + str(globals.expansion.namePussy()) + " today that had been left inside of $him.\n ")
+					text += "[color=aqua]$name[/color] had [color=aqua]" + str(semen) + " Semen[/color] extracted from $his " + str(globals.expansion.namePussy()) + " today that had been left inside of $him.\n "
 				
 				if cattle.asshole != "none" && cattle.cum.ass > 0:
 					semen = clamp(round(cattle.cum.ass * extractionmod), 0, cattle.cum.ass)
 					cattle.cum.ass -= semen
 					semenproduced += semen
-					text += cattle.dictionary("[color=aqua]$name[/color] had [color=aqua]" + str(semen) + " Semen[/color] extracted from $his " + str(globals.expansion.nameAsshole()) + " today that had been left inside of $him.\n ")
+					text += "[color=aqua]$name[/color] had [color=aqua]" + str(semen) + " Semen[/color] extracted from $his " + str(globals.expansion.nameAsshole()) + " today that had been left inside of $him.\n "
 				
 				#Lubricant Produced
 				if cattle.vagina != "none":
@@ -1094,7 +1097,7 @@ func dailyFarm():
 						lube = round(lube*globals.expansionsettings.futacumweakenedpercentage)
 					lube = clamp(lube, 1, 100)
 					lubeproduced = lube
-					text += cattle.dictionary("[color=aqua]$name[/color] had [color=aqua]" + str(lubeproduced) + " Lube[/color] extracted from $his " + str(globals.expansion.namePussy()) + " as " + str(globals.expansion.nameHelplessOrgasmPreface()) + "" + str(globals.expansion.nameHelplessOrgasm()) + ".\n ")
+					text += "[color=aqua]$name[/color] had [color=aqua]" + str(lubeproduced) + " Lube[/color] extracted from $his " + str(globals.expansion.namePussy()) + " as " + str(globals.expansion.nameHelplessOrgasmPreface()) + "" + str(globals.expansion.nameHelplessOrgasm()) + ".\n "
 				
 				text += setFate(cattle, 'extractcum')
 				
@@ -1111,18 +1114,18 @@ func dailyFarm():
 						lubeproduced -= round(rand_range(lubeproduced*.1,lubeproduced*.5))
 						text += milkmaid.dictionary("Unfortunately, $name [color=red]spilled[/color] the " + str(containerdict[cattle.farmexpanded.extractcum.container].name) + " of lube on the way back to the Vat and only delivered [color=aqua]" + str(semenproduced) + "[/color] Lubricant. The " + str(container.name) + " had a [color=aqua]" + str(container.spillchance) + "[/color] chance of spilling. \n")
 				
-				globals.resources.farmexpanded.vats.semen.new += semenproduced
-				globals.resources.farmexpanded.vats.lube.new += lubeproduced
+				refVats.semen.new += semenproduced
+				refVats.lube.new += lubeproduced
 				#globals.resources.semen += semenproduced
 				#globals.resources.lube += lubeproduced
 			
 			#---Piss Extraction: Major Factor (Diet) not yet implimented. Amount will be based on Diet when applied
 			if cattle.farmexpanded.extractpiss.enabled == true:
 				#Container Description
-				text += cattle.dictionary("\n[color=aqua]$name[/color] was prepped to have $his [color=aqua]piss[/color] collected. " + str(containerdict[cattle.farmexpanded.extractpiss.container].description) + " " + str(globals.expansion.getGenitals(cattle)) + ". ")
+				text += "\n[color=aqua]$name[/color] was prepped to have $his [color=aqua]piss[/color] collected. " + str(containerdict[cattle.farmexpanded.extractpiss.container].description) + " " + str(globals.expansion.getGenitals(cattle)) + ". "
 				#Extraction Method
 				if cattle.farmexpanded.extractpiss.method != 'hand':
-					text += cattle.dictionary("$His piss [color=aqua]" + str(extractorsdict[cattle.farmexpanded.extractpiss.method].description) + "[/color]. ")
+					text += "$His piss [color=aqua]" + str(extractorsdict[cattle.farmexpanded.extractpiss.method].description) + "[/color]. "
 					#Automatic Extraction
 					if extractorsdict.has(cattle.farmexpanded.extractpiss.method):
 						extractionmod = rand_range(extractorsdict[cattle.farmexpanded.extractpiss.method].low, extractorsdict[cattle.farmexpanded.extractpiss.method].high)
@@ -1131,18 +1134,18 @@ func dailyFarm():
 						print("Piss Extractor not found for Cattle ID " + str(cattle.id) + ". Random 0-100 substituted")
 				else:
 					#Manual Extraction
-					text += milkmaid.dictionary("[color=aqua]$name[/color] forced ") + cattle.dictionary("[color=aqua]$name[/color] to drink throughout the day. Occassionally they would press against $his bladder, forcing $him to let helplessly let loose a warm stream which ") + milkmaid.dictionary("[color=aqua]$name[/color] would collect. ")
+					text += "[color=aqua]" + milkmaid.name_short() + "[/color] forced [color=aqua]$name[/color] to drink throughout the day. Occassionally they would press against $his bladder, forcing $him to let helplessly let loose a warm stream which [color=aqua]" + milkmaid.name_short() + "[/color] would collect. "
 					var pissextractmod = (globals.fetishopinion.find(milkmaid.fetish.otherspissing))*.5
 					if milkmaid.checkFetish('otherspissing') == true:
 						effort = round(rand_range(1, globals.fetishopinion.find(milkmaid.fetish.otherspissing) + 1))
 						globals.addrelations(milkmaid, cattle, rand_range(10,30))
-						text += milkmaid.dictionary("[color=aqua]$name[/color] got off on seeing ") + cattle.dictionary("[color=aqua]$name[/color] forced to piss in front of ") + milkmaid.dictionary("$him and made sure that it happened as much as possible today. ")
+						text += "[color=aqua]" + milkmaid.name_short() + "[/color] got off on seeing [color=aqua]$name[/color] forced to piss in front of " + milkmaid.dictionary("$him and made sure that it happened as much as possible today. ")
 					else:
 						effort = round(rand_range(.25,1))
 						if milkmaid.checkContentmentLoss('med') == true:
-							text += milkmaid.dictionary("[color=aqua]$name[/color] felt disgusted by having to deal with someone else's piss and lost [color=aqua]Contentment[/color].")
+							text += "[color=aqua]" + milkmaid.name_short() + "[/color] felt disgusted by having to deal with someone else's piss and lost [color=aqua]Contentment[/color]."
 						if rand_range(0,100) <= milkmaid.loyal:
-							text += milkmaid.dictionary("[color=aqua]$name[/color] seemed disgusted by ") + cattle.dictionary("[color=aqua]$name[/color] not being able to control $himself. ")
+							text += "[color=aqua]" + milkmaid.name_short() + "[/color] seemed disgusted by [color=aqua]$name[/color] not being able to control $himself. "
 							globals.addrelations(milkmaid, cattle, rand_range(-10,-30))
 						else:
 							text += milkmaid.dictionary("[color=aqua]$name[/color] seemed upset at you specifically for making $him do that. ")
@@ -1153,10 +1156,10 @@ func dailyFarm():
 				#Production
 				if cattle.farmexpanded.resistance <= 0 || cattle.farmexpanded.extractpiss.fate != "undecided" || cattle.spec == 'hucow':
 					pissproduced += clamp(round(temppiss * extractionmod), 0, 10)
-					text += cattle.dictionary("[color=aqua]$name[/color] didn't fight it when $his piss was collected and $his bladder drained [color=green]" + str(pissproduced) + " Piss[/color] total. ")
+					text += "[color=aqua]$name[/color] didn't fight it when $his piss was collected and $his bladder drained [color=green]" + str(pissproduced) + " Piss[/color] total. "
 				else:
 					pissproduced += clamp(round((temppiss * extractionmod) * (cattle.farmexpanded.resistance*.1)), 0, 10)
-					text += cattle.dictionary("[color=aqua]$name[/color] fought as best $he could to keep $his piss from being collected and only [color=green]" + str(pissproduced) + " Piss[/color] was collected. ")
+					text += "[color=aqua]$name[/color] fought as best $he could to keep $his piss from being collected and only [color=green]" + str(pissproduced) + " Piss[/color] was collected. "
 				text += setFate(cattle, 'extractpiss')
 				
 				if checkSpill(cattle, milkmaid, 'piss') == true:
@@ -1164,12 +1167,12 @@ func dailyFarm():
 					if pissproduced > container.size:
 						pissproduced = container.size
 					pissproduced -= round(rand_range(pissproduced*.1,pissproduced*.5))
-					text += milkmaid.dictionary("Unfortunately, $name [color=red]spilled[/color] the " + str(containerdict[cattle.farmexpanded.extractpiss.container].name) + " of urine on the way back to the Vat and only delivered [color=aqua]" + str(pissproduced) + "[/color] Piss. The " + str(container.name) + " had a [color=aqua]" + str(container.spillchance) + "[/color] chance of spilling. \n")
+					text += "Unfortunately, " + milkmaid.name_short() + " [color=red]spilled[/color] the " + str(containerdict[cattle.farmexpanded.extractpiss.container].name) + " of urine on the way back to the Vat and only delivered [color=aqua]" + str(pissproduced) + "[/color] Piss. The " + str(container.name) + " had a [color=aqua]" + str(container.spillchance) + "[/color] chance of spilling. \n"
 					if milkmaid.checkFetish('wearpiss') == false:
 						if milkmaid.checkContentmentLoss('high') == true:
-							text += milkmaid.dictionary("[color=aqua]$name[/color] was utterly disgusted by being covered in piss and lost [color=aqua]Contentment[/color].")
+							text += "[color=aqua]" + milkmaid.name_short() + "[/color] was utterly disgusted by being covered in piss and lost [color=aqua]Contentment[/color]."
 				
-				globals.resources.farmexpanded.vats.piss.new += pissproduced
+				refVats.piss.new += pissproduced
 				#globals.resources.piss += pissproduced
 		
 			#Daily Action: Prod
@@ -1177,88 +1180,88 @@ func dailyFarm():
 				actionresult = clamp(round(cattle.cour*.1)+1, 1, 10)
 				cattle.cour -= actionresult
 				cattle.obed += actionresult
-				text += cattle.dictionary("\nEvery time that [color=aqua]$name[/color] tried to speak, move, or do anything outside of the actions of a submissive, mindless cattle $he was prodded incredible painfully. $He lost [color=red]" + str(actionresult) + " Courage[/color] to speak up. ")
+				text += "\nEvery time that [color=aqua]$name[/color] tried to speak, move, or do anything outside of the actions of a submissive, mindless cattle $he was prodded incredible painfully. $He lost [color=red]" + str(actionresult) + " Courage[/color] to speak up. "
 				if rand_range(0,100) <= globals.expansionsettings.proddamagechance - cattle.send:
 					actionresult = round(actionresult*1.25)
 					cattle.health -= actionresult
-					text += cattle.dictionary("$He also lost [color=red]" +str(actionresult)+" Health[/color] from the repeated electric shocks. ")
+					text += "$He also lost [color=red]" +str(actionresult)+" Health[/color] from the repeated electric shocks. "
 				if cattle.traits.has('Masochist') || cattle.checkFetish('masochism') == true:
 					cattle.npcexpanded.contentment += 1
 					cattle.lust += actionresult
-					text += cattle.dictionary("$He seemed to get off on the painful shocks and gained [color=aqua]Contentment[/color] and [color=aqua]Lust[/color] from the pure agony. ")
+					text += "$He seemed to get off on the painful shocks and gained [color=aqua]Contentment[/color] and [color=aqua]Lust[/color] from the pure agony. "
 				elif cattle.checkContentmentLoss('high') == true:
 					cattle.npcexpanded.contentment -= 1
-					text += cattle.dictionary("The pain was excrutiating and $he lost quite a bit of [color=aqua]Contentment[/color]. ")
+					text += "The pain was excrutiating and $he lost quite a bit of [color=aqua]Contentment[/color]. "
 			
 			#Daily Action: Moo
 			if cattle.farmexpanded.dailyaction == 'moo':
 				if cattle.spec == 'hucow':
-					text += cattle.dictionary("\n[color=aqua]$name[/color] was forced to moo like a cow any time $he needed to communicate all day. This made $him feel more comfortable and like $himself, and thus $he gained [color=aqua]Confidence[/color] in who $he was meant to be. ")
+					text += "\n[color=aqua]$name[/color] was forced to moo like a cow any time $he needed to communicate all day. This made $him feel more comfortable and like $himself, and thus $he gained [color=aqua]Confidence[/color] in who $he was meant to be. "
 					cattle.conf += round(rand_range(2,5))
 				elif rand_range(0,100) <= globals.expansionsettings.witlosschance:
 					actionresult = clamp(round(cattle.wit*.1), 1, 10)
 					cattle.obed = actionresult
-					text += cattle.dictionary("\n[color=aqua]$name[/color] was forced to moo like a cow any time $he needed to communicate all day. This seems to have made it slightly harder for $him to talk and $he even hesitates before talking now as though $he is trying to remember how to speak correctly. $He lost [color=red]" +str(actionresult)+" Wits[/color] today. ")
+					text += "\n[color=aqua]$name[/color] was forced to moo like a cow any time $he needed to communicate all day. This seems to have made it slightly harder for $him to talk and $he even hesitates before talking now as though $he is trying to remember how to speak correctly. $He lost [color=red]" +str(actionresult)+" Wits[/color] today. "
 					if cattle.checkContentmentLoss('med') == true:
-						text += cattle.dictionary("$He seems to have realized that $he is having a harder time thinking and seems upset. $He lost [color=aqua]Contentment[/color]. ")
+						text += "$He seems to have realized that $he is having a harder time thinking and seems upset. $He lost [color=aqua]Contentment[/color]. "
 				else:
-					text += cattle.dictionary("\nDespite being forced to moo like a cow all day, [color=aqua]$name[/color] doesn't seem any dumber than $he was before. ")
+					text += "\nDespite being forced to moo like a cow all day, [color=aqua]$name[/color] doesn't seem any dumber than $he was before. "
 					if cattle.checkContentmentLoss('low') == true:
-						text += cattle.dictionary("$He seems to have realized that you are actively trying to make $him stupider and seems upset. $He lost [color=aqua]Contentment[/color]. ")
+						text += "$He seems to have realized that you are actively trying to make $him stupider and seems upset. $He lost [color=aqua]Contentment[/color]. "
 			
 			#Daily Action: Pamper
 			if cattle.farmexpanded.dailyaction == 'pamper':
 				actionresult = round(rand_range(1,3))
 				cattle.npcexpanded.contentment += actionresult
-				text += cattle.dictionary("\n[color=aqua]$name[/color] was pampered and doted on today, making $him feel far more [color=aqua]Content[/color] with $his lot in life. $He gained [color=aqua]" +str(actionresult)+ " Contentment[/color] today. ")
+				text += "\n[color=aqua]$name[/color] was pampered and doted on today, making $him feel far more [color=aqua]Content[/color] with $his lot in life. $He gained [color=aqua]" +str(actionresult)+ " Contentment[/color] today. "
 			
 			#Daily Action: Rest
 			if cattle.farmexpanded.dailyaction == 'rest':
 				cattle.energy += (cattle.energy*1.5)
 				cattle.health += round(rand_range(3,5))
-				text += cattle.dictionary("\n[color=aqua]$name[/color] just rested today and recovered some [color=green]Energy[/color] and [color=green]Health[/color]. ")
+				text += "\n[color=aqua]$name[/color] just rested today and recovered some [color=green]Energy[/color] and [color=green]Health[/color]. "
 				if rand_range(0,100) <= globals.expansionsettings.restgainchance:
 					actionresult = 1
 					cattle.npcexpanded.contentment += actionresult
-					text += cattle.dictionary("$He enjoyed not having to do anything else today and gained [color=aqua]Contentment[/color]")
+					text += "$He enjoyed not having to do anything else today and gained [color=aqua]Contentment[/color]"
 			
 			#---Contentment
 			#Hucow Bonus
 			if cattle.spec == 'hucow' && cattle.npcexpanded.contentment < 5:
 				cattle.npcexpanded.contentment += 1
-				text += cattle.dictionary("\n[color=aqua]$name[/color] naturally feels at home on the [color=aqua]Farm[/color] and truly believes that this is where $he belongs. $He gains [color=lime]1 Contentment[/color] from his [color=aqua]Hucow[/color] training. ")
+				text += "\n[color=aqua]$name[/color] naturally feels at home on the [color=aqua]Farm[/color] and truly believes that this is where $he belongs. $He gains [color=lime]1 Contentment[/color] from his [color=aqua]Hucow[/color] training. "
 			#Contentment Displays
 			if cattle.npcexpanded.contentment >= 5:
 				cattle.loyal += rand_range(2,4)
 				cattle.obed += rand_range(3,5)
 				cattle.stress -= rand_range(5,15)
-				text += cattle.dictionary("\n[color=aqua]$name[/color] feels that $he is very well taken care of and is [color=lime]Happy[/color]. $His happiness made $him feel more [color=green]Loyal[/color] and [color=green]Obedient[/color] to you today. ")
+				text += "\n[color=aqua]$name[/color] feels that $he is very well taken care of and is [color=lime]Happy[/color]. $His happiness made $him feel more [color=green]Loyal[/color] and [color=green]Obedient[/color] to you today. "
 				if cattle.consentexp.livestock == false && rand_range(0,100) <= globals.expansionsettings.livestockautoconsentchance:
 					cattle.consentexp.livestock = true
-					text += cattle.dictionary("\n[color=aqua]$name[/color] is enjoying life as one of your livestock so much that $he approaches you and indicates that $he is happy to stay that way for a long time. You now have $his [color=aqua]Consent[/color] and $he will not resist you. ")				
+					text += "\n[color=aqua]$name[/color] is enjoying life as one of your livestock so much that $he approaches you and indicates that $he is happy to stay that way for a long time. You now have $his [color=aqua]Consent[/color] and $he will not resist you. "
 			elif cattle.npcexpanded.contentment > 0:
 				cattle.loyal += 1
 				cattle.obed += 1
 				cattle.stress -= rand_range(3,10)
-				text += cattle.dictionary("\n[color=aqua]$name[/color] feels that $he is very well taken care of and is [color=green]Content[/color]. $His comfort made $him feel slightly more [color=green]Loyal[/color] and [color=green]Obedient[/color] to you today. ")				
+				text += "\n[color=aqua]$name[/color] feels that $he is very well taken care of and is [color=green]Content[/color]. $His comfort made $him feel slightly more [color=green]Loyal[/color] and [color=green]Obedient[/color] to you today. "
 			elif cattle.npcexpanded.contentment > -5:
 				cattle.loyal -= rand_range(1,3)
 				cattle.obed -= rand_range(2,5)
 				cattle.stress += rand_range(3,7)
-				text += cattle.dictionary("\n[color=aqua]$name[/color] feels [color=red]Discontent[/color] and [color=red]Stressed[/color] as your livestock. $He lost [color=red]Loyalty[/color] and [color=red]Obedience[/color] for $his master. ")
+				text += "\n[color=aqua]$name[/color] feels [color=red]Discontent[/color] and [color=red]Stressed[/color] as your livestock. $He lost [color=red]Loyalty[/color] and [color=red]Obedience[/color] for $his master. "
 				if cattle.consentexp.livestock == true && globals.expansionsettings.livestockcanloseconsent && rand_range(0,100) <= globals.expansionsettings.livestockloseconsentchance:
 					cattle.consentexp.livestock = false
-					text += cattle.dictionary("\n[color=aqua]$name[/color] hates life as one of your livestock so much that $he approaches you and indicates that $he wants it to stop. You no longer have $his [color=aqua]Consent[/color] and $he might even resist you in the future. ")
+					text += "\n[color=aqua]$name[/color] hates life as one of your livestock so much that $he approaches you and indicates that $he wants it to stop. You no longer have $his [color=aqua]Consent[/color] and $he might even resist you in the future. "
 			elif cattle.npcexpanded.contentment <= -5:
 				cattle.loyal -= rand_range(3,7)
 				cattle.obed -= rand_range(5,10)
 				cattle.fear += rand_range(5,10)
 				cattle.stress += rand_range(5,20)
-				text += cattle.dictionary("\n[color=aqua]$name[/color] feels [color=red]Miserable[/color] and [color=red]Stressed[/color] as your livestock. $He lost a lot of [color=red]Loyalty[/color] and [color=red]Obedience[/color], but gained [color=green]Fear[/color] for $his master. ")
+				text += "\n[color=aqua]$name[/color] feels [color=red]Miserable[/color] and [color=red]Stressed[/color] as your livestock. $He lost a lot of [color=red]Loyalty[/color] and [color=red]Obedience[/color], but gained [color=green]Fear[/color] for $his master. "
 				if cattle.consentexp.livestock == true && globals.expansionsettings.livestockcanloseconsent && rand_range(0,50) <= globals.expansionsettings.livestockloseconsentchance:
 					cattle.consentexp.livestock = false
-					text += cattle.dictionary("\n[color=aqua]$name[/color] hates life as one of your livestock so much that $he approaches you and indicates that $he wants it to stop. You no longer have $his [color=aqua]Consent[/color] and $he might even resist you in the future. ")
-		
+					text += "\n[color=aqua]$name[/color] hates life as one of your livestock so much that $he approaches you and indicates that $he wants it to stop. You no longer have $his [color=aqua]Consent[/color] and $he might even resist you in the future. "
+			text = cattle.dictionary(text)
 	#---Sleep/Bedding Effects
 	text += "[color=#d1b970][center]\n\n-----Evening-----[/center][/color]"
 	for findcattle in allcattle:
@@ -1266,118 +1269,117 @@ func dailyFarm():
 		if cattle == null:
 			print("Cattle ID " + str(cattle) + " Invalid")
 			continue
-		var bedding = globals.expansionfarm.beddingdict[cattle.farmexpanded.stallbedding]
-		text += cattle.dictionary("\n[color=aqua]$name[/color] settled down for the night in $his [color=aqua]" + str(bedding.name) + "[/color] and ")
+		var bedding = beddingdict[cattle.farmexpanded.stallbedding]
+		text += "\n[color=aqua]$name[/color] settled down for the night in $his [color=aqua]" + str(bedding.name) + "[/color] and "
 		if bedding.gainstress > 0:
 			if cattle.spec == 'hucow':
 				cattle.stress -= bedding.gainstress
-				text += cattle.dictionary("would have gained [color=red]" + str(bedding.gainstress) + " Stress[/color] from the uncomfortable " + str(bedding.name) + ", but lost that much Stress instead due to $his [color=aqua]Hucow[/color] training. $He ")
+				text += "would have gained [color=red]" + str(bedding.gainstress) + " Stress[/color] from the uncomfortable " + str(bedding.name) + ", but lost that much Stress instead due to $his [color=aqua]Hucow[/color] training. $He "
 			else:
 				cattle.stress += bedding.gainstress
-				text += cattle.dictionary("gained [color=red]" + str(bedding.gainstress) + " Stress[/color] from the uncomfortable " + str(bedding.name) + ". $He ")
+				text += "gained [color=red]" + str(bedding.gainstress) + " Stress[/color] from the uncomfortable " + str(bedding.name) + ". $He "
 		else:
 			cattle.stress -= bedding.losestress
-			text += cattle.dictionary("recovered [color=green]" + str(bedding.losestress) + " Stress[/color] from the comfortable " + str(bedding.name) + ". $He ")
+			text += "recovered [color=green]" + str(bedding.losestress) + " Stress[/color] from the comfortable " + str(bedding.name) + ". $He "
 		cattle.energy += bedding.gainenergy
-		text += cattle.dictionary("recovered [color=green]" + str(bedding.gainenergy) + " Energy[/color] from resting in the " + str(bedding.name) + ". ")
+		text += "recovered [color=green]" + str(bedding.gainenergy) + " Energy[/color] from resting in the " + str(bedding.name) + ". "
 		if rand_range(0,100) <= bedding.healchance && cattle.health < cattle.stats.health_max:
 			var healthgained = round(rand_range(cattle.stats.health_max*.1, cattle.stats.health_max*.35))
 			cattle.health += healthgained
-			text += cattle.dictionary("[color=aqua]$name[/color] had such a restful sleep that $he recovered [color=green]" +str(healthgained)+ " Health[/color] as well. ")
+			text += "[color=aqua]$name[/color] had such a restful sleep that $he recovered [color=green]" +str(healthgained)+ " Health[/color] as well. "
+		text = cattle.dictionary(text)
 		
 	#Mansion Workers
 	var chef
 	var merchantcounter = 0
-	for i in range(globals.slaves.size()):
-		if globals.slaves[i].away.duration == 0:
-			if globals.slaves[i].work == 'cooking':
-				chef = globals.slaves[i]
-			elif globals.slaves[i].work == 'storewimborn':
+	for i in globals.slaves:
+		if i.away.duration == 0:
+			if i.work == 'cooking':
+				chef = i
+			elif i.work == 'storewimborn':
 				merchantcounter += 1
 	
 	#---Snail Management/Events
 	var snailresults = 0
 	
-	if globals.resources.farmexpanded.snails.neweggs > 0:
-		text += "\n\nThe mansion received [color=green]" +str(globals.resources.farmexpanded.snails.neweggs)+ " new snail eggs[/color] from our breeders today. "
+	if refSnails.neweggs > 0:
+		text += "\n\nThe mansion received [color=green]" +str(refSnails.neweggs)+ " new snail eggs[/color] from our breeders today. "
 		#Auto: Food
-		if globals.resources.farmexpanded.snails.auto == 'food':
+		if refSnails.auto == 'food':
 			text += "They were taken to the kitchens immediately, per your order. "
-			globals.resources.farmexpanded.snails.food += globals.resources.farmexpanded.snails.neweggs
-			globals.resources.farmexpanded.snails.neweggs = 0
+			refSnails.food += refSnails.neweggs
+			refSnails.neweggs = 0
 		#Auto: Sell
-		elif globals.resources.farmexpanded.snails.auto == 'sell':
+		elif refSnails.auto == 'sell':
 			text += "They were taken to be sold immediately, per your order. "
-			globals.resources.farmexpanded.snails.sell += globals.resources.farmexpanded.snails.neweggs
-			globals.resources.farmexpanded.snails.neweggs = 0
+			refSnails.sell += refSnails.neweggs
+			refSnails.neweggs = 0
 		#Auto: Hatch
-		elif globals.resources.farmexpanded.snails.auto == 'hatch':
+		elif refSnails.auto == 'hatch':
 			var incubators = globals.resources.farmexpanded.incubators
-			var inc = ""
-			var inc_array = [1,2,3,4,5,6,7,8,9,10]
+			var inc_array = ['1','2','3','4','5','6','7','8','9','10']
 			for num in inc_array:
-				if incubators[str(num)].level > 0 && incubators[str(num)].filled == false:
-					incubators[str(num)].filled = true
-					incubators[str(num)].growth = 0
-					globals.resources.farmexpanded.snails.neweggs -= 1
-			if globals.resources.farmexpanded.snails.neweggs > 0:
+				if incubators[num].level > 0 && incubators[num].filled == false:
+					incubators[num].filled = true
+					incubators[num].growth = 0
+					refSnails.neweggs -= 1
+			if refSnails.neweggs > 0:
 				text += "They were used to fill the Incubators and put aside for hatching. "
-				globals.resources.farmexpanded.snails.hatch += globals.resources.farmexpanded.snails.neweggs
-				globals.resources.farmexpanded.snails.neweggs = 0
+				refSnails.hatch += refSnails.neweggs
+				refSnails.neweggs = 0
 				
 		else:
 			text += "They were added to the stockpile to await your decision. "
-			globals.resources.farmexpanded.snails.eggs += globals.resources.farmexpanded.snails.neweggs
-			globals.resources.farmexpanded.snails.neweggs = 0
+			refSnails.eggs += refSnails.neweggs
+			refSnails.neweggs = 0
 
 	#Cook Snails
-	if globals.resources.farmexpanded.snails.food > 0:
+	if refSnails.food > 0:
 		if chef != null:
-			snailresults = globals.resources.farmexpanded.snails.food * globals.resources.farmexpanded.snails.foodperchef
+			snailresults = refSnails.food * refSnails.foodperchef
 			globals.resources.food += snailresults
 			text += "\nYour chef, [color=aqua]" +chef.name+ "[/color] was able to cook up the snail eggs and provide [color=green]" +str(snailresults)+ " Food[/color] from the stockpile. "
-		elif globals.resources.farmexpanded.snails.cookwithoutchef == true:
-			snailresults = globals.resources.farmexpanded.snails.food
+		elif refSnails.cookwithoutchef == true:
+			snailresults = refSnails.food
 			globals.resources.food += snailresults
 			text += "\nThere was no chef available but the snail eggs were still cooked up as ordered. Without the expertise of a chef, however, they could only produce [color=green]" +str(snailresults)+ " Food[/color] from the eggs. "
 	
 	#Sell Snails
-	if globals.resources.farmexpanded.snails.sell > 0:
+	if refSnails.sell > 0:
 		merchantcounter += milkmerchants.size()
 		while merchantcounter > 0:
-			if snailresults < globals.resources.farmexpanded.snails.sell:
-				snailresults += round(rand_range(0,globals.resources.farmexpanded.snails.sell-snailresults))
+			if snailresults < refSnails.sell:
+				snailresults += round(rand_range(0,refSnails.sell-snailresults))
 			else:
 				break
 			merchantcounter -= 1
 		#Total Sold
-		snailresults = clamp(snailresults, 0, globals.resources.farmexpanded.snails.sell)
-		globals.resources.farmexpanded.snails.sell -= snailresults
+		snailresults = clamp(snailresults, 0, refSnails.sell)
+		refSnails.sell -= snailresults
 		text += "\nYour merchants were able to sell [color=green]" +str(snailresults)+ " eggs [/color] today for "
 		#Gold Earned
-		snailresults = snailresults * globals.resources.farmexpanded.snails.goldperegg
+		snailresults = snailresults * refSnails.goldperegg
 		text += "[color=green]" +str(snailresults)+ " gold[/color]. "
 		globals.resources.gold += snailresults
 	
 	#Incubate & Hatch
 	var hatchedsnails = 0
 	var incubators = globals.resources.farmexpanded.incubators
-	var inc = ""
-	var inc_array = [1,2,3,4,5,6,7,8,9,10]
+	var inc_array = ['1','2','3','4','5','6','7','8','9','10']
 	for num in inc_array:
-		if incubators[str(num)].level > 0 && incubators[str(num)].filled == true:
-			incubators[str(num)].growth += incubators[str(num)].level
-			if incubators[str(num)].growth >= 10:
+		if incubators[num].level > 0 && incubators[num].filled == true:
+			incubators[num].growth += incubators[num].level
+			if incubators[num].growth >= 10:
 				hatchedsnails += 1
-				incubators[str(num)].growth = 0
-				if globals.resources.farmexpanded.snails.hatch > 0:
-					incubators[str(num)].filled = true
-					globals.resources.farmexpanded.snails.hatch -= 1
+				incubators[num].growth = 0
+				if refSnails.hatch > 0:
+					incubators[num].filled = true
+					refSnails.hatch -= 1
 				else:
-					incubators[str(num)].filled = false
-		elif incubators[str(num)].level > 0 && globals.resources.farmexpanded.snails.hatch > 0:
-			incubators[str(num)].filled = true
-			incubators[str(num)].growth = 0
+					incubators[num].filled = false
+		elif incubators[num].level > 0 && refSnails.hatch > 0:
+			incubators[num].filled = true
+			incubators[num].growth = 0
 				
 	if hatchedsnails > 0:
 		globals.state.snails += hatchedsnails
@@ -1387,23 +1389,23 @@ func dailyFarm():
 	
 	#Sort New Production - Options are Vat, Sell, Food, Refine. If Sell or Refine, adds to Bottles for Bottling.
 	text += "[color=#d1b970][center]\n\n-----Vat Stockpile Changes-----[/center][/color]"
-	for fluid in globals.resources.farmexpanded.vats.processingorder:
-		var sort = globals.resources.farmexpanded.vats[fluid].auto
+	for fluid in refVats.processingorder:
+		var sort = refVats[fluid].auto
 		if sort in ['sell','refine']:
-			text += "\n[color=aqua]" + str(globals.resources.farmexpanded.vats[fluid].new) + " bottles[/color] of [color=aqua]" + str(fluid).capitalize() + "[/color] were added to the [color=aqua]" + str(sort) + "[/color] queue today. "
+			text += "\n[color=aqua]" + str(refVats[fluid].new) + " bottles[/color] of [color=aqua]" + str(fluid).capitalize() + "[/color] were added to the [color=aqua]" + str(sort) + "[/color] queue today. "
 			var bottle2 = 'bottle2' + str(sort)
-			globals.resources.farmexpanded.vats[fluid][bottle2] += globals.resources.farmexpanded.vats[fluid].new
-			globals.resources.farmexpanded.vats[fluid].new = 0
+			refVats[fluid][bottle2] += refVats[fluid].new
+			refVats[fluid].new = 0
 		else:
-			text += "\n[color=aqua]" + str(globals.resources.farmexpanded.vats[fluid].new) + "[/color] units of [color=aqua]" + str(fluid).capitalize() + "[/color] were added to the [color=aqua]" + str(sort) + "[/color] stockpile today."
-			globals.resources.farmexpanded.vats[fluid][sort] += globals.resources.farmexpanded.vats[fluid].new
-			globals.resources.farmexpanded.vats[fluid].new = 0
+			text += "\n[color=aqua]" + str(refVats[fluid].new) + "[/color] units of [color=aqua]" + str(fluid).capitalize() + "[/color] were added to the [color=aqua]" + str(sort) + "[/color] stockpile today."
+			refVats[fluid][sort] += refVats[fluid].new
+			refVats[fluid].new = 0
 		
 	
 	#Bottling
 	text += "[color=#d1b970][center]\n\n-----Bottler Production-----[/center][/color]"
 	var bottlespurchased = 0
-	for fluid in globals.resources.farmexpanded.vats.processingorder:
+	for fluid in refVats.processingorder:
 		var success = false
 		var difference = 0
 		var totalbottlesneeded = 0
@@ -1411,40 +1413,39 @@ func dailyFarm():
 		var refined = 0
 		var sales = 0
 		#Count
-		if globals.resources.farmexpanded.vats[fluid].bottle2refine > 0:
-			totalbottlesneeded += globals.resources.farmexpanded.vats[fluid].bottle2refine
-			refined = globals.resources.farmexpanded.vats[fluid].bottle2refine
-		if globals.resources.farmexpanded.vats[fluid].bottle2sell > 0:
-			totalbottlesneeded += globals.resources.farmexpanded.vats[fluid].bottle2sell
-			sales = globals.resources.farmexpanded.vats[fluid].bottle2sell
+		if refVats[fluid].bottle2refine > 0:
+			totalbottlesneeded += refVats[fluid].bottle2refine
+			refined = refVats[fluid].bottle2refine
+		if refVats[fluid].bottle2sell > 0:
+			totalbottlesneeded += refVats[fluid].bottle2sell
+			sales = refVats[fluid].bottle2sell
 		#Check Bottles vs Available: Buy if Possible
 		success = false
-		difference = globals.resources.farmexpanded.containers.bottle - totalbottlesneeded
+		difference = refContainers.bottle - totalbottlesneeded
 		if difference >= 0:
 			success = true
-		elif globals.resources.farmexpanded.vats[fluid].autobuybottles == true:
-			var cost = totalbottlesneeded * globals.expansionfarm.containerdict.bottle.cost
+		elif refVats[fluid].autobuybottles == true:
+			var cost = totalbottlesneeded * containerdict.bottle.cost
 			if globals.resources.gold >= cost:
-				globals.resources.farmexpanded.containers.bottle += totalbottlesneeded
+				refContainers.bottle += totalbottlesneeded
 				globals.resources.gold -= cost
 				bottlespurchased += totalbottlesneeded
 			else:
 				difference = round(globals.resources.gold/cost)
-				globals.resources.farmexpanded.containers.bottle += difference
-				globals.resources.gold -= difference * globals.expansionfarm.containerdict.bottle.cost
+				refContainers.bottle += difference
+				globals.resources.gold -= difference * containerdict.bottle.cost
 				bottlespurchased += difference
 		else:
-			text += "\n[color=red]There was a shortage of available bottles. Your slaves were only able to bottle " + str(globals.resources.farmexpanded.containers.bottle) + " " + str(fluid) + " today. There are still " + str(totalbottlesneeded - globals.resources.farmexpanded.containers.bottle) + " waiting to be bottled.[/color]\n[color=aqua]Hint: This can be avoided by setting your Auto-Buy Bottles setting to a higher number than needed or to 0 for unlimited purchases. As long as you have the gold, you will be able to buy. "
-			totalbottlesneeded = globals.resources.farmexpanded.containers.bottle
+			text += "\n[color=red]There was a shortage of available bottles. Your slaves were only able to bottle " + str(refContainers.bottle) + " " + str(fluid) + " today. There are still " + str(totalbottlesneeded - refContainers.bottle) + " waiting to be bottled.[/color]\n[color=aqua]Hint: This can be avoided by setting your Auto-Buy Bottles setting to a higher number than needed or to 0 for unlimited purchases. As long as you have the gold, you will be able to buy. "
+			totalbottlesneeded = refContainers.bottle
 			
 		#Begin Bottling
-		var energycost = globals.resources.farmexpanded.vats[fluid].basebottlingenergy - globals.resources.farmexpanded.bottler.level
+		var energycost = refVats[fluid].basebottlingenergy - globals.resources.farmexpanded.bottler.level
 		var deficit = 0
 		var perworker = 0
 		if totalbottlesneeded > 0:
-			bottlers.clear()
 			#Build Bottlers Array
-			if milkmaids.size() > 0:
+			if !milkmaids.empty():
 				for worker in milkmaids:
 					bottler = globals.state.findslave(worker)
 					if worker == null:
@@ -1453,7 +1454,7 @@ func dailyFarm():
 					#5 per Bottle is Max
 					if bottler.energy >= 5:
 						bottlers.append(worker)
-			if farmhands.size() > 0:
+			if !farmhands.empty():
 				for worker in farmhands:
 					bottler = globals.state.findslave(worker)
 					if worker == null:
@@ -1467,7 +1468,7 @@ func dailyFarm():
 					bottlers.append(worker.id)
 			#Check for Bottlers
 			var bottlerskillmod = 0
-			if bottlers.size() == 0:
+			if bottlers.empty():
 				text += "\n[color=red]There were no workers in the farm assigned to bottling or with the energy left to successfully run the bottler today. No " + str(fluid) + " were bottled for sales or refinement. [/color] "
 			else:
 				perworker = round(totalbottlesneeded / bottlers.size())
@@ -1512,69 +1513,69 @@ func dailyFarm():
 			text += "\n[color=yellow]In all, [color=lime]" + str(bottlesproduced) + " bottles[/color] of [color=aqua]" + str(fluid) + "[/color] were successfully produced today. These were prioritized to have any designated be [color=aqua]refined[/color] for your use with any remainder being added to the [color=aqua]sales stockpile[/color].[/color]\n"
 			globals.resources.farmexpanded.bottler.totalproduced += bottlesproduced
 			difference = round(bottlesproduced/2)
-			if globals.resources.farmexpanded.vats[fluid].bottle2refine <= bottlesproduced:
-				globals.resources.farmexpanded.vats[fluid].refine += globals.resources.farmexpanded.vats[fluid].bottle2refine
-				bottlesproduced -= globals.resources.farmexpanded.vats[fluid].bottle2refine
-				globals.resources.farmexpanded.vats[fluid].bottle2refine = 0
-				globals.resources.farmexpanded.vats[fluid].sell += bottlesproduced
-				globals.resources.farmexpanded.vats[fluid].bottle2sell -= bottlesproduced
+			if refVats[fluid].bottle2refine <= bottlesproduced:
+				refVats[fluid].refine += refVats[fluid].bottle2refine
+				bottlesproduced -= refVats[fluid].bottle2refine
+				refVats[fluid].bottle2refine = 0
+				refVats[fluid].sell += bottlesproduced
+				refVats[fluid].bottle2sell -= bottlesproduced
 			else:
-				globals.resources.farmexpanded.vats[fluid].refine += bottlesproduced
-				globals.resources.farmexpanded.vats[fluid].bottle2refine -= bottlesproduced
+				refVats[fluid].refine += bottlesproduced
+				refVats[fluid].bottle2refine -= bottlesproduced
 		
 		#Add Refined Bottles
-		globals.itemdict.bottledmilk.amount += globals.resources.farmexpanded.vats.milk.refine
-		globals.resources.farmexpanded.vats.milk.refine = 0
-		globals.itemdict.bottledsemen.amount += globals.resources.farmexpanded.vats.semen.refine
-		globals.resources.farmexpanded.vats.semen.refine = 0
-		globals.itemdict.bottledlube.amount += globals.resources.farmexpanded.vats.lube.refine
-		globals.resources.farmexpanded.vats.lube.refine = 0
-		globals.itemdict.bottledpiss.amount += globals.resources.farmexpanded.vats.piss.refine
-		globals.resources.farmexpanded.vats.piss.refine = 0
+		globals.itemdict.bottledmilk.amount += refVats.milk.refine
+		refVats.milk.refine = 0
+		globals.itemdict.bottledsemen.amount += refVats.semen.refine
+		refVats.semen.refine = 0
+		globals.itemdict.bottledlube.amount += refVats.lube.refine
+		refVats.lube.refine = 0
+		globals.itemdict.bottledpiss.amount += refVats.piss.refine
+		refVats.piss.refine = 0
 		
 		#Resolve Food to Cook (Flesh Out Later)
-		if globals.resources.farmexpanded.vats[fluid].food > 0:
+		if refVats[fluid].food > 0:
 			if chef != null:
 				if !chef.jobskills.has('cook'):
 					chef.jobskills['cook'] = 0
 				if rand_range(0,100) <= chef.jobskills.cook + (chef.wit/2):
-					globals.resources.food += globals.resources.farmexpanded.vats[fluid].food * 3
-					text += chef.dictionary("\nYour cook, [color=aqua]$name[/color], had a great day and was able to turn " + str(globals.resources.farmexpanded.vats[fluid].food) + " units of " + str(fluid) + " into " + str(globals.resources.farmexpanded.vats[fluid].food*3) + " food today. ")
+					globals.resources.food += refVats[fluid].food * 3
+					text += chef.dictionary("\nYour cook, [color=aqua]$name[/color], had a great day and was able to turn " + str(refVats[fluid].food) + " units of " + str(fluid) + " into " + str(refVats[fluid].food*3) + " food today. ")
 				else:
-					globals.resources.food += globals.resources.farmexpanded.vats[fluid].food * 2
-					text += chef.dictionary("\nYour cook, [color=aqua]$name[/color], was only able to turn " + str(globals.resources.farmexpanded.vats[fluid].food) + " units of " + str(fluid) + " into " + str(globals.resources.farmexpanded.vats[fluid].food*2) + " food today. ")
-				globals.resources.farmexpanded.vats[fluid].food = 0
+					globals.resources.food += refVats[fluid].food * 2
+					text += chef.dictionary("\nYour cook, [color=aqua]$name[/color], was only able to turn " + str(refVats[fluid].food) + " units of " + str(fluid) + " into " + str(refVats[fluid].food*2) + " food today. ")
+				refVats[fluid].food = 0
 			else:
 				if rand_range(0,100) <= globals.expansionsettings.foodconvertchance:
-					globals.resources.food += globals.resources.farmexpanded.vats[fluid].food
-					text += "\nYour slaves converted " + str(globals.resources.farmexpanded.vats[fluid].food) + " units of " + str(fluid) + " into food today. "
-					globals.resources.farmexpanded.vats[fluid].food = 0
+					globals.resources.food += refVats[fluid].food
+					text += "\nYour slaves converted " + str(refVats[fluid].food) + " units of " + str(fluid) + " into food today. "
+					refVats[fluid].food = 0
 				else:
-					globals.resources.food += round(globals.resources.farmexpanded.vats[fluid].food*.5)
-					text += "\n[color=red]Your slaves tried to convert " + str(globals.resources.farmexpanded.vats[fluid].food) + " units of " + str(fluid) + " into food today but spoiled half of it in the process.[/color] "
-					globals.resources.farmexpanded.vats[fluid].food = 0
+					globals.resources.food += round(refVats[fluid].food*.5)
+					text += "\n[color=red]Your slaves tried to convert " + str(refVats[fluid].food) + " units of " + str(fluid) + " into food today but spoiled half of it in the process.[/color] "
+					refVats[fluid].food = 0
 		
 	#Wrap-Up Text
 	if bottlespurchased > 0:
-		var cost = bottlespurchased * globals.expansionfarm.containerdict.bottle.cost
+		var cost = bottlespurchased * containerdict.bottle.cost
 		text += "\nToday, your farmmanager automatically purchased [color=aqua]" + str(bottlespurchased) + " Bottles[/color] for [color=aqua]" + str(cost) + "[/color] to fulfill the outstanding requests to bottle the fluids for refinement or sales. "		
 	
 	#Sell Non-Milk
 	text += "[color=#d1b970][center]\n\n-----Sales Results-----[/center][/color]"
 	var sellresult = 0
-	if milkmerchants.size() > 0:
+	if !milkmerchants.empty():
 		#Sell Semen
-		if globals.resources.farmexpanded.vats.semen.sell > 0:
+		if refVats.semen.sell > 0:
 			merchantcounter += milkmerchants.size()
 			while merchantcounter > 0:
-				if sellresult < globals.resources.farmexpanded.vats.semen.sell:
-					sellresult += round(rand_range(1,globals.resources.farmexpanded.vats.semen.sell-sellresult))
+				if sellresult < refVats.semen.sell:
+					sellresult += round(rand_range(1,refVats.semen.sell-sellresult))
 				else:
 					break
 				merchantcounter -= 1
 			#Total Sold
-			sellresult = clamp(sellresult, 0, globals.resources.farmexpanded.vats.semen.sell)
-			globals.resources.farmexpanded.vats.semen.sell -= sellresult
+			sellresult = clamp(sellresult, 0, refVats.semen.sell)
+			refVats.semen.sell -= sellresult
 			text += "\nYour merchants were able to sell [color=green]" +str(sellresult)+ " bottles of Semen [/color] today for "
 			#Gold Earned
 			sellresult = sellresult * (globals.itemdict.bottledsemen.cost * rand_range(.5,1.5))
@@ -1583,17 +1584,17 @@ func dailyFarm():
 		
 		#Sell Lube
 		sellresult = 0
-		if globals.resources.farmexpanded.vats.lube.sell > 0:
+		if refVats.lube.sell > 0:
 			merchantcounter += milkmerchants.size()
 			while merchantcounter > 0:
-				if sellresult < globals.resources.farmexpanded.vats.lube.sell:
-					sellresult += round(rand_range(1,globals.resources.farmexpanded.vats.lube.sell-sellresult))
+				if sellresult < refVats.lube.sell:
+					sellresult += round(rand_range(1,refVats.lube.sell-sellresult))
 				else:
 					break
 				merchantcounter -= 1
 			#Total Sold
-			sellresult = clamp(sellresult, 0, globals.resources.farmexpanded.vats.lube.sell)
-			globals.resources.farmexpanded.vats.lube.sell -= sellresult
+			sellresult = clamp(sellresult, 0, refVats.lube.sell)
+			refVats.lube.sell -= sellresult
 			text += "\nYour merchants were able to sell [color=green]" +str(sellresult)+ " bottles of Lube [/color] today for "
 			#Gold Earned
 			sellresult = sellresult * (globals.itemdict.bottledlube.cost * rand_range(.5,1.5))
@@ -1602,17 +1603,17 @@ func dailyFarm():
 		
 		#Sell Piss
 		sellresult = 0
-		if globals.resources.farmexpanded.vats.piss.sell > 0:
+		if refVats.piss.sell > 0:
 			merchantcounter += milkmerchants.size()
 			while merchantcounter > 0:
-				if sellresult < globals.resources.farmexpanded.vats.piss.sell:
-					sellresult += round(rand_range(1,globals.resources.farmexpanded.vats.piss.sell-sellresult))
+				if sellresult < refVats.piss.sell:
+					sellresult += round(rand_range(1,refVats.piss.sell-sellresult))
 				else:
 					break
 				merchantcounter -= 1
 			#Total Sold
-			sellresult = clamp(sellresult, 0, globals.resources.farmexpanded.vats.piss.sell)
-			globals.resources.farmexpanded.vats.piss.sell -= sellresult
+			sellresult = clamp(sellresult, 0, refVats.piss.sell)
+			refVats.piss.sell -= sellresult
 			text += "\nYour merchants were able to sell [color=green]" +str(sellresult)+ " bottles of Piss [/color] today for "
 			#Gold Earned
 			sellresult = sellresult * (globals.itemdict.bottledpiss.cost * rand_range(.5,1.5))
@@ -1620,13 +1621,13 @@ func dailyFarm():
 			globals.resources.gold += sellresult
 	
 	#Milk Economy (Separate Function)
-	var milkforsale = globals.resources.farmexpanded.vats.milk.sell
+	var milkforsale = refVats.milk.sell
 	var bottlesperperson = 0
 	var townmarkets = []
 	for i in globals.expandedtowns:
 		townmarkets.append(i)
 	
-	if milkforsale > 0 && milkmerchants.size() > 0:
+	if milkforsale > 0 && !milkmerchants.empty():
 		bottlesperperson = milkforsale / milkmerchants.size()
 		for sales in milkmerchants:
 			milkmerchant = globals.state.findslave(sales)
@@ -1648,7 +1649,7 @@ func dailyFarm():
 			
 			#Selling to the Town
 			text += milkMarket(milkmerchant, location, bottlesperperson)
-	elif milkmerchants.size() > 0:
+	elif !milkmerchants.empty():
 		text += "\n\n[color=red]All of the available milk bottles were reserved for mansion use, so there were none available for the milk merchants to sell today.[/color]\n"
 	else:
 		text += "\n\n[color=red]There are no [color=aqua]Milk Merchants[/color] assigned. No fluids can be sold.[/color]\n"
@@ -1665,25 +1666,24 @@ func milkMarket(person, town, totalbottles):
 	
 	#Invalid Checks
 	if !town in globals.expandedtowns || person == null:
-		return text
+		return ""
 	
 	if bottles == 0:
-		text += person.dictionary("\n[color=aqua]$name[/color] had no bottles of Milk to take to [color=aqua]" + str(town).capitalize() + "[/color], so $he did not go today.\n")
-		return text
+		return person.dictionary("\n[color=aqua]$name[/color] had no bottles of Milk to take to [color=aqua]" + str(town).capitalize() + "[/color], so $he did not go today.\n")
+	var refExpandedTown = globals.state.townsexpanded[town]
+	var value = round(refExpandedTown.milkvalue)
+	var interest = round(refExpandedTown.milkinterest)
 	
-	var value = round(globals.state.townsexpanded[town].milkvalue)
-	var interest = round(globals.state.townsexpanded[town].milkinterest)
-	
-	text += person.dictionary("\n[color=aqua]$name[/color] took [color=aqua]" + str(bottles) + "[/color] of Milk to [color=aqua]" + str(town).capitalize() + "[/color]. ")
+	text += "\n[color=aqua]$name[/color] took [color=aqua]" + str(bottles) + "[/color] of Milk to [color=aqua]" + str(town).capitalize() + "[/color]. "
 	
 	#Sale = Bottles > Interest * 2
 	if bottles >= interest * 2:
-		text += person.dictionary("$He realized that $he had far more bottles than $he needed, so he chose to sell them for half-price to try and garner more interest in your slave's bottled milk. ")
+		text += "$He realized that $he had far more bottles than $he needed, so he chose to sell them for half-price to try and garner more interest in your slave's bottled milk. "
 		interest += round(interest * (rand_range(person.wit/2, person.wit) * .01))
 		value = round(value*.5)
 	#Price Increase = Bottles < Interest & Wit Check
 	elif bottles <= interest && rand_range(0,100) - ((interest - bottles)*2) <= person.wit:
-		text += person.dictionary("$He realized that $he had far more customers than bottles, so $he cleverly raised the price per bottle for the day. ")
+		text += "$He realized that $he had far more customers than bottles, so $he cleverly raised the price per bottle for the day. "
 		value += round((interest - bottles) * .25)
 	
 	#Increase Job Skills
@@ -1698,19 +1698,19 @@ func milkMarket(person, town, totalbottles):
 		bottlessold += 1
 		roll = rand_range(0,100)
 		if roll >= 95:
-			globals.state.townsexpanded[town].milkinterest -= .1
+			refExpandedTown.milkinterest -= .1
 			reaction.bad += 1
 		elif roll <= person.charm + person.jobskills.milkmerchant:
-			globals.state.townsexpanded[town].milkinterest += .2
+			refExpandedTown.milkinterest += .2
 			reaction.good += 1
 		else:
-			globals.state.townsexpanded[town].milkinterest += .1
+			refExpandedTown.milkinterest += .1
 			reaction.neutral += 1
 		bottles -= 1
 		interest -= 1
 	
 	#End Text (Town Reaction)
-	text += person.dictionary("\n$He ended up selling [color=green]"+str(bottlessold)+"[/color] bottles to [color=green]" + str(reaction.good + reaction.neutral + reaction.bad) + "[/color] people in [color=aqua]" + str(town).capitalize() + "[/color]. Out of those people, ")
+	text += "\n$He ended up selling [color=green]"+str(bottlessold)+"[/color] bottles to [color=green]" + str(reaction.good + reaction.neutral + reaction.bad) + "[/color] people in [color=aqua]" + str(town).capitalize() + "[/color]. Out of those people, "
 	if reaction.good > 0:
 		text += "[color=green]" + str(reaction.good) + "[/color] seemed to really [color=green]enjoy[/color] the milk having been from sentient women"
 	if reaction.bad > 0:
@@ -1736,24 +1736,24 @@ func milkMarket(person, town, totalbottles):
 	if interest > 0:
 		roll = rand_range(0,100)
 		if roll - (interest*2) <= person.jobskills.milkmerchant + person.wit:
-			globals.state.townsexpanded[town].milkvalue += .2
+			refExpandedTown.milkvalue += .2
 		else:
-			globals.state.townsexpanded[town].milkvalue += .1
+			refExpandedTown.milkvalue += .1
 	
 	#Don't Undersell Check
-	if profit <= bottlessold * globals.expansionfarm.containerdict.bottle.cost:
-		profit = bottlessold * (globals.expansionfarm.containerdict.bottle.cost + 1)
+	if profit <= bottlessold * containerdict.bottle.cost:
+		profit = bottlessold * (containerdict.bottle.cost + 1)
 	
-	text += person.dictionary("$He made a total profit of [color=aqua]" +str(profit)+ " Gold[/color] today. ")
+	text += "$He made a total profit of [color=aqua]" +str(profit)+ " Gold[/color] today. "
 	
 	globals.resources.gold += profit
 	globals.resources.farmexpanded.vats.milk.sell -= bottlessold
 	
-	return text
+	return person.dictionary(text)
 
 func checkSpill(person, worker, type):
 	var container = containerdict[person.farmexpanded['extract'+type].container]
-	var chancelevel = globals.expansionfarm.spillchances[container.spillchance]
+	var chancelevel = spillchances[container.spillchance]
 	var actualchance = 0
 	if worker != null:
 		actualchance = round(rand_range(chancelevel['min'], chancelevel['max'])) - (worker.sagi*2)
@@ -1773,18 +1773,17 @@ func setFate(person, type):
 		
 		if accepted >= obeyed && accepted >= forced:
 			person.farmexpanded[type].fate = 'accepted'
-			text += person.dictionary("[color=aqua]$name[/color] [color=green]accepted[/color] this as part of $his future. ")
+			text += "[color=aqua]$name[/color] [color=green]accepted[/color] this as part of $his future. "
 		elif obeyed >= accepted && obeyed >= forced:
 			person.farmexpanded[type].fate = 'obeyed'
-			text += person.dictionary("[color=aqua]$name[/color] realized that $he will have to [color=aqua]obey[/color] and let this happen to $him as long as you'd like. ")
+			text += "[color=aqua]$name[/color] realized that $he will have to [color=aqua]obey[/color] and let this happen to $him as long as you'd like. "
 		else:
 			person.farmexpanded[type].fate = 'broken'
-			text += person.dictionary("[color=aqua]$name[/color] [color=red]broke down[/color] after realizing that there is nothing that $he could do to stop this from happening whenever you'd like. ")
-		text += person.dictionary("You shouldn't encounter any future resistance from $him any longer.\n")
-	return text
+			text += "[color=aqua]$name[/color] [color=red]broke down[/color] after realizing that there is nothing that $he could do to stop this from happening whenever you'd like. "
+		text += "You shouldn't encounter any future resistance from $him any longer.\n"
+	return person.dictionary(text)
 
-func chooseworker(type, array):
-	var workers = array
+func chooseworker(type, workers):
 	var workerid = 0
 	var variable = 0
 	var currentperson = null
@@ -1818,7 +1817,7 @@ func chooseworker(type, array):
 					variable = currentperson.jobskill.farmhand
 	
 	#Milkmaids
-	if type == 'milkmaid':
+	elif type == 'milkmaid':
 		if settings.milkmaids == 'equal':
 			if counter >= workers.size()-1:
 				counter = 0
@@ -1846,7 +1845,7 @@ func chooseworker(type, array):
 					variable = currentperson.jobskill.milkmaid
 	
 	#Studs
-	if type == 'stud':
+	elif type == 'stud':
 		if settings.studs == 'equal':
 			for workerids in workers:
 				currentperson = globals.state.findslave(workerids)
@@ -1889,7 +1888,7 @@ var containerefficiency = {
 	jugspillpercent = 25,
 	canisterspillchance = 5,
 	canisterspillpercent = 5,
-	}
+}
 
 func buyContainers(type):
 	var text = ""

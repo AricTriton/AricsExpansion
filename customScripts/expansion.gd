@@ -87,13 +87,13 @@ var moodarray = ['sad','angry','scared','indifferent','obediant','horny','respec
 var demeanorarray = ['meek','shy','reserved','open','excitable']
 var flawarray = ['lust','envy','pride','wrath','greed','sloth','gluttony']
 var flawdict = {
-lust = "\n[color=green]You have discovered that $he is wrought with Lust and hyper-sensitive to $his sexuality.[/color]\n[color=aqua]Sexual Consent and Actions will be easier to initiate.[/color]",
-envy = "\n[color=green]You have discovered that $he is incredibly Envious of others.[/color]\n[color=red]Effects TBD[/color]",
-pride = "\n[color=green]You have discovered that $he is incredibly Prideful.[/color]\n[color=red]Effects TBD[/color]",
-wrath = "\n[color=green]You have discovered that $he is easily filled with Wrath and plagued with a short temper.[/color]\n[color=red]Effects TBD[/color]",
-greed = "\n[color=green]You have discovered that $he is incredibly Greedy and materialistic.[/color]\n[color=red]Effects TBD[/color]",
-sloth = "\n[color=green]You have discovered that $he is very lazy and a complete Sloth.[/color]\n[color=red]Effects TBD[/color]",
-gluttony = "\n[color=green]You have discovered that $he is secretly Gluttonous and takes $his greatest pleasure in food and drinks.[/color]\n[color=aqua]Food and Drink Interactions will always give the best result.[/color]",
+	lust = "\n[color=green]You have discovered that $he is wrought with Lust and hyper-sensitive to $his sexuality.[/color]\n[color=aqua]Sexual Consent and Actions will be easier to initiate.[/color]",
+	envy = "\n[color=green]You have discovered that $he is incredibly Envious of others.[/color]\n[color=red]Effects TBD[/color]",
+	pride = "\n[color=green]You have discovered that $he is incredibly Prideful.[/color]\n[color=red]Effects TBD[/color]",
+	wrath = "\n[color=green]You have discovered that $he is easily filled with Wrath and plagued with a short temper.[/color]\n[color=red]Effects TBD[/color]",
+	greed = "\n[color=green]You have discovered that $he is incredibly Greedy and materialistic.[/color]\n[color=red]Effects TBD[/color]",
+	sloth = "\n[color=green]You have discovered that $he is very lazy and a complete Sloth.[/color]\n[color=red]Effects TBD[/color]",
+	gluttony = "\n[color=green]You have discovered that $he is secretly Gluttonous and takes $his greatest pleasure in food and drinks.[/color]\n[color=aqua]Food and Drink Interactions will always give the best result.[/color]",
 }
 
 var libidoarray = ['prudish','low','average','seductive','nympho']
@@ -449,12 +449,7 @@ func updateMood(person,modifier=0,wanted='any'):
 #"Daily" functions are intended to run once per Day
 
 #---Fetishes | How to refer to Fetishes || Add Self.Dict
-
-
-func getFetishDescription(value):
-	var text
-
-	var fetishdict = {
+var fetishDescriptions = {
 	incest = "incest",
 	lactation = "lactating",
 	drinkmilk = "drinking a sentient woman's $milk",
@@ -478,20 +473,21 @@ func getFetishDescription(value):
 	submission = "giving up control",
 	sadism = "inflicting pain",
 	masochism = "feeling pain"
-	}
+}
 
-	if fetishdict.has(value):
-		text = fetishdict[value]
+func getFetishDescription(value):
+	var text = fetishDescriptions.get(value)
+	if text != null:
 #		text = text.split('|',true)
 #		text = text[rand_range(0,text.size())]
-		text = text.replace('$cum',globals.expansion.nameCum())
-		text = text.replace('$breasts',globals.expansion.nameTits())
-		text = text.replace('$naked',globals.expansion.nameNaked())
-		text = text.replace('$pussy',globals.expansion.namePussy())
-		text = text.replace('$ass',globals.expansion.nameAsshole())
-		text = text.replace('$impregnated',globals.expansion.nameBeingBred())
-		text = text.replace('$bound',globals.expansion.nameBound())
-		text = text.replace('$milk','milk')
+		text = text.replace('$cum', nameCum())
+		text = text.replace('$breasts', nameTits())
+		text = text.replace('$naked', nameNaked())
+		text = text.replace('$pussy', namePussy())
+		text = text.replace('$ass', nameAsshole())
+		text = text.replace('$impregnated', nameBeingBred())
+		text = text.replace('$bound', nameBound())
+		text = text.replace('$milk', 'milk')
 	else:
 		text = "[color=red]Error at getting description for " + value + "[/color]. "
 	return text
@@ -631,13 +627,9 @@ func updateTraitline(person,traitline,number=1):
 		else:
 			newtrait = traitline[rank]
 		person.add_trait(newtrait)
-	return
 
 #Checks for Relation for Incest Checks
 func relatedCheck(person, person2):
-	var related = 'none'
-	var persondata
-	var person2data
 #Assign IDs if none
 	if person.id == null:
 		person.id = int(globals.state.slavecounter)
@@ -646,39 +638,25 @@ func relatedCheck(person, person2):
 		person2.id = int(globals.state.slavecounter)
 		globals.state.slavecounter += 1
 #Pull Relative Data to be called
-	if globals.state.relativesdata.has(person.id):
-		persondata = globals.state.relativesdata[person.id]
-	else:
+	if !globals.state.relativesdata.has(person.id):
 		globals.createrelativesdata(person)
-		persondata = globals.state.relativesdata[person.id]
-	if globals.state.relativesdata.has(person2.id):
-		person2data = globals.state.relativesdata[person2.id]
-	else:
+	var persondata = globals.state.relativesdata[person.id]
+	if !globals.state.relativesdata.has(person2.id):
 		globals.createrelativesdata(person2)
-		person2data = globals.state.relativesdata[person2.id]
+	var person2data = globals.state.relativesdata[person2.id]
+	if persondata == null || person2data == null:
+		return 'unrelated'
 #Check Relatives
-	if persondata != null:
-		for i in ['mother','father']:
-			#Meaning that Person 1 is the Child of Person 2
-			if str(person2data[i]) == str(persondata.id):
-				if person2.sex == 'female':
-					related = 'daughter'
-				elif person2.sex == 'male':
-					related = 'son'
+	for i in ['mother','father']:
+		#Meaning that Person 1 is the Child of Person 2
+		if str(person2data[i]) == str(persondata.id):
+			return 'son' if person2.sex == 'male' else 'daughter'
 		#Person 1 is the Parent of Person 2
-		if str(persondata['father']) == str(person2data.id):
-			related = 'father'
-		elif str(persondata['mother']) == str(person2data.id):
-			related = 'mother'
-		for i in [persondata, person2data]:
-			if i.siblings.has(persondata.id) || i.siblings.has(person2data.id):
-				if person2.sex == 'male':
-					related = 'brother'
-				else:
-					related = 'sister'
-	if related == 'none':
-		related = 'unrelated'
-	return related
+		if str(persondata[i]) == str(person2data.id):
+			return i
+	if persondata.siblings.has(person2data.id) || persondata.halfsiblings.has(person2data.id):
+		return 'brother' if person2.sex == 'male' else 'sister'
+	return 'unrelated'
 
 func setFamily(person,person2):
 	#Person 2 joins Person 1's family
@@ -703,18 +681,14 @@ func setFamily(person,person2):
 		person2.id = int(globals.state.slavecounter)
 		globals.state.slavecounter += 1
 	#Pull Relative Data to be called
-	if globals.state.relativesdata.has(person.id):
-		persondata = globals.state.relativesdata[person.id]
-	else:
+	if !globals.state.relativesdata.has(person.id):
 		globals.createrelativesdata(person)
-		persondata = globals.state.relativesdata[person.id]
-	if globals.state.relativesdata.has(person2.id):
-		person2data = globals.state.relativesdata[person2.id]
-	else:
+	persondata = globals.state.relativesdata[person.id]
+	if !globals.state.relativesdata.has(person2.id):
 		globals.createrelativesdata(person2)
-		person2data = globals.state.relativesdata[person2.id]
+	person2data = globals.state.relativesdata[person2.id]
 	#Age Difference
-	if agearray.find(person.age) > agearray.find(person2.age) && rand_range(0,100) <= globals.expansion.parentchance:
+	if agearray.find(person.age) > agearray.find(person2.age) && rand_range(0,100) <= parentchance:
 		#Parent
 		if person.sex in ['female','futanari'] && str(person2data.mother) == str(-1):
 			globals.connectrelatives(person, person2, 'mother')
@@ -786,9 +760,9 @@ func setFamily(person,person2):
 				sharedrelative.surname = tempperson.surname
 	elif str(persondata.father) != str(-1) && str(persondata.mother) == str(-1) || str(persondata.father) == str(-1) && str(persondata.mother) != str(-1):
 		if str(persondata.father) == str(-1):
-			tempperson = globals.state.findslave(persondata['father'])
-		else:
 			tempperson = globals.state.findslave(persondata['mother'])
+		else:
+			tempperson = globals.state.findslave(persondata['father'])
 		if tempperson != null:
 			person.surname = tempperson.surname
 			person2.surname = tempperson.surname
@@ -887,13 +861,11 @@ func correctGenes(person):
 		while percent != 100:
 			percent = globals.constructor.build_genealogy_equalize(person, percent)
 		globals.constructor.setRaceDisplay(person)
-	return
 
 ###---Conversations---###
 
 #Called in main hub of talk only
 func getLocation(person):
-	var text = ""
 	var choices = []
 
 	###
@@ -929,19 +901,19 @@ func getLocation(person):
 			choices.append("You find [color=aqua]$name[/color] walking around $his cell.")
 			choices.append("You find [color=aqua]$name[/color] leaning against the wall of $his cell.")
 			choices.append("You find [color=aqua]$name[/color] sleeping in $his cell. You give $him a moment to get up.")
-		if person.restrained == "cuffed":
+		elif person.restrained == "cuffed":
 			choices.append("You find [color=aqua]$name[/color] walking around $his cell with $his hands cuffed behind $his back.")
 			choices.append("You find [color=aqua]$name[/color] leaning against the wall of $his cell uncomfortably due to the handcuffs on $his wrists.")
 			choices.append("You find [color=aqua]$name[/color] sleeping in $his cell. Watching $him get up is almost pitiful as $he struggles to $his feet without having use of $his hands.")
-		if person.restrained == "shackled":
+		elif person.restrained == "shackled":
 			choices.append("You find [color=aqua]$name[/color] sitting in $his cell with $his legs shackled to the wall.")
 			choices.append("You find [color=aqua]$name[/color] leaning against the wall of the cell $he is shackled to.")
 			choices.append("You find [color=aqua]$name[/color] sleeping in $his cell. $He wakes up and shifts as best $he can with $his shackles to face you.")
-		if person.restrained == "fully":
+		elif person.restrained == "fully":
 			choices.append("You find [color=aqua]$name[/color] helplessly barred against $his cell's walls.")
 			choices.append("You find [color=aqua]$name[/color] strapped against the wall of $his cell, unable to move.")
 			choices.append("You find [color=aqua]$name[/color] sleeping in $his restraints against the wall of $his cell. You wake $him up and enjoy the minimal movement $he can make to wake up.")
-		if person.restrained == "fullyexposed":
+		elif person.restrained == "fullyexposed":
 			choices.append("You find [color=aqua]$name[/color] helplessly barred against $his cell's walls. $He is being held open so $his " + str(getGenitals(person)) + " are exposed for all to see.")
 			choices.append("You find [color=aqua]$name[/color] strapped against the wall of $his cell, unable to move. $He is being held open so $his " + str(getGenitals(person)) + " are exposed for anyone in the cells to see.")
 			choices.append("You find [color=aqua]$name[/color] sleeping in $his restraints against the wall of $his cell. You enoy watching $his exposed " + str(getGenitals(person)) + " twitch as $he groggily wakes up, barely able to move.")
@@ -951,7 +923,7 @@ func getLocation(person):
 			choices.append("You find [color=aqua]$name[/color] in the farm. $He is preparing to slide the pumps onto $his swollen nipples as you approach.")
 			choices.append("You find [color=aqua]$name[/color] in the farm. $He is massaging $his swollen " + str(nameTits()) + " and watching milk drip out of $his nipples with fascination.")
 			choices.append("You find [color=aqua]$name[/color] in the farm. $He is sucking on $his " + str(nameTits()) + ". $He sees you approach and releases it, accidentally spilling some milk out of $his drooling lips.")
-		if person.work == 'hen':
+		elif person.work == 'hen':
 			choices.append("You find [color=aqua]$name[/color] in the farm. $He is rubbing $his swollen belly that is squirming with hatched life within.")
 			choices.append("You find [color=aqua]$name[/color] in the farm. As you approach, you see the last tendril of a slug slide from $his stretched " + str(namePussy()))
 			choices.append("You find [color=aqua]$name[/color] in the farm. $He is on all fours pushing violently as something slides out of $him. You give $him a moment to catch $his breath, watching him rub $his sore, dripping " + str(namePussy())+ " and then approach.")
@@ -960,8 +932,7 @@ func getLocation(person):
 		choices.append("You find [color=aqua]$name[/color] in the farm, scrubbing the milking jugs, buckets, and pumps from yesterday's activities.")
 		choices.append("You find [color=aqua]$name[/color] in the farm, cleaning the stalls from the piss and shit of the cattle and hens.")
 		choices.append("You find [color=aqua]$name[/color] in the farm. $He is drinking from a white bottle as you approach. $He stops and pulls the bottle away, leaving a small white ring around $his lips and chin.")
-	text = " " + globals.randomitemfromarray(choices)
-	return text
+	return " " + globals.randomitemfromarray(choices)
 
 #---Dialogue Expressions---#
 func getIntro(person):
@@ -1013,20 +984,17 @@ func getMovementText(person):
 
 ###Possibly Unneeded, for StartSlave Quest Quirking
 func getStartSlave():
-	var person
 	for i in globals.slaves:
 		if i.unique == 'startslave':
-			person = i
-			return person
+			return i
+	return null
 
 #---Random Generic Names for Body Parts
 func nameTits():
-	var text = str(globals.randomitemfromarray(['boobs','breasts','tits','boobs','breasts','tits','knockers','udders']))
-	return text
+	return str(globals.randomitemfromarray(['boobs','breasts','tits','boobs','breasts','tits','knockers','udders']))
 
 func nameTitsMilking():
-	var text = str(globals.randomitemfromarray(['nipples','nipples','boobs','breasts','tits','boobs','breasts','tits','knockers','udders']))
-	return text
+	return str(globals.randomitemfromarray(['nipples','nipples','boobs','breasts','tits','boobs','breasts','tits','knockers','udders']))
 
 func namePenis():
 	var array = ['penis','cock','member','dick','penis','cock','member','dick']
@@ -1039,12 +1007,10 @@ func namePenis():
 #		array.append('prince charles')
 #		array.append('mighty boosh')
 		array.append('knob')
-	var text = str(globals.randomitemfromarray(array))
-	return text
+	return str(globals.randomitemfromarray(array))
 
 func nameBalls():
-	var text = str(globals.randomitemfromarray(['balls','balls','nuts','nutsack','testicles','ballsack']))
-	return text
+	return str(globals.randomitemfromarray(['balls','balls','nuts','nutsack','testicles','ballsack']))
 
 func namePussy():
 	var array = ['pussy','pussy','twat','cunt','cunt','vagina']
@@ -1056,12 +1022,10 @@ func namePussy():
 		array.append('cunny')
 		array.append('quim')
 #		array.append('tardis')
-	var text = str(globals.randomitemfromarray(array))
-	return text
+	return str(globals.randomitemfromarray(array))
 
 func nameAsshole():
-	var text = str(globals.randomitemfromarray(['butt','bum','bumhole','asshole','ass','butthole','anus','sphincter']))
-	return text
+	return str(globals.randomitemfromarray(['butt','bum','bumhole','asshole','ass','butthole','anus','sphincter']))
 
 func nameAss():
 	var array = ['ass','ass','butt','rump','behind','ass cheeks']
@@ -1070,89 +1034,71 @@ func nameAss():
 		array.append('bum')
 		array.append('arse')
 #		array.append('that which follows constantly')
-	var text = str(globals.randomitemfromarray(array))
-	return text
+	return str(globals.randomitemfromarray(array))
 
 func nameNaked():
-	var text = str(globals.randomitemfromarray(['completely naked','naked','nude','stripped','exposed','bared','immodestly exposed','revealed']))
-	return text
+	return str(globals.randomitemfromarray(['completely naked','naked','nude','stripped','exposed','bared','immodestly exposed','revealed']))
 
 func namePenisCumming():
-	var text = str(globals.randomitemfromarray(['came','squirted','jizzed','creampied','filled up','popped inside']))
-	return text
+	return str(globals.randomitemfromarray(['came','squirted','jizzed','creampied','filled up','popped inside']))
 
 func nameCum():
-	var text = str(globals.randomitemfromarray(['semen','cum','cum','jizz','spunk','cream']))
-	return text
+	return str(globals.randomitemfromarray(['semen','cum','cum','jizz','spunk','cream']))
 
 func nameBelly():
-	var text = str(globals.randomitemfromarray(['belly','belly','stomach','gut','midriff','tummy']))
-	return text
+	return str(globals.randomitemfromarray(['belly','belly','stomach','gut','midriff','tummy']))
 
 func nameKissing():
 	var array = ['kissing','making out with','touching lips with','kissing','locking lips with']
 	if globals.expansionsettings.ihavebloodygoodtaste == true:
 		array.append('snogging')
-	var text = str(globals.randomitemfromarray(array))
-	return text
+	return str(globals.randomitemfromarray(array))
 
 func nameCrying():
 	var array = ['moaning','whining','complaining','crying','sniffling','sobbing','whimpering']
 	if globals.expansionsettings.ihavebloodygoodtaste == true:
 		array.append('whinging')
-	var text = str(globals.randomitemfromarray(array))
-	return text
+	return str(globals.randomitemfromarray(array))
 
 func nameSex():
 	var array = ['fuck','be fucked by','rail','have sex with','do','get nasty','do the deed','pound it out','knock boots']
 	if globals.expansionsettings.ihavebloodygoodtaste == true:
 		array.append('do it for Queen and country')
 		array.append('lay there and think of England')
-	var text = str(globals.randomitemfromarray(array))
-	return text
+	return str(globals.randomitemfromarray(array))
 
 func nameBound():
-	var text = str(globals.randomitemfromarray(['bound','restrained','chained up','helplessly bound','restrained helplessly']))
-	return text
+	return str(globals.randomitemfromarray(['bound','restrained','chained up','helplessly bound','restrained helplessly']))
 
 func nameBred():
-	var text = str(globals.randomitemfromarray(['bred','knocked up','impregnated','get pregnant','get impregnated','have a baby','have a '+str(globals.randomitemfromarray(['','swollen','big','huge','unbearable','incredible']))+' '+str(globals.randomitemfromarray(['','pregnant','protruding','pot','filled up']))+' '+nameBelly()]))
-	return text
+	return str(globals.randomitemfromarray(['bred','knocked up','impregnated','get pregnant','get impregnated','have a baby','have a '+str(globals.randomitemfromarray(['','swollen','big','huge','unbearable','incredible']))+' '+str(globals.randomitemfromarray(['','pregnant','protruding','pot','filled up']))+' '+nameBelly()]))
 
 func nameBreed():
-	var text = str(globals.randomitemfromarray(['breed','knock up','impregnate']))
-	return text
+	return str(globals.randomitemfromarray(['breed','knock up','impregnate']))
 
 func nameBeBred():
-	var text = str(globals.randomitemfromarray(['be bred','be knocked up','be impregnated','get pregnant','get impregnated','have a baby','have a '+str(globals.randomitemfromarray(['','swollen','big','huge','incredible']))+' '+str(globals.randomitemfromarray(['','pregnant','protruding','pot','filled up']))+' belly']))
-	return text
+	return str(globals.randomitemfromarray(['be bred','be knocked up','be impregnated','get pregnant','get impregnated','have a baby','have a '+str(globals.randomitemfromarray(['','swollen','big','huge','incredible']))+' '+str(globals.randomitemfromarray(['','pregnant','protruding','pot','filled up']))+' belly']))
 
 func nameBeingBred():
-	var text = str(globals.randomitemfromarray(['being bred','being knocked up','being impregnated','getting pregnant','getting impregnated','having a baby','having a '+str(globals.randomitemfromarray(['','swollen','big','huge','incredible']))+' '+str(globals.randomitemfromarray(['','pregnant','protruding','pot','pot','pot']))+' belly']))
-	return text
+	return str(globals.randomitemfromarray(['being bred','being knocked up','being impregnated','getting pregnant','getting impregnated','having a baby','having a '+str(globals.randomitemfromarray(['','swollen','big','huge','incredible']))+' '+str(globals.randomitemfromarray(['','pregnant','protruding','pot','pot','pot']))+' belly']))
 
 func nameStretching():
-	var text = str(globals.randomitemfromarray(['stretching','inflating','bloating','swelling','expanding','loosening']))
-	return text
+	return str(globals.randomitemfromarray(['stretching','inflating','bloating','swelling','expanding','loosening']))
 
 func nameStretched():
-	var text = str(globals.randomitemfromarray(['stretched','inflated','bloated','swollen','expanded','filled','puffed up','ready to pop']))
-	return text
+	return str(globals.randomitemfromarray(['stretched','inflated','bloated','swollen','expanded','filled','puffed up','ready to pop']))
 
 func nameExecution():
 	var array = ['You grab a piece of rope and wrap it around $his throat, pulling it tightly until $his legs stop kicking.','You whip out a blade and slice through $his neck, leaving $him to pull against the ropes binding $his hands as $he falls into the dirt. $His last few coughs spill $his $race blood onto the ground in front of you.','You stick your blade in $his gut and pull it to the side. $He looks on in complete, helpless shock as $his guts begin to slide out of $his stomach onto the ground in front of you all. $He looks up at you as the light starts to fade from $his eyes and slumps to the side.','You grab a blade from the battle and walk over to $him. You place it against $his neck.\n[color=yellow]-No...no, plea-[/color]\nYou decide not to let $him finish and watch $his head slide with still moving lips onto the ground in front of everyone.','You recall a little magical trick as you watch $him. You reach down, grab $his head, and infuse $his brain. $His head begins to turn bright red before, eventually, exploding off of $his shoulders.']
 	if globals.expansionsettings.ihavebloodygoodtaste == true:
 		array.append('You see the flag sticker on the captives clothing and sense $his patriotism. You begin to regale the doomed victim with tales all about what those damned rowdy colonists are getting up to. About the time that you begin to vividly describe them taking entire crates of tea and throwing them in the harbor, $he clutches $his heart in pain.\n\n$He weakly raises $his hand to $his head in a pitiful, though patriotic, salute.\n[color=yellow]-Tell me...they left...the Crumpets...[/color]\n\nYou shake your head firmly. $He sputters, gasps, and dies of shock.')
-	var text = str(globals.randomitemfromarray(array))
-	return text
+	return str(globals.randomitemfromarray(array))
 
 func nameHelplessOrgasmPreface():
-	var text = str(globals.randomitemfromarray(['$he ','$his body ','$he, despite $himself ','$his body helplessly ','$he uncontrollably ','$he tried to resist orgasming, but ','$he humiliatingly ','$he vulnerably ','$he lost control and ']))
-	return text
+	return str(globals.randomitemfromarray(['$he ','$his body ','$he, despite $himself ','$his body helplessly ','$he uncontrollably ','$he tried to resist orgasming, but ','$he humiliatingly ','$he vulnerably ','$he lost control and ']))
 
 func nameHelplessOrgasm():
-	var text = str(globals.randomitemfromarray(['came','orgasmed','came so hard that $he squirted','relentlessly orgasmed','moaned in orgasm','responded instinctually','gave in to $his animalistic urges','responded helplessly','grunted like a bitch in heat','squealed as $he orgasmed','gushed in esctasy','drenched $himself']))
-	return text
+	return str(globals.randomitemfromarray(['came','orgasmed','came so hard that $he squirted','relentlessly orgasmed','moaned in orgasm','responded instinctually','gave in to $his animalistic urges','responded helplessly','grunted like a bitch in heat','squealed as $he orgasmed','gushed in esctasy','drenched $himself']))
 
 #Non-Generic Description Names for Body Parts
 func getChest(person):
@@ -1182,15 +1128,14 @@ func getGenitals(person):
 #---Descriptions---#
 
 func getCheeksDescription(person):
-	var text = ""
 	if person.lust >= 50:
 		if person.lust >= 100:
-			text = "$His cheeks are heavily flushed and $he seems to be breathing very heavily. "
+			return "$His cheeks are heavily flushed and $he seems to be breathing very heavily. "
 		elif person.lust >= 75:
-			text = "$His cheeks are flushed and rosy and $his breathing is slightly deeper than normal. "
+			return "$His cheeks are flushed and rosy and $his breathing is slightly deeper than normal. "
 		else:
-			text = "$His cheeks are very slightly flushed. "
-	return text
+			return "$His cheeks are very slightly flushed. "
+	return ""
 
 func getCumCoatedDescription(person,part):
 	var text = ""
@@ -1205,8 +1150,7 @@ func getCumCoatedDescription(person,part):
 			text += str(globals.randomitemfromarray(['face ','cheek ','chin ','nose '])) + ' is ' + str(globals.randomitemfromarray(['sprayed with ','coated in ','speckled with ','dripping in ','marked with ','stained with ']))
 		else:
 			text += str(globals.randomitemfromarray(['face ','cheek ','chin ','nose '])) +  str(globals.randomitemfromarray(['streaked with ','dotted with ','speckled with ']))
-		text += '[color=#E0D8C6]' + str(nameCum()) + '[/color].'
-		text += "\n"
+		text += '[color=#E0D8C6]' + str(nameCum()) + '[/color].\n'
 	#Cum on Body
 	if person.cum.body > 0 && part == 'body':
 		text += "$His " + str(globals.randomitemfromarray(['','',' ' +str(person.race)+ ' '])) + str(getChest(person)) + ' are '
@@ -1219,8 +1163,7 @@ func getCumCoatedDescription(person,part):
 				text += str(globals.randomitemfromarray(['coated ','speckled ','dripping ','marked  ','sprayed ','stained '])) + str(globals.randomitemfromarray(['with ','in ']))
 			else:
 				text += str(globals.randomitemfromarray(['streaked with ','dotted with ','speckled with ']))
-			text += '[color=#E0D8C6]' + str(nameCum()) + '[/color].'
-			text += "\n"
+			text += '[color=#E0D8C6]' + str(nameCum()) + '[/color].\n'
 		else:
 			text += ' covered by clothing, but you see a series of ' + str(globals.randomitemfromarray(['wet','gloopy','moist','damp','dark'])) + ' spots on $his clothing that seem to be sticking to $his ' + str(getChest(person)) + '. ' + str(globals.randomitemfromarray(['Maybe it is just water?','Could it be water?','Maybe they spilled milk?','What it could be?','Interesting...']))
 	return text
@@ -1312,9 +1255,8 @@ func getSwollenDescription(person,short=false):
 func getCapacity(person, hole):
 	#Call with globals.expansion.getCapacity(person's identifier like person/i, identifier .vagina or .asshole)
 	var capacity = globals.expansionsettings.baseholecapacity + (globals.vagsizearray.find(hole)-3) + round((person.lust - 50)*.05)
-	capacity = clamp(capacity, 0, globals.expansionsettings.baseholecapacity+6)
 #	OLD FORMULA var capacity = round(1 + (globals.vagsizearray.find(size)*1.5) + person.send/2)
-	return capacity
+	return clamp(capacity, 0, globals.expansionsettings.baseholecapacity+6)
 
 #Calculate Swollen
 func getSwollen(person):
@@ -1343,7 +1285,7 @@ func getSwollen(person):
 	if person.cum.pussy > vagcapacity:
 		#Trigger Overload
 		if person.cum.pussy > vagcapacity*1.25:
-			text += "" + str(cumOverload(person, 'vagina'))
+			text += cumOverload(person, 'vagina')
 		swollen += 1
 		number = ((person.cum.pussy - vagcapacity)*.5)-1
 		while number > .5:
@@ -1353,7 +1295,7 @@ func getSwollen(person):
 	if person.cum.ass > asscapacity:
 		#Trigger Overload
 		if person.cum.ass > asscapacity * 1.5:
-			text += "" + str(cumOverload(person, 'ass'))
+			text += cumOverload(person, 'ass')
 		swollen += 1
 		number = ((person.cum.ass - asscapacity)*.5)-1
 		while number > .5:
@@ -1367,7 +1309,6 @@ func getSwollen(person):
 	return text
 
 func getMovement(person):
-	var text = ""
 	#Affect Movement per Breast Size, Restrains, or Energy
 	var titweight = (globals.titssizearray.find(person.titssize)-4) - (person.send/2)
 	titweight = clamp(titweight, -1, 5)
@@ -1401,7 +1342,7 @@ func getMovement(person):
 			if person.energy-weight < 0:
 				person.movementreasons.append('[color=red]\nIs too tired, Energy is too low.[/color] ')
 			person.movement = "none"
-			text += "$name is now [color=aqua]immobilized[/color]\n"
+			return "$name is now [color=aqua]immobilized[/color]\n"
 #		elif !person.traits.has('Movement: Immobilized'):
 #			person.add_trait('Movement: Immobilized')
 	elif weight < 3 || person.restrained in ['cuffed'] || person.energy-weight < 15 || person.rules.pet == true && rand_range(0,150) <= person.obed+person.loyal:
@@ -1428,7 +1369,7 @@ func getMovement(person):
 				person.movementreasons.append('[color=red]\nIs too tired, Energy is too low.[/color] ')
 			if person.rules.pet == true:
 				person.movementreasons.append('[color=red]\nIs required to crawl per your orders.[/color] ')
-			text += "$name is now [color=aqua]crawling[/color]\n"
+			return "$name is now [color=aqua]crawling[/color]\n"
 #		elif !person.traits.has('Movement: Crawling'):
 #			person.add_trait('Movement: Crawling')
 	elif person.wings != "none" && person.energy >= 50:
@@ -1444,7 +1385,7 @@ func getMovement(person):
 			person.movement = "fly"
 			person.movementreasons.clear()
 			person.movementreasons.append('Is Flying as Energy is above 50 ')
-			text += "$name is now [color=aqua]flying[/color]\n"
+			return "$name is now [color=aqua]flying[/color]\n"
 #		elif !person.traits.has('Movement: Flying'):
 #			person.add_trait('Movement: Flying')
 	else:
@@ -1461,14 +1402,14 @@ func getMovement(person):
 			person.movementreasons.clear()
 			if person.wings != "none":
 				person.movementreasons.append('Is too tired to Fly right now. ')
-			text += "$name is now [color=aqua]walking[/color]\n"
+			return "$name is now [color=aqua]walking[/color]\n"
 #		else:
 #			if !person.traits.has('Movement: Walking'):
 #				person.add_trait('Movement: Walking')
-	return text
+	return ""
 
 func getMovementIcon(person):
-	var text = ""
+	var text
 	#Update Movement
 	getMovement(person)
 	if person.sex == 'male':
@@ -1480,12 +1421,7 @@ func getMovementIcon(person):
 	else:
 		text += str(person.movement)
 	
-	var count = 0
-	for i in ['chest','genitals','ass']:
-		if person.exposed[i] == true:
-			count += 1
-	
-	if count >= 2:
+	if int(person.exposed.chest) + int(person.exposed.genitals) + int(person.exposed.ass) >= 2:
 		text += "_naked"
 	else:
 		text += "_clothed"
@@ -1505,24 +1441,21 @@ func getMovementIcon(person):
 	
 	return text
 
+var sexualityText = {
+	'straight': "Straight",
+	'gay': "Gay",
+	'bi': "Bisexual",
+	'mostlystraight': "primarily Straight",
+	'mostlygay': "primarily Gay",
+	'rarelystraight': "usually Gay, but occasionally Straight",
+	'rarelygay': "usually Straight, but occasionally Gay",
+}
+
 func getSexuality(person):
-	var text = ''
-	if person.sexuality in ['straight','gay']:
-		text = person.sexuality.capitalize()
-	elif person.sexuality == 'bi':
-		text = 'Bisexual'
-	elif person.sexuality == 'mostlystraight':
-		text = "primarily Straight"
-	elif person.sexuality == 'mostlygay':
-		text = "primarily Gay"
-	elif person.sexuality == 'rarelystraight':
-		text = "usually Gay, but occasionally Straight"
-	elif person.sexuality == 'rarelygay':
-		text = "usually Straight, but occasionally Gay"
-	return text
+	return sexualityText.get(person.sexuality, '')
 
 
-func cumOverload (person, mode = ''):
+func cumOverload(person, mode = ''):
 	var text = ""
 	var vagcapacity = getCapacity(person, person.vagina)
 	var asscapacity = getCapacity(person, person.asshole)
@@ -1550,7 +1483,7 @@ func cumOverload (person, mode = ''):
 			text += "slip out of her [color=green]loose "+str(namePussy())+ "[/color] as she overflows with "+str(nameCum())+ "."
 		elif person.vagina == 'gaping':
 			text += "slide straight out of her [color=green]gaping "+str(namePussy())+ "[/color] as she overflows with "+str(nameCum())+ "."
-	if mode == 'ass':
+	elif mode == 'ass':
 #		assdrip = (asscapacity * 5) - person.cum.ass
 #		person.cum.ass = asscapacity * 5
 		if assdrip >= 15:
@@ -1569,11 +1502,11 @@ func cumOverload (person, mode = ''):
 		elif person.asshole == 'tight':
 			text += "squirt in little streams out of her [color=green]tight "+str(nameAsshole())+ "[/color] as she overflows with "+str(nameCum())+ "."
 		elif person.asshole == 'average':
-			text += "spray out of her [color=green]ass[/color] as she overflows with +str(nameCum())+."
+			text += "spray out of her [color=green]ass[/color] as she overflows with "+str(nameCum())+"."
 		elif person.asshole == 'loose':
-			text += "slip out of her [color=green]loose "+str(nameAsshole())+ "[/color] as she overflows with +str(nameCum())+."
+			text += "slip out of her [color=green]loose "+str(nameAsshole())+ "[/color] as she overflows with "+str(nameCum())+"."
 		elif person.asshole == 'gaping':
-			text += "slide straight out of her [color=green]gaping "+str(nameAsshole())+ "[/color] as she overflows with +str(nameCum())+."
+			text += "slide straight out of her [color=green]gaping "+str(nameAsshole())+ "[/color] as she overflows with "+str(nameCum())+"."
 	return text
 
 ###Combine Ass and Vag Overload, Turn into "Pushed on Stomach/Drain" convo when swollen
@@ -1807,29 +1740,18 @@ func dailyBioClock(person):
 		person.instinct.reproduce -= round(rand_range(1,person.instinct.reproduce))
 
 func getTrimester(person):
-	var text = ""
 	if person.preg.duration >= floor(variables.pregduration/1.5):
-		text = "third"
+		return "third"
 	elif person.preg.duration >= floor(variables.pregduration/3):
-		text = "second"
+		return "second"
 	elif person.preg.duration > 0:
-		text = "first"
+		return "first"
 	else:
-		text = "none"
-	return text
+		return "none"
 
 func setWantedPregnancy(mother):
 	#Set Once per Pregnancy
-	if mother.pregexp.incestbaby == true:
-		if mother.consentexp.incestbreeder == true:
-			mother.pregexp.wantedpregnancy = true
-		else:
-			mother.pregexp.wantedpregnancy = false
-	else:
-		if mother.consentexp.pregnancy == true:
-			mother.pregexp.wantedpregnancy = true
-		else:
-			mother.pregexp.wantedpregnancy = false
+	mother.pregexp.wantedpregnancy = mother.consentexp['incestbreeder' if mother.pregexp.incestbaby else 'pregnancy']
 	#Final Random Chance to Want Baby
 	if mother.pregexp.wantedpregnancy == false:
 		if rand_range(0,100) <= ((mother.pregexp.desiredoffspring - mother.metrics.birth)*10) + mother.instinct.reproduce + globals.expansionsettings.wantedpregnancychance:
@@ -1853,72 +1775,73 @@ func getIdentity(person):
 #---Daily Checks---#
 func dailyCrystal():
 	var text = ""
-	globals.state.thecrystal.power = globals.state.mansionupgrades.dimensionalcrystal
+	var refCrystal = globals.state.thecrystal
+	refCrystal.power = globals.state.mansionupgrades.dimensionalcrystal
 
-	if globals.state.thecrystal.lifeforce < 0 && globals.state.thecrystal.mode == "light" && rand_range(0,100) <= globals.expansionsettings.crystal_shatter_chance:
-		globals.state.thecrystal.mode = "dark"
+	if refCrystal.lifeforce < 0 && refCrystal.mode == "light" && rand_range(0,100) <= globals.expansionsettings.crystal_shatter_chance:
+		refCrystal.mode = "dark"
 		text += "\n[center][color=red]At exactly midnight, everyone in the Mansion woke up. Some found that their nose was bleeding, others reported their skin crawling, and still others claimed to have horrific nightmares of being eaten alive. A brief investigation found that the Dimensional Crystal has dark, shadowy veins running through it like deep cracks. The color seems to be a darker purple and the glow seen coming off the Crystal and people seem to have those same dark, shadowy tendrils. Everyone returned to their beds, though sleep came uneasily and was wrought with nightmares.[/color][/center]\n"
-	elif globals.state.thecrystal.lifeforce >= 0 && globals.state.thecrystal.hunger <= 0 && globals.state.thecrystal.mode == "dark":
-		globals.state.thecrystal.mode = "light"
+	elif refCrystal.lifeforce >= 0 && refCrystal.hunger <= 0 && refCrystal.mode == "dark":
+		refCrystal.mode = "light"
 		text += "\n[center][color=lime]At exactly midnight, everyone woke up in a blissful, body-shaking orgasm. Everyone rushed back to the Dimensional Crystal to find it glowing a pure, violet light with no trace of the shadowy tendrils running through it. Dreams were lovely and bright tonight.[/color][/center]\n"
 
-	if globals.state.thecrystal.mode == "dark":
-		if globals.state.thecrystal.hunger <= globals.state.thecrystal.power:
-			globals.state.thecrystal.hunger += 1
-		if globals.state.thecrystal.lifeforce < 0 && rand_range(0,100) <= globals.expansionsettings.crystallifeforcerestorechance:
-			globals.state.thecrystal.lifeforce += 1
-			globals.state.thecrystal.hunger += 1
+	if refCrystal.mode == "dark":
+		if refCrystal.hunger <= refCrystal.power:
+			refCrystal.hunger += 1
+		if refCrystal.lifeforce < 0 && rand_range(0,100) <= globals.expansionsettings.crystallifeforcerestorechance:
+			refCrystal.lifeforce += 1
+			refCrystal.hunger += 1
 	else:
 		#Strengthen the Crystal
-		if globals.state.thecrystal.hunger > 0:
-			globals.state.thecrystal.lifeforce -= globals.state.thecrystal.hunger
-			globals.state.thecrystal.hunger = 0
+		if refCrystal.hunger > 0:
+			refCrystal.lifeforce -= refCrystal.hunger
+			refCrystal.hunger = 0
 		#Daily Regain
-		if globals.state.thecrystal.lifeforce <= globals.state.mansionupgrades.dimensionalcrystal:
-			globals.state.thecrystal.lifeforce += 1
-		if rand_range(40,100) <= globals.state.thecrystal.research && globals.state.thecrystal.lifeforce < globals.state.mansionupgrades.dimensionalcrystal:
-			globals.state.thecrystal.lifeforce += 1
+		if refCrystal.lifeforce <= globals.state.mansionupgrades.dimensionalcrystal:
+			refCrystal.lifeforce += 1
+		if rand_range(40,100) <= refCrystal.research && refCrystal.lifeforce < globals.state.mansionupgrades.dimensionalcrystal:
+			refCrystal.lifeforce += 1
 	
-	if globals.state.thecrystal.abilities.size() > 0 && !globals.state.thecrystal.abilities.has('attunement'):
-		if rand_range(50,100) <= globals.state.thecrystal.research:
+	if refCrystal.abilities.size() > 0 && !refCrystal.abilities.has('attunement'):
+		if rand_range(50,100) <= refCrystal.research:
 			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
 			text += "You dream deeply. You are standing before the Crystal in your Mansion and staring deeply into the flowing energy within it. As you watch, the energy begins to split and separate itself into understandable forms. You see the [color=aqua]Coloration[/color] of the [color=aqua]Crystal[/color]. You see the latent [color=aqua]Lifeforce[/color] inside it and the [color=red]Hunger[/color] consuming those trapped souls. You feel [color=green]Attuned[/color] to the [color=aqua]Crystal[/color]. "
-			globals.state.thecrystal.abilities.append('attunement')	
+			refCrystal.abilities.append('attunement')	
 	
-	if globals.state.mansionupgrades.dimensionalcrystal >= 1 && !globals.state.thecrystal.abilities.has('pregnancyspeed'):
-		if rand_range(35,100) <= globals.state.thecrystal.research:
+	if globals.state.mansionupgrades.dimensionalcrystal >= 1 && !refCrystal.abilities.has('pregnancyspeed'):
+		if rand_range(35,100) <= refCrystal.research:
 			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
 			text += "You dream that you are the Crystal. You feel life moving within your walls. Life grows. You love life. You are life. You see the growing sprouts and water them with words. They burst out of their seeds and grow mightily. You bask in their life.\nYou awaken and write down the words uttered in your dream. You have been granted the secret of [color=green]Altering Pregnancy Speeds[/color]. "
-			globals.state.thecrystal.abilities.append('pregnancyspeed')
+			refCrystal.abilities.append('pregnancyspeed')
 	
-	elif globals.state.mansionupgrades.dimensionalcrystal >= 2 && !globals.state.thecrystal.abilities.has('secondwind'):
-		if rand_range(50,100) <= globals.state.thecrystal.research:
+	elif globals.state.mansionupgrades.dimensionalcrystal >= 2 && !refCrystal.abilities.has('secondwind'):
+		if rand_range(50,100) <= refCrystal.research:
 			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
 			text += "You dream of standing in a great field of combat. You look down and see arrows, blades, and magic blasts have destroyed parts of your body. Despite it all, you feel a resurgence of energy within you. You have been hurt...but you will fight again. You MUST fight on. \n[color=lime]You have been granted the secret of [color=green]Second Wind[/color], allowing you personally to survive 1 fatal blow in combat daily.[/color] "
-			globals.state.thecrystal.abilities.append('secondwind')
+			refCrystal.abilities.append('secondwind')
 
-	elif globals.state.mansionupgrades.dimensionalcrystal >= 3 && !globals.state.thecrystal.abilities.has('immortality'):
-		if rand_range(50,100) <= globals.state.thecrystal.research:
+	elif globals.state.mansionupgrades.dimensionalcrystal >= 3 && !refCrystal.abilities.has('immortality'):
+		if rand_range(50,100) <= refCrystal.research:
 			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
 			text += "You dream that you are the Crystal. You feel each soul living within the warmth of your glow. You see a shadowy, skeletal entity sneak within your glow and raise a long scythe above one of your beings. You mutter a series of words and sent a part of your essence to banish the entity.\nWhen you awaken, you write the words down. You have been granted the secret of [color=green]Immortality[/color]. "
-			globals.state.thecrystal.abilities.append('immortality')
+			refCrystal.abilities.append('immortality')
 	
-	elif (globals.state.thecrystal.mode == "dark" || globals.state.thecrystal.lifeforce <= 0) && !globals.state.thecrystal.abilities.has('sacrifice'):
-		if rand_range(-25,100) <= globals.state.thecrystal.research:
+	elif (refCrystal.mode == "dark" || refCrystal.lifeforce <= 0) && !refCrystal.abilities.has('sacrifice'):
+		if rand_range(-25,100) <= refCrystal.research:
 			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
 			text += "You dream that you are famished. You look down and see your ribs poking through your skin. Hunger. You need hunger. You need LIFE! You sit in a corner and wait. A rat scurries into your view.\nLife. Life for you.\nYou rush forward and snap the creatures neck. You sink your teeth in and feel your hunger subside. "
 			text += "\n\n[color=yellow]-Good. Good. You know hunger too. You know what it is to consume life.[/color]\nThe voice ripples through you and you see teeth. You look up into it's gaping maw and squeak. Your tail squishes back and forth in a panic and you try to move. But the tentacles around you body aren't going to let you escape. As you feel yourself approach the teeth, you feel your rat-like body crumple and you wake up. For better or worse, you now know two things. You know how you can feed the Crystal. And now, you know you must."
-			globals.state.thecrystal.abilities.append('sacrifice')
+			refCrystal.abilities.append('sacrifice')
 	
-	elif globals.state.thecrystal.abilities.has('sacrifice') && !globals.state.thecrystal.abilities.has('understandsacrifice'):
-		if rand_range(0,100) <= globals.state.thecrystal.research:
+	elif refCrystal.abilities.has('sacrifice') && !refCrystal.abilities.has('understandsacrifice'):
+		if rand_range(0,100) <= refCrystal.research:
 			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
 			text += "You dream that you standing in front of the Crystal. It extends a tendril and gently touches the body of a lifeless human beside you. The tendril extends into the body's mouth, slithers through her body, and stands the corpse up like a puppet on a string. It then violently rips its tendril out of the corpse's mouth. The human woman opens her eyes and screams herself back to life. "
 			text += "You look in amazement as the woman turns to walk off. You look at the crystal and see cracks and veins start to appear in it's surface. You see a tendril reach out towards you.\nYou open your mouth to protest 'I am still alive!' and a loud bleating erupts from your lips. It reaches into your open mouth and extends through your body. You sense it draining every one of your levels to restore it's hunger, then finally take your lifeforce back into it. As your soul splits off from your body, you see the cracks and veins healing. "
 			text += "You now understand how the sacrifices work. "
-			globals.state.thecrystal.abilities.append('understandsacrifice')
+			refCrystal.abilities.append('understandsacrifice')
 	
-	globals.state.thecrystal.research = 0
+	refCrystal.research = 0
 
 	return text
 
@@ -1967,27 +1890,19 @@ func dailyUpdate(person):
 	
 	if person.cum.mouth > 0 && person.fetish.drinkcum in ['mindblowing','enjoyable','acceptable']:
 		text += "\n$name had " +str(nameCum())+ " still in $his mouth and swallowed it. "
-		person.cum.mouth= 0
+		person.cum.mouth = 0
 	elif person.cum.mouth > 0:
 		text += "\n$name had " +str(nameCum())+ " still in $his mouth and washed it out. "
-		person.cum.mouth= 0
+		person.cum.mouth = 0
 	
 	#---Daily Baths
 	#Player (Auto)
 	if person == globals.player:
 		var triggered_cum_cleaning = false
-		if person.cum.face > 0:
-			triggered_cum_cleaning = true
-			person.cum.face = 0
-		if person.cum.body > 0:
-			triggered_cum_cleaning = true
-			person.cum.body = 0
-		if person.cum.ass > 0:
-			triggered_cum_cleaning = true
-			person.cum.ass = 0
-		if person.cum.pussy > 0:
-			triggered_cum_cleaning = true
-			person.cum.pussy = 0
+		for i in ['face', 'body', 'pussy', 'ass']:
+			if person.cum[i] > 0:
+				triggered_cum_cleaning = true
+				person.cum[i] = 0
 		if triggered_cum_cleaning == true:
 			text += "\nYou still had " +str(nameCum())+ " on you, so you washed it all out while taking your daily bath. "
 	#Bath (Cleans All)
@@ -2027,15 +1942,8 @@ func dailyUpdate(person):
 			text += "\n$name had " +str(nameCum())+ " stuck to $his body and cleaned it off. "
 			person.cum.face = 0
 
-	if person.cum.face < .5:
-		person.cum.face = 0
-	elif person.cum.face > 0:
-		person.cum.face -= .5
-
-	if person.cum.body < .5:
-		person.cum.body = 0
-	elif person.cum.body > 0:
-		person.cum.body -= .5
+	person.cum.face = max(0, person.cum.face - .5)
+	person.cum.body = max(0, person.cum.body - .5)
 
 	if person.cum.ass > 0:
 		if person.fetish.creampieass in ['mindblowing','enjoyable','acceptable']:
@@ -2058,10 +1966,7 @@ func dailyUpdate(person):
 				text += "\n$name had " +str(nameCum())+ " still in $his asshole and washed it out. "
 				person.cum.ass = 0
 
-	if person.cum.ass < .2:
-		person.cum.ass = 0
-	elif person.cum.ass > 0:
-		person.cum.ass -= .2
+	person.cum.ass = max(0, person.cum.ass - .2)
 	
 	if person.cum.pussy > 0:
 		if person.fetish.creampiepussy in ['mindblowing','enjoyable','acceptable']:
@@ -2092,11 +1997,7 @@ func dailyUpdate(person):
 			else:
 				text += "\n$name had " +str(nameCum())+ " still in $his pussy and washed it out. "
 				person.cum.pussy = 0
-
-	if person.cum.pussy < .2:
-		person.cum.pussy = 0
-	elif person.cum.pussy > 0:
-		person.cum.pussy -= .2
+	person.cum.pussy = max(0, person.cum.pussy - .2)
 
 	#Consent Changes: Will Change to Giving Consent in Dialogue Only
 	if person.consentexp.incest == false && person.fetish.incest in ['mindblowing','enjoyable','acceptable']:
@@ -2183,8 +2084,7 @@ func dailyUpdate(person):
 	#Clamp Jobskills at 0-100
 	var job = person.work
 	for i in person.jobskills:
-		if person.jobskills[i] < 0 || person.jobskills[i] > 100:
-			person.jobskills[i] = clamp(person.jobskills[i], 0, 100)
+		person.jobskills[i] = clamp(person.jobskills[i], 0, 100)
 #	Run "Job" (adding person.JobSkill.job if any), returning "Success", "Failure", or "None"
 #	var workresult = dailyWork(person,job)
 
@@ -2224,8 +2124,7 @@ func dailyTighten(person,hole='all'):
 	#Tightening Mods: Race, Elasticity
 	if person.findRace(['Goblin','Gnome','Fairy']):
 		mod -= 1
-	mod -= person.sexexpanded.elasticity
-	mod -= round(rand_range(-1,1))
+	mod = mod - person.sexexpanded.elasticity - round(rand_range(-1,1))
 
 	#Check Vagina
 	if hole in ['all','vagina'] && person.vagina != "none":
@@ -2255,7 +2154,10 @@ func dailyTighten(person,hole='all'):
 				text += "[color=green]$name's " +str(nameAsshole())+ " naturally tightened today. It is now " + str(person.asshole) + ".[/color]\n"
 	return text
 
+
 #---Category: Better NPCs---#
+enum {NPC_ID, NPC_ZONE, NPC_REMEET, NPC_ACTION, NPC_REP, NPC_STATUS}
+
 func dailyNPCs():
 
 	#Reset Town Reports
@@ -2267,264 +2169,264 @@ func dailyNPCs():
 			globals.state.townsexpanded[towns].dailyreport[report] = 0
 
 	#offscreennpcs = [person.id, location.code, encounterchance, action, reputation, status]
-	if !globals.state.offscreennpcs.empty():
-		for npcs in globals.state.offscreennpcs:
-			var npc = globals.state.findnpc(npcs[0])
-			#Null Check and Clear
-			if npc == null:
-				globals.state.offscreennpcs.erase(npcs)
-				continue
+	for npcs in globals.state.offscreennpcs:
+		var npc = globals.state.findnpc(npcs[NPC_ID])
+		#Null Check and Clear
+		if npc == null:
+			globals.state.offscreennpcs.erase(npcs)
+			continue
 
-			#Backwards Compatibility
-			if !npc.diet.has('hunger'):
-				npc.diet['hunger'] = 0
-			if !npc.npcexpanded.possessions.has('food'):
-				npc.npcexpanded.possessions['food'] = 0
+		#Backwards Compatibility
+		if !npc.diet.has('hunger'):
+			npc.diet['hunger'] = 0
+		if !npc.npcexpanded.possessions.has('food'):
+			npc.npcexpanded.possessions['food'] = 0
 
-			#Determine Pregnancy, Swelling, & Movement
-			dailyPregnancy(npc)
-			getSwollen(npc)
-			getMovement(npc)
+		#Determine Pregnancy, Swelling, & Movement
+		dailyPregnancy(npc)
+		getSwollen(npc)
+		getMovement(npc)
 
-			#---Actions
-			#Detained is Arrested and applied from the TownGuard.
-			#Add Detained Punishments later
-			if npcs[3] == "detained":
-				continue
-			var canact = true
-			var needgold = false
-			#Can also be 'success','fail'
-			var crime = 'none'
+		#---Actions
+		#Detained is Arrested and applied from the TownGuard.
+		#Add Detained Punishments later
+		if npcs[NPC_ACTION] == "detained":
+			continue
+		var canact = true
+		var needgold = false
+		#Can also be 'success','fail'
+		var crime = 'none'
 
-			#Variables
-			var cities = globals.expansion.citiesarray
-			var outskirts = globals.expansion.outskirtsarray
-			var wilderness = globals.expansion.wildernessarray
-			var actions = globals.expansion.npcactions
-			var number = 0
+		#Variables
+		var cities = citiesarray
+		var outskirts = outskirtsarray
+		var wilderness = wildernessarray
+		var actions = npcactions
+		var number = 0
 
-			#---Actions Encounter Chance Reset
-			if npcs[3] == 'fleeing':
-				npcs[2] -= 25
-			if npcs[3] == 'escaping':
-				npcs[2] += 10
-			if npcs[3] == 'hiding':
-				npcs[2] += 25
-			if npcs[3] == "resting":
-				npcs[2] += 5
-			if npcs[3] == "shopping":
-				npcs[2] -= 25
+		#---Actions Encounter Chance Reset
+		if npcs[NPC_ACTION] == 'fleeing':
+			npcs[NPC_REMEET] -= 25
+		elif npcs[NPC_ACTION] == 'escaping':
+			npcs[NPC_REMEET] += 10
+		elif npcs[NPC_ACTION] == 'hiding':
+			npcs[NPC_REMEET] += 25
+		elif npcs[NPC_ACTION] == "resting":
+			npcs[NPC_REMEET] += 5
+		elif npcs[NPC_ACTION] == "shopping":
+			npcs[NPC_REMEET] -= 25
 
-			#---Reactionary Actions
+		#---Reactionary Actions
 
-			#Defeated (After Combat/Released)
-			if npcs[3] == "defeated" && rand_range(0,100) <= actions.defeated:
-				npcs[3] == "recover"
+		#Defeated (After Combat/Released)
+		if npcs[NPC_ACTION] == "defeated" && rand_range(0,100) <= actions.defeated:
+			npcs[NPC_ACTION] = "recover"
+			canact = false
+		#Raped
+		if npcs[NPC_ACTION] == "raped" && rand_range(0,100) <= actions.raped:
+			npc.lust -= round(rand_range(npc.lust/2,npc.lust))
+			npcs[NPC_REMEET] -= 10
+			npcs[NPC_ACTION] = "recover"
+			canact = false
+		#Pregnancy and Childbirth
+		if npc.preg.duration >= variables.pregduration && rand_range(0,100) <= actions.childbirth:
+			npcs[NPC_ACTION] = "childbirth"
+			canact = false
+		elif npcs[NPC_ACTION] == "childbirth":
+			npcChildbirth(npc)
+			npcs[NPC_REMEET] -= 10
+			npcs[NPC_ACTION] = "recover"
+			canact = false
+
+		#Recovery (Can take several turns)
+		if npcs[NPC_ACTION] == "recover":
+			if rand_range(0,100) > actions.recover:
 				canact = false
-			#Raped
-			if npcs[3] == "raped" && rand_range(0,100) <= actions.raped:
-				npc.lust -= round(rand_range(npc.lust/2,npc.lust))
-				npcs[2] -= 10
-				npcs[3] == "recover"
-				canact = false
-			#Pregnancy and Childbirth
-			if npc.preg.duration >= variables.pregduration && rand_range(0,100) <= actions.childbirth:
-				npcs[3] == "childbirth"
-				canact = false
-			elif npcs[3] == "childbirth":
-				npcChildbirth(npc)
-				npcs[2] -= 10
-				npcs[3] == "recover"
+			else:
+				npcs[NPC_REMEET] -= 10
+
+		#---Escaping and Hiding (Escaping via Crime Fail, Combat Escape, or Slave Escape)
+		if npcs[NPC_ACTION] == "fleeing":
+			npcs[NPC_REMEET] += 25
+			if rand_range(0,100) <= actions.escapechance:
+				npcs[NPC_ACTION] = "escaping"
+			canact = false
+		elif npcs[NPC_ACTION] == "escaping":
+			npcs[NPC_REMEET] -= 10
+			if rand_range(0,100) <= actions.hidechance:
+				npcs[NPC_ACTION] = "hiding"
+			canact = false
+		elif npcs[NPC_ACTION] == "hiding":
+			if rand_range(0,100) > actions.stophiding:
+				npcs[NPC_REMEET] -= 25
 				canact = false
 
-			#Recovery (Can take several turns)
-			if npcs[3] == "recover":
-				if rand_range(0,100) > actions.recover:
-					canact = false
+		if !canact:
+			continue
+		##############################################################################
+		#Hunger Chain
+		if npc.diet.hunger > 0 && actions.hunger:
+			#Eat all their Food
+			if npc.npcexpanded.possessions.food > 0:
+				number = round(rand_range(1, npc.npcexpanded.possessions.food))
+				npc.npcexpanded.possessions.food -= number
+				npc.diet.hunger = round(0 - (number*.75))
+				npcs[NPC_REMEET] -= 5
+				npcs[NPC_ACTION] = "resting"
+
+			#Buy Food
+			elif npc.npcexpanded.possessions.gold > 0:
+				#Citizens Shopping
+				if npcs[NPC_REP] >= 0 && npc.npcexpanded.possessions.gold >= 2:
+					if !npcs[NPC_ZONE] in cities:
+						npcs[NPC_ZONE] = npcTravel(npcs[NPC_ZONE],'city')
+					number = round(rand_range(2,npc.npcexpanded.possessions.gold))
+					npc.npcexpanded.possessions.gold -= number
+					npc.npcexpanded.possessions.food += round(number/2)
+					npcs[NPC_REMEET] += 25
+					npcs[NPC_REP] += 1
+					npcs[NPC_ACTION] = "shopping"
+				#Criminals Shopping (Double-Price for Bribes/Discretion)
+				if npcs[NPC_REP] < 0 && npc.npcexpanded.possessions.gold >= 4:
+					if !npcs[NPC_ZONE] in cities:
+						npcs[NPC_ZONE] = npcTravel(npcs[NPC_ZONE],'city')
+					number = round(rand_range(4,npc.npcexpanded.possessions.gold))
+					npc.npcexpanded.possessions.gold -= number
+					npc.npcexpanded.possessions.food += round(number/4)
+					npcs[NPC_REMEET] += 25
+					npcs[NPC_REP] += 1
+					npcs[NPC_ACTION] = "shopping"
+				#Work/Crime
 				else:
-					npcs[2] -= 10
+					needgold = true
+			else:
+				needgold = true
 
-			#---Escaping and Hiding (Escaping via Crime Fail, Combat Escape, or Slave Escape)
-			if npcs[3] == "fleeing":
-				npcs[2] += 25
-				if rand_range(0,100) <= actions.escapechance:
-					npcs[3] = "escaping"
-				canact = false
-			elif npcs[3] == "escaping":
-				npcs[2] -= 10
-				if rand_range(0,100) <= actions.hidechance:
-					npcs[3] = "hiding"
-				canact = false
-			elif npcs[3] == "hiding":
-				if rand_range(0,100) > actions.stophiding:
-					npcs[2] -= 25
-					canact = false
-
-			if canact == true:
-
-				#Hunger Chain
-				if npc.diet.hunger > 0 && actions.hunger:
-					#Eat all their Food
-					if npc.npcexpanded.possessions.food > 0:
-						number = round(rand_range(1, npc.npcexpanded.possessions.food))
-						npc.npcexpanded.possessions.food -= number
-						npc.diet.hunger = round(0 - (number*.75))
-						npcs[2] -= 5
-						npcs[3] = "resting"
-
-					#Buy Food
-					elif npc.npcexpanded.possessions.gold > 0:
-						#Citizens Shopping
-						if npcs[4] >= 0 && npc.npcexpanded.possessions.gold >= 2:
-							if !npcs[1] in cities:
-								npcs[1] = npcTravel(npcs[1],'city')
-							number = round(rand_range(2,npc.npcexpanded.possessions.gold))
-							npc.npcexpanded.possessions.gold -= number
-							npc.npcexpanded.possessions.food += round(number/2)
-							npcs[2] += 25
-							npcs[4] += 1
-							npcs[3] = "shopping"
-						#Criminals Shopping (Double-Price for Bribes/Discretion)
-						if npcs[4] < 0 && npc.npcexpanded.possessions.gold >= 4:
-							if !npcs[1] in cities:
-								npcs[1] = npcTravel(npcs[1],'city')
-							number = round(rand_range(4,npc.npcexpanded.possessions.gold))
-							npc.npcexpanded.possessions.gold -= number
-							npc.npcexpanded.possessions.food += round(number/4)
-							npcs[2] += 25
-							npcs[4] += 1
-							npcs[3] = "shopping"
-						#Work/Crime
-						else:
-							needgold = true
-					else:
-						needgold = true
-
-				#Determine Work/Crime
-				if needgold == true:
-					#Citizen
-					if npcs[4] >= 0:
-						if !npcs[1] in cities:
-							npcs[1] = npcTravel(npcs[1],'city')
-						number = (globals.originsarray.find(npc.origins)+1)*2
-						npc.npcexpanded.possessions.gold = round(rand_range(1,number))
-						npcs[4] += 1
-						npcs[3] = "working"
-					#Criminal
-					if npcs[4] < 0:
-						if !npcs[1] in outskirts:
-							npcs[1] = globals.randomitemfromarray(outskirts)
-						if npcs[3] == 'plotting':
-							npcs[3] = 'plottedcrime'
-						else:
-							npcs[3] = "crime"
+		#Determine Work/Crime
+		if needgold == true:
+			#Citizen
+			if npcs[NPC_REP] >= 0:
+				if !npcs[NPC_ZONE] in cities:
+					npcs[NPC_ZONE] = npcTravel(npcs[NPC_ZONE],'city')
+				number = (globals.originsarray.find(npc.origins)+1)*2
+				npc.npcexpanded.possessions.gold = round(rand_range(1,number))
+				npcs[NPC_REP] += 1
+				npcs[NPC_ACTION] = "working"
+			#Criminal
+			if npcs[NPC_REP] < 0:
+				if !npcs[NPC_ZONE] in outskirts:
+					npcs[NPC_ZONE] = globals.randomitemfromarray(outskirts)
+				if npcs[NPC_ACTION] == 'plotting':
+					npcs[NPC_ACTION] = 'plottedcrime'
 				else:
-					if npcs[4] <= 0:
-						if npcs[3] == 'plotting':
-							npcs[3] = 'plottedcrime'
-						elif rand_range(0,100) <= actions.plancrime + npc.wit:
-							npcs[3] = 'plotting'
-							if rand_range(0,100) <= 25:
-								npcs[1] = npcTravel(npcs[1],'wilderness')
-							else:
-								npcs[1] = npcTravel(npcs[1],'outskirts')
-						else:
-							npcs[3] = 'roaming'
+					npcs[NPC_ACTION] = "crime"
+		else:
+			if npcs[NPC_REP] <= 0:
+				if npcs[NPC_ACTION] == 'plotting':
+					npcs[NPC_ACTION] = 'plottedcrime'
+				elif rand_range(0,100) <= actions.plancrime + npc.wit:
+					npcs[NPC_ACTION] = 'plotting'
+					if rand_range(0,100) <= 25:
+						npcs[NPC_ZONE] = npcTravel(npcs[NPC_ZONE],'wilderness')
 					else:
-						if rand_range(0,100) <= actions.workchance:
-							if !npcs[1] in cities:
-								npcs[1] = npcTravel(npcs[1],'city')
-							number = (globals.originsarray.find(npc.origins)+1)*2
-							npc.npcexpanded.possessions.gold = round(rand_range(1,number))
-							npcs[4] += 1
-							npcs[3] = "working"
-						else:
-							npcs[3] = 'roaming'
-
-				if npcs[3] in ['plottedcrime','crime']:
-					var crimedifficulty = 0
-					if !npcs[1] in outskirts + cities:
-						npcs[1] = npcTravel(npcs[1],'outskirts')
-
-					if npcs[1] in cities:
-						crimedifficulty += rand_range(0,50)
-					else:
-						crimedifficulty += rand_range(0,25)
-
-					if npcs[3] == 'plottedcrime':
-						crimedifficulty = crimedifficulty/2
-
-					if rand_range(0,100) >= crimedifficulty:
-						#Got Gold
-						number = round(rand_range(2,10))
-						if npcs[3] == 'plottedcrime':
-							number += round(rand_range(5,10))
-						if npcs[1] in cities:
-							number += round(rand_range(1,20))
-						npc.npcexpanded.possessions.gold += number
-
-						#Stopped to Rape
-						if rand_range(50,100) >= npc.lust:
-							npc.lust -= round(rand_range(npc.lust/2,npc.lust))
-							crimedifficulty += rand_range(0,25)
-							npcs[4] -= 1
-
-						#Got Away Clean
-						if rand_range(0,100) >= crimedifficulty*(number/5):
-							if rand_range(0,100) <= actions.robfoodchance:
-								npc.npcexpanded.possessions.food += round(rand_range(1,5))
-							crime = 'succeeded'
-							npcs[4] -= 1
-							npcs[3] = 'hiding'
-						#Caught and Running
-						else:
-							crime = 'interrupted'
-							npcs[4] -= round(number/5)
-							npcs[3] = 'fleeing'
-
-					#Crime Aborted
-					else:
-						crime = 'attempted'
-						npcs[4] -= 1
-						npcs[3] = 'escaping'
-
-				#Random Travel
-				if npcs[3] == 'roaming' && rand_range(0,100) <= actions.npctravelchance:
-					npcs[4] += round(rand_range(-1,1))
-					if npcs[4] >= 0:
-						npcs[1] = npcTravel(npcs[1],'outskirts')
-					else:
-						npcs[1] = npcTravel(npcs[1],'any')
-
-				#Gain Daily Needs
-				npc.diet.hunger += 1
-				npc.lust += round(rand_range(0,10))
-
-				if globals.state.perfectinfo == true:
-					globals.state.relativesdata[str(npc.id)].state = npcs[3]
-
-				#Metrics for Reports
-				#dailyreport = {shopping = 0, crimeattempted = 0, crimeprevented = 0, crimesucceeded = 0}
-				var town
-				if npcs[1] in ['wimborn','wimbornoutskirts','shaliq']:
-					town = globals.state.townsexpanded.wimborn
-				elif npcs[1] in ['gorn','gornoutskirts']:
-					town = globals.state.townsexpanded.gorn
-				elif npcs[1] in ['frostford','frostfordoutskirts']:
-					town = globals.state.townsexpanded.frostford
-				elif npcs[1] in ['amberguard','amberguardoutskirts']:
-					town = globals.state.townsexpanded.amberguard
+						npcs[NPC_ZONE] = npcTravel(npcs[NPC_ZONE],'outskirts')
 				else:
-					continue
+					npcs[NPC_ACTION] = 'roaming'
+			else:
+				if rand_range(0,100) <= actions.workchance:
+					if !npcs[NPC_ZONE] in cities:
+						npcs[NPC_ZONE] = npcTravel(npcs[NPC_ZONE],'city')
+					number = (globals.originsarray.find(npc.origins)+1)*2
+					npc.npcexpanded.possessions.gold = round(rand_range(1,number))
+					npcs[NPC_REP] += 1
+					npcs[NPC_ACTION] = "working"
+				else:
+					npcs[NPC_ACTION] = 'roaming'
 
-				if npcs[3] == 'shopping':
-					town.dailyreport.shopping += 1
-				elif crime == "attempted":
-					town.dailyreport.crimeattempted +1
-				elif crime == "interrupted":
-					town.dailyreport.crimeprevented +1
-				elif crime == "succeeded":
-					town.dailyreport.crimesucceeded +1
+		if npcs[NPC_ACTION] in ['plottedcrime','crime']:
+			var crimedifficulty = 0
+			if !npcs[NPC_ZONE] in outskirts + cities:
+				npcs[NPC_ZONE] = npcTravel(npcs[NPC_ZONE],'outskirts')
+
+			if npcs[NPC_ZONE] in cities:
+				crimedifficulty += rand_range(0,50)
+			else:
+				crimedifficulty += rand_range(0,25)
+
+			if npcs[NPC_ACTION] == 'plottedcrime':
+				crimedifficulty = crimedifficulty/2
+
+			if rand_range(0,100) >= crimedifficulty:
+				#Got Gold
+				number = round(rand_range(2,10))
+				if npcs[NPC_ACTION] == 'plottedcrime':
+					number += round(rand_range(5,10))
+				if npcs[NPC_ZONE] in cities:
+					number += round(rand_range(1,20))
+				npc.npcexpanded.possessions.gold += number
+
+				#Stopped to Rape
+				if rand_range(50,100) >= npc.lust:
+					npc.lust -= round(rand_range(npc.lust/2,npc.lust))
+					crimedifficulty += rand_range(0,25)
+					npcs[NPC_REP] -= 1
+
+				#Got Away Clean
+				if rand_range(0,100) >= crimedifficulty*(number/5):
+					if rand_range(0,100) <= actions.robfoodchance:
+						npc.npcexpanded.possessions.food += round(rand_range(1,5))
+					crime = 'succeeded'
+					npcs[NPC_REP] -= 1
+					npcs[NPC_ACTION] = 'hiding'
+				#Caught and Running
+				else:
+					crime = 'interrupted'
+					npcs[NPC_REP] -= round(number/5)
+					npcs[NPC_ACTION] = 'fleeing'
+
+			#Crime Aborted
+			else:
+				crime = 'attempted'
+				npcs[NPC_REP] -= 1
+				npcs[NPC_ACTION] = 'escaping'
+
+		#Random Travel
+		if npcs[NPC_ACTION] == 'roaming' && rand_range(0,100) <= actions.npctravelchance:
+			npcs[NPC_REP] += round(rand_range(-1,1))
+			if npcs[NPC_REP] >= 0:
+				npcs[NPC_ZONE] = npcTravel(npcs[NPC_ZONE],'outskirts')
+			else:
+				npcs[NPC_ZONE] = npcTravel(npcs[NPC_ZONE],'any')
+
+		#Gain Daily Needs
+		npc.diet.hunger += 1
+		npc.lust += round(rand_range(0,10))
+
+		if globals.state.perfectinfo == true:
+			globals.state.relativesdata[str(npc.id)].state = npcs[NPC_ACTION]
+
+		#Metrics for Reports
+		#dailyreport = {shopping = 0, crimeattempted = 0, crimeprevented = 0, crimesucceeded = 0}
+		var town
+		if npcs[NPC_ZONE] in ['wimborn','wimbornoutskirts','shaliq']:
+			town = globals.state.townsexpanded.wimborn
+		elif npcs[NPC_ZONE] in ['gorn','gornoutskirts']:
+			town = globals.state.townsexpanded.gorn
+		elif npcs[NPC_ZONE] in ['frostford','frostfordoutskirts']:
+			town = globals.state.townsexpanded.frostford
+		elif npcs[NPC_ZONE] in ['amberguard','amberguardoutskirts']:
+			town = globals.state.townsexpanded.amberguard
+		else:
+			continue
+
+		if npcs[NPC_ACTION] == 'shopping':
+			town.dailyreport.shopping += 1
+		elif crime == "attempted":
+			town.dailyreport.crimeattempted += 1
+		elif crime == "interrupted":
+			town.dailyreport.crimeprevented += 1
+		elif crime == "succeeded":
+			town.dailyreport.crimesucceeded += 1
 
 	#----Old NPC Action Ideas Below This---#
 #	var goodactions = ['shopping','working','guarding']
@@ -2534,9 +2436,9 @@ func dailyNPCs():
 #	var punishmentactions = ['condemned','flogging','stocks','pillory','cage']
 
 func npcTravel(npclocation, goal='any'):
-	var cities = globals.expansion.citiesarray
-	var outskirts = globals.expansion.outskirtsarray
-	var wilderness = globals.expansion.wildernessarray
+	var cities = citiesarray
+	var outskirts = outskirtsarray
+	var wilderness = wildernessarray
 	var location = npclocation
 	var destination = ""
 
@@ -2571,10 +2473,10 @@ func dailyTownGuard():
 	var baddie
 	#Town Guard hunting (trimming) the existing enemies
 
-	for town in globals.expansion.citiesarray:
+	for town in citiesarray:
 		text = ""
 		for npcs in globals.state.offscreennpcs:
-			var zonecode = npcs[1]
+			var zonecode = npcs[NPC_ZONE]
 			var zone = zones[zonecode]
 			if zone == null:
 				continue
@@ -2588,16 +2490,16 @@ func dailyTownGuard():
 			elif zone.tags.find("amberguard") >= 0:
 				location = 'amberguard'
 			else:
-				location = npcs[1]
+				location = npcs[NPC_ZONE]
 
 			if location != town || location == null:
 				continue
 
-			if globals.state.offscreennpcs.size() > globals.expansionsettings.minimum_npcs_to_detain && rand_range(0,100) - rand_range(0,globals.state.allnpcs.size()-1) <= globals.state.townsexpanded[town].guardskill + npcs[2] + globals.expansionsettings.townguardefficiency:
-				if npcs[4] < 0 || npcs[3] in ['fleeing','escaping','crime','plottedcrime','hiding']:
-					npcs[3] = 'detained'
+			if globals.state.offscreennpcs.size() > globals.expansionsettings.minimum_npcs_to_detain && rand_range(0,100) - rand_range(0,globals.state.allnpcs.size()-1) <= globals.state.townsexpanded[town].guardskill + npcs[NPC_REMEET] + globals.expansionsettings.townguardefficiency:
+				if npcs[NPC_REP] < 0 || npcs[NPC_ACTION] in ['fleeing','escaping','crime','plottedcrime','hiding']:
+					npcs[NPC_ACTION] = 'detained'
 
-					baddie = globals.state.findnpc(npcs[0])
+					baddie = globals.state.findnpc(npcs[NPC_ID])
 					if baddie == null:
 						continue
 
@@ -2626,7 +2528,7 @@ func dailyTownGuard():
 						globals.state.allnpcs.erase(baddie)
 						globals.state.offscreennpcs.erase(npcs)
 						globals.guildslaves[location].append(baddie)
-					elif rand_range(0,100) <= globals.expansionsettings.randomexecutions - (npcs[4]*5) && globals.expansionsettings.brutalcontent == true:
+					elif rand_range(0,100) <= globals.expansionsettings.randomexecutions - (npcs[NPC_REP]*5) && globals.expansionsettings.brutalcontent == true:
 						#Add Executions to All Towns eventually
 						text += baddie.dictionary("$He has been scheduled for execution and sent to Wimborn for sentencing. $He will plague the good citizens of [color=aqua]" + location.capitalize() + "[/color] no more.")
 						globals.state.offscreennpcs.erase(npcs)
@@ -2760,27 +2662,29 @@ func dailyThoughts(person):
 	#Flaws
 	if person.mind.flaw == 'sloth':
 		person.mind.thoughts.append('tired')
-	if person.mind.flaw == 'gluttony':
+	elif person.mind.flaw == 'gluttony':
 		person.mind.thoughts.append('hungry')
-	if person.mind.flaw == 'lust':
+	elif person.mind.flaw == 'lust':
 		person.mind.thoughts.append('horny')
 
 
 func dailyFetish(person):
 	#Update and Possibly Increase Fetishes Daily
 	for i in globals.fetishesarray:
-		if person.dailyevents.count([i]) >= 0:
+		var numDailyFetish = person.dailyevents.count(i)
+		if numDailyFetish >= 0:
 			#Chance to Increase Fetish
-			if person.dailyevents.count([i]) + rand_range(0,2) >= globals.fetishopinion.find(person.fetish[i])*2:
-				if person.fetish[i] != globals.fetishopinion.back():
-					person.fetish[i] = globals.fetishopinion[globals.fetishopinion.find(person.fetish[i])+1]
+			var idxFetishOpinion = globals.fetishopinion.find( person.fetish[i])
+			if numDailyFetish + rand_range(0,2) >= idxFetishOpinion * 2:
+				if idxFetishOpinion < globals.fetishopinion.size() - 1:
+					person.fetish[i] = globals.fetishopinion[ idxFetishOpinion + 1]
 			#Chance to Lower Fetish (Changable Per Setting)
-			elif globals.expansionsettings.fetishescanlower == true:
-				if person.dailyevents.count([i]) + rand_range(0,2) < globals.fetishopinion.find(person.fetish[i])/3 && rand_range(0,1) <= .1:
-					if globals.fetishopinion.find(person.fetish[i]) >= 0:
-						person.fetish[i] = globals.fetishopinion[globals.fetishopinion.find(person.fetish[i])-1]
-			while person.dailyevents.count([i]) > 0:
-				person.dailyevents.erase([i])
+			elif globals.expansionsettings.fetishescanlower == true && idxFetishOpinion > 0:
+				if rand_range(0,1) <= .1 && numDailyFetish + rand_range(0,2) < idxFetishOpinion/3:
+					person.fetish[i] = globals.fetishopinion[ idxFetishOpinion - 1]
+			while numDailyFetish > 0:
+				person.dailyevents.erase(i)
+				numDailyFetish -= 1
 
 func getSecret(person,discovery='none'):
 	var realdiscovery = discovery
@@ -2790,15 +2694,14 @@ func getSecret(person,discovery='none'):
 		if !person.fetish.has(discovery):
 			person.fetish[discovery] = globals.randomitemfromarray(globals.fetishopinion)
 		#Check Fetish + Loyalty (max 13) vs Default 5
-		if ((globals.fetishopinion.find(person.fetish[discovery])-3)*10) + person.loyal >= globals.expansion.secretsharechance:
+		if ((globals.fetishopinion.find(person.fetish[discovery])-3)*10) + person.loyal >= secretsharechance:
 			if discovery == 'pregnancy':
 				realdiscovery = 'currentpregnancy'
 			if person.knowledge.has(realdiscovery):
 				return
 			setWantedPregnancy(person)
 			person.dailytalk.append(realdiscovery)
-			if person.mind.secrets.has(realdiscovery):
-				person.mind.secrets.erase(realdiscovery)
+			person.mind.secrets.erase(realdiscovery)
 			share = true
 		else:
 			if discovery == 'pregnancy':
@@ -2807,8 +2710,7 @@ func getSecret(person,discovery='none'):
 				return
 			setWantedPregnancy(person)
 			person.mind.secrets.append(realdiscovery)
-			if person.dailytalk.has(realdiscovery):
-				person.dailytalk.erase(realdiscovery)
+			person.dailytalk.erase(realdiscovery)
 			share = false
 	return share
 
@@ -2825,7 +2727,7 @@ func dailyLactation(person):
 	person.lactating.milkstorage = clamp(person.lactating.milkstorage, 0, 100)
 
 	if globals.expansionsettings.lactationstops == true && person.lactating.hyperlactation == false:
-		if lact.daysunmilked > 0 && person.preg.duration == 0 && rand_range(0,100) - lact.daysunmilked <= globals.expansion.chancelactationstops:
+		if lact.daysunmilked > 0 && person.preg.duration == 0 && rand_range(0,100) - lact.daysunmilked <= chancelactationstops:
 			person.lactation = false
 			person.lactating.duration = 0
 			if person.knowledge.has('lactating'):
@@ -2874,7 +2776,7 @@ func dailyLactation(person):
 	#Set Lactation Regen/Flow Traitline
 		var trait = globals.origins.trait(i)
 		if trait.tags.has('lactation-trait') && trait.tags.has('regentrait'):
-			traitrank = globals.expansion.regentrait.find(i)
+			traitrank = regentrait.find(i)
 			if traitrank == 0:
 				traitmod = round(regen*.5)
 				text += "[color=red]Milk regeneration hampered by Trait: " + str(i) + ".[/color]\n"
@@ -2887,7 +2789,7 @@ func dailyLactation(person):
 			regen = traitmod
 		traitmod = 0
 		if trait.tags.has('lactation-trait') && trait.tags.has('storagetrait'):
-			traitrank = globals.expansion.storagetrait.find(i)
+			traitrank = storagetrait.find(i)
 			if traitrank == 0:
 				traitmod = round(milkstorage*.5)
 				text += "[color=red]Milk gland capacity lessened by Trait: " + str(i) + ".[/color]\n"
@@ -2912,7 +2814,7 @@ func dailyLactation(person):
 		pressure = clamp(pressure, -10, 10)
 		if pressure > 0:
 			#Chance at Swelling
-			if globals.titssizearray.find(person.titssize)*3 < pressure && rand_range(0,100) <= globals.expansion.chancelactationincreasetits + pressure:
+			if globals.titssizearray.find(person.titssize)*3 < pressure && rand_range(0,100) <= chancelactationincreasetits + pressure:
 				if globals.titssizearray.back() != person.titssize:
 					text += "$name's "+ str(person.titssize) +" "+str(nameTits())+ " were so filled and full of pressure that $his body could only handle it by "+str(nameStretching())
 					person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)+1]
@@ -2963,7 +2865,7 @@ func dailyMilking(person, extraction='', autopump = false):
 	if extraction == 'none':
 		lact.daysunmilked += 1
 		#Turn .1 of Storage into Pressure
-		transfer = round(lact.milkstorage * globals.expansion.milkregenperday)
+		transfer = round(lact.milkstorage * milkregenperday)
 		lact.pressure += transfer
 		lact.milkstorage -= transfer
 		result = 0
@@ -3124,254 +3026,184 @@ func altereddiet_consumebottle(person):
 		text = "$name drank a bottle of piss for $his dinner."
 	return text
 
+enum {IMAGE_DEFAULT, IMAGE_NAKED}
+enum {LOW_STRESS, MID_STRESS, HIGH_STRESS}
+
+var dictUniqueImagePaths = {
+	'Ayda': {
+		IMAGE_DEFAULT: {
+			HIGH_STRESS: 'res://files/images/ayda/aydanormal.png',
+		},
+		IMAGE_NAKED: {
+			HIGH_STRESS: 'res://files/images/ayda/aydanaked.png',
+		},
+	},
+	'Ayneris': {
+		IMAGE_DEFAULT: {
+			LOW_STRESS: 'res://files/images/ayneris/aynerisneutral.png',
+			MID_STRESS: 'res://files/images/ayneris/aynerisangry.png',
+			HIGH_STRESS: 'res://files/images/ayneris/aynerispissed.png',
+		},
+		IMAGE_NAKED: {
+			LOW_STRESS: 'res://files/images/ayneris/aynerisneutralnaked.png',
+			MID_STRESS: 'res://files/images/ayneris/aynerisangrynaked.png',
+			HIGH_STRESS: 'res://files/images/ayneris/aynerispissednaked.png',
+		},
+	},
+	'Cali': {
+		IMAGE_DEFAULT: {
+			LOW_STRESS: 'res://files/images/cali/calihappy.png',
+			MID_STRESS: 'res://files/images/cali/calineutral.png',
+			HIGH_STRESS: 'res://files/images/cali/calisad.png',
+		},
+		IMAGE_NAKED: {
+			LOW_STRESS: 'res://files/images/cali/calinakedhappy.png',
+			MID_STRESS: 'res://files/images/cali/calinakedneutral.png',
+			HIGH_STRESS: 'res://files/images/cali/calinakedangry.png',
+		},
+	},
+	'Chloe': {
+		IMAGE_DEFAULT: {
+			LOW_STRESS: 'res://files/images/chloe/chloehappy.png',
+			MID_STRESS: 'res://files/images/chloe/chloeneutral.png',
+			HIGH_STRESS: 'res://files/images/chloe/chloeshy2.png',
+		},
+		IMAGE_NAKED: {
+			LOW_STRESS: 'res://files/images/chloe/chloenakedhappy.png',
+			MID_STRESS: 'res://files/images/chloe/chloenakedneutral.png',
+			HIGH_STRESS: 'res://files/images/chloe/chloenakedshy.png',
+		},
+	},
+	'Emily': {
+		IMAGE_DEFAULT: {
+			LOW_STRESS: 'res://files/images/emily/emily2happy.png',
+			MID_STRESS: 'res://files/images/emily/emily2neutral.png',
+			HIGH_STRESS: 'res://files/images/emily/emily2worried.png',
+		},
+		IMAGE_NAKED: {
+			LOW_STRESS: 'res://files/images/emily/emilynakedhappy.png',
+			HIGH_STRESS: 'res://files/images/emily/emilynakedneutral.png',
+		},
+	},
+	'Maple': {
+		IMAGE_DEFAULT: {
+			HIGH_STRESS: 'res://files/images/maple/maple.png',
+		},
+		IMAGE_NAKED: {
+			HIGH_STRESS: 'res://files/images/maple/maplenaked.png',
+		},
+	},
+	'Melissa': {
+		IMAGE_DEFAULT: {
+			LOW_STRESS: 'res://files/images/melissa/melissafriendly.png',
+			MID_STRESS: 'res://files/images/melissa/melissaneutral.png',
+			HIGH_STRESS: 'res://files/images/melissa/melissaworried.png',
+		},
+		IMAGE_NAKED: {
+			LOW_STRESS: 'res://files/images/melissa/melissanakedfriendly.png',
+			HIGH_STRESS: 'res://files/images/melissa/melissanakedneutral.png',
+		},
+	},
+	'Tisha': {
+		IMAGE_DEFAULT: {
+			LOW_STRESS: 'res://files/images/tisha/tishahappy.png',
+			MID_STRESS: 'res://files/images/tisha/tishaneutral.png',
+			HIGH_STRESS: 'res://files/images/tisha/tishaangry.png',
+		},
+		IMAGE_NAKED: {
+			LOW_STRESS: 'res://files/images/tisha/tishanakedhappy.png',
+			HIGH_STRESS: 'res://files/images/tisha/tishanakedneutral.png',
+		},
+	},
+	'Yris': {
+		IMAGE_DEFAULT: {
+			HIGH_STRESS: 'res://files/images/yris/yrisnormaldressed.png',
+		},
+		IMAGE_NAKED: {
+			HIGH_STRESS: 'res://files/images/yris/yrisnormalnaked.png',
+		},
+	},
+	'Zoe': {
+		IMAGE_DEFAULT: {
+			LOW_STRESS: 'res://files/images/zoe/zoehappy.png',
+			MID_STRESS: 'res://files/images/zoe/zoeneutral.png',
+			HIGH_STRESS: 'res://files/images/zoe/zoesad.png',
+		},
+		IMAGE_NAKED: {
+			LOW_STRESS: 'res://files/images/zoe/zoehappynaked.png',
+			MID_STRESS: 'res://files/images/zoe/zoeneutralnaked.png',
+			HIGH_STRESS: 'res://files/images/zoe/zoesadnaked.png',
+		},
+	},
+}
+
+var typeToPath = {
+	'default' : 'bodies',
+	'preg' : 'bodiespreg',
+	'naked' : 'bodiesnaked',
+}
+
 ###---Change Slave Images---###
 func updateBodyImage(person):
-	var path
-	var test
-
-	###---Added by Expansion---### Added by Deviate
-	if person.unique == 'Ayda':
-		if person.exposed.chest == true && person.exposed.genitals == true || person.exposed.chest == true && person.exposed.ass == true || person.exposed.genitals == true && person.exposed.ass == true:	
-			person.imagetype = 'naked'
-			person.imagefull = "res://files/images/ayda/aydanaked.png"	
+	###---Added by Expansion---### Added by Deviate, updated by Ank
+	if dictUniqueImagePaths.has(person.unique):
+		var imagetype
+		if int(person.exposed.chest) + int(person.exposed.genitals) + int(person.exposed.ass) >= 2:
+			imagetype = IMAGE_NAKED
 		else:
-			person.imagetype = 'default'
-			person.imagefull = "res://files/images/ayda/aydanormal.png"
-				
-	elif person.unique == 'Ayneris':
-		if person.exposed.chest == true && person.exposed.genitals == true || person.exposed.chest == true && person.exposed.ass == true || person.exposed.genitals == true && person.exposed.ass == true:	
-			person.imagetype = 'naked'
-			if person.stress < 20:
-				person.imagefull = "res://files/images/ayneris/aynerisneutralnaked.png"
-			elif person.stress < 60:
-				person.imagefull = "res://files/images/ayneris/aynerisangrynaked.png"
-			else:
-				person.imagefull = "res://files/images/ayneris/aynerispissednaked.png"	
+			imagetype = IMAGE_DEFAULT
+		var stress
+		if person.stress < 20:
+			stress = LOW_STRESS
+		elif person.stress < 60:
+			stress = MID_STRESS
 		else:
-			person.imagetype = 'default'
-			if person.stress < 20:
-				person.imagefull = "res://files/images/ayneris/aynerisneutral.png"
-			elif person.stress < 60:
-				person.imagefull = "res://files/images/ayneris/aynerisangry.png"
-			else:
-				person.imagefull = "res://files/images/ayneris/aynerispissed.png"
-				
-	elif person.unique == 'Cali':
-		if person.exposed.chest == true && person.exposed.genitals == true || person.exposed.chest == true && person.exposed.ass == true || person.exposed.genitals == true && person.exposed.ass == true:	
-			person.imagetype = 'naked'
-			if person.stress < 20:
-				person.imagefull = "res://files/images/cali/calinakedhappy.png"
-			elif person.stress < 60:
-				person.imagefull = "res://files/images/cali/calinakedneutral.png"
-			else:
-				person.imagefull = "res://files/images/cali/calinakedangry.png"	
-		else:
-			person.imagetype = 'default'
-			if person.stress < 20:
-				person.imagefull = "res://files/images/cali/calihappy.png"
-			elif person.stress < 60:
-				person.imagefull = "res://files/images/cali/calineutral.png"
-			else:
-				person.imagefull = "res://files/images/cali/calisad.png"	
-				
-	elif person.unique == 'Chloe':
-		if person.exposed.chest == true && person.exposed.genitals == true || person.exposed.chest == true && person.exposed.ass == true || person.exposed.genitals == true && person.exposed.ass == true:	
-			person.imagetype = 'naked'
-			if person.stress < 20:
-				person.imagefull = "res://files/images/chloe/chloenakedhappy.png"
-			elif person.stress < 60:
-				person.imagefull = "res://files/images/chloe/chloenakedneutral.png"
-			else:
-				person.imagefull = "res://files/images/chloe/chloenakedshy.png"	
-		else:
-			person.imagetype = 'default'
-			if person.stress < 20:
-				person.imagefull = "res://files/images/chloe/chloehappy.png"
-			elif person.stress < 60:
-				person.imagefull = "res://files/images/chloe/chloeneutral.png"
-			else:
-				person.imagefull = "res://files/images/chloe/chloeshy2.png"
-				
-	elif person.unique == 'Emily':
-		if person.exposed.chest == true && person.exposed.genitals == true || person.exposed.chest == true && person.exposed.ass == true || person.exposed.genitals == true && person.exposed.ass == true:	
-			person.imagetype = 'naked'
-			if person.stress < 20:
-				person.imagefull = "res://files/images/emily/emilynakedhappy.png"
-			else:
-				person.imagefull = "res://files/images/emily/emilynakedneutral.png"	
-		else:
-			person.imagetype = 'default'
-			if person.stress < 20:
-				person.imagefull = "res://files/images/emily/emily2happy.png"
-			elif person.stress < 60:
-				person.imagefull = "res://files/images/emily/emily2neutral.png"
-			else:
-				person.imagefull = "res://files/images/emily/emily2worried.png"	
-	
-	elif person.unique == 'Maple':
-		if person.exposed.chest == true && person.exposed.genitals == true || person.exposed.chest == true && person.exposed.ass == true || person.exposed.genitals == true && person.exposed.ass == true:	
-			person.imagetype = 'naked'
-			person.imagefull = "res://files/images/maple/maplenaked.png"	
-		else:
-			person.imagetype = 'default'
-			person.imagefull = "res://files/images/maple/maple.png"
-				
-	elif person.unique == 'Melissa':
-		if person.exposed.chest == true && person.exposed.genitals == true || person.exposed.chest == true && person.exposed.ass == true || person.exposed.genitals == true && person.exposed.ass == true:	
-			person.imagetype = 'naked'
-			if person.stress < 20:
-				person.imagefull = "res://files/images/melissa/melissanakedfriendly.png"
-			else:
-				person.imagefull = "res://files/images/melissa/melissanakedneutral.png"
-		else:
-			person.imagetype = 'default'
-			if person.stress < 20:
-				person.imagefull = "res://files/images/melissa/melissafriendly.png"
-			elif person.stress < 60:
-				person.imagefull = "res://files/images/melissa/melissaneutral.png"
-			else:
-				person.imagefull = "res://files/images/melissa/melissaworried.png"
-				
-	elif person.unique == 'Tisha':
-		if person.exposed.chest == true && person.exposed.genitals == true || person.exposed.chest == true && person.exposed.ass == true || person.exposed.genitals == true && person.exposed.ass == true:	
-			person.imagetype = 'naked'
-			if person.stress < 20:
-				person.imagefull = "res://files/images/tisha/tishanakedhappy.png"
-			else:
-				person.imagefull = "res://files/images/tisha/tishanakedneutral.png"	
-		else:
-			person.imagetype = 'default'
-			if person.stress < 20:
-				person.imagefull = "res://files/images/tisha/tishahappy.png"
-			elif person.stress < 60:
-				person.imagefull = "res://files/images/tisha/tishaneutral.png"
-			else:
-				person.imagefull = "res://files/images/tisha/tishaangry.png"	
-	
-	elif person.unique == 'Yris':
-		if person.exposed.chest == true && person.exposed.genitals == true || person.exposed.chest == true && person.exposed.ass == true || person.exposed.genitals == true && person.exposed.ass == true:	
-			person.imagetype = 'naked'
-			person.imagefull = "res://files/images/yris/yrisnormalnaked.png"	
-		else:
-			person.imagetype = 'default'
-			person.imagefull = "res://files/images/yris/yrisnormaldressed.png"	
+			stress = HIGH_STRESS
+		person.imagetype = imagetype
+		var ref = dictUniqueImagePaths[person.unique][imagetype]
+		person.imagefull = ref[stress] if ref.has(stress) else ref[HIGH_STRESS] 
 	###---End Expansion---###
 	elif person.imagefull != null:
-		path = person.imagefull
+		var attempt = []
 		if person.preg.duration > 0 || person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height)/2:
-			if person.imagetype == 'default':
-				test = path.replace('bodies',"bodiespreg")
-				if File.new().file_exists(test):
-#				if globals.loadimage(path.replace('bodies',"bodiespreg")) != null:
-					person.imagefull = test
-					person.imagetype = 'preg'
-			elif person.imagetype == 'naked':
-				test = path.replace('bodiesnaked',"bodiespreg")
-				if File.new().file_exists(test):
-#				if globals.loadimage(path.replace('bodies',"bodiespreg")) != null:
-					person.imagefull = test
-					person.imagetype = 'preg'
-			else:
-				test = path.replace('bodiespreg',"bodiespreg")
-				if File.new().file_exists(test):
-#			if globals.loadimage(path.replace('bodiespreg',"bodiespreg")) != null:
-					person.imagefull = test
-					person.imagetype = 'preg'
-		elif person.exposed.chest == true && person.exposed.genitals == true || person.exposed.chest == true && person.exposed.ass == true || person.exposed.genitals == true && person.exposed.ass == true:
-			if person.imagetype == 'default':
-				test = path.replace('bodies',"bodiesnaked")
-				if File.new().file_exists(test):
-#				if globals.loadimage(path.replace('bodies',"bodiesnaked")) != null:
-					person.imagefull = test
-					person.imagetype = 'naked'
-			elif person.imagetype == 'preg':
-				test = path.replace('bodiespreg',"bodiesnaked")
-				if File.new().file_exists(test):
-#				if globals.loadimage(path.replace('bodies',"bodiesnaked")) != null:
-					person.imagefull = test
-					person.imagetype = 'naked'
-			else:
-				test = path.replace('bodiesnaked',"bodiesnaked")
-				if File.new().file_exists(test):
-#				if globals.loadimage(path.replace('bodiesnaked',"bodiesnaked")) != null:
-					person.imagefull = test
-					person.imagetype = 'naked'
-		else:
-			if person.imagetype == 'preg':
-				test = path.replace('bodiespreg',"bodies")
-				if File.new().file_exists(test):
-#				if globals.loadimage(path.replace('bodiespreg',"bodies")) != null:
-					person.imagefull = test
-					person.imagetype = 'default'
-			elif person.imagetype == 'naked':
-				test = path.replace('bodiesnaked',"bodies")
-				if File.new().file_exists(test):
-#				if globals.loadimage(path.replace('bodiesnaked',"bodies")) != null:
-					person.imagefull = test
-					person.imagetype = 'default'
+			attempt.append('preg')
+		if int(person.exposed.chest) + int(person.exposed.genitals) + int(person.exposed.ass) >= 2:
+			attempt.append('naked')
+		attempt.append('default')
+		for a in attempt:
+			var path = person.imagefull.replace( typeToPath[person.imagetype], typeToPath[a] )
+			if globals.canloadimage(path):
+				person.imagefull = path
+				person.imagetype = a
+				break
 	else:
 		if person.imageportait != null && person.imagetype == 'default':
-			path = person.imageportait
-			test = path.replace('portraits',"bodies")
-			if File.new().file_exists(test):
-#			if globals.loadimage(path.replace('portraits',"bodies")) != null:
-				person.imagefull = test
+			var path = person.imageportait.replace('portraits',"bodies")
+			if globals.canloadimage(path):
+				person.imagefull = path
 				person.imagetype = 'default'
-	return
 
+var listCompat = ['','low','medium','high']
+var listSex = ['male', 'female', 'futanari']
 func updateSexualityImage(person):
 	if person == null:
 		return
 	
+	var refSexImg = person.sexuality_images
 	if person.knowledge.has('sexuality'):
-		if person.sex == 'male':
-			person.sexuality_images.base = 'base_male'
-		elif person.sex == 'female':
-			person.sexuality_images.base = 'base_female'
-		else:
-			person.sexuality_images.base = 'base_futa'
-		
-		var compatibility = ''
-		#Male
-		compatibility = testSexualCompatibility(person, person, 'male')
-		if compatibility == 'high':
-			person.sexuality_images.male = 'male_3'
-		elif compatibility == 'medium':
-			person.sexuality_images.male = 'male_2'
-		elif compatibility == 'low':
-			person.sexuality_images.male = 'male_1'
-		else:
-			person.sexuality_images.male = null
-		#Female
-		compatibility = testSexualCompatibility(person, person, 'female')
-		if compatibility == 'high':
-			person.sexuality_images.female = 'female_3'
-		elif compatibility == 'medium':
-			person.sexuality_images.female = 'female_2'
-		elif compatibility == 'low':
-			person.sexuality_images.female = 'female_1'
-		else:
-			person.sexuality_images.female = null
-		#Futa
-		compatibility = testSexualCompatibility(person, person, 'futanari')
-		if compatibility == 'high':
-			person.sexuality_images.futa = 'futa_3'
-		elif compatibility == 'medium':
-			person.sexuality_images.futa = 'futa_2'
-		elif compatibility == 'low':
-			person.sexuality_images.futa = 'futa_1'
-		else:
-			person.sexuality_images.futa = null
+		refSexImg.base = 'base_' + person.sex.trim_suffix('nari')
+		for sex in listSex:
+			var idx = listCompat.find(testSexualCompatibility(person, sex))
+			refSexImg[sex] = null if idx < 1 else (person.sex.trim_suffix('nari') + "_" + str(idx))
 	else:
-		person.sexuality_images.male = null
-		person.sexuality_images.female = null
-		person.sexuality_images.futa = null
-		person.sexuality_images.base = 'unknown'
-	
-	return
+		refSexImg.male = null
+		refSexImg.female = null
+		refSexImg.futa = null
+		refSexImg.base = 'unknown'
+
 
 func checkIncest(person):
-	var related = globals.expansion.relatedCheck(person,globals.player)
+	var related = relatedCheck(person,globals.player)
 	var modifier = 0
 	if related != "none":
 		person.dailyevents.append('incest')
@@ -3400,17 +3232,28 @@ func checkGreed(person):
 	return text
 
 func quickStrip(person):
-	if person.exposed.chest == false:
-		person.exposed.chest = true
-	if person.exposed.genitals == false:
-		person.exposed.genitals = true
-	if person.exposed.ass == false:
-		person.exposed.ass = true
-	return
+	person.exposed.chest = true
+	person.exposed.genitals = true
+	person.exposed.ass = true
 
-func getSexualAttraction(person,target):
-	var success = false
-	var compatibility = globals.expansion.testSexualCompatibility(person,target)
+func isSameSex(sex1, sex2):
+	if sex1 == sex2:
+		return true
+	var futaconsideration = globals.expansionsettings.futasexualitymatch
+	if sex1 == 'futanari':
+		if futaconsideration == 'both':
+			return true
+		return futaconsideration == sex2
+	if sex2 == 'futanari':
+		if futaconsideration == 'both':
+			return true
+		return sex1 == futaconsideration
+	return false
+
+func getSexualAttraction(person, target):
+	var compatibility = testSexualCompatibility(person, target.sex)
+	if compatibility == 'none':
+		return false
 	var base_attraction = (target.beauty-40) + (person.lewdness*.2) + (person.lust*.1) + rand_range(-10,20)
 	var attraction_modifier = target.level * (target.lust*.05)
 	#Apply Player Attraction Modifier
@@ -3418,86 +3261,43 @@ func getSexualAttraction(person,target):
 		attraction_modifier += globals.expansionsettings.playerattractionmodifier
 	#Check Attraction for Success/Failure
 	var attraction = base_attraction + attraction_modifier
-	if compatibility == 'none':
-		return success
-	elif compatibility == 'low' && attraction >= 75:
-		success = true
-	elif compatibility == 'medium' && attraction >= 40:
-		success = true
-	elif compatibility == 'high' && attraction >= 10:
-		success = true
-	return success
+	if compatibility == 'low':
+		return attraction >= 75
+	elif compatibility == 'medium':
+		return attraction >= 40
+	elif compatibility == 'high':
+		return attraction >= 10
+	return false
 
-func testSexualCompatibility(person, target, sexuality = ''):
-	var compatibility = "none"
-	var samesex = false
-	var futaconsideration = globals.expansionsettings.futasexualitymatch
-	
-	#Fail Check
+func testSexualCompatibility(person, targetSex):
 	if person == null:
-		return
-	#Match Sexuality to Person (Accounting for Futas)
-	if target != null and person != target:
-		if person.sex == target.sex:
-			samesex = true
-		elif person.sex == 'futanari' || target.sex == 'futanari':
-			if futaconsideration == 'both':
-				samesex = true
-			elif futaconsideration == 'male':
-				if person.sex in ['male','futanari'] && target.sex in ['male','futanari']:
-					samesex = true
-			elif futaconsideration == 'female':
-				if person.sex in ['female','futanari'] && target.sex in ['female','futanari']:
-					samesex = true
-	#Test Stated Sexuality
-	elif sexuality != '':
-		if person.sex == sexuality:
-			samesex = true
-		elif person.sex == 'futanari' || sexuality == 'futanari':
-			if futaconsideration == 'both':
-				samesex = true
-			elif futaconsideration == 'male':
-				if person.sex in ['male','futanari'] && sexuality in ['male','futanari']:
-					samesex = true
-			elif futaconsideration == 'female':
-				if person.sex in ['female','futanari'] && sexuality in ['female','futanari']:
-					samesex = true
-	else:
-		return compatibility
-	
+		return 'none'
 	#Set Compatibility Rating
 	var idxKS = globals.kinseyscale.find(person.sexuality)
-	if samesex == true:
+	if isSameSex(person.sex, targetSex):
 		if idxKS >= 5:
-			compatibility = 'high'
+			return 'high'
 		elif idxKS >= 3:
-			compatibility = 'medium'
+			return 'medium'
 		elif idxKS > 0:
-			compatibility = 'low'
-	elif samesex == false:
+			return 'low'
+	else:
 		if idxKS <= 1:
-			compatibility = 'high'
+			return 'high'
 		elif idxKS <= 3:
-			compatibility = 'medium'
+			return 'medium'
 		elif idxKS < 5:
-			compatibility = 'low'
-	
-	return compatibility
+			return 'low'
+	return 'none'
 
 func insertCum(taker,giver,location):
 	#Just to Test
-	var amount = round(rand_range(0,1) + giver.person.pregexp.cumprod)
-#	var amount = 1 + giver.pregexp.cumprod
-	if taker.person.cum[location] == 0:
-		taker.person.cum[location] = amount
-	else:
-		taker.person.cum[location] += amount
 
+	taker.person.cum[location] = taker.person.cum.get(location, 0) + round(rand_range(0,1) + giver.person.pregexp.cumprod)
 	if location == 'pussy':
 		taker.pregexp.latestvirility = giver.pregexp.virility
 	updatePerson(taker)
 	updatePerson(giver)
-	return
 
 func getResponse(person,value):
 	#Value accepts Respected, Degraded, and Lewd
@@ -3534,26 +3334,19 @@ func getResponse(person,value):
 	return response
 
 ###---Checks all Treatment Additions and Sorts for the Top Ranked---###
-class TreatmentSorter:
-	static func sort(a, b):
-		if a[0] < b[0]:
-			return true
-		return false
+static func treatmentSort(a, b):
+	return a[0] > b[0]
 
 func getTreatment(person):
 	#Returns Respect, Degradation, or Lewd
 	var totalcount = []
-	var count
 	for i in ['respected','degraded','lewd']:
-		var temparray = []
 		if person.mind.treatment.has(i):
-			temparray.append(person.mind.treatment.count(i))
-			temparray.append(i)
-			totalcount.append(temparray)
-	if totalcount.size() > 0:
-		totalcount.sort_custom(TreatmentSorter, "sort")
-		var chosen = totalcount[0]
-		return chosen[1]
+			totalcount.append([person.mind.treatment.count(i), i])
+	if totalcount.empty():
+		return 'respected'
+	totalcount.sort_custom(self, "treatmentSort")
+	return totalcount[0][1]
 
 ###---Expansion End---###
 
@@ -3563,13 +3356,11 @@ func setTraitsperFetish(person):
 	if globals.fetishopinion.find(person.fetish.dominance) >= 5 && !person.traits.has('Dominant'):
 		if person.knownfetishes.has('dominance'):
 			person.add_trait('Dominant')
-			if person.traits.has('Undiscovered Trait'):
-				person.trait_remove('Undiscovered Trait')
+			person.trait_remove('Undiscovered Trait')
 			if person.dailytalk.has('hint_dominance'):
 				person.dailytalk.erase('hint_dominance')
 		else:
-			if !person.traits.has('Undiscovered Trait'):
-				person.add_trait('Undiscovered Trait')
+			person.add_trait('Undiscovered Trait')
 			if !person.dailytalk.has('hint_dominance'):
 				person.dailytalk.append('hint_dominance')
 	elif globals.fetishopinion.find(person.fetish.dominance) <= 4 && person.traits.has('Dominant'):
@@ -3578,13 +3369,11 @@ func setTraitsperFetish(person):
 	if globals.fetishopinion.find(person.fetish.submission) >= 5 && !person.traits.has('Submissive'):
 		if person.knownfetishes.has('submission'):
 			person.add_trait('Submissive')
-			if person.traits.has('Undiscovered Trait'):
-				person.trait_remove('Undiscovered Trait')
+			person.trait_remove('Undiscovered Trait')
 			if person.dailytalk.has('hint_submissive'):
 				person.dailytalk.erase('hint_submissive')
 		else:
-			if !person.traits.has('Undiscovered Trait'):
-				person.add_trait('Undiscovered Trait')
+			person.add_trait('Undiscovered Trait')
 			if !person.dailytalk.has('hint_submissive'):
 				person.dailytalk.append('hint_submissive')
 	elif globals.fetishopinion.find(person.fetish.submission) <= 4 && person.traits.has('Submissive'):
@@ -3594,13 +3383,11 @@ func setTraitsperFetish(person):
 	if globals.fetishopinion.find(person.fetish.sadism) >= 5 && !person.traits.has('Sadist'):
 		if person.knownfetishes.has('sadism'):
 			person.add_trait('Sadist')
-			if person.traits.has('Undiscovered Trait'):
-				person.trait_remove('Undiscovered Trait')
+			person.trait_remove('Undiscovered Trait')
 			if person.dailytalk.has('hint_sadism'):
 				person.dailytalk.erase('hint_sadism')
 		else:
-			if !person.traits.has('Undiscovered Trait'):
-				person.add_trait('Undiscovered Trait')
+			person.add_trait('Undiscovered Trait')
 			if !person.dailytalk.has('hint_sadism'):
 				person.dailytalk.append('hint_sadism')
 	elif globals.fetishopinion.find(person.fetish.sadism) <= 4 && person.traits.has('Sadist'):
@@ -3609,15 +3396,12 @@ func setTraitsperFetish(person):
 	if globals.fetishopinion.find(person.fetish.masochism) >= 5 && !person.traits.has('Masochist'):
 		if person.knownfetishes.has('masochism'):
 			person.add_trait('Masochist')
-			if person.traits.has('Undiscovered Trait'):
-				person.trait_remove('Undiscovered Trait')
+			person.trait_remove('Undiscovered Trait')
 			if person.dailytalk.has('hint_masochism'):
 				person.dailytalk.erase('hint_masochism')
 		else:
-			if !person.traits.has('Undiscovered Trait'):
-				person.add_trait('Undiscovered Trait')
+			person.add_trait('Undiscovered Trait')
 			if !person.dailytalk.has('hint_masochism'):
 				person.dailytalk.append('hint_masochism')
 	elif globals.fetishopinion.find(person.fetish.masochism) <= 4 && person.traits.has('Masochist'):
 		person.trait_remove('Masochist')
-	return

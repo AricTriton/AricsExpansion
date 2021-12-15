@@ -1519,7 +1519,7 @@ func energy_cur(value):
 	return ''
 
 func toxicity(value):
-	person.energy -= value
+	person.toxicity -= value
 	return ''
 
 func beauty(value):
@@ -1527,6 +1527,7 @@ func beauty(value):
 
 func lust(value):
 	person.lust += value
+	return ''
 
 func luxury(value):
 	person.luxury += value
@@ -2152,6 +2153,7 @@ func sortbytype(first, second):
 
 func foodpurchase(item):
 	var amount = globals.itemdict.food.amount
+	amount = min(amount, ceil((globals.resources.foodcaparray[globals.state.mansionupgrades.foodcapacity] - globals.resources.food) / 20.0))
 	globals.resources.gold -= amount*globals.itemdict.food.cost
 	globals.resources.food += amount*20
 	globals.itemdict.food.amount = 0
@@ -2163,8 +2165,8 @@ func teleportunlock(item):
 	if item.code != 'teleportumbra':
 		globals.get_tree().get_current_scene().popup("Portal to " + item.code.replace('teleport','').capitalize() + ' has been unlocked.')
 	else:
-		globals.get_tree().get_current_scene().get_node("outside/shoppanel/inventory")._on_inventoryclose_pressed()
 		globals.get_tree().get_current_scene().get_node("outside").sebastianquest(4)
+		globals.get_tree().get_current_scene().get_node("outside/shoppanel/inventory")._on_inventoryclose_pressed()
 		globals.get_tree().get_current_scene().get_node("outside").shopclose()
 ###---End Expansion---###
 

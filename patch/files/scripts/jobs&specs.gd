@@ -811,10 +811,11 @@ func cooking(person):
 	var food = 0
 	person.xp += globals.slavecount() * 2
 	if globals.resources.food < 200:
-		if globals.resources.gold >= globals.state.foodbuy/2:
+		var temp = min(globals.state.foodbuy, globals.resources.foodcaparray[globals.state.mansionupgrades.foodcapacity] - globals.resources.food)
+		if globals.resources.gold >= temp/2:
 			text = '$name went to purchase groceries and brought back new food supplies.\n'
-			gold = -globals.state.foodbuy/2
-			food = globals.state.foodbuy
+			gold = -temp/2
+			food = temp
 		else:
 			text = '$name complained about the lack of food and no money to supply the kitchen on $his own.\n'
 	###---Added by Expansion---### Job Skills
@@ -1068,7 +1069,7 @@ func storewimborn(person):
 		if gold >= 0:
 			text += "With the money earned $he purchased [color=yellow]" + str(supplySold) + "[/color] units of supplies. "
 		elif gold < 0:
-			text += "$With the money earned and [color=yellow]"+str(gold)+"[/color] gold $he purchased [color=yellow]" + str(supplySold) + "[/color] units of supplies.\n"
+			text += "With the money earned and [color=yellow]"+str(gold)+"[/color] gold $he purchased [color=yellow]" + str(supplySold) + "[/color] units of supplies.\n"
 	else:
 		supplySold = 0
 

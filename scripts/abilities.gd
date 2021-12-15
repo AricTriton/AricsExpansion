@@ -881,6 +881,7 @@ func lust(combatant, value):
 var passivesdict = {
 	doubleattack15 = {code = 'doubleattack15', effect = 'doubleattack', effectvalue = 15, descript = '15% chance to attack twice'},
 	doubleattack25 = {code = 'doubleattack25', effect = 'doubleattack', effectvalue = 25, descript = '25% chance to attack twice'},
+	doubleattack50 = {code = 'doubleattack50', effect = 'doubleattack', effectvalue = 50, descript = '50% chance to attack twice'},
 	cultleaderpassive = {code = 'cultleaderpassive', effect = 'cultleaderpassive', effectvalue = null, descript = 'Grows stronger when allies defeated'}
 }
 

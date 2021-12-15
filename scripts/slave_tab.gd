@@ -1,5 +1,5 @@
 
-var showfullbody = true
+#var showfullbody = true
 
 func slavetabopen():
 	var label
@@ -26,7 +26,8 @@ func slavetabopen():
 	text = person.status()
 	$stats/statustext.set_bbcode(text)
 	###---Added by Expansion---### Fix Fullbody Showing
-	if showfullbody == true:
+	#if showfullbody == true:
+	if globals.rules.showfullbody:
 		$stats/basics/bodypanel/fullbody.set_texture(null)
 		if person.imagefull != null && globals.loadimage(person.imagefull) != null:
 			$stats/basics/bodypanel/fullbody.set_texture(globals.loadimage(person.imagefull))
@@ -99,7 +100,7 @@ func slavetabopen():
 		globals.state.tutorial.person = true
 		get_tree().get_current_scene().get_node("tutorialnode").slaveinitiate()
 
-	$stats/basics/fullbodycheck.pressed = showfullbody
+	#$stats/basics/fullbodycheck.pressed = showfullbody
 
 	if person.work == 'jailer':
 		get_node("stats/workbutton").set_text('Jailer')
@@ -443,7 +444,7 @@ func sleeprooms():
 	###---End Expansion---###
 ###---End Expansion---###
 							 
-\
+
 ###---Added by Expansion---### Family Expanded
 func _on_relativesbutton_pressed():
 	var text = ''
