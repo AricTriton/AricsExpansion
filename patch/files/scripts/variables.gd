@@ -9,7 +9,7 @@ var timeformeetinteraction = 20.0
 var enchantitemprice = 1.5
 var sellingitempricemod = 0.2
 var basefoodconsumption = 10.0
-var skillpointsperlevel = 1.0 #/ralph
+var skillpointsperlevel = 2.0
 var timeforinteraction = 20.0
 var bonustimeperslavefororgy = 10.0
 var consumerope = 1.0
@@ -33,12 +33,12 @@ var banditishumanchance = 70.0
 
 ###---Added by Expansion---### Pregnancy Expanded
 var pregduration = 14.0
-var growuptimechild = 1.0 #/ralph
-var growuptimeteen = 2.0 #/ralph
-var growuptimeadult = 3.0 #/ralph
+var growuptimechild = 2.0
+var growuptimeteen = 4.0
+var growuptimeadult = 6.0
 ###---End Expansion---###
 var traitinheritchance = 80.0
-var babynewtraitchance = 33.0 #/ralph
+var babynewtraitchance = 20.0
 ###---Added by Expansion---### Pregnancy Expanded (Deviate)
 var ovulationtype1stage1 = 8
 var ovulationtype1stage2 = 15

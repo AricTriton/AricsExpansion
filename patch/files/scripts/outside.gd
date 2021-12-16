@@ -644,9 +644,9 @@ func marketsattext():
 			starttext = "[color=yellow]"
 			endtext = "[/color]"
 		if !marketrate in [0,1,2,3,4,5,6,7,8,9,10]:
-			sattext = sattext + "Price x " + starttext + str(marketrate) + endtext + " for [color=aqua]" + racetext + endtext + "\n"
+			sattext = sattext + "Price x " + starttext + str(marketrate) + endtext + " for [color=aqua]" + racetext + endtext + "[/color]\n"
 		else:
-			sattext = sattext + "Price x " + starttext + str(marketrate) + extrazero + endtext + " for [color=aqua]" + racetext + endtext + "\n"
+			sattext = sattext + "Price x " + starttext + str(marketrate) + extrazero + endtext + " for [color=aqua]" + racetext + endtext + "[/color]\n"
 	return sattext
 		#print("Market pricing for " + str(i) + "'s increased by" + str(max(0.01,(1-globals.state.racemarketsat[i])*0.25)) + " from " + str(globals.state.racemarketsat[i]))
 		#globals.state.racemarketsat[i] = clamp(globals.state.racemarketsat[i] + max(0.01,(1-globals.state.racemarketsat[i])*0.25),0.5,globals.races[i].pricemod) #under 1.0, recovers quickly toward 1 - over 1.0 increase 0.1 every 10 days
@@ -825,7 +825,7 @@ var guildlocation
 func slaveguildslaves(location):
 	guildlocation = location
 	get_node("slavebuypanel").visible = true
-	var cost = globals.expansionsettings.mindread_manacost*globals.expansionsettings.spellcost
+	var cost = ceil((globals.spelldict.mindread.manacost*globals.expansionsettings.spellcost)*1.5)
 	if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction:
 		cost = cost/2
 	get_node("slavebuypanel/mindreadbutton").text = "Use Mind Read (" +str(cost)+ ")"
@@ -1005,7 +1005,7 @@ func _on_slavesellbutton_pressed():
 		###---Added by Expansion---###
 		globals.expansion.updatePerson(selectedslave)
 		if selectedslave.npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
-			globals.resources.upgradepoints += (globals.originsarray.find(selectedslave.origins)+1)*1.5 #ralph3
+			globals.resources.upgradepoints += (globals.originsarray.find(selectedslave.origins)+1)*globals.expansionsettings.mansion_bred_and_breeder
 		elif selectedslave.npcexpanded.mansionbred == true:
 			globals.resources.upgradepoints += round((globals.originsarray.find(selectedslave.origins)+1)*1.25)
 		else:
@@ -1017,7 +1017,7 @@ func _on_slavesellbutton_pressed():
 		###---Added by Expansion---### Person Expanded / Breeder Specialty
 		globals.expansion.updatePerson(selectedslave)
 		if selectedslave.npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
-			globals.resources.upgradepoints += (globals.originsarray.find(selectedslave.origins)+1)*1.5 #ralph3
+			globals.resources.upgradepoints += (globals.originsarray.find(selectedslave.origins)+1)*globals.expansionsettings.mansion_bred_and_breeder
 		elif selectedslave.npcexpanded.mansionbred == true:
 			globals.resources.upgradepoints += round((globals.originsarray.find(selectedslave.origins)+1)*1.25)
 		else:
@@ -1078,7 +1078,7 @@ func sellslavelist(location):
 			newbutton.get_node("sex").hint_tooltip = person.sex
 			###---Added by Expansion---### Breeder Specialization Support & Ank BugFix v4
 			if person.npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
-				newbutton.get_node('name').set_text(person.dictionary('$name, ')+ person.race + ', ' + person.age + ', ' + person.work + '[color=aqua]Born in Mansion - +50% Gold/Upgrade Points[/color]') #ralph3
+				newbutton.get_node('name').set_text(person.dictionary('$name, ')+ person.race + ', ' + person.age + ', ' + person.work + '[color=aqua]Born in Mansion - x' + str(globals.expansionsettings.mansion_bred_and_breeder) + ' Gold/Upgrade Points[/color]') #ralph3
 			elif person.npcexpanded.mansionbred == true:
 				newbutton.get_node('name').set_text(person.dictionary('$name, ')+ person.race + ', ' + person.age + ', ' + person.work + '[color=aqua]Born in Mansion - +25% Gold/Upgrade Points[/color]')
 			else:
@@ -2898,15 +2898,12 @@ func _on_capturedmindread_pressed():
 func _on_quicksell_pressed():
 	var text = ''
 	var gold = 0
-	var array = []
-	#ralph5
+	var array = globals.state.capturedgroup
+	globals.state.capturedgroup = []
 	var racepricemodchange = 0
 	var racepricemod = 1
-	#/ralph5
-	for i in globals.state.capturedgroup:
-		array.append(i)
 	for i in array:
-		gold += i.sellprice()*.9 #ralph3
+		gold += floor(i.sellprice()*globals.expansionsettings.quicksell_slave_pressed)
 		#ralph5
 		racepricemod = globals.state.racemarketsat[i.race.replace('Halfkin', 'Beastkin')]
 		#print("Pricemod for " + i.race + " is " + str(racepricemod))
@@ -2917,8 +2914,10 @@ func _on_quicksell_pressed():
 		#/ralph5
 		globals.state.capturedgroup.erase(i)
 	main.popup('You furtively delivered your captives to the local slaver guild. This earned you [color=yellow]' + str(gold) + '[/color] gold. ')
+	globals.state.backpack.stackables.rope = globals.state.backpack.stackables.get('rope', 0) + globals.state.calcRecoverRope(array.size())
 	globals.resources.gold += gold
 	_on_details_pressed()
+	playergrouppanel()
 
 var lowcrime = ["theft","banditry","robbery","smuggling","poaching","assualt","assualt","indecent exposure","vandalism","fraud","threats against one of higher caste","threats upon a member of the guard","defacing a public monument","theft of livestock","harboring an escaped slave","banditry","banditry","banditry","banditry","banditry","banditry","banditry","banditry","aiding and abetting a known fugitive","trespassing","fencing stolen goods","sale of counterfeit potions","impersonating a guard","vagrancy","robbery","robbery","robbery","robbery","theft","theft","theft","theft","obstruction of justice","forgery"]
 var midcrime = ["manslaughter","armed robbery","kidnapping","desertion","murder","assualt on a town guard","rape","removal of a slave brand","incitation to rebellion","assault of one of higher caste","impersonating a member of the mage guild"]

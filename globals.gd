@@ -1050,6 +1050,7 @@ func slavetooltip(person):
 
 var longtails = ['cat','fox','wolf','demon','dragon','scruffy','snake tail','racoon','mouse']
 var alltails = ['cat','fox','wolf','bunny','bird','demon','dragon','scruffy','snake tail','racoon','mouse']
+var alleyecolors = ['blue', 'green', 'brown', 'hazel', 'black', 'gray', 'purple', 'yellow', 'amber', 'red', 'auburn']
 ###---Added by Expansion---### Kennels Expanded
 var sleepdict = {communal = {name = 'Communal Room'}, jail = {name = "Jail"}, personal = {name = 'Personal Room'}, your = {name = "Your bed"}, kennel = {name = "Dog Kennel"}}
 
@@ -1249,8 +1250,8 @@ var expansionsetup = loadModFile("AricsExpansion", "customScripts/expansionsetup
 var expansionfarm = loadModFile("AricsExpansion", "customScripts/expansionfarm.gd").new()
 var expansiontalk = loadModFile("AricsExpansion", "customScripts/expansiontalk.gd").new()
 var backwardscompatibility = loadModFile("AricsExpansion", "customScripts/backwardscompatibility.gd").new()
-var useRalphsTweaks = false
 var expansionsettings = loadModFile("AricsExpansion", "customScripts/expansionsettings.gd").new()
+var useRalphsTweaks = expansionsettings.use_ralphs_tweaks
 
 ###---Added by Expansion---### General Arrays
 #Size Arrays
@@ -1278,10 +1279,9 @@ var expandedtowns = ['wimborn','frostford','gorn','amberguard','shaliq','umbra']
 var expandedplayerspecs = {
 	Slaver = "+100% gold from selling captured slaves\n+33% gold reward from slave delivery tasks",
 	Hunter = "+100% gold drop from random encounters\n+20% gear drop chance\nBonus to preventing ambushes",
-	Alchemist = "Double potion production\nSelling potions earn 100% more gold\n[color=aqua]Start with an Alchemy Room unlocked[/color]",
-	Mage = ("Combat spell deal 20% more damage" if useRalphsTweaks else "-50% mana cost of spells\nCombat spell deal 20% more damage"),
-	#Breeder = "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for 200% more and receive 2x as many upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]"
-	Breeder = "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for 20% more gold and provide 20% more upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]" #ralph3
+	Alchemist = "Double potion production\nSelling potions earn +100% more gold\n[color=aqua]Start with an Alchemy Room unlocked[/color]",
+	Mage = ("Combat spell deal +20% more damage" if useRalphsTweaks else "-50% mana cost of spells\nCombat spell deal +20% more damage"),
+	Breeder = ("Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for +20% more gold and provide 20% more upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]" if useRalphsTweaks else "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for +100% more and receive 2x as many upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]")
 }
 
 ###---Added by Expansion---### Movement Icons (replicated)
@@ -1346,18 +1346,10 @@ var sexuality_images = {
 	futa_3 = load("res://files/aric_expansion_images/sexuality_icons/futa_3.png"),
 }
 
-var playerspecs = {
-	Slaver = "+100% gold from selling captured slaves\n+33% gold reward from slave delivery tasks",
-	Hunter = "+100% gold drop from random encounters\n+20% gear drop chance\nBonus to preventing ambushes",
-	Alchemist = "Start with an alchemy room\nDouble potion production\nSelling potions earn 100% more gold",
-	Mage = "Combat spell deal 20% more damage", #ralph3
-}
-
+<AddTo -1>
 func _ready():
-	var temp
 	if useRalphsTweaks:
 		expansionsettings.applyTweaks()
-		print(expansionsettings.spellcost)
 
 ###---Added by Expansion---### Farm Expanded
 func getVatMaxCapacity(type):

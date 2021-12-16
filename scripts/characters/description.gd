@@ -5,7 +5,7 @@ func getslavedescription(tempperson, mode = 'default'):
 	###---Added by Expansion---###
 	globals.expansion.updatePerson(person)
 	###---Expansion End---###
-	var text = basics() + features() + genitals() + mods() + tattoo() + piercing()
+	var text = basics() + features() + genitals() + mods() + tattoo() + piercing() + onceperdayConvos()
 	if person.customdesc != '':
 		text += '\n\n' + person.customdesc
 	if person == globals.player:

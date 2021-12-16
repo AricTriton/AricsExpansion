@@ -116,6 +116,10 @@ var enemygrouppools = {
 		description = 'You spot a [color=aqua]group of cave goblins[/color] moving through the tunnels. ',
 		descriptionambush = "A [color=aqua]group of cave goblins[/color] jumps on you. ",
 	},
+	dryad = {
+		units = [['dryad',1,1]], awareness = 0, captured = null, special = null,
+		description = 'You spot a wild [color=aqua]$race $child[/color] walking through the woods.',
+	},
 	dryad2 = {
 		units = [['dryad2',2,4]], awareness = 20, captured = null, special = null, #ralph4
 		description = 'You spot a group of bark-armored dryads apparently searching the woods for intruders.', #ralph4

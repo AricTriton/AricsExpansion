@@ -420,19 +420,18 @@ func getessence():
 	###---Expansion End---###
 	return essence
 
-#ralph
-func playercleartraits():
+func cleartraits():
 	spec = null
 	while !traits.empty():
 		trait_remove(traits.back())
 	for i in ['str_base','agi_base', 'maf_base', 'end_base']:
 		stats[i] = 0
-	for i in ['str_mod','agi_mod','maf_mod','end_mod']:
-		stats[i] = 0	
+	if globals.useRalphsTweaks && self == globals.player:
+		for i in ['str_mod','agi_mod','maf_mod','end_mod']:
+			stats[i] = 0
 	skillpoints = 2
 	level = 1
 	xp = 0
-#/ralph
 
 func health_set(value):
 	###---Added by Expansion---### Crystal | Added Death Prevention
@@ -844,8 +843,7 @@ func calculateprice():
 	var bonus = 1
 	price = beautybase*variables.priceperbasebeauty + beautytemp*variables.priceperbonusbeauty
 	price += (level-1)*variables.priceperlevel
-	#price = price*globals.races[race.replace('Halfkin', 'Beastkin')].pricemod #ralph5
-	price = price*globals.state.racemarketsat[race.replace('Halfkin', 'Beastkin')] #ralph5
+	price = (price*globals.state.racemarketsat[race.replace('Halfkin', 'Beastkin')] if globals.useRalphsTweaks else price*globals.races[race.replace('Halfkin', 'Beastkin')].pricemod)
 	if vagvirgin == true:
 		bonus += variables.pricebonusvirgin
 	if sex == 'futanari':
@@ -871,11 +869,11 @@ func calculateprice():
 
 	###---Added by Expansion---### Breeder Support
 	if npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
-		price *= 1.5 #ralph3
+		price *= globals.expansionsettings.mansion_bred_and_breeder
 	elif npcexpanded.mansionbred == true:
 		price = round(price*1.25)
 	###---End Expansion---###
-	bonus = bonus/2 #ralph4
+	bonus = bonus/globals.expansionsettings.calculate_price_bonus_divide
 	
 	price = price*bonus
 
@@ -897,7 +895,7 @@ func sellprice(alternative = false):
 	price = max(round(price), variables.priceminimumsell)
 	###---Added by Expansion---### Breeder Support
 	if npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
-		price *= 1.5 #ralph3
+		price *= globals.expansionsettings.mansion_bred_and_breeder
 	elif npcexpanded.mansionbred == true:
 		price = round(price*1.25)
 	###---End Expansion---###
@@ -1132,9 +1130,7 @@ func get_race_display():
 	var rvar = ''
 	if race != race_display:
 		if race_display in globals.dictionary.hybriddict:
-			var temp1 = "[color=yellow]Subspecies: "
-			var temp2 = "[/color]"
-			rvar = ' (' + temp1 + race_display + temp2 + ')'
+			rvar = ' ([color=yellow]Subspecies: ' + race_display + '[/color])'
 		else:
 			rvar = ' (' + race_display + ')'
 	

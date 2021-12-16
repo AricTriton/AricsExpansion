@@ -4,7 +4,7 @@ var hobbydescription = {
 	'Physical' : '[color=aqua]+1 Max Strength, +25 Courage[/color]\n\n$name is no stranger to fighting and tends to act boldly in many situations.',
 	'Etiquette' : "[color=aqua]+20 Confidence, +15 Charm[/color]\n\n$name has spent $his youth among elderly people and high society, learning how to be liked and present $himself while also feeling superior to commonfolk.",
 	'Graceful' : "[color=aqua]+1 Max Agility, +10 Confidence[/color]\n\n$name was the fastest kid $he knew growing up and a natural when it came to hand-eye coordination in general.", #ralph3
-	'Magic' : "[color=aqua]+1 Max Magic, +25 Wit[/color]\n\n$name was a very curious child and spent a lot of $his time reading and studying various things, including magic.", #ralph3
+	'Magic' : "[color=aqua]+" + str(globals.expansionsettings.magic_hobby_maf_max) + " Max Magic, +25 Wit[/color]\n\n$name was a very curious child and spent a lot of $his time reading and studying various things, including magic.", #ralph3
 	'Servitude' : "[color=aqua]+1 Max Endurance, +35 Min Obedience, +20 Loyalty[/color]\n\n$name has spent $his youth in harsh training which lead to $him being more physically fit and respecting to $his superiors.",
 	'Curious' : "[color=aqua]Start with the [color=green]Gifted[/color] trait.[/color]\n\n$name spends $his time searching for answers and meaning in this crazy world. This has led $him to become more receptive to new skills and knowledge.",
 	'Genius' : "[color=aqua]Start with the [color=green]Clever[/color] trait and randomly either the [color=green]Responsive[/color] or [color=green]Gifted[/color] trait.[/color]\n[color=red]Gains either the Clumsy, Frail, or Weak trait.[/color]\n\n$name spends $his time studying and thinking and tends to not focus on physical activities.\n",
@@ -92,9 +92,8 @@ func _ready_newgame_creator():
 	
 	#Initialize newgame variables
 	player = globals.newslave(playerDefaults.race, playerDefaults.age, playerDefaults.sex, playerDefaults.origins) #Prefer to use a constructor/builder
-	#ralph
-	player.playercleartraits()
-	#/ralph
+	globals.player = player #Necessary for descriptions to properly identify player character during newgame creation
+	player.cleartraits()
 	player.hairstyle = 'straight'
 	player.beautybase = variables.playerstartbeauty
 	
@@ -113,7 +112,7 @@ func regenerateplayer():
 	player = globals.newslave(player.race, player.age, player.sex, 'slave')
 	globals.player = player
 	#ralph
-	player.playercleartraits()
+	player.cleartraits()
 	#/ralph
 	player.unique = 'player'
 	player.imageportait = imageportait
@@ -232,9 +231,10 @@ func _select_stage(button):
 	if stage >= 6: #If backtracking after reaching player specialization stage
 		var spec = player.spec
 		#ralph
-		player.playercleartraits()
+		player.cleartraits()
 		#/ralph
-		
+		player.spec = spec
+
 	#Update stage and advance
 	self.stage = button.get_position_in_parent()
 
@@ -395,7 +395,7 @@ func _on_slaveconfirm_pressed():
 	#/ralph3
 	elif startSlaveHobby == 'Magic':
 		startSlave.wit += 25
-		startSlave.stats.maf_max += 1 #ralph3
+		startSlave.stats.maf_max += globals.expansionsettings.magic_hobby_maf_max
 	elif startSlaveHobby == 'Servitude':
 		startSlave.stats.end_max += 1
 		startSlave.loyal += 20

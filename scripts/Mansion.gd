@@ -1106,21 +1106,29 @@ func _on_end_pressed():
 				text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=#ff4949]Mansion's terrible condition causes $name a lot of stress and impacted $his health. [/color]\n"))
 	#####          Outside Events
 
+	for guild in globals.guildslaves:
+		var slaves = globals.guildslaves[guild]
+		count = round(clamp(0.25, 0.75, 0.01 * slaves.size() + rand_range(0.1, 0.4)) * slaves.size())
+		###---Added by Expansion---### Ank BugFix v4a
+		var idx
+		var removeId
+		var tempslave
+		for i in range(count):
+			idx = randi() % (slaves.size()*7/4) % slaves.size()
+			removeId = slaves[idx].id
+			for id in slaves[idx].relations:
+				tempslave = globals.state.findslave(id)
+				if tempslave:
+					tempslave.relations.erase(removeId)
+			slaves.remove(idx)
+		###---End Expansion---###
 
-	for i in globals.guildslaves:
-		var tempcount = 0 #ralph6
-		for person in globals.guildslaves[i]:
-			count = 0
-			#if randf() < 0.2: #ralph6
-			#	globals.guildslaves[i].remove(count)  #ralph6
-			count += 1
-			if rand_range(0,100) <= 20: #ralph6
-				globals.guildslaves[i].remove(tempcount)  #ralph6
-			tempcount += 1 #ralph6
-		if globals.guildslaves[i].size() < 4:
-			get_node("outside").newslaveinguild(1, i, 'rand') #ralph5 added 3rd entry
-		if globals.guildslaves[i].size() < 6 && randf() > 0.25:
-			get_node("outside").newslaveinguild(1, i, 'rand') #ralph5 added 3rd entry
+		if slaves.size() < 4:
+			get_node("outside").newslaveinguild(2, guild)
+		if slaves.size() < 10 && randf() < 0.85:
+			get_node("outside").newslaveinguild(1, guild)
+		if randf() < 0.5:
+			get_node("outside").newslaveinguild(1, guild)
 			
 	if globals.state.sebastianorder.duration > 0:
 		globals.state.sebastianorder.duration -= 1

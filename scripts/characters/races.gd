@@ -29,10 +29,12 @@ var races = {
 		uncivilized = false,
 		sebastian = false,
 		shade = {male = "res://files/buttons/inventory/shades/Human_M.png", female = "res://files/buttons/inventory/shades/Human_F.png"},
-		stats = {str_max = 3, 
-		agi_max = 3, 
-		maf_max = 3, 
-		end_max = 3}
+		stats = {
+			str_max = 3, 
+			agi_max = 3, 
+			maf_max = 3, 
+			end_max = 3
+		}
 	},
 	Elf = {
 		surname = names.elfsurname,
@@ -57,39 +59,12 @@ var races = {
 		uncivilized = false,
 		sebastian = false,
 		shade = {male = "res://files/buttons/inventory/shades/Elf_M.png", female = "res://files/buttons/inventory/shades/Elf_F.png"},
-		stats = {str_max = 2,
-		agi_max = 5,
-		maf_max = 4,
-		end_max = 2}
-	},
-	'Dark Elf' : {
-		surname = names.elfsurname,
-		description = "Dark Elves are a race, considered a branching species of elf. Little is known about their history and motherland, if they ever had one at all, as their underground cities are spread thin across multiple continents, and are even more difficult to enter than to locate.\n\nBeyond a preference for isolation and their general appearance, Dark Elves are quite different from their cousins in both attitude and culture. However, what sets them apart most is the unusual pigmentation of their skin; a dark colors with occasional blue tint. The unusual pigmentation is the subject of much debate and speculation, with theories ranging from natural mutation, to the byproduct of ancient beings.",
-		details = "[color=aqua]Racial trait: sexual actions give 20% more mana.[/color]\n\n[color=yellow]Stat potential: Strength - 2, Agility - 5, Magic - 5, Endurance - 2 [/color]\n\nBreeding Note:\nElves in general owe some of their amazing finesse and grace of movement to their fine bone structure in addition to a simple advantage of reflex. As a consequence of their original purpose, in most lands they are thought to be infertile outside their race and in addition to their enhanced affinity for all elements Dark Elves are known to be particularly sensitive to mana corruption. This presents a potential double-edged sword in that offspring resulting from unions with corrupted bloodlines often suffer distinct shortcomings.\n\n\n[color=yellow]Racial Stat Bonus:\nAgility+, Magic+ \nPure Blood Bonus:\nStrength+\nOther Racial Characteristics:\nBeauty+, Fertility-, Wit+ [/color]\n[color=red]Elemental Modifiers\n25% Water \nElemental Bonuses:\nFire(Str+), Wind(Agi+), Water(Mag+), Earth(End+) [/color]\n[color=green]Nature Magic Saturation:\n50% \nNature Bonus:\nAmplifies Elemental Bonuses [/color]\n[color=purple]Mana Corruption:\n50% \nHigher Corruption:\nAll stats-, Beauty-, Fertility-, Charm- \nLower Corruption:\nAll stats+ based on elemental make-up, Charm+ [/color]\n[color=aqua]Breeding Quirks:\nGains stat bonuses from all elements \nPossible Mutations:\nHuldrekall, Nymph, Undine [/color]",
-		pricemod = 2.5,
-		#ralph5
-		marketup = ["Demand for [color=aqua]dark elves[/color] is up.\n","[color=aqua]Dark Elves[/color] are the latest status symbols for up and coming mages. Slavers simply cannot keep up with demand.\n","A consortium of mages is attempting to create a new species and [color=aqua]dark elves[/color] are in higher demand for their mana output.\n"],
-		marketdown = ["[color=aqua]Dark Elves[/color] just aren't selling for what they used to.\n","Rumors abound that sex with subterranean species promotes the cockrot. Demand for [color=aqua]dark elves[/color] falls.\n"],
-		single = " elf",
-		plural = " elves",
-		singlepos = " elf's",
-		pluralpos = " elves'",
-		#/ralph5
-		startingrace = false,
-		wimbornrace = false,
-		gornrace = false,
-		frostfordrace = false,
-		banditrace = false,
-		uncivilized = false,
-		sebastian = true,
-		ears = ['pointy'],
-		skin = ['blue', 'purple', 'pale blue'],
-		haircolor = ['white', 'green', 'purple', 'blue', 'blond', 'red', 'auburn'],
-		shade = {male = "res://files/buttons/inventory/shades/Elf_M.png", female = "res://files/buttons/inventory/shades/Elf_F.png"},
-		stats = {str_max = 2,
-		agi_max = 5,
-		maf_max = 5,
-		end_max = 2,}
+		stats = {
+			str_max = 2,
+			agi_max = 5,
+			maf_max = 4,
+			end_max = 2
+		}
 	},
 	'Tribal Elf' : {
 		surname = names.elfsurname,
@@ -116,10 +91,43 @@ var races = {
 		eyecolor = ['blue', 'green', 'amber', 'red', 'purple'],
 		haircolor = ['white', 'green', 'purple', 'blue', 'blond', 'red', 'auburn'],
 		shade = {male = "res://files/buttons/inventory/shades/Elf_M.png", female = "res://files/buttons/inventory/shades/Elf_F.png"},
-		stats = {str_max = 3,
-		agi_max = 5,
-		maf_max = 3,
-		end_max = 2}
+		stats = {
+			str_max = 3,
+			agi_max = 5,
+			maf_max = 3,
+			end_max = 2
+		}
+	},
+	'Dark Elf' : {
+		surname = names.elfsurname,
+		description = "Dark Elves are a race, considered a branching species of elf. Little is known about their history and motherland, if they ever had one at all, as their underground cities are spread thin across multiple continents, and are even more difficult to enter than to locate.\n\nBeyond a preference for isolation and their general appearance, Dark Elves are quite different from their cousins in both attitude and culture. However, what sets them apart most is the unusual pigmentation of their skin; a dark colors with occasional blue tint. The unusual pigmentation is the subject of much debate and speculation, with theories ranging from natural mutation, to the byproduct of ancient beings.",
+		details = "[color=aqua]Racial trait: sexual actions give 20% more mana.[/color]\n\n[color=yellow]Stat potential: Strength - 2, Agility - 5, Magic - 5, Endurance - 2 [/color]\n\nBreeding Note:\nElves in general owe some of their amazing finesse and grace of movement to their fine bone structure in addition to a simple advantage of reflex. As a consequence of their original purpose, in most lands they are thought to be infertile outside their race and in addition to their enhanced affinity for all elements Dark Elves are known to be particularly sensitive to mana corruption. This presents a potential double-edged sword in that offspring resulting from unions with corrupted bloodlines often suffer distinct shortcomings.\n\n\n[color=yellow]Racial Stat Bonus:\nAgility+, Magic+ \nPure Blood Bonus:\nStrength+\nOther Racial Characteristics:\nBeauty+, Fertility-, Wit+ [/color]\n[color=red]Elemental Modifiers\n25% Water \nElemental Bonuses:\nFire(Str+), Wind(Agi+), Water(Mag+), Earth(End+) [/color]\n[color=green]Nature Magic Saturation:\n50% \nNature Bonus:\nAmplifies Elemental Bonuses [/color]\n[color=purple]Mana Corruption:\n50% \nHigher Corruption:\nAll stats-, Beauty-, Fertility-, Charm- \nLower Corruption:\nAll stats+ based on elemental make-up, Charm+ [/color]\n[color=aqua]Breeding Quirks:\nGains stat bonuses from all elements \nPossible Mutations:\nHuldrekall, Nymph, Undine [/color]",
+		pricemod = 2.5,
+		#ralph5
+		marketup = ["Demand for [color=aqua]dark elves[/color] is up.\n","[color=aqua]Dark Elves[/color] are the latest status symbols for up and coming mages. Slavers simply cannot keep up with demand.\n","A consortium of mages is attempting to create a new species and [color=aqua]dark elves[/color] are in higher demand for their mana output.\n"],
+		marketdown = ["[color=aqua]Dark Elves[/color] just aren't selling for what they used to.\n","Rumors abound that sex with subterranean species promotes the cockrot. Demand for [color=aqua]dark elves[/color] falls.\n"],
+		single = " elf",
+		plural = " elves",
+		singlepos = " elf's",
+		pluralpos = " elves'",
+		#/ralph5
+		startingrace = false,
+		wimbornrace = false,
+		gornrace = false,
+		frostfordrace = false,
+		banditrace = false,
+		uncivilized = false,
+		sebastian = true,
+		ears = ['pointy'],
+		skin = ['blue', 'purple', 'pale blue'],
+		haircolor = ['white', 'green', 'purple', 'blue', 'blond', 'red', 'auburn'],
+		shade = {male = "res://files/buttons/inventory/shades/Elf_M.png", female = "res://files/buttons/inventory/shades/Elf_F.png"},
+		stats = {
+			str_max = 2,
+			agi_max = 5,
+			maf_max = 5,
+			end_max = 2,
+		}
 	},
 	Orc = {
 		surname = names.orcsurname,
@@ -144,10 +152,12 @@ var races = {
 		shade = {male = "res://files/buttons/inventory/shades/Orc_-M.png", female = "res://files/buttons/inventory/shades/Orc_F.png"},
 		skin = ['green'],
 		ears = ['pointy'],
-		stats = {str_max = 6,
-		agi_max = 2,
-		maf_max = 1,
-		end_max = 4}
+		stats = {
+			str_max = 6,
+			agi_max = 2,
+			maf_max = 1,
+			end_max = 4
+		}
 	},
 	Gnome = {
 		bodyshape = ['shortstack'],
@@ -171,14 +181,16 @@ var races = {
 		sebastian = true,
 		shade = {male = "res://files/buttons/inventory/shades/Gnome_M.png", female = "res://files/buttons/inventory/shades/Gnome_F.png"},
 		height = ['tiny'],
-		stats = {str_max = 2,
-		agi_max = 3,
-		maf_max = 5,
-		end_max = 3}
+		stats = {
+			str_max = 2,
+			agi_max = 3,
+			maf_max = 5,
+			end_max = 3
+		}
 	},
 	Goblin = {
 		bodyshape = ['shortstack'],
-		description = "Goblins are a race of cave dwellers, loosely resembling short, green-skinned elves. They have existed for a very long time, but despite their prevalence rarely played any influential role. While they have often been considered nothing more than common monsters, they have surprising skill and understanding, putting them on par with many humanoid races in term of sentience and physical cpability despite their stature.",
+		description = "Goblins are a race of cave dwellers, loosely resembling short, green-skinned elves. They have existed for a very long time, but despite their prevalence rarely played any influential role. While they have often been considered nothing more than common monsters, they have surprising skill and understanding, putting them on par with many humanoid races in term of sentience and physical capability despite their stature.",
 		details = "[color=aqua]Racial trait: pregnancy progresses lot quicker. [/color]\n\n[color=yellow]Stat potential: Strength - 3, Agility - 4, Magic - 3, Endurance - 3 [/color]\n\nBreeding Note:\nGoblins are frequently underestimated, often to the mortal peril of their detractors. Additionally, goblin blood is often mutanagenic and their offspring in certain combinations barely resemble the parents. For example, it's rumored that long ago goblins were made to breed with orcs to quickly produce armies of hobgoblins, powerful from birth but much like mules in that they were seldom capable of siring offspring of their own.\n\n[color=yellow]Racial Stat Bonus:\nStrength+, Agility+ \nPure Blood Bonus:\nMagic+\nOther Racial Characteristics:\nLewdness+, Pliability++, Beauty--, Height --- [/color]\n[color=red]Elemental Modifiers\n75% Earth \nElemental Bonuses:\nEarth (Strength+) [/color]\n[color=green]Nature Magic Saturation:\n100% \nNature Bonus:\nFertility+++ [/color]\n[color=purple]Mana Corruption:\n100% \nHigher Corruption:\nN/A \nLower Corruption:\nBeauty+,  Agility+, Strength- [/color]\n[color=aqua]Breeding Quirks:\nExtra penis size from Orc heritage \nPossible Mutations:\nKobold, Gremlin, Hobgoblin, Redcap [/color]",
 		pricemod = 1.5,
 		#ralph5
@@ -200,10 +212,12 @@ var races = {
 		skin = ['green'],
 		ears = ['pointy'],
 		height = ['tiny'],
-		stats = {str_max = 3,
-		agi_max = 4,
-		maf_max = 3,
-		end_max = 3}
+		stats = {
+			str_max = 3,
+			agi_max = 4,
+			maf_max = 3,
+			end_max = 3
+		}
 	},
 	Fairy = {
 		bodyshape = ['shortstack'],
@@ -232,10 +246,12 @@ var races = {
 		wings = ['insect'],
 		height = ['tiny'],
 		surname = '',
-		stats = {str_max = 1,
-		agi_max = 5,
-		maf_max = 6,
-		end_max = 1}
+		stats = {
+			str_max = 1,
+			agi_max = 5,
+			maf_max = 6,
+			end_max = 1
+		}
 	},
 	Seraph = {
 		ears = ['pointy'],
@@ -259,10 +275,12 @@ var races = {
 		sebastian = true,
 		shade = {male = "res://files/buttons/inventory/shades/Seraph_M.png", female = "res://files/buttons/inventory/shades/Seraph_F.png"},
 		wings = ['feathered_black', 'feathered_white', 'feathered_brown'],
-		stats = {str_max = 3,
-		agi_max = 3,
-		maf_max = 5,
-		end_max = 3}
+		stats = {
+			str_max = 3,
+			agi_max = 3,
+			maf_max = 5,
+			end_max = 3
+		}
 	},
 	Demon = {
 		description = "Though they share a name and certain physical traits, modern demons bear mostly superficial resemblance to their ancient counterparts, who were driven into the great depths of the underground, and even into other dimensions. It is speculated that modern demons are either the offspring of humans and actual monsters, the byproduct of extensive magical corruption similar to gnomes, or as more recent research suggests the descendants of an entirely separate race that migrated from the outer planes.\n\nThough demons are often feared and reviled, those with outstanding talent or skill often receive recognition for their abilities, so it is not entirely uncommon to see demons among the elite, or in high profile positions.",
@@ -288,10 +306,12 @@ var races = {
 		tail = ['demon'],
 		wings = ['leather_black', 'leather_red'],
 		horns = ['short', 'long_straight', 'curved'],
-		stats = {str_max = 3,
-		agi_max = 4,
-		maf_max = 4,
-		end_max = 3}
+		stats = {
+			str_max = 3,
+			agi_max = 4,
+			maf_max = 4,
+			end_max = 3
+		}
 	},
 	Dryad = {
 		description = "Dryads are a virtual unknown, with little information on their natural habitat and reproduction. It is speculated that they are nature spirits born from old trees that have absorbed a large amount of mana.",
@@ -319,10 +339,12 @@ var races = {
 		ears = ['pointy'],
 		skincov = ['plants'],
 		surname = '',
-		stats = {str_max = 3,
-		agi_max = 1,
-		maf_max = 4,
-		end_max = 5}
+		stats = {
+			str_max = 3,
+			agi_max = 1,
+			maf_max = 4,
+			end_max = 5
+		}
 	},
 	Dragonkin = {
 		description = "Dragonkin are an extremely rare breed of human with draconic lineage, partially possessing the blood and certain physical traits of dragons, such as wings, scales, and a tail. While originally confined to the whims of dragons, a coalition of influential mages banded together and developed a powerful ritual to imbue grown humans with dragon blood, in spite of observed difficulties in adoption of the blood so late into development. There is a great deal of secrecy surrounding the ritual, and outside of a few involved elite, its success rate is unknown. The few dragonkin alleged to have been produced by the ritual are virtually indistinguishable from those who were naturally birthed.",
@@ -354,10 +376,12 @@ var races = {
 		skincov = ['scales'],
 		arms = ['scales'],
 		legs = ['scales'],
-		stats = {str_max = 4,
-		agi_max = 3,
-		maf_max = 3,
-		end_max = 6}
+		stats = {
+			str_max = 4,
+			agi_max = 3,
+			maf_max = 3,
+			end_max = 6
+		}
 	},
 	Taurus = {
 		description = "Taurus are a purely artificial race, created on the orders of a group of noblemen looking for bodyguards. The experiment seems to have been an attempt at recreating the size and strength of orcs and beastkin in a more easily controlled package, but was ultimately considered only partially successful, as the new species had a tendency of taking too many bovine behavioral traits, becoming too passive, or in some cases, too aggressive.\n\nStill, they, especially the females, remain popular among certain individuals for their appearance and outstanding natural lactation.",
@@ -382,10 +406,12 @@ var races = {
 		horns = ['long_straight'],
 		ears = ['short_furry'],
 		tail = ['scruffy'],
-		stats = {str_max = 4,
-		agi_max = 2,
-		maf_max = 1,
-		end_max = 6}
+		stats = {
+			str_max = 4,
+			agi_max = 2,
+			maf_max = 1,
+			end_max = 6
+		}
 	},
 	Slime = {
 		description = "Slimes are the result of a relatively common magical mutation, which dramatically changes a person's bodily integrity. Slimes are heavily reliant on water, even though their body is not actually 'slimy'. They can freely ooze over anything they touch, yet are in fact, pretty cohesive and firm to the touch.\n\nUnlike most other ooze-type slime monsters, slimes of humanoid origins are capable of nearly the same mental processes, although they are generally ill-regarded for having a clearly monstrous appearance.",
@@ -411,10 +437,12 @@ var races = {
 		haircolor = ['jelly'],
 		skin = ['jelly'],
 		surname = '',
-		stats = {str_max = 4,
-		agi_max = 4,
-		maf_max = 4,
-		end_max = 4}
+		stats = {
+			str_max = 4,
+			agi_max = 4,
+			maf_max = 4,
+			end_max = 4
+		}
 	},
 	Lamia = {
 		description = "Lamias are easily recognized and tend to be timid in their interactions, rarely showing themselves to majority of the population. Their population has been severely reduced by hunting and extermination expeditions launched by different races. Lamias are surprisingly intelligent, as the few captured and studied samples have shown.",
@@ -446,10 +474,12 @@ var races = {
 		eyeshape = ['slit'],
 		surname = '',
 		mods = {augmenttongue = 'augmenttongue'},
-		stats = {str_max = 3,
-		agi_max = 4,
-		maf_max = 4,
-		end_max = 3}
+		stats = {
+			str_max = 3,
+			agi_max = 4,
+			maf_max = 4,
+			end_max = 3
+		}
 	},
 	Harpy = {
 		description = "Harpies are human-bird hybrids with easily recognisable features, such as their feathered arms and avian lower quarters. Commonly seen as monsters, they have existed since time immemorial. Wild harpies generally inhabit mountain regions and are relatively aggressive. Their intelligence has a wide range, and people have had some success making them into slave-pets.",
@@ -479,10 +509,12 @@ var races = {
 		arms = ['winged'],
 		legs = ['avian'],
 		surname = '',
-		stats = {str_max = 3,
-		agi_max = 6,
-		maf_max = 2,
-		end_max = 2}
+		stats = {
+			str_max = 3,
+			agi_max = 6,
+			maf_max = 2,
+			end_max = 2
+		}
 	},
 	Arachna = {
 		description = "Arachna live in isolation and tend to choose caves and other underground locations as their homes. While not being especially aggressive, they are fearsome hunters and have been reported for rare night attacks on both cattle and humans.",
@@ -513,10 +545,12 @@ var races = {
 		eyecolor = ['blue', 'green', 'amber', 'red'],
 		eyeshape = ['slit'],
 		surname = '',
-		stats = {str_max = 4,
-		agi_max = 5,
-		maf_max = 2,
-		end_max = 4}
+		stats = {
+			str_max = 4,
+			agi_max = 5,
+			maf_max = 2,
+			end_max = 4
+		}
 	},
 	Centaur = {
 		description = "The Centaur race is somewhat distant, yet not unheard of in southern regions. Some individuals have made it very far by adopting a nomadic lifestyle, making the race common enough to be recognized by most. The centauri population is relatively small, due to dealing with territorial oppression from humanoid races.",
@@ -542,11 +576,13 @@ var races = {
 		tail = ['horse'],
 		ears = ['short_furry'],
 		legs = ['horse'],
-		stats = {str_max = 6,
-		agi_max = 3,
-		maf_max = 1,
-		end_max = 4,
-		energy_max = 140}
+		stats = {
+			str_max = 6,
+			agi_max = 3,
+			maf_max = 1,
+			end_max = 4,
+			energy_max = 140
+		}
 	},
 	Nereid = {
 		description = "Nereid are considered to be another subspecies of the humanoid races, yet they likely split from another race in the distant past. They adapted to an aquatic lifestyle. Nereids are often seen by sailors and fishermen, but they tend to be hesitant in making contact with humans, likely viewing them as a threat.",
@@ -578,10 +614,12 @@ var races = {
 		eyesclera = ['yellow'],
 		skin = ['teal', 'blue', 'pale blue'],
 		surname = '',
-		stats = {str_max = 3,
-		agi_max = 3,
-		maf_max = 5,
-		end_max = 3}
+		stats = {
+			str_max = 3,
+			agi_max = 3,
+			maf_max = 5,
+			end_max = 3
+		}
 	},
 	Scylla = {
 		bodyshape = ['halfsquid'],
@@ -609,10 +647,12 @@ var races = {
 		legs = ['tentacles'],
 		eyecolor = ['blue', 'green', 'amber', 'red'],
 		surname = '',
-		stats = {str_max = 4,
-		agi_max = 3,
-		maf_max = 5,
-		end_max = 3}
+		stats = {
+			str_max = 4,
+			agi_max = 3,
+			maf_max = 5,
+			end_max = 3
+		}
 	},
 	"Beastkin Cat" : {
 		bodyshape = ['bestial'],
@@ -643,10 +683,12 @@ var races = {
 		arms = ['fur_covered'],
 		eyecolor = ['blue', 'green', 'amber', 'red'],
 		eyeshape = 'slit',
-		stats = {str_max = 3,
-		agi_max = 5,
-		maf_max = 2,
-		end_max = 3}
+		stats = {
+			str_max = 3,
+			agi_max = 5,
+			maf_max = 2,
+			end_max = 3
+		}
 	},
 	"Beastkin Fox" : {
 		bodyshape = ['bestial'],
@@ -677,10 +719,12 @@ var races = {
 		arms = ['fur_covered'],
 		eyecolor = ['blue', 'green', 'amber', 'red'],
 		eyeshape = ['slit'],
-		stats = {str_max = 2,
-		agi_max = 4,
-		maf_max = 6,
-		end_max = 2}
+		stats = {
+			str_max = 2,
+			agi_max = 4,
+			maf_max = 6,
+			end_max = 2
+		}
 	},
 	"Beastkin Wolf" : {
 		bodyshape = ['bestial'],
@@ -711,10 +755,12 @@ var races = {
 		arms = ['fur_covered'],
 		eyecolor = ['blue', 'green', 'amber', 'red'],
 		eyeshape = ['slit'],
-		stats = {str_max = 5,
-		agi_max = 5,
-		maf_max = 1,
-		end_max = 3}
+		stats = {
+			str_max = 5,
+			agi_max = 5,
+			maf_max = 1,
+			end_max = 3
+		}
 	},
 	"Beastkin Bunny" : {
 		bodyshape = ['bestial'],
@@ -744,10 +790,12 @@ var races = {
 		legs = ['fur_covered'],
 		arms = ['fur_covered'],
 		eyecolor = ['blue', 'green', 'amber', 'red'],
-		stats = {str_max = 2,
-		agi_max = 6,
-		maf_max = 2,
-		end_max = 3}
+		stats = {
+			str_max = 2,
+			agi_max = 6,
+			maf_max = 2,
+			end_max = 3
+		}
 	},
 	"Beastkin Tanuki" : {
 		bodyshape = ['bestial'],
@@ -778,10 +826,12 @@ var races = {
 		arms = ['fur_covered'],
 		eyecolor = ['blue', 'green', 'amber', 'red'],
 		eyeshape = ['slit'],
-		stats = {str_max = 3,
-		agi_max = 3,
-		maf_max = 5,
-		end_max = 3}
+		stats = {
+			str_max = 3,
+			agi_max = 3,
+			maf_max = 5,
+			end_max = 3
+		}
 	},
 }
 

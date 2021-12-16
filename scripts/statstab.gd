@@ -1815,40 +1815,41 @@ func talkconsent(mode=''):
 		#Change Dialogue
 		text += "[color=red]Consent Topics are once per day. If Consent failed, you can try again tomorrow.[/color]\n\n[color=yellow]-What did you want to talk about?[/color]"
 		#ralph7
-		var consentstatus = "\n\n" + person.name + " has consented to the following:\n"
-		if person.consentexp.party:
-			consentstatus += "$He will [color=green]fight[/color] for you.\n"
-		else:
-			consentstatus += "$He will [color=red]not  fight[/color] for you.\n"
-		if person.consent:
-			consentstatus += "$He has given consent to [color=green]have  sex[/color] with you.\n"
-		else:
-			consentstatus += "$He has not given consent to [color=red]have  sex[/color] with you.\n"
-		if person.consentexp.pregnancy && person.preg.has_womb && globals.player.penis != "none":
-			consentstatus += "$He has given consent to [color=green]be  impregnated[/color] by you.\n"
-		elif person.preg.has_womb && globals.player.penis != "none":
-			consentstatus += "$He has not given consent to [color=red]be  impregnated[/color] by you.\n"
-		if person.consentexp.stud && person.penis != "none":
-			consentstatus += "$He has agreed to [color=green]stud[/color] for you and will impregnate other slaves.\n"
-		elif person.penis != "none":
-			consentstatus += "$He has not agreed to [color=red]stud[/color] for you and does not want to father children with other slaves.\n"
-		if person.consentexp.breeder && person.preg.has_womb:
-			consentstatus += "$He has agreed to [color=green]be  bred[/color] by other slaves for you.\n"
-		elif person.preg.has_womb:
-			consentstatus += "$He has not agreed to [color=green]be  bred[/color] by other slaves for you.\n"
-		if person.consentexp.incest:
-			consentstatus += "$He has consented to have [color=green]incestuous  sex[/color].\n"
-		else:
-			consentstatus += "$He has not consented to have [color=red]incestuous  sex[/color].\n"
-		if person.consentexp.incestbreeder && person.preg.has_womb:
-			consentstatus += "$He has consented to [color=green]be  bred  by  family[/color].\n"
-		elif person.preg.has_womb:
-			consentstatus += "$He has not consented to [color=red]be  bred  by  family[/color].\n"
-		if person.consentexp.livestock && globals.state.farm >= 3:
-			consentstatus += "$He has consented to [color=green]be  livestock[/color].\n"
-		elif globals.state.farm >= 3:
-			consentstatus += "$He has not consented to [color=red]be  livestock[/color].\n"
-		text += consentstatus
+		if globals.useRalphsTweaks:
+			var consentstatus = "\n\n" + person.name + " has consented to the following:\n"
+			if person.consentexp.party:
+				consentstatus += "$He will [color=green]fight[/color] for you.\n"
+			else:
+				consentstatus += "$He will [color=red]not fight[/color] for you.\n"
+			if person.consent:
+				consentstatus += "$He has given consent to [color=green]have sex[/color] with you.\n"
+			else:
+				consentstatus += "$He has not given consent to [color=red]have sex[/color] with you.\n"
+			if person.consentexp.pregnancy && person.preg.has_womb && globals.player.penis != "none":
+				consentstatus += "$He has given consent to [color=green]be impregnated[/color] by you.\n"
+			elif person.preg.has_womb && globals.player.penis != "none":
+				consentstatus += "$He has not given consent to [color=red]be impregnated[/color] by you.\n"
+			if person.consentexp.stud && person.penis != "none":
+				consentstatus += "$He has agreed to [color=green]stud[/color] for you and will impregnate other slaves.\n"
+			elif person.penis != "none":
+				consentstatus += "$He has not agreed to [color=red]stud[/color] for you and does not want to father children with other slaves.\n"
+			if person.consentexp.breeder && person.preg.has_womb:
+				consentstatus += "$He has agreed to [color=green]be bred[/color] by other slaves for you.\n"
+			elif person.preg.has_womb:
+				consentstatus += "$He has not agreed to [color=green]be bred[/color] by other slaves for you.\n"
+			if person.consentexp.incest:
+				consentstatus += "$He has consented to have [color=green]incestuous sex[/color].\n"
+			else:
+				consentstatus += "$He has not consented to have [color=red]incestuous sex[/color].\n"
+			if person.consentexp.incestbreeder && person.preg.has_womb:
+				consentstatus += "$He has consented to [color=green]be bred by family[/color].\n"
+			elif person.preg.has_womb:
+				consentstatus += "$He has not consented to [color=red]be bred by family[/color].\n"
+			if person.consentexp.livestock && globals.state.farm >= 3:
+				consentstatus += "$He has consented to [color=green]be livestock[/color].\n"
+			elif globals.state.farm >= 3:
+				consentstatus += "$He has not consented to [color=red]be livestock[/color].\n"
+			text += consentstatus
 		#/ralph7
 		#Party Up Consent
 		if !person.dailytalk.has('consentparty') && person.consentexp.party == false:
@@ -1857,7 +1858,7 @@ func talkconsent(mode=''):
 		if !person.dailytalk.has('consent') && person.consent == false:
 			buttons.append({text = person.dictionary("Are you willing to have sex with me?"), function = 'talkconsent', args = 'sexual'})
 		#Pregnancy Consent (With Player)
-		if !person.dailytalk.has('consentpregnant') && person.consentexp.pregnancy == false:
+		if person.consent == true && !person.dailytalk.has('consentpregnant') && person.consentexp.pregnancy == false:
 			if person.preg.has_womb == true && globals.player.penis != "none":
 				buttons.append({text = person.dictionary("I want to impregnate you"), function = 'talkconsent', args = 'pregnancy'})
 		#Breeding Stud

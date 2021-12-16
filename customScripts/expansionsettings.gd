@@ -15,88 +15,6 @@ var messycontent = true
 #Bloody Good Taste (British the Descriptions)
 var ihavebloodygoodtaste = false
 
-#---Ralph Edition Changes | Makes the game a little more difficult
-#Mage Specialization Manacost Reduction
-var mage_mana_reduction = true
-												# Ralph's - [false, "Combat spell deal 20% more damage"]
-
-#Spellcost Changes
-var spellcost = 1 								# Ralph's - 2, This is a multiplicative that applies to all spellcosts.
-
-#Spell Tweak Effects
-var reduce_rebellion_with_fear = 1				# Ralph's - 3, This divides by the players magic affinity to determine how much rebellion is reduced.
-var summontentacle_lewdness = 0					# Ralph's - 5, Make... them... lewd...
-
-#Reputation Tweak
-var reputation_loss = -4						# Ralph's - -18, How much your reputation suffers when you sell a bad slave to Sebastian.
-
-#Food Tweak Effects
-var food_experience = 2							# Ralph's = 1, How much experience a slave earns from cooking, equal to the amount of slaves the player owns multiplied by this number.
-var food_difficulty = false						# Ralph's = true, 
-
-var func_forage_tweaks = [4,20,25,1.2,5]		
-												# Ralph's - [3,2,5,1.5,2]
-												# In order: represents how much base food is divided, 
-												# how much additional food is multipled in min(food, max(person.sstr+person.send, -1)*[this number]+5), 
-												# how much additional food is added in min(food, max(person.sstr+person.send, -1)*2+[this number]),
-												# how much being a ranger multiplies the food gained,
-												# and how much experience is gained by dividing by the amount of food gained total.
-
-var func_hunt_tweaks = [2,5,10,1.3,1.25,30,40,7]
-												# Ralph's - [1,3,8,1.4,1.5,3,5,3]
-												# In order: represents the minimum random range that a person can obtain base food,
-												# the minimum random range a person can obtain food multiplied by endurance,
-												# the maximum random range a person can obtain food multiplied by endurance,
-												# how much food is multiplied by being an Arachna,
-												# how much food is multiplied by being a ranger or trapper,
-												# how much additional food is multiplied in round(min(food, max(person.sstr+person.send, -1)*[this number]+5))
-												# how much additional food is added in round(min(food, max(person.sstr+person.send, -1)*3+[this number]))
-												# and how much experience is gained by dividing the amount of food gained total.
-
-"""
-Applies Ralph's tweaks to the game, making it a slightly more challenging experience.
-Feel free to change as you see fit!
-"""
-func applyTweaks():
-	mage_mana_reduction = false
-
-	# Ralph likes his increased mana costs
-	spellcost = 2
-
-	applySpellManacostTweaks()
-
-	#Spell Tweak Effects
-	reduce_rebellion_with_fear = 3
-	summontentacle_lewdness = 5
-
-	#Reputation Tweak
-	reputation_loss = -18
-
-	#Food Tweak Effects
-	food_experience = 1
-	food_difficulty = true
-	
-	applyItemMarketCostTweaks()
-	
-	func_forage_tweaks = [3,2,5,1.5,2]
-
-	func_hunt_tweaks = [1,3,8,1.4,1.5,3,5,3]
-
-# Apply Manacost Tweaks here.
-func applySpellManacostTweaks():
-	globals.spelldict.mindread.manacost = 1			# Original - globals.spelldict.mindread.manacost = 3
-	globals.spelldict.sedation.manacost = 20		# Original - globals.spelldict.sedation.manacost = 10
-	globals.spelldict.dream.manacost = 5			# Original - globals.spelldict.dream.manacost = 20
-	globals.spelldict.entrancement.manacost = 10	# Original - globals.spelldict.entrancement.manacost = 15
-	globals.spelldict.fear.manacost = 20			# Original - globals.spelldict.fear.manacost = 10
-	globals.spelldict.mutate.manacost = 10			# Original - globals.spelldict.mutate.manacost = 15
-	globals.spelldict.invigorate.manacost = 20		# Original - globals.spelldict.invigorate.manacost = 5
-	globals.spelldict.summontentacle.manacost = 20	# Original - globals.spelldict.summontentacle.manacost = 35
-
-# Apply Market Item Tweaks here.
-func applyItemMarketCostTweaks():
-	globals.itemdict.food.cost = 40					# Original - 10
-
 
 #---Person Expanded (True/False)
 #If set to true, Unique Slaves will join your party without having to ask for consent first
@@ -252,11 +170,11 @@ var racialstatbonuses = true
 
 #---Genealogy
 var genealogy_equalizer = 10
-var randompurebreedchance = 10
-var randommixedbreedchance = 30
-var randompurebreedchanceuncommon = 60 #ralph2
+var randompurebreedchance = 20					# Ralph's - 10
+var randommixedbreedchance = 40					# Ralph's - 20
+var randompurebreedchanceuncommon = 0			# Ralph's - 60
 var secondaryhumanoidracialchance = 75
-var secondaryuncommonracialchance = 0 #ralph
+var secondaryuncommonracialchance = 15			# Ralph's - 0
 var secondarybeastracialchance = 25
 
 #Ovulation Chances
@@ -275,3 +193,136 @@ var ovulationtype1stage1 = 8
 var ovulationtype1stage2 = 15
 var ovulationtype2stage1 = 12
 var ovulationtype2stage2 = 15
+
+#---Aric's and Game's Base Values potentially changed by Ralph's
+var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within ApplyTweaks
+var unique_trait_generation = false				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
+
+#Mage Specialization Manacost Reduction
+var mage_mana_reduction = true
+												# Ralph's - [false, "Combat spell deal 20% more damage"]
+
+#Spellcost Changes
+var spellcost = 1 								# Ralph's - 2, This is a multiplicative that applies to all spellcosts.
+
+#Spell Tweak Effects
+var reduce_rebellion_with_fear = 1				# Ralph's - 3, This divides by the players magic affinity to determine how much rebellion is reduced.
+var summontentacle_lewdness = 0					# Ralph's - 5, Make... them... lewd...
+
+#Reputation Tweak
+var reputation_loss = -4						# Ralph's - -18, How much your reputation suffers when you sell a bad slave to Sebastian.
+
+#Food Tweak Effects
+var food_experience = 2							# Ralph's = 1, How much experience a slave earns from cooking, equal to the amount of slaves the player owns multiplied by this number.
+var food_difficulty = false						# Ralph's = true, 
+
+var func_forage_tweaks = [4,20,25,1.2,5]		
+												# Ralph's - [3,2,5,1.5,2]
+												# In order: represents how much base food is divided, 
+												# how much additional food is multipled in min(food, max(person.sstr+person.send, -1)*[this number]+5), 
+												# how much additional food is added in min(food, max(person.sstr+person.send, -1)*2+[this number]),
+												# how much being a ranger multiplies the food gained,
+												# and how much experience is gained by dividing by the amount of food gained total.
+
+var func_hunt_tweaks = [2,5,10,1.3,1.25,30,40,7]
+												# Ralph's - [1,3,8,1.4,1.5,3,5,3]
+												# In order: represents the minimum random range that a person can obtain base food,
+												# the minimum random range a person can obtain food multiplied by endurance,
+												# the maximum random range a person can obtain food multiplied by endurance,
+												# how much food is multiplied by being an Arachna,
+												# how much food is multiplied by being a ranger or trapper,
+												# how much additional food is multiplied in round(min(food, max(person.sstr+person.send, -1)*[this number]+5))
+												# how much additional food is added in round(min(food, max(person.sstr+person.send, -1)*3+[this number]))
+												# and how much experience is gained by dividing the amount of food gained total.
+
+#Start Slave Hobby Changes
+var magic_hobby_maf_max = 2						# Ralph's - 2, The value responsible for how much the maximum magic affinity a starter slave with the magic hobby has.
+
+#Sell Slave Prices
+var mansion_bred_and_breeder = 2				# Ralph's - 1.5, The multiplicative value that modifies the price.
+var calculate_price_bonus_divide = 1			# Ralph's - 2, The divider value that modifies the bonus value that multiplies the price when calculating.
+var quicksell_slave_pressed = 2					# Ralph's - 1.11, The divider value that affects the sellprice of a slave when quicksell is pressed.
+
+#Capture Changes
+var times_rescued_multiplier = 0				# Ralph's - 10, The multiplicative value that is used with how many times an npc has been rescued when determining whether they will join you willingly after saving them from bandits.
+
+#Random Awareness
+var random_enemy_awareness = [0,0]				# Ralph's - [-7,7], This value applies a random awareness negative or positive to determine whether you are ambushed or not. [0,0] means no change.
+
+
+"""
+Applies Ralph's tweaks to the game, making it a slightly more challenging experience.
+Feel free to change as you see fit!
+"""
+func applyTweaks():
+	applyVariableTweaks()
+
+	mage_mana_reduction = false
+
+	# Ralph likes his increased mana costs
+	spellcost = 2
+
+	applySpellManacostTweaks()
+
+	#Spell Tweak Effects
+	reduce_rebellion_with_fear = 3
+	summontentacle_lewdness = 5
+
+	#Reputation Tweak
+	reputation_loss = -18
+
+	#Food Tweak Effects
+	food_experience = 1
+	food_difficulty = true
+	
+	applyItemMarketCostTweaks()
+	
+	func_forage_tweaks = [3,2,5,1.5,2]
+
+	func_hunt_tweaks = [1,3,8,1.4,1.5,3,5,3]
+
+	#Start Slave Hobby Changes
+	magic_hobby_maf_max = 1
+	
+	#Sell Slave Prices
+	mansion_bred_and_breeder = 1.5
+	calculate_price_bonus_divide = 2
+	quicksell_slave_pressed = 1.11
+	
+	#Capture Changes
+	times_rescued_multiplier = 10
+	
+	#Random Awareness
+	random_enemy_awareness = [-7,7]	
+	
+	#Genealogy Changes
+	randompurebreedchance = 10
+	randommixedbreedchance = 30
+	randompurebreedchanceuncommon = 60
+	secondaryuncommonracialchance = 0
+
+# Apply variables.gd changes here
+func applyVariableTweaks():
+	#Levelling Changes
+	variables.skillpointsperlevel = 1.0			# Original - 2.0
+
+	#Baby Stuff
+	variables.growuptimechild = 1.0				# Original - 2.0, How long it takes a baby to become said thing.
+	variables.growuptimeteen = 2.0				# Original - 4.0
+	variables.growuptimeadult = 3.0				# Original - 6.0
+	variables.babynewtraitchance = 33.0			# Original - 20.0, Chance a baby will gain an entirely new trait.
+
+# Apply Manacost Tweaks here.
+func applySpellManacostTweaks():
+	globals.spelldict.mindread.manacost = 1			# Original - globals.spelldict.mindread.manacost = 3
+	globals.spelldict.sedation.manacost = 20		# Original - globals.spelldict.sedation.manacost = 10
+	globals.spelldict.dream.manacost = 5			# Original - globals.spelldict.dream.manacost = 20
+	globals.spelldict.entrancement.manacost = 10	# Original - globals.spelldict.entrancement.manacost = 15
+	globals.spelldict.fear.manacost = 20			# Original - globals.spelldict.fear.manacost = 10
+	globals.spelldict.mutate.manacost = 10			# Original - globals.spelldict.mutate.manacost = 15
+	globals.spelldict.invigorate.manacost = 20		# Original - globals.spelldict.invigorate.manacost = 5
+	globals.spelldict.summontentacle.manacost = 20	# Original - globals.spelldict.summontentacle.manacost = 35
+
+# Apply Market Item Tweaks here.
+func applyItemMarketCostTweaks():
+	globals.itemdict.food.cost = 40					# Original - 10

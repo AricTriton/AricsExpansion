@@ -1,5 +1,5 @@
 static func randanyeyecolor():
-	var text = ['blue', 'green', 'brown', 'hazel', 'black', 'gray', 'purple', 'blue', 'amber', 'red', 'auburn']
+	var text = globals.alleyecolors
 	return text[randi()%text.size()]
 
 static func randhybridrace():

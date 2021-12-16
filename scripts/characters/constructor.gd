@@ -295,7 +295,7 @@ func newbaby(mother,father):
 			person.add_trait(i)
 	
 	if rand_range(0,100) <= variables.babynewtraitchance:
-		if rand_range(0,100) <= 20: # 1 in 5 chance
+		if rand_range(0,100) <= 20 && globals.expansionsettings.unique_trait_generation: # 1 in 5 chance, requires Ralph Tweaks to be set on.
 			person.add_trait(globals.origins.traits('unique').name)
 		else:
 			person.add_trait(globals.origins.traits('any').name)
