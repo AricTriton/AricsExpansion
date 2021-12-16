@@ -397,7 +397,10 @@ func _on_end_pressed():
 	text = "" if text0.get_bbcode().empty() else "\n"
 	#---NPCs Expanded
 	globals.expansion.dailyNPCs()
-	#Update Towns
+	#---Towns Expanded
+	temptext = globals.expansion.dailyTownEvents()
+	if temptext != null:
+		text += temptext
 	temptext = globals.expansion.dailyTownGuard()
 	if temptext != null:
 		text += temptext
@@ -1904,11 +1907,18 @@ func _on_selfbutton_pressed():
 		text2 = text2.substr(0, text2.length() -2)+ '. '
 	text += text2 + '\nReputation: '
 	for i in globals.state.reputation:
-		text += i.capitalize() + " - "+ reputationword(globals.state.reputation[i]) + ", "
+		text += i.capitalize() + " - "+ reputationword(globals.state.reputation[i])
+		###---Added by Expansion---### Towns Expanded
+		if globals.expansionsettings.enable_public_nudity_system == true:
+			var lawdict = globals.state.townsexpanded[i]
+			#Public Nudity
+			text += " - Local Laws: [color=aqua]Public Nudity[/color] " + globals.fastif(lawdict.laws.public_nudity == true, "[color=lime]Legal[/color]", "[color=red]Illegal[/color]")
+		#End Line (Change to Multi-line Spacing?)
+		text += ", "
+		###---End Expansion---###
 	text += "\nYour mage order rank: " + dict[int(globals.state.rank)]
 	###---Added by Expansion---###
 	if globals.state.spec != "" && globals.state.spec != null:
-		
 		text += "\n\nYour speciality: [color=yellow]" + globals.state.spec + "[/color]\nBonuses: " + globals.expandedplayerspecs[globals.state.spec]
 	###---End Expansion---###
 

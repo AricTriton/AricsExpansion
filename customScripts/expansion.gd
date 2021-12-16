@@ -2582,6 +2582,45 @@ func npcChildbirth(npc):
 	baby = null
 	#Add very low Baby/Mother die in childbirth chance with an "Encounter" event
 
+func dailyTownEvents():
+	var text = ""
+	var d100 = 0
+	var gold_lost = 0
+	var rep_loss = 0
+	for town in citiesarray:
+		var currenttown = globals.state.townsexpanded[town]
+		#Votes
+		if currenttown.currentevents.has('vote_public_nudity'):
+			currenttown.currentevents.erase('vote_public_nudity')
+			d100 = round(rand_range(0,100))
+			if d100 <= currenttown.nudity:
+				currenttown.currentevents.append('public_nudity_success')
+				currenttown.laws.public_nudity = true
+				text += "\n\n[center]Council Vote![/center]\nThe town council of [color=aqua]" + town.capitalize() + "[/color] voted on a proposition to legalize Public Nudity today. This vote received enough support from the citizens of the town to pass! [color=aqua]Public nudity[/color] is now [color=lime]Legal[/color]."
+			else:
+				currenttown.currentevents.append('public_nudity_failure')
+				text += "\n\n[center]Council Vote![/center]\nThe town council of [color=aqua]" + town.capitalize() + "[/color] voted on a proposition to legalize Public Nudity today. This vote did not receive enough support from the citizens of the town to pass. [color=aqua]Public nudity[/color] remains [color=red]Illegal[/color]."
+			if globals.expansionsettings.perfectinfo == true:
+				text += "\n[color=yellow]Perfect Info[/color] - [color=aqua]Public Nudity Success Chance[/color] of [color=aqua]" + str(currenttown.nudity) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color]\n"
+		#Fines
+		if !currenttown.townhall.fines.empty():
+			if currenttown.townhall.autopay_fines == true:
+				for fine in currenttown.townhall.fines:
+					gold_lost -= int(currenttown.townhall.fines[fine][1])
+					currenttown.townhall.fines.erase(fine)
+			else:
+				for fine in currenttown.townhall.fines:
+					if int(currenttown.townhall.fines[fine][0]) >= globals.resources.day + 3:
+						rep_loss = round(int(currenttown.townhall.fines[fine][1])/5)
+						globals.state.reputation[town] -= rep_loss
+						text += "\n[color=red]An outstanding fine in [color=aqua]" + town.capitalize() + "[/color] for [color=yellow]" + str(currenttown.townhall.fines[fine][1]) + "[/color] expired today due to non-payment. You lost [color=aqua]" + str(rep_loss) + " Reputation[/color] with the town due to this. "
+						currenttown.townhall.fines.erase(fine)
+			if gold_lost > 0:
+				text += "\n\nYou spent a total of [color=yellow]" + str(gold_lost) + "[/color] paying off existing [color=red]fines[/color] today in [color=aqua]" + town.capitalize() + "[/color]. "
+				globals.resources.gold -= gold_lost
+		
+	return text
+
 func getTownReportText(senttown):
 	#Expand to discuss Poverty Levels, Important NPCs, Events (Weddings? Graduations? Disappearances?)
 	var town = globals.state.townsexpanded[senttown]
@@ -2617,8 +2656,18 @@ func getTownReportText(senttown):
 		text += " nothing of interest happened. "
 	else:
 		text += " and nothing else of note happened. "
+
 	if !town.pendingexecution.empty():
 		text += "There are also [color=aqua]" +str(town.pendingexecution.size())+ "[/color] people awaiting sentencing and execution in the town dungeon right now. "
+	
+	#Town Events
+	if !town.currentevents.empty():
+		if town.currentevents.has('public_nudity_success'):
+			text += "\n\n[center]Council Vote![/center]\nThe Council voted on a proposition to legalize Public Nudity yesterday. This vote received enough support from the citizens of the town to pass! [color=aqua]Public nudity[/color] is now [color=lime]Legal[/color]."
+		if town.currentevents.has('public_nudity_failure'):
+			text += "\n\n[center]Council Vote![/center]\nThe Council voted on a proposition to legalize Public Nudity yesterday. This vote did not receive enough support from the citizens of the town to pass. [color=aqua]Public nudity[/color] remains [color=red]Illegal[/color]."
+		town.currentevents.clear()
+		
 	if town.dailyreport.text != "":
 		text += town.dailyreport.text
 	return text

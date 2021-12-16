@@ -884,11 +884,19 @@ func ffprostitution(person):
 		person.stress += 25 - min(counter*5, 20)
 	if person.spec == 'geisha':
 		gold = gold*1.25
-	###---Added by Expansion---###
+	###---Added by Expansion---### 
+	#Job Skills
 	var bonusgold = round(clamp(globals.expansion.sexWorkBonus(person), -100, gold))
 	if bonusgold > 0:
 		text += "$He earned [color=green]" + str(bonusgold) + " Bonus Gold[/color] due to $his [color=aqua]Job Skill[/color], [color=aqua]Arousal (Lust)[/color], [color=aqua]Traits[/color], [color=aqua]Body[/color], and [color=aqua]Energy (minus $his Stress)[/color]. "
 		gold += bonusgold
+	#Towns Expanded - Public Nudity
+	if globals.expansionsettings.enable_public_nudity_system == true:
+		var nude_dict = public_nudity_law(person, gold)
+		if nude_dict.text != "":
+			text += nude_dict.text
+		if nude_dict.gold != 0:
+			gold += nude_dict.gold
 	###---End Expansion---###
 	gold = round(gold)
 	person.xp += gold/5
@@ -900,7 +908,8 @@ func ffprostitution(person):
 func guardian(person):
 	var text = "$name spent the day in Gorn, patrolling the city as part of the guard.\n"
 	var gold = max(person.sstr*rand_range(5,10) + person.cour/4,5)
-	###---Added by Expansion---### Job Skills
+	###---Added by Expansion---###
+	#Job Skills
 	person.add_jobskill('combat', 1)
 	globals.currentslave = person
 	var events = []
@@ -915,6 +924,13 @@ func guardian(person):
 		if globals.expansionsettings.perfectinfo == true:
 			text += "- " + str(chance) + "% Chance"
 		gold += bonus
+	#Towns Expanded - Public Nudity
+	if globals.expansionsettings.enable_public_nudity_system == true:
+		var nude_dict = public_nudity_law(person, gold)
+		if nude_dict.text != "":
+			text += nude_dict.text
+		if nude_dict.gold != 0:
+			gold += nude_dict.gold
 	###---End Expansion---###
 	person.xp += gold/6
 	text += "In the end $he made [color=yellow]" + str(round(gold)) + "[/color] gold\n"
@@ -976,11 +992,19 @@ func fucktoy(person):
 	person.metrics.randompartners += round(rand_range(2,5))
 	if person.mods.has("augmenttongue"):
 		gold = gold * 1.15
-	###---Added by Expansion---### Job Skills
+	###---Added by Expansion---###
+	#Job Skills
 	var bonusgold = round(clamp(globals.expansion.sexWorkBonus(person), -100, gold))
 	if bonusgold > 0:
 		text += "$He earned [color=green]" + str(bonusgold) + " Bonus Gold[/color] due to $his [color=aqua]Job Skill[/color], [color=aqua]Arousal (Lust)[/color], [color=aqua]Traits[/color], [color=aqua]Body[/color], and [color=aqua]Energy (minus $his Stress)[/color]. "
 		gold += bonusgold
+	#Towns Expanded - Public Nudity
+	if globals.expansionsettings.enable_public_nudity_system == true:
+		var nude_dict = public_nudity_law(person, gold)
+		if nude_dict.text != "":
+			text += nude_dict.text
+		if nude_dict.gold != 0:
+			gold += nude_dict.gold
 	###---End Expansion---###
 	gold = round(gold)
 	if person.wit >= 25:
@@ -999,7 +1023,8 @@ func fucktoy(person):
 func slavecatcher(person):
 	var text = "$name spent the day helping Gorn's slavers to acquire and transport slaves. \n"
 	var gold = max(5, person.sstr*rand_range(5,10) + person.sagi*rand_range(5,10) + person.cour/4)
-	###---Added by Expansion---### Job Skills
+	###---Added by Expansion---###
+	#Job Skills
 	person.add_jobskill('combat', 1)
 	globals.currentslave = person
 	var events = []
@@ -1014,6 +1039,13 @@ func slavecatcher(person):
 		if globals.expansionsettings.perfectinfo == true:
 			text += "- " + str(chance) + "% Chance"
 		gold += bonus
+	#Towns Expanded - Public Nudity
+	if globals.expansionsettings.enable_public_nudity_system == true:
+		var nude_dict = public_nudity_law(person, gold)
+		if nude_dict.text != "":
+			text += nude_dict.text
+		if nude_dict.gold != 0:
+			gold += nude_dict.gold
 	###---End Expansion---###
 	person.xp += gold/6
 	text += "In the end $he made [color=yellow]" + str(round(gold)) + "[/color] gold\n"
@@ -1042,7 +1074,8 @@ func storewimborn(person):
 	gold = round(gold * min(0.10 * (globals.originsarray.find(person.origins) + 7), 1) * bonus)
 	var xp = gold / 4
 	
-	###---Added by Expansion---### Job Skills
+	###---Added by Expansion---###
+	#Job Skills
 	person.add_jobskill('merchant', 1)
 	var chance = clamp(person.jobskills.merchant + (person.charm*.1), 1, 50)
 	bonus = person.charm *.2
@@ -1051,6 +1084,13 @@ func storewimborn(person):
 		if globals.expansionsettings.perfectinfo == true:
 			text += "- " + str(chance) + "% Chance"
 		gold += bonus
+	#Towns Expanded - Public Nudity
+	if globals.expansionsettings.enable_public_nudity_system == true:
+		var nude_dict = public_nudity_law(person, gold)
+		if nude_dict.text != "":
+			text += nude_dict.text
+		if nude_dict.gold != 0:
+			gold += nude_dict.gold
 	###---End Expansion---###
 
 	var supplyDiff = globals.itemdict.supply.amount - globals.state.supplykeep
@@ -1086,7 +1126,8 @@ func assistwimborn(person):
 	var gold
 	text = "$name worked at the Mage's Order.\n"
 	gold = rand_range(1,5) + person.smaf*15 + person.wit/4 + min(globals.state.reputation.wimborn/1.5,50)
-	###---Added by Expansion---### Job Skills
+	###---Added by Expansion---###
+	#Job Skills
 	person.add_jobskill('mage', 1)
 	var chance = clamp(person.jobskills.mage + (person.wit*.11), 1, 50)
 	var bonus = person.wit *.2
@@ -1095,6 +1136,13 @@ func assistwimborn(person):
 		if globals.expansionsettings.perfectinfo == true:
 			text += "- " + str(chance) + "% Chance"
 		gold += bonus
+	#Towns Expanded - Public Nudity
+	if globals.expansionsettings.enable_public_nudity_system == true:
+		var nude_dict = public_nudity_law(person, gold)
+		if nude_dict.text != "":
+			text += nude_dict.text
+		if nude_dict.gold != 0:
+			gold += nude_dict.gold
 	###---End Expansion---###
 	gold = round(max(5, gold))
 	person.xp += gold/5
@@ -1116,7 +1164,8 @@ func artistwimborn(person):
 		gold = gold*1.2
 	elif person.traits.has('Foul Mouth') == true:
 		gold = gold*0.7
-	###---Added by Expansion---### Job Skills
+	###---Added by Expansion---###
+	#Job Skills
 	person.add_jobskill('entertainer', 1)
 	var chance = clamp(person.jobskills.entertainer + (person.charm*.1), 1, 50)
 	var bonus = person.charm *.2
@@ -1125,6 +1174,13 @@ func artistwimborn(person):
 		if globals.expansionsettings.perfectinfo == true:
 			text += "- " + str(chance) + "% Chance"
 		gold += bonus
+	#Towns Expanded - Public Nudity
+	if globals.expansionsettings.enable_public_nudity_system == true:
+		var nude_dict = public_nudity_law(person, gold)
+		if nude_dict.text != "":
+			text += nude_dict.text
+		if nude_dict.gold != 0:
+			gold += nude_dict.gold
 	###---End Expansion---###
 	gold = round(gold)
 	person.stress += rand_range(10,15)
@@ -1170,11 +1226,19 @@ func whorewimborn(person):
 		person.stress += 25 - min(counter*5, 20)
 	if person.spec == 'geisha':
 		gold = gold*1.25
-	###---Added by Expansion---### Job Skills
+	###---Added by Expansion---###
+	#Job Skills
 	var bonusgold = round(clamp(globals.expansion.sexWorkBonus(person), -100, gold))
 	if bonusgold > 0:
 		text += "$He earned [color=green]" + str(bonusgold) + " Bonus Gold[/color] due to $his [color=aqua]Job Skill[/color], [color=aqua]Arousal (Lust)[/color], [color=aqua]Traits[/color], [color=aqua]Body[/color], and [color=aqua]Energy (minus $his Stress)[/color]. "
 		gold += bonusgold
+	#Towns Expanded - Public Nudity
+	if globals.expansionsettings.enable_public_nudity_system == true:
+		var nude_dict = public_nudity_law(person, gold)
+		if nude_dict.text != "":
+			text += nude_dict.text
+		if nude_dict.gold != 0:
+			gold += nude_dict.gold
 	###---End Expansion---###
 	gold = round(gold)
 	person.xp += gold/5
@@ -1215,11 +1279,19 @@ func escortwimborn(person):
 		gold = gold*1.25
 	if person.mods.has("augmenttongue"):
 		gold = gold * 1.15
-	###---Added by Expansion---### Job Skills
+	###---Added by Expansion---###
+	#Job Skills
 	var bonusgold = round(clamp(globals.expansion.sexWorkBonus(person), -100, gold))
 	if bonusgold > 0:
 		text += "$He earned [color=green]" + str(bonusgold) + " Bonus Gold[/color] due to $his [color=aqua]Job Skill[/color], [color=aqua]Arousal (Lust)[/color], [color=aqua]Traits[/color], [color=aqua]Body[/color], and [color=aqua]Energy (minus $his Stress)[/color]. "
 		gold += bonusgold
+	#Towns Expanded - Public Nudity
+	if globals.expansionsettings.enable_public_nudity_system == true:
+		var nude_dict = public_nudity_law(person, gold)
+		if nude_dict.text != "":
+			text += nude_dict.text
+		if nude_dict.gold != 0:
+			gold += nude_dict.gold
 	###---End Expansion---###
 	gold = round(gold)
 	person.xp += gold/6
@@ -1275,11 +1347,19 @@ func fucktoywimborn(person):
 	person.lastsexday = globals.resources.day
 	if person.spec == 'nympho':
 		gold = gold*1.25
-	###---Added by Expansion---### Job Skills
+	###---Added by Expansion---###
+	#Job Skills
 	var bonusgold = round(clamp(globals.expansion.sexWorkBonus(person), -100, gold))
 	if bonusgold > 0:
 		text += "$He earned [color=green]" + str(bonusgold) + " Bonus Gold[/color] due to $his [color=aqua]Job Skill[/color], [color=aqua]Arousal (Lust)[/color], [color=aqua]Traits[/color], [color=aqua]Body[/color], and [color=aqua]Energy (minus $his Stress)[/color]. "
 		gold += bonusgold
+	#Towns Expanded - Public Nudity
+	if globals.expansionsettings.enable_public_nudity_system == true:
+		var nude_dict = public_nudity_law(person, gold)
+		if nude_dict.text != "":
+			text += nude_dict.text
+		if nude_dict.gold != 0:
+			gold += nude_dict.gold
 	###---End Expansion---###
 	gold = round(gold)
 	person.xp += gold/6
@@ -1463,13 +1543,85 @@ func trainee(person):
 func masseuse(person):
 	var text = ""
 	
-	
-	
 	var dict = {text = text}
 	return dict
-###---End Expansion---###
 
-###---Added by Expansion---### New Job-Skill Events
+func public_nudity_law(person, gold):
+	var text = ""
+	var goldmod = 0
+	#Check Nudity
+	var isnaked = false
+	var count_nakedness = 0
+	if person.exposed.chest == true:
+		count_nakedness += 1
+	if person.exposed.genitals == true:
+		count_nakedness += 1
+	if person.exposed.ass == true:
+		count_nakedness += 1
+	if person.rules.nudity == true || count_nakedness >= 2:
+		text += "\n$name arrived in town [color=aqua]naked[/color]. "
+		isnaked = true
+	elif person.obed < person.fetish.exhibitionism * 20 && person.fetish.exhibitionism > 3:
+		text += "\n$name decided to expose $himself in town due to $his [color=aqua]exhibitionism[/color] fetish. "
+		isnaked = true
+
+	#Bonus/Penalty to job
+	if isnaked == true:
+		#Replace with person.jobsexpanded.location after selectable locations
+		var joblocation = globals.jobs.jobdict[person.work].location[0]
+		var towndict = globals.state.townsexpanded[joblocation]
+		var d100 = round(rand_range(0,100))
+		#Bonus/Penalty due to Wages
+		if d100 <= person.beauty:
+			goldmod = round(gold * (person.charm *.01))
+			text += "$His naked body [color=lime]attracted[/color] others. He ended up earning an extra [color=yellow]" + str(goldmod) + " Gold[/color] due to $his [color=aqua]nudity[/color], [color=aqua]beauty[/color], and [color=aqua]charm[/color]. "
+			if towndict.laws.public_nudity == false:
+				towndict.nudity += round(rand_range(1,3))
+				text += "You suspect this made some citizens appreciate public nudity. You've gained some local support towards accepting a law legalizing it, increasing the chances of a proposed law passing. "
+				if globals.expansionsettings.perfectinfo == true:
+					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Updated Chance of Law Passing[/color] = [color=aqua]" + str(towndict.nudity) + "[/color] || "
+		elif d100 >= person.beauty + 50:
+			goldmod = -1 * round(gold * (100 - person.charm *.01))
+			text += "$His naked body [color=red]disgusted[/color] others. He ended up losing [color=yellow]" + str(goldmod) + " Gold[/color] due to $his [color=aqua]nudity[/color], [color=aqua]beauty[/color], and [color=aqua]charm[/color]. "
+			if towndict.laws.public_nudity == false:
+				towndict.nudity -= round(rand_range(1,3))
+				text += "You suspect this made some citizens hate public nudity. You've lost some local support towards accepting a law legalizing it, decreasing the chances of a proposed law passing. "
+				if globals.expansionsettings.perfectinfo == true:
+					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Updated Chance of Law Passing[/color] = [color=aqua]" + str(towndict.nudity) + "[/color] || "
+		else:
+			text += "This decision did not meaningfully impact $his wages."
+		if globals.expansionsettings.perfectinfo == true:
+			text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Bonus Gold Chance[/color] of [color=aqua]" + str(person.beauty) + "[/color] and [color=aqua]Critical Failure Penalty[/color] at [color=aqua]" + str(person.beauty + 50) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color] || "
+		
+		#Guard Fine Chance
+		if towndict.laws.public_nudity == false:
+			d100 = round(rand_range(0,100))
+			if d100 <= towndict.guardskill:
+				var fine = 50
+				text += "\n[color=red][color=aqua]$name[/color] was stopped by the local guards in [color=aqua]" + str(joblocation).capitalize() + "[/color]. $He was informed that $he was breaking the local [color=aqua]Public Nudity[/color] law and would receive a fine of [color=yellow]100[/color] for public indecency.[/color]"
+				if globals.expansionsettings.perfectinfo == true:
+					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Public Indecency Fine Chance[/color] of [color=aqua]" + str(towndict.guardskill) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color] || "
+				
+				#Reduced due to Charm
+				d100 = round(rand_range(0,100))
+				if d100 <= person.charm:
+					text += "[color=aqua]$name[/color][color=red] managed to [color=aqua]Charm[/color] them down to only fining $him [color=yellow]75[/color] instead."
+					fine = 25
+				if globals.expansionsettings.perfectinfo == true:
+					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Chance to Reduce Fine[/color] of [color=aqua]" + str(person.charm) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color] || "
+				#Autopay
+				if towndict.townhall.autopay_fines == true:
+					text += "\nThe fine was automatically paid per your agreement with the town council."
+				else:
+					towndict.townhall.fines.append([globals.resources.day, fine])
+					text += "\nThe fine was submitted to the town council. [color=yellow]You must pay go to the town council in [color=aqua]" + str(joblocation).capitalize() + "[/color] to pay the fine within [color=aqua]3 days[/color] or suffer the reputation penalty.[/color]"
+			elif globals.expansionsettings.perfectinfo == true:
+				text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Public Indecency Fine Chance[/color] of [color=aqua]" + str(towndict.guardskill) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color] || "
+
+	var dict = {text = text, gold = goldmod}
+	return dict
+
+#New Job-Skill Events
 var slaveguard = {
 	ruffians = {name = 'ruffians', chance = 'round(person.cour*.3)', bonus = 'round(person.cour*.2)', text = '$He encountered a group of ruffians while on patrol. $He bravely led the charge into the combat. '},
 	thieves = {name = 'thieves', chance = 'round(person.wit*.2)', bonus = 'round(person.sagi*3)', text = '$He encountered a group of thieves robbing a noble citizen. They tried to escape but $he determined their route and cut them off successfully. '},
