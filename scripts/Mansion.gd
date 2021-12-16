@@ -1943,6 +1943,7 @@ func babyage(age):
 		baby.away.duration = variables.growuptimeteen
 	elif age == 'adult':
 		ClearBabyTraits(age) #ralph
+		baby.away.duration = variables.growuptimeadult
 	baby.away.at = 'growing'
 	baby.obed += 75
 	baby.loyal += 20

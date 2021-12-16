@@ -564,44 +564,35 @@ func outskirts():
 ############## person GUILD
 
 
-func newslaveinguild(number, town = 'wimborn', raceadd = 'Human'): #ralph5 added 3rd entry: raceadd
+func newslaveinguild(number, town = 'wimborn', raceadd = 'rand'): #ralph5 added 3rd entry: raceadd
 	while number > 0:
 		var racearray
 		var race
 		var origin
 		var originpool 
 		if town == 'wimborn':
-			#racearray = [[globals.getracebygroup("wimborn"),1],['Halfkin Tanuki', 1],['Dragonkin', 1.5],['Arachna', 2],['Scylla', 6]] #test
-			racearray = [[globals.getracebygroup("wimborn"),1],['Tribal Elf', 1],['Dark Elf', 1],['Elf', 4],['Human', 8]] #ralph5
-		elif town == 'gorn':
-			racearray = [[globals.getracebygroup("gorn"),1],['Centaur', 1],['Human', 2],['Goblin', 4],['Orc', 6],['Dark Elf', 2]] #ralph5 changed weights, added dark elves
-		elif town == 'frostford':
-			#racearray = [[globals.getracebygroup("frostford"),1],['Human', 1.5],['Halfkin Wolf', 3],['Beastkin Wolf', 5]] #ralph5
-			racearray = [[globals.getracebygroup("frostford"),1],['Human', 3],['Halfkin Wolf', 5],['Beastkin Wolf', 8],['Halfkin Cat', 5],['Halfkin Bunny', 1]] #ralph5
-		elif town == 'umbra':
-			racearray = [[globals.allracesarray[rand_range(0,globals.allracesarray.size())],1]]
-		if globals.rules.slaverguildallraces == true && globals.state.sandbox == true:
-			originpool = ['slave','poor','commoner','rich','noble']
-			origin = originpool[rand_range(0,originpool.size())]
-			race = globals.allracesarray[rand_range(0,globals.allracesarray.size())]
-		elif raceadd == 'rand': #ralph5 changed from else:
-			race = globals.weightedrandom(racearray)
-			if town == 'umbra':
-				originpool = [['noble', 1],['rich',2],['commoner',3], ['poor', 3], ['slave',1]]
-			else:
-				originpool = [['rich',1], ['commoner',3], ['poor', 6], ['slave', 6]]
-			origin = globals.weightedrandom(originpool)
-		#ralph5
+			racearray = ([[globals.getracebygroup("wimborn"),1],['Dark Elf', 1],['Tribal Elf', 1.5],['Elf', 2],['Human', 6]] if !globals.useRalphsTweaks else [[globals.getracebygroup("wimborn"),1],['Tribal Elf', 1],['Dark Elf', 1],['Elf', 4],['Human', 8]] )
+		if town == 'gorn':
+			racearray = ([[globals.getracebygroup("gorn"),1],['Centaur', 1],['Human', 2],['Goblin', 2],['Orc', 5]] if !globals.useRalphsTweaks else [[globals.getracebygroup("gorn"),1],['Centaur', 1],['Human', 2],['Goblin', 4],['Orc', 6],['Dark Elf', 2]])
+		if town == 'frostford':
+			racearray = ([[globals.getracebygroup("frostford"),1],['Human', 1.5],['Halfkin Wolf', 3],['Beastkin Wolf', 5]] if !globals.useRalphsTweaks else [[globals.getracebygroup("frostford"),1],['Human', 3],['Halfkin Wolf', 5],['Beastkin Wolf', 8],['Halfkin Cat', 5],['Halfkin Bunny', 1]])
+		if town == 'umbra':
+			racearray = [[globals.randomfromarray(globals.allracesarray),1]]
+			originpool = [['noble', 1],['rich',2],['commoner',3], ['poor', 3], ['slave',1]]			
 		else:
-			race = raceadd
+			originpool = [['rich',1], ['commoner',3], ['poor', 6], ['slave', 6]]
+		if globals.rules.slaverguildallraces == true && globals.state.sandbox == true:
+			race = globals.randomfromarray(globals.allracesarray)
+			originpool = ['slave','poor','commoner','rich','noble']
+			origin = globals.randomfromarray(originpool)
+		else:
+			if raceadd == 'rand': #ralph5 changed from else:	
+				race = globals.weightedrandom(racearray)
+			else:
+				race = raceadd
 			if race in ['Beastkin Tanuki','Beastkin Fox','Beastkin Bunny','Beastkin Wolf','Beastkin Cat'] && rand_range(0,100) < 50:
 				race = race.replace('Beastkin','Halfkin')
-			if town == 'umbra':
-				originpool = [['noble', 1],['rich',2],['commoner',3], ['poor', 3], ['slave',1]]
-			else:
-				originpool = [['rich',1], ['commoner',3], ['poor', 6], ['slave', 6]]
 			origin = globals.weightedrandom(originpool)
-		#/ralph5
 		var newslave = globals.newslave(race, 'random', 'random', origin)
 		if town == 'umbra':
 			newslave.obed = rand_range(0,80)
@@ -2711,12 +2702,14 @@ func _on_details_pressed(empty = null):
 		get_node("playergroupdetails/quicksell").set_disabled(false)
 	else:
 		get_node("playergroupdetails/quicksell").set_disabled(true)
-	#ralph4
-	if get_parent().get_node("explorationnode").currentzone.code in ['wimborn','gorn','frostford'] && globals.state.capturedgroup.size() > 0:
-		get_node("playergroupdetails/bountysell").set_disabled(false)
-	else:
+	if !globals.useRalphsTweaks:
 		get_node("playergroupdetails/bountysell").set_disabled(true)
-	#/ralph4
+		#To-do Add tooltip explaining this feature is used by Ralphs Tweaks
+	else:
+		if get_parent().get_node("explorationnode").currentzone.code in ['wimborn','gorn','frostford'] && globals.state.capturedgroup.size() > 0:
+			get_node("playergroupdetails/bountysell").set_disabled(false)
+		else:
+			get_node("playergroupdetails/bountysell").set_disabled(true)
 	if get_node("playergroupdetails/Panel/TabContainer").get_current_tab() == 1:
 		get_node("playergroupdetails/Panel/discardbutton").visible = false
 	else:

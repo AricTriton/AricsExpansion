@@ -794,11 +794,11 @@ class progress:
 		return numPersons - lostRope
 
 func addrelations(person, person2, value):
-	if person == player || person2 == player || person == person2 || person == null || person2 == null: #ralph9  - eliminates harmless script error pointed out by Ank
+	if person == player || person2 == player || person == person2:
 		return
-	if person.relations.has(person2.id) == false: #ralph4 - keep getting errors pointing here
-		person.relations[person2.id] = 0
-	if person2.relations.has(person.id) == false:
+	if person == null || person2 == null:
+		return
+	if person.relations.has(person2.id) == false:
 		person2.relations[person.id] = 0
 	if person.relations[person2.id] > 500 && value > 0 && checkifrelatives(person, person2):
 		value = value/1.5

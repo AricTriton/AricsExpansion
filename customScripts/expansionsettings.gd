@@ -195,8 +195,8 @@ var ovulationtype2stage1 = 12
 var ovulationtype2stage2 = 15
 
 #---Aric's and Game's Base Values potentially changed by Ralph's
-var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within ApplyTweaks
-var unique_trait_generation = false				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
+var use_ralphs_tweaks = true					# Set this to true if you want to use the settings within ApplyTweaks
+var unique_trait_generation = true				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
 
 #Mage Specialization Manacost Reduction
 var mage_mana_reduction = true
@@ -249,6 +249,9 @@ var times_rescued_multiplier = 0				# Ralph's - 10, The multiplicative value tha
 #Random Awareness
 var random_enemy_awareness = [0,0]				# Ralph's - [-7,7], This value applies a random awareness negative or positive to determine whether you are ambushed or not. [0,0] means no change.
 
+#Constructor Changes
+var same_type_weight = 2						# Ralph's - 4, The divider value that divides the genealogy of the person's temporary race to determine the sametypeweight used in the constructor.
+
 
 """
 Applies Ralph's tweaks to the game, making it a slightly more challenging experience.
@@ -300,17 +303,24 @@ func applyTweaks():
 	randommixedbreedchance = 30
 	randompurebreedchanceuncommon = 60
 	secondaryuncommonracialchance = 0
+	
+	#Constructor Changes
+	same_type_weight = 4
+	
+	applyConstructorTweaks()
+	
+	applyCombatDataTweaks()
 
 # Apply variables.gd changes here
 func applyVariableTweaks():
 	#Levelling Changes
-	variables.skillpointsperlevel = 1.0			# Original - 2.0
+	variables.skillpointsperlevel = 1.0				# Original - 2.0
 
 	#Baby Stuff
-	variables.growuptimechild = 1.0				# Original - 2.0, How long it takes a baby to become said thing.
-	variables.growuptimeteen = 2.0				# Original - 4.0
-	variables.growuptimeadult = 3.0				# Original - 6.0
-	variables.babynewtraitchance = 33.0			# Original - 20.0, Chance a baby will gain an entirely new trait.
+	variables.growuptimechild = 1.0					# Original - 2.0, How long it takes a baby to become said thing.
+	variables.growuptimeteen = 2.0					# Original - 4.0
+	variables.growuptimeadult = 3.0					# Original - 6.0
+	variables.babynewtraitchance = 33.0				# Original - 20.0, Chance a baby will gain an entirely new trait.
 
 # Apply Manacost Tweaks here.
 func applySpellManacostTweaks():
@@ -326,3 +336,12 @@ func applySpellManacostTweaks():
 # Apply Market Item Tweaks here.
 func applyItemMarketCostTweaks():
 	globals.itemdict.food.cost = 40					# Original - 10
+
+# Apply Constructor Changes here.
+func applyConstructorTweaks():
+	globals.constructor.humanoid_races_array = ['Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome','Goblin','Demon']					# Original - ['Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome','Goblin','Demon','Dragonkin']
+	globals.constructor.uncommon_races_array = ['Dragonkin','Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla']		# Original - ['Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla']
+
+# Apply Combat Data Tweaks here.
+func applyCombatDataTweaks():
+	globals.combatdata.enemygrouppools.monstergirl = 15	# Original - -10

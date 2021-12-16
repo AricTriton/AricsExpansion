@@ -131,7 +131,7 @@ var enemygrouppools = {
 		descriptionambush = 'You are attacked by [color=aqua]Nereid Skirmishers[/color] attempting to secure the beachhead for their kind. ', #ralph4
 	}, #ralph4
 	monstergirl = {
-		units = [['monstergirl',1,1]], awareness = 15, captured = null, special = null, escape = 6, #ralph4
+		units = [['monstergirl',1,1]], awareness = -10, captured = null, special = null, escape = 6, #ralph4
 		description =  "You come across a rare [color=aqua]$race monster $child[/color]. $He hasn't spotted you yet. ",
 		descriptionambush = 'You are attacked by a frenzied [color=aqua]$race $child[/color] in search of mate. ', #ralph4
 		descriptionescape = "A wild $race escapes from you before you get close to $him. ",
