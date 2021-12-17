@@ -16,7 +16,7 @@ func backwardsCompatibility(person):
 		person.npcexpanded['contentment'] = 0
 	if !person.npcexpanded.has('racialbonusesapplied'):
 		person.npcexpanded['racialbonusesapplied'] = false
-		if !person.npcexpanded.has('body'):
+	if !person.npcexpanded.has('body'):
 		person.npcexpanded['body'] = {penis = {traits = []}, vagina = {traits = [], inside = [], pliability = 0, elasticity = 0}, asshole = {traits = [], inside = [], pliability = 0, elasticity = 0},}
 	for i in ['temptraits','onlyonce']:
 		if !person.npcexpanded.has(i):
@@ -146,10 +146,10 @@ func backwardsCompatibility(person):
 	
 	#Towns Expanded
 	for town in globals.state.townsexpanded:
-		if globals.state.townsexpanded[town].has(townhall):
-			globals.state.townsexpanded[town].['townhall'] = {law_change_cost = 5, fines = [], autopay_fines = false,}
-		if !globals.state.townsexpanded[town].has(laws):
-			globals.state.townsexpanded[town]['laws'] = {public_nudity = false,}
+		if globals.state.townsexpanded[town].has('townhall'):
+			globals.state.townsexpanded[town].townhall = {law_change_cost = 5, fines = [], autopay_fines = false,}
+		if !globals.state.townsexpanded[town].has('laws'):
+			globals.state.townsexpanded[town].laws = {public_nudity = false,}
 	
 	#Movement Icon Change from Traits (Unneeded now?)
 	for i in ['Movement: Walking','Movement: Flying','Movement: Crawling','Movement: Immobilized']:
