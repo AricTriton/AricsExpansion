@@ -1362,7 +1362,7 @@ var itemlist = {
 	sedative = {
 		code = 'sedative',
 		name = 'Sedative',
-		icon = load("res://files/aric_expansion_images/items/sedative_trans.png"),
+		icon = load("res://files/aric_expansion_images/items/rendrassa_sedative_potion_bottle_moon.png"),
 		description = "Reduces the Energy of the consumer by anywhere from 25% to 50% of a normal person's daily [color=aqua]Energy[/color] level. It also has a chance to reduce the [color=aqua]Wits[/color] of consumers. ",
 		effect = 'sedativeeffect',
 		recipe = 'recipesedative',
@@ -1370,6 +1370,20 @@ var itemlist = {
 		type = 'potion',
 		toxicity = 15,
 		reqs = 'globals.state.mansionupgrades.mansionalchemy >= 1',
+		weight = 1,
+		amount = 0
+	},
+	sexchangepot = {
+		code = 'sexchangepot',
+		name = 'Tonic of Sexual Conversion ',
+		icon = load("res://files/aric_expansion_images/items/rendrassa_sex_change_potion_bottle.png"),
+		description = "A powerful concoction that radically alters the drinker's sexual characteristics by flooding their body with magically charged hormones.",
+		effect = 'sexchangepoteffect',
+		recipe = 'recipesexchangepot',
+		cost = 250,
+		type = 'potion',
+		toxicity = 50,
+		reqs = 'globals.state.mansionupgrades.mansionalchemy >= 2',
 		weight = 1,
 		amount = 0
 	},
@@ -1466,13 +1480,19 @@ var recipeclaritypot = {
 ###---Added by Expansion---###
 var recipehyperlactationpot = {
 	lactationpot = 1,
-	bottledmilk = 3
+	bottledmilk = 3,
 }
 
 var recipesedative = {
 	basicsolutioning = 1,
 	taintedessenceing = 1,
-	bottledmilk = 1
+	bottledmilk = 1,
+}
+
+var recipesexchangepot = {
+	taintedessenceing = 1,
+	bottledsemen = 2,
+	bottledlube= 2,
 }
 ###---End Expansion
 
@@ -2004,7 +2024,34 @@ func sedativeeffect():
 		text += person.dictionary("$He opens $his mouth as if $he is going to speak, then starts to drool slightly. You touch $his face and $his dull eyes drift toward your face. The heavy dose of sedatives in $his mentally weakened state seems to have permanently lowered $his [color=aqua]Wits[/color]. ")	
 	person.energy -= number
 	return text
-	
+
+func sexchangepoteffect():
+	#Created by Rendrassa
+	var text = ''
+	match person.sex:
+		'male':
+			person.penis = ""
+			person.balls = ""
+			person.vagina = globals.randomitemfromarray(globals.vagsizearray)
+			person.vagvirgin = true
+			text = person.dictionary("$name's penis shrinks into a clitoris as vaginal lips form beneath it. ")
+			person.sex = 'female'
+		'female':
+			person.vagina = ""
+			person.penis = globals.randomitemfromarray(globals.penissizearray)
+			person.balls = globals.randomitemfromarray(globals.penissizearray)
+			text = person.dictionary("$name's clitoris morphs into a fully functional penis with a pair of testicles forming beneath it. ")
+			person.sex = 'male'
+		'futanari':
+			text = person.dictionary("The potion's magic fills $name with toxicity but there is no visible effect on $his body. ")
+	#Abnormal Sex
+	if text == "":
+		text = "The potion failed. It cannot understand the complexities of $name's sexuality. "
+	if person == globals.player:
+		text = text.replace("$name's", 'Your')
+		text = text.replace("$name", 'You')
+	return text
+
 ###---Expansion End---###
 
 
