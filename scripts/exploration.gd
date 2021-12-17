@@ -891,7 +891,7 @@ func townhall_pay_fine_gold(town):
 	var text = "You state that you are ready to pay your oldest fine. The guard extends their hand patiently. You hand over the pouch of gold and watch as they shred the fine and purge it from their records."
 	
 	var currenttown =  globals.state.townsexpanded[town]
-	globals.resources.gold -= int(currenttown.townhall.fines[0][1]
+	globals.resources.gold -= int(currenttown.townhall.fines[0][1])
 	currenttown.townhall.fines.erase([0])
 
 	if !globals.state.townsexpanded[town].townhall.fines.empty():

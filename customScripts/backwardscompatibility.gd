@@ -21,6 +21,10 @@ func backwardsCompatibility(person):
 	for i in ['temptraits','onlyonce']:
 		if !person.npcexpanded.has(i):
 			person.npcexpanded[i] = []
+	
+	#Fetishes
+	if !person.fetish.has('transformation'):
+		person.fetish['transformation'] = "none"
 
 	#Pregnancy Expanded
 	if !person.preg.has('bonus_fertility'):
@@ -143,13 +147,6 @@ func backwardsCompatibility(person):
 		person.stats['wit_racial'] = 0
 	if !person.stats.has('charm_racial'):
 		person.stats['charm_racial'] = 0
-	
-	#Towns Expanded
-	for town in globals.state.townsexpanded:
-		if globals.state.townsexpanded[town].has('townhall'):
-			globals.state.townsexpanded[town].townhall = {law_change_cost = 5, fines = [], autopay_fines = false,}
-		if !globals.state.townsexpanded[town].has('laws'):
-			globals.state.townsexpanded[town].laws = {public_nudity = false,}
 	
 	#Movement Icon Change from Traits (Unneeded now?)
 	for i in ['Movement: Walking','Movement: Flying','Movement: Crawling','Movement: Immobilized']:

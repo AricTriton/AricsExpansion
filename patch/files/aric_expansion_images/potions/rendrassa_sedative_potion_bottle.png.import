@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/rendrassa_sedative_potion_bottle_moon.png-c2b75508a9b60443e2c317e3b367cbac.stex"
+path="res://.import/rendrassa_sedative_potion_bottle.png-879d99b1bc5dcf4b2188259d494b129a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://files/aric_expansion_images/potions/rendrassa_sedative_potion_bottle_moon.png"
-dest_files=[ "res://.import/rendrassa_sedative_potion_bottle_moon.png-c2b75508a9b60443e2c317e3b367cbac.stex" ]
+source_file="res://files/aric_expansion_images/potions/rendrassa_sedative_potion_bottle.png"
+dest_files=[ "res://.import/rendrassa_sedative_potion_bottle.png-879d99b1bc5dcf4b2188259d494b129a.stex" ]
 
 [params]
 

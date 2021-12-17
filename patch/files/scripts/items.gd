@@ -1362,7 +1362,7 @@ var itemlist = {
 	sedative = {
 		code = 'sedative',
 		name = 'Sedative',
-		icon = load("res://files/aric_expansion_images/items/rendrassa_sedative_potion_bottle_moon.png"),
+		icon = load("res://files/aric_expansion_images/potions/rendrassa_sedative_potion_bottle.png"),
 		description = "Reduces the Energy of the consumer by anywhere from 25% to 50% of a normal person's daily [color=aqua]Energy[/color] level. It also has a chance to reduce the [color=aqua]Wits[/color] of consumers. ",
 		effect = 'sedativeeffect',
 		recipe = 'recipesedative',
@@ -1376,7 +1376,7 @@ var itemlist = {
 	sexchangepot = {
 		code = 'sexchangepot',
 		name = 'Tonic of Sexual Conversion ',
-		icon = load("res://files/aric_expansion_images/items/rendrassa_sex_change_potion_bottle.png"),
+		icon = load("res://files/aric_expansion_images/potions/sex_change_potion.png"),
 		description = "A powerful concoction that radically alters the drinker's sexual characteristics by flooding their body with magically charged hormones.",
 		effect = 'sexchangepoteffect',
 		recipe = 'recipesexchangepot',
@@ -2036,12 +2036,14 @@ func sexchangepoteffect():
 			person.vagvirgin = true
 			text = person.dictionary("$name's penis shrinks into a clitoris as vaginal lips form beneath it. ")
 			person.sex = 'female'
+			person.dailyevents.append('sex_changed_potion')
 		'female':
 			person.vagina = ""
 			person.penis = globals.randomitemfromarray(globals.penissizearray)
 			person.balls = globals.randomitemfromarray(globals.penissizearray)
 			text = person.dictionary("$name's clitoris morphs into a fully functional penis with a pair of testicles forming beneath it. ")
 			person.sex = 'male'
+			person.dailyevents.append('sex_changed_potion')
 		'futanari':
 			text = person.dictionary("The potion's magic fills $name with toxicity but there is no visible effect on $his body. ")
 	#Abnormal Sex

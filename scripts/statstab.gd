@@ -129,7 +129,8 @@ func _on_talk_pressed(mode = 'talk'):
 		###---End Expansion---###
 
 		###---Added by Expansion---### Events
-	
+		
+		#---Pregnancy Events
 		#Discover Pregnancy Event
 		if person.dailytalk.has('currentpregnancy'):
 			text += "$He is holding $his " +expansion.nameBelly()+ " with a shy smile.\n\n[color=yellow]" + person.quirk("-$master, I have some news. I think it's good news![/color]\n")
@@ -159,6 +160,31 @@ func _on_talk_pressed(mode = 'talk'):
 			text += person.quirk("$He seems to think for a moment, then hesitantly speaks.\n[color=yellow]-$master? I...I would like to show you something.[/color]")
 			buttons.append({text = "What did you want to talk about?", function = 'eventLactation', args = 'introtold', tooltip = person.dictionary("What does $he want?")})
 		
+		#---Transformation Events
+		#Sex Change from Potion
+		if person.dailyevents.has('sex_changed_potion'):
+			text += "$He is holding $his crotch with an odd look on $his face. "
+			var transformation_factors = 0
+			#Fetish
+			if person.checkFetish('transformation', 0, false):
+				transformation_factors += 50
+			else:
+				transformation_factors -= 50
+			#Traits
+			for positive_trait in ['Pervert','Pliable','Grateful']:
+				if person.traits.has(positive_trait):
+					transformation_factors += 25
+			for negative_trait in ['Prude','Dominant']:
+				if person.traits.has(negative_trait):
+					transformation_factors -= 25
+			if rand_range(0,100) <= person.loyal + transformation_factors:
+				text += person.quirk("\n[color=yellow]-$master? I think I am getting used to how this feels. It is a little strange...but I think I might enjoy being a $sex.[/color]")
+			else:
+				text += person.quirk("\n[color=yellow]-$master, I cannot believe that you forced me to become a $sex. I don't even know who I am anymore! [/color]")
+				person.loyal -= round(rand_range(2,5))
+			person.dailyevents.erase('sex_changed_potion')
+		
+		#---Consent Events
 		#Incest Consent Given
 		if person.dailytalk.has('incestconsentgiven') && person.consentexp.incest == false:
 			#Alter to Personality Changes Dialogue and Player Yes/No response

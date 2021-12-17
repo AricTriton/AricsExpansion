@@ -1218,7 +1218,7 @@ var originsarrayexp = ['slave','poor','commoner','rich','atypical','noble']
 var kinseyscale = ['straight','mostlystraight','rarelygay','bi','rarelystraight','mostlygay','gay']
 
 #All Current Fetishes
-var fetishesarray = ['incest','lactation','drinkmilk','bemilked','milking','exhibitionism','drinkcum','wearcum','wearcumface','creampiemouth','creampiepussy','creampieass','pregnancy','oviposition','drinkpiss','wearpiss','pissing','otherspissing','bondage','dominance','submission','sadism','masochism']
+var fetishesarray = ['incest','lactation','drinkmilk','bemilked','milking','exhibitionism','drinkcum','wearcum','wearcumface','creampiemouth','creampiepussy','creampieass','pregnancy','oviposition','drinkpiss','wearpiss','pissing','otherspissing','bondage','dominance','submission','sadism','masochism','transformation']
 var fetishopinion = ['taboo','dirty','unacceptable','uncertain','acceptable','enjoyable','mindblowing']
 
 var restraintsarray = ['none','cuffed','shackled','fully','fullyexposed']

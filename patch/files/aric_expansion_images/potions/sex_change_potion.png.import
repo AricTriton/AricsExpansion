@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/rendrassa_sex_change_potion_bottle.png-bba8c573fdf45b55a03990713f9d7bef.stex"
+path="res://.import/sex_change_potion.png-5a23fe40a2f162022b2b08a28b1057bf.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://files/aric_expansion_images/potions/rendrassa_sex_change_potion_bottle.png"
-dest_files=[ "res://.import/rendrassa_sex_change_potion_bottle.png-bba8c573fdf45b55a03990713f9d7bef.stex" ]
+source_file="res://files/aric_expansion_images/potions/sex_change_potion.png"
+dest_files=[ "res://.import/sex_change_potion.png-5a23fe40a2f162022b2b08a28b1057bf.stex" ]
 
 [params]
 

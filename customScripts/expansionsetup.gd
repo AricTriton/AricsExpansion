@@ -171,6 +171,13 @@ func expandGame():
 	if !globals.state.reputation.has('umbra'):
 		globals.state.reputation['umbra'] = 0
 	
+	#Towns Expanded
+	for town in globals.state.townsexpanded:
+		if globals.state.townsexpanded[town].has('townhall'):
+			globals.state.townsexpanded[town].townhall = {law_change_cost = 5, fines = [], autopay_fines = false,}
+		if !globals.state.townsexpanded[town].has('laws'):
+			globals.state.townsexpanded[town].laws = {public_nudity = false,}
+	
 	#End Update
 	globals.state.expansionversion = globals.expansionsettings.modversion
 	

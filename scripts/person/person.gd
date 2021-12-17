@@ -186,6 +186,7 @@ var fetish = {
 	submission = "none",
 	sadism = "none",
 	masochism = "none",
+	transformation = "none",
 }
 
 #Tracks their Consent for Expanded Options
