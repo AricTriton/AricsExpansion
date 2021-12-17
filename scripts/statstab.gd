@@ -1296,16 +1296,17 @@ func talkfetishes(mode=''):
 	var invalidfetishfound = false
 	var incompletefetishtext = "\n\n\n[color=red]Aric's Note: The following fetishes have no current mechanical value. They may be implemented in the future but were implimented using another, more specific fetish instead. They are only for roleplay purposes at the moment. Any other fetishes that appear are have at least 1 fetish check and provide a mechanical benefit somewhere in the game. [/color]"
 	#ralph7
-	var fetishstatus = "\n\n" + person.name + " has the following known fetishes:\n"
-	var textcolor = ""
-	for i in person.knownfetishes:
-		if person.fetish[i] in ['mindblowing','enjoyable']:
-			textcolor = "[color=green]"
-		elif person.fetish[i] in ['acceptable','uncertain']:
-			textcolor = "[color=yellow]"
-		else:
-			textcolor = "[color=red]"
-		fetishstatus += str(i).capitalize() + ": " + textcolor + person.fetish[i].capitalize() + "[/color]\n"
+	if globals.useRalphsTweaks:
+		var fetishstatus = "\n\n" + person.name + " has the following known fetishes:\n"
+		var textcolor = ""
+		for i in person.knownfetishes:
+			if person.fetish[i] in ['mindblowing','enjoyable']:
+				textcolor = "[color=green]"
+			elif person.fetish[i] in ['acceptable','uncertain']:
+				textcolor = "[color=yellow]"
+			else:
+				textcolor = "[color=red]"
+			fetishstatus += str(i).capitalize() + ": " + textcolor + person.fetish[i].capitalize() + "[/color]\n"
 	#/ralph7
 	
 	#The Fetish Response
@@ -1873,10 +1874,10 @@ func talkconsent(mode=''):
 		if !person.dailytalk.has('consentincest') && person.consentexp.incest == false:
 			buttons.append({text = person.dictionary("Will you "+str(expansion.nameSex())+" with family members?"), function = 'talkconsent', args = 'incest'})
 		#Incest Breeder
-		if !person.dailytalk.has('consentincestbreeder') && person.consentexp.incestbreeder == false && person.consentexp.incest == true:
+		if person.consentexp.incest == true && (person.consentexp.breeder == true || person.consentexp.stud == true) && !person.dailytalk.has('consentincestbreeder') && person.consentexp.incestbreeder == false:
 			buttons.append({text = person.dictionary("Will you "+str(expansion.nameBeBred())+" by relatives?"), function = 'talkconsent', args = 'incestbreeder'})
 		#Livestock
-		if !person.dailytalk.has('consentlivestock') && globals.state.farm >= 3 && person.consentexp.livestock == false:
+		if globals.state.farm >= 3 && (person.consentexp.breeder == true || person.consentexp.stud == true) && !person.dailytalk.has('consentlivestock') && person.consentexp.livestock == false:
 			buttons.append({text = person.dictionary("Would you willingly work in the Farm as livestock?"), function = 'talkconsent', args = 'livestock'})
 	
 	if mode != "intro":

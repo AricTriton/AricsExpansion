@@ -815,20 +815,13 @@ func cooking(person):
 	var food = 0
 	person.xp += globals.slavecount() * globals.expansionsettings.food_experience
 	if globals.resources.food < 200:
-		if globals.expansionsettings.food_difficulty:
-			if globals.resources.gold/2 >= globals.state.foodbuy:
-				text = '$name went to purchase groceries and brought back new food supplies.\n'
-				gold = -globals.state.foodbuy*2
-				food = globals.state.foodbuy
-			else:
-				text = '$name complained about the lack of food and no money to supply the kitchen on $his own.\n'
+		var scaling = 20.0 / globals.itemdict.food.cost
+		if globals.resources.gold >= floor(globals.state.foodbuy/scaling):
+			text = '$name went to purchase groceries and brought back new food supplies.\n'
+			gold = -floor(globals.state.foodbuy/scaling)
+			food = globals.state.foodbuy
 		else:
-			if globals.resources.gold >= globals.state.foodbuy/2:	
-				text = '$name went to purchase groceries and brought back new food supplies.\n'	
-				gold = -globals.state.foodbuy/2	
-				food = globals.state.foodbuy	
-			else:	
-				text = '$name complained about the lack of food and no money to supply the kitchen on $his own.\n'	
+			text = '$name complained about the lack of food and no money to supply the kitchen on $his own.\n'
 	###---Added by Expansion---### Job Skills
 	var bonusfood = 0
 	person.add_jobskill('cook', 1)

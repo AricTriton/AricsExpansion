@@ -13,19 +13,18 @@ var questgiveawayslave
 #onready var sideQuestTexts = globals.sideQuestTexts
 
 func _ready():
-	###---Added by Expansion---### Removed via Ank BugFix v4
 	if globals.guildslaves.wimborn.size() < 2:
 		var rand = round(rand_range(4,6))
-		newslaveinguild(rand, 'wimborn', 'rand') #ralph5 added 3rd entry
+		newslaveinguild(rand, 'wimborn')
 	if globals.guildslaves.gorn.size() < 2:
 		var rand = round(rand_range(4,6))
-		newslaveinguild(rand, 'gorn', 'rand') #ralph5 added 3rd entry
+		newslaveinguild(rand, 'gorn')
 	if globals.guildslaves.frostford.size() < 2:
 		var rand = round(rand_range(4,6))
-		newslaveinguild(rand, 'frostford', 'rand') #ralph5 added 3rd entry
+		newslaveinguild(rand, 'frostford')
 	if globals.guildslaves.umbra.size() < 4:
 		var rand = round(rand_range(4,6))
-		newslaveinguild(rand, 'umbra', 'rand') #ralph5 added 3rd entry
+		newslaveinguild(rand, 'umbra')
 	for i in ['armor','weapon','costume','accessory','underwear']:
 		$playergrouppanel/characterinfo.get_node(i).connect('mouse_entered',self,'iteminfo',[i])
 		$playergrouppanel/characterinfo.get_node(i).connect('mouse_exited',self,'iteminfoclose')
@@ -572,26 +571,27 @@ func newslaveinguild(number, town = 'wimborn', raceadd = 'rand'): #ralph5 added 
 		var originpool 
 		if town == 'wimborn':
 			racearray = ([[globals.getracebygroup("wimborn"),1],['Dark Elf', 1],['Tribal Elf', 1.5],['Elf', 2],['Human', 6]] if !globals.useRalphsTweaks else [[globals.getracebygroup("wimborn"),1],['Tribal Elf', 1],['Dark Elf', 1],['Elf', 4],['Human', 8]] )
-		if town == 'gorn':
+		elif town == 'gorn':
 			racearray = ([[globals.getracebygroup("gorn"),1],['Centaur', 1],['Human', 2],['Goblin', 2],['Orc', 5]] if !globals.useRalphsTweaks else [[globals.getracebygroup("gorn"),1],['Centaur', 1],['Human', 2],['Goblin', 4],['Orc', 6],['Dark Elf', 2]])
-		if town == 'frostford':
+		elif town == 'frostford':
 			racearray = ([[globals.getracebygroup("frostford"),1],['Human', 1.5],['Halfkin Wolf', 3],['Beastkin Wolf', 5]] if !globals.useRalphsTweaks else [[globals.getracebygroup("frostford"),1],['Human', 3],['Halfkin Wolf', 5],['Beastkin Wolf', 8],['Halfkin Cat', 5],['Halfkin Bunny', 1]])
 		if town == 'umbra':
 			racearray = [[globals.randomfromarray(globals.allracesarray),1]]
 			originpool = [['noble', 1],['rich',2],['commoner',3], ['poor', 3], ['slave',1]]			
 		else:
 			originpool = [['rich',1], ['commoner',3], ['poor', 6], ['slave', 6]]
-		if globals.rules.slaverguildallraces == true && globals.state.sandbox == true:
+		if raceadd != 'rand': #ralph
+			if race in ['Beastkin Tanuki','Beastkin Fox','Beastkin Bunny','Beastkin Wolf','Beastkin Cat'] && rand_range(0,100) < 50:
+				race = raceadd.replace('Beastkin','Halfkin')
+			else:
+				race = raceadd #/ralph
+			origin = globals.weightedrandom(originpool)
+		elif globals.rules.slaverguildallraces == true && globals.state.sandbox == true:
 			race = globals.randomfromarray(globals.allracesarray)
 			originpool = ['slave','poor','commoner','rich','noble']
 			origin = globals.randomfromarray(originpool)
 		else:
-			if raceadd == 'rand': #ralph5 changed from else:	
-				race = globals.weightedrandom(racearray)
-			else:
-				race = raceadd
-			if race in ['Beastkin Tanuki','Beastkin Fox','Beastkin Bunny','Beastkin Wolf','Beastkin Cat'] && rand_range(0,100) < 50:
-				race = race.replace('Beastkin','Halfkin')
+			race = globals.weightedrandom(racearray)
 			origin = globals.weightedrandom(originpool)
 		var newslave = globals.newslave(race, 'random', 'random', origin)
 		if town == 'umbra':
@@ -614,6 +614,8 @@ func setcharacter(text):
 			get_parent().nodeunfade($charactersprite, 0.3)
 	
 func marketsattext():
+	if !globals.useRalphsTweaks:
+		return ""
 	#ralph5
 	var sattext = ""
 	var starttext = ""
@@ -722,9 +724,7 @@ func slaveguild(guild = 'wimborn'):
 			text += "Realizing you belong to the Mage's Order, the attendant politely greets you and asks how she may assist you. "
 		text = text + marketsattext() #ralph5
 		mansion.maintext = globals.player.dictionaryplayer(text)
-		###---Added by Expansion---### Ank BugFix v4
 		var array = [{name = 'See slaves for sale',function = 'slaveguildslaves', args = 'frostford'},{name = 'Offer your servants',function = 'sellslavelist', args = 'frostford'}, {name = 'See custom requests', function = 'slaveguildquests'}, {name = 'Services for Slaves',function = 'slaveservice'}, {name = 'Leave', function = 'tofrostford'}]
-		###---End Expansion---###
 		buildbuttons(array)
 	get_node("playergrouppanel/VBoxContainer").visible = false
 	if globals.spelldict.mindread.learned == false:
@@ -816,7 +816,8 @@ var guildlocation
 func slaveguildslaves(location):
 	guildlocation = location
 	get_node("slavebuypanel").visible = true
-	var cost = ceil((globals.spelldict.mindread.manacost*globals.expansionsettings.spellcost)*1.5)
+	#ralph
+	var cost = ceil(globals.spelldict.mindread.manacost * globals.expansionsettings.spellcost * 1.5)
 	if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction:
 		cost = cost/2
 	get_node("slavebuypanel/mindreadbutton").text = "Use Mind Read (" +str(cost)+ ")"
@@ -2691,9 +2692,7 @@ func _on_details_pressed(empty = null):
 		newbutton.set_meta('spell', spell)
 		newbutton.connect("pressed",self,'spellbackpackselect',[spell])
 	
-	###---Added by Expansion---### Ank Bugfix v4
 	selectpartymember(partyselectedslave)
-	###---End Expansion---###	 
 	if !get_parent().get_node("explorationnode").currentzone.code in ['wimborn','gorn','frostford', 'amberguard'] || globals.resources.gold <= 25:
 		get_node("playergroupdetails/return").set_disabled(true)
 	else:
@@ -2704,12 +2703,11 @@ func _on_details_pressed(empty = null):
 		get_node("playergroupdetails/quicksell").set_disabled(true)
 	if !globals.useRalphsTweaks:
 		get_node("playergroupdetails/bountysell").set_disabled(true)
-		#To-do Add tooltip explaining this feature is used by Ralphs Tweaks
+		get_node("playergroupdetails/bountysell").set_tooltip("This feature requires enabling Ralph's Tweaks.")
+	elif get_parent().get_node("explorationnode").currentzone.code in ['wimborn','gorn','frostford'] && globals.state.capturedgroup.size() > 0:
+		get_node("playergroupdetails/bountysell").set_disabled(false)
 	else:
-		if get_parent().get_node("explorationnode").currentzone.code in ['wimborn','gorn','frostford'] && globals.state.capturedgroup.size() > 0:
-			get_node("playergroupdetails/bountysell").set_disabled(false)
-		else:
-			get_node("playergroupdetails/bountysell").set_disabled(true)
+		get_node("playergroupdetails/bountysell").set_disabled(true)
 	if get_node("playergroupdetails/Panel/TabContainer").get_current_tab() == 1:
 		get_node("playergroupdetails/Panel/discardbutton").visible = false
 	else:
@@ -2905,7 +2903,6 @@ func _on_quicksell_pressed():
 		globals.state.racemarketsat[i.race.replace('Halfkin', 'Beastkin')] = racepricemod
 		#print("Sold 1 " + i.race + "   Pricemod decreased " + str(racepricemodchange) + " to " + str(racepricemod))
 		#/ralph5
-		globals.state.capturedgroup.erase(i)
 	main.popup('You furtively delivered your captives to the local slaver guild. This earned you [color=yellow]' + str(gold) + '[/color] gold. ')
 	globals.state.backpack.stackables.rope = globals.state.backpack.stackables.get('rope', 0) + globals.state.calcRecoverRope(array.size())
 	globals.resources.gold += gold
@@ -2966,10 +2963,10 @@ func _on_bountysell_pressed():
 			array_lowcrime.append(i)
 		else:
 			array_nobounty.append(i)
-	if !array_highcrime == []:
+	if !array_highcrime.empty():
 		for i in array_highcrime:
 			tempname = i.name + " " + i.surname
-			bountycrime = highcrime[rand_range(0,highcrime.size())]
+			bountycrime = globals.randomfromarray(highcrime)
 			if i.traits.has("Pervert"):
 				bountycrime = "multiple counts of necrophilia"
 			if i.traits.has("Sadist"):
@@ -2982,10 +2979,10 @@ func _on_bountysell_pressed():
 			repgaincount += 3
 			text += "\n[color=green]Your reputation has improved.[/color]"
 			norewards = false
-	if !array_midcrime == []:
+	if !array_midcrime.empty():
 		for i in array_midcrime:
 			tempname = i.name + " " + i.surname
-			bountycrime = midcrime[rand_range(0,midcrime.size())]
+			bountycrime = globals.randomfromarray(midcrime)
 			if i.traits.has("Pervert"):
 				bountycrime = "public acts of bestiality"
 			if i.traits.has("Sadist"):
@@ -2997,16 +2994,16 @@ func _on_bountysell_pressed():
 			repgaincount += 1
 			text += "\n[color=green]Your reputation has improved a little.[/color]"
 			norewards = false
-	if !array_lowcrime == []:
+	if !array_lowcrime.empty():
 		for i in array_lowcrime:
 			tempname = i.name + " " + i.surname
-			bountycrime = lowcrime[rand_range(0,lowcrime.size())]
+			bountycrime = globals.randomfromarray(lowcrime)
 			bountycount += 1
 			bountyprice = round(sqrt(i.level)*rand_range(10,40))
 			gold += bountyprice
 			text += "\nYou collected a [color=yellow]" + str(bountyprice) + "[/color] gold reward from the guard for turning in " + str(tempname) + " who had a warrant out for [color=red]" + str(bountycrime) + "[/color]."
 			norewards = false
-	if !array_noble == []:
+	if !array_noble.empty():
 		for i in array_noble:
 			tempname = i.name + " " + i.surname
 			bountyprice = round(sqrt(i.level)*rand_range(125,500))
@@ -3016,7 +3013,7 @@ func _on_bountysell_pressed():
 			else:
 				text += "\nYou collected a [color=yellow]" + str(bountyprice) + "[/color] gold reward from the guard for the safe return of " + str(tempname) + ", who turns away haughtily. There is little doubt that " + str(i.name) + "'s indiscretions will be covered up by House " + str(i.surname) + " or some other noble affiliation."	
 			norewards = false
-	if !array_magespecimen == []:
+	if !array_magespecimen.empty():
 		norewards = false
 		if array_magespecimen.size() > 1:
 			text += "\n\n"
@@ -3039,7 +3036,7 @@ func _on_bountysell_pressed():
 				bountyprice = round(i.calculateprice()*0.3*0.9) #equiv to quickselling (ralph modded 0.9 penalty) at slave guild but no influential/slaver boost
 				gold += bountyprice
 				text += "\nYou collect a finder's fee of [color=yellow]" + str(bountyprice) + "[/color] gold for the delivery of " + str(tempname) + " as a research specimen for the mage guild.\n"
-	if !array_citizen == []:
+	if !array_citizen.empty():
 		text += "\n\n"
 		if array_citizen.size() > 1:
 			var count = 0
@@ -3055,7 +3052,7 @@ func _on_bountysell_pressed():
 				tempname = i.name + " " + i.surname
 				text += "You collected a no bounty or reward for the safe return of " + str(tempname) + ". A hushed conversation with the guard leaves " + str(i.name) + " with a horrified expression as realization of how close enslavement or worse had been. " + str(i.name) + " decides to leave town and this little misunderstanding is taken care of.\n"
 			#text += "Your reputation recovers somewhat."
-	if !array_nobounty == [] && !norewards:
+	if !array_nobounty.empty() && !norewards:
 		text += "\nThe rest of your captives are freed and instructed to leave town."
 	elif gold > 0:
 		text += "\n\nYou collected [color=aqua]" + str(bountycount) + " bounties [/color]and rewards totalling [color=yellow]" + str(gold) + "[/color] gold for this group. "
