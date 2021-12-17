@@ -487,8 +487,650 @@ func cleargenes(person):
 		person.genealogy[race] = 0
 #/ralph4
 
-###---Added by Expansion---### Deviate Concept Tweaked ###Ralphomod### tweaked further
+###---Added by Expansion---### Deviate Concept Tweaked
 func setRaceBonus(person, increasestats):
+	if globals.useRalphsTweaks:
+		setRaceBonus_Ralph(person, increasestats)
+		return
+	var bonus_strength = 0
+	var bonus_agility = 0
+	var bonus_magic = 0
+	var bonus_endurance = 0
+	var bonus_courage = 0
+	var bonus_confidence = 0
+	var bonus_wit = 0
+	var bonus_charm = 0
+	var bonus_beauty = 0
+	var bonus_fertility = 0
+	
+	var addstats = increasestats
+	
+	if person == null:
+		print("Invalid Person for Setting Racial Bonus")
+		return
+	
+	###ANK'S FIX? This + Dictionary?
+#	for race in genealogy:
+#		if genealogy[race] > 0:
+#			descript += race.replace('_',' ').capitalize() + " : " + str(genealogy[race]) + "%\n"
+	###
+	
+#	if person.npcexpanded.racialbonusesapplied == false && addstats == true || person.npcexpanded.racialbonusesapplied == true && addstats == false:
+	if person.genealogy.human > 0:
+		if person.genealogy.human >= 100:
+			bonus_strength += .6
+			bonus_agility += .6
+			bonus_magic += .6
+			bonus_endurance += 1.8
+		elif person.genealogy.human >= 70:
+			bonus_strength += .4
+			bonus_agility += .4
+			bonus_magic += .4
+			bonus_endurance += 1.4
+		elif person.genealogy.human >= 50:
+			bonus_strength += .4
+			bonus_agility += .4
+			bonus_magic += .4
+			bonus_endurance += .6
+		elif person.genealogy.human >= 30:
+			bonus_strength += .2
+			bonus_agility += .2
+			bonus_magic += .2
+			bonus_endurance += .4
+		else:
+			bonus_strength += .1
+			bonus_agility += .1
+			bonus_magic += .1
+			bonus_endurance += .2
+	
+	if person.genealogy.gnome > 0:
+		if person.genealogy.gnome >= 100:
+			bonus_wit += 20
+			bonus_magic += 1
+			bonus_endurance += 2
+		elif person.genealogy.gnome >= 70:
+			bonus_wit += 20
+			bonus_magic += 1
+			bonus_endurance += 1
+		elif person.genealogy.gnome >= 50:
+			bonus_wit += 15
+			bonus_magic += 1
+			bonus_endurance += .4
+		elif person.genealogy.gnome >= 30:
+			bonus_wit += 10
+			bonus_magic += .4
+			bonus_endurance += .2
+		else:
+			bonus_wit += 5
+			bonus_magic += .2
+			bonus_endurance += .2
+	
+	#Long-Ears
+	#Elf 
+	if person.genealogy.elf > 0:
+		if person.genealogy.elf >= 100:
+			bonus_agility += 3
+			bonus_charm += 10
+		elif person.genealogy.elf >= 70:
+			bonus_agility += 2
+			bonus_charm += 10
+		elif person.genealogy.elf >= 50:
+			bonus_agility += 1
+			bonus_charm += 5
+		elif person.genealogy.elf >= 30:
+			bonus_agility += 1
+		else:
+			bonus_agility += .4
+	
+	#Dark Elf
+	if person.genealogy.dark_elf > 0:
+		if person.genealogy.dark_elf >= 100:
+			bonus_magic += 1
+			bonus_agility += 2
+			bonus_wit += 10
+		elif person.genealogy.dark_elf >= 70:
+			bonus_magic += 1
+			bonus_agility += 1
+			bonus_wit += 10
+		elif person.genealogy.dark_elf >= 50:
+			bonus_magic += 1
+			bonus_agility += .4
+			bonus_wit += 5
+		elif person.genealogy.dark_elf >= 30:
+			bonus_magic += 1
+			bonus_agility += .2
+		else:
+			bonus_magic += .2
+			bonus_agility += .2
+	
+	#Tribal Elf
+	if person.genealogy.tribal_elf > 0:
+		if person.genealogy.tribal_elf >= 100:
+			bonus_confidence += 20
+			bonus_strength += 1
+			bonus_agility += 2
+		elif person.genealogy.tribal_elf >= 70:
+			bonus_confidence += 20
+			bonus_strength += 1
+			bonus_agility += 1
+		elif person.genealogy.tribal_elf >= 50:
+			bonus_confidence += 15
+			bonus_strength += 1
+			bonus_agility += .4
+		elif person.genealogy.tribal_elf >= 30:
+			bonus_confidence += 10
+			bonus_strength += .4
+			bonus_agility += .2
+		else:
+			bonus_confidence += 5
+			bonus_strength += .2
+			bonus_agility += .2
+	
+	#Greenskins 
+	#Orcs
+	if person.genealogy.orc > 0:
+		if person.genealogy.orc >= 100:
+			bonus_strength += 3
+			bonus_courage += 10
+		if person.genealogy.orc >= 70:
+			bonus_strength += 2
+			bonus_courage += 10
+		elif person.genealogy.orc >= 70:
+			bonus_strength += 2
+			bonus_courage += 10
+		elif person.genealogy.orc >= 50:
+			bonus_strength += 1.4
+			bonus_courage += 5
+		elif person.genealogy.orc >= 30:
+			bonus_strength += 1
+		else:
+			bonus_strength += .4
+	
+	#Goblin 
+	if person.genealogy.goblin > 0:
+		if person.genealogy.goblin >= 100:
+			bonus_fertility += 40
+			bonus_agility += 1
+			bonus_strength += 1
+		elif person.genealogy.goblin >= 70:
+			bonus_fertility += 30
+			bonus_agility += 1
+			bonus_strength += .4
+		elif person.genealogy.goblin >= 50:
+			bonus_fertility += 25
+			bonus_agility += 1
+			bonus_strength += .4
+		elif person.genealogy.goblin >= 30:
+			bonus_fertility += 20
+			bonus_agility += .4
+			bonus_strength += .2
+		else:
+			bonus_fertility += 10
+			bonus_agility += .2
+			bonus_strength += .1
+	
+	#Aquatic
+	#Nereid 
+	if person.genealogy.nereid > 0:
+		if person.genealogy.nereid >= 100:
+			bonus_beauty += 25
+			bonus_charm += 15
+			bonus_magic += 2
+		elif person.genealogy.nereid >= 70:
+			bonus_beauty += 20
+			bonus_charm += 15
+			bonus_magic += 1
+		elif person.genealogy.nereid >= 50:
+			bonus_beauty += 15
+			bonus_charm += 10
+			bonus_magic += .4
+		elif person.genealogy.nereid >= 30:
+			bonus_beauty += 10
+			bonus_charm += 5
+			bonus_magic += .2
+		else:
+			bonus_beauty += 5
+			bonus_charm += 5
+			bonus_magic += .2
+	
+	#Scylla 
+	if person.genealogy.scylla > 0:
+		if person.genealogy.scylla >= 100:
+			bonus_confidence += 20
+			bonus_magic += 2
+			bonus_agility += 1
+		elif person.genealogy.scylla >= 70:
+			bonus_confidence += 20
+			bonus_magic += 1
+			bonus_agility += 1
+		elif person.genealogy.scylla >= 50:
+			bonus_confidence += 20
+			bonus_magic += 1
+			bonus_agility += 1
+		elif person.genealogy.scylla >= 30:
+			bonus_confidence += 15
+			bonus_magic += 1
+			bonus_agility += .4
+		else:
+			bonus_magic += .2
+			bonus_agility += .2
+	
+	#Aerials
+	#Fairy
+	if person.genealogy.fairy > 0:
+		if person.genealogy.fairy >= 100:
+			bonus_magic += 3
+			bonus_charm += 10
+		elif person.genealogy.fairy >= 70:
+			bonus_magic += 2
+			bonus_charm += 10
+		elif person.genealogy.fairy >= 50:
+			bonus_magic += 1.4
+			bonus_charm += 5
+		elif person.genealogy.fairy >= 30:
+			bonus_magic += 1
+		else:
+			bonus_magic += .4
+	
+	#Harpy
+	if person.genealogy.harpy > 0:
+		if person.genealogy.harpy >= 100:
+			bonus_courage += 25
+			bonus_agility += 1
+			bonus_magic += 2
+		elif person.genealogy.harpy >= 70:
+			bonus_courage += 20
+			bonus_agility += 1
+			bonus_magic += 1
+		elif person.genealogy.harpy >= 50:
+			bonus_courage += 15
+			bonus_agility += 1
+			bonus_magic += .4
+		elif person.genealogy.harpy >= 30:
+			bonus_courage += 10
+			bonus_agility += .4
+			bonus_magic += .2
+		else:
+			bonus_agility += .2
+			bonus_magic += .2
+	
+	#Seraph
+	if person.genealogy.seraph > 0:
+		if person.genealogy.seraph >= 100:
+			bonus_beauty += 30
+			bonus_magic += 2
+			bonus_endurance += 1
+		elif person.genealogy.seraph >= 70:
+			bonus_beauty += 25
+			bonus_magic += 1
+			bonus_endurance += 1
+		elif person.genealogy.seraph >= 50:
+			bonus_beauty += 20
+			bonus_magic += 1
+			bonus_endurance += .4
+		elif person.genealogy.seraph >= 30:
+			bonus_beauty += 15
+			bonus_magic += .4
+			bonus_endurance += .2
+		else:
+			bonus_beauty += 10
+			bonus_magic += .2
+			bonus_endurance += .2
+	
+	#Demon
+	if person.genealogy.demon > 0:
+		if person.genealogy.demon >= 100:
+			bonus_charm += 25
+			bonus_strength += 1
+			bonus_magic += 2
+		elif person.genealogy.demon >= 70:
+			bonus_charm += 20
+			bonus_strength += 1
+			bonus_magic += 1
+		elif person.genealogy.demon >= 50:
+			bonus_charm += 15
+			bonus_strength += .4
+			bonus_magic += 1
+		elif person.genealogy.demon >= 30:
+			bonus_charm += 10
+			bonus_strength += .2
+			bonus_magic += .4
+		else:
+			bonus_charm += 4
+			bonus_strength += .2
+			bonus_magic += .2
+	
+	#Monstrous
+	#Dragonkin
+	if person.genealogy.dragonkin > 0:
+		if person.genealogy.dragonkin >= 100:
+			bonus_strength += 1.6
+			bonus_magic += 1
+			bonus_endurance += 1
+		elif person.genealogy.dragonkin >= 70:
+			bonus_strength += 1.4
+			bonus_magic += 0.4
+			bonus_endurance += 1
+		elif person.genealogy.dragonkin >= 50:
+			bonus_strength += 1
+			bonus_magic += 0.2
+			bonus_endurance += 1
+		elif person.genealogy.dragonkin >= 30:
+			bonus_strength += 1
+			bonus_magic += 0.2
+			bonus_endurance += .4
+		else:
+			bonus_strength += .4
+			bonus_magic += 0.2
+			bonus_endurance += .2
+	
+	#Arachna
+	if person.genealogy.arachna > 0:
+		if person.genealogy.arachna >= 100:
+			bonus_strength += 2
+			bonus_agility += 1.6
+		elif person.genealogy.arachna >= 70:
+			bonus_strength += 1
+			bonus_agility += 1.4
+		elif person.genealogy.arachna >= 50:
+			bonus_strength += 1
+			bonus_agility += 1
+		elif person.genealogy.arachna >= 30:
+			bonus_strength += .4
+			bonus_agility += 1
+		else:
+			bonus_strength += .2
+			bonus_agility += .4
+	
+	#Lamia 
+	if person.genealogy.lamia > 0:
+		if person.genealogy.lamia >= 100:
+			bonus_confidence += 25
+			bonus_strength += 2
+			bonus_magic += 1
+		elif person.genealogy.lamia >= 70:
+			bonus_confidence += 20
+			bonus_strength += 1
+			bonus_magic += 1
+		elif person.genealogy.lamia >= 50:
+			bonus_confidence += 15
+			bonus_strength += 1
+			bonus_magic += .4
+		elif person.genealogy.lamia >= 30:
+			bonus_confidence += 10
+			bonus_strength += .6
+			bonus_magic += .2
+		else:
+			bonus_strength += .4
+			bonus_magic += .2
+	
+	if person.genealogy.dryad > 0:
+		if person.genealogy.dryad >= 100:
+			bonus_strength += 2
+			bonus_magic += 1
+			bonus_endurance += 1
+		elif person.genealogy.dryad >= 70:
+			bonus_strength += .6
+			bonus_magic += 1
+			bonus_endurance += 1
+		elif person.genealogy.dryad >= 50:
+			bonus_strength += .4
+			bonus_magic += 1
+			bonus_endurance += .6
+		elif person.genealogy.dryad >= 30:
+			bonus_strength += .2
+			bonus_magic += .6
+			bonus_endurance += .4
+		else:
+			bonus_strength += .2
+			bonus_magic += .4
+			bonus_endurance += .2
+	
+	#Slime
+	if person.genealogy.slime > 0:
+		if person.genealogy.slime >= 100:
+			bonus_strength += 1
+			bonus_agility += 1
+			bonus_magic += 1
+			bonus_endurance += 2
+		elif person.genealogy.slime >= 70:
+			bonus_strength += 1
+			bonus_agility += .6
+			bonus_magic += .6
+			bonus_endurance += 2
+		elif person.genealogy.slime >= 50:
+			bonus_strength += 1
+			bonus_agility += .4
+			bonus_magic += .4
+			bonus_endurance += 1.6
+		elif person.genealogy.slime >= 30:
+			bonus_strength += .6
+			bonus_agility += .2
+			bonus_magic += .2
+			bonus_endurance += 1
+		else:
+			bonus_strength += .2
+			bonus_agility += .2
+			bonus_magic += .2
+			bonus_endurance += .4
+	
+	#Cat 
+	if person.genealogy.cat > 0:
+		if person.genealogy.cat >= 100:
+			bonus_charm += 15
+			bonus_agility += 2
+			bonus_endurance += 1
+		elif person.genealogy.cat >= 70:
+			bonus_charm += 15
+			bonus_agility += 1.4
+			bonus_endurance += 1
+		elif person.genealogy.cat >= 50:
+			bonus_charm += 10
+			bonus_agility += 1
+			bonus_endurance += .4
+		elif person.genealogy.cat >= 30:
+			bonus_charm += 5
+			bonus_agility += .6
+			bonus_endurance += .2
+		else:
+			bonus_agility += .4
+			bonus_endurance += .2
+	
+	#Wolf 
+	if person.genealogy.dog > 0:
+		if person.genealogy.dog >= 100:
+			bonus_courage += 10
+			bonus_strength += 1
+			bonus_agility += 2
+		elif person.genealogy.dog >= 70:
+			bonus_courage += 10
+			bonus_strength += 1
+			bonus_agility += 1
+		elif person.genealogy.dog >= 50:
+			bonus_courage += 5
+			bonus_strength += 1
+			bonus_agility += .4
+		elif person.genealogy.dog >= 30:
+			bonus_strength += .6
+			bonus_agility += .2
+		else:
+			bonus_strength += .4
+			bonus_agility += .2
+	
+	#Bunny
+	if person.genealogy.bunny > 0:
+		if person.genealogy.bunny >= 100:
+			bonus_fertility += 30
+			bonus_agility += 3
+		elif person.genealogy.bunny >= 70:
+			bonus_fertility += 30
+			bonus_agility += 2
+		elif person.genealogy.bunny >= 50:
+			bonus_fertility += 25
+			bonus_agility += 2
+		elif person.genealogy.bunny >= 30:
+			bonus_fertility += 20
+			bonus_agility += 1
+		else:
+			bonus_fertility += 10
+			bonus_agility += .4
+	
+	#Fox
+	if person.genealogy.fox > 0:
+		if person.genealogy.fox >= 100:
+			bonus_charm += 20
+			bonus_wit += 20
+			bonus_agility += 2
+		elif person.genealogy.fox >= 70:
+			bonus_charm += 20
+			bonus_wit += 20
+			bonus_agility += 1
+		elif person.genealogy.fox >= 50:
+			bonus_charm += 15
+			bonus_wit += 15
+			bonus_agility += 1
+		elif person.genealogy.fox >= 30:
+			bonus_charm += 10
+			bonus_wit += 10
+			bonus_agility += .6
+		else:
+			bonus_charm += 5
+			bonus_wit += 5
+			bonus_agility += .2
+	
+	#Tanuki
+	if person.genealogy.raccoon > 0:
+		if person.genealogy.raccoon >= 100:
+			bonus_wit += 20
+			bonus_agility += 2
+			bonus_magic += 1
+		elif person.genealogy.raccoon >= 70:
+			bonus_wit += 20
+			bonus_agility += 1
+			bonus_magic += 1
+		elif person.genealogy.raccoon >= 50:
+			bonus_wit += 15
+			bonus_agility += 1
+			bonus_magic += .6
+		elif person.genealogy.raccoon >= 30:
+			bonus_wit += 10
+			bonus_agility += .4
+			bonus_magic += .2
+		else:
+			bonus_agility += .2
+			bonus_magic += .2
+	
+	#Centaur
+	if person.genealogy.horse > 0:
+		if person.genealogy.horse >= 100:
+			bonus_courage += 20
+			bonus_strength += 1
+			bonus_endurance += 2
+		elif person.genealogy.horse >= 70:
+			bonus_courage += 20
+			bonus_strength += 1
+			bonus_endurance += 1
+		elif person.genealogy.horse >= 50:
+			bonus_courage += 15
+			bonus_strength += 1
+			bonus_endurance += .6
+		elif person.genealogy.horse >= 30:
+			bonus_courage += 10
+			bonus_strength += .6
+			bonus_endurance += .4
+		else:
+			bonus_strength += .4
+			bonus_endurance += .2
+	
+	#Taurus 
+	if person.genealogy.cow > 0:
+		if person.genealogy.cow >= 100:
+			bonus_fertility += 20
+			bonus_endurance += 3
+		elif person.genealogy.cow >= 70:
+			bonus_fertility += 20
+			bonus_endurance += 2
+		elif person.genealogy.cow >= 50:
+			bonus_fertility += 15
+			bonus_endurance += 1.6
+		elif person.genealogy.cow >= 30:
+			bonus_fertility += 10
+			bonus_endurance += 1
+		else:
+			bonus_endurance += .4
+	
+	var somethingchanged = false
+	if addstats == true:
+		if bonus_strength > 0:
+			person.stats.str_mod += round(bonus_strength)
+			somethingchanged = true
+		if bonus_agility > 0:
+			person.stats.agi_mod += round(bonus_agility)
+			somethingchanged = true
+		if bonus_magic > 0:
+			person.stats.maf_mod += round(bonus_magic)
+			somethingchanged = true
+		if bonus_endurance > 0:
+			person.stats.end_mod += round(bonus_endurance)
+			somethingchanged = true
+		if bonus_courage > 0:
+			person.stats.cour_racial += round(bonus_courage)
+			somethingchanged = true
+		if bonus_confidence > 0:
+			person.stats.conf_racial += round(bonus_confidence)
+			somethingchanged = true
+		if bonus_wit > 0:
+			person.stats.wit_racial += round(bonus_wit)
+			somethingchanged = true
+		if bonus_charm > 0:
+			person.stats.charm_racial += round(bonus_charm)
+			somethingchanged = true
+		if bonus_beauty > 0:
+			person.beautybase += round(bonus_beauty)
+			somethingchanged = true
+		if bonus_fertility > 0:
+			person.preg.bonus_fertility += round(bonus_fertility)
+			somethingchanged = true
+		if somethingchanged == true:
+			person.npcexpanded.racialbonusesapplied = true
+	else:
+		if bonus_strength > 0:
+			person.stats.str_mod -= round(bonus_strength)
+			somethingchanged = true
+		if bonus_agility > 0:
+			person.stats.agi_mod -= round(bonus_agility)
+			somethingchanged = true
+		if bonus_magic > 0:
+			person.stats.maf_mod -= round(bonus_magic)
+			somethingchanged = true
+		if bonus_endurance > 0:
+			person.stats.end_mod -= round(bonus_endurance)
+			somethingchanged = true
+		if bonus_courage > 0:
+			person.stats.cour_racial -= round(bonus_courage)
+			somethingchanged = true
+		if bonus_confidence > 0:
+			person.stats.conf_racial -= round(bonus_confidence)
+			somethingchanged = true
+		if bonus_wit > 0:
+			person.stats.wit_racial -= round(bonus_wit)
+			somethingchanged = true
+		if bonus_charm > 0:
+			person.stats.charm_racial -= round(bonus_charm)
+			somethingchanged = true
+		if bonus_beauty > 0:
+			person.beautybase -= round(bonus_beauty)
+			somethingchanged = true
+		if bonus_fertility > 0:
+			person.preg.bonus_fertility -= round(bonus_fertility)
+			somethingchanged = true
+		
+		if somethingchanged == true:
+			person.npcexpanded.racialbonusesapplied = false
+	
+
+###---Added by Expansion---### Deviate Concept Tweaked ###Ralphomod### tweaked further
+func setRaceBonus_Ralph(person, increasestats):
 	var count_races = 0
 	var hybridtype = "" #set person.race_display at bottom and make sure to assign hybridtype for every unique combo below
 	#var somethingtoremoveshortstack

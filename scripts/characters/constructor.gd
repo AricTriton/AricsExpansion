@@ -369,7 +369,7 @@ func set_genealogy(person):
 		person.race_type = 4
 	
 	#Set Primary Race
-	if person == globals.player || person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(1,101) <= globals.expansionsettings.randompurebreedchanceuncommon):
+	if person == globals.player || person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon):
 		random_number = allot_percentage('purebreed')
 	elif person.race.find('Halfkin') >= 0 || rand_range(0,100) <= globals.expansionsettings.randommixedbreedchance:
 		random_number = allot_percentage('primary_mixed')
@@ -582,7 +582,7 @@ func raceLottery(person):
 func build_genealogy(person, mother, father):
 	var percent = 0
 	#ralph9 add randomness to babies genes from toxicity of parents; high toxicity -> more chance for variance in which genes are passed
-	var remainder
+	#var remainder
 	for race in genealogies:
 		#ralph8 add a tiny bit of randomization and fix 99% and 100% parents never yielding pureblood child
 		if rand_range(0,100) >= 50: 

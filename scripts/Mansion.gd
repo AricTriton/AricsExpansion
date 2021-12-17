@@ -1212,64 +1212,65 @@ func _on_end_pressed():
 	else:
 		text = text + 'Your food storage grew by [color=aqua]' + str(globals.resources.food - start_food) + '[/color] units of food.\n'
 	#ralph5 - daily market price recovery and chance of big market change for one race
-	text = text + "\n\n Market pricing for slaves increased somewhat to suit demand.\n"
-	for i in globals.races:
-		if globals.state.racemarketsat[i] < globals.races[i].pricemod:
-			globals.state.racemarketsat[i] = clamp(globals.state.racemarketsat[i] + max(0.01,(1-globals.state.racemarketsat[i])*0.25),0.5,globals.races[i].pricemod) #under 1.0, recovers quickly toward 1 - over 1.0 increase 0.1 every 10 days
-	if rand_range(0,100) > 0: #chance of a market event occuring to affect one races prices
-		var temprandom = rand_range(0.25,1.0) #magnitude of ratio change
-		var temprace
-		var tempcount = 0.0
-		var tempracecount = 0.0
-		var tempracearray = []
-		var tempracearray2 = []
-		for i in globals.guildslaves:
-			for person in globals.guildslaves[i]:
-				if !tempracearray.has(person.race.replace('Halfkin', 'Beastkin')):
-					tempracearray.append(person.race.replace('Halfkin', 'Beastkin')) #create array or races currently for sale
-		temprace = tempracearray[rand_range(0,tempracearray.size()-1)] #select available race for price decrease or else: below (increase)
-		if rand_range(0,100) < 30: #chance specific race increase/decrease
-			if rand_range(0,100) < 50: #chance for price decrease
-				if rand_range(0,100) <= 20: #chance for price decrease due to sudden supply
-					#determine how amny to add; increase price; add them to a guild
-					for i in globals.guildslaves: #get count of temprace for sale at the guilds
-						for person in globals.guildslaves[i]:
-							if temprace == person.race.replace('Halfkin', 'Beastkin'):
-								tempracecount += 1
-					tempracecount = max(min(tempracecount*2,10),4)-int(rand_range(0,1)) #set number of slaves to be added with scarce races added to less
-					var town = globals.randomitemfromarray(['wimborn','gorn','frostford','umbra'])
-					#globals.get_tree().get_current_scene().get_node("outside").newslaveinguild(tempracecount,town,temprace)
-					get_node("outside").newslaveinguild(tempracecount,town,temprace)
-					text = text + "An anonymous party floods the slave guild in [color=yellow]" + town + "[/color] with [color=yellow]" + str(tempracecount) + "[/color][color=aqua]" + globals.races[temprace].plural + "[/color]. Prices drop.\n"
-					var racepricemod = 1
-					var racepricemodchange = 0
-					for i in tempracecount: #decrease price ratio for temprace for each sold (same amount as when player sells)
-						racepricemod = globals.state.racemarketsat[temprace.replace('Halfkin', 'Beastkin')]
-						racepricemodchange = (racepricemod - 0.5)*0.1 #the bigger the premium the more the premium will be decreased
-						racepricemod = clamp(racepricemod - racepricemodchange,0.5,5)
-						globals.state.racemarketsat[temprace] = racepricemod
-				else: #chance for simple price decrease
-					globals.state.racemarketsat[temprace] = clamp(globals.state.racemarketsat[temprace] - temprandom,0.5,5)
-					text = text + str(globals.races[temprace].marketdown[rand_range(0,globals.races[temprace].marketdown.size())])
-					print("decrease price: " + str(globals.races[temprace].marketdown[rand_range(0,globals.races[temprace].marketdown.size())]))
-			elif rand_range(0,100) < 80: #simple price increase for race missing from slave guilds
-				for i in globals.races:
-					if !i in tempracearray:
-						tempracearray2.append(i) #create array of races not currently for sale
-				if tempracearray2 != null:
-					temprace = tempracearray2[rand_range(0,tempracearray.size()-1)] #select available race for price increase
-					globals.state.racemarketsat[temprace] = clamp(globals.state.racemarketsat[temprace] + temprandom,0.5,5)
-					text = text + str(globals.races[temprace].marketup[rand_range(0,globals.races[temprace].marketup.size())])
-					print("increase price: " + str(globals.races[temprace].marketup[rand_range(0,globals.races[temprace].marketup.size())]))
-			else: #price increase due to all existing race slaves being sold from slave guilds
-				for guild in globals.guildslaves:
-					for person in globals.guildslaves[guild].duplicate():
-						if person.race.replace('Halfkin', 'Beastkin') == temprace:
-							var start_size = globals.guildslaves[guild].size()
-							globals.guildslaves[guild].erase(person)
-							tempcount += 1.0
-				text = text + "Demand skyrockets after an unknown party purchases every [color=aqua]" + temprace + "[/color] on the market.\n"
-				globals.state.racemarketsat[temprace] = clamp(globals.races[temprace].pricemod + min(0.5,tempcount*0.1),0.5,5)
+	if globals.useRalphsTweaks:
+		text = text + "\n\n Market pricing for slaves increased somewhat to suit demand.\n"
+		for i in globals.races:
+			if globals.state.racemarketsat[i] < globals.races[i].pricemod:
+				globals.state.racemarketsat[i] = clamp(globals.state.racemarketsat[i] + max(0.01,(1-globals.state.racemarketsat[i])*0.25),0.5,globals.races[i].pricemod) #under 1.0, recovers quickly toward 1 - over 1.0 increase 0.1 every 10 days
+		if rand_range(0,100) <= 100: #chance of a market event occuring to affect one races prices
+			var temprandom = rand_range(0.25,1.0) #magnitude of ratio change
+			var temprace
+			var tempcount = 0.0
+			var tempracecount = 0.0
+			var tempracearray = []
+			var tempracearray2 = []
+			for i in globals.guildslaves:
+				for person in globals.guildslaves[i]:
+					if !tempracearray.has(person.race.replace('Halfkin', 'Beastkin')):
+						tempracearray.append(person.race.replace('Halfkin', 'Beastkin')) #create array or races currently for sale
+			if !tempracearray.empty() && rand_range(0,100) < 30: #chance specific race increase/decrease
+				temprace = globals.randomfromarray(tempracearray) #select available race for price decrease or else: below (increase)
+				if rand_range(0,100) < 50: #chance for price decrease
+					if rand_range(0,100) <= 20: #chance for price decrease due to sudden supply
+						#determine how amny to add; increase price; add them to a guild
+						for i in globals.guildslaves: #get count of temprace for sale at the guilds
+							for person in globals.guildslaves[i]:
+								if temprace == person.race.replace('Halfkin', 'Beastkin'):
+									tempracecount += 1
+						tempracecount = max(min(tempracecount*2,10),4)-int(rand_range(0,1)) #set number of slaves to be added with scarce races added to less
+						var town = globals.randomfromarray(['wimborn','gorn','frostford','umbra'])
+						#globals.get_tree().get_current_scene().get_node("outside").newslaveinguild(tempracecount,town,temprace)
+						get_node("outside").newslaveinguild(tempracecount,town,temprace)
+						text = text + "An anonymous party floods the slave guild in [color=yellow]" + town + "[/color] with [color=yellow]" + str(tempracecount) + "[/color][color=aqua]" + globals.races[temprace].plural + "[/color]. Prices drop.\n"
+						var racepricemod = 1
+						var racepricemodchange = 0
+						for i in tempracecount: #decrease price ratio for temprace for each sold (same amount as when player sells)
+							racepricemod = globals.state.racemarketsat[temprace.replace('Halfkin', 'Beastkin')]
+							racepricemodchange = (racepricemod - 0.5)*0.1 #the bigger the premium the more the premium will be decreased
+							racepricemod = clamp(racepricemod - racepricemodchange,0.5,5)
+							globals.state.racemarketsat[temprace] = racepricemod
+					else: #chance for simple price decrease
+						globals.state.racemarketsat[temprace] = clamp(globals.state.racemarketsat[temprace] - temprandom,0.5,5)
+						text = text + str(globals.randomfromarray(globals.races[temprace].marketdown))
+						print("decrease price: " + str(globals.randomfromarray(globals.races[temprace].marketdown)))
+				elif rand_range(0,100) < 80: #simple price increase for race missing from slave guilds
+					for i in globals.races:
+						if !i in tempracearray:
+							tempracearray2.append(i) #create array of races not currently for sale
+					if tempracearray2 != null:
+						temprace = globals.randomfromarray(tempracearray2) #select available race for price increase
+						globals.state.racemarketsat[temprace] = clamp(globals.state.racemarketsat[temprace] + temprandom,0.5,5)
+						text = text + str(globals.randomfromarray(globals.races[temprace].marketup))
+						print("increase price: " + str(globals.randomfromarray(globals.races[temprace].marketup)))
+				else: #price increase due to all existing race slaves being sold from slave guilds
+					for guild in globals.guildslaves:
+						for person in globals.guildslaves[guild].duplicate():
+							if person.race.replace('Halfkin', 'Beastkin') == temprace:
+								var start_size = globals.guildslaves[guild].size()
+								globals.guildslaves[guild].erase(person)
+								tempcount += 1.0
+					text = text + "Demand skyrockets after an unknown party purchases every [color=aqua]" + temprace + "[/color] on the market.\n"
+					globals.state.racemarketsat[temprace] = clamp(globals.races[temprace].pricemod + min(0.5,tempcount*0.1),0.5,5)
 	#/ralph5
 	text0.set_bbcode(text0.get_bbcode() + text)
 	globals.state.sexactions = ceil(globals.player.send/2.0) + variables.basesexactions

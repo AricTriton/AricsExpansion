@@ -172,7 +172,7 @@ var racialstatbonuses = true
 var genealogy_equalizer = 10
 var randompurebreedchance = 20					# Ralph's - 10
 var randommixedbreedchance = 40					# Ralph's - 20
-var randompurebreedchanceuncommon = 0			# Ralph's - 60
+var randompurebreedchanceuncommon = -1			# Ralph's - 60
 var secondaryhumanoidracialchance = 75
 var secondaryuncommonracialchance = 15			# Ralph's - 0
 var secondarybeastracialchance = 25
@@ -214,7 +214,6 @@ var reputation_loss = -4						# Ralph's - -18, How much your reputation suffers 
 
 #Food Tweak Effects
 var food_experience = 2							# Ralph's = 1, How much experience a slave earns from cooking, equal to the amount of slaves the player owns multiplied by this number.
-var food_difficulty = false						# Ralph's = true, 
 
 var func_forage_tweaks = [4,20,25,1.2,5]		
 												# Ralph's - [3,2,5,1.5,2]
@@ -276,7 +275,6 @@ func applyTweaks():
 
 	#Food Tweak Effects
 	food_experience = 1
-	food_difficulty = true
 	
 	applyItemMarketCostTweaks()
 	

@@ -799,12 +799,14 @@ func addrelations(person, person2, value):
 	if person == null || person2 == null:
 		return
 	if person.relations.has(person2.id) == false:
+		person.relations[person2.id] = 0
+	if person2.relations.has(person.id) == false:
 		person2.relations[person.id] = 0
 	if person.relations[person2.id] > 500 && value > 0 && checkifrelatives(person, person2):
 		value = value/1.5
 	elif person.relations[person2.id] < -500 && value < 0 && checkifrelatives(person,person2):
 		value = value/1.5
-	if (person.race.find('Otter') >= 0 || person2.race.find('Otter') >= 0) && value > 0: # /Capitulize
+	if value > 0 && (person.race.find('Otter') >= 0 || person2.race.find('Otter') >= 0): # /Capitulize
 		person.relations[person2.id] += value*1.5 # /Capitulize
 	else: # /Capitulize
 		person.relations[person2.id] += value
