@@ -195,8 +195,8 @@ var ovulationtype2stage1 = 12
 var ovulationtype2stage2 = 15
 
 #---Aric's and Game's Base Values potentially changed by Ralph's
-var use_ralphs_tweaks = true					# Set this to true if you want to use the settings within ApplyTweaks
-var unique_trait_generation = true				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
+var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within ApplyTweaks as well as the Hybrid system.
+var unique_trait_generation = false				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
 
 #Mage Specialization Manacost Reduction
 var mage_mana_reduction = true
@@ -308,6 +308,8 @@ func applyTweaks():
 	applyConstructorTweaks()
 	
 	applyCombatDataTweaks()
+	
+	applyRaceTweaks()
 
 # Apply variables.gd changes here
 func applyVariableTweaks():
@@ -320,7 +322,7 @@ func applyVariableTweaks():
 	variables.growuptimeadult = 3.0					# Original - 6.0
 	variables.babynewtraitchance = 33.0				# Original - 20.0, Chance a baby will gain an entirely new trait.
 
-# Apply Manacost Tweaks here.
+# Apply Manacost Tweaks here
 func applySpellManacostTweaks():
 	globals.spelldict.mindread.manacost = 1			# Original - globals.spelldict.mindread.manacost = 3
 	globals.spelldict.sedation.manacost = 20		# Original - globals.spelldict.sedation.manacost = 10
@@ -331,7 +333,7 @@ func applySpellManacostTweaks():
 	globals.spelldict.invigorate.manacost = 20		# Original - globals.spelldict.invigorate.manacost = 5
 	globals.spelldict.summontentacle.manacost = 20	# Original - globals.spelldict.summontentacle.manacost = 35
 
-# Apply Market Item Tweaks here.
+# Apply Market Item Tweaks here
 func applyItemMarketCostTweaks():
 	globals.itemdict.food.cost = 40					# Original - 10
 
@@ -340,6 +342,94 @@ func applyConstructorTweaks():
 	globals.constructor.humanoid_races_array = ['Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome','Goblin','Demon']					# Original - ['Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome','Goblin','Demon','Dragonkin']
 	globals.constructor.uncommon_races_array = ['Dragonkin','Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla']		# Original - ['Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla']
 
-# Apply Combat Data Tweaks here.
+# Apply Combat Data Tweaks here
 func applyCombatDataTweaks():
 	globals.combatdata.enemygrouppools.monstergirl = 15	# Original - -10
+
+# Apply Race Tweaks here.
+func applyRaceTweaks():
+	#Human
+	globals.races.Human.description = "Humans are a highly successful militaristic people whose members can be found throughout much of the world, their presence often receiving a mixed reception. Slavery is a common part of human society, viewed as a civilized form of alternative punishment, with many laws and businesses based around the concept. Because of this slave driven culture, you have found that humans tend to be the most widely accessible residents, servants, and slaves.\n\n"
+	globals.races.Human.stats = {str_max = 3, agi_max = 3, maf_max = 3, end_max = 3}
+	
+	#Elf
+	globals.races.Elf.stats = {str_max = 2, agi_max = 5, maf_max = 4, end_max = 2}
+	
+	#Tribal Elf
+	globals.races["Tribal Elf"].description = "Elves are famous among the various races for the legends and stories of ancient times, when elves held a similar status to modern humans. These tales speak of elves as arrogant, and in command of powerful nature magic, but ultimately spelling their own downfall in some great act of folly.\n\nTribal elves are rumored to have separated split from their elven cousins long ago and generally live in warmer regions.\n\nBreeding Note:\nElves in general owe some of their amazing finesse and grace of movement to their fine bone structure in addition to a simple advantage of reflex. Compared to other elves, tribal elves make for mediocre spell casters, but tribal elves that inherit bloodlines infused with fire, wind, or nature magic can harness this power more directly provided another race acts as a catalyst."
+	globals.races["Tribal Elf"].stats = {str_max = 3, agi_max = 5, maf_max = 3, end_max = 2}
+
+	#Dark Elf
+	globals.races["Dark Elf"].stats = {str_max = 2, agi_max = 5, maf_max = 5, end_max = 2}
+	
+	#Orc
+	globals.races.Orc.stats = {str_max = 6, agi_max = 2, maf_max = 1, end_max = 4}
+
+	#Gnome
+	globals.races.Gnome.startingrace = true
+	globals.races.Gnome.stats = {str_max = 2, agi_max = 3, maf_max = 5, end_max = 3}
+	
+	#Goblin
+	globals.races.Goblin.description = "Goblins are a race of cave dwellers, loosely resembling short, green-skinned elves. They have existed for a very long time, but despite their prevalence rarely played any influential role. While they have often been considered nothing more than common monsters, they have surprising skill and understanding, putting them on par with many humanoid races in term of sentience and physical capability despite their stature."
+	globals.races.Goblin.startingrace = false
+	globals.races.Goblin.stats = {str_max = 3, agi_max = 4, maf_max = 3, end_max = 3}
+	
+	#Fairy
+	globals.races.Fairy.stats = {str_max = 1, agi_max = 5, maf_max = 6, end_max = 1}
+	
+	#Seraph
+	globals.races.Seraph.description = "Seraphs were named because of their similarity in appearance to angels, the winged servants of divinity spoken of in myth. The reclusiveness of seraphs has led to a lack of research, but common theories are that they are a subspecies of harpy, an artificial race created accidentally many generations ago, or the descendants of an alien race that migrated from somewhere within the outer planes.\n\nSimilar to demons, seraphs seem to exhibit many behavioral traits in line with their mythic counterparts, such as a prudish nature and a slight inclination towards public service, though it’s unknown if these traits are universal, or if they come down to an individual basis."
+	globals.races.Seraph.startingrace = false
+	globals.races.Seraph.stats = {str_max = 3, agi_max = 3, maf_max = 5, end_max = 3}
+	
+	#Demon
+	globals.races.Demon.description = "Though they share a name and certain physical traits, modern demons bear mostly superficial resemblance to their ancient counterparts, who were driven into the great depths of the underground, and even into other dimensions. It is speculated that modern demons are either the offspring of humans and actual monsters, the byproduct of extensive magical corruption similar to gnomes, or as more recent research suggests the descendants of an entirely separate race that migrated from the outer planes.\n\nThough demons are often feared and reviled, those with outstanding talent or skill often receive recognition for their abilities, so it is not entirely uncommon to see demons among the elite, or in high profile positions."
+	globals.races.Demon.stats = {str_max = 3, agi_max = 4, maf_max = 4, end_max = 3}
+	
+	#Dryad
+	globals.races.Dryad.stats = {str_max = 3, agi_max = 1, maf_max = 4, end_max = 5}
+	
+	#Dragonkin
+	globals.races.Dragonkin.stats = {str_max = 4, agi_max = 3, maf_max = 3, end_max = 6}
+	
+	#Taurus
+	globals.races.Taurus.description = "Taurus are a purely artificial race, created on the orders of a group of noblemen looking for bodyguards. The experiment seems to have been an attempt at recreating the size and strength of orcs and beastkin in a more easily controlled package, but was ultimately considered only partially successful, as the new species had a tendency of taking too many bovine behavioral traits, becoming too passive, or in some cases, too aggressive.\n\nStill, they, especially the females, remain popular among certain individuals for their appearance and outstanding natural lactation."
+	globals.races.Taurus.stats = {str_max = 4, agi_max = 2, maf_max = 1, end_max = 6}
+	
+	#Slime
+	globals.races.Slime.stats = {str_max = 4, agi_max = 4, maf_max = 4, end_max = 4}
+	
+	#Lamia
+	globals.races.Lamia.stats = {str_max = 3, agi_max = 4, maf_max = 4, end_max = 3}
+	
+	#Harpy
+	globals.races.Harpy.stats = {str_max = 3, agi_max = 6, maf_max = 2, end_max = 2}
+	
+	#Arachna
+	globals.races.Arachna.stats = {str_max = 4, agi_max = 5, maf_max = 2, end_max = 4}
+	
+	#Centaur
+	globals.races.Centaur.stats = {str_max = 6, agi_max = 3, maf_max = 1, end_max = 4, energy_max = 140}
+	
+	#Nereid
+	globals.races.Nereid.stats = {str_max = 3, agi_max = 3, maf_max = 5, end_max = 3}
+	
+	#Scylla
+	globals.races.Scylla.description = "Scylla are rather unusual in appearance, possessing a number of tentacle-like appendages they use in the place of legs. They generally prefer damp and aquatic regions. In general, their behavior is not much different from lamia. Their appearance is extremely rare, to the point of being treated as mere myth or drunken fancy by some."
+	globals.races.Scylla.stats = {str_max = 4, agi_max = 3, maf_max = 5, end_max = 3}
+	
+	#Beastkin Cat
+	globals.races["Beastkin Cat"].stats = {str_max = 3, agi_max = 5, maf_max = 2, end_max = 3}
+	
+	#Beastkin Fox
+	globals.races["Beastkin Fox"].stats = {str_max = 2, agi_max = 4, maf_max = 6, end_max = 2}
+	
+	#Beastkin Wolf
+	globals.races["Beastkin Wolf"].stats = {str_max = 5, agi_max = 5, maf_max = 1, end_max = 3}
+	
+	#Beastkin Bunny
+	globals.races["Beastkin Bunny"].startingrace = true
+	globals.races["Beastkin Bunny"].stats = {str_max = 2, agi_max = 6, maf_max = 2, end_max = 3}
+	
+	#Beastkin Tanuki
+	globals.races["Beastkin Tanuki"].stats = {str_max = 3, agi_max = 3, maf_max = 5, end_max = 3}

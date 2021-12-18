@@ -21,39 +21,28 @@ static func getRaceDescription(race, full = true, reverse = false): #show descri
 	var text = ''
 	var text2 = ''
 	
-	###---Added by Expansion---### Hybrid Support
-#	var defaultrace = false
-#	if globals.races.find(race) >= 0:
-#		defaultrace = true
-#	else:
-#		defaultrace = false
-
-#	if defaultrace == true:
 	if race.find("Beastkin") >= 0:
 		text += globals.racefile.beastkindescription + '\n\n'
 	elif race.find("Halfkin") >= 0:
 		text += globals.racefile.halfkindescription + '\n\n'
-		
-	text += globals.races[race.replace('Halfkin','Beastkin')].description
-	text2 += globals.races[race.replace('Halfkin','Beastkin')].details
-#	else:
-#		if race.find("Beastkin") >= 0:
-#			text += globals.state.hybridraces.beastkindescription + '\n\n'
-#		elif race.find("Halfkin") >= 0:
-#			text += globals.state.hybridraces.halfkindescription + '\n\n'
-#		
-#		text += globals.state.hybridraces[race.replace('Halfkin','Beastkin')].description
-#		text2 += globals.state.hybridraces[race.replace('Halfkin','Beastkin')].details
-	###---End Expansion---###
+	
+	var raceRef = globals.races[race.replace('Halfkin','Beastkin')]
+	var raceDesc = "{description}"
+	text += raceDesc.format(raceRef)
+	text2 += raceRef.details.format(raceRef.stats)
+
 	if full == true:
+		if globals.useRalphsTweaks:
+			var raceText = """\nBreeding Note:\n{breedingnotes}\n\n\n[color=yellow]Racial Stat Bonus:\n{racialstatbonuses}\nPure Blood Bonus:\n{purebloodbonus}\nOther Racial Characteristics:\n{otherracialcharacteristics}[/color]
+Elemental Modifiers\n[color=red]{fire}% - Fire[/color]\n[color=yellow]{wind}% - Wind[/color]\n[color=aqua]{water}% - Water[/color]\n[color=green]{earth}% - Earth[/color]
+Elemental Bonuses:\n[color=red]{elementalbonuses}[/color]\n[color=green]Nature Magic Saturation:\n{nature}%\nNature Bonus:\n{naturebonus}[/color]\n[color=purple]Mana Corruption:\n{corruption}%
+Higher Corruption:\n{highcorruptionbonus}\nLower Corruption:\n{lowcorruptionbonus}[/color]\n[color=aqua]Breeding Quirks:\n{breedingquirk}\nPossible Mutations:\n{mutations}[/color]"""
+			text2 += raceText.format(raceRef).format(raceRef.stats).format(raceRef.elementalmod)
 		if reverse == false:
-			text = text + '\n\n' + text2
+			text += '\n\n' + text2
 		else:
 			text = text2 + '\n\n' + text
-	
 	return text
-
-
 
 static func getRaceArticle(race):
 	if race in ['Elf', 'Arachna', 'Orc']:
