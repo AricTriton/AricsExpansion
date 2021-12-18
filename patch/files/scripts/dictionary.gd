@@ -37,7 +37,7 @@ static func getRaceDescription(race, full = true, reverse = false): #show descri
 Elemental Modifiers\n[color=red]{fire}% - Fire[/color]\n[color=yellow]{wind}% - Wind[/color]\n[color=aqua]{water}% - Water[/color]\n[color=green]{earth}% - Earth[/color]
 Elemental Bonuses:\n[color=red]{elementalbonuses}[/color]\n[color=green]Nature Magic Saturation:\n{nature}%\nNature Bonus:\n{naturebonus}[/color]\n[color=purple]Mana Corruption:\n{corruption}%
 Higher Corruption:\n{highcorruptionbonus}\nLower Corruption:\n{lowcorruptionbonus}[/color]\n[color=aqua]Breeding Quirks:\n{breedingquirk}\nPossible Mutations:\n{mutations}[/color]"""
-			text2 += raceText.format(raceRef).format(raceRef.stats).format(raceRef.elementalmod)
+			text2 += raceText.format(raceRef).format(raceRef.elementalmod)
 		if reverse == false:
 			text += '\n\n' + text2
 		else:
