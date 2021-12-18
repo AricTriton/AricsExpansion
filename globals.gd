@@ -172,6 +172,8 @@ class resource:
 			upgrademax = 10,
 		},
 		bottler = {level = 0, totalproduced = 0},
+		worker_cycle = [],
+		work_type = "",
 	}
 	###---Expansion End---### 
 	

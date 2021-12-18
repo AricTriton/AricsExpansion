@@ -803,9 +803,10 @@ func townhall_enter(town):
 	main.animationfade()
 	yield(main, 'animfinished')
 	var buttons = []
-	var text = "You enter the town hall of [color=aqua]" + str(town).capitalize() + "[/color]. You see a few desks set up for members of the council, receptionists, and local town guard liasons. You know that your reputation here is [color=aqua]" + str(globals.state.reputation[town]) + "[/color]. You take a moment to decide what you would like to accomplish here."
+	var text = "You enter the town hall of [color=aqua]" + str(town).capitalize() + "[/color]. You see a few desks set up for members of the council, receptionists, and local town guard liasons. You know that your reputation here is [color=aqua]" + str(round(globals.state.reputation[town])) + "[/color]. You take a moment to decide what you would like to accomplish here."
 	
-	buttons.append({name = "Request Meeting with Council",function = 'townhall_meet_council', args = town})
+	
+	buttons.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = 'wimborn', textcolor = 'green', tooltip = 'Hear news from yesterday'})
 	if !globals.state.townsexpanded[town].townhall.fines.empty():
 		buttons.append({name = "Pay a Fine",function = 'townhall_fines', args = town})
 	
@@ -813,6 +814,7 @@ func townhall_enter(town):
 		buttons.append({name = "Register to Autopay Fines", function = 'townhall_toggle_autopay', args = town})
 	else:
 		buttons.append({name = "Stop Autopaying Fines", function = 'townhall_toggle_autopay', args = town})
+	buttons.append({name = "Request Meeting with Council",function = 'townhall_meet_council', args = town})
 	
 	buttons.append({name = "Leave Town Hall", function = 'zoneenter', args = town})
 	mansion.maintext = text
@@ -924,10 +926,10 @@ func townhall_toggle_autopay(town):
 	var buttons = []
 	var text = ""
 	if globals.state.townsexpanded[town].townhall.autopay_fines == false:
-		text += "You approach a clerk and make arrangements to have your estate automatically pay for any fines accrued by any of your slaves while working in this town."
+		text += "You gather some paperwork, fill it out, and approach a front desk to make arrangements to have your estate automatically pay for any fines accrued by any of your slaves while working in this town.\n\nThe young, perky female clerk smiles brightly at you as she takes your paperwork and files it away.\n[color=yellow]-No problem at all! We will make sure to automatically deduct any fines from your estate automatically. You won't have to come back here yourself to pay fines or anything.[/color]\n\nYou turn to leave as you here her giggle slightly behind you and whisper to herself.\n[color=yellow]-Assuming you couldn't think of any other reason to drop by, that is.[/color]"
 		globals.state.townsexpanded[town].townhall.autopay_fines = true
 	else:
-		text += "You approach a clerk and revoke the arrangement currently in place for your estate automatically pay for any fines accrued by any of your slaves while working in this town. You must manually come to the town hall and pay these fines once again."
+		text += "You approach a clerk and explain that you want to revoke the arrangement currently in place for your estate to automatically pay for any fines accrued by any of your slaves while working in this town.\n\nShe nods and ruffles around for your paperwork before destroying it.\n[color=yellow]-Done. I guess we'll be seeing you around here a lot more now as you pay off all your debts to society, huh?[/color]\n\nShe laughs coyly and smiles at you as you walk out."
 		globals.state.townsexpanded[town].townhall.autopay_fines = false
 	
 	buttons.append({name = "Return to the Entryway", function = 'townhall_enter', args = town})
@@ -941,7 +943,6 @@ func wimborn():
 	
 	###---Added by Expansion---### Towns Expanded
 	outside.addbutton({name = 'Enter Town Hall', function = 'townhall_enter', args = 'wimborn', textcolor = 'green', tooltip = 'Enter the Town Hall to pay fines or affect laws'}, self)
-	outside.addbutton({name = 'Inquire about Recent Events', function = 'getTownReport', args = 'wimborn', textcolor = 'green', tooltip = 'Hear yesterdays news'}, self)
 	###---End Expansion---###
 	
 	if globals.state.location != 'wimborn':

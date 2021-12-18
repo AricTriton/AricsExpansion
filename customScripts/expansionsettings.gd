@@ -156,7 +156,7 @@ var sedativewitlosschance = 75
 
 #---Towns Expanded
 #The Base Chance that local town guards will have arrested/killed escaped enemies to clear room in the array
-var minimum_npcs_to_detain = 5
+var minimum_npcs_to_detain = 20
 var townguardefficiency = 15
 #Laws: Public Nudity Bonus and Penalty
 var enable_public_nudity_system = true

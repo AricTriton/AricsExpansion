@@ -472,7 +472,8 @@ var fetishDescriptions = {
 	dominance = "being in control",
 	submission = "giving up control",
 	sadism = "inflicting pain",
-	masochism = "feeling pain"
+	masochism = "feeling pain",
+	transformation = "having your body changed",
 }
 
 func getFetishDescription(value):
@@ -1099,6 +1100,14 @@ func nameHelplessOrgasmPreface():
 
 func nameHelplessOrgasm():
 	return str(globals.randomitemfromarray(['came','orgasmed','came so hard that $he squirted','relentlessly orgasmed','moaned in orgasm','responded instinctually','gave in to $his animalistic urges','responded helplessly','grunted like a bitch in heat','squealed as $he orgasmed','gushed in esctasy','drenched $himself']))
+
+func nameBrothelWorking():
+	var array = ["waiting for clients.","sitting on a couch","talking to another whore.","sitting with $his legs spread open.","posing on the stage."] 
+	var client_tasks = str(globals.randomitemfromarray(['leading $him to a room.','being led to a room by $him.','kissing $his neck.','and is fingering her openly.','kissing $him.','getting a blowjob from $him.','sucking $his nipples.']))
+	var text = " with a " + str(globals.randomitemfromarray(['Human','Human','Human','Human','Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome'])) + " " + client_tasks + "."
+	array.append(text)
+	
+	return str(globals.randomitemfromarray(array))
 
 #Non-Generic Description Names for Body Parts
 func getChest(person):
@@ -2626,7 +2635,8 @@ func getTownReportText(senttown):
 	var town = globals.state.townsexpanded[senttown]
 	var nonews = true
 	var text = ""
-	text += "You approach " + str(globals.randomitemfromarray(['the local newspaper stand','the town cryer','the daily town scroll','a local urchin']))
+	#Old Array, Keep for Outdoors? str(globals.randomitemfromarray(['the local newspaper stand','the town cryer','the daily town scroll','a local urchin']))
+	text += "You approach " + str(globals.randomitemfromarray(['the front desk','a cute but bored looking receptionist','the bulletin board','the newspaper stand','a bored looking guard']))
 	text += " to get the local news from yesterday. You learn that yesterday"
 	if town.dailyreport.shopping > 0:
 		text = " [color=aqua]" +str(town.dailyreport.shopping)+ "[/color] new traders and merchants came to town"

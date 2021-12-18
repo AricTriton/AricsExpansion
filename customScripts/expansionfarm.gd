@@ -553,7 +553,7 @@ func dailyFarm():
 			if cattle == null:
 				print("Cattle ID " + str(cattle) + " Invalid")
 				continue
-			workerid = chooseworker('herder', milkmaids)
+			workerid = chooseworker('milkmaid', milkmaids)
 			milkmaid = globals.state.findslave(workerid)
 			
 			milkproduced = 0
@@ -1112,7 +1112,7 @@ func dailyFarm():
 						if lubeproduced > container.size:
 							lubeproduced = container.size
 						lubeproduced -= round(rand_range(lubeproduced*.1,lubeproduced*.5))
-						text += milkmaid.dictionary("Unfortunately, $name [color=red]spilled[/color] the " + str(containerdict[cattle.farmexpanded.extractcum.container].name) + " of lube on the way back to the Vat and only delivered [color=aqua]" + str(semenproduced) + "[/color] Lubricant. The " + str(container.name) + " had a [color=aqua]" + str(container.spillchance) + "[/color] chance of spilling. \n")
+						text += milkmaid.dictionary("Unfortunately, $name [color=red]spilled[/color] the " + str(containerdict[cattle.farmexpanded.extractcum.container].name) + " of lube on the way back to the Vat and only delivered [color=aqua]" + str(lubeproduced) + "[/color] Lubricant. The " + str(container.name) + " had a [color=aqua]" + str(container.spillchance) + "[/color] chance of spilling. \n")
 				
 				refVats.semen.new += semenproduced
 				refVats.lube.new += lubeproduced
@@ -1788,14 +1788,21 @@ func chooseworker(type, workers):
 	var variable = 0
 	var currentperson = null
 	
+	#Clear Workers
+	if globals.resources.farmexpanded.work_type != type:
+		globals.resources.farmexpanded.worker_cycle.clear()
+		globals.resources.farmexpanded.work_type = type
+	
 	#Herders
 	if type == 'herder':
 		if settings.herders == 'equal':
-			if counter >= workers.size()-1:
-				counter = 0
-			workerid = workers[counter]
-			counter += 1
-		
+			if globals.resources.farmexpanded.worker_cycle.empty():
+				for i in workers:
+					globals.resources.farmexpanded.worker_cycle.append(i)
+			
+			workerid = globals.resources.farmexpanded.worker_cycle[0]
+			globals.resources.farmexpanded.worker_cycle.erase([0])
+			
 		elif settings.herders == 'energy':
 			for workerids in workers:
 				currentperson = globals.state.findslave(workerids)
@@ -1819,10 +1826,12 @@ func chooseworker(type, workers):
 	#Milkmaids
 	elif type == 'milkmaid':
 		if settings.milkmaids == 'equal':
-			if counter >= workers.size()-1:
-				counter = 0
-			workerid = workers[counter]
-			counter += 1
+			if globals.resources.farmexpanded.worker_cycle.empty():
+				for i in workers:
+					globals.resources.farmexpanded.worker_cycle.append(i)
+			
+			workerid = globals.resources.farmexpanded.worker_cycle[0]
+			globals.resources.farmexpanded.worker_cycle.erase([0])
 		
 		elif settings.milkmaids == 'energy':
 			for workerids in workers:
@@ -1847,6 +1856,18 @@ func chooseworker(type, workers):
 	#Studs
 	elif type == 'stud':
 		if settings.studs == 'equal':
+#			if globals.resources.farmexpanded.worker_cycle.empty():
+#				for i in workers:
+#					globals.resources.farmexpanded.worker_cycle.append(i)
+			
+#			var found_stud = false
+#			while found_stud == false:
+#				workerid = globals.resources.farmexpanded.worker_cycle[0]
+#				globals.resources.farmexpanded.worker_cycle.erase([0])
+#				currentperson = globals.state.findslave(workerid)
+#				if currentperson != null:
+#					found_stud = true
+			
 			for workerids in workers:
 				currentperson = globals.state.findslave(workerids)
 				if currentperson == null:

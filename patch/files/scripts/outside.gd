@@ -2501,27 +2501,92 @@ func brothel(person = null):
 	clearbuttons()
 	setcharacter('brothelhost')
 	
-	var text = "Doorman greets you and shows you the way around brothel until you meet with the Madam.\n\n— Greetings, what would you like?  "
+	###---Added by Expansion---### Colorize Text
+	var text = "Doorman greets you and shows you the way around [color=aqua]brothel[/color] until you meet with the [color=aqua]Madam[/color].\n[color=yellow]—Greetings. How can we pleasure you today?[/color]\n"
 	for person in globals.slaves:
 		if person.away.duration == 0 && (person.work == 'whorewimborn' || person.work == 'escortwimborn' || person.work == 'fucktoywimborn'):
-			text = text + person.dictionary('\nYou can see [url=id' + str(person.id) + '][color=yellow]$name[/color][/url] waiting for clients here.')
+			text += person.dictionary('\nYou can see [url=id' + str(person.id) + '][color=yellow]$name[/color][/url] ' + str(globals.expansion.nameBrothelWorking()))
 	mansion.maintext = text
 	var array = [{name = 'Return', function = 'backstreets'}]
+	#---Brothel Services
+	array.append({name = 'Check Available Prostitutes', function = 'brothelservices'})
+	
 	if globals.state.sidequests.brothel == 0:
-		array.insert(0,{name = 'Request your servants work here', function = 'brothelquest'})
+		array.insert(0,{name = 'Can my Slaves work here?', function = 'brothelquest'})
 	elif globals.state.sidequests.brothel == 1:
 		if person == null:
 			array.insert(0,{name = 'Offer slave for quest', function = 'selectslavebrothelquest'})
 		else:
 			if person.race in ['Elf','Tribal Elf','Dark Elf'] && person.sex != 'male':
-				mansion.maintext = "— An elf, indeed. So, do you wanna trade?"
+				mansion.maintext = "[color=yellow]— An [color=aqua]elf[/color], indeed. So, do you wanna trade?[/color]"
 				array = [{name = 'Give away ' + person.name,function = 'brothelquest'}, {name = 'Choose another person', function = 'selectslavebrothelquest'}, {name = 'Leave', function = 'backstreets'}]
 				questgiveawayslave = person
 			else:
-				mansion.maintext = "— I don't think this is an Elf girl. Please, don't waste my time. "
+				mansion.maintext = "[color=yellow]— I don't think this is an [color=aqua]Elf[/color] girl. Please, don't waste my time.[/color] "
 				array = [{name = 'Offer slave for quest', function = 'selectslavebrothelquest'},{name = 'Leave',function = 'backstreets'}]
 				questgiveawayslave = null
 	buildbuttons(array)
+	###---End Expansion---###
+
+###---Added by Expansion---###
+func brothelservices():
+	mansion.background_set("brothel")
+	yield(main, 'animfinished')
+	clearbuttons()
+	setcharacter('brothelhost')
+	
+	var text = "The [color=aqua]Madam[/color] smiles and motions you towards a couch at the front of the [color=aqua]brothel[/color] with a stage in front of it."
+	if globals.player.energy < 100:
+		text += "\n\n[color=yellow]—We have a few options for you. Do you prefer something young and exotic that will make you feel like the day has just begun?[/color]"
+		text += "\n\nA petite, perky [color=aqua]Fairy[/color] girl bounces out onto the stage wearing nothing but hopes and dreams to cover her bouncy tits. She gets down on her knees and smiles lewdly at you, running her tongue around her lips."
+	else:
+		text += "\n\n[color=yellow]—Our [color=aqua]Fairy[/color] is out for the moment, but don't worry.[/color]"
+	text += "\n\nThe Madam continues.\n\n[color=yellow]—Are you here to taste raw energy, experience, and sexual prowess?[/color]\n\n"
+	text += "\n\nA tall, sultry [color=aqua]Dark Elf[/color] woman slinks onto the stage. She moves across it like water and if not for the sultry jiggling of her voluptuous breasts you may not be able to tell she was even moving. She sinks to her knees and heaves her chest out toward you while waiting breathlessly."
+	if globals.player.energy < 100:
+		text += "\n\n[color=yellow]—Both girls are just 50 gold each for the next half-hour.[/color]"
+	else:
+		text += "\n\n[color=yellow]—She is just 50 gold for the next half-hour.[/color]"
+	var counter = 0
+	
+	mansion.maintext = text
+	var array = [{name = 'Choose the Dark Elf | -50 gold & +10 mana', function = 'brothelservicesmana'},{name = 'No thanks', function = 'brothel'}]
+	if globals.player.energy < 100:
+		array.insert(0,{name = 'Choose the perky Fairy | -50 gold & +25 energy', function = 'brothelservicesenergy'})
+	buildbuttons(array)
+
+func brothelservicesenergy():
+	mansion.background_set("brothel")
+	yield(main, 'animfinished')
+	clearbuttons()
+	setcharacter('brothelhost')
+	var array = [{name = 'Head back to the street', function = 'backstreets'}]
+	var text = "You point at the [color=aqua]Fairy[/color] and nod.\n[color=yellow]-I'll have her.[/color]\n\nThe [color=aqua]Madam[/color] looks at you with an understanding smile.\n[color=yellow]-I hope you thoroughly enjoy yourself.[/color]"
+	if globals.resources.gold >= 50:
+		globals.resources.gold -= 50
+		globals.player.energy += 25
+		text += "\n\nShe leads you to a back room. You enjoy the flitting of her wings as she lets you ravage her after teasing you and exciting you. You leave feeling satisfied and refreshed.\n\n[color=green]Gained 25 Energy[/color]\n[color=red]Lost 50 Gold[/color]"
+	else:
+		text += "\n\nThe [color=aqua]Madam[/color] looks at you and holds out her hand.\n\n[color=yellow]-Don't be trying anything tricky now, cutie. Either pay first or get out.[/color]\n\nYou stand and head for the door as the doorman looms over you. She calls after you from the couch.\n\n[color=yellow]-Come back when you have some money![/color]"
+	mansion.maintext = text
+	buildbuttons(array)
+
+func brothelservicesmana():
+	mansion.background_set("brothel")
+	yield(main, 'animfinished')
+	clearbuttons()
+	setcharacter('brothelhost')
+	var array = [{name = 'Head back to the street', function = 'backstreets'}]
+	var text = "You point at the [color=aqua]Dark Elf[/color] and nod. [color=yellow]-I'll have her.[/color]\n\nThe [color=aqua]Madam[/color] looks at you with an understanding smile.\n[color=yellow]-I hope you thoroughly enjoy yourself.[/color]"
+	if globals.resources.gold >= 50:
+		globals.resources.gold -= 50
+		globals.resources.mana += 10
+		text += "\n\nThe [color=aqua]Dark Elf[/color] woman leads you to a back room. You walk out of the room some hours later having been infused with magical energy from her orgasms. You leave feeling satisfied and refreshed.\n\n[color=green]Gained 10 Mana[/color]\n[color=red]Lost 50 Gold[/color]"
+	else:
+		text += "\n\nThe [color=aqua]Madam[/color] looks at you and holds out her hand.\n\n[color=yellow]-Don't be trying anything tricky now, cutie. Either pay first or get out.[/color]\n\nYou stand and head for the door as the doorman looms over you. She calls after you from the couch.\n\n[color=yellow]-Come back when you have some money![/color]"
+	mansion.maintext = text
+	buildbuttons(array)
+###---End Expansion---###
 
 func selectslavebrothelquest():
 	main.selectslavelist(true, 'brothel', self, 'person.race in ["Elf","Dark Elf","Tribal Elf"]')

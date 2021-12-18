@@ -1375,7 +1375,7 @@ var itemlist = {
 	},
 	sexchangepot = {
 		code = 'sexchangepot',
-		name = 'Tonic of Sexual Conversion ',
+		name = 'Sexual Conversion Tonic',
 		icon = load("res://files/aric_expansion_images/potions/sex_change_potion.png"),
 		description = "A powerful concoction that radically alters the drinker's sexual characteristics by flooding their body with magically charged hormones.",
 		effect = 'sexchangepoteffect',

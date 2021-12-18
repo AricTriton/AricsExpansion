@@ -242,7 +242,7 @@ var jobdict = {
 		code = 'slavecatcher',
 		name = "G - Slave Catcher",
 		type = 'social',
-		description = "$name will be joining slaver parties and help catching and transporting slaves. \n\n[color=yellow]Requires grade of [color=aqua]Poor[/color] or higher.[/color] \n\nEfficiency grows with Agility, Strength and Courage.[/color]",
+		description = "$name will be joining slaver parties and help catching and transporting slaves. \n\n[color=yellow]Requires grade of [color=aqua]Poor[/color] or higher. \n\nEfficiency grows with Agility, Strength and Courage.[/color]",
 		workline = "$name will be joining slaver parties and help catching and transporting slaves around Gorn.",
 		reqs = "globals.originsarray.find(globals.currentslave.origins) >= 1",
 		unlockreqs = 'true',
@@ -1561,7 +1561,7 @@ func public_nudity_law(person, gold):
 	if person.rules.nudity == true || count_nakedness >= 2:
 		text += "\n$name arrived in town [color=aqua]naked[/color]. "
 		isnaked = true
-	elif person.obed < person.fetish.exhibitionism * 20 && person.fetish.exhibitionism > 3:
+	elif person.obed < globals.fetishesarray.find(person.fetish.exhibitionism) * 20 && globals.fetishesarray.find(person.fetish.exhibitionism) > 3:
 		text += "\n$name decided to expose $himself in town due to $his [color=aqua]exhibitionism[/color] fetish. "
 		isnaked = true
 
@@ -1581,7 +1581,7 @@ func public_nudity_law(person, gold):
 				if globals.expansionsettings.perfectinfo == true:
 					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Updated Chance of Law Passing[/color] = [color=aqua]" + str(towndict.nudity) + "[/color] || "
 		elif d100 >= person.beauty + 50:
-			goldmod = -1 * round(gold * (100 - person.charm *.01))
+			goldmod = -1 * round(gold * ((100 - person.charm) *.01))
 			text += "$His naked body [color=red]disgusted[/color] others. He ended up losing [color=yellow]" + str(goldmod) + " Gold[/color] due to $his [color=aqua]nudity[/color], [color=aqua]beauty[/color], and [color=aqua]charm[/color]. "
 			if towndict.laws.public_nudity == false:
 				towndict.nudity -= round(rand_range(1,3))
@@ -1589,7 +1589,7 @@ func public_nudity_law(person, gold):
 				if globals.expansionsettings.perfectinfo == true:
 					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Updated Chance of Law Passing[/color] = [color=aqua]" + str(towndict.nudity) + "[/color] || "
 		else:
-			text += "This decision did not meaningfully impact $his wages."
+			text += "This decision did not meaningfully impact $his wages. "
 		if globals.expansionsettings.perfectinfo == true:
 			text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Bonus Gold Chance[/color] of [color=aqua]" + str(person.beauty) + "[/color] and [color=aqua]Critical Failure Penalty[/color] at [color=aqua]" + str(person.beauty + 50) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color] || "
 		
@@ -1598,14 +1598,14 @@ func public_nudity_law(person, gold):
 			d100 = round(rand_range(0,100))
 			if d100 <= towndict.guardskill:
 				var fine = 50
-				text += "\n[color=red][color=aqua]$name[/color] was stopped by the local guards in [color=aqua]" + str(joblocation).capitalize() + "[/color]. $He was informed that $he was breaking the local [color=aqua]Public Nudity[/color] law and would receive a fine of [color=yellow]100[/color] for public indecency.[/color]"
+				text += "\n[color=aqua]$name[/color] was stopped by the local guards in [color=aqua]" + str(joblocation).capitalize() + "[/color]. [color=red]$He was informed that $he was breaking the local [color=aqua]Public Nudity[/color] law and would receive a fine of [color=yellow]50[/color] for public indecency.[/color] "
 				if globals.expansionsettings.perfectinfo == true:
 					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Public Indecency Fine Chance[/color] of [color=aqua]" + str(towndict.guardskill) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color] || "
 				
 				#Reduced due to Charm
 				d100 = round(rand_range(0,100))
 				if d100 <= person.charm:
-					text += "[color=aqua]$name[/color][color=red] managed to [color=aqua]Charm[/color] them down to only fining $him [color=yellow]75[/color] instead."
+					text += "[color=aqua]$name[/color][color=red] managed to [color=aqua]Charm[/color] them down to only fining $him [color=yellow]25[/color] instead. "
 					fine = 25
 				if globals.expansionsettings.perfectinfo == true:
 					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Chance to Reduce Fine[/color] of [color=aqua]" + str(person.charm) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color] || "
@@ -1614,10 +1614,10 @@ func public_nudity_law(person, gold):
 					text += "\nThe fine was automatically paid per your agreement with the town council."
 				else:
 					towndict.townhall.fines.append([globals.resources.day, fine])
-					text += "\nThe fine was submitted to the town council. [color=yellow]You must pay go to the town council in [color=aqua]" + str(joblocation).capitalize() + "[/color] to pay the fine within [color=aqua]3 days[/color] or suffer the reputation penalty.[/color]"
+					text += "\nThe fine was submitted to the town council. [color=yellow]You must pay go to the town council in [color=aqua]" + str(joblocation).capitalize() + "[/color] to pay the fine within [color=aqua]3 days[/color] or suffer the reputation penalty.[/color] "
 			elif globals.expansionsettings.perfectinfo == true:
 				text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Public Indecency Fine Chance[/color] of [color=aqua]" + str(towndict.guardskill) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color] || "
-
+			text += "\n"
 	var dict = {text = text, gold = goldmod}
 	return dict
 
