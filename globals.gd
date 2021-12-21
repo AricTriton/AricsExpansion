@@ -105,6 +105,19 @@ func loadsettings():
 			printErrorCode("Writing file " + progressFile, retCode)
 	return baseFolders
 
+func clearstate():
+	state = progress.new()
+	slaves.clear()
+	events = load("res://files/scripts/events.gd").new()
+	items = load("res://files/scripts/items.gd").new()
+	itemdict = items.itemlist
+	spells = load("res://files/scripts/spells.gd").new()
+	spelldict = spells.spelllist
+	if useRalphsTweaks:
+		expansionsettings.applyItemMarketCostTweaks()
+		expansionsettings.applySpellManacostTweaks()
+	resources.reset()
+
 func slaves_set(person):
 	person.originstrue = person.origins
 	person.health = max(person.health, 5)
@@ -434,6 +447,7 @@ class progress:
 	var alisecloth = 'normal'
 	var decisions = []
 	var lorefound = []
+	var racemarketsat = {} #ralph5 - variable to track market saturation of various races (sell a lot of one race and its pricing goes down, etc.)
 	var relativesdata = {}
 	var descriptsettings = {full = true, basic = true, appearance = true, genitals = true, piercing = true, tattoo = true, mods = true}
 	###---Added by Expansion---### Dimensional Crystal & Farm Expanded
@@ -784,6 +798,14 @@ class progress:
 					count -= max(globals.itemdict[item].amount, 0)
 					globals.itemdict[item].amount = 0
 		return count
+		
+	#ralph5
+	func setupracemarketsat():
+		for race in globals.races:
+			if !racemarketsat.has(race):
+				racemarketsat[race] = globals.races[race].pricemod
+				#print(race + " added to racemarketsat with value: " + str(racemarketsat[race]))
+	#/ralph5
 
 	# calculates and returns the number of ropes recovered after use, mainly for adding to appropriate inventory. displays infotext if ropes are lost
 	func calcRecoverRope(numPersons, usedFor = 'capture'):
@@ -808,8 +830,30 @@ class progress:
 		if globals.main && lostRope > 0:
 			globals.main.infotext(str(lostRope) + ' rope%s wore out from use' % ('s' if lostRope > 1 else ''),'red')
 		return numPersons - lostRope
-	
 
+func addrelations(person, person2, value):
+	if person == player || person2 == player || person == person2:
+		return
+	if person == null || person2 == null:
+		return
+	if person.relations.has(person2.id) == false:
+		person.relations[person2.id] = 0
+	if person2.relations.has(person.id) == false:
+		person2.relations[person.id] = 0
+	if person.relations[person2.id] > 500 && value > 0 && checkifrelatives(person, person2):
+		value = value/1.5
+	elif person.relations[person2.id] < -500 && value < 0 && checkifrelatives(person,person2):
+		value = value/1.5
+	if value > 0 && (person.race.find('Otter') >= 0 || person2.race.find('Otter') >= 0): # /Capitulize
+		person.relations[person2.id] += value*1.5 # /Capitulize
+	else: # /Capitulize
+		person.relations[person2.id] += value
+	person.relations[person2.id] = clamp(person.relations[person2.id], -1000, 1000)
+	person2.relations[person.id] = person.relations[person2.id]
+	if person.relations[person2.id] < -200 && value < 0:
+		person.stress += rand_range(4,8)
+		person2.stress += rand_range(4,8)
+	
 static func count_sleepers():
 	var your_bed = 0
 	var personal_room = 0
@@ -1004,6 +1048,9 @@ func slavetooltip(person):
 	if node.get_rect().end.y >= screen.size.y:
 		node.rect_global_position.y -= node.get_rect().end.y - screen.size.y
 
+var longtails = ['cat','fox','wolf','demon','dragon','scruffy','snake tail','racoon','mouse']
+var alltails = ['cat','fox','wolf','bunny','bird','demon','dragon','scruffy','snake tail','racoon','mouse']
+var alleyecolors = ['blue', 'green', 'brown', 'hazel', 'black', 'gray', 'purple', 'yellow', 'amber', 'red', 'auburn']
 ###---Added by Expansion---### Kennels Expanded
 var sleepdict = {communal = {name = 'Communal Room'}, jail = {name = "Jail"}, personal = {name = 'Personal Room'}, your = {name = "Your bed"}, kennel = {name = "Dog Kennel"}}
 
@@ -1204,6 +1251,7 @@ var expansionfarm = loadModFile("AricsExpansion", "customScripts/expansionfarm.g
 var expansiontalk = loadModFile("AricsExpansion", "customScripts/expansiontalk.gd").new()
 var backwardscompatibility = loadModFile("AricsExpansion", "customScripts/backwardscompatibility.gd").new()
 var expansionsettings = loadModFile("AricsExpansion", "customScripts/expansionsettings.gd").new()
+var useRalphsTweaks = expansionsettings.use_ralphs_tweaks
 
 ###---Added by Expansion---### General Arrays
 #Size Arrays
@@ -1231,9 +1279,9 @@ var expandedtowns = ['wimborn','frostford','gorn','amberguard','shaliq','umbra']
 var expandedplayerspecs = {
 	Slaver = "+100% gold from selling captured slaves\n+33% gold reward from slave delivery tasks",
 	Hunter = "+100% gold drop from random encounters\n+20% gear drop chance\nBonus to preventing ambushes",
-	Alchemist = "Double potion production\nSelling potions earn 100% more gold\n[color=aqua]Start with an Alchemy Room unlocked[/color]",
-	Mage = "-50% mana cost of spells\nCombat spell deal 20% more damage",
-	Breeder = "Pregnancy chance for everyone increased by 25%\nBred Slaves sell for 200% more and receive 2x as many upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]"
+	Alchemist = "Double potion production\nSelling potions earn +100% more gold\n[color=aqua]Start with an Alchemy Room unlocked[/color]",
+	Mage = ("Combat spell deal +20% more damage" if useRalphsTweaks else "-50% mana cost of spells\nCombat spell deal +20% more damage"),
+	Breeder = ("Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for +20% more gold and provide 20% more upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]" if useRalphsTweaks else "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for +100% more and receive 2x as many upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]")
 }
 
 ###---Added by Expansion---### Movement Icons (replicated)
@@ -1297,6 +1345,11 @@ var sexuality_images = {
 	futa_2 = load("res://files/aric_expansion_images/sexuality_icons/futa_2.png"),
 	futa_3 = load("res://files/aric_expansion_images/sexuality_icons/futa_3.png"),
 }
+
+<AddTo -1>
+func _ready():
+	if useRalphsTweaks:
+		expansionsettings.applyTweaks()
 
 ###---Added by Expansion---### Farm Expanded
 func getVatMaxCapacity(type):
@@ -1411,7 +1464,7 @@ func fertilize_egg(mother, father_id, father_unique):
 		father = globals.state.findslave(father_id)
 		#If Father disappeared from the World
 		if father == null:
-			father = globals.newslave('randomany', 'adult', 'male')
+			father = globals.newslave(randomitemfromarray(globals.allracesarray), 'adult', 'male')
 	else:
 		father = globals.newslave('randomany', 'adult', 'male')
 		father.id = '-1'
@@ -1548,9 +1601,11 @@ func slimeConversionCheck(mother, father):
 				strongestgenes = baby.genealogy[genes]
 		
 		if rand_range(0,100) + conversionstrength > strongestgenes:
+			#ralph
+			expansionsetup.setRaceBonus(baby, false)
 			baby.race = 'Slime'
 			baby.race_type == 4
-			expansionsetup.setRaceBonus(baby, false)
+			#/ralph
 			for genes in baby.genealogy:
 				if genes != 'slime' && baby.genealogy[genes] > 0:
 					baby.genealogy[genes] = 0
@@ -1575,8 +1630,8 @@ func slimeConversionCheck(mother, father):
 #I can't remember if I added this or found it elsewhere. Sorry if I didn't!
 func randomitemfromarray(source):
 	if source.size() > 0:
-		return source[randi() % source.size()]
-	return null
+		#source[randi() % source.size()] Old
+		return source[round(rand_range(0,source.size()-1))]
 
 func getfromarray(array, index):
 	return array[ clamp(index, 0, array.size()-1) ]

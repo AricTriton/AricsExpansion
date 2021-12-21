@@ -647,6 +647,7 @@ var traits = {
 		},
 		"tags": [
 			"secondary",
+			"unique",
 		],
 		"conflict": [
 			""
@@ -661,6 +662,7 @@ var traits = {
 		"tags": [
 			"secondary",
 			"mental",
+			"unique",
 		],
 		"conflict": [
 			""
@@ -674,6 +676,7 @@ var traits = {
 		},
 		"tags": [
 			"secondary",
+			"unique",
 		],
 		"conflict": [
 			""
@@ -713,6 +716,7 @@ var traits = {
 		},
 		"tags": [
 			"secondary",
+			"unique",
 		],
 		"conflict": [
 			""
@@ -726,6 +730,7 @@ var traits = {
 		},
 		"tags": [
 			"secondary",
+			"unique",
 		],
 		"conflict": [
 			""
@@ -829,7 +834,8 @@ var traits = {
 			"expansiontrait",
 			"convotrait",
 			"detrimental",
-			"physical"
+			"physical",
+			"unique",
 		],
 		"conflict": [
 			"Clever"

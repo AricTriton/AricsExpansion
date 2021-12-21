@@ -274,9 +274,9 @@ var spelllist = {
 
 func spellcost(spell):
 	var cost = spell.manacost
-	if globals.state.spec == 'Mage':
+	if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction:
 		cost = cost/2
-	return cost
+	return cost*globals.expansionsettings.spellcost
 
 func mindreadeffect():
 	var spell = globals.spelldict.mindread
@@ -331,6 +331,73 @@ var dictChangeParts = {
 	21 : ['haircolor', globals.allhaircolors, "hair color"],
 	22 : ['ears', globals.allears, "ear shape"],
 }
+
+func invigorateeffect():
+	if globals.useRalphsTweaks:
+		return invigorateeffect_Ralphs()
+	var text = ''
+	var spell = globals.spelldict.invigorate
+	globals.resources.mana -= spellcost(spell)
+	person.energy += person.stats.energy_max/2
+	person.stress += max(rand_range(25,35)-globals.player.smaf*4, 10)
+	globals.player.energy += 50
+	text = person.dictionary("You cast Invigorate on $name. Your and $his energy is partly restored. $His stress has increased. ")
+	return text
+
+#ralph
+func invigorateeffect_Ralphs():
+	var text = ''
+	var spell = globals.spelldict.invigorate
+	globals.resources.mana -= spellcost(spell)
+	if person.unique != 'player':
+		person.energy += person.stats.energy_max/2
+		person.stress += max(rand_range(25,35)-globals.player.smaf*4, 10)
+		globals.player.energy += 50
+		text = person.dictionary("You cast Invigorate on $name. Your and $his energy is partly restored. $His stress has increased. ")
+	else:
+		if person.health >= person.stats.health_max/2 && person.health > 30:
+			person.health -= rand_range(20,30)
+			globals.player.energy += 50
+			text = person.dictionary("You cast Invigorate on yourself. You cut your palm using your own blood as the catalyst for the spell. Your energy is partly restored at the cost of a small amount of your health. ")
+		else:
+			globals.player.energy += 25
+			text = person.dictionary("You cast Invigorate on yourself and make a sputtering gasp, coughing up a little blood. You're not in any shape for this. Your energy is partly restored, but not as much as you hoped. ")
+	return text
+#/ralph
+
+func feareffect():
+	var text = "You grab hold of $name's shoulders and hold $his gaze. At first, $he’s calm, but the longer you stare into $his eyes, the more $he trembles in fear. Soon, panic takes over $his stare. "
+	var spell = globals.spelldict.fear
+	globals.resources.mana -= spellcost(spell)
+	person.fear += 20+caster.smaf*10
+	person.stress += max(5, 20-caster.smaf*3)
+	if person.effects.has('captured') == true:
+		text += "\n[color=green]$name becomes less rebellious towards you.[/color]"
+		person.effects.captured.duration -= 1+globals.player.smaf/globals.expansionsettings.reduce_rebellion_with_fear
+	text = (person.dictionary(text))
+	return text
+
+func tentacleeffect():
+	var spell = globals.spelldict.summontentacle
+	var text = "As you finish chanting the spell, a stream of tentacles emerge from small breach in air. "
+	if person.unique == 'Zoe':
+		text += "\n\n[color=yellow]—No... Please NO![/color]\n\n"
+	
+	text += "They quickly seize $name by the limbs and free $him from the clothes. You observe how $name is being toyed and raped by tentacles. After a couple of orgasms the tentacles disappear from reality and you make sure that $name learned this lesson well before leaving."
+	person.obed += 75
+	person.fear += 90
+	person.lewdness += globals.expansionsettings.summontentacle_lewdness #/ralph
+	person.lust -= rand_range(20,30)
+	if person.vagvirgin == true:
+		person.vagvirgin = false
+	if !person.traits.has("Deviant"):
+		person.loyal -= 20
+		person.stress += rand_range(30,50)
+	if person.unique == 'Zoe':
+		person.loyal = 0
+		text += "\n\n[color=yellow]—How could you...?[/color]"
+	
+	return person.dictionary(text)
 
 func mutate(power=2):
 	###---Added by Expansion---### Size Expanded

@@ -421,8 +421,18 @@ func getessence():
 	###---Expansion End---###
 	return essence
 
-
-
+func cleartraits():
+	spec = null
+	while !traits.empty():
+		trait_remove(traits.back())
+	for i in ['str_base','agi_base', 'maf_base', 'end_base']:
+		stats[i] = 0
+	if globals.useRalphsTweaks && self == globals.player:
+		for i in ['str_mod','agi_mod','maf_mod','end_mod']:
+			stats[i] = 0
+	skillpoints = 2
+	level = 1
+	xp = 0
 
 func health_set(value):
 	###---Added by Expansion---### Crystal | Added Death Prevention
@@ -838,7 +848,7 @@ func calculateprice():
 	var bonus = 1
 	price = beautybase*variables.priceperbasebeauty + beautytemp*variables.priceperbonusbeauty
 	price += (level-1)*variables.priceperlevel
-	price = price*globals.races[race.replace('Halfkin', 'Beastkin')].pricemod
+	price = (price*globals.state.racemarketsat[race.replace('Halfkin', 'Beastkin')] if globals.useRalphsTweaks else price*globals.races[race.replace('Halfkin', 'Beastkin')].pricemod)
 	if vagvirgin == true:
 		bonus += variables.pricebonusvirgin
 	if sex == 'futanari':
@@ -864,11 +874,12 @@ func calculateprice():
 
 	###---Added by Expansion---### Breeder Support
 	if npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
-		price *= 2
+		price *= globals.expansionsettings.mansion_bred_and_breeder
 	elif npcexpanded.mansionbred == true:
 		price = round(price*1.25)
 	###---End Expansion---###
-
+	bonus = bonus/globals.expansionsettings.calculate_price_bonus_divide
+	
 	price = price*bonus
 
 	if price < 0:
@@ -889,7 +900,7 @@ func sellprice(alternative = false):
 	price = max(round(price), variables.priceminimumsell)
 	###---Added by Expansion---### Breeder Support
 	if npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
-		price *= 2
+		price *= globals.expansionsettings.mansion_bred_and_breeder
 	elif npcexpanded.mansionbred == true:
 		price = round(price*1.25)
 	###---End Expansion---###
@@ -1123,7 +1134,10 @@ func get_birth_amount_name():
 func get_race_display():
 	var rvar = ''
 	if race != race_display:
-		rvar = ' (' + race_display + ')'
+		if race_display in globals.dictionary.hybriddict:
+			rvar = ' ([color=yellow]Subspecies: ' + race_display + '[/color])'
+		else:
+			rvar = ' (' + race_display + ')'
 	
 	return rvar
 
@@ -1134,10 +1148,11 @@ func get_genealogy():
 	
 	if genealogy[temprace] >= 100:
 		description = "$He is obviously a pure specimen of a full-blooded " + race + ".\n\n"
-	elif genealogy[temprace] >= 70:
-		description = "$He appears to be primarily a " + race + ", though $he has certain physical features that may suggest that $he is unlikely to be a from a purely " + race + " bloodline.\n\n"
 	elif genealogy[temprace] >= 50:
-		description = "$He appears to be a mixed blooded mongrol, though $he seems to have more " + race + " blood in $him than anything else.\n\n"
+		if race_display in globals.dictionary.hybriddict:
+			description = globals.dictionary.hybriddict[race_display]
+		else:
+			description = "$He appears to be primarily a " + race + ", though $he has certain physical features that may suggest that $he is unlikely to be a from a purely " + race + " bloodline.\n\n"
 	elif genealogy[temprace] >= 30:
 		description = "$His features are such a mix that it is only on very close inspection that $his " + race + " heritage shines through.\n\n"
 	else:

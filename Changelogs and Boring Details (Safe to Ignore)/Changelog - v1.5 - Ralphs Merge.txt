@@ -1,0 +1,2444 @@
+This Pull Request is rather large and should be tested and reviewed carefully before merging.
+
+Includes all of the base additions from Ralph's additions from https://itch.io/t/1036577/ralphs-modded-arics-mod-097-standalone-hybrid-expansion
+I'm just gonna include the detailed list of changes made from the the text file Ralph and I passed to each other. It's a little messy, but it should correlate to most of the code changes in this PR.
+
+##RM9## - fix script error - #Capitulize Done
+[globals.gd]
+func addrelations(person, person2, value):
+#if person == player || person2 == player || person == person2:
+if person == player || person2 == player || person == person2 || person == null || person2 == null: #ralph9 - eliminates harmless script error pointed out by Ank
+
+##RM3## - fix back vs back() titsize error - #Capitulize Done
+[expansion.gd]
+if titsgrow == true:
+if globals.titssizearray.back() != person.titssize && person.lactating.hyperlactation == true || globals.titssizearray.find(person.titssize)-5 <= 0: #ralph3 fixed titssizearray.back by adding ()
+
+##RM9## - fix duplicating rescued bystander npcs you recruit after combat - #Capitulize Done
+[exploration.gd]
+elif stage == 4:
+#if rand_range(0,100) >= 20 + globals.state.reputation[location]/4: #ralph6
+#if rand_range(0,100) >= 20 + globals.state.reputation[location]/4 + rewardslave.npcexpanded.timesrescued*10: #ralph6
+if rand_range(0,100) >= 101: #test
+text = "$name excuses $himself, but can't accept your proposal and quickly leaves. "
+else:
+rewardslave.obed = 85
+rewardslave.stress = 10
+globals.slaves = rewardslave
+text = "$name observes you for some time, measuring your words, but to your surprise, $he complies either out of sympathy or bacause of the desperate life $he had to live. " #ralph2
+#ralph2
+#ralph9
+globals.state.offscreennpcs.erase(rewardslave) #ralph9 - hopefully fix recruited slaves from being reencountered and re-recruited later (duplicates)
+#/ralph9
+main.dialogue(true,self,rewardslave.dictionary(text))
+
+##RM8## - More info for Player Inspect Looks - #Capitulize Done
+[description.gd]
+func getslavedescription(tempperson, mode = 'default'):
+showmode = mode
+person = tempperson
+###---Added by Expansion---###
+globals.expansion.updatePerson(person)
+###---Expansion End---###
+var text = basics() + features() + genitals() + mods() + tattoo() + piercing()
+if person.customdesc != '':
+text += '\n\n' + person.customdesc
+if person == globals.player:
+text = person.dictionaryplayerplus(person.dictionaryplayer(text))
+#ralph8
+var array = []
+var textcolor = ""
+if person.preg.duration > 2:
+text += "\n\nYou are now certain you are pregnant. If you had to guess you'd say " + str(globals.expansion.getTrimester(person)).capitalize() + " trimester."
+elif person.preg.duration > 0:
+text += "\n\nYou're not completely sure, but you think you might be pregnant."
+if !person.traits.empty():
+for i in person.traits:
+array.append(i)
+if array.size() == 1:
+text += "\n\nYour new life has been quite interesting so far. You've aquired a trait: " + array[0] + "."
+else:
+var count = 0
+text += "\n\nYour new life has been quite interesting so far. You've aquired some traits: "
+for i in array:
+count += 1
+if count < array.size():
+text += i + ", "
+else:
+text += "and " + i + "."
+text += "\n\nYour mind wanders to sex and in comparing yourself to others, you suspect your fetishes are:\n"
+for i in person.fetish:
+if person.fetish[i] in ['mindblowing','enjoyable']:
+textcolor = "[color=green]"
+elif person.fetish[i] in ['acceptable','uncertain']:
+textcolor = "[color=yellow]"
+else:
+textcolor = "[color=red]"
+text += i.capitalize() + ": " + textcolor + person.fetish[i].capitalize() + "[/color]\n"
+#/ralph8
+
+##RM8#RMF#
+[combatdata.gd] - #Capitulize Done
+replaced all awareness = 0 with awareness = -10 so that encounters without ambush text don't ever get called (bug I introduced by +/-7 to awareness checks)
+
+##RM7## - Streamline consent discussions a little by displaying existing consent - #Capitulize Done
+[statstab.gd]
+if mode == "intro":
+#Change Dialogue
+text += "[color=red]Consent Topics are once per day. If Consent failed, you can try again tomorrow.[/color]\n\n[color=yellow]-What did you want to talk about?[/color]"
+#ralph7
+var consentstatus = "\n\n" + person.name + " has consented to the following:\n"
+if person.consentexp.party:
+consentstatus += "$He will [color=green]fight[/color] for you.\n"
+else:
+consentstatus += "$He will [color=red]not fight[/color] for you.\n"
+if person.consent:
+consentstatus += "$He has given consent to [color=green]have sex[/color] with you.\n"
+else:
+consentstatus += "$He has not given consent to [color=red]have sex[/color] with you.\n"
+if person.consentexp.pregnancy && person.preg.has_womb && globals.player.penis != "none":
+consentstatus += "$He has given consent to [color=green]be impregnated[/color] by you.\n"
+elif person.preg.has_womb && globals.player.penis != "none":
+consentstatus += "$He has not given consent to [color=red]be impregnated[/color] by you.\n"
+if person.consentexp.stud && person.penis != "none":
+consentstatus += "$He has agreed to [color=green]stud[/color] for you and will impregnate other slaves.\n"
+elif person.penis != "none":
+consentstatus += "$He has not agreed to [color=red]stud[/color] for you and does not want to father children with other slaves.\n"
+if person.consentexp.breeder && person.preg.has_womb:
+consentstatus += "$He has agreed to [color=green]be bred[/color] by other slaves for you.\n"
+elif person.preg.has_womb:
+consentstatus += "$He has not agreed to [color=green]be bred[/color] by other slaves for you.\n"
+if person.consentexp.incest:
+consentstatus += "$He has consented to have [color=green]incestuous sex[/color].\n"
+else:
+consentstatus += "$He has not consented to have [color=red]incestuous sex[/color].\n"
+if person.consentexp.incestbreeder && person.preg.has_womb:
+consentstatus += "$He has consented to [color=green]be bred by family[/color].\n"
+elif person.preg.has_womb:
+consentstatus += "$He has not consented to [color=red]be bred by family[/color].\n"
+if person.consentexp.livestock && globals.state.farm >= 3:
+consentstatus += "$He has consented to [color=green]be livestock[/color].\n"
+elif globals.state.farm >= 3:
+consentstatus += "$He has not consented to [color=red]be livestock[/color].\n"
+text += consentstatus
+#/ralph7
+
+##RM7## - Streamline fetish interface a little by displaying known fetishes - #Capitulize Done
+[statstab.gd]
+func talkfetishes(mode=''):
+#Conversations that can be held with anyone Once Per Day
+var text = ""
+var state = false
+var buttons = []
+var sprite = []
+var tempbuttons = []
+#Incomplete Fetish Variables
+var invalidfetishfound = false
+var incompletefetishtext = "\n\n\n[color=red]Aric's Note: The following fetishes have no current mechanical value. They may be implemented in the future but were implimented using another, more specific fetish instead. They are only for roleplay purposes at the moment. Any other fetishes that appear are have at least 1 fetish check and provide a mechanical benefit somewhere in the game. [/color]"
+#ralph7
+var fetishstatus = "\n\n" + person.name + " has the following known fetishes:\n"
+var textcolor = ""
+for i in person.knownfetishes:
+if person.fetish[i] in ['mindblowing','enjoyable']:
+textcolor = "[color=green]"
+elif person.fetish[i] in ['acceptable','uncertain']:
+textcolor = "[color=yellow]"
+else:
+textcolor = "[color=red]"
+fetishstatus += str(i).capitalize() + ": " + textcolor + person.fetish[i].capitalize() + "[/color]\n"
+#/ralph7
+
+##RM6## made slave guild rosters remove slaves faster - #Capitulize Done
+#R-NEW# This just makes the slave guild roster cycle more often and removes slaves faster the more bloated it is (eg. return to the mansion w/ tons of prisoners and sell them manually - now you don't have to wait forever for the slave guild to declutter)
+[mansion.gd]
+for i in globals.guildslaves:
+var tempcount = 0 #ralph6
+for person in globals.guildslaves[i]:
+count = 0
+#if randf() < 0.2: #ralph6
+# globals.guildslaves[i].remove(count) #ralph6
+count += 1
+if rand_range(0,100) <= 20: #ralph6
+globals.guildslaves[i].remove(tempcount) #ralph6
+tempcount += 1 #ralph6
+if globals.guildslaves[i].size() < 4:
+get_node("outside").newslaveinguild(1, i, 'rand') #ralph5 added 3rd entry
+if globals.guildslaves[i].size() < 6 && randf() > 0.25:
+get_node("outside").newslaveinguild(1, i, 'rand') #ralph5 added 3rd entry
+#/R-NEW#
+
+##RM6## multiple rescues increases chance to join party - #Capitulize Done
+[exploration.gd]
+elif stage == 4:
+#if rand_range(0,100) >= 20 + globals.state.reputation[location]/4: #ralph6
+if rand_range(0,100) >= 20 + globals.state.reputation[location]/4 + rewardslave.npcexpanded.timesrescued*10: #ralph6
+
+##RM2#F# 50/50 split always one race fixed #Capitulize Done
+#R-NEW# This fixes instances where 2 pureblood races are bred and the offspring is always the first race in the list (rather than sometimes mom's and sometimes dad's race)
+[contructor.gd]
+func build_genealogy(person, mother, father):
+var percent = 0
+#ralph9 add randomness to babies genes from toxicity of parents; high toxicity -> more chance for variance in which genes are passed
+var remainder
+for race in genealogies:
+#ralph8 add a tiny bit of randomization and fix 99% and 100% parents never yielding pureblood child
+if rand_range(0,100) >= 50:
+person.genealogy[race] = round((mother.genealogy[race] + father.genealogy[race]) * .49999999)
+percent += person.genealogy[race]
+else:
+person.genealogy[race] = round((mother.genealogy[race] + father.genealogy[race]) * .5)
+percent += person.genealogy[race]
+#/ralph8
+while percent != 100:
+percent = build_genealogy_equalize(person, percent)
+#/ralph9
+globals.traceFile('build genealogy')
+return
+#/R-NEW#
+
+##RM5## Variable race pricemods in person.gd sell a race, -0.2 pricemod and recover 0.1 pricemod per 15 days? set min/max pricemod based on races.gd constant for pricemod? #Capitulize Done
+
+[person.gd] - no #P# base is same as tweaked
+#R-NEW# - The [x.gd] notes were just for me when I was packaging the two different versions of Ralph's on itch.io. You can ignore those notes (eg. "[person.gd] - no #P# base is same as tweaked"). I've copy/pasted all the code here plus some unrelated existing code so it's easy to find where it goes.
+#R-NEW - here's what was modified in [person.gd]:
+func calculateprice():
+var price = 0
+var bonus = 1
+price = beautybasevariables.priceperbasebeauty + beautytempvariables.priceperbonusbeauty
+price += (level-1)variables.priceperlevel
+#price = priceglobals.races[race.replace('Halfkin', 'Beastkin')].pricemod #ralph5
+price = priceglobals.state.racemarketsat[race.replace('Halfkin', 'Beastkin')] #ralph5
+#/R-NEW#
+
+*[outside.gd] - mindread / increased rep drop for sebas/umbra on tweaked #Capitulize Done
+#R-NEW# - I changed the race balance in different towns mainly so that rare races wouldn't appear in slave guilds - 8 batches of code modified (you may have already caught some of this):
+
+#1 Added
+
+func _ready():
+###---Added by Expansion---### Removed via Ank BugFix v4
+if globals.guildslaves.wimborn.size() < 2:
+var rand = round(rand_range(4,6))
+newslaveinguild(rand, 'wimborn', 'rand') #ralph5 added 3rd entry
+if globals.guildslaves.gorn.size() < 2:
+var rand = round(rand_range(4,6))
+newslaveinguild(rand, 'gorn', 'rand') #ralph5 added 3rd entry
+if globals.guildslaves.frostford.size() < 2:
+var rand = round(rand_range(4,6))
+newslaveinguild(rand, 'frostford', 'rand') #ralph5 added 3rd entry
+if globals.guildslaves.umbra.size() < 4:
+var rand = round(rand_range(4,6))
+newslaveinguild(rand, 'umbra', 'rand') #ralph5 added 3rd entry
+
+#2 Added #C-NEW# Changed Drow to Tribal Elf #needs toggle: actually no toggling to do, we just need to fix it so Dark_Elf matches the old Ralph's version of Drow and confirm Tribal_Elf matches the old Ralph's version of Dark_Elf#
+
+func newslaveinguild(number, town = 'wimborn', raceadd = 'Human'): #ralph5 added 3rd entry: raceadd
+while number > 0:
+var racearray
+var race
+var origin
+var originpool
+if town == 'wimborn':
+#racearray = [[globals.getracebygroup("wimborn"),1],['Halfkin Tanuki', 1],['Dragonkin', 1.5],['Arachna', 2],['Scylla', 6]] #test
+racearray = [[globals.getracebygroup("wimborn"),1],['Drow', 1],['Dark Elf', 1],['Elf', 4],['Human', 8]] #ralph5
+elif town == 'gorn':
+racearray = [[globals.getracebygroup("gorn"),1],['Centaur', 1],['Human', 2],['Goblin', 4],['Orc', 6],['Dark Elf', 2]] #ralph5 changed weights, added dark elves
+elif town == 'frostford':
+#racearray = [[globals.getracebygroup("frostford"),1],['Human', 1.5],['Halfkin Wolf', 3],['Beastkin Wolf', 5]] #ralph5
+racearray = [[globals.getracebygroup("frostford"),1],['Human', 3],['Halfkin Wolf', 5],['Beastkin Wolf', 8],['Halfkin Cat', 5],['Halfkin Bunny', 1]] #ralph5
+elif town == 'umbra':
+racearray = [[globals.allracesarray[rand_range(0,globals.allracesarray.size())],1]]
+if globals.rules.slaverguildallraces == true && globals.state.sandbox == true:
+originpool = ['slave','poor','commoner','rich','noble']
+origin = originpool[rand_range(0,originpool.size())]
+race = globals.allracesarray[rand_range(0,globals.allracesarray.size())]
+elif raceadd == 'rand': #ralph5 changed from else:
+race = globals.weightedrandom(racearray)
+if town == 'umbra':
+originpool = [['noble', 1],['rich',2],['commoner',3], ['poor', 3], ['slave',1]]
+else:
+originpool = [['rich',1], ['commoner',3], ['poor', 6], ['slave', 6]]
+origin = globals.weightedrandom(originpool)
+#ralph5
+else:
+race = raceadd
+if race in ['Beastkin Tanuki','Beastkin Fox','Beastkin Bunny','Beastkin Wolf','Beastkin Cat'] && rand_range(0,100) < 50:
+race = race.replace('Beastkin','Halfkin')
+if town == 'umbra':
+originpool = [['noble', 1],['rich',2],['commoner',3], ['poor', 3], ['slave',1]]
+else:
+originpool = [['rich',1], ['commoner',3], ['poor', 6], ['slave', 6]]
+origin = globals.weightedrandom(originpool)
+#/ralph5
+
+#3 Added
+
+func marketsattext():
+#ralph5
+var sattext = ""
+var starttext = ""
+var endtext = ""
+var extrazero = ".0"
+#var racetext
+var racetext = ""
+var marketrate = 1
+sattext = "\n\nA sign board lists current relative pricing by race:\n"
+for i in globals.races:
+marketrate = round(globals.state.racemarketsat[i]*100)/100
+#racetext = i.replace('Beastkin', '')
+racetext = str(i.replace('Beastkin', ''))
+if marketrate < 0.9:
+starttext = "[color=red]"
+endtext = "[/color]"
+elif marketrate >= 2.0:
+starttext = "[color=green]"
+endtext = "[/color]"
+else:
+starttext = "[color=yellow]"
+endtext = "[/color]"
+if !marketrate in [0,1,2,3,4,5,6,7,8,9,10]:
+sattext = sattext + "Price x " + starttext + str(marketrate) + endtext + " for [color=aqua]" + racetext + endtext + "\n"
+else:
+sattext = sattext + "Price x " + starttext + str(marketrate) + extrazero + endtext + " for [color=aqua]" + racetext + endtext + "\n"
+return sattext
+#print("Market pricing for " + str(i) + "'s increased by" + str(max(0.01,(1-globals.state.racemarketsat[i])*0.25)) + " from " + str(globals.state.racemarketsat[i]))
+#globals.state.racemarketsat[i] = clamp(globals.state.racemarketsat[i] + max(0.01,(1-globals.state.racemarketsat[i])*0.25),0.5,globals.races[i].pricemod) #under 1.0, recovers quickly toward 1 - over 1.0 increase 0.1 every 10 days
+#print("to " + str(globals.state.racemarketsat[i]) + "\n")
+#/ralph5
+
+#4 - Wimborn ### line added: ### text = text + marketsattext() #ralph5 Added
+
+	###---Added by Expansion---### Ank BugFix v4
+	var array = [{name = 'See slaves for sale', function = 'slaveguildslaves', args = 'wimborn'}, {name = 'Offer your servants',function = 'sellslavelist', args = 'wimborn'}, {name = 'See custom requests', function = 'slaveguildquests'},{name = 'Services for Slaves',function = 'slaveservice'},{name = 'Leave', function = 'town'}]
+	###---End Expansion---###
+	if globals.state.sandbox == true && globals.state.sidequests.maple < 1: globals.state.sidequests.maple = 1
+	if globals.state.mainquest == 3:
+		array.insert(3, {name = "Ask about fairies", function = 'slaveguildfairy'})
+	if globals.state.sidequests.maple in [1,3] && globals.state.reputation.wimborn >= 40:
+		array.insert(3, {name = "Flirt with Maple", function = 'slaveguildfairy', args = 1})
+	if globals.state.sidequests.maple == 6:
+		array.insert(3, {name = "Take Maple into custody", function = 'slaveguildfairy', args = 5})
+	if globals.state.sidequests.maple in [2,3,4,5,6]:
+		text += "\n\nMaple gives you a playful, warm look."
+	elif globals.state.sidequests.maple == 7:
+		text = "You enter through the guild’s doors, and are greeted once again by the busy sights and sounds of customers, slaves, and workers shuffling around at blistering speeds. You give a polite bow to one of the receptionists and grab a pen to sign in."
+	text = text + marketsattext() #ralph5
+	mansion.maintext = globals.player.dictionary(text)
+	buildbuttons(array)
+#5 - Gorn Added
+
+elif guild == 'gorn':
+	clearselection()
+	setcharacter('goblin')
+	slavearray = globals.guildslaves.gorn
+	mansion.maintext = globals.player.dictionaryplayer("A huge part of the supposed guild is taken up by a makeshift platform and tents with a few half-empty cages. In the middle, you can see a presentation podium which is easily observable from main street. Despite Gorn being very different from primarily human-populated towns, it still very much follows Mage Order directives — race diversity and casual slavery are omnipresent. \n\nAs you walk in, one of the goblin receptionists hastily grabs your attention, sensing a profitable customer.\n\n— $sir interested in some heat-tolerant 'orkers? *chuckles* Or you are in preference of short girls? We quite often get those as well, for every taste and color!" + marketsattext()) #ralph5
+	###---Added by Expansion---### Ank BugFix v4
+#6 - Frostford Added
+
+elif guild == 'frostford':
+	clearselection()
+	setcharacter('frostfordslaver')
+	slavearray = globals.guildslaves.frostford
+	text = "A humble local guild building is bright and warm inside. Just as the whole of Frostford, this place is serene in its mood compared to what you are used to. "
+	if globals.state.mainquest >= 2:
+		text += "Realizing you belong to the Mage's Order, the attendant politely greets you and asks how she may assist you. "
+	text = text + marketsattext() #ralph5
+	mansion.maintext = globals.player.dictionaryplayer(text)
+	###---Added by Expansion---### Ank BugFix v4
+#7 Added
+
+func _on_slavesellbutton_pressed():
+var upgradefromslave = false
+var text = ''
+var racepricemodchange = 0 #ralph5
+var racepricemod = 1 #ralph5
+globals.resources.gold += selectedslaveprice
+#ralph5
+racepricemod = globals.state.racemarketsat[selectedslave.race.replace('Halfkin', 'Beastkin')] #ralph5
+racepricemodchange = (racepricemod - 0.5)*0.1 #the bigger the premium the more the premium will be decreased
+#print("Pricemod for " + selectedslave.race + " is " + str(racepricemod))
+racepricemod = clamp(racepricemod - racepricemodchange,0.5,5)
+globals.state.racemarketsat[selectedslave.race] = racepricemod
+#print("Sold 1 " + selectedslave.race + " Pricemod decreased " + str(racepricemodchange) + " to " + str(racepricemod))
+#/ralph5
+
+#8 Added
+
+func _on_quicksell_pressed():
+var text = ''
+var gold = 0
+var array = []
+#ralph5
+var racepricemodchange = 0
+var racepricemod = 1
+#/ralph5
+for i in globals.state.capturedgroup:
+array.append(i)
+for i in array:
+gold += i.sellprice()*.9 #ralph3
+#ralph5
+racepricemod = globals.state.racemarketsat[i.race.replace('Halfkin', 'Beastkin')]
+#print("Pricemod for " + i.race + " is " + str(racepricemod))
+racepricemodchange = (racepricemod - 0.5)*0.1 #the bigger the premium the more the premium will be decreased
+racepricemod = clamp(racepricemod - racepricemodchange,0.5,5)
+globals.state.racemarketsat[i.race.replace('Halfkin', 'Beastkin')] = racepricemod
+#print("Sold 1 " + i.race + " Pricemod decreased " + str(racepricemodchange) + " to " + str(racepricemod))
+#/ralph5
+globals.state.capturedgroup.erase(i)
+main.popup('You furtively delivered your captives to the local slaver guild. This earned you [color=yellow]' + str(gold) + '[/color] gold. ')
+globals.resources.gold += gold
+_on_details_pressed()
+
+#/R-NEW#
+
+*[globals.gd] - nopoplimit / remove mage
+#R-NEW# 2 code chunks to add: #Capitulize Done
+#1 Added
+
+var lorefound = []
+var racemarketsat = {} #ralph5 - variable to track market saturation of various races (sell a lot of one race and its pricing goes down, etc.)
+#2 Added
+
+func removeStackableItem(item, count = 1, search = 'any'):
+	if count > 0 && (search in ['any','backpack']):
+		if backpack.stackables.has(item):
+			if backpack.stackables[item] > count:
+				backpack.stackables[item] -= count
+				return 0
+			else:
+				count -= max(backpack.stackables[item], 0)
+				backpack.stackables.erase(item)
+	if count > 0 && (search in ['any','inventory']):	
+		if globals.itemdict.has(item):
+			if globals.itemdict[item].amount >= count:
+				globals.itemdict[item].amount -= count
+				return 0
+			else:
+				count -= max(globals.itemdict[item].amount, 0)
+				globals.itemdict[item].amount = 0
+	return count
+
+#ralph5
+func setupracemarketsat():
+	for race in globals.races:
+		if !racemarketsat.has(race):
+			racemarketsat[race] = globals.races[race].pricemod
+			#print(race + " added to racemarketsat with value: " + str(racemarketsat[race]))
+#/ralph5
+#/R-NEW#
+
+*[upgradespanel.gd] - just tweaked version - goes with beds change - only need to add to tweaks
+#R-NEW# - No action needed. This was one of my preferred tweaks that changed how many beds you could build. I don't expect Aric will want to incorporate until we have toggles working if at all. #/R-NEW# #Capitulize, no action made
+
+*[mansion.gd] no #P# base is same as tweaked
+#R-NEW# 3 code chunks to add: #Capitulize Done
+#1 Added
+
+if globals.state.tutorialcomplete == false && globals.resources.day == 1:
+	get_node("tutorialnode").starttutorial()
+	globals.state.tutorialcomplete = true
+
+globals.state.setupracemarketsat() #ralph5
+if globals.showalisegreet == true:
+	alisegreet()
+elif globals.gameloaded == true:
+	infotext("Game Loaded.",'green')
+#2 Added
+
+		###---Added by Expansion---### Ankmairdor's BugFix v4
+if person.sleep == 'farm' && person.away.duration == 0:
+		###---End Expansion---###
+			#if person.obed < 75:
+			if rand_range(0,100) <= (person.obed-100) + (farmmanager.conf*1.25):
+				globals.addrelations(person, farmmanager, rand_range(25,40))
+			else:
+				globals.addrelations(person, farmmanager, rand_range(-25,-40))
+#text1.set_bbcode(text1.get_bbcode()+farmtext) #ralph5
+text1.set_bbcode(text1.get_bbcode()+str(farmtext)) #ralph5
+#print("Farm text when cow is revealed pregnant: " + str(farmtext)) #ralph5 saw this error break the end of day button press
+#3 Added
+
+if start_food > globals.resources.food:
+	text = text + 'Your food storage shrank by [color=aqua]' + str(start_food - globals.resources.food) + '[/color] units of food.\n'
+else:
+	text = text + 'Your food storage grew by [color=aqua]' + str(globals.resources.food - start_food) + '[/color] units of food.\n'
+#ralph5 - daily market price recovery and chance of big market change for one race
+text = text + "\n\n Market pricing for slaves increased somewhat to suit demand.\n"
+for i in globals.races:
+	if globals.state.racemarketsat[i] < globals.races[i].pricemod:
+		globals.state.racemarketsat[i] = clamp(globals.state.racemarketsat[i] + max(0.01,(1-globals.state.racemarketsat[i])*0.25),0.5,globals.races[i].pricemod) #under 1.0, recovers quickly toward 1 - over 1.0 increase 0.1 every 10 days
+if rand_range(0,100) > 0: #chance of a market event occuring to affect one races prices
+	var temprandom = rand_range(0.25,1.0) #magnitude of ratio change
+	var temprace
+	var tempcount = 0.0
+	var tempracecount = 0.0
+	var tempracearray = []
+	var tempracearray2 = []
+	for i in globals.guildslaves:
+		for person in globals.guildslaves[i]:
+			if !tempracearray.has(person.race.replace('Halfkin', 'Beastkin')):
+				tempracearray.append(person.race.replace('Halfkin', 'Beastkin')) #create array or races currently for sale
+	temprace = tempracearray[rand_range(0,tempracearray.size()-1)] #select available race for price decrease or else: below (increase)
+	if rand_range(0,100) < 30: #chance specific race increase/decrease
+		if rand_range(0,100) < 50: #chance for price decrease
+			if rand_range(0,100) <= 20: #chance for price decrease due to sudden supply
+				#determine how amny to add; increase price; add them to a guild
+				for i in globals.guildslaves: #get count of temprace for sale at the guilds
+					for person in globals.guildslaves[i]:
+						if temprace == person.race.replace('Halfkin', 'Beastkin'):
+							tempracecount += 1
+				tempracecount = max(min(tempracecount*2,10),4)-int(rand_range(0,1)) #set number of slaves to be added with scarce races added to less
+				var town = globals.randomitemfromarray(['wimborn','gorn','frostford','umbra'])
+				#globals.get_tree().get_current_scene().get_node("outside").newslaveinguild(tempracecount,town,temprace)
+				get_node("outside").newslaveinguild(tempracecount,town,temprace)
+				text = text + "An anonymous party floods the slave guild in [color=yellow]" + town + "[/color] with [color=yellow]" + str(tempracecount) + "[/color][color=aqua]" + globals.races[temprace].plural + "[/color]. Prices drop.\n"
+				var racepricemod = 1
+				var racepricemodchange = 0
+				for i in tempracecount: #decrease price ratio for temprace for each sold (same amount as when player sells)
+					racepricemod = globals.state.racemarketsat[temprace.replace('Halfkin', 'Beastkin')]
+					racepricemodchange = (racepricemod - 0.5)*0.1 #the bigger the premium the more the premium will be decreased
+					racepricemod = clamp(racepricemod - racepricemodchange,0.5,5)
+					globals.state.racemarketsat[temprace] = racepricemod
+			else: #chance for simple price decrease
+				globals.state.racemarketsat[temprace] = clamp(globals.state.racemarketsat[temprace] - temprandom,0.5,5)
+				text = text + str(globals.races[temprace].marketdown[rand_range(0,globals.races[temprace].marketdown.size())])
+				print("decrease price: " + str(globals.races[temprace].marketdown[rand_range(0,globals.races[temprace].marketdown.size())]))
+		elif rand_range(0,100) < 80: #simple price increase for race missing from slave guilds
+			for i in globals.races:
+				if !i in tempracearray:
+					tempracearray2.append(i) #create array of races not currently for sale
+			if tempracearray2 != null:
+				temprace = tempracearray2[rand_range(0,tempracearray.size()-1)] #select available race for price increase
+				globals.state.racemarketsat[temprace] = clamp(globals.state.racemarketsat[temprace] + temprandom,0.5,5)
+				text = text + str(globals.races[temprace].marketup[rand_range(0,globals.races[temprace].marketup.size())])
+				print("increase price: " + str(globals.races[temprace].marketup[rand_range(0,globals.races[temprace].marketup.size())]))
+		else: #price increase due to all existing race slaves being sold from slave guilds
+			for guild in globals.guildslaves:
+				for person in globals.guildslaves[guild].duplicate():
+					if person.race.replace('Halfkin', 'Beastkin') == temprace:
+						var start_size = globals.guildslaves[guild].size()
+						globals.guildslaves[guild].erase(person)
+						tempcount += 1.0
+			text = text + "Demand skyrockets after an unknown party purchases every [color=aqua]" + temprace + "[/color] on the market.\n"
+			globals.state.racemarketsat[temprace] = clamp(globals.races[temprace].pricemod + min(0.5,tempcount*0.1),0.5,5)
+#/ralph5
+/R-NEW#
+
+*[races.gd] no #P# base is same as tweaked
+#R-NEW# - I added a section to every race in races.gd (need them all for market price changes to work) like the following:
+#C-NEW#, just copied races.gd over to the mod from an original ralph version. Should be fine. Drow changed to Tribal Elves. Need to figure that out. Just added basic shit for it at the moment.
+#ralph5
+marketup = ["Demand for [color=aqua]tanuki[/color] is up.\n","The popularity of a play involving a dastardly human villain dragging around a cute smitten [color=aqua]tanuki[/color] slave girl facinates the masses. Demand for [color=aqua]tanuki[/color] increases.\n"],
+marketdown = ["Rumors abound that [color=aqua]tanuki[/color] have the mysterious ability to escape their owners at will despite slave brands and restraints. Prices fall.\n","Rumor of a [color=aqua]tanuki[/color] crushing his master with testicles spread and the market shrinks.\n"],
+single = " tanuki",
+plural = " tanukis",
+singlepos = " tanuki's",
+pluralpos = " tanukis'",
+#/ralph5
+#/R-NEW#
+
+*[constructor.gd] no #P# base is same as tweaked
+#R-NEW# - more market price changes #Capitulize Done
+for i in races[personrace]:
+if i in ['description', 'details']:
+continue
+if i in ['marketup', 'marketdown']: #ralph5
+continue #ralph5
+#/R-NEW#
+
+##RM4## - reduce slave price - #Capitulize Done
+[person.gd]
+###---Added by Expansion---### Breeder Support
+if npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
+price = 1.5 #ralph3
+elif npcexpanded.mansionbred == true:
+price = round(price1.25)
+###---End Expansion---###
+bonus = bonus/2 #ralph4
+
+##RM4## Add CollectBounty - needs Criminal/Citizen fix for faction 'stranger' - #Capitulize Done
+
+[combatdata.gd] - added guard encounter flavor text to suggest they are outside their jurisdiction
+wimbornguards = {units = [['wimbornpatrol',3,4]], awareness = 0, captured = null, special = null,
+description = "You have been spotted by a [color=aqua]patrolling militia[/color] group from Wimborn.\nIt seems they are inclined to take you to task despite your station. ", #ralph4 - added 2nd line
+},
+wimbornguardsmany = {units = [['wimbornpatrol',7,10]], awareness = 0, captured = null, special = null,
+description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Wimborn.\nIt seems they are inclined to take you to task despite your station. ", #ralph4 - added 2nd line
+},
+gornguards = {units = [['gornpatrol',3,4]], awareness = 0, captured = null, special = null,
+description = "You have been spotted by a [color=aqua]patrolling militia[/color] group from Gorn.\nIt seems they are inclined to take you to task despite your station. ", #ralph4 - added 2nd line
+},
+gornguardsmany = {units = [['gornpatrol',7,10]], awareness = 0, captured = null, special = null,
+description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Gorn.\nIt seems they are inclined to take you to task despite your station. ", #ralph4 - added 2nd line
+},
+frostfordguards = {units = [['frostfordpatrol',3,4]], awareness = 0, captured = null, special = null,
+description = "You have been spotted by a [color=aqua]patrolling militia[/color] group from Frostford.\nIt seems they are inclined to take you to task despite your station. ", #ralph4 - added 2nd line
+},
+frostfordguardsmany = {units = [['frostfordpatrol',7,10]], awareness = 0, captured = null, special = null,
+description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Frostford.\nIt seems they are inclined to take you to task despite your station. ", #ralph4 - added 2nd line
+},
+
+[outside.tscn] - #Capitulize Done
+[connection signal="pressed" from="playergroupdetails/quicksell" to="." method="_on_quicksell_pressed"]
+[connection signal="pressed" from="playergroupdetails/bountysell" to="." method="_on_bountysell_pressed"]
+...
+[node name="quicksell" type="Button" parent="playergroupdetails"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 211.0
+margin_top = -69.0
+margin_right = 370.0
+margin_bottom = -27.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Quicksell Captives"
+
+[node name="bountysell" type="Button" parent="playergroupdetails"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 391.0
+margin_top = -69.0
+margin_right = 550.0
+margin_bottom = -27.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Collect Bounties"
+
+[outside.gd] - #Capitulize Done
+###---Added by Expansion---### Ank Bugfix v4
+selectpartymember(partyselectedslave)
+###---End Expansion---###
+if !get_parent().get_node("explorationnode").currentzone.code in ['wimborn','gorn','frostford', 'amberguard'] || globals.resources.gold <= 25:
+get_node("playergroupdetails/return").set_disabled(true)
+else:
+get_node("playergroupdetails/return").set_disabled(false)
+if get_parent().get_node("explorationnode").currentzone.code in ['wimborn','gorn','frostford'] && globals.state.capturedgroup.size() > 0:
+get_node("playergroupdetails/quicksell").set_disabled(false)
+else:
+get_node("playergroupdetails/quicksell").set_disabled(true)
+#ralph4
+if get_parent().get_node("explorationnode").currentzone.code in ['wimborn','gorn','frostford'] && globals.state.capturedgroup.size() > 0:
+get_node("playergroupdetails/bountysell").set_disabled(false)
+else:
+get_node("playergroupdetails/bountysell").set_disabled(true)
+#/ralph4
+...
+#R-NEW# - just lessened the penalty for quicksell
+#gold += i.sellprice()*0.5
+#changed to
+#gold += i.sellprice()*0.9
+
+func _on_quicksell_pressed(): #Added
+var text = ''
+var gold = 0
+var array = []
+for i in globals.state.capturedgroup:
+array.append(i)
+for i in array:
+gold += i.sellprice()*.9 #ralph3
+globals.state.capturedgroup.erase(i)
+main.popup('You furtively delivered your captives to the local slaver guild. This earned you [color=yellow]' + str(gold) + '[/color] gold. ')
+globals.resources.gold += gold
+_on_details_pressed()
+
+#ralph4 - #Added
+var lowcrime = ["theft","banditry","robbery","smuggling","poaching","assualt","assualt","indecent exposure","vandalism","fraud","threats against one of higher caste","threats upon a member of the guard","defacing a public monument","theft of livestock","harboring an escaped slave","banditry","banditry","banditry","banditry","banditry","banditry","banditry","banditry","aiding and abetting a known fugitive","trespassing","fencing stolen goods","sale of counterfeit potions","impersonating a guard","vagrancy","robbery","robbery","robbery","robbery","theft","theft","theft","theft","obstruction of justice","forgery"]
+var midcrime = ["manslaughter","armed robbery","kidnapping","desertion","murder","assualt on a town guard","rape","removal of a slave brand","incitation to rebellion","assault of one of higher caste","impersonating a member of the mage guild"]
+var highcrime = ["the rape of a noble","murder most foul","acts of cannibalism","crimes against the mage guild","a long list of truly sickening crimes","crimes against the nobility","the assassination of a prominent merchant","murder of one of higher caste","high treason","mass murder"]
+
+func reputationgain(repgain): #Added
+var location = ''
+if globals.state.location.find("wimborn") >= 0:
+location = 'wimborn'
+elif globals.state.location.find("frostford") >= 0:
+location = 'frostford'
+elif globals.state.location.find("gorn") >= 0:
+location = 'gorn'
+elif globals.state.location.find("amberguard") >= 0:
+location = 'amberguard'
+if location != null:
+globals.state.reputation[location] += repgain
+
+func _on_bountysell_pressed(): #Added
+var text = "You turn your captives over to the town guard for whatever bounties may be on their heads.\n"
+var tempname = ""
+var gold = 0
+var repgaincount = 0
+var bountyprice = 0
+var bountycount = 0
+var norewards = true #determines if alt text for no collections is to be used
+var bountycrime = ""
+var location = ''
+var array = []
+var array_lowcrime = []
+var array_midcrime = []
+var array_highcrime = []
+var array_nobounty = []
+var array_citizen = []
+var array_guard = []
+var array_noble = []
+var array_magespecimen = []
+for i in globals.state.capturedgroup:
+array.append(i)
+if i.race_type in [2,4]:
+array_magespecimen.append(i)
+elif i.origins == 'noble': # && !i.race_type in [2,4]:
+array_noble.append(i)
+elif i.npcexpanded.citizen:
+array_citizen.append(i)
+#if i is a guard: #tried to make guards count as citizens instead
+#array_guard.append(i)
+elif rand_range(0,100) <= 2: #0.5
+array_highcrime.append(i)
+elif rand_range(0,100) <= 10: #2.5
+array_midcrime.append(i)
+elif rand_range(0,100) <= 30 && i.origins != 'rich' && i.origins != 'noble': #~10
+array_lowcrime.append(i)
+else:
+array_nobounty.append(i)
+if !array_highcrime == []:
+for i in array_highcrime:
+tempname = i.name + " " + i.surname
+bountycrime = highcrime[rand_range(0,highcrime.size())]
+if i.traits.has("Pervert"):
+bountycrime = "multiple counts of necrophilia"
+if i.traits.has("Sadist"):
+bountycrime = "serial rape and torture"
+bountycount += 1
+bountyprice = round(sqrt(i.level)*rand_range(175,500))
+gold += bountyprice
+text += "\nA small crowd gathers as the guards take turns congratulating you on the capture of the infamous [color=aqua]" + str(tempname) + "[/color]."
+text += "\nYou collected the [color=yellow]" + str(bountyprice) + "[/color] gold bounty on [color=aqua]" + str(tempname) + "[/color] for [color=red]" + str(bountycrime) + "[/color]."
+repgaincount += 3
+text += "\n[color=green]Your reputation has improved.[/color]"
+norewards = false
+if !array_midcrime == []:
+for i in array_midcrime:
+tempname = i.name + " " + i.surname
+bountycrime = midcrime[rand_range(0,midcrime.size())]
+if i.traits.has("Pervert"):
+bountycrime = "public acts of bestiality"
+if i.traits.has("Sadist"):
+bountycrime = "kidnapping and torture"
+bountycount += 1
+bountyprice = round(sqrt(i.level)*rand_range(40,175))
+gold += bountyprice
+text += "\nYou collected a [color=yellow]" + str(bountyprice) + "[/color] gold bounty on " + str(tempname) + " for [color=red]" + str(bountycrime) + "[/color]."
+repgaincount += 1
+text += "\n[color=green]Your reputation has improved a little.[/color]"
+norewards = false
+if !array_lowcrime == []:
+for i in array_lowcrime:
+tempname = i.name + " " + i.surname
+bountycrime = lowcrime[rand_range(0,lowcrime.size())]
+bountycount += 1
+bountyprice = round(sqrt(i.level)*rand_range(10,40))
+gold += bountyprice
+text += "\nYou collected a [color=yellow]" + str(bountyprice) + "[/color] gold reward from the guard for turning in " + str(tempname) + " who had a warrant out for [color=red]" + str(bountycrime) + "[/color]."
+norewards = false
+if !array_noble == []:
+for i in array_noble:
+tempname = i.name + " " + i.surname
+bountyprice = round(sqrt(i.level)*rand_range(125,500))
+gold += bountyprice
+if i.npcexpanded.citizen:
+text += "\nYou collected a [color=yellow]" + str(bountyprice) + "[/color] gold reward from the guard for the safe return of " + str(tempname) + ", who avoids your gaze. It is likely that the " + str(i.surname) + "'s will desire to keep this matter quiet."
+else:
+text += "\nYou collected a [color=yellow]" + str(bountyprice) + "[/color] gold reward from the guard for the safe return of " + str(tempname) + ", who turns away haughtily. There is little doubt that " + str(i.name) + "'s indiscretions will be covered up by House " + str(i.surname) + " or some other noble affiliation."
+norewards = false
+if !array_magespecimen == []:
+norewards = false
+if array_magespecimen.size() > 1:
+text += "\n\n"
+var count = 0
+var findersfees = 0
+for i in array_magespecimen:
+count += 1
+tempname = i.name + " " + i.surname
+bountyprice = round(i.calculateprice()0.30.9) #equiv to quickselling (ralph modded 0.9 penalty) at slave guild but no influential/slaver boost
+gold += bountyprice
+findersfees += bountyprice
+if count == array_magespecimen.size():
+text += "and " + str(tempname) + " are hooded and led away."
+else:
+text += str(tempname) + ", "
+text += "\nYou collect [color=yellow]" + str(findersfees) + "[/color] gold in finders' fees for the delivery of research specimens in high demand by the mage guild.\n"
+else:
+for i in array_magespecimen:
+tempname = i.name + " " + i.surname
+bountyprice = round(i.calculateprice()0.30.9) #equiv to quickselling (ralph modded 0.9 penalty) at slave guild but no influential/slaver boost
+gold += bountyprice
+text += "\nYou collect a finder's fee of [color=yellow]" + str(bountyprice) + "[/color] gold for the delivery of " + str(tempname) + " as a research specimen for the mage guild.\n"
+if !array_citizen == []:
+text += "\n\n"
+if array_citizen.size() > 1:
+var count = 0
+for i in array_citizen:
+count += 1
+tempname = i.name + " " + i.surname
+if count == array_citizen.size():
+text += "and " + str(tempname) + " are taken aside by the guards and a hushed lecture ensues. You see horror creep onto their faces as they realize how close to enslavement or worse they had been. The guards make an impression and you doubt if they will ever set foot outside the town walls again.\n"
+else:
+text += str(tempname) + ", "
+else:
+for i in array_citizen:
+tempname = i.name + " " + i.surname
+text += "You collected a no bounty or reward for the safe return of " + str(tempname) + ". A hushed conversation with the guard leaves " + str(i.name) + " with a horrified expression as realization of how close enslavement or worse had been. " + str(i.name) + " decides to leave town and this little misunderstanding is taken care of.\n"
+#text += "Your reputation recovers somewhat."
+if !array_nobounty == [] && !norewards:
+text += "\nThe rest of your captives are freed and instructed to leave town."
+elif gold > 0:
+text += "\n\nYou collected [color=aqua]" + str(bountycount) + " bounties [/color]and rewards totalling [color=yellow]" + str(gold) + "[/color] gold for this group. "
+else:
+text += "\nThe town guard retains them for questioning, but there is not a single bounty or reward to collect. All the same, you're not likely to see them again."
+main.popup(str(text))
+globals.resources.gold += gold
+reputationgain(repgaincount)
+for i in array: #erase them all so they won't reappear, just like quicksell
+globals.state.capturedgroup.erase(i)
+_on_details_pressed()
+#/ralph4
+
+func _on_return_pressed():
+globals.resources.gold -= 25
+mansion()
+get_node("playergroupdetails").visible = false
+
+##RM4## Fix Maple starting out with 14 attribute points (and Ayneris upped to 3) - #Capitulize Done
+[gallery.gd]
+
+##RM4## Need ways to get rare slaves without capturing innocents
+random ambush by monstergirls
+dryad forest defenders
+nereid skirmishers at sea
+
+[combatdata.gd] #Capitulize Done
+dryad2 = {units = [['dryad2',2,4]], awareness = 20, captured = null, special = null, #ralph4
+description = 'You spot a group of bark-armored dryads apparently searching the woods for intruders.', #ralph4
+descriptionambush = 'You are attacked by [color=aqua]wild defenders of the forest[/color]. ', #ralph4
+}, #ralph4
+nereidgroup = {units = [['nereidgroup',2,6]], awareness = 30, captured = null, special = null, #ralph4
+description = 'You spot a small group of Nereid scouts armed and armored primarily with coral.', #ralph4
+descriptionambush = 'You are attacked by [color=aqua]Nereid Skirmishers[/color] attempting to secure the beachhead for their kind. ', #ralph4
+}, #ralph4
+#monstergirl = {units = [['monstergirl',1,1]], awareness = 0, captured = null, special = null, escape = 6, #ralph4
+monstergirl = {units = [['monstergirl',1,1]], awareness = 15, captured = null, special = null, escape = 6, #ralph4
+description = "You come across a rare [color=aqua]$race monster $child[/color]. $He hasn't spotted you yet. ",
+descriptionambush = 'You are attacked by a frenzied [color=aqua]$race $child[/color] in search of mate. ', #ralph4
+descriptionescape = "A wild $race escapes from you before you get close to $him. ",
+},
+...
+#ralph4
+dryad2 = {
+name = 'Dryad',
+code = 'dryad2',
+faction = 'monster',
+icon = load("res://files/images/enemies/dryadm.png"),
+iconalt = load("res://files/images/enemies/dryadf.png"),
+special = '',
+capture = true,
+capturerace = [['Dryad',100]],
+captureoriginspool = [{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
+captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 4}],
+capturesex = ['any'],
+rewardpool = {natureessenceing = 35},
+rewardgold = [5,10],
+rewardexp = 30,
+stats = {health = 150, power = 6, speed = 24, energy = 60, armor = 4, magic = 0, abilities = ['attack']},
+gear = 'forest',
+skills = [],
+},
+nereidgroup = {
+name = 'Nereid',
+code = 'nereidgroup',
+faction = 'monster',
+icon = null,
+special = '',
+capture = true,
+capturerace = [['Nereid',100]],
+captureoriginspool = [{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
+captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 6}],
+capturesex = ['any'],
+rewardpool = {},
+rewardgold = [5,20],
+rewardexp = 30,
+stats = {health = 200, power = 25, speed = 30, energy = 100, armor = 7, magic = 3, abilities = ['attack','stunattack']},
+gear = 'medbandits',
+skills = [],
+},
+monstergirl = {
+name = 'Monster ',
+code = 'monstergirl',
+faction = 'monster',
+icon = null,
+special = '',
+capture = true,
+capturerace = ['area'],
+captureoriginspool = [{value = 'rich', weight = 1},{value = 'commoner', weight = 3},{value = 'poor', weight = 2}],
+#captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 4}], #ralph4
+captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 6}], #ralph4
+capturesex = ['any'],
+rewardpool = {},
+rewardgold = [5,10],
+rewardexp = 25,
+stats = {health = 200, power = 25, speed = 25, energy = 50, armor = 2, magic = 1, abilities = ['attack','stunattack']},
+gear = 'medbandits',
+skills = [],
+},
+#/ralph4
+
+[explorationregions.gd] #Capitulize Done
+grove = {
+background = 'grove',
+music = 'explore',
+reqs = "true",
+combat = true,
+code = 'grove',
+name = 'Far Eerie Woods',
+description = "This portion of the forest is deeply shadowed, and strange sounds drift in and out of hearing. Something about the atmosphere keeps the normal forest creatures silent, lending an eerie, mystic feeling to the grove you stand within.",
+#enemies = [{value = 'plantswithperson',weight = 1},{value = 'dryad',weight = 2}, {value = 'fairy', weight = 2},{value = 'wolveshard', weight = 4},{value = 'plantseasy',weight = 5}], #ralph4
+enemies = [{value = 'plantswithperson',weight = 1},{value = 'dryad',weight = 1},{value = 'dryad2',weight = 1},{value = 'fairy', weight = 2},{value = 'wolveshard', weight = 4},{value = 'plantseasy',weight = 5}], #ralph4
+...
+sea = {
+background = 'sea',
+music = 'explore',
+reqs = "true",
+combat = true,
+code = 'sea',
+name = 'Sea',
+description = "You are at the beach of a Big Sea. Air smells of salt and you can spot some sea caves formed by plateau and incoming waves.",
+#enemies = [{value = 'banditcamp', weight = 1},{value = 'monstergirl', weight = 3},{value = 'travelersgroup', weight = 5},{value = 'oozesgroup', weight = 5},{value = 'treasurechest', weight = 1}], #ralph4
+enemies = [{value = 'banditcamp', weight = 1},{value = 'nereidgroup', weight = 1},{value = 'banditsmedium', weight = 2},{value = 'monstergirl', weight = 3},{value = 'travelersgroup', weight = 2},{value = 'oozesgroup', weight = 5},{value = 'treasurechest', weight = 1}], #ralph4
+
+##RM4## - make ambushes a little more randomly chanced - #Capitulize Done
+[exploration.gd]
+###---Added by Expansion---### Ank BugFix v4
+#elif scoutawareness < enemyawareness: #ralph4
+elif scoutawareness < (enemyawareness + rand_range(-7,7)): #ralph4
+
+##RM4## Set non-random genealogy for various uniques? #Capitulize Done
+#R-NEW# - it's in [expansionsetup.gd]
+
+#ralph4 - fix unique npc genealogies
+if person.unique != null:
+if person.unique == 'Melissa':
+cleargenes(person)
+person.genealogy.human = 100
+elif person.unique == 'Cali':
+cleargenes(person)
+person.genealogy.dog = 70
+person.genealogy.human = 30
+elif person.unique in ['Emily','Tisha']:
+cleargenes(person)
+person.genealogy.human = 84
+person.genealogy.gnome = 2
+person.genealogy.elf = 2
+person.genealogy.fairy = 2
+person.genealogy.bunny = 2
+person.genealogy.raccoon = 2
+person.genealogy.fox = 2
+person.genealogy.cat = 2
+person.genealogy.dog = 2
+elif person.unique == 'Chloe':
+cleargenes(person)
+person.genealogy.gnome = 96
+person.genealogy.fairy = 4
+elif person.unique == 'Yris':
+cleargenes(person)
+person.genealogy.cat = 70
+person.genealogy.human = 30
+elif person.unique == 'Maple':
+cleargenes(person)
+person.genealogy.fairy = 100
+elif person.unique == 'Ayneris':
+cleargenes(person)
+person.genealogy.elf = 100
+elif person.unique == 'Ayda':
+cleargenes(person)
+person.genealogy.dark_elf = 100
+elif person.unique == 'Zoe':
+cleargenes(person)
+person.genealogy.dog = 100
+#/ralph4
+
+##RM3## Reduced Quicksell penalty to multiply price x0.9 rather than x0.5 #Capitulize Done
+[outside.gd]
+
+##RM3## nerf Breeder sell prices #Capitulize Done
+[outside.gd]
+func _on_slavesellbutton_pressed():
+var upgradefromslave = false
+var text = ''
+globals.resources.gold += selectedslaveprice
+if selectedslave.obed >= 90 && selectedslave.fromguild == false && selectedslave.effects.has('captured') == false:
+upgradefromslave = true
+###---Added by Expansion---###
+globals.expansion.updatePerson(selectedslave)
+if selectedslave.npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
+globals.resources.upgradepoints += (globals.originsarray.find(selectedslave.origins)+1)*1.5 #ralph3
+...
+###---Added by Expansion---###
+globals.expansion.updatePerson(selectedslave)
+if selectedslave.npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
+globals.resources.upgradepoints += (globals.originsarray.find(selectedslave.origins)+1)*1.5 #ralph3
+...
+###---Added by Expansion---### Breeder Specialization Support & Ank BugFix v4
+if person.npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
+newbutton.get_node('name').set_text(person.dictionary('$name, ')+ person.race + ', ' + person.age + ', ' + person.work + '[color=aqua]Born in Mansion - +50% Gold/Upgrade Points[/color]') #ralph3
+
+[person.gd] #Capitulize Done
+###---Added by Expansion---### Breeder Support
+if npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
+price *= 1.5 #ralph3
+...
+###---Added by Expansion---### Breeder Support
+if npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
+price *= 1.5 #ralph3
+
+[globals.gd] #Capitulize Done
+var expandedplayerspecs = {
+Slaver = "+100% gold from selling captured slaves\n+33% gold reward from slave delivery tasks",
+Hunter = "+100% gold drop from random encounters\n+20% gear drop chance\nBonus to preventing ambushes",
+Alchemist = "Double potion production\nSelling potions earn 100% more gold\n[color=aqua]Start with an Alchemy Room unlocked[/color]",
+Mage = "Combat spell deal 20% more damage",
+#Breeder = "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for 200% more and receive 2x as many upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]"
+Breeder = "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for 20% more gold and provide 20% more upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]" #ralph3
+
+##RM3## Nerf Magic starting slave bonus to +1 #Capitulize Done
+[mainmenu.gd]
+var hobbydescription = {
+'Physical' : '[color=aqua]+1 Max Strength, +25 Courage[/color]\n\n$name is no stranger to fighting and tends to act boldly in many situations.',
+'Etiquette' : "[color=aqua]+20 Confidence, +15 Charm[/color]\n\n$name has spent $his youth among elderly people and high society, learning how to be liked and present $himself while also feeling superior to commonfolk.",
+'Graceful' : "[color=aqua]+1 Max Agility, +10 Confidence[/color]\n\n$name was the fastest kid $he knew growing up and a natural when it came to hand-eye coordination in general.", #ralph3
+'Magic' : "[color=aqua]+1 Max Magic, +25 Wit[/color]\n\n$name was a very curious child and spent a lot of $his time reading and studying various things, including magic.", #ralph3
+#'Magic' : "[color=aqua]+2 Max Magic, +25 Wit[/color]\n\n$name was a very curious child and spent a lot of $his time reading and studying various things, including magic.",
+...
+#Provides a container for Additional Hobbies
+var slaveHobbiesExpanded = ['Graceful','Curious','Genius','Socialite','Waifu','Perfect Specimen'] #ralph3
+...
+#ralph3
+elif startSlaveHobby == 'Graceful':
+startSlave.conf += 10
+startSlave.stats.agi_max += 1
+#/ralph3
+elif startSlaveHobby == 'Magic':
+startSlave.wit += 25
+startSlave.stats.maf_max += 1 #ralph3
+
+##RM3#F# Fix Halfkin race babies #Capitulize Done
+[constructor.gd]
+elif currentrace in animal_races_array:
+person.race_type = 3
+if person.genealogy.horse >= highestpercent: #ralph3 - should fix instances of <50% Centaur dominant hybrids being born as 'Halfkin ' only for race
+#if person.genealogy.horse >= 50:
+person.race = 'Centaur'
+elif person.genealogy.cow >= highestpercent: #ralph3 - should fix instances of <50% Centaur dominant hybrids being born as 'Halfkin ' only for race
+#elif person.genealogy.cow >= 50:
+person.race = 'Taurus'
+
+##RM3## Added genealogy changes as a possible mutation spell outcome #Capitulize, holding off
+#R-NEW# - as discussed, let's hold off on trying to implement changes to the Mutation spell
+[spells.gd]
+func mutate(power=2, silent = false):
+###---Added by Expansion---### Size Expanded
+var array = ['traitadd','height','tits','ass','penis','balls','penistype','skin','skincov','eyecolor','eyeshape','haircolor','hairlength','ears','tail','wings','horns','beauty','lactation','nipples','lust','amnesia','pregnancy','vagina','asshole','lips','genealogy2'] #ralph3: Added 'genealogy2'
+var line
+var text = "Raw magic in $name's body causes $him to uncontrollably mutate. \n\n"
+var temp
+while power >= 1:
+person.stress += rand_range(5,15)
+#if rand_range(0,100) < 75: #ralph3 testing
+# line = 'genealogy2' #ralph3 testing
+#else: #ralph3 testing
+# line = array[rand_range(0,array.size())] #ralph3 testing
+...
+#ralph3
+#---Genealogy
+elif line == "genealogy2": #go through person.genealogy and get highest % --- if % greater than 50% then --- else
+var genes = 0
+var original_race = globals.constructor.genealogy_decoder(person.race)
+var domgenealogy = original_race
+var original_race_display = person.race_display
+text += "\n\n$name cries out as a myriad of distinct sensations flood through $his body and"
+for i in person.genealogy: #find out what % the dominant genealogy is
+if person.genealogy[i] > genes:
+#domgenealogy = i
+genes = person.genealogy[i]
+if genes == 100:
+power += 1
+text += "... nothing happens...\n\n"
+elif genes > 50 && globals.constructor.genealogy_decoder(person.race) == domgenealogy: #if race-dominant hybrid, keep race same (dominant genealogy stays >=50), but shuffle genealogy from dominant race to an existing secondary genealogy
+genes -= 50 #get the number of % points possible to redistribute
+if genes >= 8: #cap and randomize if there's a high % to work with
+genes = round(clamp(genes*rand_range(10,90)/100,0,20)) #get the number of % points that will be redistributed
+if genes == 0:
+power += 1
+text += "... $he's experiences a mild headache...\n\n"
+else:
+globals.expansionsetup.setRaceBonus(person, false) #initialize racial bonuses (any previous hybrid trait adds, etc. will stay)
+person.genealogy[domgenealogy] -= genes
+while genes != 0: #cycle through genealogies and add the % points to one of the secondary races
+for i in person.genealogy:
+if domgenealogy != i && person.genealogy[i] > 0 && rand_range(0,100) <= 20: #higher chance to redistribute to existing ancestry
+if genes != 0: #added due to getting bogus text that happened after changes (genes=0 already, but still looping)
+person.genealogy[i] += genes
+text += " $his very nature has subtly shifted. $He feels more " + i + "-like than $he was just a moment ago.\n\n"
+genes = 0
+elif person.genealogy[domgenealogy] != person.genealogy[i] && rand_range(0,100) <= 3: #lower chance to redistribute to nonexistant ancestry
+if genes != 0: #added due to getting bogus text that happened after changes (genes=0 already, but still looping)
+person.genealogy[i] += genes
+text += " $his very nature twists and lurches. $He feels somehow more " + i + "-like.\n\n"
+genes = 0
+globals.expansionsetup.setRaceBonus(person, true) #apply new hybrid bonuses, etc.
+elif genes <= 50 && genes > 0 && globals.constructor.genealogy_decoder(person.race) == domgenealogy:
+var mutated_genes = 0
+var temp_genes = 0
+var temp_genealogy = globals.assets.getrandomfromarray(globals.constructor.genealogies)
+var temp_genedifference = person.genealogy[original_race] - person.genealogy[temp_genealogy]
+globals.expansionsetup.setRaceBonus(person, false) #initialize racial bonuses (any trait adds will stay)
+for i in person.genealogy:
+if domgenealogy != i:
+temp_genes = round(rand_range(0,5))*2 #size of % chunks to deduct; *2 to keep it even and avoid rounding complications; can negate ancestry, but more often leaves low % remnants
+if person.genealogy[i] >= temp_genes && mutated_genes + temp_genes < genes: #prevent changes that should result in a change in race (avoiding that)
+person.genealogy[i] -= temp_genes
+mutated_genes += temp_genes #add to pool to add to other genealogy later
+if temp_genedifference > mutated_genes: #prevent changes that should result in a change in race (avoiding that)
+person.genealogy[temp_genealogy] += mutated_genes
+text += " $his very nature twists and lurches. $He feels somehow more " + temp_genealogy + "-like.\n\n"
+else:
+person.genealogy[original_race] += mutated_genes/2
+person.genealogy[temp_genealogy] += mutated_genes/2
+text += " $his very nature twists. $He feels somehow both more " + domgenealogy + " than $he was and more " + temp_genealogy + "-like.\n\n"
+globals.expansionsetup.setRaceBonus(person, true) #apply new hybrid bonuses, etc.
+else:
+power += 1
+text += " yet $he's not sure anything changed...\n\n"
+globals.constructor.setRaceDisplay(person) #update race_display
+if original_race_display != person.race_display:
+text += " $He has changed from\n" + original_race_display + "\n to\n" + person.race_display + "\n\n"
+#/ralph3
+
+Tweaked Half vs Part race descriptions
+[constructor.gd] #Capitulize Done
+if secondaryracepercent > 0 && secondaryrace != null:
+if secondaryracepercent >= 100:
+text += ' | Fullblooded ' + secondaryrace + ' Freak of Nature'
+elif secondaryracepercent >= 70:
+text += ' | Mostly ' + secondaryrace + ' Freak of Nature'
+#elif primaryracepercent >= 50: #ralph3
+elif primaryracepercent >= 50 && secondaryracepercent >= 40: #ralph3
+text += ' | Half ' + secondaryrace + ''
+elif primaryracepercent >= 50: #ralph3
+text += ' | Part ' + secondaryrace + '' #ralph3
+else:
+text += ' with ' + secondaryrace + ' features'
+
+##RM3#T# Tweaked items.gd weights to be more realisitc #Unsure lol
+[items.gd]
+doesn't work
+
+##RM2#F# - Fixed a bug that caused mixed scylla not to get bonuses #Capitulize Done, replaced Arics expansionsetup.gd with ours. Merged their recent changes to this file. Fixed bugs.
+#R-NEW# - It was in expansionsetup.gd. You would have gotten it along with the rest of the code for Scyllas in func_SetRaceBonus(w
+
+##RM2# Add eyesclera to Inspect Looks and baby descriptions #Capitulize Done
+[description.gd]
+
+#Face
+#text += "\n[color=#d1b970]Head:[/color]\n" + getdescription('hairlength') + getdescription('hairstyle') + getdescription("eyecolor") + getdescription("eyeshape") + getdescription('horns') + getdescription('ears') + getdescription('lips') #ralph2
+text += "\n[color=#d1b970]Head:[/color]\n" + getdescription('hairlength') + getdescription('hairstyle') + getdescription("eyesclera") + getdescription("eyecolor") + getdescription("eyeshape") + getdescription('horns') + getdescription('ears') + getdescription('lips') #ralph2
+...
+eyeshape = {
+normal = "",
+slit = "$He has [color=aqua]vertical, animalistic pupils[/color]. "
+},
+#ralph2
+eyesclera = {
+normal = "",
+yellow = 'Instead of whites, the sclera of $his eyes are entirely [color=aqua]yellow[/color]. ',
+green = 'Instead of whites, the sclera of $his eyes are entirely [color=aqua]green[/color]. ',
+black = 'Instead of whites, the sclera of $his eyes are entirely [color=aqua]black[/color]. ',
+red = 'Instead of whites, the sclera of $his eyes are entirely [color=aqua]red[/color]. ',
+glowing = '$His eyes glow with some luminous power. ',
+default = '$He has no discernable pupils or irises. ', #this is intended for tiefling subspecies and will be wrong if new colors are added (check expansionsetup.gd)
+#default = 'Instead of whites, the sclera of $his eyes are entirely [color=aqua][eyesclera][/color]. ', #displays "[eyesclera]" instead of the color
+},
+#/ralph2
+...
+func getBabyDescription(person):
+#ralph2
+var moreeyeinfo = ''
+if person.eyesclera != 'normal':
+moreeyeinfo = ' with ' + str(person.eyesclera) + ' sclera'
+var text = '$He has ' + person.haircolor + ' hair and ' + person.eyecolor + ' eyes' + moreeyeinfo + '. $His skin is ' + person.skin + '. '#ralph2
+#/ralph2
+
+##RM2# Make it so Uncommon races random encounters have pure or nearly pure genes #Capitulize - Done
+#R-NEW# - Cap moved it to expansionsettings.gd? or another script and modified the refs (needs to be tested, but looked fine)
+[expansion.gd]
+#Genealogy Changes
+randompurebreedchance = 10,
+randommixedbreedchance = 30,
+randompurebreedchanceuncommon = 60, #ralph2 #Capitulize Added to expansionsettings.gd
+
+[constructor.gd]
+#Set Primary Race
+#if person == globals.player || person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansion.settings.randompurebreedchance: #ralph2
+if person == globals.player || person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon): #ralph2
+
+#RM?#Fixed OR NOT- CAN'T FIND ANY Changes
+#R-NEW# - there are problems in how the job skills progress (or don't); I didn't fix all of them - let's not bother with this for now; I wasn't clear why some of my "fixes" didn't work anyway
+
+nurse/forager person.jobskill changed to person.jobskills ????? #Capitulize leaving alone for now
+[jobs&specs.gd]
+
+##RM2#Fixed# Add bonus pliability and elasticity to expansionsetup.gd, #Capitlize Done
+[expansionsetup.gd]
+#R-NEW# No action needed - you would have gotten it along with the rest of the code in [expansionsetup.gd]
+
+#RM2#Fixed# Canine OP #Capitulize Done
+[expansionsetup.gd]
+#R-NEW# No action needed - you would have gotten it along with the rest of the code in [expansionsetup.gd]
+
+RalphMod v1 included: (RMs below) #Capitulize Done
+RM#F# See Relatives sometimes has wrong sex for offspring
+[constructor.gd]
+var person = globals.newslave(mother.race, 'child', 'random', mother.origins) #ralph - changed 'female' to 'random'
+var body_array = ['skin','tail','ears','wings','horns','arms','legs','bodyshape','haircolor','eyecolor','eyeshape','eyesclera']
+var tacklearray = ['penis']
+var temp
+
+#Prep
+person.race = ''
+person.age = ''
+person.sex = ''
+
+#General
+person.state = 'fetus'
+person.surname = mother.surname
+
+#Sex #ralph - removed b/c was causing misgendered ofspring as globals.newslave(mother.race, 'child', 'female', mother.origins) above made them all female first
+#if globals.rules.male_chance > 0 && rand_range(0, 100) < globals.rules.male_chance:
+#	person.sex = 'male'
+#elif rand_range(0, 100) < globals.rules.futa_chance && globals.rules.futa == true:
+#	person.sex = 'futanari'
+#else:
+#	person.sex = 'female'
+RM#F# Parents traits were applying over setracebonus() stats (including race_display) #Capitulize Done
+
+Children may not inherit sex traits depending on how long in accelerated time
+Mansion_ALT.gd includes halving the breeder spec's time to grow offspring (part of the code below under func babyage())
+[mansion.gd]
+#ralph - makes children not inherit parents sex traits and teens have lower chance to inherit them; also resets to Pliable
+func ClearBabyTraits(age, baby):
+if age == 'child':
+if baby.traits.has('Slutty') || baby.traits.has('Devoted'):
+baby.trait_remove('Slutty')
+baby.trait_remove('Devoted')
+baby.add_trait('Pliable')
+baby.trait_remove('Deviant')
+baby.trait_remove('Pervert')
+baby.trait_remove('Masochist')
+baby.trait_remove('Sadist')
+baby.trait_remove('Fickle')
+baby.trait_remove('Likes it rough')
+baby.trait_remove('Enjoys Anal')
+baby.trait_remove('Grateful')
+baby.trait_remove('Sex-crazed')
+elif age == 'teen':
+var chancetoremovetrait = 34
+if baby.traits.has('Slutty') || baby.traits.has('Devoted'):
+baby.trait_remove('Slutty')
+baby.trait_remove('Devoted')
+baby.add_trait('Pliable')
+if baby.traits.has('Deviant') && rand_range(0,100) < chancetoremovetrait:
+baby.trait_remove('Deviant')
+if baby.traits.has('Pervert') && rand_range(0,100) < chancetoremovetrait:
+baby.trait_remove('Pervert')
+if baby.traits.has('Masochist') && rand_range(0,100) < chancetoremovetrait:
+baby.trait_remove('Masochist')
+if baby.traits.has('Sadist') && rand_range(0,100) < chancetoremovetrait:
+baby.trait_remove('Sadist')
+if baby.traits.has('Fickle') && rand_range(0,100) < chancetoremovetrait:
+baby.trait_remove('Fickle')
+if baby.traits.has('Likes it rough') && rand_range(0,100) < chancetoremovetrait:
+baby.trait_remove('Likes it rough')
+if baby.traits.has('Enjoys Anal') && rand_range(0,100) < chancetoremovetrait:
+baby.trait_remove('Enjoys Anal')
+if baby.traits.has('Grateful') && rand_range(0,100) < chancetoremovetrait:
+baby.trait_remove('Grateful')
+if baby.traits.has('Sex-crazed') && rand_range(0,100) < chancetoremovetrait*2:
+baby.trait_remove('Sex-crazed')
+elif age == 'adult':
+if baby.traits.has('Slutty') || baby.traits.has('Devoted'):
+baby.trait_remove('Slutty')
+baby.trait_remove('Devoted')
+baby.add_trait('Pliable')
+if baby.traits.has('Sex-crazed') && rand_range(0,100) < 50:
+baby.trait_remove('Sex-crazed')
+#/ralph
+
+func babyage(age):
+baby.name = get_node("birthpanel/raise/childpanel/LineEdit").get_text()
+if get_node("birthpanel/raise/childpanel/surnamecheckbox").is_pressed() == true:
+baby.surname = globals.player.surname
+###---Added by Expansion---### Size Support || Replaced Functions
+if age == 'child':
+baby.age = 'child'
+baby.away.duration = variables.growuptimechild
+if globals.state.spec == "Breeder": #ralph
+baby.away.duration = clamp(int(baby.away.duration/2),1,999) #ralph
+elif age == 'teen':
+baby.age = 'teen'
+baby.away.duration = variables.growuptimeteen
+if globals.state.spec == "Breeder": #ralph
+baby.away.duration = clamp(int(baby.away.duration/2),1,999) #ralph
+elif age == 'adult':
+baby.age = 'adult'
+baby.away.duration = variables.growuptimeadult
+if globals.state.spec == "Breeder": #ralph
+baby.away.duration = clamp(int(baby.away.duration/2),1,999) #ralph
+baby.away.at = 'growing'
+baby.obed += 75
+baby.loyal += 20
+if baby.sex != 'male':
+baby.vagvirgin = true
+baby.assvirgin = true
+baby.unique = null #ralph
+ClearBabyTraits(age, baby) #ralph
+globals.expansionsetup.setRaceBonus(baby, false) #ralph - needed to override certain inherited traits for certain hybrids including race_display
+globals.expansionsetup.setRaceBonus(baby, true) #ralph
+globals.slaves = baby
+globals.state.relativesdata[baby.id].name = baby.name_long()
+globals.state.relativesdata[baby.id].state = 'normal'
+
+globals.state.babylist.erase(baby)
+baby = null
+get_node("birthpanel").hide()
+get_node("birthpanel/raise/childpanel").hide()
+childbirth_loop(birthmother)
+##Easier Fetish Talks, etc. IMPLEMENTED IN ARICS MOD 0.97 #Capitulize think this is done? If it's implemented then I'm not sure I should change it.
+#R-NEW# - yup, shouldn't need to do anything. It looks like Aric rebalanced it to his liking already.
+[statstab.gd]
+if mode == "stud":
+person.dailytalk.append('consentstud')
+if (person.loyal*.2) + (person.lewdness*.2) + (person.lust*.3) + person.instinct.reproduce >= 50+(person.metrics.birth10):
+...
+if mode == "breeder":
+person.dailytalk.append('consentbreeder')
+if rand_range(50,100) + ((person.metrics.birth-person.pregexp.desiredoffspring)10) <= (person.loyal.3) + (person.lewdness.2) + (person.lust*.1) + (person.instinct.reproduce10):
+#person.dailytalk.append('consentbreeder')
+#if (person.loyal.5) + (person.lewdness*.2) + (person.lust*.1) + person.instinct.reproduce >= 75+(person.metrics.birth*10):
+...
+
+#P#Easier Fetish Talks, etc.
+#Resistance Check
+if person.checkFetish(mode, 2) || person.loyal == 100:
+[person.gd]
+else:
+clamper = alternatemod
+if rand_range(0,100) <= 20 + ((opinionrank*10) * clamper) + stats.loyal_cur/10:
+
+RM## #Capitulize Done
+[person.gd]
+func get_race_display():
+var rvar = ''
+if race != race_display:
+if race_display in globals.dictionary.hybriddict:
+var temp1 = "[color=yellow]Subspecies: "
+var temp2 = "[/color]"
+rvar = ' (' + temp1 + race_display + temp2 + ')'
+else:
+rvar = ' (' + race_display + ')'
+
+return rvar
+RM##Add hybrid info to race descriptions to Inspect Looks via func get_genealogy(): #Capitulize Done
+[person.gd]
+if genealogy[temprace] >= 100:
+description = "$He is obviously a pure specimen of a full-blooded " + race + ".\n\n"
+elif genealogy[temprace] >= 50:
+if race_display in globals.dictionary.hybriddict:
+description = globals.dictionary.hybriddict[race_display]
+else:
+description = "$He appears to be primarily a " + race + ", though $he has certain physical features that may suggest that $he is unlikely to be a from a purely " + race + " bloodline.\n\n"
+elif genealogy[temprace] >= 30:
+description = "$His features are such a mix that it is only on very close inspection that $his " + race + " heritage shines through.\n\n"
+else:
+description = "$He appears to be some distorted mix of " + race + ", though it is so muddled that it is unlikely that any " + race + " would consider $him one of their own.\n\n"
+
+RM#F# fixed weirdness from regenerating player once game is started #Capitulize Done
+[person.gd]
+#ralph
+func playercleartraits():
+spec = null
+while !traits.empty():
+trait_remove(traits.back())
+for i in ['str_base','agi_base', 'maf_base', 'end_base']:
+stats[i] = 0
+for i in ['str_mod','agi_mod','maf_mod','end_mod']:
+stats[i] = 0
+skillpoints = 2
+level = 1
+xp = 0
+#/ralph
+
+[mainmenu.gd] #Capitulize Done
+#Connect virgin option
+get_node("TextureFrame/newgame/stage6/virgin").connect("pressed", self, '_virgin_press')
+
+#Initialize newgame variables
+player = globals.newslave(playerDefaults.race, playerDefaults.age, playerDefaults.sex, playerDefaults.origins) #Prefer to use a constructor/builder
+#ralph
+#player.cleartraits()
+player.playercleartraits()
+#/ralph
+
+if stage >= 6: #If backtracking after reaching player specialization stage
+	var spec = player.spec
+	#ralph
+	#player.cleartraits()
+	player.playercleartraits()
+	#/ralph
+func regenerateplayer():
+var imageportait = player.imageportait
+player = globals.newslave(player.race, player.age, player.sex, 'slave')
+globals.player = player
+#ralph
+#player.cleartraits()
+player.playercleartraits()
+#/ralph
+
+#P#Quicker Breeder Start #Capitulize, leaving alone because it doesn't seem to be adjusted in 0.5.2.5
+#R-NEW# No action needed - when I use #P# it indicates a preferential tweak I only implemented on my personal copy
+[mainmenu.gd]
+elif player.spec == 'Breeder':
+globals.state.mansionupgrades.mansionnursery += 1
+globals.state.mansionupgrades.dimensionalcrystal += 2
+variables.growuptimechild = round(variables.growuptimechild/2) #not incorporated this time
+variables.growuptimeteen = round(variables.growuptimeteen/2) #not incorporated this time
+variables.growuptimeadult = round(variables.growuptimeadult/2) #not incorporated this time
+
+##################################
+Tweaking steps:
+
+Tweak mod files first and apply
+Tweak directly last
+##################################
+9.7 Playthru:
+RM##blond eyes to amber eyes: #Capitulize Done
+[assets.gd]
+func getrandomeyecolor():
+return getrandomfromarray(['blue', 'green', 'brown', 'hazel', 'black', 'gray', 'purple', 'blue', 'amber', 'red', 'auburn'])
+[repeatablequests.gd]
+static func randanyeyecolor():
+var text = ['blue', 'green', 'brown', 'hazel', 'black', 'gray', 'purple', 'blue', 'amber', 'red', 'auburn']
+
+#P#adjusted startingrace = true for all (in S4P files) #Capitulize, leaving alone
+#R-NEW# No action needed - when I use #P# it indicates a preferential tweak I only implemented on my personal copy
+[races.gd]
+
+RM## made it so babies aged to child don't inherit sexuals, etc. #Capitulize Done, This is in here twice. I assume this is the more up to date version?
+#R-NEW# Not sure why this one is in twice - they should be the same
+#C-NEW remove_trait is incorrect, should be trait_remove. Fixed this in expansionsetup.gd and ClearBabyTraits.
+#ralph
+func ClearBabyTraits(age):
+if age == 'child':
+if baby.traits.has('Slutty') || baby.traits.has('Devoted'):
+baby.remove_trait('Slutty')
+baby.remove_trait('Devoted')
+baby.add_trait('Pliable')
+baby.remove_trait('Deviant')
+baby.remove_trait('Pervert')
+baby.remove_trait('Masochist')
+baby.remove_trait('Sadist')
+baby.remove_trait('Likes it rough')
+baby.remove_trait('Enjoys Anal')
+baby.remove_trait('Grateful')
+baby.remove_trait('Sex-crazed')
+elif age == 'teen':
+if baby.traits.has('Slutty') || baby.traits.has('Devoted'):
+baby.remove_trait('Slutty')
+baby.remove_trait('Devoted')
+baby.add_trait('Pliable')
+if baby.traits.has('Deviant') && rand_range(0,100) < 75:
+baby.remove_trait('Deviant')
+if baby.traits.has('Pervert') && rand_range(0,100) < 50:
+baby.remove_trait('Pervert')
+if baby.traits.has('Masochist') && rand_range(0,100) < 50:
+baby.remove_trait('Masochist')
+if baby.traits.has('Sadist') && rand_range(0,100) < 50:
+baby.remove_trait('Sadist')
+if baby.traits.has('Likes it rough') && rand_range(0,100) < 50:
+baby.remove_trait('Likes it rough')
+if baby.traits.has('Enjoys Anal') && rand_range(0,100) < 50:
+baby.remove_trait('Enjoys Anal')
+if baby.traits.has('Grateful') && rand_range(0,100) < 50:
+baby.remove_trait('Grateful')
+if baby.traits.has('Sex-crazed') && rand_range(0,100) < 75:
+baby.remove_trait('Sex-crazed')
+elif age == 'adult':
+if baby.traits.has('Slutty') || baby.traits.has('Devoted'):
+baby.remove_trait('Slutty')
+baby.remove_trait('Devoted')
+baby.add_trait('Pliable')
+if baby.traits.has('Sex-crazed') && rand_range(0,100) < 50:
+baby.remove_trait('Sex-crazed')
+#/ralph
+
+func babyage(age):
+baby.name = get_node("birthpanel/raise/childpanel/LineEdit").get_text()
+if get_node("birthpanel/raise/childpanel/surnamecheckbox").is_pressed() == true:
+baby.surname = globals.player.surname
+###---Added by Expansion---### Size Support || Replaced Functions
+if age == 'child':
+ClearBabyTraits(age) #ralph
+baby.age = 'child'
+baby.away.duration = variables.growuptimechild
+elif age == 'teen':
+ClearBabyTraits(age) #ralph
+baby.age = 'teen'
+baby.away.duration = variables.growuptimeteen
+elif age == 'adult':
+ClearBabyTraits(age) #ralph
+
+#P#nerfed interactions (partially IMPLEMENTED IN ARICS MOD 0.9.7)
+#R-NEW# No action needed
+#C-NEW# Sweet
+[Mansion.gd]
+globals.state.sexactions = clamp(globals.player.send/2,1,globals.player.send/2) #ralph2
+globals.state.nonsexactions = clamp(globals.player.send/2,1,globals.player.send/2) #ralph2
+
+#R-NEW# No action needed - this was avaialable in the "tweaked" version that I like to use personally
+Need Alternate_globals.gd and Alternate_upgradespanel.gd
+RM#P#reduce number of beds?
+#If you'd like to restrict the max beds allowed for an enforced slower build up of the slave roster, manually set var nopoplimit = true in globals.gd and you will start with max 4 Communal, 4 Personal, and 4 Jail Cells and another of each will become available to purchase every ~5 game days.
+- reduced max allowable beds by tying to days played
+[globals.gd]
+var nopoplimit = true
+[upgradespanel.gd] #this is the only place found to actually work for the adjustment
+if upgrade.code in ['mansioncommunal', 'mansionpersonal','jailcapacity'] && globals.state.nopoplimit == true:
+limit = int(round(globals.resources.day/5)) + 4
+
+#P# tweak costs
+#R-NEW# No action needed - when I use #P# it indicates a preferential tweak I only implemented on my personal copy
+[mansionupgrades.gd]
+jailcapacity = {
+name = "Capacity",
+code = 'jailcapacity',
+description = "Adds additional cells to your jail, increasing the maximum number of prisoners it can hold at a time.",
+levels = 15,
+cost = 300,
+pointscost = 3,
+valuename = "Jail Cells: ",
+},
+
+...
+
+mansioncommunal = {
+name = "Communal Room Beds",
+code = 'mansioncommunal',
+description = "Adds new beds to communal room, providing space for additional residents to sleep. ",
+levels = 6,
+cost = 200,
+pointscost = 1,
+valuename = "Total beds: ",
+},
+mansionpersonal = {
+name = "New Personal Room",
+code = 'mansionpersonal',
+description = "Set up one of the free rooms for living. Personal rooms provide sense of [color=yellow]Luxury[/color] to their hosts. ",
+levels = 15,
+cost = 549,
+pointscost = 3,
+valuename = "Total rooms: ",
+},
+
+Need Alternate_slave_tab.gd
+#R-NEW# No action needed - when I use #P# it indicates a preferential tweak I only implemented on my personal copy
+RM#P#disallowed attribute points to upgrade points on new people
+[slave_tab.gd]
+func buyattributepoint():
+#Ralpho edit - added && person.loyal >=50
+if person.skillpoints >= variables.attributepointsperupgradepoint && person.loyal >=50:
+
+Need Alternate_expansion.gd
+#R-NEW# No action needed - when I use #P# it indicates a preferential tweak I only implemented on my personal copy
+RM#P#adjusted ("ihavebloodygoodtaste" set to false) in mod/.../scripts/aricsexpansion/
+[expansion.gd]
+
+#R-NEW# Implemented?
+RM##moved dragonkin to uncommon races for func racelottery (Make exotic race blood not randomly found (Arachna, Scylla, Dragonkin))
+[expansion.gd]
+#C-NEW# Located in expansionsettings.gd, left the randompurebreedchanceuncommon at 60 in accordance to previous comment.
+#Genealogy Changes
+randompurebreedchance = 10,
+randommixedbreedchance = 30,
+randompurebreedchanceuncommon = 75, #ralph2
+secondaryhumanoidracialchance = 75,
+secondaryuncommonracialchance = 0, #ralph
+
+[constructor.gd]
+var humanoid_races_array = ['Demon','Drow','Orc','Goblin','Gnome','Dark Elf','Elf','Human'] #C-NEW# Drow is now Dark Elf, added Tribal Elf, drow do not exist in 1.0d. Moved Dragonkin to uncommon.
+
+var uncommon_races_array = ['Dragonkin','Scylla','Arachna','Seraph','Nereid','Dryad','Lamia','Fairy','Harpy']
+
+var beast_races_array = ['Centaur','Halfkin Fox','Halfkin Tanuki','Beastkin Tanuki','Beastkin Fox','Beastkin Bunny','Taurus','Beastkin Wolf','Beastkin Cat','Halfkin Cat','Halfkin Wolf','Halfkin Bunny']
+...
+#C-NEW# Added, changed expansion.settings to expansionsettings
+for i in uncommon_races_array:
+temprace = genealogy_decoder(i)
+if person.genealogy[temprace] == 0 && rand_range(0,100) <= globals.expansion.settings.secondaryuncommonracialchance + sametypeweight:
+raceoptions.append(i)
+elif person.genealogy[temprace] > 0:
+sametypeweight += round(person.genealogy[temprace]/4)
+sametypeweight = 0
+
+#not added this time#Add more variety in offspring race inheritance
+#C-NEW# Unsure what the comment above means. Leaving alone since I added build_genealogy already above.
+[constructor.gd]
+func build_genealogy(person, mother, father):
+var percent = 0
+var parentgenechance = rand_range(0,100)
+
+	for race in genealogies:
+		if parentgenechance >= 75:
+			person.genealogy[race] = round((mother.genealogy[race] * .4) + (father.genealogy[race] * .6))
+		if parentgenechance <= 25:
+			person.genealogy[race] = round((mother.genealogy[race] * .6) + (father.genealogy[race] * .4))
+		else:
+			person.genealogy[race] = round((mother.genealogy[race] + father.genealogy[race]) * .5)
+		percent += person.genealogy[race]
+RM#F#fix
+#R-NEW# Implemented?
+#C-NEW# Not going to touch this at the moment. Seems to have changed in the new mod.
+[constructor.gd]
+func set_baby_type(person): #Nereid was missing and Dragonkin duplicated
+if person.race == 'Dragonkin' || person.race == 'Nereid' || person.race == 'Lamia' || person.race == 'Harpy' || person.race == 'Arachna' || person.race == 'Scylla':
+
+#C-NEW# This is currently what it is. Also I don't think Nereids lay eggs?
+func setBabyType(person):
+if person.preg.has_womb == false || person.race_type == 4:
+person.preg.baby_type = 'none'
+elif person.race in ['Dragonkin','Lamia','Harpy','Arachna','Scylla']:
+person.preg.baby_type = 'egg'
+else:
+person.preg.baby_type = 'birth'
+
+globals.traceFile('setbabytype')
+return
+#/C-NEW#
+
+RM##Add random traits #Capitulize Done maybe
+#R-NEW# Implemented?
+to all at very low % chance including those for special characters (eg "Sturdy")?
+to all births at low % chance including those for special characters (eg "Sturdy")
+at dim crystal level 2
+#C-NEW# Not sure about the comments above
+[constructor.gd] #C-NEW# Added
+if rand_range(0,100) <= variables.babynewtraitchance:
+if rand_range(0,100) <= 20: # 1 in 5 chance
+person.add_trait(globals.origins.traits('unique').name)
+else:
+person.add_trait(globals.origins.traits('any').name)
+[origins.gd]#C-NEW# Added
+func traits(tag):
+var rval = []
+var traits = traitlist
+
+if tag == 'any':
+	for i in traits:
+		###---Added by Expansion---### Modified to block Expansion Traits from randomizing
+		if traits[i]['tags'].has('secondary') != true && traits[i]['tags'].has('expansiontrait') != true:
+		###---Expansion End---###
+			rval.append(traits[i])
+#ralph
+elif tag == 'unique':
+	for i in traits:
+		if traits[i]['tags'].has('unique') == true && traits[i]['tags'].has('expansiontrait') != true:
+		###---Expansion End---###
+			rval.append(traits[i])
+[traits.gd]#C-NEW# Added
+#[added to some]
+#"tags": [
+# "secondary",
+# "unique",
+"Small Eater": {
+"name": "Small Eater",
+"description": "[color=aqua]Food consumption reduced to 1/3. [/color]",
+"effect": {
+
+},
+"tags": [
+  "secondary",
+  "unique",
+],
+"conflict": [
+  ""
+]    
+},
+"Hard Worker": {
+"name": "Hard Worker",
+"description": "[color=aqua]+15% gold from non-sexual occupations. [/color]",
+"effect": {
+
+},
+"tags": [
+  "secondary",
+  "mental",
+  "unique",
+],
+"conflict": [
+  ""
+]    
+},
+"Sturdy": {
+"name": "Sturdy",
+"description": "[color=aqua]Takes 15% less damage in combat [/color]",
+"effect": {
+
+},
+"tags": [
+  "secondary",
+  "unique",
+],
+"conflict": [
+  ""
+]    
+},
+...
+"Scoundrel": {
+"name": "Scoundrel",
+"description": "[color=aqua]+15 gold per day. [/color]",
+"effect": {
+
+},
+"tags": [
+  "secondary"
+  "unique",
+],
+"conflict": [
+  ""
+]    
+},
+"Nimble": {
+"name": "Nimble",
+"description": "[color=aqua]+25% to hit chances. [/color]",
+"effect": {
+
+},
+"tags": [
+  "secondary",
+  "unique",
+],
+"conflict": [
+  ""
+]    
+},
+"Ditzy": {
+"name": "Ditzy",
+"description": "$name is very pretty but a life of getting by on looks has left $his wit lacking.\n\n[color=aqua]Natural Beauty increased by 40.\n[/color][color=red]Max Wit decreased by 20. [/color]",
+"effect": {
+"code": "ditzy",
+"beautybase": 40,
+"wit_max": -20,
+"wit": 0,
+"wit_base": -20
+},
+"tags": [
+"expansiontrait",
+"convotrait",
+"detrimental",
+"physical",
+"unique",
+],
+"conflict": [
+"Clever"
+]
+},
+
+Need in Alternate_globals.gd #Capitulize Done, didn't add a alternate_globals.gd
+RM3#P#Fix Mage Description to match below (Need in Alternate_globals.gd and RM3 in general)
+[globals.gd] #C-NEW# Added
+var expandedplayerspecs = {
+Slaver = "+100% gold from selling captured slaves\n+33% gold reward from slave delivery tasks",
+Hunter = "+100% gold drop from random encounters\n+20% gear drop chance\nBonus to preventing ambushes",
+Alchemist = "Double potion production\nSelling potions earn 100% more gold\n[color=aqua]Start with an Alchemy Room unlocked[/color]",
+Mage = "Combat spell deal 20% more damage", #ralph
+Breeder = "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for and additional 20% more and receive 20% more upgrade points.\n[color=aqua]Start with the Nursery unlocked[/color]" #ralph3
+...
+var playerspecs = { #C-NEW# Added
+Slaver = "+100% gold from selling captured slaves\n+33% gold reward from slave delivery tasks",
+Hunter = "+100% gold drop from random encounters\n+20% gear drop chance\nBonus to preventing ambushes",
+Alchemist = "Start with an alchemy room\nDouble potion production\nSelling potions earn 100% more gold",
+Mage = "Combat spell deal 20% more damage", #ralph3
+
+Rolledback (and for following) Need to make Alternate_spells.gd #C-NEW# I don't see a spells_ALT.gd in arics, so I just threw them in spells.gd. Also the manacosts for these spells are actually less than whats in Aric's.
+RM#P#Increase spell costs and code change below #Capitulize Done, though you may want to check spell mana costs.
+[spells.gd] #C-NEW# Added #needs toggle: manacost# #Done#
+func spellcost(spell):
+var cost = spell.manacost2
+#if globals.state.spec == 'Mage':
+# cost = cost2
+#else:
+# cost = cost*2
+return cost
+##Mindread #C-NEW# Added #needs toggle: manacost# #Done#
+mindread = {
+code = 'mindread',
+name = 'Mind Reading',
+description = 'Enhances your mind to be more cunning towards others. Allows to get accurate information about other characters. ',
+effect = 'mindreadeffect',
+manacost = 1,
+##Sedate
+sedation = { #C-NEW# Added #needs toggle: manacost# #Done#
+code = 'sedation',
+name = 'Sedation',
+description = "Eases target's stress and fear.",
+effect = 'sedationeffect',
+manacost = 20,
+##Dream
+dream = { #C-NEW# Added #needs toggle: manacost# #Done#
+code = 'dream',
+name = 'Dream',
+description = 'Puts target into deep, restful sleep. ',
+effect = 'dreameffect',
+manacost = 5,
+##Entrancement
+entrancement = { #C-NEW# Added #needs toggle: manacost# #Done#
+code = 'entrancement',
+name = 'Entrancement',
+description = 'Makes target more susceptible to suggestions and easier to acquire various kinks.',
+effect = 'entrancementeffect',
+manacost = 10,
+##Mutate
+mutate = { #C-NEW# Added #needs toggle: manacost# #Done#
+code = 'mutate',
+name = 'Mutation',
+description = 'Enforces mutation onto target. Results may vary drastically. ',
+effect = 'mutateeffect',
+manacost = 10,
+##Nerf Invigorate
+invigorate = { #C-NEW# Added #needs toggle: manacost# #Done#
+code = 'invigorate',
+name = 'Invigorate',
+description = "Restores caster's and target's energy by using mana and target body's potential. Builds up target's stress. Can be used in wild. ",
+effect = 'invigorateeffect',
+manacost = 20,
+
+##Nerf Invigorate targeted on player #Capitulize Done #needs toggle: manacost# #Manacost should be included in the change above.#
+#ralph
+func invigorateeffect():
+var text = ''
+var spell = globals.spelldict.invigorate
+globals.resources.mana -= spellcost(spell)
+if person.unique != 'player':
+person.energy += person.stats.energy_max/2
+person.stress += max(rand_range(25,35)-globals.player.smaf*4, 10)
+globals.player.energy += 50
+text = person.dictionary("You cast Invigorate on $name. Your and $his energy is partly restored. $His stress has increased. ")
+else:
+if person.health >= person.stats.health_max/2 && person.health > 30:
+person.health -= rand_range(20,30)
+globals.player.energy += 50
+text = person.dictionary("You cast Invigorate on yourself. You cut your palm using your own blood as the catalyst for the spell. Your energy is partly restored at the cost of a small amount of your health. ")
+else:
+globals.player.energy += 25
+text = person.dictionary("You cast Invigorate on yourself and make a sputtering gasp, coughing up a little blood. You're not in any shape for this. Your energy is partly restored, but not as much as you hoped. ")
+return text
+#/ralph
+
+##Nerf Fear spell rebelliousness reduction #Capitulize Done #needs toggle: spelltweaks# #Done#
+[spells.gd]
+if person.effects.has('captured') == true:
+text += "\n[color=green]$name becomes less rebellious towards you.[/color]"
+person.effects.captured.duration -= 1+globals.player.smaf/3
+...
+fear = {
+code = 'fear',
+name = 'Fear',
+description = 'Invokes subconscious feel of terror onto the target. Can be effective punishment. ',
+effect = 'feareffect',
+manacost = 20,
+
+##Tweaked Tentacle Spell #Capitulize Done #needs toggle: spelltweaks# #Done#
+[spells.gd]
+person.obed += 75
+person.fear += 90
+person.lewdness += 5
+...
+summontentacle = {
+code = 'summontentacle',
+name = 'Summon Tentacle',
+description = 'Summons naughty tentacles from the otherworld for a short time. Can make up for a very effective punishment.',
+effect = 'tentacleeffect',
+manacost = 20,
+
+Need to rollback
+RM#P#Make food harder to produce with forage/hunting; make cooking more needed #Capitulize Done
+[jobs&specs.gd]
+#forage nerf #C-NEW# Added #needs toggle: fooddifficulty# #Done#
+###---Added by Expansion---### Ank Bugfix v4
+food = min(food, max(person.sstr+person.send, -1)2+5)
+###---End Expansion---###
+if person.spec == 'ranger':
+food = 1.5
+food = round(food)
+text += '$He brought back [color=aqua]'+ str(food) + '[/color] units of food.\n'
+person.xp += food/2
+#hunt nerf #C-NEW# Added #needs toggle: fooddifficulty# #Done#
+var food = person.awareness(true)rand_range(1,4) + max(0,person.sendrand_range(3,8))
+if person.cour < 60 && rand_range(0,100) + person.cour/4 < 45:
+food = foodrand_range(0.25, 0.50)
+text += "Due to [color=yellow]lack of courage[/color], $he obtained less food than $he could. \n"
+###---Added by Expansion---### Hybrid Support
+if person.race.find('Arachna') >= 0:
+food = food1.4
+###---End Expansion---###
+if person.spec in ['ranger','trapper']:
+food *= 1.5
+###---Added by Expansion---### Ank Bugfix v4
+food = round(min(food, max(person.sstr+person.send, -1)3+5))
+###---End Expansion---###
+globals.itemdict.supply.amount += round(food/12)
+person.xp += food/3
+#T#cooking foodbuy nerf #C-NEW# Added #needs toggle: fooddifficulty# #Done#
+func cooking(person):
+var text = ''
+var gold = 0
+var food = 0
+person.xp += globals.slaves.size()
+if globals.resources.food < 200:
+if globals.resources.gold/2 >= globals.state.foodbuy:
+text = '$name went to purchase groceries and brought back new food supplies.\n'
+gold = -globals.state.foodbuy2
+food = globals.state.foodbuy
+
+#T#food cost x4 2 gold/unit of food #Capitulize Done #needs toggle: fooddifficulty# #Done#
+[items.gd]
+food = {
+code = 'food',
+name = 'Provisions',
+icon = load("res://files/images/items/food.png"),
+description = "Various assortments of preserved food servable for daily ration. Mostly stale, yet in high demand. \nPrice for 20 units.",
+effect = "foodpurchase",
+recipe = '',
+cost = 40,
+
+need to finish
+TEST
+SPLIT OUT PREFERENCE CHANGES (make optional?)
+
+RM## Replace Expansionsetup.gd to expand/tweak hybrid system #Capitulize Done
+{see Expansionsetup.gd}
+
+RM## Add hybrid descriptions to dictionary.gd #Capitulize Done
+{see dictionary.gd, hybriddict}
+
+RM##Adjust max stats by race #Capitulize Done
+{See races.gd)
+
+#R-NEW# Implemented? #Capitulize Done
+RM## Add hybrid library dependent on Breeder Specialization in dictionary.gd var loredict
+added
+breedingbasics = {
+code = 'breedingbasics',
+reqs = 'true',
+name = 'Hybrids',
+text = "[center]Racial Hybrids[/center]\n\nEvery humanoid and sexually compatible race is made up of some percentage genealogy of it's forebearers. A being with 100% of a given race is generally referred to as a pure-blood and typically has a generous endowment of natural abilities including at least some combination of Strength, Agility, Magic, and/or Endurance that manifest from birth in addition to and potentially exceeding the maximum attributes of their race. Beings of mixed racial heritage are known as hybrids. A hybrid takes on the same physical maximum attributes and is typically treated as being the same as its dominant race. Hybrids in which a dominant race represents at least 50% of its heritage are know as race-dominant hybrids. The natural endowments of race-dominant hybrids vary widely from natural athletes and sorcerers to those exhibiting no natural endowment whatsoever. Some race-dominant hybrids manifest as a special subspecies of their dominant race and may possess unique endowments and characteristics unrelated to their host race. Beings that are so mixed as not to include at least 50% of any race are typically referred to as mutts or mongrels and tend to be fairly limited in terms of any natural endowments.\n\nAll hybrids that are not a subspecies in their own right posess a racial inclination or inclinations amounting to two attribute points of natural endowment that manifest reliably as a function of the percentage genealogy of the given race. For example, Harpies posess a racial inclination solely to Agility (denoted as Agility++) with a magnitude of two attribute points for a pure-blood. A 75% Harpy-dominant hybrid should have a bonus to agility of 1.5 which rounds up to the same two attribute points exhibited by the pure-blood Harpy. This is provided another lineage or other factor does not detract from this bonus. If this Harpy-dominant hybrid included 25% Fairy ancestry, the hybrid would also benefit from the Fairy's sole racial inclination, Magic++, resulting in a bonus to Magic of 0.5 which would round up to a one attribute point bonus to Magic.\n\nIn the preceding example, elemental effects were ignored; however in actuality all races with the exception of Humans exhibit some unbalanced attunement to one or more of the four elemental forces. This also typically manifests in an attribute bonus. Note that the elemental attunements of a hybrid are the average of those posessed by its various racial components, so breeders seeking to maximize a given elemental attribute bonus should consider races highly attuned to a given element as secondary racial components in a hybrid amounting to less than or possibly equal to 50%.\n\nEach race embodies some level of saturation of Nature magic which is the driving force of life in our world. Just as with elemental attunement a hybrid's Nature magic saturation will be an average of that of its constituent races. The effects of nature magic saturation are generally positive, but vary greatly within race-dominant hybrids. Mutts and mongrels exhibit no benefits or consequences due to Nature magic saturation.\n\nMana corruption is the level of entropy or chaos in the lifeforce of a given being. Levels of mana corruption are again averaged in a hybrid according to its racial makeup. Some races are inherently more corrupted than others depending on their origins. The effects of mana corruption often represent a trade-off and should be considered by the aspiring breeder carefully.\n\nFinally all races react to a multitude of factors in unique ways. Some of these are categorized as Breeding Quirks, which breeders must consider as to their utility for a potential hybrid offspring. In rare cases an entirely different subspecies of a given race may be produced through mutation via careful combination in a race-dominant hybrid."
+},
+breeding = {
+code = 'breeding',
+reqs = 'player.spec == "Breeder" || globals.state.mansionupgrades.nursery >= 1',
+name = 'Breeding',
+text = "[center]Modern Breeding Theory: Origins[/center]\n\nWhile the mechanics are quite simple, one must have a thorough understanding of the world's races and their origins to select the proper stock to be a successful breeder. For the purposes of discussion on racial hybrids, genealogy in excess of 50% is considered primary ancestry, while anything less is referred to as secondary ancestry.\n\nThere are two main racial substrates underlying most races. First the elves: Elves are the original sentient race native to our world. Orcs and the other varieties of Elf were derived from the original Elvish stock. Humans, while not natural, are the second racial substrate developed and are arguably the most malleable race in existance today. Gnomes, Catkin, Wolfkin, Bunnykin, Foxkin, Tanuki, Dragonkin and most recently Taurus were all created via transfomative magic from Humans, though it is debated whether Gnomes were created intentionally. It is the generally accepted theory that Dragonkin, Scyllas, and Centaurs are based on Humans, while Arachna, Lamia, and Nereid are thought to be based on Elves, but the evidence is unclear and it is generally accepted that the creation of these races was an accidental side effect of wars past in any case.\n\nYou may wonder about the other races in existence. Here the debate among mages and breeders intensifies, but there is growing evidence that their origins fit into one of three general categories: direct Manifestations of Mana, Monsters, and the Outer Planes. Dryads and Fairies are understood to be manifestations of nature magic independent of Elves or Humans as they have been known to appear in places previously devoid of sentient life from time to time throughout history. Goblins are actually a counterpart to Faeries springing from the underworld though as opposed to occuring in vibrant natural settings on the surface. Demons while not the same as their ancient couterparts, are understood to have arrived in our world from the outer planes of existence at some point in the distant past and embody forces of chaos and corruption. They are similar in this way but also unlike Goblins or Gnomes in that their life force is not based on the natural order of this world. In terms of breeding, Demon blood can have seemingly random effects on offspring sired with other races. Likewise Seraphs while similar to Harpies in terms of their connection to wind magic are likely to have originated from another plane of existence and may influence offspring in ways harpies do not, sometimes profoundly. Slimes can't be fully dismissed as mere monsters given sentient specimens, but are clearly of monstrous origin. They aren't entirely compatible with other species and their breeding is beyond the scope of this discussion."
+},
+advancedbreeding = {
+code = 'advancedbreeding',
+reqs = 'player.spec == "Breeder" || globals.state.mansionupgrades.dimensionalcrystal >= 1',
+name = 'Advanced Breeding',
+text = "[center]Mana and Racial Phylogeny[/center]\n\nCertainly the physical traits of a given race are often of primary importance as breeders of beasts and men alike can attest; however mages specialized in breeding in particular should appreciate the underlying magical factors involved. Although destructive magic has been effectively bred out of all known races, elemental forces are still interwoven into all living things and some races unevenly so. Here we must allow a disclaimer and a warning for any would-be guild breeders. The mage guild strictly prohibits experimentation with or study of elemental magic itself. In terms of breeding mages may discuss the matter without fear of a guild inquisition; however any such research or even focused discussion as relates to destructive magic will be immediately and severely punished.\n\nWith that said, a basic knowledge of elemental forces and their relation to breeding is helpful. Although the interplay between elements and humors of a given established race is complex and beyond the scope of this humble summary, secondary ancestry typically behaves more predictably. Generally, a given race with a large amount of secondary ancestry from races aligned with a certain elemental force may be enhanced dependent on the properties of the host's primary race. Other mana related influences include Nature and Entropy (also referred to as Corruption, Taint, or Chaos). Nature magic represents a fusion of the elements and may enhance certain races depending on the source and the affintiy of the host race. Entropic mana can be harnessed through secondary ancestry by some host races, but can also have adverse side effects or potentially cause mutations resulting in offspring that may not resemble any of the individual parent races. The typical elemental attribute associations are as follows along with races known to be strongly attuned:\nFire - Strength\t\t\tRaces: Dragonkin, Demon\nWind - Agility\t\t\tRaces: Harpy, Seraph\nWater - Magic\t\t\tRaces: Nereid, Scylla\nEarth - Endurance\t\t\tRaces: Gnome, Goblin\nNature\t\t\tRaces: Fairy, Dryad, Goblin\nEntropy\t\t\tRaces: Gnome, Demon, Goblin"
+},
+
+Need to rollback
+RM#P#Fix Mindread cost at Slave guild #Capitulize Done I think. Bit confused. The outside_ALT.gd is different from the outside.gd in ralphs version. I'm guessing ALT is for Ralph Tweaks? Also made the cost 1 instead of 2 to match the spells.gd. I assume since mage just increases spell damage that we want to use this version. #needs toggle: manacost# #Done#
+[outside.gd]
+func slaveguildslaves(location):
+guildlocation = location
+get_node("slavebuypanel").visible = true
+var cost = 2
+#ralph
+#if globals.state.spec == 'Mage':
+# cost = cost/2
+get_node("slavebuypanel/mindreadbutton").text = "Use Mind Read (" +str(cost)+ ")"
+get_node("slavebuypanel/mindreadbutton").hint_tooltip = "Allows to see more information about all the slaves.\nCosts " +str(cost)+ " mana"
+#/ralph
+
+Need to rollback
+RM#P#decrease reputation more for sebastion/umbra sales #Capitulize Done #needs toggle: reputationdifficulty#
+[outside.gd]
+globals.state.reputation[globals.weightedrandom(reputationloss)] -= 18 #ralph originally was 4
+
+#R-NEW# Implemented? #Capitulize Done
+RM##Add Breeders quests to Slave Guild custom requests
+[repeatablequests.gd]
+static func randhybridrace():
+var text
+text = globals.dictionary.hybriddict.keys()
+text = text[randi()%text.size()]
+return text
+
+func questarray():
+var questsarray = {
+quest001 = {
+code = '001',
+shortdescription = 'A local aristocrat wants an obedient servant for his house. ',
+description = 'A local nobleman is looking for an obedient worker for his estate, or someone who will provide one. The semi-famous house name provides some crediability to the customer. A $sex servant must present $himself meekly and have above avearge looks. Only humanoids. ',
+reqs = [['obed','gte', 80],['conf','lte',40],['beauty','gte',50],['bodyshape','eq','humanoid']],
+reqstemp = [['sex', 'eq', randsex()]],
+time = round(rand_range(4,7)),
+reward = round(rand_range(80,110))*10,
+location = ['any'],
+difficulty = 'medium'
+},
+quest002 = {
+code = '002',
+shortdescription = 'A senior citizen wants someone strong to help him around his residence. ',
+description = 'An old man looking for someone physically fit to take care of everyday tasks instead of him. ',
+reqs = [['obed','gte', 80],['send','gte',2], ['sstr','gte',2]],
+reqstemp = [],
+time = round(rand_range(5,10)),
+reward = round(rand_range(45,55))*10,
+location = ['wimborn','frostford'],
+difficulty = 'easy'
+},
+quest003 = {
+code = '003',
+shortdescription = 'Exquisite collector looking for a rare species.',
+description = 'A particularly elegant letterhead bears the nuanced description of a slave desired by a famously eccentric collector. A handsome reward is offered for the delivery of a $sex $race. ',
+reqs = [['obed','gte', 80]],
+reqstemp = [['age','eq',randage()],['race','eq',rarerace()],['sex', 'eq', randsex()]],
+time = round(rand_range(6,12)),
+reward = round(rand_range(75,90))*10,
+location = ['any'],
+difficulty = 'medium'
+},
+quest004 = {
+code = '004',
+shortdescription = 'Mage guild requests a dependable, clever worker.',
+description = 'One of the Mages Order’s carefully-scribed requisition letters is posted, detailing a new position available for full-time worker. Applicants should be versed in the Magical Arts and be very dependable.',
+reqs = [['obed','gte', 80], ['wit', 'gte', 60], ['smaf','gte',2],['conf', 'gte', 50]],
+reqstemp = [],
+time = round(rand_range(6,8)),
+reward = round(rand_range(75,95))*10,
+location = ['wimborn'],
+difficulty = 'medium'
+},
+quest005 = {
+code = '005',
+shortdescription = 'Brothel owner looking for a new resident.',
+description = "As the last $race girl has been bought out by one of her frequent customers, there's a dire need for a new one. ",
+reqs = [['obed','gte', 80], ['lewdness', 'gte', 25], ['beauty','gte',40]],
+reqstemp = [['race','eq',commonrace()]],
+time = round(rand_range(4,6)),
+reward = round(rand_range(45,70))*10,
+location = ['any'],
+difficulty = 'easy'
+},
+quest006 = {
+code = '006',
+shortdescription = "A market stall needs a helping hand. ",
+description = "One of the somewhat successful merchants has decided to get a dependable assistant. Besides being pleasant to look at, they must be able to handle all sorts of people they would be interacting with.",
+reqs = [['obed','gte', 80], ['conf', 'gte', 50],['charm','gte',40], ['beauty','gte',40]],
+reqstemp = [],
+time = round(rand_range(5,9)),
+reward = round(rand_range(75,95))*10,
+location = ['any'],
+difficulty = 'medium'
+},
+quest007 = {
+code = '007',
+shortdescription = "City guard looking for capable recruits. ",
+description = "A call to arms has been made by the Captain of the Watch, who is seeking a capable warrior to add to the ranks of the town guard. Prospective candidates must be able to follow orders, and have the courage to stand their ground against the city’s toughest criminals.",
+reqs = [['obed','gte', 80], ['cour','gte',50], ['sstr','gte',2], ['send', 'gte', 2]],
+reqstemp = [],
+time = round(rand_range(5,9)),
+reward = round(rand_range(75,100))*10,
+location = ['any'],
+difficulty = 'medium'
+},
+quest008 = {
+code = '008',
+shortdescription = "Local nobleman wants a dominant slave for bed-play. ",
+description = "An anonymous request was made by a certain nobleman, who is looking for a girl with strong character for his eccentric lewd plays. ",
+reqs = [['obed','gte', 80], ['sex','eq','female'], ['lewdness', 'gte', 25],['conf','gte',65], ['asser','gte',50]],
+reqstemp = [],
+time = round(rand_range(4,8)),
+reward = round(rand_range(75,110))*10,
+location = ['wimborn','frostford'],
+difficulty = 'medium'
+},
+quest009 = {
+code = '009',
+questreq = globals.rules.male_chance >= 10,
+shortdescription = "Undisclosed customer wants a very pretty boy of young age.",
+description = "A small note promises a hefty reward for delivery of an obedient boy for bed duty. It also specifies that a desirable appearance is required. ",
+reqs = [['obed','gte', 80], ['sex','eq','male'], ['age','eq','teen'], ['beauty','gte',70], ['hairlength','gte',3]],
+reqstemp = [],
+time = round(rand_range(4,8)),
+reward = round(rand_range(75,100))*10,
+location = ['wimborn','frostford'],
+difficulty = 'medium'
+},
+quest010 = {
+code = '010',
+shortdescription = "An eccentric experimenter requests a rare species.",
+description = "You find a note of one of the more proactive mages, searching for a subject of $race race for his dangerous experiments. He would like it to be at least somewhat cooperative and preferably smart. ",
+reqs = [['obed','gte', 40], ['wit','gte',40]],
+reqstemp = [['race','eq',rarerace()]],
+time = round(rand_range(6,12)),
+reward = round(rand_range(45,65))*10,
+location = ['wimborn','gorn'],
+difficulty = 'easy'
+},
+quest011 = {
+code = '011',
+shortdescription = "A local nobleman is looking for a bride for his son.",
+description = "The head of a noble house wants to arrange a marriage for his love-timid son. In order to preserve their aristocratic dynasty, a pure maiden of Noble descent is required. She must be knowledgeable in the management of an estate, and have an attractiveness befitting for nobility. ",
+reqs = [['obed','gte', 80], ['sex','eq','female'],['origins','eq','noble'],['beauty','gte',80] ],
+reqstemp = [],
+time = round(rand_range(6,12)),
+reward = round(rand_range(80,120))*10,
+location = ['wimborn','gorn'],
+difficulty = 'medium'
+},
+quest012 = {
+code = '012',
+shortdescription = "A traveller is looking for a reliable companion.",
+description = "A lone adventurer wants to purchase a steadfast person to keep them company on a long journey. ",
+reqs = [['obed','gte', 80], ['send','gte', 3], ['cour','gte',40]],
+reqstemp = [],
+time = round(rand_range(6,8)),
+reward = round(rand_range(45,65))*10,
+location = ['any'],
+difficulty = 'easy'
+},
+quest013 = {
+code = '013',
+shortdescription = "A widower is looking for a replacement for his deceased wife.",
+description = "A middle-aged man wishes to move on with his life but has been too reliant on cohabitant for past years. Having neither the confidence nor the time to look for new wife personally, he has decided to cut corners and try out a different approach. ",
+reqs = [['obed','gte', 80], ['sex','eq', 'female'], ['haircolor','eq',randhaircolor()], ['bodyshape','eq','humanoid']],
+reqstemp = [],
+time = round(rand_range(6,12)),
+reward = round(rand_range(40,50))*10,
+location = ['any'],
+difficulty = 'easy'
+},
+quest014 = {
+code = '014',
+shortdescription = "A rich kid desires a new toy.",
+description = "A fairly simple note from a rich and well-bred background requests a $race girl as a birthday present for their son. Hastily scribbled in one corner of the paper you can see 'MUST HAVE BIG BOOBS' in another style of handwriting. ",
+reqs = [['obed','gte', 80], ['sex','eq', 'female'],['titssize','gte',3]],
+reqstemp = [['race','eq',commonrace()]],
+time = round(rand_range(6,8)),
+reward = round(rand_range(50,60))*10,
+location = ['wimborn','gorn'],
+difficulty = 'easy'
+},
+quest015 = {
+code = '015',
+shortdescription = "An anonymous person is looking for half-pint slave.",
+description = "You spot a request for any of the tiny-sized races for unspecified reasons. It seems to lack any other hard requirement besides specifically not being slave descendants. ",
+reqs = [['obed','gte', 80],['bodyshape','eq','shortstack'],['origins','neq','slave']],
+reqstemp = [],
+time = round(rand_range(6,8)),
+reward = round(rand_range(40,50))*10,
+location = ['gorn','wimborn'],
+difficulty = 'easy'
+},
+quest016 = {
+code = '016',
+shortdescription = "Unspecified person desires a lively slave.",
+description = "A note desiring a high grade $sex slave. Taming is not needed. ",
+reqs = [['origins','gte','rich'], ['sex', 'eq', randsex()]],
+reqstemp = [],
+time = round(rand_range(6,8)),
+reward = round(rand_range(70,90))*10,
+location = ['any'],
+difficulty = 'medium'
+},
+quest017 = {
+code = '017',
+questreq = globals.rules.male_chance >= 10,
+shortdescription = "Noble seeks young squire.",
+description = "An elegant note describes the search for a young male to act as squire for a newly knighted lord.\nMust be well behaved and physically able. ",
+reqs = [['obed','gte', 80],['sex', 'eq', 'male'], ['sstr', 'gte', 2], ['age','neq','adult']],
+reqstemp = [],
+time = round(rand_range(7,12)),
+reward = round(rand_range(30,50))*10,
+location = ['wimborn','frostford'],
+difficulty = 'easy'
+},
+quest018 = {
+code = '018',
+shortdescription = "Fresh blood for our troupe!",
+description = "A traveling circus is looking to take in a new performer. Male or female doesn't matter, just that they be young, flexible, and a quick learner. ",
+reqs = [['obed','gte', 80], ['sagi', 'gte', 2], ['wit','gte',40], ['age','neq','adult']],
+reqstemp = [],
+time = round(rand_range(7,9)),
+reward = round(rand_range(35,55))*10,
+location = ['wimborn','gorn'],
+difficulty = 'easy'
+},
+quest019 = {
+code = '019',
+questreq = globals.rules.male_chance >= 15,
+shortdescription = "An anonymous woman desires a real man to satisfy her.",
+description = "A sexually frustrated wife is looking for a male slave to give her the attention she desperately craves. Looks should not be very high, to avoid husband's suspicion. Must be well endowed with good stamina! ",
+reqs = [['sex', 'eq', 'male'], ['obed','gte', 80],['send','gte',2],['beauty','lte',40],['penis','gte',1]],
+reqstemp = [],
+time = round(rand_range(7,12)),
+reward = round(rand_range(30,50))*10,
+location = ['wimborn','frostford'],
+difficulty = 'easy'
+},
+quest020 = {
+code = '020',
+questreq = globals.rules.furry == true,
+shortdescription = "Wanted: dogs for breeding purposes.",
+description = 'A rather plain and slightly crinkled notice explains how a certain quirky land owner is buying pure beastkin wolves for a "breeding project." Appearances should be decent but looks are a secondary concern at the moment. ',
+reqs = [['race','eq','Beastkin Wolf'],['obed','gte', 80],['beauty','gte',20]],
+reqstemp = [['sex', 'eq', randsex()]],
+time = round(rand_range(7,12)),
+reward = round(rand_range(30,40))*10,
+location = ['wimborn','gorn'],
+difficulty = 'easy'
+},
+####Hard Quests
+quest021 = {
+code = '021',
+questreq = true,
+shortdescription = "Skilled Fighter",
+description = 'A rich local noble seeks for a very capable fighter for unspecified task. ',
+reqs = [['obed','gte', 100],['origins','gte','commoner']],
+reqstemp = [['sex', 'eq', randsex()], ['spec', 'eq', randcombspec()], ['level', 'gte', round(rand_range(3,5))]],
+reqsfunc = ['nobadtraits'],
+time = round(rand_range(22,30)),
+reward = round(rand_range(220, 315))*10,
+location = ['any'],
+difficulty = 'hard'
+},
+quest022 = {
+code = '022',
+questreq = true,
+shortdescription = "A high grade sex slave",
+description = 'A detailed note with a list of characteristics for future sex servant and a hefty price. ',
+reqs = [['obed','gte', 100],['beauty','gte',80], ['charm','gte',80], ['origins','gte','rich'], ['lewdness', 'gte', 65]],
+reqstemp = [['sex', 'eq', randsex()], ['spec', 'eq', randsexspec()],['age','eq',randage()]],
+reqsfunc = [],
+time = round(rand_range(20,35)),
+reward = round(rand_range(250, 350))*10,
+location = ['any'],
+difficulty = 'hard'
+},
+quest023 = {
+code = '023',
+questreq = true,
+shortdescription = "An exquisite doll",
+description = 'An anonymous request has been made for a slave matching an exact specification. ',
+reqs = [['obed','gte', 100],['beauty','gte',90], ['cour','lte',20], ['conf','lte',20]],
+reqstemp = [['sex', 'eq', randsex()],['age','eq',randage()], ['haircolor','eq',randanyhaircolor()], ['eyecolor','eq', randanyeyecolor()]],
+reqsfunc = [],
+time = round(rand_range(20,35)),
+reward = round(rand_range(250, 350))*10,
+location = ['any'],
+difficulty = 'hard'
+},
+quest024 = {
+code = '024',
+questreq = true,
+shortdescription = "Custom Hybrid Request",
+description = 'A local collector has placed a request for a certain hybrid for undisclosed purposes. ',
+reqs = [['obed','gte',50]],
+reqstemp = [['race_display', 'eq', randhybridrace()]],
+reqsfunc = [],
+time = round(rand_range(20,35)),
+reward = round(rand_range(250, 350))*10,
+location = ['any'],
+difficulty = 'hard'
+},
+quest025 = {
+code = '025',
+questreq = true,
+shortdescription = "Legendary Diva",
+description = 'An opera house in the capitol has placed a request for a certain hybrid to be trained to serenade the elite.\n\nBreeding Instructions: At least half Elf and as much elemental water affinity as can be managed. ',
+reqs = [['obed','gte',90],['sex', 'neq', 'male'],['race_display', 'eq', 'Siren']],
+reqstemp = [],
+reqsfunc = [],
+time = round(rand_range(20,35)),
+reward = round(rand_range(250, 350))*10,
+location = ['wimborn'],
+difficulty = 'hard'
+},
+quest026 = {
+code = '026',
+questreq = true,
+shortdescription = "Fresh Calamari",
+description = 'A wealthy widow has requested a sentient tentacle monster for undisclosed purposes.\n\nBreeding Instructions: At least half Scylla and with as much mana corruption as can be managed. ',
+reqs = [['obed','gte',80]], #['lewdness', 'gte', 20], ['race_display', 'eq', 'Tentacle'],['sex', 'neq', 'female']],
+reqstemp = [],
+reqsfunc = [],
+time = round(rand_range(20,35)),
+reward = round(rand_range(250, 350))*10,
+location = ['wimborn'],
+difficulty = 'hard'
+},
+quest027 = {
+code = '027',
+questreq = true,
+shortdescription = "Teach My Son A Lesson",
+description = 'Local lord has experienced some success treating his third born son of alcoholism by forcing spirits on the boy and now requests a succubus to cure him of his whoring addiction.\n\nBreeding Instructions: At least half Demon and as close to half Bunnykin as can be managed. ',
+reqs = [['obed','gte',95],['sex', 'eq', 'female'],['race_display', 'eq', 'Succubus']],
+reqstemp = [],
+reqsfunc = [],
+time = round(rand_range(20,35)),
+reward = round(rand_range(250, 350))*12,
+location = ['wimborn'],
+difficulty = 'hard'
+},
+quest028 = {
+code = '028',
+questreq = true,
+shortdescription = "Role Model For Goblins",
+description = 'An indecipherable note with a bloody thumb print in place of a seal has been written over by the slave guild indicating that a nearby warlord is in search of a goblin brute to serve as an example for a contingent of conscripted goblins in training.\n\nBreeding Instructions: At least half Goblin and as close to an even mix of Orc and either Lamia, Arachna, or Slime as can be managed. ',
+reqs = [['obed','gte',80], ['sstr', 'gte', 4],['race_display', 'eq', 'Hobgoblin']],
+reqstemp = [],
+reqsfunc = [],
+time = round(rand_range(20,35)),
+reward = round(rand_range(250, 350))*10,
+location = ['gorn'],
+difficulty = 'hard'
+},
+quest029 = {
+code = '029',
+questreq = true,
+shortdescription = "Desert Caravan",
+description = 'A foreign merchant is sick and tired of half his revenue going to hauling water across the desert. He requests a Lizardkin to act as a caravan guard while surviving on minimal water.\n\nBreeding Instructions: At least half Orc and as much Lamia and Dragonkin as can be managed. ',
+reqs = [['obed','gte',80], ['sstr', 'gte', 2], ['send', 'gte', 1],['race_display', 'eq', 'Lizardman']],
+reqstemp = [],
+reqsfunc = [],
+time = round(rand_range(20,35)),
+reward = round(rand_range(250, 350))*10,
+location = ['gorn'],
+difficulty = 'hard'
+},
+quest030 = {
+code = '030',
+questreq = true,
+shortdescription = "Crazy Old Erasmus",
+description = 'The crazy old hermit in the Marsh posted a tattered note requesting a well camoflaged guard.\n\nBreeding Instructions: At least half Dryad and as close to quarter Gnome and quarter Taurus as can be managed. ',
+reqs = [['obed','gte',50],['race_display', 'eq', 'Ent']],
+reqstemp = [],
+reqsfunc = [],
+time = round(rand_range(20,35)),
+reward = round(rand_range(250, 350))*10,
+location = ['frostford'],
+difficulty = 'hard'
+},
+quest031 = {
+code = '031',
+questreq = true,
+shortdescription = "A Sandbag That Bleeds",
+description = 'An arena master from a neighboring country seeks a living practice dummy his gladiators can practice on without having to replace so often.\n\nBreeding Instructions: At least half Orc and posessing a significant elemental earth affinity. ',
+reqs = [['obed','gte',80],['race_display', 'eq', 'Troll']],
+reqstemp = [],
+reqsfunc = [],
+time = round(rand_range(20,35)),
+reward = round(rand_range(250, 350))*10,
+location = ['gorn'],
+difficulty = 'hard'
+},
+quest032 = {
+code = '032',
+questreq = true,
+shortdescription = "A Fleet Messenger",
+description = 'City Hall has posted a request for Sylph to be trained as an especially swift messenger.\n\nBreeding Instructions: At least half Fairy and as much wind elemental affinity as can be managed. ',
+reqs = [['obed','gte',95],['race_display', 'eq', 'Sylph']],
+reqstemp = [],
+reqsfunc = [],
+time = round(rand_range(20,35)),
+reward = round(rand_range(250, 350))*10,
+location = ['frostford'],
+difficulty = 'hard'
+},
+quest033 = {
+code = '033',
+questreq = true,
+shortdescription = "Crazy Old Erasmus",
+description = 'The crazy old hermit in the Marsh posted a tattered note requesting a well camoflaged guard.\n\nBreeding Instructions: At least half Arachna and as much elemental water affinity as can be managed. ',
+reqs = [['obed','gte',50],['race_display', 'eq', 'Crabkin']],
+reqstemp = [],
+reqsfunc = [],
+time = round(rand_range(20,35)),
+reward = round(rand_range(250, 350))*10,
+location = ['frostford'],
+difficulty = 'hard'
+},
+}
+return questsarray
+
+#R-NEW# Implemented? #Capitlize Done
+##One stat point/level up (SAME AS ALWAYS)
+[variables.gd]
+var skillpointsperlevel = 1.0
+
+#R-NEW# Implemented? #Capitulize Done
+##adjusted ovulation and growup time (in mod files / variables.gd) (SAME AS ALWAYS)
+[variables.gd]
+#Pregnancies
+var pregduration = 14.0
+var growuptimechild = 1.0
+var growuptimeteen = 2.0
+var growuptimeadult = 3.0
+var traitinheritchance = 80.0
+var babynewtraitchance = 33.0
+###---Added by Expansion---### Changed by Deviate
+var ovulationtype1stage1 = 8
+var ovulationtype1stage2 = 15
+var ovulationtype2stage1 = 12
+var ovulationtype2stage2 = 15
+
+#R-NEW# Implemented? #Capitulize Done
+RM#F#fix slime/setracebonus order so correct race bonuses are subtracted before slime race bonuses are added later in the if statement
+[globals.gd]
+if rand_range(0,100) + conversionstrength > strongestgenes:
+expansionsetup.setRaceBonus(baby, false)
+baby.race = 'Slime'
+baby.race_type == 4
+
+#R-NEW# Implemented? May need revision since Cap's work with Mousekin race changes things
+#C-NEW# I'm just gonna incorporate everything 1 for 1 as best as I can in here. Will worry about my changes later.
+RM## Added mouse subspecies and mouse tails #Capitulize Done
+#need to add to arrays in: globals.longtails, globals.alltails, characters/description.gd
+#added to dictionary.gd, races.gd
+characters/[description.gd]
+tail = {
+none = '',
+cat = 'Below $his waist, you spot a slim [color=aqua]cat tail[/color] covered with fur. ',
+fox = '$He has a large, fluffy [color=aqua]fox tail[/color]. ',
+wolf = "Below $his waist there's a short, fluffy, [color=aqua]wolf tail[/color]. ",
+bunny = '$He has a [color=aqua]small ball of fluff[/color] behind $his rear. ',
+racoon = '$He has a plump, fluffy [color=aqua]raccoon tail[/color]. ',
+scruffy = 'Behind $his back you notice a long tail covered in a thin layer of fur which ends in a [color=aqua]scruffy brush[/color]. ',
+demon = '$He has a long, thin, [color=aqua]demonic tail[/color] ending in a pointed tip. ',
+dragon = 'Trailing somewhat behind $his back is a [color=aqua]scaled tail[/color]. ',
+bird = '$He has a [color=aqua]feathery bird tail[/color] on $his rear. ',
+fish = '$His rear ends in long, sleek [color=aqua]fish tail[/color]. ',
+"snake tail" : '',
+tentacles = '',
+horse = '',
+"spider abdomen" : '',
+mouse = 'Below $his waist, you spot a slim [color=aqua]mouse tail[/color] covered in a fine thin layer of fuzz. '
+},
+[globals.gd]
+var longtails = ['cat','fox','wolf','demon','dragon','scruffy','snake tail','racoon','mouse']
+
+var alltails = ['cat','fox','wolf','bunny','bird','demon','dragon','scruffy','snake tail','racoon','mouse']

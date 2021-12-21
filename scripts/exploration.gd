@@ -51,7 +51,7 @@ func enemyencounter():
 	if patrol != 'none':
 		text = encounterdictionary(enemygroup.description) + "Your bad reputation around here will certainly lead to a difficult fight..."
 		encounterbuttons(patrol)
-	elif scoutawareness < enemyawareness:
+	elif scoutawareness < (enemyawareness + rand_range(globals.expansionsettings.random_enemy_awareness[0],globals.expansionsettings.random_enemy_awareness[1])): #ralph4
 		ambush = true
 		text = encounterdictionary(enemygroup.descriptionambush)
 		if enemygroup.special == null:
@@ -779,13 +779,13 @@ func capturedecide(stage): #1 - no reward, 2 - material, 3 - sex, 4 - join
 			text = "$name hastily refuses and retreats excusing $himself. "
 		###---End Expansion---###
 	elif stage == 4:
-		if rand_range(0,100) >= 20 + globals.state.reputation[location]/4:
+		if rand_range(0,100) >= 20 + globals.state.reputation[location]/4 + (rewardslave.npcexpanded.timesrescued*globals.expansionsettings.times_rescued_multiplier):
 			text = "$name excuses $himself, but can't accept your proposal and quickly leaves. "
 		else:
 			rewardslave.obed = 85
 			rewardslave.stress = 10
 			globals.slaves = rewardslave
-			text = "$name observes you for some time, measuring your words, but to your surprise, $he complies either out of symphathy, or out of desperate life $he had to carry. "
+			text = "$name observes you for some time, measuring your words, but to your surprise, $he complies either out of symphathy, or out of the desperate life $he had to carry. "
 	main.dialogue(true,self,rewardslave.dictionary(text))
 	
 
