@@ -2058,31 +2058,83 @@ func sexchangepoteffect():
 
 
 #recipes
-func recipedecrypt(item):
+func recipedecrypt(item): #apparently never used...
+	#print("recipedecrypt")
+	craftitemingredients.clear()
 	var text = ''
 	var recipe = item.recipe
 	var canmake = true
 	for i in get(recipe):
-		var ingredient = globals.itemdict[i]
-		var amount = get(recipe)[i]
-		text += ingredient.name + ' - '+ str(amount) + ', '
-		if ingredient.amount < amount:
-			canmake = false
+		###---Added By Expansion ---###
+		if (globals.items.itemlist[i].type == "potion" || globals.items.itemlist[i].type == "ingredient"):
+			var ingredient = globals.itemdict[i]
+			var amount = get(recipe)[i]
+			text += ingredient.name + ' - '+ str(amount) + ', '
+			if ingredient.amount < amount:
+				canmake = false
+		else:
+			var count = 0
+			var amount = get(recipe)[i]
+			print(str(amount))
+			var ingredient = globals.itemdict[i]
+			#var dupearray = duplicate()
+			print(str(globals.state.unstackables.get() + ' unst'))
+			for j in globals.state.unstackables.get():
+				if j.owner == null:
+					print(str(j.code))
+					if j.code == i:
+						count += 1
+						if count <= amount:
+							craftitemingredients.append(j)
+							print(str(craftitemingredients))
+			ingredient.amount = count
+			text += ingredient.name + ' - '+ str(amount) + ', '
+			if ingredient.amount < amount:
+				canmake = false
+		###---Expansion End---###
 	var dict = {}
 	dict.text = text
 	dict.canmake = canmake
 	return dict
 
 func recipemake(item):
+	var count = 0
+	var dupearrayunstackables = []
+	#print("recipemake")
 	var recipe = item.recipe
+	#print(str(craftitemingredients))
+	var amount = 0
 	for i in get(recipe):
-		var ingredient = globals.itemdict[i]
-		var amount = get(recipe)[i]
-		ingredient.amount -= amount
-	if globals.state.spec == 'Alchemist':
-		item.amount += 2
+		count = 0
+		amount = get(recipe)[i]
+		###---Added By Expansion ---###
+		if (globals.items.itemlist[i].type == "potion" || globals.items.itemlist[i].type == "ingredient"):
+			var ingredient = globals.itemdict[i]
+			ingredient.amount -= amount
+		else:
+			dupearrayunstackables = globals.state.unstackables.duplicate().values()
+			dupearrayunstackables.sort_custom(globals.items,"sortbyenchantPall")
+			for j in dupearrayunstackables:
+				if j.owner == null:
+					#print(str(j.code))
+					if j.code == i:
+						count += 1
+						if count <= amount:
+							craftitemingredients.append(j)
+							#print(str(craftitemingredients))
+			for j in craftitemingredients:
+				if j.code == i:
+					globals.state.unstackables.erase(j.id)
+	if (item.type == "potion" || item.type == "ingredient"):
+		if globals.state.spec == 'Alchemist':
+			item.amount += 2
+		else:
+			item.amount += 1
 	else:
-		item.amount += 1
+		var tmpitem = globals.items.createunstackable(item.code) 
+		globals.state.unstackables[str(tmpitem.id)] = tmpitem
+	###---Expansion End---###
+
 
 
 #unstackable item management
