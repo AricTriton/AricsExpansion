@@ -4,6 +4,11 @@
 
 var modversion = 1.5
 
+#---Aric's and Game's Base Values potentially changed by Ralph's
+var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within ApplyTweaks as well as the Hybrid system.
+var unique_trait_generation = false				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
+
+
 #---Debug Tools (True/False)
 var perfectinfo = false
 var enablecheatbutton = false
@@ -12,8 +17,12 @@ var enablecheatbutton = false
 #---Content Filter | Partially Enabled (True/False)
 var brutalcontent = true
 var messycontent = true
+
 #Bloody Good Taste (British the Descriptions)
 var ihavebloodygoodtaste = false
+
+#Unwanted Fetishes - Disables them from showing in the Fetish Talk menu
+var unwantedfetishes = []		#Copy/Paste any you don't want into the 'unwantedfetishes' array below: ['incest','lactation','drinkmilk','bemilked','milking','exhibitionism','drinkcum','wearcum','wearcumface','creampiemouth','creampiepussy','creampieass','pregnancy','oviposition','drinkpiss','wearpiss','pissing','otherspissing','bondage','dominance','submission','sadism','masochism']
 
 
 #---Person Expanded (True/False)
@@ -134,10 +143,6 @@ var livestockloseconsentchance = 20
 
 
 #---Fetishes
-#Unwanted Fetishes - Disables them from showing in the Fetish Talk menu
-#Copy/Paste any you don't want into the 'unwantedfetishes' array below: ['incest','lactation','drinkmilk','bemilked','milking','exhibitionism','drinkcum','wearcum','wearcumface','creampiemouth','creampiepussy','creampieass','pregnancy','oviposition','drinkpiss','wearpiss','pissing','otherspissing','bondage','dominance','submission','sadism','masochism']
-var unwantedfetishes = []
-
 #FetishDifficulty is what Fetish*10 is multiplied by for the Chance of Success
 var fetishdifficulty = 2
 
@@ -196,10 +201,8 @@ var ovulationtype1stage2 = 15
 var ovulationtype2stage1 = 12
 var ovulationtype2stage2 = 15
 
-#---Aric's and Game's Base Values potentially changed by Ralph's
-var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within ApplyTweaks as well as the Hybrid system.
-var unique_trait_generation = false				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
 
+#--- Ralph's Tweaks
 #Mage Specialization Manacost Reduction
 var mage_mana_reduction = true
 												# Ralph's - [false, "Combat spell deal 20% more damage"]
