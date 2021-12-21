@@ -77,6 +77,69 @@ func mountainwin(stage = 0):
 		
 	globals.main.dialogue(state, self, text, buttons, sprite)
 
+func finalemelissa(stage = 0):
+	var text = ''
+	var state = false
+	var buttons = []
+	var slavelist = []
+	var image = 'finale'
+	for i in globals.slaves:
+		var score = i.metrics.ownership + i.metrics.sex*3 + i.metrics.win*2 + i.level*7
+		slavelist.append({person = i, score = score})
+	slavelist.sort_custom(self, 'bestslave')
+	if globals.slaves.size() == 0:
+		stage = 5
+	if stage == 0:
+		finaleperson = slavelist[0].person
+		text = finaleperson.dictionary(textnode.MainQuestFinaleGoodHadeDefeat)
+		buttons.append({text = "Let Hade go", function = 'finalemelissa', args = 1})
+		buttons.append({text = finaleperson.dictionary("Let $name die"), function = 'finalemelissa', args = 2})
+	elif stage == 1:
+		text = finaleperson.dictionary(textnode.MainQuestFinaleGoodReleaseHade)
+		buttons.append({text = "Continue", function = 'finalemelissa', args = 3})
+		globals.state.decisions.append("haderelease")
+	elif stage == 2:
+		text = finaleperson.dictionary(textnode.MainQuestFinaleGoodTakeHade)
+		globals.main.sound('stab')
+		image = 'finale2'
+		buttons.append({text = "Subdue Melissa", function = 'finalemelissa', args = 4})
+		globals.state.decisions.append("hadekeep")
+		globals.main.music_set('stop')
+		###---Added by Expansion---### Crystal Immortality | Added by Pallington
+		if globals.state.thecrystal.preventsdeath == true:
+			globals.state.thecrystal.lifeforce -= 1
+			finaleperson.stats.health_cur = 15
+			finaleperson.away.duration = 3
+			finaleperson.away.at = 'rest'
+			finaleperson.work = 'rest'
+			globals.state.playergroup.erase(finaleperson.id)
+		else:				
+			finaleperson.removefrommansion()
+		###---End Expansion---###
+	elif stage == 3:
+		text = finaleperson.dictionary(textnode.MainQuestFinaleGoodReleaseHade2)
+		globals.main.closescene()
+		var sprite = [["melissaworried", 'pos1', 'opac']]
+		buttons.append({text = finaleperson.dictionary("Rush to $name"), function = 'ending'})
+		globals.main.dialogue(state, self, text, buttons, sprite)
+		return
+	elif stage == 4:
+		text = finaleperson.dictionary("You subdue and capture Melissa, but $name is above saving... ")
+		globals.main.closescene()
+		var sprite = [["melissaworried", 'pos1', 'opac'], ['hadeneutral','pos2','opac']]
+		buttons.append({text = "...", function = 'ending'})
+		globals.main.dialogue(state, self, text, buttons, sprite)
+		return
+	elif stage == 5:
+		text = "With Hade's defeat you secure this victory..."
+		globals.main.closescene()
+		globals.state.decisions.append("melissanoslave")
+		var sprite = [['hadeneutral','pos1','opac']]
+		buttons.append({text = "...", function = 'ending'})
+		globals.main.dialogue(state, self, text, buttons, sprite)
+		return
+	globals.main.scene(self, image, text, buttons)
+
 func chloeforest(stage = 0):
 	var text = ''
 	var state = false
