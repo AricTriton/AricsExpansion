@@ -1,18 +1,18 @@
 AricsExpansion Rebred v1.5
 
 <HOW TO CORRECTLY INSTALL THIS MOD>
-1) Extract Ankmairdor's BugFix v5a and this mod, AricsExpansion, into your %AppData%/Strive/mods folder
+1) Extract Ankmairdor's BugFix v6 and this mod, AricsExpansion, into your %AppData%/Strive/mods folder
     - Links are in "Shortcuts" if needed
-2) Verify that the extracted folders are "Strive-1.0d-Bugfix-V5a" and "AricsExpansion" (If they aren't, the correct folders are likely within the ones you extracted.)
+2) Verify that the extracted folders are "Strive-1.0d-Bugfix-V6" and "AricsExpansion" (If they aren't, the correct folders are likely within the ones you extracted.)
     - If they aren't, the correct folders are likely within the ones you extracted.
-3) Start the Game; Activate BugFix v5a (and ONLY this). Hit the Exit Game button.
-4) Start the Game; Activate AricsExpansion BENEATH BugFix v5a. Hit the Exit Game button.
+3) Start the Game; Activate BugFix v6 (and ONLY this). Hit the Exit Game button.
+4) Start the Game; Activate AricsExpansion BENEATH BugFix v6. Hit the Exit Game button.
 5) Start the Game; Make a New Game. Immediately SAVE (as soon as possible). LOAD that game you just Saved.
 6) You are ready to play! Have fun and enjoy the new features. If you have any Bugs, please use the Debug mod to give me the specific error so we can resolve it.
 
 <Load Order & Disclaimer>
 Load Order should look like:
-"BugFix v5a"
+"BugFix v6"
 "AricsExpansion"
 [Any others MUST load below AricsExpansion]
 Starting a New Save Game for this mod is Highly Recommended!
@@ -53,11 +53,11 @@ The Talk button has a lot of new features integrated into it. Consent (combat, s
 NPCs persist when released and not killed to level up as rivals and nemesis', Stress can be a major combonent in Combat, New Abilites are added, and a lot more.
 
 -New Items:
-New Items and changed weights on old items.
+New Items, Images, and changed weights on old items.
 
 <Compatibility>
 -Compatible Mods (Load After AricsExpansion)
-RandomPortraits (Version for Game Version v1)
+RandomPortraits (Version for Game Version v1d)
 
 -Note: Be aware this mod is a complete overhaul of many game mechanics. It is not recommended to use it in addition to other mods and doing so may break your game.
 If you don't want to risk corrupting a save or breaking a game, check the forums or Discord for ones tested for compatibility first.
@@ -67,8 +67,8 @@ App Data is the same for both, though, so you will need to duplicate and rename 
 I would also recommend backing up and deleting the ProgressData from the %AppData%/Strive folder, especially if you are playing on an existing savegame. The date and icons for your save will return next time you save the game!
 
 <More Details Here and Support Here>
-Use the AricsExpansion Mod v1 Shortcut in the Shortcuts folder for Support on the itch.io forums
-You can also generally contact Aric via the mod channel in the Strive Discord
+Use the AricsExpansion Shortcut in the Shortcuts folder for Support on the itch.io forums
+You can also generally contact Aric via the mod channel in the Strive Discord or via the Discord link on the main mod page
 
 -Reporting Bugs Note-
 Report bugs to the itch.io forum listed above or Discord.
@@ -80,7 +80,7 @@ Be aware that this is a work in progress and generally only developed on by 1 pe
 
 <Uninstalling AricsExpansion>
 Just deselect it from the Mods list and hit "Exit Game".
-Do not deselect Bugfix v5a! If you want to remove that too, remove AricsExpansion first, reboot, then you may do so. But...why would you?
+Do not deselect Bugfix v6! If you want to remove that too, remove AricsExpansion first, reboot, then you may do so. But...why would you?
 Remember: Games Saved using Aric's Expansion can only be used with Aric's Expansion.
 
 
