@@ -17,6 +17,16 @@ var hobbydescription = {
 var slaveHobbiesExpanded = ['Graceful','Curious','Genius','Socialite','Waifu','Perfect Specimen'] #ralph3
 ###---Expansion End---###
 
+#QMod - Rewrote function
+func statup(button):	
+	var name = button.get_name().left(3) + "_max" #Get stat being increased
+	###---Added by Expansion---### Removed player.stats[name] < variables.playermaxstats as it seems to reference a non-existant variable
+	if playerBonusStatPoints >= 1: #Check bonus points available and stat below maximum limit
+		player.stats[name] += 1
+		playerBonusStatPoints -= 1
+	###---End Expansion---###
+	_update_stage5()
+
 #Added Penis Sizes
 #QMod - Refactor
 func _process_stage6_sex_options():

@@ -1645,7 +1645,12 @@ func slimeConversionCheck(mother, father):
 func randomitemfromarray(source):
 	if source.size() > 0:
 		#source[randi() % source.size()] Old
-		return source[rand_range(0,source.size()-1)]
+		return source[round(rand_range(0,source.size()-1))]
+
+#Changed to fix Division by Zero in operator % error
+func randomfromarray(array):
+#	return array[randi() % array.size()]
+	return array[round(rand_range(0, array.size()-1))]
 
 func getfromarray(array, index):
 	return array[ clamp(index, 0, array.size()-1) ]
