@@ -1466,7 +1466,7 @@ func fertilize_egg(mother, father_id, father_unique):
 		father = globals.state.findslave(father_id)
 		#If Father disappeared from the World
 		if father == null:
-			father = globals.newslave(randomfromarray(globals.allracesarray), 'adult', 'male')
+			father = globals.newslave(randomitemfromarray(globals.allracesarray), 'adult', 'male')
 	else:
 		father = globals.newslave(globals.allracesarray[rand_range(0,globals.allracesarray.size())], 'adult', 'male')
 		father.id = '-1'
@@ -1645,7 +1645,7 @@ func slimeConversionCheck(mother, father):
 func randomitemfromarray(source):
 	if source.size() > 0:
 		#source[randi() % source.size()] Old
-		return source[rand_range(0,source.size())]
+		return source[rand_range(0,source.size()-1)]
 
 func getfromarray(array, index):
 	return array[ clamp(index, 0, array.size()-1) ]
