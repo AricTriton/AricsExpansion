@@ -489,7 +489,7 @@ func mutate(power=2):
 					text += "$name's breasts stopped secreting milk. "
 					person.lactation = false
 			8:
-				temp = randNewFromArray(range(6), int(person.titsextra))
+				temp = randNewFromArray(range(5), int(person.titsextra))
 				text += "Additional %s have %s on $name's torso. " % ["tits" if person.titsextradeveloped else "nipples", "sprouted" if (temp > person.titsextra) else "shrunk to nothing"]
 				person.titsextra = temp
 			9:

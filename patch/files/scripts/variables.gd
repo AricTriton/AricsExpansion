@@ -102,6 +102,8 @@ var list = {
 		basehealth = {descript = "Character's health before modifiers", min = 1.0, max = 1000.0},
 		healthperend = {descript = "Bonus health per point of endurance", min = 0.0, max = 1000.0},
 		playerbonusstatpoint = {descript = "Bonus player stat points during char creation", min = 0.0, max = 1000.0},
+		playermaxstats = {descript = "Max points per player stat during char creation", min = 4.0, max = 1000.0},
+		storymodeanyrace = {descript = "Choose any race when starting story mode"},
 		basefoodconsumption = {descript = "Basic food consumption for characters per day", min = 0.0, max = 100.0},
 		skillpointsperlevel = {descript = "Attribute points gained on level-up", min = 0.0, max = 100.0},
 		learnpointsperstat = {descript = "Number of skill points required to increase mental stat by 1", min = 1.0, max = 100.0},
@@ -166,3 +168,6 @@ var list = {
 	},
 }
 ###---End Expansion---###
+var playermaxstats = 7
+
+var storymodeanyrace = false

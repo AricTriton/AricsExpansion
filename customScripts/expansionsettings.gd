@@ -2,7 +2,7 @@
 
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
-var modversion = 1.4
+var modversion = 1.5
 
 #---Debug Tools (True/False)
 var perfectinfo = false
@@ -21,7 +21,7 @@ var ihavebloodygoodtaste = false
 var uniqueslavesautopartyconsent = false
 
 #Lip Size Increase Change (Chance is array-5*10, ie: plump and bigger give 10)
-var lipstraitbasechance = 25
+var lipstraitbasechance = 20
 
 #Base Bonus or Penalty for Attraction Checks for PCs
 var playerattractionmodifier = 20
@@ -156,8 +156,10 @@ var sedativewitlosschance = 75
 
 #---Towns Expanded
 #The Base Chance that local town guards will have arrested/killed escaped enemies to clear room in the array
-var minimum_npcs_to_detain = 5
+var minimum_npcs_to_detain = 20
 var townguardefficiency = 15
+#Laws: Public Nudity Bonus and Penalty
+var enable_public_nudity_system = true
 
 #NPC Town Guard Execution Chance
 var randomexecutions = 25

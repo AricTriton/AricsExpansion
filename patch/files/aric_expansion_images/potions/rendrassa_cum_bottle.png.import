@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/milkbottle.png-36f24ec827566956cd01217346416e49.stex"
+path="res://.import/rendrassa_cum_bottle.png-90fcfee3bf3680fdb1ff3ded7ee656cd.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://files/aric_expansion_images/items/milkbottle.png"
-dest_files=[ "res://.import/milkbottle.png-36f24ec827566956cd01217346416e49.stex" ]
+source_file="res://files/aric_expansion_images/potions/rendrassa_cum_bottle.png"
+dest_files=[ "res://.import/rendrassa_cum_bottle.png-90fcfee3bf3680fdb1ff3ded7ee656cd.stex" ]
 
 [params]
 

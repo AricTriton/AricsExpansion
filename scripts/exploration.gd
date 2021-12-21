@@ -128,7 +128,7 @@ func buildslave(i, criminal = false):
 				race = globals.weightedrandom(currentzone.races)
 	
 			'any':
-				race = globals.allracesarray[rand_range(0,globals.allracesarray.size())]
+				race = globals.getracebygroup('active')
 	
 			'bandits':
 				if rand_range(0,100) <= variables.banditishumanchance:
@@ -194,66 +194,6 @@ func buildslave(i, criminal = false):
 		slavetemp.health = slavetemp.stats.health_max
 	return slavetemp
 
-###---Added by Expansion---### Ank BugFix v4a
-func enemyinfo():
-	var text = ''
-	if enemygroup.units.size() <= 3:
-		text = "Number: " + str(enemygroup.units.size())
-	else:
-		text = "Estimate number: " + str(max(round(enemygroup.units.size() + rand_range(-2,2)),3))
-	var total = 0
-	for i in enemygroup.units:
-		if i.capture != null:
-			total += i.capture.level
-		elif deeperregion:
-			total += ceil(i.level * 1.3)
-		else:
-			total += i.level
-	text += "\nEstimated level: " + str(max(1,round(total/enemygroup.units.size()) + round(rand_range(-1,1))))
-	var firstEnemy = enemygroup.units[0]
-	text += '\nGroup: ' + firstEnemy.faction
-	if enemygroup.captured != null && enemygroup.captured.size() >= 1:
-		text += "\n\nHave other persons involved. "
-	if firstEnemy.capture != null && firstEnemy.capture.sex != 'male' && firstEnemy.has('iconalt'):
-		outside.get_node("textpanelexplore/enemyportrait").set_texture(firstEnemy.iconalt)
-	else:
-		outside.get_node("textpanelexplore/enemyportrait").set_texture(firstEnemy.icon)
-	outside.get_node("textpanelexplore/enemyinfo").set_bbcode(text)
-###---End Expansion---###
-
-func enemyinfoclear():
-	outside.get_node("textpanelexplore/enemyportrait").set_texture(null)
-	outside.get_node("textpanelexplore/enemyinfo").set_bbcode('')
-
-func enemylevelup(person, levelarray):
-	var level = round(rand_range(levelarray[0], levelarray[1]))
-	var statdict = ['sstr','sagi','smaf','send']
-	var skillpoints = abs(level-person.level)*variables.skillpointsperlevel
-	while skillpoints > 0 && statdict.size() > 0:
-		var tempstat = statdict[randi()%statdict.size()]
-		#slaves can be constructed with levels greater than they will recieve for the region of encounter
-		if person.level < level:
-			if randf() <= 0.2:
-				person.skillpoints += 1
-			elif person.stats[globals.maxstatdict[tempstat].replace('_max',"_base")] >= person.stats[globals.maxstatdict[tempstat]]:
-				statdict.erase(tempstat)
-				continue
-			else:
-				person.stats[globals.maxstatdict[tempstat].replace('_max',"_base")] += 1
-		elif person.stats[globals.maxstatdict[tempstat].replace('_max',"_base")] <= 0:
-			statdict.erase(tempstat)
-			continue
-		else:
-			person.stats[globals.maxstatdict[tempstat].replace('_max',"_base")] -= 1
-		skillpoints -= 1
-	if skillpoints > 0 && statdict.empty():
-		if person.level < level:
-			person.skillpoints += skillpoints
-		else:
-			person.skillpoints = max(person.skillpoints - skillpoints, 0)
-	person.level = level
-	person.health = person.stats.health_max
-
 func buildenemies(enemyname = null):
 	if enemyname == null:
 		enemygroup = enemygrouppools[globals.weightedrandom(currentzone.enemies)].duplicate()
@@ -286,36 +226,6 @@ func buildenemies(enemyname = null):
 			buildslave(i,true)
 			###---End Expansion---###
 
-func encounterbuttons(state = null):
-	var array = []
-	if state == null:
-		if ambush == false:
-			array.append({name = "Attack",function = "enemyfight"})
-			array.append({name = "Leave", function = "enemyleave"})
-		else:
-			array.append({name = "Fight",function = "enemyfight"})
-	elif state in ['patrolsmall', 'patrolbig']:
-		array.append({name = "Fight",function = "enemyfight"})
-		var dict = {}
-		if state == 'patrolsmall':
-			dict = {name = "Bribe with 100 gold", args = 100, function = 'patrolbribe'}
-			if globals.resources.gold < 100 :
-				dict.disabled = true
-		elif state == 'patrolbig':
-			dict = {name = "Bribe with 300 gold", args = 300, function = 'patrolbribe'}
-			if globals.resources.gold < 300 :
-				dict.disabled = true
-		array.append(dict)
-	outside.buildbuttons(array, self)
-
-func patrolbribe(sum):
-	var array = []
-	globals.resources.gold -= sum
-	array.append({name = "Leave", function = "enemyleave"})
-	mansion.maintext = "You bribe Patrol's leader and hastily escape from the scene. "
-	outside.buildbuttons(array, self)
-
-
 ##############
 
 
@@ -330,398 +240,6 @@ var chestloot = {
 ###---End Expansion---###
 
 
-var chest = {strength = 0, agility = 0, treasure = {}, trap = ''}
-var selectedpartymember = null
-var chestaction = ''
-
-func getchestlevel():
-	var level = rand_range(currentzone.levelrange[0], currentzone.levelrange[1])
-	if level < 5:
-		level = 'easy'
-		chest.strength = round(rand_range(1,3))
-		chest.agility = round(rand_range(1,3))
-	elif level < 10:
-		level = 'medium'
-		chest.strength = round(rand_range(3,5))
-		chest.agility = round(rand_range(3,5))
-	else:
-		level = 'hard'
-		chest.strength = round(rand_range(5,8))
-		chest.agility = round(rand_range(5,8))
-	return level
-
-func treasurechest():
-	var level = getchestlevel()
-	treasurechestgenerate(level)
-	var text = "You found a hidden [color=yellow]chest[/color]. However, it seems to be locked and is too heavy to carry with you. "
-	treasurechestoptions(text)
-	text = "Chest\nDifficulty level: [color=aqua]" + level.capitalize() + '[/color]\n\nStrength : ' + str(chest.strength) + '\nComplexity: ' + str(chest.agility)
-	outside.get_node("textpanelexplore/enemyportrait").set_texture(load("res://files/buttons/chest.png"))
-	outside.get_node("textpanelexplore/enemyinfo").set_bbcode(text)
-
-
-func chestselectslave(action):
-	chestaction = action
-	var reqs = ''
-	var text = ''
-	if chestaction == 'chestlockpick':
-		reqs = 'person.energy >= 5'
-		text = 'Lock difficulty: ' + str(chest.agility)
-	else:
-		reqs = 'person.energy >= 20'
-		text = 'Lock strength: ' + str(chest.strength)
-	outside.chosepartymember(true, [self,chestaction], reqs, text)#func chosepartymember(includeplayer = true, targetfunc = [null,null], reqs = 'true'):
-
-
-func treasurechestoptions(text = ''):
-	var array = []
-	mansion.maintext = text
-	array.append({name = 'Use a lockpick (5 energy)', function = 'chestselectslave', args = 'chestlockpick'})
-	if !globals.state.backpack.stackables.has("lockpick"):
-		array.back().disabled = true
-	array.append({name = 'Crack it open (20 energy)', function = 'chestselectslave', args = 'chestbash'})
-	array.append({name = "Leave", function = 'enemyleave'})
-	outside.buildbuttons(array, self)
-
-
-
-func treasurechestgenerate(level = 'easy'):
-	var gear = {number = 0, enchantchance = 0 }
-	var misc = 0
-	var text
-	var miscnumber = 1
-	if level == 'easy':
-		gear.number = round(rand_range(1,2))
-		gear.enchantchance = 45
-		misc = round(rand_range(0,1))
-		miscnumber = [1,2]
-	elif level == 'medium':
-		gear.number = round(rand_range(1,4))
-		gear.enchantchance = 55
-		misc = round(rand_range(0,2))
-		miscnumber = [1,3]
-	elif level == 'hard':
-		gear.number = round(rand_range(2,4))
-		gear.enchantchance = 65
-		misc = round(rand_range(1,3))
-		miscnumber = [1,4]
-	var gearpool = chestloot[level]
-	if level == 'hard':
-		gearpool = chestloot.medium+chestloot.hard
-	winscreenclear()
-	generaterandomloot(gearpool, gear, misc, miscnumber)
-
-func chestlockpick(person):
-	var unlock = false
-	var text = ''
-	person.energy -= 5
-	globals.state.backpack.stackables.lockpick -= 1
-	if person.sagi >= chest.agility:
-		unlock = true
-		text = "$name skillfully picks the lock on the chest."
-	else:
-		if 60 - (chest.agility - person.sagi) * 10 >= rand_range(0,100):
-			text = "With some luck, $name manages to pick the lock on the chest. "
-			unlock = true
-		else:
-			text = "$name fails to pick the lock and breaks the lockpick. "
-			unlock = false
-	
-	text = person.dictionary(text)
-	if unlock == false:
-		outside.playergrouppanel()
-		treasurechestoptions(text)
-	else:
-		showlootscreen(text)
-
-func chestbash(person):
-	var unlock = false
-	var text = ''
-	person.energy -= 20
-	if person.sstr >= chest.strength:
-		unlock = true
-		text = "$name easily smashes the chest's lock mechanism."
-	else:
-		if 60 - (chest.strength - person.sstr) * 10 >= rand_range(0,100):
-			text = "With some luck, $name manages to crack the chest open. "
-			unlock = true
-		else:
-			text = "[color=yellow]$name seems to be too weak to break the chest open. [/color]"
-			unlock = false
-	
-	text = person.dictionary(text)
-	if unlock == false:
-		outside.playergrouppanel()
-		treasurechestoptions(text)
-	else:
-		showlootscreen(text)
-
-
-
-
-
-###################
-
-func blockedsection():
-	var array = []
-	
-	mansion.maintext = "You found a hidden [color=yellow]section[/color] covered in thick roots. "
-	if globals.state.backpack.stackables.has("torch"):
-		array.append({name = "Use a torch", function = 'blockedsectionopen'})
-	else:
-		array.append({name = "Use a torch", function = 'blockedsectionopen', tooltip = 'You have no torches with you',disabled = true})
-	
-	array.append({name = "Leave", function = 'enemyleave'})
-	outside.buildbuttons(array, self)
-
-func blockedsectionopen():
-	var gear = {number = round(randf()*3), enchantchance = 75 }
-	var misc = rand_range(1,4)
-	var text
-	var miscnumber = [1,3]
-	var loottable = chestloot.medium
-	globals.state.backpack.stackables.torch -= 1
-	text = "After roots burn down you discover a hidden stash."
-	if gear.number == 0:
-		gear.number = 1
-	winscreenclear()
-	generaterandomloot(loottable, gear, misc, miscnumber)
-	showlootscreen(text)
-
-func generateloot(loot = [], text = ''):
-	var winpanel = get_node("winningpanel")
-	var tempitem
-	var enchant
-	for i in winpanel.get_node("ScrollContainer/VBoxContainer").get_children():
-		if i != winpanel.get_node("ScrollContainer/VBoxContainer/Button"):
-			i.visible = false
-			i.free()
-	enchant = false
-	var item = loot[0]
-	if item.findn('+') >= 0:
-		enchant = true
-		item = item.replace("+","")
-	if globals.itemdict[item].type == 'gear':
-		var counter = loot[1]
-		while counter > 0:
-			tempitem = globals.items.createunstackable(item)
-			if enchant:
-				globals.items.enchantrand(tempitem)
-			enemyloot.unstackables.append(tempitem)
-			counter -= 1
-	else:
-		enemyloot.stackables[loot[0]] = loot[1]
-	
-	showlootscreen()
-
-func generaterandomloot(loottable = [], gear = {number = 0, enchantchance = 0}, misc = 0, miscnumber = [0,0]):
-	var tempitem
-	while gear.number > 0:
-		gear.number -= 1
-		tempitem = globals.items.createunstackable(loottable[randi()%loottable.size()])
-		if randf() <= float(gear.enchantchance)/100:
-			globals.items.enchantrand(tempitem)
-		enemyloot.unstackables.append(tempitem)
-	while misc > 0:
-		misc -= 1
-		tempitem = globals.weightedrandom(treasuremisc)
-		if enemyloot.stackables.has(tempitem):
-			enemyloot.stackables[tempitem] += round(rand_range(miscnumber[0], miscnumber[1]))
-		else:
-			enemyloot.stackables[tempitem] = round(rand_range(miscnumber[0], miscnumber[1]))
-	
-	#showlootscreen()
-
-func showlootscreen(text = ''):
-	var winpanel = get_node("winningpanel")
-	for i in winpanel.get_node("ScrollContainer/VBoxContainer").get_children():
-		if i.name != "Button":
-			i.visible = false
-			i.free()
-	winpanel.visible = true
-	winpanel.get_node("wintext").set_bbcode(text)
-	builditemlists()
-
-
-
-
-
-func banditcamp():
-	globals.get_tree().get_current_scene().get_node('outside').clearbuttons()
-	newbutton = button.duplicate()
-	buttoncontainer.add_child(newbutton)
-	newbutton.set_text('Attack them')
-	newbutton.visible = true
-	newbutton.connect("pressed",self,'enemyfight')
-	newbutton = button.duplicate()
-	buttoncontainer.add_child(newbutton)
-	newbutton.set_text('Ignore them')
-	newbutton.visible = true
-	newbutton.connect("pressed",self,'enemyleave')
-
-func slaversenc(stage = 0):
-	var state = false
-	var buttons = []
-	var image
-	var sprites = []
-	if stage == 0:
-		if enemygroup.units.size() < 4:
-			mansion.maintext = "You spot a small group of slavers escorting a captured person. "
-		else:
-			mansion.maintext = "You come across a considerable group of slavers escorting a few capturees. "
-		buttons.append({name = 'Attack Slavers', function = 'slaversenc', args = 1})
-		buttons.append({name = 'Greet Slavers',function = 'slaversenc',args = 2})
-		buttons.append({name = 'Leave',function = 'enemyleave'})
-		outside.mindread = false
-	elif stage == 1:
-		enemyfight()
-		return
-	elif stage == 2:
-		mansion.maintext = "You greet the group of slavers and they offer you to check their freshly acquired merchandise. "
-		buttons.append({name = 'Fight Slavers', function = 'slaversenc', args = 1})
-		buttons.append({name = 'Check Victims',function = 'slaversenc',args = 4})
-		buttons.append({name = 'Leave',function = 'enemyleave'})
-	elif stage == 3:
-		progress += 1
-		zoneenter(currentzone.code)
-	elif stage == 4:
-		outside.get_node("playergrouppanel/VBoxContainer").visible = false
-		globals.main.get_node("outside").slavearray = enemygroup.captured
-		globals.main.get_node("outside").slaveguildslaves('slavers')
-	outside.buildbuttons(buttons,self)
-	#globals.main.dialogue(state, self, text, buttons, sprites)
-	
-#func slaverwin():
-#	var state = false
-#	var text = ''
-#	var buttons = []
-#	var sprites = []
-#	text = textnode.SlaverWin1
-#	globals.main.dialogue(state, self, text, buttons, sprites)
-	
-func merchantencounter(stage = 0):
-	var state = false
-	var text = ''
-	var buttons = []
-	var image
-	var sprites = []
-	if stage == 0:
-		text = ""
-		buttons.append({text = 'Trade',function = 'merchantencounter',args = 1})
-		buttons.append({text = 'Ignore',function = 'merchantencounter',args = 2})
-	elif stage == 1:
-		globals.main.get_node("outside").shopinitiate('outdoor')
-		globals.main.get_node("outside").shopbuy()
-		globals.main.close_dialogue()
-		return
-	elif stage == 2:
-		globals.main.close_dialogue()
-		return
-	globals.main.dialogue(state, self, text, buttons, sprites)
-#-----------------------------------------------------------------------
-
-
-func slaversgreet():
-	globals.get_tree().get_current_scene().get_node('outside').clearbuttons()
-	globals.get_tree().get_current_scene().get_node('outside').maintext = globals.player.dictionary("You reveal yourself to the slavers' group and wonder if they'd be willing to part with their merchandise saving them hassle of transportation.\n\n- You, $sir, know how to bargain. We'll agree to part with our treasure here for ")+str(max(round(enemygroup.captured.buyprice()*0.7),40))+" gold.\n\nYou still might try to take their hostage by force, but given they know about your presence, you are at considerable disadvantage. "
-	newbutton = button.duplicate()
-	buttoncontainer.add_child(newbutton)
-	newbutton.set_text('Inspect')
-	newbutton.visible = true
-	newbutton.connect("pressed",self,'inspectenemy')
-	newbutton = button.duplicate()
-	buttoncontainer.add_child(newbutton)
-	newbutton.set_text('Agree on the deal')
-	newbutton.visible = true
-	newbutton.connect("pressed",self,'slaverbuy')
-	if globals.resources.gold < max(round(enemygroup.captured.buyprice()*0.7),40):
-		newbutton.set_disabled(true)
-		newbutton.set_tooltip("You don't have enough gold.")
-	if globals.spelldict.mindread.learned == true:
-		newbutton = button.duplicate()
-		buttoncontainer.add_child(newbutton)
-		newbutton.set_text('Cast Mindread to check personality')
-		newbutton.visible = true
-		newbutton.connect("pressed",self,'mindreadcapturee', ['slavers'])
-		if globals.spells.spellcost(globals.spelldict.mindread) > globals.resources.mana:
-			newbutton.set_disabled(true)
-	newbutton = button.duplicate()
-	buttoncontainer.add_child(newbutton)
-	newbutton.set_text('Fight')
-	newbutton.visible = true
-	newbutton.connect("pressed",self,'enemyfight')
-	newbutton = button.duplicate()
-	buttoncontainer.add_child(newbutton)
-	newbutton.set_text('Refuse and leave')
-	newbutton.visible = true
-	newbutton.connect("pressed",self,'enemyleave')
-
-func snailevent():
-	var array = []
-	mansion.maintext = "You come across a humongous snail making its way through the trees. It makes you remember hearing how you could use it for farming additional income but you will likely need to sacrifice some food to tame it first. "
-	if globals.resources.food >= 200:
-		array.append({name = 'Feed Snail (200 food)', function = 'snailget'})
-	else:
-		array.append({name = 'Feed Snail (200 food)', function = 'snailget', disabled = true, tooltip = "not enough food"})
-	array.append({name = "Ignore it", function = "zoneenter", args = 'grove'})
-	outside.buildbuttons(array,self)
-
-func snailget():
-	globals.resources.food -= 200
-	globals.state.snails += 1
-	main.popup("You've brought a giant snail back with you and left it at your farm. ")
-	main._on_mansion_pressed()
-
-func slaverbuy():
-	globals.resources.gold -= max(round(enemygroup.captured.buyprice()*0.7),30)
-	#enemycapture()
-	globals.get_tree().get_current_scene().popup("You purchase slavers' captive and return to the mansion. " )
-
-func inspectenemy():
-	globals.get_tree().get_current_scene().popup(enemygroup.captured.descriptionsmall())
-
-func mindreadcapturee(state = 'encounter'):
-	globals.spells.person = enemygroup.captured
-	globals.main.popup(globals.spells.mindreadeffect())
-	if state == 'win':
-		enemydefeated()
-	elif state == 'slavers':
-		slaversgreet()
-	else:
-		encounterbuttons()
-
-
-func enemyleave():
-	progress += 1.0
-	var text = ''
-	globals.player.energy -= max(5-floor((globals.player.sagi+globals.player.send)/2),1)
-	for i in globals.state.playergroup:
-		var person = globals.state.findslave(i)
-		person.energy -= max(5-floor((person.sagi+person.send)/2),1)
-	zoneenter(currentzone.code)
-	if text != '':
-		mansion.maintext = mansion.maintext +'\n[color=yellow]'+text+'[/color]'
-
-func enemyfight(soundkeep = false):
-	mansion.maintext = ''
-	outside.clearbuttons()
-	main.get_node("combat").currentenemies = enemygroup.units
-	main.get_node('combat').area = currentzone
-	main.get_node('combat').enemygear = enemygear
-	main.get_node("combat").start_battle(soundkeep)
-
-
-func winscreenclear():
-	var winpanel = get_node("winningpanel")
-	defeated = {units = [], names = [], select = [], faction = []}
-	enemyloot = {stackables = {}, unstackables = []}
-	for i in winpanel.get_node("ScrollContainer/VBoxContainer").get_children():
-		if i != winpanel.get_node("ScrollContainer/VBoxContainer/Button"):
-			i.visible = false
-			i.free()
-	winpanel.get_node("ScrollContainer").visible = false
-	winpanel.get_node("Panel").visible = false
-	main.checkplayergroup()
 
 func enemydefeated():
 	if launchonwin != null:
@@ -1280,13 +798,151 @@ func getTownReport(town):
 	buttons.append({name = "Leave",function = 'zoneenter', args = town})
 	mansion.maintext = text
 	outside.buildbuttons(buttons,self)
+
+func townhall_enter(town):
+	main.animationfade()
+	yield(main, 'animfinished')
+	var buttons = []
+	var text = "You enter the town hall of [color=aqua]" + str(town).capitalize() + "[/color]. You see a few desks set up for members of the council, receptionists, and local town guard liasons. You know that your reputation here is [color=aqua]" + str(round(globals.state.reputation[town])) + "[/color]. You take a moment to decide what you would like to accomplish here."
+	
+	
+	buttons.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = 'wimborn', textcolor = 'green', tooltip = 'Hear news from yesterday'})
+	if !globals.state.townsexpanded[town].townhall.fines.empty():
+		buttons.append({name = "Pay a Fine",function = 'townhall_fines', args = town})
+	
+	if globals.state.townsexpanded[town].townhall.autopay_fines == false:
+		buttons.append({name = "Register to Autopay Fines", function = 'townhall_toggle_autopay', args = town})
+	else:
+		buttons.append({name = "Stop Autopaying Fines", function = 'townhall_toggle_autopay', args = town})
+	buttons.append({name = "Request Meeting with Council",function = 'townhall_meet_council', args = town})
+	
+	buttons.append({name = "Leave Town Hall", function = 'zoneenter', args = town})
+	mansion.maintext = text
+	outside.buildbuttons(buttons,self)
+
+func townhall_meet_council(town):
+	main.animationfade()
+	yield(main, 'animfinished')
+	var buttons = []
+	var text = "You approach a receptionist to request a meeting with the town's leader. You are informed that you will not be able to make any requests or gain a meeting unless you have a Positive reputation (10+) with the town."
+	#Assign/Get Leader
+	var leader = globals.newslave('randomcommon', 'adult', 'random', 'rich')
+	if str(globals.state.townsexpanded[town].localnpcs.leader) == str(-1):
+		leader = globals.newslave('randomcommon', 'adult', 'random', 'rich')
+	else:
+		leader = globals.state.findslave(globals.state.townsexpanded[town].localnpcs.leader)
+	#Show Leader Image
+	
+	#Show if Rep 10+
+	if globals.state.reputation[town] >= 10:
+		buttons.append({name = "Propose Law Change",function = 'townhall_law_change', args = town})
+	
+	buttons.append({name = "Return to the Town Hall Entryway", function = 'townhall_enter', args = town})
+	mansion.maintext = text
+	outside.buildbuttons(buttons,self)
+
+func townhall_law_change(town):
+	main.animationfade()
+	yield(main, 'animfinished')
+	var buttons = []
+	var text = "You approach a receptionist and request that they consider voting on a potential law change. She gives you a form to submit the appeal. She informs you that making this request will cost you [color=aqua]" + str(globals.state.townsexpanded[town].townhall.law_change_cost) + " Reputation[/color] whether it passes or fails as you stake your reputation on it. "
+	
+	#Nudity Law
+	text += "\n\n[center]Laws[/color]\n\nPublic Nudity - "
+	if globals.state.townsexpanded[town].laws.public_nudity == false && !globals.state.townsexpanded[town].currentevents.has('vote_public_nudity'):
+		text += "[color=aqua]Illegal[/color] || Current Public Support to Legalize [color=aqua]" + str(globals.state.townsexpanded[town].nudity) + "[/color] "
+		buttons.append({name = "Legalize Public Nudity", function = 'townhall_legalize_public_nudity', args = town})
+	else:
+		text += "[color=aqua]Legal[/color]"
+	
+	buttons.append({name = "Leave",function = 'zoneenter', args = town})
+	mansion.maintext = text
+	outside.buildbuttons(buttons,self)
+
+func townhall_legalize_public_nudity(town):
+	main.animationfade()
+	yield(main, 'animfinished')
+	var buttons = []
+	var text = "You submit the request form for them to vote on legalizing public nudity. The vote will take place tonight, you won't hear about the results until tomorrow.\n[color=red]You have lost 5 Reputation with " + town.capitalize() + ". [/color]"
+	globals.state.townsexpanded[town].currentevents.append('vote_public_nudity')
+	globals.state.reputation[town] -= 5
+	
+	buttons.append({name = "Return to the Entryway", function = 'townhall_enter', args = town})
+	mansion.maintext = text
+	outside.buildbuttons(buttons,self)
+
+func townhall_fines(town):
+	main.animationfade()
+	yield(main, 'animfinished')
+	var buttons = []
+	var text = "You approach the Town Guard desk and explain that you are interested in seeing the fines accrued under your estate. The officer brings forth the records of the fines. You will have to pay them in order of oldest to newest, but with a high enough reputation may be able to have some waived at a cost to that reputation."
+	
+	var currenttown =  globals.state.townsexpanded[town]
+	buttons.append({name = "From Date = " + str(currenttown.townhall.fines[0][0]) + "; Gold Cost = " + str(currenttown.townhall.fines[0][1]), function = 'townhall_pay_fine_gold', args = town})
+	if globals.state.reputation[town] >= 0:
+		buttons.append({name = "Use Your Reputation to Waive 1 Fine", function = 'townhall_pay_fine_rep', args = town})
+		
+	buttons.append({name = "Return to the Entryway", function = 'townhall_enter', args = town})
+	mansion.maintext = text
+	outside.buildbuttons(buttons,self)
+
+func townhall_pay_fine_gold(town):
+	main.animationfade()
+	yield(main, 'animfinished')
+	var buttons = []
+	var text = "You state that you are ready to pay your oldest fine. The guard extends their hand patiently. You hand over the pouch of gold and watch as they shred the fine and purge it from their records."
+	
+	var currenttown =  globals.state.townsexpanded[town]
+	globals.resources.gold -= int(currenttown.townhall.fines[0][1])
+	currenttown.townhall.fines.erase([0])
+
+	if !globals.state.townsexpanded[town].townhall.fines.empty():
+		buttons.append({name = "Pay another Fine", function = 'townhall_fines', args = town})
+	
+	buttons.append({name = "Return to the Entryway", function = 'townhall_enter', args = town})
+	mansion.maintext = text
+	outside.buildbuttons(buttons,self)
+
+func townhall_pay_fine_rep(town):
+	main.animationfade()
+	yield(main, 'animfinished')
+	var buttons = []
+	var text = "You ask if they know who you are and what you've done for this time. The guard nods slowly with growing confusion. You ask if while keeping in mind all of that good that there's anything they can do about this fine. The guard looks exasperated but nods and shreds it. You've lost some reputation with the town but your oldest fine is waived."
+	
+	var currenttown =  globals.state.townsexpanded[town]
+	globals.state.reputation[town] -= round(int(currenttown.townhall.fines[0][1])/15)
+	currenttown.townhall.fines.erase([0])
+	
+	if !globals.state.townsexpanded[town].townhall.fines.empty():
+		buttons.append({name = "Pay another Fine", function = 'townhall_fines', args = town})
+	
+	buttons.append({name = "Return to the Entryway", function = 'townhall_enter', args = town})
+	mansion.maintext = text
+	outside.buildbuttons(buttons,self)
+
+func townhall_toggle_autopay(town):
+	main.animationfade()
+	yield(main, 'animfinished')
+	var buttons = []
+	var text = ""
+	if globals.state.townsexpanded[town].townhall.autopay_fines == false:
+		text += "You gather some paperwork, fill it out, and approach a front desk to make arrangements to have your estate automatically pay for any fines accrued by any of your slaves while working in this town.\n\nThe young, perky female clerk smiles brightly at you as she takes your paperwork and files it away.\n[color=yellow]-No problem at all! We will make sure to automatically deduct any fines from your estate automatically. You won't have to come back here yourself to pay fines or anything.[/color]\n\nYou turn to leave as you here her giggle slightly behind you and whisper to herself.\n[color=yellow]-Assuming you couldn't think of any other reason to drop by, that is.[/color]"
+		globals.state.townsexpanded[town].townhall.autopay_fines = true
+	else:
+		text += "You approach a clerk and explain that you want to revoke the arrangement currently in place for your estate to automatically pay for any fines accrued by any of your slaves while working in this town.\n\nShe nods and ruffles around for your paperwork before destroying it.\n[color=yellow]-Done. I guess we'll be seeing you around here a lot more now as you pay off all your debts to society, huh?[/color]\n\nShe laughs coyly and smiles at you as you walk out."
+		globals.state.townsexpanded[town].townhall.autopay_fines = false
+	
+	buttons.append({name = "Return to the Entryway", function = 'townhall_enter', args = town})
+	mansion.maintext = text
+	outside.buildbuttons(buttons,self)
+	
 ###---End Expansion---###
 
 func wimborn():
 	main.get_node('outside').wimborn()
 	
 	###---Added by Expansion---### Towns Expanded
-	outside.addbutton({name = 'Inquire about Recent Events', function = 'getTownReport', args = 'wimborn', textcolor = 'green', tooltip = 'Hear yesterdays news'}, self)
+	outside.addbutton({name = 'Enter Town Hall', function = 'townhall_enter', args = 'wimborn', textcolor = 'green', tooltip = 'Enter the Town Hall to pay fines or affect laws'}, self)
 	###---End Expansion---###
 	
 	if globals.state.location != 'wimborn':
@@ -1306,6 +962,7 @@ func gorn():
 		array.append({name = "Visit Alchemist", function = 'gornayda'})
 	array.append({name = "Gorn's Market (shop)", function = 'gornmarket'})
 	###---Added by Expansion---### Towns Expanded
+	array.append({name = 'Enter Town Hall', function = 'townhall_enter', args = 'gorn', textcolor = 'green', tooltip = 'Enter the Town Hall to pay fines or affect laws'})
 	array.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = 'gorn', textcolor = 'green', tooltip = 'Hear yesterdays news'})
 	###---End Expansion---###
 	array.append({name = "Outskirts", function = 'zoneenter', args = 'gornoutskirts'})
@@ -1332,6 +989,7 @@ func amberguard():
 		array.append({name = 'Find stranger', function = 'amberguardsearch', args = 2})
 	array.append({name = "Local Market (shop)", function = 'amberguardmarket'})
 	###---Added by Expansion---### Towns Expanded
+	array.append({name = 'Enter Town Hall', function = 'townhall_enter', args = 'amberguard', textcolor = 'green', tooltip = 'Enter the Town Hall to pay fines or affect laws'})
 	array.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = 'amberguard', textcolor = 'green', tooltip = 'Hear yesterdays news'})
 	###---End Expansion---###
 	array.append({name = "Return to Elven Grove", function = 'zoneenter', args = 'elvenforest'})
@@ -1373,6 +1031,7 @@ func frostford():
 	array.append({name = "Visit local Slaver Guild", function = 'frostfordslaveguild'})
 	array.append({name = "Frostford's Market (shop)", function = 'frostfordmarket'})
 	###---Added by Expansion---### Towns Expanded
+	array.append({name = 'Enter Town Hall', function = 'townhall_enter', args = 'frostford', textcolor = 'green', tooltip = 'Enter the Town Hall to pay fines or affect laws'})
 	array.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = 'frostford', textcolor = 'green', tooltip = 'Hear yesterdays news'})
 	###---End Expansion---###
 	array.append({name = "Outskirts", function = 'zoneenter', args = 'frostfordoutskirts'})

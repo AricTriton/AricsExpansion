@@ -161,9 +161,14 @@ func expandGame():
 #	if !globals.state.farmexpanded.has('aphrodisiacs'):
 #		globals.state.farmexpanded['aphrodisiacs'] = 0
 	
+	#Towns Expanded
 	for town in globals.expandedtowns:
 		if !globals.state.townsexpanded[town].has('milkinterest'):
 			globals.state.townsexpanded[town]['milkinterest'] = 5
+		if !globals.state.townsexpanded[town].has('townhall'):
+			globals.state.townsexpanded[town]['townhall'] = {law_change_cost = 5, fines = [], autopay_fines = false,}
+		if !globals.state.townsexpanded[town].has('laws'):
+			globals.state.townsexpanded[town]['laws'] = {public_nudity = false,}
 	
 	#Reputations
 	if !globals.state.reputation.has('shaliq'):
@@ -171,6 +176,12 @@ func expandGame():
 	if !globals.state.reputation.has('umbra'):
 		globals.state.reputation['umbra'] = 0
 	
+	#Resources
+	if !globals.resources.farmexpanded.has('worker_cycle'):
+		globals.resources.farmexpanded['worker_cycle'] = []
+	if !globals.resources.farmexpanded.has('work_type'):
+		globals.resources.farmexpanded['work_type'] = ""
+		
 	#End Update
 	globals.state.expansionversion = globals.expansionsettings.modversion
 	

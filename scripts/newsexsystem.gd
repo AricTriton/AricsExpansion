@@ -665,7 +665,6 @@ class member:
 			var text = ''
 			if i != self:
 				#Checks Attraction, SexMatch
-				var success = globals.expansion.getSexualAttraction(person,i.person)
 				#Match Sexuality (to account for Futas)
 				var sexmatch = false
 				#Sexuality Shift
@@ -674,36 +673,27 @@ class member:
 				elif person.sex != i.person.sex:
 					if i.person.sex == 'futanari':
 						if globals.expansionsettings.futasexualityshift == 'bi':
-							if globals.kinseyscale.find(person.sexuality) < 3:
-								sexmatch = true
-							else:
-								sexmatch = false
+							sexmatch = globals.kinseyscale.find(person.sexuality) < 3
 						elif globals.expansionsettings.futasexualityshift == 'male':
-							if person.sex in ['male','futanari']:
-								sexmatch = true
-							else:
-								sexmatch = false
+							sexmatch = person.sex in ['male','futanari']
 						else:
-							if person.sex in ['female','futanari']:
-								sexmatch = true
-							else:
-								sexmatch = false
+							sexmatch = person.sex in ['female','futanari']
 					else:
 						sexmatch = false
 				#Max of 110 Currently. Add "Size Queen/Etc" for Fetishes/Likes in the Future, then Sens/Lust multipliers as well
 #				text += "[color=aqua]Sexuality Check:[/color] "
-				if success == true:
-					if sexmatch == false:
-						sexualityshift -= rand_range(.1,.15)
-					elif sexmatch == true:
+				if globals.expansion.getSexualAttraction(person,i.person) == true:
+					if sexmatch == true:
 						sexualityshift += rand_range(.1,.15)
+					else:
+						sexualityshift -= rand_range(.1,.15)
 					values.sens *= rand_range(.95,1.05)
 					values.lust *= rand_range(.95,1.05)
 				else:
-					if sexmatch == false:
-						sexualityshift -= rand_range(.05,.5)
-					elif sexmatch == true:
+					if sexmatch == true:
 						sexualityshift += rand_range(.05,.5)
+					else:
+						sexualityshift -= rand_range(.05,.5)
 					values.sens *= rand_range(.4,.6)
 					values.lust *= rand_range(.4,.6)
 				#---End Sexuality Check
@@ -1196,8 +1186,7 @@ func rebuildparticipantslist():
 	for i in givers:
 		for k in takers:
 			#Giver Attraction
-			var success = globals.expansion.getSexualAttraction(i.person,k.person)
-			if success == true:
+			if globals.expansion.getSexualAttraction(i.person,k.person) == true:
 				text += '\n[color=yellow]' + i.name + '[/color] is attracted to ' + '[color=aqua]' + k.name + '[/color] and will enjoy interactions with ' + k.person.dictionary(' $him.')
 			else:
 				text += '\n[color=yellow]' + i.name + "[/color] is [color=red]not[/color] attracted to " + '[color=aqua]' + k.name + "[/color] and will not enjoy interactions with " + k.person.dictionary(' $him.')
@@ -1209,8 +1198,7 @@ func rebuildparticipantslist():
 				if i.person != globals.player:
 					text += '\n[color=yellow]' + i.name + i.person.dictionary('[/color] feels that being with $his [color=aqua]') + str(related) + '[/color], [color=aqua]' + k.name + '[/color], would be ' + str(i.person.fetish.incest) + '.'
 			#Taker Attraction
-			success = globals.expansion.getSexualAttraction(k.person,i.person)
-			if success == true:
+			if globals.expansion.getSexualAttraction(k.person,i.person) == true:
 				text += '\n[color=aqua]' + k.name + '[/color] is attracted to ' + '[color=aqua]' + i.name + '[/color] and will enjoy interactions with ' + i.person.dictionary(' $him.')
 			else:
 				text += '\n[color=aqua]' + k.name + "[/color] is [color=red]not[/color] attracted to " + '[color=aqua]' + i.name + "[/color] and will not enjoy interactions with " + i.person.dictionary(' $him.')
@@ -1290,13 +1278,13 @@ func generaterequest(member):
 	
 	#Creampie Mouth | Cum Drinking
 	if member.person.cum.mouth == 0:
-		if member.person.checkFetish('creampiemouth',checkmod):
+		if member.person.checkFetish('creampiemouth',checkmod, false):
 			checkmod = globals.fetishopinion.find(member.person.fetish.creampiemouth)-3
 			difference = checkmod
 			while difference > 0:
 				rval.append('cuminmouth')
 				difference -= 1
-		elif member.person.checkFetish('drinkcum',checkmod):
+		elif member.person.checkFetish('drinkcum',checkmod, false):
 			checkmod = globals.fetishopinion.find(member.person.fetish.drinkcum)-3
 			difference = checkmod
 			while difference > 0:
@@ -1305,13 +1293,13 @@ func generaterequest(member):
 	
 	#Creampie Pussy | Pregnancy
 	if member.person.vagina != "none" && member.person.cum.pussy == 0:
-		if member.person.checkFetish('creampiepussy',checkmod):
+		if member.person.checkFetish('creampiepussy',checkmod, false):
 			checkmod = globals.fetishopinion.find(member.person.fetish.creampiepussy)-3
 			difference = checkmod
 			while difference > 0:
 				rval.append('cuminpussy')
 				difference -= 1
-		elif member.person.checkFetish('pregnancy',checkmod):
+		elif member.person.checkFetish('pregnancy',checkmod, false):
 			checkmod = globals.fetishopinion.find(member.person.fetish.pregnancy)-3
 			difference = checkmod
 			while difference > 0:
@@ -1320,7 +1308,7 @@ func generaterequest(member):
 	
 	#Creampie Ass
 	if member.person.cum.ass == 0:
-		if member.person.checkFetish('creampieass'):
+		if member.person.checkFetish('creampieass', 0, false):
 			checkmod = globals.fetishopinion.find(member.person.fetish.creampieass)-3
 			difference = checkmod
 			while difference > 0:
@@ -1329,7 +1317,7 @@ func generaterequest(member):
 
 	#Cum on Face
 	if member.person.cum.face == 0:
-		if member.person.checkFetish('wearcum'):
+		if member.person.checkFetish('wearcum', 0, false):
 			checkmod = globals.fetishopinion.find(member.person.fetish.wearcum)-3
 			difference = checkmod
 			while difference > 0:
@@ -1341,7 +1329,7 @@ func generaterequest(member):
 		rval.append('anal')
 	
 	#Dominance
-	if member.person.checkFetish('dominance'):
+	if member.person.checkFetish('dominance', 0, false):
 		checkmod = globals.fetishopinion.find(member.person.fetish.dominance)-3
 		difference = checkmod
 		while difference > 0:
@@ -1353,7 +1341,7 @@ func generaterequest(member):
 	
 	#Submission
 	
-	if member.person.checkFetish('submission'):
+	if member.person.checkFetish('submission', 0, false):
 		checkmod = globals.fetishopinion.find(member.person.fetish.submission)-3
 		difference = checkmod
 		while difference > 0:
@@ -1364,7 +1352,7 @@ func generaterequest(member):
 			rval.append('humiliate')
 	
 	#Sadism
-	if member.person.checkFetish('sadism'):
+	if member.person.checkFetish('sadism', 0, false):
 		checkmod = globals.fetishopinion.find(member.person.fetish.sadism)-3
 		difference = checkmod
 		while difference > 0:
@@ -1375,7 +1363,7 @@ func generaterequest(member):
 			rval.append('punishother')
 	
 	#Masochism
-	if member.person.checkFetish('masochism'):
+	if member.person.checkFetish('masochism', 0, false):
 		checkmod = globals.fetishopinion.find(member.person.fetish.masochism)-3
 		difference = checkmod
 		while difference > 0:
@@ -1657,20 +1645,20 @@ func startscene(scenescript, cont = false, pretext = ''):
 			if scenescript.giverpart == 'vagina':
 				i.person.vagvirgin = false
 				if i.person.vagina == 'normal':
-					i.person.vagina = globals.vagsizearray[rand_range(0,globals.vagsizearray.size())]
+					i.person.vagina = globals.randomfromarray(globals.vagsizearray)
 			elif scenescript.giverpart == 'anus':
 				i.person.assvirgin = false
 				if i.person.asshole == 'normal':
-					i.person.asshole = globals.assholesizearray[rand_range(0,globals.assholesizearray.size())]
+					i.person.asshole = globals.randomfromarray(globals.assholesizearray)
 		for i in takers:
 			if scenescript.takerpart == 'vagina':
 				i.person.vagvirgin = false
 				if i.person.vagina == 'normal':
-					i.person.vagina = globals.vagsizearray[rand_range(0,globals.vagsizearray.size())]
+					i.person.vagina = globals.randomfromarray(globals.vagsizearray)
 			elif scenescript.takerpart == 'anus':
 				i.person.assvirgin = false
 				if i.person.asshole == 'normal':
-					i.person.asshole = globals.assholesizearray[rand_range(0,globals.assholesizearray.size())]
+					i.person.asshole = globals.randomfromarray(globals.assholesizearray)
 	###---End Expansion---###
 	
 	

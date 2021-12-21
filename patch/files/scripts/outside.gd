@@ -971,7 +971,7 @@ func _on_purchasebutton_pressed():
 		selectedslave.brand = 'basic'
 		###---Added by Expansion---### Ank BugFix v4a
 		if globals.state.relativesdata.has(selectedslave.id):
-			globals.state.relativesdata[selectedslave.id].state = 'normal'	
+			globals.state.relativesdata[selectedslave.id].state = 'normal'
 		###---End Expansion---###
 	selectedslave.sleep = 'communal'
 	slavearray.remove(slavearray.find(selectedslave))
@@ -2272,62 +2272,60 @@ func caliqueststart(value = ''):
 	var buttons = []
 	var text = ''
 	var sprites
-	if typeof(value) != 4:
+	if typeof(value) != TYPE_STRING:
 		globals.state.sidequests.cali = value
 	if globals.state.sidequests.cali == 0:
 		text = "As you walk by rows of traders you hear some noise and bunch of people gathering around.\n\n[color=yellow]— Let me go, you brute, I didn't do anything! — you hear girl's voice. [/color]\n\nAs you get closer, you notice a small dirty-looking halfkin wolf girl trying to break free from big man holding her.\n\n[color=aqua]— She's a thief! Everyone saw this! Why do they even let your kind roam around? You are no different from wild animals trying to hunt human flocks! [/color]\n\n[color=yellow]— Damn you, fat bastard! [/color]\n\nWith that girl tries to bite on hand holding her, but fails as her holder reacts to that and makes her struggling useless.\n\n[color=aqua]— Call the guards already! I still have stall to look after![/color]"
 		buttons.append(["Intervene as a guild member",'caliqueststart', 1])
 		buttons.append(["Ignore it",'caliqueststart', 10])
 	elif globals.state.sidequests.cali == 1:
-		text = ("You approach shop owner and tell him, that it is improper to stereotype on other races and it is guild's free will to welcome every other humanoid race. As he sees your badge, he quickly restrains himself and begs for pardon.\n\n[color=aqua]— She's a thief, Milord! She stolen big chunk of pork from me. Witnesses will confirm it. [/color]\n\nAs you look at the girl, she glares back but don't deny accusation. You notice that she looks pretty scrawny and is probably one of the homeless around town. By the law theft is a considerable offence and will result in flagellation.")
+		text = "You approach the shop owner and tell him that it is improper to stereotype on other races and it is the guild's policy to welcome every other humanoid race. As he sees your badge, he quickly restrains himself and begs for pardon.\n\n[color=aqua]— She's a thief, " + globals.fastif(globals.player.sex == 'male', 'Milord', 'Milady')+ "! She stole a big chunk of pork from me. Witnesses will confirm it. [/color]\n\nAs you look at the girl, she glares back but doesn't deny the accusation. You notice that she looks pretty scrawny and is probably one of the homeless around town. By law theft is a considerable offence and will result in flagellation."
 		globals.charactergallery.cali.unlocked = true
 		if globals.resources.gold >= 50:
 			buttons.append(["Offer compensation for her", 'caliqueststart', 2])
+		else:
+			buttons.append({text = "Offer compensation for her", function = 'caliqueststart', args = 2, disabled = true, tooltip = "Not enough gold"})
 		buttons.append(["Offer to take her away for personal punishment", 'caliqueststart', 3])
 		buttons.append(["Step away and leave it to guards", 'caliqueststart', 100])
 		cali = globals.characters.create('Cali')
 	elif globals.state.sidequests.cali == 2:
 		globals.resources.gold -= 50
-		text = ("— That is... very noble of you " + globals.fastif(globals.player.sex == 'male', 'Milord', 'Milady')+ ", but I believe thief should be punished.\n\nOn that you tell him to let you handle the girl and after a moment butcher agrees to drop his charge. You lead the girl away and after some time end up in desolated place.")
+		text = "— That is... very noble of you " + globals.fastif(globals.player.sex == 'male', 'Milord', 'Milady')+ ", but I believe a thief should be punished.\n\nOn that you tell him to let you handle the girl and after a moment butcher agrees to drop his charge. You lead the girl away and after some time end up in desolated place."
 		buttons.append(["Talk to her", 'caliqueststart', 4])
 		buttons.append(["Take girl to jail", 'caliqueststart',5])
 		cali.loyal += 10
 	elif globals.state.sidequests.cali == 3:
-		text = ("You give scary look and offer to take care of the thief. After a thought, butcher decides that being handled by one of the magi would be more than sufficient punishment and hands girl away. She barely tries to resist realising there's not much room for escape and you lead her away from public.\n\nAfter a while you end up in remotely desolated street.")
+		text = "You give a scary look and offer to take care of the thief. After a thought, butcher decides that being handled by one of the magi would be more than sufficient punishment and hands girl away. She barely tries to resist realising there's not much room for escape and you lead her away from public.\n\nAfter a while you end up in remotely desolated street."
 		buttons.append(["Go with your words and take girl to jail", 'caliqueststart', 5])
 		buttons.append(["Talk to her", 'caliqueststart', 4])
 	elif globals.state.sidequests.cali == 4:
-		text = ("You share some food and ask her about her life.\n\n— Thanks for help... My name is Cali. I was captured from my village few weeks ago by bandits. They was about to sell me here but I managed to escape before they brought me to the guild. I have to get back home to my mother and father... I hope they are alright.\n\nAfter few moments she says goodbye and prepares to leave.")
+		text = "You share some food and ask her about her life.\n\n— Thanks for help... My name is Cali. I was captured from my village few weeks ago by bandits. They were about to sell me here but I managed to escape before they brought me to the guild. I have to get back home to my mother and father... I hope they are alright.\n\nAfter few moments she says goodbye and prepares to leave."
 		buttons.append(["Offer to take her into your mansion", 'caliqueststart', 6])
 		buttons.append(["Offer to help her get home", 'caliqueststart', 7])
 		buttons.append(["Leave her on her own", 'caliqueststart', 100])
 	elif globals.state.sidequests.cali == 5:
-		text = ("You take young girl with you and return to the mansion.")
+		text = "You take the young girl with you and return to the mansion."
 		buttons.append(["Continue", 'caliqueststart', 100])
 		cali.sleep = 'jail'
 		globals.slaves = cali
-		cali = null
 	elif globals.state.sidequests.cali == 6:
 		if cali.loyal > 5:
-			text = ("You offer Cali to take her into your mansion saying that even if she can't get home it's still better than living on the streets. After some thought she decides to accept your offer.\n\n— I can trust you I guess? You bribed me from trouble after all... Alright, please take care of me.\n\n[color=green]Cali is now your servant. [/color]")
+			text = "You offer Cali to take her into your mansion saying that even if she can't get home it's still better than living on the streets. After some thought she decides to accept your offer.\n\n— I can trust you I guess? You bribed me from trouble after all... Alright, please take care of me.\n\n[color=green]Cali is now your servant. [/color]"
 			globals.slaves = cali
-			cali = null
 			buttons.append(["Continue", 'caliqueststart', 11])
 			globals.state.upcomingevents.append({code = 'calievent1', duration = 7})
 			globals.state.sidequests.caliparentsdead = false
 			globals.state.upcomingevents.append({code = 'caliparentsdie', duration = 28})
 		else:
-			text = ("You offer Cali to take her into your mansion saying that even if she can't get home it's still better than living on the streets. After some thought she decides to accept your offer.\n\n— Thanks for help, but I don't wanna stay here.\n\nWith that she shortly thanks you again and retreats.")
+			text = "You offer Cali to take her into your mansion saying that even if she can't get home it's still better than living on the streets. After some thought she decides to decline your offer.\n\n— Thanks for help, but I don't wanna stay here.\n\nWith that she shortly thanks you again and retreats."
 			buttons.append(["Continue", 'caliqueststart', 100])
-			cali = null
 	elif globals.state.sidequests.cali == 7:
-		text = ("You offer Cali your help and roof over head in exchange for her service while you finding out a way to get her home.\n\n— You would do that for me?!\n\nHer eyes shimmer with hope giving away her innocent nature.\n\n— I will... make sure to repay you in that case. My family is not rich, but I'm sure they would find a way.\n\n[color=green]Cali is now your servant.[/color]")
+		text = "You offer Cali your help and roof over head in exchange for her service while you find out a way to get her home.\n\n— You would do that for me?!\n\nHer eyes shimmer with hope giving away her innocent nature.\n\n— I will... make sure to repay you in that case. My family is not rich, but I'm sure they would find a way.\n\n[color=green]Cali is now your servant.[/color]"
 		cali.loyal += 5
 		cali.obed += 25
 		globals.slaves = cali
 		globals.state.sidequests.caliparentsdead = false
 		globals.state.upcomingevents.append({code = 'caliparentsdie', duration = 28})
-		cali = null
 		buttons.append(["Continue", 'caliqueststart', 12])
 	elif globals.state.sidequests.cali >= 10:
 		market()
@@ -2417,12 +2415,7 @@ func sebastianorder():
 		clearbuttons()
 		get_node("sebastiannode").visible = true
 		$sebastiannode/sebastionorder.clear()
-		var array = []
-		for i in globals.races:
-			if globals.races[i].sebastian == true:
-				array.append(i)
-		globals.addnonfurrycounterpart(array)
-		for i in array:
+		for i in globals.racefile.groups.sebastian:
 			$sebastiannode/sebastionorder.add_item(i)
 		
 #		if globals.rules.furry == false:
@@ -2556,27 +2549,92 @@ func brothel(person = null):
 	clearbuttons()
 	setcharacter('brothelhost')
 	
-	var text = "Doorman greets you and shows you the way around brothel until you meet with the Madam.\n\n— Greetings, what would you like?  "
+	###---Added by Expansion---### Colorize Text
+	var text = "Doorman greets you and shows you the way around [color=aqua]brothel[/color] until you meet with the [color=aqua]Madam[/color].\n[color=yellow]—Greetings. How can we pleasure you today?[/color]\n"
 	for person in globals.slaves:
 		if person.away.duration == 0 && (person.work == 'whorewimborn' || person.work == 'escortwimborn' || person.work == 'fucktoywimborn'):
-			text = text + person.dictionary('\nYou can see [url=id' + str(person.id) + '][color=yellow]$name[/color][/url] waiting for clients here.')
+			text += person.dictionary('\nYou can see [url=id' + str(person.id) + '][color=yellow]$name[/color][/url] ' + str(globals.expansion.nameBrothelWorking()))
 	mansion.maintext = text
 	var array = [{name = 'Return', function = 'backstreets'}]
+	#---Brothel Services
+	array.append({name = 'Check Available Prostitutes', function = 'brothelservices'})
+	
 	if globals.state.sidequests.brothel == 0:
-		array.insert(0,{name = 'Request your servants work here', function = 'brothelquest'})
+		array.insert(0,{name = 'Can my Slaves work here?', function = 'brothelquest'})
 	elif globals.state.sidequests.brothel == 1:
 		if person == null:
 			array.insert(0,{name = 'Offer slave for quest', function = 'selectslavebrothelquest'})
 		else:
 			if person.race in ['Elf','Tribal Elf','Dark Elf'] && person.sex != 'male':
-				mansion.maintext = "— An elf, indeed. So, do you wanna trade?"
+				mansion.maintext = "[color=yellow]— An [color=aqua]elf[/color], indeed. So, do you wanna trade?[/color]"
 				array = [{name = 'Give away ' + person.name,function = 'brothelquest'}, {name = 'Choose another person', function = 'selectslavebrothelquest'}, {name = 'Leave', function = 'backstreets'}]
 				questgiveawayslave = person
 			else:
-				mansion.maintext = "— I don't think this is an Elf girl. Please, don't waste my time. "
+				mansion.maintext = "[color=yellow]— I don't think this is an [color=aqua]Elf[/color] girl. Please, don't waste my time.[/color] "
 				array = [{name = 'Offer slave for quest', function = 'selectslavebrothelquest'},{name = 'Leave',function = 'backstreets'}]
 				questgiveawayslave = null
 	buildbuttons(array)
+	###---End Expansion---###
+
+###---Added by Expansion---###
+func brothelservices():
+	mansion.background_set("brothel")
+	yield(main, 'animfinished')
+	clearbuttons()
+	setcharacter('brothelhost')
+	
+	var text = "The [color=aqua]Madam[/color] smiles and motions you towards a couch at the front of the [color=aqua]brothel[/color] with a stage in front of it."
+	if globals.player.energy < 100:
+		text += "\n\n[color=yellow]—We have a few options for you. Do you prefer something young and exotic that will make you feel like the day has just begun?[/color]"
+		text += "\n\nA petite, perky [color=aqua]Fairy[/color] girl bounces out onto the stage wearing nothing but hopes and dreams to cover her bouncy tits. She gets down on her knees and smiles lewdly at you, running her tongue around her lips."
+	else:
+		text += "\n\n[color=yellow]—Our [color=aqua]Fairy[/color] is out for the moment, but don't worry.[/color]"
+	text += "\n\nThe Madam continues.\n\n[color=yellow]—Are you here to taste raw energy, experience, and sexual prowess?[/color]\n\n"
+	text += "\n\nA tall, sultry [color=aqua]Dark Elf[/color] woman slinks onto the stage. She moves across it like water and if not for the sultry jiggling of her voluptuous breasts you may not be able to tell she was even moving. She sinks to her knees and heaves her chest out toward you while waiting breathlessly."
+	if globals.player.energy < 100:
+		text += "\n\n[color=yellow]—Both girls are just 50 gold each for the next half-hour.[/color]"
+	else:
+		text += "\n\n[color=yellow]—She is just 50 gold for the next half-hour.[/color]"
+	var counter = 0
+	
+	mansion.maintext = text
+	var array = [{name = 'Choose the Dark Elf | -50 gold & +10 mana', function = 'brothelservicesmana'},{name = 'No thanks', function = 'brothel'}]
+	if globals.player.energy < 100:
+		array.insert(0,{name = 'Choose the perky Fairy | -50 gold & +25 energy', function = 'brothelservicesenergy'})
+	buildbuttons(array)
+
+func brothelservicesenergy():
+	mansion.background_set("brothel")
+	yield(main, 'animfinished')
+	clearbuttons()
+	setcharacter('brothelhost')
+	var array = [{name = 'Head back to the street', function = 'backstreets'}]
+	var text = "You point at the [color=aqua]Fairy[/color] and nod.\n[color=yellow]-I'll have her.[/color]\n\nThe [color=aqua]Madam[/color] looks at you with an understanding smile.\n[color=yellow]-I hope you thoroughly enjoy yourself.[/color]"
+	if globals.resources.gold >= 50:
+		globals.resources.gold -= 50
+		globals.player.energy += 25
+		text += "\n\nShe leads you to a back room. You enjoy the flitting of her wings as she lets you ravage her after teasing you and exciting you. You leave feeling satisfied and refreshed.\n\n[color=green]Gained 25 Energy[/color]\n[color=red]Lost 50 Gold[/color]"
+	else:
+		text += "\n\nThe [color=aqua]Madam[/color] looks at you and holds out her hand.\n\n[color=yellow]-Don't be trying anything tricky now, cutie. Either pay first or get out.[/color]\n\nYou stand and head for the door as the doorman looms over you. She calls after you from the couch.\n\n[color=yellow]-Come back when you have some money![/color]"
+	mansion.maintext = text
+	buildbuttons(array)
+
+func brothelservicesmana():
+	mansion.background_set("brothel")
+	yield(main, 'animfinished')
+	clearbuttons()
+	setcharacter('brothelhost')
+	var array = [{name = 'Head back to the street', function = 'backstreets'}]
+	var text = "You point at the [color=aqua]Dark Elf[/color] and nod. [color=yellow]-I'll have her.[/color]\n\nThe [color=aqua]Madam[/color] looks at you with an understanding smile.\n[color=yellow]-I hope you thoroughly enjoy yourself.[/color]"
+	if globals.resources.gold >= 50:
+		globals.resources.gold -= 50
+		globals.resources.mana += 10
+		text += "\n\nThe [color=aqua]Dark Elf[/color] woman leads you to a back room. You walk out of the room some hours later having been infused with magical energy from her orgasms. You leave feeling satisfied and refreshed.\n\n[color=green]Gained 10 Mana[/color]\n[color=red]Lost 50 Gold[/color]"
+	else:
+		text += "\n\nThe [color=aqua]Madam[/color] looks at you and holds out her hand.\n\n[color=yellow]-Don't be trying anything tricky now, cutie. Either pay first or get out.[/color]\n\nYou stand and head for the door as the doorman looms over you. She calls after you from the couch.\n\n[color=yellow]-Come back when you have some money![/color]"
+	mansion.maintext = text
+	buildbuttons(array)
+###---End Expansion---###
 
 func selectslavebrothelquest():
 	main.selectslavelist(true, 'brothel', self, 'person.race in ["Elf","Dark Elf","Tribal Elf"]')

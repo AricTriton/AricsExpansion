@@ -1245,14 +1245,18 @@ var descPenisSize = [
 ]
 # tries to pick a descriptor that applies to the entire group, else returns null
 func describePenis(group):
-	var limitsPenis = getAttribLimits(group, 'penis', refGenitaliaArray)
-	if limitsPenis[0] == limitsPenis[1]:
-		if limitsPenis[0] == -1: # handle strapon with default size
-			return getRandStr( descPenisSize[ 4 * 2 + int(areAllAttrib_E_val(group, C_AGE, C_CHILD)) ])
-		else:
-			return getRandStr( descPenisSize[ clamp(limitsPenis[0],0,5) * 2 + int(areAllAttrib_E_val(group, C_AGE, C_CHILD)) ])
-	return null
-###---End Expansion---###
+	var val
+	var temp
+	for member in group:
+		temp = refGenitaliaArray.find(member[C_PERSON][C_PENIS])
+		if temp == -1: # handle strapon with default size
+			temp = 4
+		if val != temp:
+			if val == null:
+				val = temp
+			else:
+				return null
+	return getRandStr( descPenisSize[ clamp(val,0,5) * 2 + int(areAllAttrib_E_val(group, C_AGE, C_CHILD)) ])
 
 
 var descPenisType = [
@@ -1844,3 +1848,5 @@ func simplifyDesc(refDescKeys, refDescConvert):
 				idx = refDescConvert.size()
 				refDescConvert.append(temp)
 			refDescKeys[i] = idx
+
+var C_PENIS = 'penis'

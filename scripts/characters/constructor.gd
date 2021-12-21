@@ -17,7 +17,7 @@ func newslave(race, age, sex, origins = 'slave'):
 	if race == 'randomcommon':
 		race = globals.getracebygroup("starting")
 	elif race == 'randomany':
-		race = globals.randomfromarray(globals.allracesarray)
+		race = globals.getracebygroup("active")
 	person.race = race
 	person.age = getage(age)
 	person.mindage = person.age

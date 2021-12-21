@@ -398,7 +398,10 @@ func _on_end_pressed():
 	text = "" if text0.get_bbcode().empty() else "\n"
 	#---NPCs Expanded
 	globals.expansion.dailyNPCs()
-	#Update Towns
+	#---Towns Expanded
+	temptext = globals.expansion.dailyTownEvents()
+	if temptext != null:
+		text += temptext
 	temptext = globals.expansion.dailyTownGuard()
 	if temptext != null:
 		text += temptext
@@ -540,7 +543,7 @@ func _on_end_pressed():
 						text += workdict.text
 						###---Added by Expansion---### Ank BugFix v4a
 						if person.spec == 'housekeeper' && person.work in ['cooking','library','nurse','maid']:
-							globals.state.condition = (5.5 + (person.sagi+person.send)*6)/2
+							globals.state.condition = (5.5 + max(0, person.sagi+person.send)*6)/2
 							text2.bbcode_text += person.dictionary("$name has managed to clean the mansion a bit while being around. \n")
 						###---End Expansion---###
 						if workdict.has("gold"):
@@ -1085,7 +1088,7 @@ func _on_end_pressed():
 	###---Added by Expansion---### Ank BugFix v4a
 	for person in globals.slaves:
 		if person.spec == 'housekeeper' && person.away.duration == 0 && person.work in ['headgirl','farmmanager','labassist','jailer']:
-			globals.state.condition = (5.5 + (person.sagi+person.send)*6)/2
+			globals.state.condition = (5.5 + max(0, person.sagi+person.send)*6)/2
 			text2.bbcode_text += person.dictionary("$name has managed to clean the mansion a bit while being around. \n")
 	###---End Expansion---###
 	if globals.state.condition <= 40:
@@ -2048,11 +2051,18 @@ func _on_selfbutton_pressed():
 		text2 = text2.substr(0, text2.length() -2)+ '. '
 	text += text2 + '\nReputation: '
 	for i in globals.state.reputation:
-		text += i.capitalize() + " - "+ reputationword(globals.state.reputation[i]) + ", "
+		text += i.capitalize() + " - "+ reputationword(globals.state.reputation[i])
+		###---Added by Expansion---### Towns Expanded
+		if globals.expansionsettings.enable_public_nudity_system == true:
+			var lawdict = globals.state.townsexpanded[i]
+			#Public Nudity
+			text += " - Local Laws: [color=aqua]Public Nudity[/color] " + globals.fastif(lawdict.laws.public_nudity == true, "[color=lime]Legal[/color]", "[color=red]Illegal[/color]")
+		#End Line (Change to Multi-line Spacing?)
+		text += ", "
+		###---End Expansion---###
 	text += "\nYour mage order rank: " + dict[int(globals.state.rank)]
 	###---Added by Expansion---###
 	if globals.state.spec != "" && globals.state.spec != null:
-		
 		text += "\n\nYour speciality: [color=yellow]" + globals.state.spec + "[/color]\nBonuses: " + globals.expandedplayerspecs[globals.state.spec]
 	###---End Expansion---###
 
@@ -2084,6 +2094,132 @@ func reputationword(value):
 	else:
 		text = "Neutral"
 	return text
+
+###---Added by Expansion---### Family Expanded
+func _on_selfrelatives_pressed():
+	get_node("MainScreen/mansion/selfinspect/relativespanel").popup()
+	var text = ''
+	var person = globals.player
+	var relativesdata = globals.state.relativesdata
+	if !relativesdata.has(person.id):
+		$MainScreen/mansion/selfinspect/relativespanel/relativestext.bbcode_text = person.dictionary("You don't know anything about your relatives. ")
+		return
+	var entry = relativesdata[person.id]
+	var entry2
+	text += '[center]Parents[/center]\n'
+	for i in ['father','mother']:
+		if int(entry[i]) <= 0 || !relativesdata.has(entry[i]):
+			text += i.capitalize() + ": Unknown\n"
+		else:
+			text += i.capitalize() + ": " + getentrytext(relativesdata[entry[i]]) + "\n"
+	
+	###---Added by Expansion---### Slime Breeding
+	if person.race == 'Slime' || person.genealogy.slime > 0:
+		for i in ['slimesire']:
+			if entry[i] == null || int(entry[i]) <= 0:
+				text += "Slimesire: Unknown\n"
+			else:
+				if relativesdata.has(entry[i]):
+					entry2 = relativesdata[entry[i]]
+					text += i.capitalize() + ": "
+					if entry2.state == 'free':
+						text += "[color=aqua]Free[/color] "
+					text += getentrytext(entry2) + "\n"
+				else:
+					text += i.capitalize() + ": Unknown\n"
+	###---End Expansion---###
+	
+	###---Added by Expansion---### Family Expanded
+	var halfsiblings_banner = false
+	if entry.siblings.size() > 0:
+		var tempperson
+		text += '\n[center]Full-Blooded Siblings[/center]\n'
+		for i in entry.siblings:
+			var samedad = false
+			var samemom = false
+			entry2 = relativesdata[i]
+			for f in ['father']:
+				if int(entry[f]) == int(entry2[f]):
+					samedad = true
+				else:
+					samedad = false
+			for m in ['mother']:
+				if int(entry[m]) == int(entry2[m]):
+					samemom = true
+				else:
+					samemom = false
+			if samedad == true && samemom == true:
+				if entry2.state == 'fetus':
+					continue
+				if entry2.sex == 'male':
+					text += "Brother: "
+				else:
+					text += "Sister: "
+				if entry2.state == 'free':
+					text += "[color=aqua]Free[/color] "
+				text += getentrytext(entry2) + "\n"
+		
+		for i in entry.siblings:
+			var samedad = false
+			var samemom = false
+			entry2 = relativesdata[i]
+			for f in ['father']:
+				if int(entry[f]) <= 0:
+					samedad = false
+				elif int(entry[f]) == int(entry2[f]):
+					samedad = true
+				else:
+					samedad = false
+			for m in ['mother']:
+				if int(entry[m]) <= 0:
+					samemom = false
+				elif int(entry[m]) == int(entry2[m]):
+					samemom = true
+				else:
+					samemom = false
+			if samedad == false && samemom == true || samedad == true && samemom == false:
+				if halfsiblings_banner == false:
+					text += '\n[center]Half-Siblings[/center]\n'
+					halfsiblings_banner = true
+				if entry2.state == 'fetus':
+					continue
+				if entry2.sex == 'male':
+					text += "Half-Brother: "
+				else:
+					text += "Half-Sister: "
+				if entry2.state == 'free':
+					text += "[color=aqua]Free[/color] "
+				text += getentrytext(entry2) + "\n"
+	
+	
+	if !entry.halfsiblings.empty():
+		if halfsiblings_banner == false:
+			text += '\n[center]Half-Siblings[/center]\n'
+			halfsiblings_banner = true
+		for i in entry.halfsiblings:
+			entry2 = relativesdata[i]
+			if entry2.state == 'fetus':
+				continue
+			if entry2.sex == 'male':
+				text += "Half-Brother: " 
+			else:
+				text += "Half-Sister: "
+			text += getentrytext(entry2) + "\n"
+	###---End Expansion---###
+	
+	if !entry.children.empty():
+		text += '\n[center]Children[/center]\n'
+		for i in entry.children:
+			entry2 = relativesdata[i]
+			if entry2.state == 'fetus':
+				continue
+			if entry2.sex == 'male':
+				text += "Son: " 
+			else:
+				text += "Daughter: "
+			text += getentrytext(entry2) + "\n"
+	$MainScreen/mansion/selfinspect/relativespanel/relativestext.bbcode_text = text
+###---End Expansion---###
 
 
 ###---Added by Expansion---### Renamed Slaves don't Rename | Ank BugFix v4a
