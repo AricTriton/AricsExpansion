@@ -637,9 +637,9 @@ func marketsattext():
 			starttext = "[color=yellow]"
 			endtext = "[/color]"
 		if !marketrate in [0,1,2,3,4,5,6,7,8,9,10]:
-			sattext = sattext + "Price x " + starttext + str(marketrate) + endtext + " for [color=aqua]" + racetext + endtext + "[/color]\n"
+			sattext = sattext + "Price x " + starttext + str(marketrate) + endtext + " for [color=aqua]" + racetext + endtext + "\n"
 		else:
-			sattext = sattext + "Price x " + starttext + str(marketrate) + extrazero + endtext + " for [color=aqua]" + racetext + endtext + "[/color]\n"
+			sattext = sattext + "Price x " + starttext + str(marketrate) + extrazero + endtext + " for [color=aqua]" + racetext + endtext + "\n"
 	return sattext
 		#print("Market pricing for " + str(i) + "'s increased by" + str(max(0.01,(1-globals.state.racemarketsat[i])*0.25)) + " from " + str(globals.state.racemarketsat[i]))
 		#globals.state.racemarketsat[i] = clamp(globals.state.racemarketsat[i] + max(0.01,(1-globals.state.racemarketsat[i])*0.25),0.5,globals.races[i].pricemod) #under 1.0, recovers quickly toward 1 - over 1.0 increase 0.1 every 10 days
