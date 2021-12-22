@@ -515,12 +515,18 @@ var leveluprequests = {
 	},
 	vacation = {
 		reqs = 'true',
-		speech = "you should provide $name with [color=aqua]3 free days[/color] to furtherly unlock $his potential.",
+		speech = "you should provide $name with [color=aqua]2 free days[/color] to furtherly unlock $his potential.",
 		descript = '$name needs a [color=aqua]vacation[/color] to advance $his level. ',
 		execfunc = 'vacationshort'
 	},
+	vacationlong = {
+		reqs = 'true',
+		speech = "you should provide $name with [color=aqua]3 free days[/color] to furtherly unlock $his potential.",
+		descript = '$name needs a [color=aqua]vacation[/color] to advance $his level. ',
+		execfunc = 'vacationlong'
+	},
 	relationship = {
-		reqs = "person.consent == false && person.tags.find('nosex') < 0",
+		reqs = "person.obed >= 70 && person.consent == false && person.tags.find('nosex') < 0",
 		speech = "you should unlock [color=aqua]intimacy[/color] with $name to unlock $his potential.",
 		descript = "$name needs to have [color=aqua]intimacy unlocked[/color] to advance $his level. ",
 		execfunc = 'startrelationship'
@@ -532,13 +538,13 @@ var leveluprequests = {
 		execfunc = 'wincombat'
 	},
 	improvegrade = {
-		reqs = 'globals.originsarray.find(person.origins) <= 3',
+		reqs = 'globals.originsarray.find(person.origins) < min(4, floor(person.level/2.0))',
 		speech = "you should raise $name's [color=aqua]grade[/color] to unlock $his potential.",
 		descript = "$name needs to [color=aqua]raise $his grade[/color] to advance $his level. ",
 		execfunc = 'raisegrade'
 	},
 	specialization = {
-		reqs = 'person.spec == null && person.level >= 4',
+		reqs = 'person.spec == null && person.level >= 5',
 		speech = "you should let $name's [color=aqua]learn a specialization[/color] to unlock $his potential.",
 		descript = "$name needs to [color=aqua]learn a specialization[/color] to advance $his level. ",
 		execfunc = 'getspec'
@@ -548,11 +554,12 @@ var leveluprequests = {
 
 var requestsbylevel = {
 	easy = ['weakitem', 'ingreditem', 'vacation', 'relationship', 'wincombat', 'improvegrade'],
-	medium = ['multitem','specialization','gearitem','improvegrade'],
+	medium = ['multitem','vacationlong', 'specialization', 'relationship', 'gearitem', 'improvegrade'],
 }
 
 
-var weakitemslist = ['aphrodisiac','hairdye', 'hairgrowthpot', 'stimulantpot', 'deterrentpot', 'beautypot']
+var weakitemslist1 = ['aphrodisiac','hairdye', 'beautypot']
+var weakitemslist2 = ['aphrodisiac','hairdye', 'hairgrowthpot', 'stimulantpot', 'deterrentpot', 'beautypot']
 var gearitemslist = ['clothsundress','clothmaid','clothkimono','clothmiko','clothbutler','underwearlacy','underwearboxers','armorleather','armorchain','weapondagger','weaponsword','accslavecollar','acchandcuffs']
 var ingredlist = ['bestialessenceing', 'natureessenceing','taintedessenceing','magicessenceing','fluidsubstanceing']
 
@@ -587,11 +594,20 @@ func gearlevelup(person):
 
 func vacationshort(person):
 	var text = person.dictionary(leveluprequests.vacation.speech)
-	person.levelupreqs = {code = 'vacation', value = '3', speech = leveluprequests.vacation.speech, descript = person.dictionary(leveluprequests.vacation.descript), button = person.dictionary('Send $name on vacation'), effect = 'vacation', activate = 'fromtalk'}
+	person.levelupreqs = {code = 'vacation', value = '2', speech = leveluprequests.vacation.speech, descript = person.dictionary(leveluprequests.vacation.descript), button = person.dictionary('Send $name on vacation'), effect = 'vacation', activate = 'fromtalk'}
+	return text
+
+func vacationlong(person):
+	var text = person.dictionary(leveluprequests.vacation.speech)
+	person.levelupreqs = {code = 'vacation', value = '3', speech = leveluprequests.vacationlong.speech, descript = person.dictionary(leveluprequests.vacationlong.descript), button = person.dictionary('Send $name on vacation'), effect = 'vacation', activate = 'fromtalk'}
 	return text
 
 func weakitem(person):
-	var item = globals.itemdict[globals.randomfromarray(weakitemslist)]
+	var item
+	if globals.state.mainquest < 7:
+		item = globals.itemdict[globals.randomfromarray(weakitemslist1)]
+	else:
+		item = globals.itemdict[globals.randomfromarray(weakitemslist2)]
 	var text = person.dictionary(leveluprequests.weakitem.speech)
 	text = text.replace('$item', item.name)
 	var descript = person.dictionary(leveluprequests.weakitem.descript).replace('$item', item.name)
@@ -612,7 +628,7 @@ func multitem(person):
 		array.remove(randi() % array.size())
 	for i in array:
 		item = globals.itemdict[i]
-		itemnumber = round(rand_range(1,3))
+		itemnumber = clamp(randi() % 4 + int(person.level / 2) - 2 , 1, 5)
 		itemtext += item.name + ': ' + str(itemnumber) + ", "
 		array2.append({item.code : itemnumber})
 		
@@ -665,7 +681,7 @@ func ingreditem(person):
 	while ingnumber >= 1:
 		ingnumber -= 1
 		item = globals.randomfromarray(itemarray)
-		finalitems[item] = round(rand_range(ingrange[0], ingrange[1]))
+		finalitems[item] = clamp(randi() % ingrange[1] + person.level - 1 , ingrange[0], ingrange[1])
 	for i in finalitems:
 		item = globals.itemdict[i]
 		temptext += item.name + ": " + str(finalitems[i]) + ", "
@@ -692,7 +708,7 @@ func raisegrade(person):
 
 func getrequest(person):
 	var array = []
-	if person.level in [1,2]:
+	if person.level <= 3:
 		for i in requestsbylevel.easy:
 			if globals.evaluate(leveluprequests[i].reqs) == true:
 				array.append(leveluprequests[i])
@@ -816,10 +832,11 @@ func cooking(person):
 	person.xp += globals.slavecount() * globals.expansionsettings.food_experience
 	if globals.resources.food < 200:
 		var scaling = 20.0 / globals.itemdict.food.cost
-		if globals.resources.gold >= floor(globals.state.foodbuy/scaling):
+		var temp = min(globals.state.foodbuy, globals.resources.foodcaparray[globals.state.mansionupgrades.foodcapacity] - globals.resources.food)
+		if globals.resources.gold >= floor(temp/scaling):
 			text = '$name went to purchase groceries and brought back new food supplies.\n'
-			gold = -floor(globals.state.foodbuy/scaling)
-			food = globals.state.foodbuy
+			gold = -floor(temp/scaling)
+			food = temp
 		else:
 			text = '$name complained about the lack of food and no money to supply the kitchen on $his own.\n'
 	###---Added by Expansion---### Job Skills
@@ -865,7 +882,7 @@ func ffprostitution(person):
 	if person.vagvirgin == true:
 		person.vagvirgin = false
 		#slave.pussy.first = 'brothel'
-		person.health -= 5
+		person.health = max(person.health - 5, 1)
 		person.stress += 15
 		text += "$His virginity was taken by one of the customers.\n"
 	person.lust -= rand_range(15,25)
@@ -882,6 +899,10 @@ func ffprostitution(person):
 		gold = gold * 1.15
 	person.metrics.randompartners += round(rand_range(2,4))
 	person.metrics.sex += round(rand_range(2,5))
+	if person.lewdness < 50:
+		person.lewdness = min(person.lewdness + rand_range(3,5), 50)
+	else:
+		person.lewdness += rand_range(0,1)
 	if person.race.find('Bunny') >= 0 || person.spec in ['geisha','nympho']:
 		person.stress += 12 - min(counter*4, 10)
 	else:
@@ -953,7 +974,7 @@ func research(person):
 		person.health -= person.health/3
 	if rand_range(0,100) < 30:
 		array = ['conf','cour','wit','charm']
-		person[array[rand_range(0,array.size())]] -= rand_range(15,25)
+		person[globals.randomfromarray(array)] -= rand_range(15,25)
 		text += "[color=#ff4949]$name's mental health has been damaged. [/color]"
 	if rand_range(0,100) < 20 && person.send >= 1:
 		person.send -= 1
@@ -965,7 +986,7 @@ func research(person):
 	if rand_range(35,50) > person.health && rand_range(0,100) < 15:
 		person.health -= 200
 		dead = true
-		text = "[color=#ff4949]Due to life-threatening experiments $name has deceased.[/color]"
+		text = "[color=#ff4949]Due to life-threatening experiments $name has deceased.[/color]\n"
 	var dict = {text = person.dictionary(text), gold = gold, dead = dead}
 	return dict
 
@@ -978,7 +999,7 @@ func fucktoy(person):
 	if person.vagvirgin == true:
 		person.vagvirgin = false
 		#slave.pussy.first = 'brothel'
-		person.health -= 5
+		person.health = max(person.health - 5, 1)
 		person.stress += 10
 		person.loyal += rand_range(-2,-4)
 		text += "$His virginity was taken by one of the customers.\n"
@@ -992,6 +1013,10 @@ func fucktoy(person):
 	gold += rand_range(5,10)
 	if person.traits.has('Sex-crazed'):
 		person.stress -= counter*3
+	if person.lewdness < 50:
+		person.lewdness = min(person.lewdness + rand_range(1,4), 50)
+	else:
+		person.lewdness += rand_range(0,1)
 	person.metrics.sex += round(rand_range(3,6))
 	person.metrics.randompartners += round(rand_range(2,5))
 	if person.mods.has("augmenttongue"):
@@ -1201,7 +1226,7 @@ func whorewimborn(person):
 	if person.vagvirgin == true:
 		person.vagvirgin = false
 		#slave.pussy.first = 'brothel'
-		person.health -= 5
+		person.health = max(person.health - 5, 1)
 		person.stress += 15
 		text += "$His virginity was taken by one of the customers.\n"
 	person.lust -= rand_range(15,25)
@@ -1224,6 +1249,10 @@ func whorewimborn(person):
 	else:
 		person.metrics.randompartners += round(rand_range(2,4))
 		person.metrics.sex += round(rand_range(2,5))
+	if person.lewdness < 50:
+		person.lewdness = min(person.lewdness + rand_range(3,5), 50)
+	else:
+		person.lewdness += rand_range(0,1)
 	if person.race.find('Bunny') >= 0 || person.spec in ['geisha','nympho']:
 		person.stress += 12 - min(counter*4, 10)
 	else:
@@ -1257,7 +1286,7 @@ func escortwimborn(person):
 	var gold
 	if person.vagvirgin == true:
 		person.vagvirgin = false
-		person.health -= 5
+		person.health = max(person.health - 5, 1)
 		if person.race.find('Bunny') >= 0:
 			person.stress += 7
 		else:
@@ -1270,6 +1299,10 @@ func escortwimborn(person):
 		person.stress += 20 - person.lewdness/10
 	person.lust -= rand_range(10,20)
 	person.lastsexday = globals.resources.day
+	if person.lewdness < 50:
+		person.lewdness = min(person.lewdness + rand_range(3,5), 50)
+	else:
+		person.lewdness += rand_range(0,1)
 	if rand_range(1,10) > 7:
 		globals.impregnation(person)
 	gold = rand_range(15,35) + person.conf/3 + person.beauty/3 + max(5, person.charm/1.8 + min(globals.state.reputation.wimborn,60))
@@ -1315,7 +1348,7 @@ func fucktoywimborn(person):
 	if person.vagvirgin == true:
 		person.vagvirgin = false
 		#slave.pussy.first = 'brothel'
-		person.health -= 5
+		person.health = max(person.health - 5, 1)
 		person.stress += 10
 		person.loyal += rand_range(-2,-4)
 		text += "$His virginity was taken by one of the customers.\n"
@@ -1342,6 +1375,10 @@ func fucktoywimborn(person):
 		person.metrics.sex += round(rand_range(3,6))
 		person.metrics.randompartners += round(rand_range(2,5))
 	
+	if person.lewdness < 50:
+		person.lewdness = min(person.lewdness + rand_range(3,5), 50)
+	else:
+		person.lewdness += rand_range(0,1)
 	
 	if person.race.find('Bunny') >= 0 || person.spec == 'nympho':
 		person.stress += 25 - min(counter*4, 20)

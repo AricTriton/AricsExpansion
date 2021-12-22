@@ -696,7 +696,7 @@ func setFamily(person,person2):
 			bonusmin = -200
 			bonusmax = 900
 			isparent = true
-		elif person.sex in ['male','futanari'] && str(person2data.father) == str(-1):
+		elif person.sex in ['male','futanari','dickgirl'] && str(person2data.father) == str(-1):
 			globals.connectrelatives(person, person2, 'father')
 			bonusmin = -200
 			bonusmax = 900
@@ -3087,6 +3087,7 @@ func altereddiet_consumebottle(person):
 
 enum {IMAGE_DEFAULT, IMAGE_NAKED}
 enum {LOW_STRESS, MID_STRESS, HIGH_STRESS}
+var typeEnumToString = ['default','naked']
 
 var dictUniqueImagePaths = {
 	'Ayda': {
@@ -3218,7 +3219,7 @@ func updateBodyImage(person):
 			stress = MID_STRESS
 		else:
 			stress = HIGH_STRESS
-		person.imagetype = imagetype
+		person.imagetype = typeEnumToString[imagetype]
 		var ref = dictUniqueImagePaths[person.unique][imagetype]
 		person.imagefull = ref[stress] if ref.has(stress) else ref[HIGH_STRESS] 
 	###---End Expansion---###
@@ -3250,10 +3251,10 @@ func updateSexualityImage(person):
 	
 	var refSexImg = person.sexuality_images
 	if person.knowledge.has('sexuality'):
-		refSexImg.base = 'base_' + person.sex.trim_suffix('nari')
+		refSexImg.base = 'base_' +  person.sex.trim_suffix('nari').replace('dickgirl','futa')
 		for sex in listSex:
 			var idx = listCompat.find(testSexualCompatibility(person, sex))
-			refSexImg[sex] = null if idx < 1 else (person.sex.trim_suffix('nari') + "_" + str(idx))
+			refSexImg[sex] = null if idx < 1 else (sex.trim_suffix('nari') + "_" + str(idx))
 	else:
 		refSexImg.male = null
 		refSexImg.female = null
@@ -3299,11 +3300,11 @@ func isSameSex(sex1, sex2):
 	if sex1 == sex2:
 		return true
 	var futaconsideration = globals.expansionsettings.futasexualitymatch
-	if sex1 == 'futanari':
+	if sex1 == 'futanari' || sex1 == 'dickgirl':
 		if futaconsideration == 'both':
 			return true
 		return futaconsideration == sex2
-	if sex2 == 'futanari':
+	if sex2 == 'futanari' || sex2 == 'dickgirl':
 		if futaconsideration == 'both':
 			return true
 		return sex1 == futaconsideration

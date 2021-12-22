@@ -276,9 +276,6 @@ func _process_stage8_traits():
 func _on_slaveconfirm_pressed():
 	#Finish processing slave
 	startSlave.cleartraits() #Clear traits, reset basics
-	###---Added by Expansion---### Ank Bugfix v4
-	startSlave.health = 1000
-	###---End Expansion---###
 
 	#Generate mental stats
 	for i in ['conf','cour','wit','charm']:
@@ -359,9 +356,11 @@ func _on_slaveconfirm_pressed():
 	globals.constructor.setRaceDisplay(startSlave)
 	globals.constructor.set_ovulation(startSlave)
 	###---End Expansion---###
+	###---Added by Expansion---### Ank Bugfix v4
+	startSlave.health = 1000
+	###---End Expansion---###
 	globals.slaves = startSlave#A bit deceptive as it assigns 'person' to 'array', works because of 'setget'
 
-	player.health = 1000
 
 	#Apply player racial bonuses
 	###---Added by Expansion---### Races Expanded
@@ -549,6 +548,7 @@ func _on_slaveconfirm_pressed():
 	globals.constructor.set_ovulation(player)
 	globals.expansion.updatePerson(player)
 	###---End Expansion---###
+	player.health = 1000
 	globals.player = player
 	###---Added by Expansion---### Ovulation Cycle/Genealogy
 	globals.expansion.updatePerson(globals.player)

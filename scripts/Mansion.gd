@@ -770,7 +770,10 @@ func _on_end_pressed():
 					globals.spells.person = person
 					text0.set_bbcode(text0.get_bbcode()+globals.spells.mutate(person.toxicity/30) + "\n\n")
 				person.toxicity -= rand_range(1,5)
-
+				if person.health < 1:
+					text = person.dictionary('[color=#ff4949]$name has died of magical toxicity.[/color]\n')
+					deads_array.append({number = count, reason = text})
+					continue
 
 			if person.stress >= 33 && randf() <= 0.3:
 				if randf() >= 0.5:
@@ -784,9 +787,17 @@ func _on_end_pressed():
 					person.loyal -= rand_range(5,10)
 				else:
 					person.health -= person.stats.health_max/7
+				if person.health < 1:
+					text = person.dictionary('[color=#ff4949]$name has died of stress.[/color]\n')
+					deads_array.append({number = count, reason = text})
+					continue
 
 			if person.stress >= 99:
 				person.mentalbreakdown()
+				if person.health < 1:
+					text = person.dictionary('[color=#ff4949]$name has died during a mental breakdown.[/color]\n')
+					deads_array.append({number = count, reason = text})
+					continue
 
 			###---Added by Expansion---### Hybrid Support
 			if person.race.find('Fairy') >= 0:
@@ -960,8 +971,10 @@ func _on_end_pressed():
 			person.away.duration -= 1
 			###---Added by Expansion---### Hybrid Support && Ankmairdor's BugFix v4
 			if person.away.at == 'lab' && person.health < 5:
-				temptext = "$name has not survived the laboratory operation due to poor health."
+				temptext = "$name has not survived the laboratory operation due to poor health.\n"
 				deads_array.append({number = count, reason = temptext})
+				person.removefrommansion()
+				continue
 			else:
 				if person.away.at in ['rest','vacation']:
 					slavehealing += 0.15
@@ -978,28 +991,35 @@ func _on_end_pressed():
 				person.energy += rand_range(20,30) + person.send*6
 
 				if person.away.duration == 0:
-					###---Added by Expansion---### Colorized & Fixed Duplicate
-					text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] returned to the mansion and went back to $his duty. \n"))
-					###---End Expansion---###
-					var sleepChange = false
-					if person.sleep != 'communal':
-						match person.sleep:
-							'personal':
-								sleepChange = globals.count_sleepers().personal > globals.state.mansionupgrades.mansionpersonal
-							'your':
-								sleepChange = globals.count_sleepers().your_bed > globals.state.mansionupgrades.mansionbed
-							'jail':
-								sleepChange = globals.count_sleepers().jail > globals.state.mansionupgrades.jailcapacity
-							'farm':
-								if globals.count_sleepers().farm > variables.resident_farm_limit[globals.state.mansionupgrades.farmcapacity]:
-									sleepChange = true
-									person.job = 'rest'
-					if sleepChange:
-						person.sleep = 'communal'
-						###---Added by Expansion---### Colorized
-						text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name's[/color] sleeping place is no longer available so $he has moved to the communal area. \n"))
+					if person.away.at == 'transported back':
+						globals.itemdict['rope'].amount += globals.state.calcRecoverRope(1)
+						if globals.count_sleepers().jail < globals.state.mansionupgrades.jailcapacity:
+							person.sleep = 'jail'
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] has been transported to the mansion and placed in the jail. \n"))
+						else:
+							person.sleep = 'communal'
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] has been transported to the mansion. You are out of free jail cells and $he was assigned to the communal area. \n"))
+					else:
+						text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] returned to the mansion and went back to $his duty. \n"))
 						###---End Expansion---###
-			###---End Expansion---###
+						var sleepChange = false
+						if person.sleep != 'communal':
+							match person.sleep:
+								'personal':
+									sleepChange = globals.count_sleepers().personal > globals.state.mansionupgrades.mansionpersonal
+								'your':
+									sleepChange = globals.count_sleepers().your_bed > globals.state.mansionupgrades.mansionbed
+								'jail':
+									sleepChange = globals.count_sleepers().jail > globals.state.mansionupgrades.jailcapacity
+								'farm':
+									if globals.count_sleepers().farm > variables.resident_farm_limit[globals.state.mansionupgrades.farmcapacity]:
+										sleepChange = true
+										person.job = 'rest'
+						if sleepChange:
+							person.sleep = 'communal'
+							###---Added by Expansion---### Colorized
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name's[/color] sleeping place is no longer available so $he has moved to the communal area. \n"))
+							###---End Expansion---###
 					person.away.at = ''
 				for i in person.effects.values():
 					if i.has('duration') && i.code != 'captured':
@@ -1084,38 +1104,44 @@ func _on_end_pressed():
 	if farmtext != null && text3 != null:
 		text3.set_bbcode(farmtext)
 	
-	#####          Dirtiness
 	###---Added by Expansion---### Ank BugFix v4a
 	for person in globals.slaves:
 		if person.spec == 'housekeeper' && person.away.duration == 0 && person.work in ['headgirl','farmmanager','labassist','jailer']:
 			globals.state.condition = (5.5 + max(0, person.sagi+person.send)*6)/2
 			text2.bbcode_text += person.dictionary("$name has managed to clean the mansion a bit while being around. \n")
 	###---End Expansion---###
+	#####          Dirtiness
 	if globals.state.condition <= 40:
 		for person in globals.slaves:
 			if person.away.duration != 0:
 				continue
-			if globals.state.condition >= 30 && randf() >= 0.7:
-				person.stress += rand_range(5,15)
-				person.obed += -rand_range(15,20)
-				text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=yellow]$name was distressed by mansion's poor condition. [/color]\n"))
-			elif globals.state.condition >= 15 && randf() >= 0.5:
-				person.stress += rand_range(10,20)
-				person.obed += -rand_range(15,35)
-				text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=yellow]$name was distressed by mansion's poor condition. [/color]\n"))
-			elif globals.state.condition < 15 && randf() >= 0.4:
+			if globals.state.condition >= 30:
+				if randf() >= 0.7:
+					person.stress += rand_range(5,15)
+					person.obed += -rand_range(15,20)
+					text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=yellow]$name was distressed by mansion's poor condition. [/color]\n"))
+			elif globals.state.condition >= 15:
+				if randf() >= 0.5:
+					person.stress += rand_range(10,20)
+					person.obed += -rand_range(15,35)
+					text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=yellow]$name was distressed by mansion's poor condition. [/color]\n"))
+			elif randf() >= 0.4:
 				person.stress += rand_range(15,25)
 				person.health -= rand_range(5,10)
 				text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=#ff4949]Mansion's terrible condition causes $name a lot of stress and impacted $his health. [/color]\n"))
-	#####          Outside Events
+				if person.health < 1:
+					text = person.dictionary('[color=#ff4949]$name has died of poor cleanliness.[/color]\n')
+					deads_array.append({number = count, reason = text})
 
+
+	#####          Outside Events
 	for guild in globals.guildslaves:
 		var slaves = globals.guildslaves[guild]
-		count = round(clamp(0.25, 0.75, 0.01 * slaves.size() + rand_range(0.1, 0.4)) * slaves.size())
 		###---Added by Expansion---### Ank BugFix v4a
 		var idx
 		var removeId
 		var tempslave
+		count = round(clamp(0.01 * slaves.size() + rand_range(0.1, 0.4), 0.25, 0.75) * slaves.size())
 		for i in range(count):
 			idx = randi() % (slaves.size()*7/4) % slaves.size()
 			removeId = slaves[idx].id
@@ -1132,7 +1158,7 @@ func _on_end_pressed():
 			get_node("outside").newslaveinguild(1, guild)
 		if randf() < 0.5:
 			get_node("outside").newslaveinguild(1, guild)
-			
+
 	if globals.state.sebastianorder.duration > 0:
 		globals.state.sebastianorder.duration -= 1
 		if globals.state.sebastianorder.duration == 0:
@@ -1280,11 +1306,9 @@ func _on_end_pressed():
 	globals.state.nonsexactions = ceil(globals.player.send/2.0) + variables.basenonsexactions
 	if deads_array.size() > 0:
 		results = 'worst'
-		deads_array.invert()
 		###---Added by Expansion---### Ank BugFix v4a
 		for i in deads_array:
-			globals.slaves[i.number].removefrommansion()
-			text0.set_bbcode(text0.get_bbcode() + i.reason + '\n')
+			text0.set_bbcode(text0.get_bbcode() + i.reason)
 		###---End Expansion---###
 	###---Added by Expansion---### NPCs Expanded || Escaped
 	if !escaped_array.empty():

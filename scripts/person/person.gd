@@ -765,16 +765,13 @@ func dictionary(text):
 		string = string.replace('$parent', 'mother')
 		string = string.replace('$sir', "Ma'am")
 	string = string.replace('$race', race.to_lower())
-	###---Added by Expansion---### Just to remove the error on load
-	if globals.player != null:
-		string = string.replace('$playername', globals.player.name_short())
-	###---End Expansion---###
+	string = string.replace('$playername', globals.player.name_short())
 	string = string.replace('$master', getMasterNoun())
 	string = string.replace('[haircolor]', haircolor)
 	string = string.replace('[eyecolor]', eyecolor)
 	var idx = string.find('$stutter') # "$stutter$master" may produce "M-Master"
 	while idx >= 0:
-		string = string.left(idx) + string.substring(idx + 8, randi() % 2 + 1) + "-" + string.right(idx + 8)
+		string = string.left(idx) + string.substr(idx + 8, randi() % 2 + 1) + "-" + string.right(idx + 8)
 		idx = string.find('$stutter')
 	return string
 
@@ -853,6 +850,10 @@ func calculateprice():
 		bonus += variables.pricebonusvirgin
 	if sex == 'futanari':
 		bonus += variables.pricebonusfuta
+	###---Added by Expansion---### centerflag982 - added dickgirl bonus
+	if sex == 'dickgirl':
+		bonus += variables.pricebonusdickgirl
+	###---End Expansion---###
 	for i in get_traits():
 		if i.tags.has('detrimental'):
 			bonus += variables.pricebonusbadtrait
@@ -955,6 +956,19 @@ func baddiedeath():
 func abortion():
 	while !preg.unborn_baby.empty():
 		globals.miscarriage(self)
+###---End Expansion---###
+
+###---Added by Expansion---### centerflag982 - allows dickgirls to be identified
+func checksex():
+	if penis != 'none':
+		if vagina != 'none':
+			sex = 'futanari'
+		elif globals.rules.dickgirl && titssize != 'masculine' && titssize != 'flat':
+			sex = 'dickgirl'
+		else:
+			sex = 'male'
+	else:
+		sex = 'female'
 ###---End Expansion---###
 
 ###---Added by Expansion---### SetGet

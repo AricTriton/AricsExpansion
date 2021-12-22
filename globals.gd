@@ -1,4 +1,33 @@
 
+var rules = {
+	futa = true,
+	futaballs = false,
+	furry = true,
+	furrynipples = true,
+	dickgirl = false, # centerflag982 - added dickgirl
+	male_chance = 15,
+	futa_chance = 10,
+	dickgirl_chance = 5, # centerflag982 - added dickgirl
+	children = false,
+	noadults = false,
+	slaverguildallraces = false,
+	fontsize = 18,
+	musicvol = 24,
+	soundvol = 24,
+	receiving = true,
+	fullscreen = false,
+	oldresize = true,
+	fadinganimation = true,
+	permadeath = false,
+	autoattack = true,
+	showfullbody = true,
+	enddayalise = 1,
+	spritesindialogues = true,
+	instantcombatanimation = false,
+	randomcustomportraits = true,
+	thumbnails = false,
+}
+
 ###---Added by Expansion---### Hucow Specialization
 var specarray = ['geisha','ranger','executor','bodyguard','assassin','housekeeper','trapper','nympho','merchant','tamer','hucow']
 ###---End Expansion---###
@@ -28,6 +57,13 @@ var specimages = {
 	hucow = load("res://files/aric_expansion_images/specialization_icons/cow_icon.png"),
 }
 ###---End Expansion---###
+
+var sexicon = {
+	female = load("res://files/buttons/sexicons/female.png"),
+	male = load("res://files/buttons/sexicons/male.png"),
+	futanari = load("res://files/buttons/sexicons/futa.png"),
+	dickgirl = load("res://files/buttons/sexicons/dickgirl.png"), # centerflag982 - added dickgirl icon
+}
 
 func loadsettings():
 	var file = File.new()
@@ -1464,7 +1500,7 @@ func fertilize_egg(mother, father_id, father_unique):
 		father = globals.state.findslave(father_id)
 		#If Father disappeared from the World
 		if father == null:
-			father = globals.newslave(randomitemfromarray(globals.allracesarray), 'adult', 'male')
+			father = globals.newslave('randomany', 'adult', 'male')
 	else:
 		father = globals.newslave('randomany', 'adult', 'male')
 		father.id = '-1'
@@ -1630,8 +1666,8 @@ func slimeConversionCheck(mother, father):
 #I can't remember if I added this or found it elsewhere. Sorry if I didn't!
 func randomitemfromarray(source):
 	if source.size() > 0:
-		#source[randi() % source.size()] Old
-		return source[round(rand_range(0,source.size()-1))]
+		return source[randi() % source.size()]
+	return null
 
 func getfromarray(array, index):
 	return array[ clamp(index, 0, array.size()-1) ]
