@@ -1633,5 +1633,9 @@ func randomitemfromarray(source):
 		#source[randi() % source.size()] Old
 		return source[round(rand_range(0,source.size()-1))]
 
+func randomfromarray(array):
+	if !array.empty():
+		return array[randi() % array.size()]
+
 func getfromarray(array, index):
 	return array[ clamp(index, 0, array.size()-1) ]
