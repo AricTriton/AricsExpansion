@@ -2058,7 +2058,7 @@ func sexchangepoteffect():
 
 
 #recipes
-func recipedecrypt(item): #apparently never used...
+func recipedecrypt(item):
 	#print("recipedecrypt")
 	craftitemingredients.clear()
 	var text = ''
