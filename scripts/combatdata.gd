@@ -99,7 +99,7 @@ var enemygrouppools = {
 	},
 	elfguards = {
 		units = [['elfguard',2,3]], awareness = 15, captured = null, special = null,
-		description = "You spot a local [color=aqua]patrol of elven warriors[/color] scouting the surroundings. Surely, they won't be happy with trespassers as this is tribal elven territory. ",
+		description = "You spot a local [color=aqua]patrol of elven warriors[/color] scouting the surroundings. Surely, they won't be happy with trespassers as this is elven territory. ", #Removed Tribal to avoid confusion
 		descriptionambush = 'You are attacked by a [color=aqua]small group of elven warriors[/color]. ',
 	},
 	fairy = {
