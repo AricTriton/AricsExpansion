@@ -1008,7 +1008,7 @@ func amberguard():
 func shuriyaslaveselect(stage):
 	###---Added by Expansion---### Races Expanded
 	if stage == 1:
-		main.selectslavelist(true, 'shuriyaelfselect', self, 'person.findRace(["Elf"])')
+		main.selectslavelist(true, 'shuriyaelfselect', self, 'person.findRace(["Elf"]) && !person.findRace(["Dark Elf"]) && !person.findRace(["Tribal Elf"])')
 	else:
 		main.selectslavelist(true, 'shuriyadrowselect', self, 'person.findRace(["Dark Elf"])')
 	###---End Expansion---###
