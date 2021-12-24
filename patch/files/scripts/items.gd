@@ -2056,6 +2056,7 @@ func sexchangepoteffect():
 
 ###---Expansion End---###
 
+var craftitemingredients = []
 
 #recipes
 func recipedecrypt(item):
