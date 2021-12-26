@@ -1738,7 +1738,7 @@ func talkconsent(mode=''):
 				text += "\n\n[color=green]Unlocked sexual actions with $name.[/color]"
 			if person.levelupreqs.has('code') && person.levelupreqs.code == 'relationship':
 				text += "\n\n[color=green]After getting closer with $name, you felt like $he unlocked new potential. [/color]"
-				person.levelup()
+				### Levelup Removed by Ank BugFix v4a
 			person.consent = true
 
 	if mode == "pregnancy":

@@ -152,7 +152,7 @@ func clearstate():
 	if useRalphsTweaks:
 		expansionsettings.applyItemMarketCostTweaks()
 		expansionsettings.applySpellManacostTweaks()
-	resources.reset()
+	resources = resource.new()
 
 func slaves_set(person):
 	person.originstrue = person.origins
@@ -181,7 +181,7 @@ class resource:
 	var day = 1 setget day_set
 	var gold = 0 setget gold_set
 	var mana = 0 setget mana_set
-	var energy = 0 setget energy_set
+	var energy = 100 setget energy_set
 	var food = 0 setget food_set
 	var upgradepoints = 0 setget upgradepoints_set
 	var panel
@@ -232,19 +232,6 @@ class resource:
 		for i in array:
 			#self[i] += 0
 			set(i, get(i))
-	
-	func reset():
-		day = 1
-		gold = 0
-		mana = 0
-		energy = 0
-		food = 0
-		###---Added by Expansion---### Farm Expanded
-		milk = 0
-		semen = 0
-		lube = 0
-		piss = 0
-		###---Expansion End---###
 	
 	func gold_set(value):
 		value = round(value)
@@ -1232,7 +1219,6 @@ func load_game(text):
 	for i in currentline.allnpcs:
 		if typeof(i) == TYPE_STRING:
 			continue
-		newslave = person.new()
 		if i['@path'].find('.gdc'):
 			i['@path'] = i['@path'].replace('.gdc', '.gd')
 		newslave = dict2inst(i)

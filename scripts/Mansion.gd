@@ -1971,17 +1971,18 @@ func babyage(age):
 		baby.away.duration = variables.growuptimeteen
 	elif age == 'adult':
 		ClearBabyTraits(age) #ralph
+		baby.age = 'adult'
 		baby.away.duration = variables.growuptimeadult
 	baby.away.at = 'growing'
 	baby.obed += 75
 	baby.loyal += 20
-	if baby.sex != 'male':
+	if !baby.sex in ['male','dickgirl']:
 		baby.vagvirgin = true
 	baby.assvirgin = true
 	baby.unique = null #ralph
-	ClearBabyTraits(age, baby) #ralph
-	globals.expansionsetup.setRaceBonus(baby, false) #ralph - needed to override certain inherited traits for certain hybrids including race_display
-	globals.expansionsetup.setRaceBonus(baby, true) #ralph
+	if globals.useRalphsTweaks:
+		globals.expansionsetup.setRaceBonus(baby, false) #ralph - needed to override certain inherited traits for certain hybrids including race_display
+		globals.expansionsetup.setRaceBonus(baby, true) #ralph
 	globals.slaves = baby
 	globals.state.relativesdata[baby.id].name = baby.name_long()
 	globals.state.relativesdata[baby.id].state = 'normal'
@@ -1989,7 +1990,7 @@ func babyage(age):
 	globals.state.babylist.erase(baby)
 	baby = null
 	get_node("birthpanel").hide()
-	get_node("birthpanel/raise/childpanel").hide()
+	get_node("birthpanel/childpanel").hide()
 	childbirth_loop(birthmother)
 
 func _on_raisehybrid_pressed():
@@ -2017,36 +2018,6 @@ func finish_raising():
 		get_node("birthpanel/childpanel/child").show()
 ###---End of Expansion---###
 
-func babyage(age):
-	baby.name = get_node("birthpanel/childpanel/LineEdit").get_text()
-	if get_node("birthpanel/childpanel/surnamecheckbox").is_pressed() == true:
-		baby.surname = globals.player.surname
-	###---Added by Expansion---### Size Support || Replaced Functions
-	if age == 'child':
-		baby.age = 'child'
-		baby.away.duration = variables.growuptimechild
-	elif age == 'teen':
-		baby.age = 'teen'
-		baby.away.duration = variables.growuptimeteen
-	elif age == 'adult':
-		baby.age = 'adult'
-		baby.away.duration = variables.growuptimeadult
-	baby.away.at = 'growing'
-	baby.obed += 75
-	baby.loyal += 20
-	if baby.sex != 'male':
-		baby.vagvirgin = true
-	baby.assvirgin = true
-	globals.slaves = baby
-	globals.state.relativesdata[baby.id].name = baby.name_long()
-	globals.state.relativesdata[baby.id].state = 'normal'
-
-	globals.state.babylist.erase(baby)
-	baby = null
-	get_node("birthpanel").hide()
-	get_node("birthpanel/childpanel").hide()
-	childbirth_loop(birthmother)
-
 func _on_selfbutton_pressed():
 	hide_everything()
 	get_node("MainScreen/mansion/selfinspect").show()
@@ -2073,7 +2044,7 @@ func _on_selfbutton_pressed():
 		text += 'none. \n'
 	else:
 		text2 = text2.substr(0, text2.length() -2)+ '. '
-	text += text2 + '\nReputation: '
+	text += text2 + '\nReputation:\n'
 	for i in globals.state.reputation:
 		text += i.capitalize() + " - "+ reputationword(globals.state.reputation[i])
 		###---Added by Expansion---### Towns Expanded
@@ -2082,9 +2053,9 @@ func _on_selfbutton_pressed():
 			#Public Nudity
 			text += " - Local Laws: [color=aqua]Public Nudity[/color] " + globals.fastif(lawdict.laws.public_nudity == true, "[color=lime]Legal[/color]", "[color=red]Illegal[/color]")
 		#End Line (Change to Multi-line Spacing?)
-		text += ", "
+		text += "\n"
 		###---End Expansion---###
-	text += "\nYour mage order rank: " + dict[int(globals.state.rank)]
+	text += "Your mage order rank: " + dict[int(globals.state.rank)]
 	###---Added by Expansion---###
 	if globals.state.spec != "" && globals.state.spec != null:
 		text += "\n\nYour speciality: [color=yellow]" + globals.state.spec + "[/color]\nBonuses: " + globals.expandedplayerspecs[globals.state.spec]

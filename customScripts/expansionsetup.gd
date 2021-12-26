@@ -206,7 +206,7 @@ func expandPerson(person):
 	var sexass = int(round(person.metrics.anal/10))
 	var modifier = 0
 	if person.vagina == 'normal' && person.vagvirgin == false:
-		person.vagina = globals.vagsizearray[rand_range(0,globals.vagsizearray.size()-2)]
+		person.vagina = globals.vagsizearray[randi() % (globals.vagsizearray.size()-2)]
 		while sexvag > 0:
 			if rand_range(0,1) < .1:
 				person.vagina = globals.vagsizearray[globals.vagsizearray.find(person.vagina)+1]
@@ -214,18 +214,18 @@ func expandPerson(person):
 	if person.vagina != "none" && person.lubrication == -1:
 		setLubrication(person)
 	if person.asshole == 'normal':
-		person.asshole = globals.assholesizearray[rand_range(0,globals.assholesizearray.size()-2)]
+		person.asshole = globals.assholesizearray[randi() % (globals.assholesizearray.size()-2)]
 		while sexass > 0:
 			if rand_range(0,1) < .1:
 				person.asshole = globals.assholesizearray[globals.assholesizearray.find(person.asshole)+1]
 			sexass -= 1
 	if person.lips == 'none':
 		#Add Racial Increases Later
-		person.lips = globals.lipssizearray[rand_range(0,globals.lipssizearray.size()-3)]
+		person.lips = globals.lipssizearray[randi() % (globals.lipssizearray.size()-3)]
 		if rand_range(0,1) < .25:
 			person.lips = globals.lipssizearray[globals.lipssizearray.find(person.lips)+1]
 	#Non-Player Checks
-	if person != globals.player:
+	if true: # this condition is never false:   if person != globals.player:
 		var origins = str(person.origins)
 		#Dignity will change in future update
 		var persondignitymin = globals.expansion.dignitymin[origins]
@@ -242,10 +242,12 @@ func expandPerson(person):
 		if !globals.state.relativesdata.has(person.id):
 			globals.createrelativesdata(person)
 	#Sets Sexuality for Existing Players/Starting Slave
+	# this condition cannot be true when creating a new progress, only when loading a non-expanded progress, the day count is useless
 	elif person == globals.player && globals.resources.day >= 1 || person.unique == 'startslave' && globals.resources.day >= 1:
-		person.sexuality = str(globals.randomitemfromarray(['straight','mostlystraight','rarelygay']))
-	elif person == globals.player:
-		person.sexuality = 'mostlystraight'
+		person.sexuality = globals.randomitemfromarray(['straight','mostlystraight','rarelygay'])
+	# this condition is almost never checked but never true when checked
+	#elif person == globals.player:
+	#	person.sexuality = 'mostlystraight'
 	setExpansionTraits(person)
 	if person.lactation == true:
 		setLactation(person)
@@ -287,13 +289,13 @@ func setDemeanor(person):
 
 func setSexuality(person):
 	if person.traits.has('Homosexual'):
-		person.sexuality = str(globals.randomitemfromarray(['rarelystraight','mostlygay','gay']))
+		person.sexuality = globals.randomitemfromarray(['rarelystraight','mostlygay','gay'])
 		person.trait_remove('Homosexual')
 	elif person.traits.has('Bisexual'):
-		person.sexuality = str(globals.randomitemfromarray(['rarelygay','bi','rarelystraight']))
+		person.sexuality = globals.randomitemfromarray(['rarelygay','bi','rarelystraight'])
 		person.trait_remove('Bisexual')
 	else:
-		person.sexuality = str(globals.randomitemfromarray(globals.kinseyscale))
+		person.sexuality = globals.randomitemfromarray(globals.kinseyscale)
 
 func setDesiredOffspring(person):
 	#Maximum of 10 + Siblings

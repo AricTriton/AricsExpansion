@@ -1,9 +1,9 @@
 func resort():
 	var strictsearch = get_node("racelock").is_pressed()
-	var gender = person.sex
+	#var gender = person.sex
 	###---Added by Expansion---### centerflag982 - added dickgirl check
-	if gender == 'futanari' || gender == 'dickgirl':
-		gender = 'female'
+	#if gender == 'futanari' || gender == 'dickgirl':
+	#	gender = 'female'
 	var race = person.race.replace("Beastkin ", "").replace("Halfkin ", "").replace(" ","")
 	var searchText = get_node("search").get_text()
 	var noImages = true

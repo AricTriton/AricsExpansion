@@ -1,4 +1,4 @@
-var id = 0
+
 
 ###---Added by Expansion---### Modified by Deviate
 #var preg = {fertility = 0, has_womb = true, duration = 0, baby = null}
@@ -75,6 +75,18 @@ var stats = {
 	loyal_max = 100,
 	loyal_min = 0,
 }
+
+func trait_remove(trait):
+	trait = globals.origins.trait(trait)
+	if traits.find(trait.name) < 0:
+		return
+	traits.erase(trait.name)
+	if trait['effect'].empty() != true:
+		add_effect(trait['effect'], true)
+
+	if globals.get_tree().get_current_scene().has_node("infotext") && globals.slaves.find(self) >= 0 && away.at != 'hidden':
+		var text = self.dictionary("$name lost trait: " + trait.name)
+		globals.get_tree().get_current_scene().infotext(text,'yellow')
 
 
 ###---Added by Expansion---###

@@ -47,7 +47,7 @@ func getsexfeatures(person):
 					person.asssize = globals.asssizearray[globals.titssizearray.find(person.asssize)+1]
 		#Add Lip Sizes
 		temp = ['thin','small','average','big','huge','plump']
-		if person.age in ['teen','adult'] && person.sex != 'male':
+		if person.age in ['teen','adult']:
 			temp.append('small')
 			temp.append('average')
 			temp.append('big')
@@ -77,9 +77,9 @@ func getsexfeatures(person):
 		###---Added by Expansion---### centerflag982 - handle dickgirl genitals
 		if person.sex == 'male' || person.sex == 'dickgirl' || globals.rules.futaballs == true:
 			person.balls = getrandomfromarray(temp)
+		else:
 		###---End Expansion---###
 			person.balls = 'none'
-		###---Added by Expansion---###
 	else:
 		person.penis = 'none'
 		person.balls = 'none'
