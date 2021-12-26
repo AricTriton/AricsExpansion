@@ -1863,7 +1863,7 @@ func talkconsent(mode=''):
 			if person.consentexp.breeder && person.preg.has_womb:
 				consentstatus += "$He has agreed to [color=green]be bred[/color] by other slaves for you.\n"
 			elif person.preg.has_womb:
-				consentstatus += "$He has not agreed to [color=green]be bred[/color] by other slaves for you.\n"
+				consentstatus += "$He has not agreed to [color=red]be bred[/color] by other slaves for you.\n"
 			if person.consentexp.incest:
 				consentstatus += "$He has consented to have [color=green]incestuous sex[/color].\n"
 			else:
