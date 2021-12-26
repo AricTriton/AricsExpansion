@@ -250,6 +250,7 @@ func newbaby(mother,father):
 	person.cleartraits()
 
 	var traitpool = father.traits + mother.traits
+	var excluded = []
 	for i in traitpool:
 		if rand_range(0,100) > variables.traitinheritchance:
 			continue
@@ -286,7 +287,8 @@ func newbaby(mother,father):
 						newtraitrank = round( traitline.find(i) + rand_range(-1,1))
 					var newtraitname = traitline[ clamp(newtraitrank, 0, traitline.size()-1) ]
 					var newtrait = globals.origins.trait(newtraitname)
-					if newtrait != null:
+					if newtrait != null && !excluded.has(traitline):
+						excluded.append(traitline)
 						if newtrait.tags.has('lactation-trait'):
 							person.traitstorage.append(newtraitname)
 						else:
