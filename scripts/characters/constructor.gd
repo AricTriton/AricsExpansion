@@ -268,7 +268,7 @@ func newbaby(mother,father):
 						if i == ii && traitpool.count(i) == 1:
 							continue
 						var trait2 = globals.origins.trait(ii)
-						if trait2 != null && trait2.tags.has(traitline):
+						if trait2 != null && trait2.tags.has(expansiontraits):
 							matchrank = traitline.find(ii)
 					if matchrank >= 0:
 						if matchrank > traitline.find(i):
@@ -276,7 +276,7 @@ func newbaby(mother,father):
 								newtraitrank = round( rand_range( traitline.find(i), matchrank)) + 1
 							else:
 								newtraitrank = round( rand_range( traitline.find(i), matchrank))
-						elif matchrank > traitline.find(i):
+						elif matchrank < traitline.find(i):
 							if rand_range(0,100) <= 50:
 								newtraitrank = round( rand_range( matchrank, traitline.find(i))) + 1
 							else:
