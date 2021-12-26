@@ -1505,7 +1505,7 @@ func build_mansion_info():
 					text += "\n[color=lime]Loyal Companion[/color]"
 				elif person.obed >= (person.loyal+person.fear) * .52:
 					text += "\n[color=green]Subserviant Slave[/color]"
-				elif person.fear >= (person.obed+person.obed) * .5:
+				elif person.fear >= (person.obed+person.loyal) * .5:
 					text += "\n[color=red]Terrified Slave[/color]"
 				else:
 					text += "\nBegrudging Bodyguard"
