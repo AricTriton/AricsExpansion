@@ -244,7 +244,7 @@ func _on_talk_pressed(mode = 'talk'):
 		buttons.append({text = 'Sexual Topics', function = '_on_talk_pressed', args = 'slave_sex_topics', tooltip = "Topics regarding to Sex and Sexuality"})
 
 		#Once a Day Convos
-		buttons.append({text = str(globals.randomitemfromarray(["I'd like a quick word.",'Can we talk quickly?',"Let's have a quick chat","Once quick thing..."])), function = 'oneperdayconvos', args = 'intro', tooltip = "These conversations that can be held once per day per slave"})
+		buttons.append({text = str(globals.randomitemfromarray(["I'd like a quick word.",'Can we talk quickly?',"Let's have a quick chat","One quick thing..."])), function = 'oneperdayconvos', args = 'intro', tooltip = "These conversations that can be held once per day per slave"})
 
 		#Dimensional Crystal Topics
 		if person.work == 'headgirl' || person.sleep != 'jail':
