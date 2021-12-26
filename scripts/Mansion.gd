@@ -1255,7 +1255,7 @@ func _on_end_pressed():
 					else: #chance for simple price decrease
 						globals.state.racemarketsat[temprace] = clamp(globals.state.racemarketsat[temprace] - temprandom,0.5,5)
 						text = text + str(globals.randomfromarray(globals.races[temprace].marketdown))
-						print("decrease price: " + str(globals.randomfromarray(globals.races[temprace].marketdown)))
+						#print("decrease price: " + str(globals.randomfromarray(globals.races[temprace].marketdown)))
 				elif rand_range(0,100) < 80: #simple price increase for race missing from slave guilds
 					for i in globals.races:
 						if !i in tempracearray:
@@ -1264,7 +1264,7 @@ func _on_end_pressed():
 						temprace = globals.randomfromarray(tempracearray2) #select available race for price increase
 						globals.state.racemarketsat[temprace] = clamp(globals.state.racemarketsat[temprace] + temprandom,0.5,5)
 						text = text + str(globals.randomfromarray(globals.races[temprace].marketup))
-						print("increase price: " + str(globals.randomfromarray(globals.races[temprace].marketup)))
+						#print("increase price: " + str(globals.randomfromarray(globals.races[temprace].marketup)))
 				else: #price increase due to all existing race slaves being sold from slave guilds
 					for guild in globals.guildslaves:
 						for person in globals.guildslaves[guild].duplicate():
