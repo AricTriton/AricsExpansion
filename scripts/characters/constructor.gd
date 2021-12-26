@@ -137,7 +137,7 @@ func newbaby(mother,father):
 	#Prep
 	person.race = ''
 	person.age = ''
-	person.sex = ''
+	#person.sex = ''
 
 	#General
 	person.state = 'fetus'
