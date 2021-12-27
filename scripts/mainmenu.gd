@@ -120,6 +120,8 @@ func _process_stage6_sex_options():
 	else:
 		sexSizes = globals.titssizearray.duplicate()
 		sexSizes.pop_front() #remove 'masculine'
+		if makeoverPerson.sex == 'dickgirl':
+			sexSizes.pop_front() #remove 'flat'
 	for i in sexSizes:
 		stage6.get_node("titssize").add_item(i)
 		if makeoverPerson.titssize == i:

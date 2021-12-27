@@ -1264,6 +1264,8 @@ func load_game(text):
 	for person in personList:
 		if person.imageportait == null: # try to add portrait if slave doesn't have one
 			constructor.randomportrait(person)
+		if typeof(person.sex) != TYPE_STRING || person.sex.empty():
+			person.checksex()
 
 
 ###---Added by Expansion---### Only to load from Mods folder

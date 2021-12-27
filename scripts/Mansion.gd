@@ -10,9 +10,8 @@ func _ready():
 	exportSlaveStats.text = "Export Stats"
 	exportSlaveStats.disconnect("pressed", self, '_on_spellbook_pressed')
 	exportSlaveStats.connect("pressed", self, 'doExportSlaveStats')
-	exportSlaveStats.margin_top -= 39
-	exportSlaveStats.margin_bottom -= 39
-	exportSlaveStats.margin_left -= 0
+	exportSlaveStats.margin_left += 150
+	exportSlaveStats.margin_right += 150
 	$MainScreen/mansion/selfinspect.add_child(exportSlaveStats)
 		## END OF CHANGED
 	###---End Expansion---###
