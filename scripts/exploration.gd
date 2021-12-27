@@ -848,7 +848,7 @@ func townhall_law_change(town):
 	var text = "You approach a receptionist and request that they consider voting on a potential law change. She gives you a form to submit the appeal. She informs you that making this request will cost you [color=aqua]" + str(globals.state.townsexpanded[town].townhall.law_change_cost) + " Reputation[/color] whether it passes or fails as you stake your reputation on it. "
 	
 	#Nudity Law
-	text += "\n\n[center]Laws[/color]\n\nPublic Nudity - "
+	text += "\n\n[center][color=#d1b970]Laws[/color][/center]\n\nPublic Nudity - "
 	if globals.state.townsexpanded[town].laws.public_nudity == false && !globals.state.townsexpanded[town].currentevents.has('vote_public_nudity'):
 		text += "[color=aqua]Illegal[/color] || Current Public Support to Legalize [color=aqua]" + str(globals.state.townsexpanded[town].nudity) + "[/color] "
 		buttons.append({name = "Legalize Public Nudity", function = 'townhall_legalize_public_nudity', args = town})
