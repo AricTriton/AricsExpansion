@@ -1956,10 +1956,10 @@ func ClearBabyTraits(age):
 
 
 func babyage(age):
-	baby.name = get_node("birthpanel/raise/childpanel/LineEdit").get_text()
-	if get_node("birthpanel/raise/childpanel/surnamecheckbox").is_pressed() == true:
-		baby.surname = globals.player.surname
 	###---Added by Expansion---### Size Support || Replaced Functions
+	baby.name = get_node("birthpanel/childpanel/LineEdit").get_text()
+	if get_node("birthpanel/childpanel/surnamecheckbox").is_pressed() == true:
+		baby.surname = globals.player.surname
 	if age == 'child':
 		ClearBabyTraits(age) #ralph
 		baby.age = 'child'
