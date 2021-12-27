@@ -1281,7 +1281,7 @@ func _on_end_pressed():
 					else: #chance for simple price decrease
 						globals.state.racemarketsat[temprace] = clamp(globals.state.racemarketsat[temprace] - temprandom,0.5,5)
 						text = text + str(globals.randomfromarray(globals.races[temprace].marketdown))
-						print("decrease price: " + str(globals.randomfromarray(globals.races[temprace].marketdown)))
+						#print("decrease price: " + str(globals.randomfromarray(globals.races[temprace].marketdown)))
 				elif rand_range(0,100) < 80: #simple price increase for race missing from slave guilds
 					for i in globals.races:
 						if !i in tempracearray:
@@ -1290,7 +1290,7 @@ func _on_end_pressed():
 						temprace = globals.randomfromarray(tempracearray2) #select available race for price increase
 						globals.state.racemarketsat[temprace] = clamp(globals.state.racemarketsat[temprace] + temprandom,0.5,5)
 						text = text + str(globals.randomfromarray(globals.races[temprace].marketup))
-						print("increase price: " + str(globals.randomfromarray(globals.races[temprace].marketup)))
+						#print("increase price: " + str(globals.randomfromarray(globals.races[temprace].marketup)))
 				else: #price increase due to all existing race slaves being sold from slave guilds
 					for guild in globals.guildslaves:
 						for person in globals.guildslaves[guild].duplicate():
@@ -1529,7 +1529,7 @@ func build_mansion_info():
 					text += "\n[color=lime]Loyal Companion[/color]"
 				elif person.obed >= (person.loyal+person.fear) * .52:
 					text += "\n[color=green]Subserviant Slave[/color]"
-				elif person.fear >= (person.obed+person.obed) * .5:
+				elif person.fear >= (person.obed+person.loyal) * .5:
 					text += "\n[color=red]Terrified Slave[/color]"
 				else:
 					text += "\nBegrudging Bodyguard"
