@@ -1,3 +1,13 @@
+static func randsex():
+	if globals.rules.male_chance > 0 && rand_range(0, 100) < globals.rules.male_chance:
+		return 'male'
+	elif rand_range(0, 100) < globals.rules.futa_chance && globals.rules.futa == true:
+		return 'futanari'
+	elif rand_range(0, 100) < globals.rules.dickgirl_chance && globals.rules.dickgirl == true:
+		return 'dickgirl'
+	else:
+		return 'female'
+
 static func randanyeyecolor():
 	var text = globals.alleyecolors
 	return text[randi()%text.size()]

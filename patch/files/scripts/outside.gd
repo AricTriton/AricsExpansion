@@ -576,8 +576,8 @@ func newslaveinguild(number, town = 'wimborn', raceadd = 'rand'): #ralph5 added 
 		elif town == 'frostford':
 			racearray = ([[globals.getracebygroup("frostford"),1],['Human', 1.5],['Halfkin Wolf', 3],['Beastkin Wolf', 5]] if !globals.useRalphsTweaks else [[globals.getracebygroup("frostford"),1],['Human', 3],['Halfkin Wolf', 5],['Beastkin Wolf', 8],['Halfkin Cat', 5],['Halfkin Bunny', 1]])
 		if town == 'umbra':
-			racearray = [[globals.randomfromarray(globals.allracesarray),1]]
-			originpool = [['noble', 1],['rich',2],['commoner',3], ['poor', 3], ['slave',1]]			
+			racearray = [[globals.getracebygroup("active"),1]]
+			originpool = [['noble', 1],['rich',2],['commoner',3], ['poor', 3], ['slave',1]]	
 		else:
 			originpool = [['rich',1], ['commoner',3], ['poor', 6], ['slave', 6]]
 		if raceadd != 'rand': #ralph
@@ -587,7 +587,7 @@ func newslaveinguild(number, town = 'wimborn', raceadd = 'rand'): #ralph5 added 
 				race = raceadd #/ralph
 			origin = globals.weightedrandom(originpool)
 		elif globals.rules.slaverguildallraces == true && globals.state.sandbox == true:
-			race = globals.randomfromarray(globals.allracesarray)
+			race = globals.getracebygroup("active")
 			originpool = ['slave','poor','commoner','rich','noble']
 			origin = globals.randomfromarray(originpool)
 		else:
@@ -874,22 +874,17 @@ func selectslavebuy(person):
 		text += "During the examination $name only returned bold, angry look, showing $his [color=#ff4949]rebellious[/color] attitude. \n\n"
 	elif person.obed < 40:
 		text += "$name reacts to commands [color=#ff4949]poorly[/color] and does not seem to hold any enthusiasm about $his position. Perhaps $he will need an additional training...\n\n"
-	if person.vagvirgin == true && person.vagina != 'none':
-		if person.obed >= 40:
-			text += "After a gesture, $name reveals to you $his [color=aqua]virgin[/color] pussy. \n\n"
-		else:
-			text += "With some assistance, $name is forced to demonstrate you $his [color=aqua]virgin[/color] pussy. \n\n"
 	###---Added by Expansion---### Genitals Expanded
 	if person.vagvirgin == true && person.vagina != 'none':
 		if person.obed >= 40:
-			text += "After a gesture, $name reveals to you $his [color=aqua]" +str(globals.expansion.getGenitals(person))+ "[/color] . \n\n"
+			text += "After a gesture, $name reveals to you $his [color=aqua]virgin " +str(globals.expansion.getGenitals(person))+ "[/color] . \n\n"
 		else:
-			text += "With some assistance, $name is forced to demonstrate you $his [color=aqua]virgin" +str(globals.expansion.getGenitals(person))+ "[/color]. \n\n"
+			text += "With some assistance, $name is forced to demonstrate you $his [color=aqua]virgin " +str(globals.expansion.getGenitals(person))+ "[/color]. \n\n"
 	elif person.vagina != 'none':
 		if person.obed >= 40:
 			text += "After a gesture, $name reveals to you $his [color=aqua]" +str(globals.expansion.getGenitals(person))+ "[/color]. \n\n"
 		else:
-			text += "With some assistance, $name is forced to demonstrate you $his [color=aqua]virgin[/color] " +str(globals.expansion.getGenitals(person))+ "[/color]. \n\n"
+			text += "With some assistance, $name is forced to demonstrate you $his [color=aqua]" +str(globals.expansion.getGenitals(person))+ "[/color]. \n\n"
 	###---End Expansion---###
 	text += "As you finish inspection, you are being reminded, that you can purchase $him for mere [color=yellow]"+str(price)+ " gold[/color].[/color] "
 	mansion.maintext = person.descriptionsmall() + '\n\n[color=#ff5df8]'+ person.dictionary(text)
@@ -1068,13 +1063,14 @@ func sellslavelist(location):
 			
 			newbutton.get_node("sex").texture = globals.sexicon[person.sex]
 			newbutton.get_node("sex").hint_tooltip = person.sex
-			###---Added by Expansion---### Breeder Specialization Support & Ank BugFix v4
+			newbutton.get_node('name').set_text(person.name_long())
+			###---Added by Expansion---### Breeder Specialization
 			if person.npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
-				newbutton.get_node('name').set_text(person.dictionary('$name, ')+ person.race + ', ' + person.age + ', ' + person.work + '[color=aqua]Born in Mansion - x' + str(globals.expansionsettings.mansion_bred_and_breeder) + ' Gold/Upgrade Points[/color]') #ralph3
+				newbutton.get_node('name').hint_tooltip = person.name_long() + ', ' + person.race + ', ' + person.age + ', ' + globals.jobs.jobdict.get(person.work, {name=person.work.capitalize()}).name + '[color=aqua]Born in Mansion - x' + str(globals.expansionsettings.mansion_bred_and_breeder) + ' Gold/Upgrade Points[/color]' #ralph3
 			elif person.npcexpanded.mansionbred == true:
-				newbutton.get_node('name').set_text(person.dictionary('$name, ')+ person.race + ', ' + person.age + ', ' + person.work + '[color=aqua]Born in Mansion - +25% Gold/Upgrade Points[/color]')
+				newbutton.get_node('name').hint_tooltip = person.name_long() + ', ' + person.race + ', ' + person.age + ', ' + globals.jobs.jobdict.get(person.work, {name=person.work.capitalize()}).name + '[color=aqua]Born in Mansion - +25% Gold/Upgrade Points[/color]'
 			else:
-				newbutton.get_node('name').set_text(person.dictionary('$name, ')+ person.race + ', ' + person.age + ', ' + person.work)
+				newbutton.get_node('name').hint_tooltip = person.name_long() + ', ' + person.race + ', ' + person.age + ', ' + globals.jobs.jobdict.get(person.work, {name=person.work.capitalize()}).name
 			if location == 'sebastian':
 				newbutton.get_node('price').set_text(str(round(person.sellprice(true)*0.7))+ ' gold')
 			elif location == 'umbra':
