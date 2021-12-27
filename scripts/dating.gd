@@ -342,12 +342,12 @@ func frenchkiss(person, counter):
 		text += "[he2] closes eyes and passionately accepts your kiss. "
 		if str(related) != 'unrelated':
 			text += "[he2] " + str(globals.randomitemfromarray(['whispers','mumbles','quickly says','says','quietly says'])) + " " + person.quirk("\n[color=yellow]-I can not believe I am ready to start " + globals.expansion.nameKissing() + " my " + str(related) + ". ")
-		if !person.traits.has("Bisexual") && !person.traits.has("Homosexual") && person.sex == globals.player.sex:
-			self.mood += 1
-			person.lust += 1
-		else:
+		if globals.expansion.getSexualAttraction(person,globals.player):
 			self.mood += 3
 			person.lust += 3
+		else:
+			self.mood += 1
+			person.lust += 1
 	else:
 		self.mood -= 4
 		text += "[he2] abruptly stops you, showing [his2] disinterest. "

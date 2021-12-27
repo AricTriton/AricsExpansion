@@ -631,7 +631,7 @@ func dailyFarm():
 							text += farmmanager.dictionary("[color=aqua]$name[/color] suspects that [color=aqua]" + cattle.name_short() + "[/color] is [color=aqua]pregnant[/color]. $He tests the cow while it is being milked and confirms the happy news. ")
 							farmmanager.add_jobskill('farmmanager')
 							cattle.knowledge.append('currentpregnancy')
-						else:
+						elif farmmanager != null:
 							text += "[color=aqua]$" + farmmanager.name_short() + "[/color] isn't sure why yet. "
 				if cattle.lactating.hyperlactation == true:
 					lactationbonus = clamp(cattle.lactating.duration*.2, .2, 5)
@@ -1657,10 +1657,11 @@ func dailyFarm():
 	#Finished
 	return text
 
-func milkMarket(person, town, totalbottles):
+# args:
+#	bottles =  totalbottles
+func milkMarket(person, town, bottles):
 	var text = ""
 	var profit = 0
-	var bottles = totalbottles
 	var bottlessold = 0
 	var reaction = {good = 0, bad = 0, neutral = 0}
 	
