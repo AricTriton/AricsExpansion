@@ -1250,7 +1250,7 @@ func setRaceBonus_Ralph(person, increasestats):
 	person.stats.charm_racial = 0
 	#for i in person.traits: #added to reapply traits (eg. 'Robust' endurance bonus was removed by the above)
 	#	
-	#	person.remove_trait(trait)
+	#	person.trait_remove(trait)
 	#	person.add_trait(trait)
 	if person.traits.has('Weak'):
 		person.stats.str_mod -= 2
@@ -1843,7 +1843,7 @@ func setRaceBonus_Ralph(person, increasestats):
 				bonus_pliability += 1
 				person.tail = 'none' #not reversible as applied
 				if person.traits.has('Natural Beauty'):
-					person.remove_trait('Natural Beauty') #not reversible
+					person.trait_remove('Natural Beauty') #not reversible
 				person.add_trait('Blemished') #not reversible
 				person.mods['augmenttongue'] = 'augmenttongue' #not reversible as applied				
 				if person.sex == 'male':
@@ -1911,7 +1911,7 @@ func setRaceBonus_Ralph(person, increasestats):
 				bonus_skincov = 'plants'
 				person.add_trait('Small Eater') #not reversible
 				if person.traits.has('Spoiled'):
-					person.remove_trait('Spoiled') #not reversible
+					person.trait_remove('Spoiled') #not reversible
 				else:
 					person.add_trait('Ascetic') #not reversible
 				if person.genealogy.dryad % 2 != 0 && person.skin in ['pale', 'fair', 'olive', 'tan', 'brown', 'dark', 'none']:
@@ -1920,7 +1920,7 @@ func setRaceBonus_Ralph(person, increasestats):
 				hybridtype = 'Tentacle'
 				bonus_endurance += 1.5
 				if person.traits.has('Natural Beauty'):
-					person.remove_trait('Natural Beauty') #not reversible
+					person.trait_remove('Natural Beauty') #not reversible
 				person.add_trait('Sex-crazed') #not reversible
 				person.add_trait('Blemished') #not reversible
 				bonus_lewdness += 25
@@ -2104,12 +2104,12 @@ func setRaceBonus_Ralph(person, increasestats):
 						bonus_tail = 'demon'
 					if person.sex != 'male':
 						if person.traits.has('Clever'):
-							person.remove_trait('Clever') #not reversible
+							person.trait_remove('Clever') #not reversible
 						person.add_trait('Ditzy') #not reversible
 						bonus_beauty -= 30
 					else:
 						if person.traits.has('Prude'):
-							person.remove_trait('Prude') #not reversible
+							person.trait_remove('Prude') #not reversible
 						person.add_trait('Pervert') #not reversible
 		else:
 			bonus_magic += person.genealogy.seraph/50
@@ -2233,7 +2233,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_magic += 1
 			bonus_courage += 10
 			if person.traits.has('Ascetic'):
-				person.remove_trait('Ascetic')
+				person.trait_remove('Ascetic')
 			else:
 				person.add_trait('Spoiled')
 			if person.sex in ['male']:
@@ -2264,7 +2264,7 @@ func setRaceBonus_Ralph(person, increasestats):
 					bonus_agility += 0.5
 					bonus_magic -= 2
 					if person.traits.has('Responsive'):
-						person.remove_trait('Responsive')
+						person.trait_remove('Responsive')
 					else:
 						person.add_trait('Magic Deaf')
 					if person.skin == 'red':
@@ -2301,7 +2301,7 @@ func setRaceBonus_Ralph(person, increasestats):
 					bonus_strength -= 1
 					bonus_agility += 1
 				if corruption >= 0.75 && person.traits.has('Ascetic'):
-					person.remove_trait('Ascetic')
+					person.trait_remove('Ascetic')
 				elif corruption >= 0.75:
 					person.add_trait('Spoiled')					
 		else:
