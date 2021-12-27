@@ -49,9 +49,9 @@ func _on_PlayerConfirmButton_pressed():
 		if (i == slavetemp['penis']['size']):
 			get_node("PlayerCustomizations/PCPenis").select(get_node("PlayerCustomizations/PCPenis").get_item_count()-1)
 	if (slavetemp['sex'] == 'male'): ### hair length
-		text = ['ear', 'neck']
+		text = ['ear', 'neck', 'bald']
 	else:
-		text = ['ear', 'neck', 'shoulder', 'waist', 'ass']
+		text = ['ear', 'neck', 'shoulder', 'waist', 'ass', 'bald']
 	for i in text:
 		get_node("PlayerCustomizations/PCHairLength").add_item(i)
 		if (i == slavetemp['hairlength']):

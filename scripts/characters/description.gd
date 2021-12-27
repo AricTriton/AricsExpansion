@@ -46,6 +46,9 @@ func getslavedescription(tempperson, mode = 'default'):
 
 	if text.find('[furcolor]'):
 		text = text.replace('[furcolor]', getdescription('furcolor'))
+		
+	if text.find('[hairstyle]'): # Capitulize
+		text = text.replace('[hairstyle]', getdescription('hairstyle'))
 
 
 	return text
@@ -104,7 +107,7 @@ func features():
 	if globals.state.descriptsettings.appearance == true || showmode != 'default':
 		text = "\n" + text
 		#Face
-		text += "\n[color=#d1b970]Head:[/color]\n" + getdescription('hairlength') + getdescription('hairstyle') + getdescription("eyesclera") + getdescription("eyecolor") + getdescription("eyeshape") + getdescription('horns') + getdescription('ears') + getdescription('lips') #ralph2
+		text += "\n[color=#d1b970]Head:[/color]\n" + getdescription('hairlength') + getdescription("eyesclera") + getdescription("eyecolor") + getdescription("eyeshape") + getdescription('horns') + getdescription('ears') + getdescription('lips') #ralph2
 		text += "\n" + globals.expansion.getCheeksDescription(person) + globals.expansion.getCumCoatedDescription(person,'face')
 		#Body
 		text += "\n[color=#d1b970]Body:[/color]\n" + getdescription('skin') + getdescription("skincov") + getdescription("wings") + getdescription("tail") + getdescription("height") + getdescription("asssize")
@@ -408,11 +411,12 @@ var newdescriptions = {
 		facepussy = '$His [color=aqua]' + str(randomitemfromarray(['unnaturaly','immobile','unusable','throbbing'])) + '[/color] [color=aqua]lips[/color] are so large $he is unable to speak any longer. $He no longer has working lips, rather a flushed, moist face-pussy. ',
 	},
 	hairlength = {
-		ear = '$His [color=aqua][haircolor][/color] hair is cut [color=aqua]short[/color]. ',
-		neck = '$His [color=aqua][haircolor][/color] hair falls down to just [color=aqua]below $his neck[/color]. ',
+		ear = '$His [color=aqua][haircolor][/color] hair is cut [color=aqua]short[/color]. [hairstyle]',
+		neck = '$His [color=aqua][haircolor][/color] hair falls down to just [color=aqua]below $his neck[/color]. [hairstyle]',
 		shoulder = '$His wavy [color=aqua][haircolor][/color] hair is [color=aqua]shoulder length[/color]. ',
-		waist = '$His gorgeous [color=aqua][haircolor][/color] hair [color=aqua]sways down to $his waist[/color]. ',
-		hips = '$His [color=aqua][haircolor][/color] hair cascades down, [color=aqua]reaching $his hips[/color]. ',
+		waist = '$His gorgeous [color=aqua][haircolor][/color] hair [color=aqua]sways down to $his waist[/color]. [hairstyle]',
+		hips = '$His [color=aqua][haircolor][/color] hair cascades down, [color=aqua]reaching $his hips[/color]. [hairstyle]',
+		bald = '$He is bald. ', #/Capitulize
 	},
 	hairstyle = {
 		straight = 'It [color=aqua]hangs freely[/color] from $his head. ',

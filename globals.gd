@@ -1048,6 +1048,7 @@ func slavetooltip(person):
 	if node.get_rect().end.y >= screen.size.y:
 		node.rect_global_position.y -= node.get_rect().end.y - screen.size.y
 
+var hairlengtharray = ['bald','ear','neck','shoulder','waist','hips']
 var longtails = ['cat','fox','wolf','demon','dragon','scruffy','snake tail','racoon','mouse']
 var alltails = ['cat','fox','wolf','bunny','bird','demon','dragon','scruffy','snake tail','racoon','mouse']
 var alleyecolors = ['blue', 'green', 'brown', 'hazel', 'black', 'gray', 'purple', 'yellow', 'amber', 'red', 'auburn']

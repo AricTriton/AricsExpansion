@@ -117,3 +117,19 @@ func getsexfeatures(person):
 	###---End Expansion---###
 ###---End Expansion---###
 
+func gethair(person):
+	if person.sex == 'male':
+		person.hairlength = getrandomfromarray(['bald','ear','ear','ear','neck','neck','shoulder'])
+		person.hairstyle = getrandomfromarray(['straight', 'straight', 'straight', 'straight', 'ponytail'])
+	else:
+		if person.age == 'child':
+			person.hairlength = getrandomfromarray(['bald','ear','neck','shoulder'])
+		elif person.age == 'teen':
+			person.hairlength = getrandomfromarray(['bald','ear','neck','shoulder','waist'])
+		else:
+			person.hairlength = getrandomfromarray(['bald','ear','neck','shoulder','waist','hips'])
+		
+		if person.hairlength != 'short' && rand_range(0,10) < 6:
+			person.hairstyle = getrandomfromarray(['ponytail', 'twintails', 'braid', 'two braids', 'bun'])
+		else:
+			person.hairstyle = 'straight'

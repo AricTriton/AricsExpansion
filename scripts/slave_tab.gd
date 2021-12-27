@@ -631,6 +631,7 @@ func updatestats():
 		text = str(person[i]) 
 		get(i).get_node('cur').set_text(text)
 		if i in ['sstr','sagi','smaf','send']:
+			get(i).get_node('base').set_text(str(person.stats[globals.basestatdict[i]])) # /Capitulize
 			if person.stats[globals.maxstatdict[i].replace("_max",'_mod')] >= 1:
 				get(i).get_node('cur').set('custom_colors/font_color', Color(0,1,0))
 			elif person.stats[globals.maxstatdict[i].replace("_max",'_mod')] < 0:
@@ -697,6 +698,12 @@ func updatestats():
 	$stats/statspanel/sexuality_futa.set_texture(sexuality_images[str(person.sexuality_images.futa)])
 	$stats/statspanel/sexuality_base.set_texture(sexuality_images[str(person.sexuality_images.base)])
 	###---End Expansion---###
+
+func _on_hairstyle_item_selected( ID ):
+	person = globals.currentslave
+	var hairstyles = ['bald', 'straight', 'ponytail', 'twintails', 'braid', 'two braids', 'bun']
+	person.hairstyle = hairstyles[ID]
+	slavetabopen()
 
 ###---Added by Expansion---### New Images and Icons
 #---Movement Images

@@ -2080,6 +2080,41 @@ func _on_selfbutton_pressed():
 		$MainScreen/mansion/selfinspect/selfpierce.set_tooltip("Unlock Beauty Parlor to access Piercing options. ")
 	$MainScreen/mansion/selfinspect/Contraception.pressed = person.effects.has("contraceptive")
 
+func updatestats(person):
+	var text = ''
+	for i in ['sstr','sagi','smaf','send']:
+		text = str(person[i])
+		get(i).get_node('cur').set_text(text)
+		if i in ['sstr','sagi','smaf','send']:
+			get(i).get_node('base').set_text(str(person.stats[globals.basestatdict[i]])) # /Capitulize
+			if person.stats[globals.maxstatdict[i].replace("_max",'_mod')] >= 1:
+				get(i).get_node('cur').set('custom_colors/font_color', Color(0,1,0))
+			elif person.stats[globals.maxstatdict[i].replace("_max",'_mod')] < 0:
+				get(i).get_node('cur').set('custom_colors/font_color', Color(1,0.29,0.29))
+			else:
+				get(i).get_node('cur').set('custom_colors/font_color', Color(1,1,1))
+		get(i).get_node('max').set_text(str(min(person.stats[globals.maxstatdict[i]], person.originvalue[person.origins])))
+	text = person.name_long() + '\n[color=aqua][url=race]' +person.dictionary('$race[/url][/color]').capitalize() +  '\nLevel : '+str(person.level)
+	get_node("MainScreen/mansion/selfinspect/statspanel/info").set_bbcode(person.dictionary(text))
+	get_node("MainScreen/mansion/selfinspect/statspanel/attribute").set_text("Free Attribute Points : "+str(person.skillpoints))
+	
+	for i in ['send','smaf','sstr','sagi']:
+		if person.skillpoints >= 1 && (globals.slaves.find(person) >= 0||globals.player == person) && person.stats[globals.maxstatdict[i].replace('_max','_base')] < person.stats[globals.maxstatdict[i]]:
+			get_node("MainScreen/mansion/selfinspect/statspanel/" + i +'/Button').visible = true
+		else:
+			get_node("MainScreen/mansion/selfinspect/statspanel/" + i+'/Button').visible = false
+	get_node("MainScreen/mansion/selfinspect/statspanel/hp").set_value((person.stats.health_cur/float(person.stats.health_max))*100)
+	get_node("MainScreen/mansion/selfinspect/statspanel/en").set_value((person.stats.energy_cur/float(person.stats.energy_max))*100)
+	get_node("MainScreen/mansion/selfinspect/statspanel/xp").set_value(person.xp)
+	text = "Health: " + str(person.stats.health_cur) + "/" + str(person.stats.health_max) + "\nEnergy: " + str(person.stats.energy_cur) + "/" + str(person.stats.energy_max) + "\nExperience: " + str(person.xp)
+	get_node("MainScreen/mansion/selfinspect/statspanel/hptooltip").set_tooltip(text)
+	if person.imageportait != null && globals.loadimage(person.imageportait):
+		$MainScreen/mansion/selfinspect/statspanel/TextureRect/portrait.set_texture(globals.loadimage(person.imageportait))
+	else:
+		person.imageportait = null
+		$MainScreen/mansion/selfinspect/statspanel/TextureRect/portrait.set_texture(null)
+
+
 #Save for modifying reputations
 func reputationword(value):
 	var text = ""
