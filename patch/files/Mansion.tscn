@@ -2147,8 +2147,8 @@ margin_bottom = 150.0
 anchor_bottom = 1.0
 margin_left = 19.0
 margin_top = 189.0
-margin_right = 689.0
-margin_bottom = -82.0
+margin_right = 473.0
+margin_bottom = -78.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 bbcode_enabled = true
@@ -3791,6 +3791,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "+1"
 
 [node name="vatdetailspanel" type="Panel" parent="MainScreen/mansion/farmpanel/vatspanel"]
+editor/display_folded = true
 visible = false
 anchor_left = 1.0
 anchor_top = 1.0
@@ -4233,6 +4234,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "-"
 
 [node name="assignsell" type="Label" parent="MainScreen/mansion/farmpanel/snailpanel"]
+editor/display_folded = true
 margin_left = 339.0
 margin_top = 290.0
 margin_right = 470.0
@@ -4276,6 +4278,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "-"
 
 [node name="assignhatch" type="Label" parent="MainScreen/mansion/farmpanel/snailpanel"]
+editor/display_folded = true
 margin_left = 485.0
 margin_top = 290.0
 margin_right = 616.0
@@ -4319,6 +4322,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "-"
 
 [node name="autoassign" type="OptionButton" parent="MainScreen/mansion/farmpanel/snailpanel"]
+editor/display_folded = true
 margin_left = 31.0
 margin_top = 370.88
 margin_right = 181.0
@@ -6165,6 +6169,7 @@ expand = true
 stretch_mode = 5
 
 [node name="sstr" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -580.0
@@ -6217,6 +6222,7 @@ custom_styles/pressed = SubResource( 11 )
 custom_styles/normal = SubResource( 10 )
 
 [node name="sagi" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -580.0
@@ -6269,6 +6275,7 @@ custom_styles/pressed = SubResource( 11 )
 custom_styles/normal = SubResource( 10 )
 
 [node name="smaf" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -580.0
@@ -6321,6 +6328,7 @@ custom_styles/pressed = SubResource( 11 )
 custom_styles/normal = SubResource( 10 )
 
 [node name="send" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -580.0
@@ -6373,6 +6381,7 @@ custom_styles/pressed = SubResource( 11 )
 custom_styles/normal = SubResource( 10 )
 
 [node name="cour" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -462.0
@@ -6417,6 +6426,7 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 
 [node name="conf" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -462.0
@@ -6461,6 +6471,7 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 
 [node name="wit" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -462.0
@@ -6505,6 +6516,7 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 
 [node name="charm" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -462.0
@@ -6595,6 +6607,7 @@ texture_under = ExtResource( 53 )
 texture_progress = ExtResource( 56 )
 
 [node name="TextureRect" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 margin_left = 14.0
 margin_top = 13.0
 margin_right = 154.0
@@ -6825,7 +6838,7 @@ margin_right = 175.0
 margin_bottom = 281.0
 text = "Communal"
 align = 1
-items = [ "Communal", null, false, 0, null, "Personal", null, false, 1, null, "Your Bed", null, false, 2, null, "Jail", null, false, 3, null, "Dog Kennel", null, false, 4, null ]
+items = [ "Communal", null, false, -1, null, "Personal", null, false, -1, null, "Your Bed", null, false, -1, null, "Jail", null, false, -1, null, "Dog Kennel", null, false, -1, null ]
 selected = 0
 
 [node name="sleeplabel" type="Label" parent="MainScreen/slave_tab/stats/sleep"]
@@ -7460,6 +7473,8 @@ hint_tooltip = "Show full body image if available"
 text = "Show Full Body"
 
 [node name="customization" type="Panel" parent="MainScreen/slave_tab/stats"]
+editor/display_folded = true
+visible = false
 margin_left = 190.0
 margin_top = 169.0
 margin_right = 944.0
@@ -7567,8 +7582,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Aphrodisiac in food"
 
 [node name="silence" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"advrules",
 "slaverules",
+"advrules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -7585,8 +7600,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Enforced Silence"
 
 [node name="pet" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"advrules",
 "slaverules",
+"advrules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -7605,8 +7620,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Pet Behavior"
 
 [node name="masturbation" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"advrules",
 "slaverules",
+"advrules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -7624,8 +7639,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "No Masturbation"
 
 [node name="nudity" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"advrules",
 "slaverules",
+"advrules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -7901,7 +7916,7 @@ rect_min_size = Vector2( 135, 0 )
 size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "None"
-items = [ "None", null, false, 0, null ]
+items = [ "None", null, false, -1, null ]
 selected = 0
 
 [node name="piercestate" type="Label" parent="MainScreen/slave_tab/stats/customization/piercingpanel"]
@@ -8068,7 +8083,7 @@ margin_bottom = 198.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "None"
-items = [ "None", null, false, 0, null, "Nature", null, false, 1, null, "Tribal", null, false, 2, null, "Derogatory", null, false, 3, null, "Animalistic", null, false, 4, null, "Magic", null, false, 5, null ]
+items = [ "None", null, false, -1, null, "Nature", null, false, -1, null, "Tribal", null, false, -1, null, "Derogatory", null, false, -1, null, "Animalistic", null, false, -1, null, "Magic", null, false, -1, null ]
 selected = 0
 
 [node name="relativesbutton" type="Button" parent="MainScreen/slave_tab/stats/customization"]
@@ -8082,9 +8097,6 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "See Relatives"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="nickname" type="Button" parent="MainScreen/slave_tab/stats/customization"]
 anchor_top = 1.0
@@ -8328,6 +8340,7 @@ bbcode_text = "ahdh [url=1]kahhd[/url]"
 text = "ahdh kahhd"
 
 [node name="statisticpanel" type="Panel" parent="MainScreen/slave_tab/stats"]
+editor/display_folded = true
 visible = false
 anchor_left = 1.0
 anchor_top = 1.0
@@ -9505,7 +9518,7 @@ margin_bottom = 37.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "Leave"
-items = [ "Leave", null, false, 0, null, "Rape", null, false, 1, null, "Kill", null, false, 2, null ]
+items = [ "Leave", null, false, -1, null, "Rape", null, false, -1, null, "Kill", null, false, -1, null ]
 selected = 0
 
 [node name="Label" type="Label" parent="explorationnode/winningpanel/ScrollContainer/VBoxContainer/Button"]
