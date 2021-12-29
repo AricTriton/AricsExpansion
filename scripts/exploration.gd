@@ -806,7 +806,7 @@ func townhall_enter(town):
 	var text = "You enter the town hall of [color=aqua]" + str(town).capitalize() + "[/color]. You see a few desks set up for members of the council, receptionists, and local town guard liasons. You know that your reputation here is [color=aqua]" + str(round(globals.state.reputation[town])) + "[/color]. You take a moment to decide what you would like to accomplish here."
 	
 	
-	buttons.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = 'wimborn', textcolor = 'green', tooltip = 'Hear news from yesterday'})
+	buttons.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = town, textcolor = 'green', tooltip = 'Hear news from yesterday'})
 	if !globals.state.townsexpanded[town].townhall.fines.empty():
 		buttons.append({name = "Pay a Fine",function = 'townhall_fines', args = town})
 	
