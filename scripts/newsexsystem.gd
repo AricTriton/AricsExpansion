@@ -927,7 +927,7 @@ class member:
 
 			text = globals.fastif(person==globals.player, text.replace("[doesn't]","don't"), text.replace("[doesn't]","doesn't"))
 			text = globals.fastif(person==globals.player, text.replace("[seems]","seem"), text.replace("[seems]","seems"))
-#			sceneref.get_node("Panel/sceneeffects").bbcode_text += sceneref.decoder(text, scenedict.givers, scenedict.takers)
+			sceneref.get_node("Panel/sceneeffects").bbcode_text += sceneref.decoder(text, scenedict.givers, scenedict.takers)
 		###---Expansion End---###
 		
 		self.lewd += values.lewd
