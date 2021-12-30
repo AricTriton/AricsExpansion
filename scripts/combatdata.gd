@@ -124,6 +124,14 @@ var enemygrouppools = {
 		units = [['harpy1',3,5]], awareness = -10, captured = ['seraphvictim'], special = null,
 		description = 'You spot a [color=aqua]small flight of harpies[/color] harassing a [color=yellow]lone Seraph[/color] in flight. They seem intent on grounding and violating their prey. Your eyes meet briefly with those of the seemingly innocent victim.',
 	},
+	centaurattackers = {
+		units = [['centaur1',2,5]], awareness = -10, captured = ['thugvictim'], special = null,
+		description = 'You spot some [color=aqua]Centaur outriders[/color] circling a [color=yellow]lone traveler[/color] who must have strayed too close to their camp. The Centaurs appear unlikely to let the traveler off with a warning. You could intervene, but it will get ugly.',
+	},
+	centaur1 = {
+		units = [['centaur1',1,1]], awareness = -10, captured = null, special = null,
+		description = 'You spot a lone [color=aqua]Centaur outcast[/color] trotting aimlessly. You are upwind and as yet unseen.',
+	},
 	#/ralphA
 	goblingroup = {
 		units = [['goblin',3,7]], awareness = 9, captured = null, special = null,
@@ -822,6 +830,25 @@ var enemypool = {
 		rewardexp = 20,
 		stats = {health = 65, power = 6, speed = 18, energy = 50, armor = 2, magic = 0, abilities = ['attack']},
 		gear = 'peasant',
+		skills = [],
+	},
+	centaur1 = {
+		name = 'Centaur',
+		code = 'centaur1',
+		faction = 'monster',
+		icon = load("res://files/images/enemies/stranger.png"),
+		iconalt = load("res://files/images/enemies/stranger.png"),
+		special = '',
+		capture = true,
+		capturerace = [['Centaur',100]],
+		captureoriginspool = [{value = 'slave', weight = 1},{value = 'poor', weight = 1}],
+		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 10}, {value = 'adult', weight = 30}],
+		capturesex = ['any'],
+		rewardpool = {gold = 10},
+		rewardgold = [5,20],
+		rewardexp = 20,
+		stats = {health = 65, power = 6, speed = 18, energy = 50, armor = 2, magic = 0, abilities = ['attack']},
+		gear = 'weakbandits',
 		skills = [],
 	},
 	#/ralphA

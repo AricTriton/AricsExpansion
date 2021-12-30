@@ -26,7 +26,7 @@ var database = {
 		code = 'prairie',
 		name = 'Prairies',
 		description = "Long trading route goes through the wide prairies. Rarely you can spot mixed settlements and lone estates. ",
-		enemies = [{value = 'banditsmedium', weight = 2},{value = 'slaverseasy', weight = 1},{value = 'peasant', weight = 2},{value = 'banditseasy', weight = 3}],
+		enemies = [{value = 'banditsmedium', weight = 20},{value = 'centaur1', weight = 2},{value = 'centaurattackers', weight = 4},{value = 'slaverseasy', weight = 10},{value = 'peasant', weight = 20},{value = 'banditseasy', weight = 30}], #ralphA
 		encounters = [],
 		length = 5,
 		exits = ['wimbornoutskirts','gornoutskirts','sea'],
