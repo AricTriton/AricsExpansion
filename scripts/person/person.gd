@@ -362,7 +362,7 @@ var flawknown = false
 var daylog = {} #Tracks Events from the Day Before | So far: brokerule_name or followedrule_name
 
 #---Sex Expanded | Fetish Content
-func checkFetish(fetish, alternatemod = 0, increase = true):
+func checkFetish(fetish, alternatemod = 0, increase = true, addevent = true):
 	#Checks and Updates Fetishes | alternatemod needs to be a Number between .1-3
 	var success = false
 	var clamper = 0
@@ -379,7 +379,8 @@ func checkFetish(fetish, alternatemod = 0, increase = true):
 		clamper = alternatemod
 	if rand_range(0,100) <= 20 + ((opinionrank*10) * clamper):
 		success = true
-		self.dailyevents.append(fetish)
+		if addevent == true:
+			self.dailyevents.append(fetish)
 	
 	#Fetish Increase Check
 	if increase == true:

@@ -1279,13 +1279,13 @@ func generaterequest(member):
 	#Creampie Mouth | Cum Drinking
 	if member.person.cum.mouth == 0:
 		checkmod = globals.fetishopinion.find(member.person.fetish.creampiemouth)-3
-		if member.person.checkFetish('creampiemouth', checkmod, false):
+		if member.person.checkFetish('creampiemouth', checkmod, false, false):
 			difference = checkmod
 			while difference > 0:
 				rval.append('cuminmouth')
 				difference -= 1
 		checkmod = globals.fetishopinion.find(member.person.fetish.drinkcum)-3
-		if member.person.checkFetish('drinkcum', checkmod, false):
+		if member.person.checkFetish('drinkcum', checkmod, false, false):
 			difference = checkmod
 			while difference > 0:
 				rval.append('cuminmouth')
@@ -1294,13 +1294,13 @@ func generaterequest(member):
 	#Creampie Pussy | Pregnancy
 	if member.person.vagina != "none" && member.person.cum.pussy == 0:
 		checkmod = globals.fetishopinion.find(member.person.fetish.creampiepussy)-3
-		if member.person.checkFetish('creampiepussy',checkmod, false):
+		if member.person.checkFetish('creampiepussy',checkmod, false, false):
 			difference = checkmod
 			while difference > 0:
 				rval.append('cuminpussy')
 				difference -= 1
 		checkmod = globals.fetishopinion.find(member.person.fetish.pregnancy)-3
-		if member.person.checkFetish('pregnancy',checkmod, false):
+		if member.person.checkFetish('pregnancy',checkmod, false, false):
 			difference = checkmod
 			while difference > 0:
 				rval.append('cuminpussy')
@@ -1309,7 +1309,7 @@ func generaterequest(member):
 	#Creampie Ass
 	if member.person.cum.ass == 0:
 		checkmod = globals.fetishopinion.find(member.person.fetish.creampieass)-3
-		if member.person.checkFetish('creampieass', 0, false):
+		if member.person.checkFetish('creampieass', 0, false, false):
 			difference = checkmod
 			while difference > 0:
 				rval.append('cuminass')
@@ -1318,7 +1318,7 @@ func generaterequest(member):
 	#Cum on Face
 	if member.person.cum.face == 0:
 		checkmod = globals.fetishopinion.find(member.person.fetish.wearcum)-3
-		if member.person.checkFetish('wearcum', 0, false):
+		if member.person.checkFetish('wearcum', 0, false, false):
 			difference = checkmod
 			while difference > 0:
 				rval.append('cumonface')
@@ -1329,7 +1329,7 @@ func generaterequest(member):
 		rval.append('anal')
 	
 	#Dominance
-	if member.person.checkFetish('dominance', 0, false):
+	if member.person.checkFetish('dominance', 0, false, false):
 		checkmod = globals.fetishopinion.find(member.person.fetish.dominance)-3
 		difference = checkmod
 		while difference > 0:
@@ -1341,7 +1341,7 @@ func generaterequest(member):
 	
 	#Submission
 	checkmod = globals.fetishopinion.find(member.person.fetish.submission)-3
-	if member.person.checkFetish('submission', 0, false):
+	if member.person.checkFetish('submission', 0, false, false):
 		difference = checkmod
 		while difference > 0:
 			rval.append('humiliate')
@@ -1351,7 +1351,7 @@ func generaterequest(member):
 	
 	#Sadism
 	checkmod = globals.fetishopinion.find(member.person.fetish.sadism)-3
-	if member.person.checkFetish('sadism', 0, false):
+	if member.person.checkFetish('sadism', 0, false, false):
 		difference = checkmod
 		while difference > 0:
 			rval.append('punishother')
@@ -1361,7 +1361,7 @@ func generaterequest(member):
 	
 	#Masochism
 	checkmod = globals.fetishopinion.find(member.person.fetish.masochism)-3
-	if member.person.checkFetish('masochism', 0, false):
+	if member.person.checkFetish('masochism', 0, false, false):
 		difference = checkmod
 		while difference > 0:
 			rval.append('punish')
