@@ -42,7 +42,7 @@ var database = {
 		code = 'forest',
 		name = 'Ancient Forest',
 		description = "You stand deep within this ancient forest. Giant trees tower above you, reaching into the skies and casting deep shadows on the ground below. As the wind whispers past, you can hear the movement of small creature in the undergrowth and birds singing from their perches above.",
-		enemies = [{value = 'wolveswithperson', weight = 0.4},{value = 'banditseasy', weight = 3}, {value = 'peasant', weight = 3}, {value ='solobear', weight = 4}, {value = 'wolveseasy', weight = 9},{value = 'treasurechest', weight = 1}],
+		enemies = [{value = 'wolveswithperson', weight = 0.4},{value = 'fairyattackers', weight = 0.2},{value = 'banditseasy', weight = 3},{value = 'peasant', weight = 3},{value ='solobear', weight = 4},{value = 'wolveseasy', weight = 9},{value = 'treasurechest', weight = 1}], #ralphA
 		encounters = [['chloeforest','globals.state.sidequests.chloe in [0,1] && !globals.state.sidequests.cali in [17,20,21]',10]],
 		length = 5,
 		exits = ['shaliq', 'wimbornoutskirts', 'elvenforest'],
@@ -121,8 +121,8 @@ var database = {
 		combat = true,
 		code = 'mountains',
 		name = 'Mountains',
-		description = "You climb over small hills in search for any activity in these elevated grounds.",
-		enemies = [{value = 'slaversmedium', weight = 1},{value = 'harpy', weight = 2},{value = 'banditsmedium', weight = 3}, {value = 'fewcougars', weight = 4}],
+		description = "You climb over small hills in search for any activity in these elevated grounds. The cloudy peak, home to the Seraphs, is barely visible far above you.", #ralphA
+		enemies = [{value = 'slaversmedium', weight = 3},{value = 'seraph1', weight = 0.25},{value = 'harpyattackers', weight = 0.5},{value = 'harpy', weight = 4},{value = 'banditsmedium', weight = 6}, {value = 'fewcougars', weight = 8}], #ralphA
 		encounters = [],
 		length = 6,
 		exits = ['gornoutskirts','mountaincave'],
