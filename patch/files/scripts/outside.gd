@@ -3113,6 +3113,7 @@ func _on_bountysell_pressed():
 	else:
 		text += "\nThe town guard retains them for questioning, but there is not a single bounty or reward to collect. All the same, you're not likely to see them again."
 	main.popup(str(text))
+	globals.state.backpack.stackables.rope = globals.state.backpack.stackables.get('rope', 0) + globals.state.calcRecoverRope(array.size()) #ralphA
 	globals.resources.gold += gold
 	reputationgain(repgaincount)
 	for i in array: #erase them all so they won't reappear, just like quicksell
