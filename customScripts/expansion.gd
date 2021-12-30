@@ -3314,7 +3314,9 @@ func getSexualAttraction(person, target):
 	var compatibility = testSexualCompatibility(person, target.sex)
 	if compatibility == 'none':
 		return false
-	var base_attraction = (target.beauty-40) + (person.lewdness*.2) + (person.lust*.1) + rand_range(-10,20)
+	var base_attraction = (target.beauty-40) + (person.lewdness*.25) + (person.lust*.35)
+	if target == globals.player:
+		base_attraction += person.metrics.ownership + person.metrics.orgasm
 	var attraction_modifier = target.level * (target.lust*.05)
 	#Apply Player Attraction Modifier
 	if (person == globals.player || target == globals.player) && globals.expansionsettings.playerattractionmodifier != 0:
@@ -3332,6 +3334,8 @@ func getSexualAttraction(person, target):
 func testSexualCompatibility(person, targetSex):
 	if person == null:
 		return 'none'
+	if person == globals.player:
+		return 'high'
 	#Set Compatibility Rating
 	var idxKS = globals.kinseyscale.find(person.sexuality)
 	if isSameSex(person.sex, targetSex):
