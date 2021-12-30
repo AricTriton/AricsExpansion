@@ -26,7 +26,7 @@ var database = {
 		code = 'prairie',
 		name = 'Prairies',
 		description = "Long trading route goes through the wide prairies. Rarely you can spot mixed settlements and lone estates. ",
-		enemies = [{value = 'banditsmedium', weight = 20},{value = 'centaur1', weight = 2},{value = 'centaurattackers', weight = 4},{value = 'slaverseasy', weight = 10},{value = 'peasant', weight = 20},{value = 'banditseasy', weight = 30}], #ralphA
+		enemies = [{value = 'banditsmedium', weight = 20},{value = 'centaur1', weight = 2},{value = 'centaurattackers', weight = 3},{value = 'slaverseasy', weight = 10},{value = 'peasant', weight = 20},{value = 'banditseasy', weight = 30}], #ralphA
 		encounters = [],
 		length = 5,
 		exits = ['wimbornoutskirts','gornoutskirts','sea'],
@@ -90,7 +90,7 @@ var database = {
 		code = 'grove',
 		name = 'Far Eerie Woods',
 		description = "This portion of the forest is deeply shadowed, and strange sounds drift in and out of hearing. Something about the atmosphere keeps the normal forest creatures silent, lending an eerie, mystic feeling to the grove you stand within.",
-		enemies = [{value = 'plantswithperson',weight = 1},{value = 'dryad',weight = 1},{value = 'dryad2',weight = 1},{value = 'fairy', weight = 2},{value = 'wolveshard', weight = 4},{value = 'plantseasy',weight = 5}], #ralph4
+		enemies = [{value = 'plantswithperson',weight = 2},{value = 'arachnaweb',weight = 100},{value = 'dryad',weight = 2},{value = 'dryad2',weight = 2},{value = 'fairy', weight = 3},{value = 'wolveshard', weight = 6},{value = 'plantseasy',weight = 6}], #ralph4
 		encounters = [['chloegrove','globals.state.sidequests.chloe == 6 && !globals.state.sidequests.cali in [17,20,21]',25],['snailevent','globals.state.mansionupgrades.farmhatchery >= 1 && globals.state.snails < 10',10]],
 		length = 7,
 		exits = ['shaliq','marsh'],
