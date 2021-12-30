@@ -447,11 +447,8 @@ func _on_slaveconfirm_pressed():
 	###---End Expansion---###
 
 	#Add traits
-	#if slaveTrait != '':
-	#	if slaveTrait == 'Gifted' && startSlave.traits.has('Gifted') == false:
-	#		startSlave.add_trait(slaveTrait)
-	#	else:
-	#		startSlave.add_trait(slaveTrait)
+	if slaveTrait != '':
+		startSlave.add_trait(slaveTrait)
 
 	#Assign start slave to global slave list
 	startSlave.unique = 'startslave'
