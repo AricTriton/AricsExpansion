@@ -111,6 +111,32 @@ var enemygrouppools = {
 		description = 'You spot a [color=aqua]small group of wild fairies[/color] playing around. ',
 		descriptionescape = "A group of wild fairies escapes from you before you get close to them. ",
 	},
+	#ralphA
+	fairyattackers = {
+		units = [['fairy2',2,3]], awareness = -10, captured = ['thugvictim'], special = null,
+		description = 'You spot a [color=aqua]small group of wild fairies[/color] swarming menacingly around a [color=yellow]lost traveler[/color]. They seem thoroughly entertained. You could leave this poor soul to be molested...',
+	},
+	seraph1 = {
+		units = [['seraph1',1,1]], awareness = -10, captured = null, special = null,
+		description = 'You spot a lost [color=aqua]Seraph[/color] wandering in a daze, perhaps too tired to fly home. ',
+	},
+	harpyattackers = {
+		units = [['harpy1',3,5]], awareness = -10, captured = ['seraphvictim'], special = null,
+		description = 'You spot a [color=aqua]small flight of harpies[/color] harassing a [color=yellow]lone Seraph[/color] in flight. They seem intent on grounding and violating their prey. Your eyes meet briefly with those of the seemingly innocent victim.',
+	},
+	centaurattackers = {
+		units = [['centaur1',2,5]], awareness = -10, captured = ['thugvictim'], special = null,
+		description = 'You spot some [color=aqua]Centaur outriders[/color] circling a [color=yellow]lone traveler[/color] who must have strayed too close to their camp. The Centaurs appear unlikely to let the traveler off with a warning. You could intervene, but it will get ugly.',
+	},
+	centaur1 = {
+		units = [['centaur1',1,1]], awareness = -10, captured = null, special = null,
+		description = 'You spot a lone [color=aqua]Centaur outcast[/color] trotting aimlessly. You are upwind and as yet unseen.',
+	},
+	arachnaweb = {
+		units = [['arachna1',1,1],['spider',2,5]], awareness = -10, captured = ['webvictim'], special = null,
+		description = 'You freeze in your tracks and turn to see [color=aqua]Giant Spiders led by a wild Arachna[/color] spinning a [color=yellow]large cocoon[/color] containing some wayward traveler entangled in their webs. You could attack the humungous arachnids, but they will not give up their prize without a fight.',
+	},
+	#/ralphA
 	goblingroup = {
 		units = [['goblin',3,7]], awareness = 9, captured = null, special = null,
 		description = 'You spot a [color=aqua]group of cave goblins[/color] moving through the tunnels. ',
@@ -120,12 +146,12 @@ var enemygrouppools = {
 		units = [['dryad',1,1]], awareness = -10, captured = null, special = null,
 		description = 'You spot a wild [color=aqua]$race $child[/color] walking through the woods.',
 	},
-	dryad2 = {
-		units = [['dryad',2,4]], awareness = 20, captured = null, special = null, #ralph4
+	dryad2 = { #ralph4
+		units = [['dryad2',2,4]], awareness = 20, captured = null, special = null, #ralph4
 		description = 'You spot a group of bark-armored dryads apparently searching the woods for intruders.', #ralph4
 		descriptionambush = 'You are attacked by [color=aqua]wild defenders of the forest[/color]. ', #ralph4
-	}, #ralph4
-	nereidgroup = {
+	},
+	nereidgroup = { #ralph4
 		units = [['nereidgroup',2,6]], awareness = 30, captured = null, special = null, #ralph4
 		description = 'You spot a small group of Nereid scouts armed and armored primarily with coral.', #ralph4
 		descriptionambush = 'You are attacked by [color=aqua]Nereid Skirmishers[/color] attempting to secure the beachhead for their kind. ', #ralph4
@@ -346,6 +372,22 @@ var capturespool = {
 		capturesex = ['any'],
 		faction = 'stranger',
 	},
+	#ralphA
+	seraphvictim = {
+		capturerace = [['Seraph',1]],
+		captureoriginspool = [{value = 'rich', weight = 10},{value = 'commoner', weight = 30},{value = 'poor', weight = 60},{value = 'slave', weight = 1}],
+		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 5}, {value = 'adult', weight = 4}],
+		capturesex = ['any'],
+		faction = 'stranger',
+	},
+	webvictim = {
+		capturerace = ['any'],
+		captureoriginspool = [{value = 'noble', weight = 2},{value = 'rich', weight = 3},{value = 'commoner', weight = 5},{value = 'poor', weight = 3},{value = 'slave', weight = 1}],
+		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 1}, {value = 'adult', weight = 2}],
+		capturesex = ['any'],
+		faction = 'stranger',
+	},
+	#/ralphA
 	slavervictim = {
 		capturerace = ['area'],
 		captureoriginspool = [{value = 'rich', weight = 2},{value = 'commoner', weight = 5},{value = 'poor', weight = 5},{value = 'slave', weight = 12}],
@@ -743,6 +785,143 @@ var enemypool = {
 		gear = 'forest',
 		skills = [],
 	},
+	#ralphA
+	fairy2 = {
+		name = 'Fairy',
+		code = 'fairy2',
+		faction = 'monster',
+		icon = load("res://files/images/enemies/fairym.png"),
+		iconalt = load("res://files/images/enemies/fairyf.png"),
+		special = '',
+		capture = true,
+		capturerace = [['Fairy',100]],
+		captureoriginspool = [{value = 'commoner', weight = 1},{value = 'poor', weight = 3}],
+		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 4}],
+		capturesex = ['any'],
+		rewardpool = {magicessenceing = 55},
+		rewardgold = [5,10],
+		rewardexp = 20,
+		stats = {health = 65, power = 10, speed = 35, energy = 50, armor = 0, magic = 5, abilities = ['attack']},
+		gear = 'forest',
+		skills = [],
+	},
+	seraph1 = {
+		name = 'Seraph',
+		code = 'seraph1',
+		faction = 'monster',
+		icon = load("res://files/images/enemies/stranger.png"),
+		iconalt = load("res://files/images/enemies/stranger.png"),
+		special = '',
+		capture = true,
+		capturerace = [['Seraph',100]],
+		captureoriginspool = [{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
+		captureagepool = [{value = 'child', weight = 8},{value = 'teen', weight = 6}, {value = 'adult', weight = 1}],
+		capturesex = ['any'],
+		rewardpool = {gold = 10},
+		rewardgold = [5,20],
+		rewardexp = 20,
+		stats = {health = 65, power = 6, speed = 18, energy = 50, armor = 2, magic = 0, abilities = ['attack']},
+		gear = 'peasant',
+		skills = [],
+	},
+	harpy1 = {
+		name = 'Harpy',
+		code = 'harpy1',
+		faction = 'monster',
+		icon = load("res://files/images/enemies/stranger.png"),
+		iconalt = load("res://files/images/enemies/stranger.png"),
+		special = '',
+		capture = true,
+		capturerace = [['Harpy',100]],
+		captureoriginspool = [{value = 'slave', weight = 1},{value = 'poor', weight = 1}],
+		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 2}, {value = 'adult', weight = 3}],
+		capturesex = ['any'],
+		rewardpool = {gold = 10},
+		rewardgold = [5,20],
+		rewardexp = 20,
+		stats = {health = 65, power = 6, speed = 18, energy = 50, armor = 2, magic = 0, abilities = ['attack']},
+		gear = 'peasant',
+		skills = [],
+	},
+	centaur1 = {
+		name = 'Centaur',
+		code = 'centaur1',
+		faction = 'monster',
+		icon = load("res://files/images/enemies/stranger.png"),
+		iconalt = load("res://files/images/enemies/stranger.png"),
+		special = '',
+		capture = true,
+		capturerace = [['Centaur',100]],
+		captureoriginspool = [{value = 'slave', weight = 1},{value = 'poor', weight = 1}],
+		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 10}, {value = 'adult', weight = 30}],
+		capturesex = ['any'],
+		rewardpool = {gold = 10},
+		rewardgold = [5,20],
+		rewardexp = 20,
+		stats = {health = 65, power = 6, speed = 18, energy = 50, armor = 2, magic = 0, abilities = ['attack']},
+		gear = 'weakbandits',
+		skills = [],
+	},
+	arachna1 = {
+		name = 'Arachna',
+		code = 'arachna1',
+		faction = 'monster',
+		icon = load("res://files/images/enemies/stranger.png"),
+		iconalt = load("res://files/images/enemies/stranger.png"),
+		special = '',
+		capture = true,
+		capturerace = [['Arachna',100]],
+		captureoriginspool = [{value = 'slave', weight = 3},{value = 'poor', weight = 1}],
+		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 1}, {value = 'adult', weight = 3}],
+		capturesex = ['any'],
+		rewardpool = {gold = 10},
+		rewardgold = [5,20],
+		rewardexp = 30,
+		stats = {health = 65, power = 6, speed = 18, energy = 50, armor = 2, magic = 0, abilities = ['attack']},
+		gear = 'forest',
+		skills = [],
+	},
+	#/ralphA
+	#ralph4
+	dryad2 = {
+		name = 'Dryad',
+		code = 'dryad2',
+		faction = 'monster',
+		icon = load("res://files/images/enemies/dryadm.png"),
+		iconalt = load("res://files/images/enemies/dryadf.png"),
+		special = '',
+		capture = true,
+		capturerace = [['Dryad',100]],
+		captureoriginspool = [{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
+		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 4}],
+		capturesex = ['any'],
+		rewardpool = {natureessenceing = 35},
+		rewardgold = [5,10],
+		rewardexp = 30,
+		stats = {health = 150, power = 6, speed = 24, energy = 60, armor = 4, magic = 0, abilities = ['attack']},
+		gear = 'forest',
+		skills = [],
+	},
+	nereidgroup = {
+		name = 'Nereid',
+		code = 'nereidgroup',
+		faction = 'monster',
+		icon = load("res://files/images/enemies/stranger.png"),
+		iconalt = load("res://files/images/enemies/stranger.png"),
+		special = '',
+		capture = true,
+		capturerace = [['Nereid',100]],
+		captureoriginspool = [{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
+		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 6}],
+		capturesex = ['any'],
+		rewardpool = {},
+		rewardgold = [5,20],
+		rewardexp = 30,
+		stats = {health = 200, power = 25, speed = 30, energy = 100, armor = 7, magic = 3, abilities = ['attack','stunattack']},
+		gear = 'medbandits',
+		skills = [],
+	},
+	#/ralph4
 	monstergirl = {
 		name = 'Monster ',
 		code = 'monstergirl',
@@ -752,7 +931,7 @@ var enemypool = {
 		capture = true,
 		capturerace = ['area'],
 		captureoriginspool = [{value = 'rich', weight = 1},{value = 'commoner', weight = 3},{value = 'poor', weight = 2}],
-		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 4}],
+		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 6}], #ralph4
 		capturesex = ['any'],
 		rewardpool = {},
 		rewardgold = [5,10],
@@ -1227,5 +1406,4 @@ var enemyequips = {
 		abilities = [],
 	},
 }
-###---End Expansion---###
 
