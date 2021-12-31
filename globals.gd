@@ -1034,7 +1034,8 @@ func slavetooltip(person):
 		node.get_node("name").set('custom_colors/font_color', Color(1,1,0))
 		node.get_node("name").text = globals.state.defaultmasternoun + " " + node.get_node("name").text
 	else:
-		node.get_node("name").set('custom_colors/font_color', Color(1,1,1))
+		#Whims -- added custom colors
+		node.get_node("name").set('custom_colors/font_color', ColorN(person.namecolor))
 	if person != globals.player:
 		node.get_node("spec").set_texture(specimages[str(person.spec)])
 	node.get_node("grade").set_texture(gradeimages[person.origins])

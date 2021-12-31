@@ -123,12 +123,59 @@ func changerace(person, race = null):
 			if person.get(i) != null:
 				person[i] = races[personrace][i]
 
+# Numbers are the portion children get from their mother, father's portion will be 1 - mother's
+# if one parent doesn't have a body part it will be fully based on the other parent, if neither has it should be set to smallest
+var sizeDict = {
+	"female":{"vagina":1,"tits":1,"asshole":1,"lips":1,"ass":1},
+	"male":{"penis":0,"balls":0,"tits":0,"asshole":0,"lips":0,"ass":0},
+	"futanari":{"vagina":0.5,"penis":0.5,"tits":0.5,"asshole":0.5,"lips":0.5,"ass":0.5},
+	"dickgirl":{"penis":0.5,"balls":0.5,"tits":1,"asshole":1,"lips":1,"ass":1},
+}
+
+func getSizeArrayString(part):
+	var sizeArrayDict = {"balls":"penissizearray","vagina":"vagsizearray"}
+	return sizeArrayDict.get(part,part+"sizearray")
+func getSizeString(part):
+	var sizeStringDict = {"tits":"titssize","ass":"asssize"}
+	return sizeStringDict.get(part,part)
+
+func getRandomMod(part):
+	var randomDict = {"vagina":{"min":-3,"max":1}}
+	var result = randomDict.get(part,{"min":-1,"max":1})
+	return round(rand_range(result["min"],result["max"]))
+
+func setSizes(person,mother,father):
+	for part in sizeDict[person.sex]:
+		var value = sizeDict[person.sex][part]
+		var motherModifier = 0
+		var fatherModifier = 0
+		var type = getSizeString(part)
+		var sizeArray = globals.get(getSizeArrayString(part))
+		var randomMod = getRandomMod(part)
+
+		if part == "tits":
+			motherModifier -= mother.pregexp.titssizebonus
+			fatherModifier -= father.pregexp.titssizebonus
+
+		if mother[type] == "none":
+			value = 0
+		elif father[type] == "none":
+			value = 1
+		var base = (sizeArray.find(mother[type]) + motherModifier)*value + (sizeArray.find(father[type]) + fatherModifier)*(1.0-value)
+		person[type] = sizeArray[clamp(round(base + randomMod), 0, sizeArray.size()-1)]
+		#prints(part,value,person[type],sizeArray.find(person[type]),randomMod,sizeArray.find(mother[type]),sizeArray.find(father[type]))
+	return person
+
 ###---Added by Expansion---### Added by Deviate - Hybrid Races
 func newbaby(mother,father):
+
+	if globals.rules.futaballs:
+		sizeDict["futanari"]["balls"] = 0.5
+
 	var person = globals.newslave(mother.race, 'child', 'random', mother.origins)
 	var body_array = ['skin','tail','ears','wings','horns','arms','legs','bodyshape','haircolor','eyecolor','eyeshape','eyesclera']
-	var tacklearray = ['penis']
-	var temp
+	#var tacklearray = ['penis']
+	#var temp
 
 	#Prep
 	#person.race = ''
@@ -168,7 +215,8 @@ func newbaby(mother,father):
 			else:
 				person[i] = mother[i]
 	
-	#Male Genitals
+	setSizes(person,mother,father)
+	""" #Male Genitals
 	###---Added by Expansion---### centerflag982 - added dickgirl check				
 	if person.sex == 'male' || person.sex == 'dickgirl' || (person.sex == 'futanari' && globals.rules.futaballs == true):
 		tacklearray.append('balls')
@@ -206,7 +254,7 @@ func newbaby(mother,father):
 	#Ass
 	temp = round(globals.asssizearray.find(mother.asssize)+globals.asssizearray.find(father.asssize)*.5)+round(rand_range(-1,1))
 	temp = clamp(temp, 0, globals.asssizearray.size()-1)
-	person.asssize = globals.asssizearray[temp]
+	person.asssize = globals.asssizearray[temp] """
 
 	#Dimensional Crystal
 	if globals.state.mansionupgrades.dimensionalcrystal >= 2:

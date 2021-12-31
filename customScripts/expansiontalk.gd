@@ -363,7 +363,7 @@ func getMasterName(person):
 	text = globals.randomitemfromarray(names)
 	#Quick Fix to stop "Null" names
 	if text == null:
-		if globals.player == 'male':
+		if globals.player.sex == 'male':
 			text = "Master"
 		else:
 			text = "Mistress"
