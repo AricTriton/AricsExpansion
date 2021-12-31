@@ -1238,3 +1238,6 @@ func revealFlaw(type):
 	return text
 
 ###---End of Expansion---###
+
+#Whims -- default color for the slave list
+var namecolor = 'white'
