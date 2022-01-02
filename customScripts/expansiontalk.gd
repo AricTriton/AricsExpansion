@@ -29,12 +29,12 @@ func getMasterName(person):
 	names.clear()
 	related = globals.expansion.relatedCheck(globals.player, person)
 ###Normal
-	names.append('Master')
-	names.append('Master')
-	names.append('Sir')
-	names.append('Sir')
-	names.append('Lord')
 	if globals.player.sex == 'male':
+		names.append('Master')
+		names.append('Master')
+		names.append('Sir')
+		names.append('Sir')
+		names.append('Lord')
 		if person.age == 'child':
 			names.append('Mister')
 		elif person.age == 'teen':
@@ -44,7 +44,12 @@ func getMasterName(person):
 		elif person.age == 'adult':
 			names.append('Sir')
 			names.append('Master')
-	elif globals.player.sex == 'female':
+	else:
+		names.append('Mistress')
+		names.append('Mistress')
+		names.append('Madam')
+		names.append('Madam')
+		names.append('Lady')
 		if person.age == 'child':
 			names.append('Miss')
 			names.append("Ma'am")
@@ -66,10 +71,16 @@ func getMasterName(person):
 		names.append('my Hero')
 		names.append('noble Master')
 	if person.obed > 50:
-		names.append('Master')
-		names.append('Master')
-		names.append('Sir')
-		names.append('Sir')
+		if globals.player.sex == 'male':
+			names.append('Master')
+			names.append('Master')
+			names.append('Sir')
+			names.append('Sir')
+		else:
+			names.append('Mistress')
+			names.append('Mistress')
+			names.append('Madam')
+			names.append('Madam')
 	if person.lust > 50:
 		names.append('Sexy')
 		names.append('Sexy')
@@ -161,15 +172,24 @@ func getMasterName(person):
 		names.append('Buddy')
 		names.append('Dude')
 	if person.mind.status == 'Trophy':
-		names.append('Master')
-		names.append('Sugar-Daddy')
 		names.append('Honey')
-		names.append('Mister')
+		if globals.player.sex == 'male':
+			names.append('Master')
+			names.append('Sugar-Daddy')
+			names.append('Mister')
+		else:
+			names.append('Mistress')
+			names.append('Sugar-Mommy')
+			names.append('Miss')
 	if person.mind.status == 'Socialite':
-		names.append('my charming Master')
-		names.append('Prince Charming')
-		names.append('Sire')
 		names.append('Boss')
+		if globals.player.sex == 'male':
+			names.append('Sire')
+			names.append('my charming Master')
+			names.append('Prince Charming')
+		else:
+			names.append('my charming Mistress')
+			names.append('Dame')
 	if person.mind.status == 'Warrior' && person.consentexp.party == true:
 		if rand_range(0,1) > .25:
 			names.clear()
@@ -343,7 +363,7 @@ func getMasterName(person):
 	text = globals.randomitemfromarray(names)
 	#Quick Fix to stop "Null" names
 	if text == null:
-		if globals.player == 'male':
+		if globals.player.sex == 'male':
 			text = "Master"
 		else:
 			text = "Mistress"

@@ -99,7 +99,7 @@ func _on_talk_pressed(mode = 'talk'):
 		globals.events.aydapersonaltalk()
 		return
 	###---Added by Expansion---### Ank BugFix v4a || Naked Image Modification by Deviate
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -244,7 +244,7 @@ func _on_talk_pressed(mode = 'talk'):
 		buttons.append({text = 'Sexual Topics', function = '_on_talk_pressed', args = 'slave_sex_topics', tooltip = "Topics regarding to Sex and Sexuality"})
 
 		#Once a Day Convos
-		buttons.append({text = str(globals.randomitemfromarray(["I'd like a quick word.",'Can we talk quickly?',"Let's have a quick chat","Once quick thing..."])), function = 'oneperdayconvos', args = 'intro', tooltip = "These conversations that can be held once per day per slave"})
+		buttons.append({text = str(globals.randomitemfromarray(["I'd like a quick word.",'Can we talk quickly?',"Let's have a quick chat","One quick thing..."])), function = 'oneperdayconvos', args = 'intro', tooltip = "These conversations that can be held once per day per slave"})
 
 		#Dimensional Crystal Topics
 		if person.work == 'headgirl' || person.sleep != 'jail':
@@ -540,7 +540,7 @@ func slave_rename_hub(mode = ''):
 		buttons.append({text = "Regarding another of your names...", function = 'slave_rename_hub', args = 'intro', tooltip = "Change another part of the slave's name."})
 	buttons.append({text = str(globals.randomitemfromarray(['Go Back','Return','Previous Menu'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -623,7 +623,7 @@ func eventPregnancyReveal(mode=''):
 		buttons.append({text = str(globals.randomitemfromarray(['Anyways, like we were saying','As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main talk screen."})
 
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -704,7 +704,7 @@ func eventLactation(mode=''):
 		buttons.append({text = str(globals.randomitemfromarray(['Anyways, like we were saying','As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main talk screen."})
 
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -755,7 +755,7 @@ func eventWantedPregnancy(mode=''):
 	if mode != 'intro':
 		buttons.append({text = str(globals.randomitemfromarray(['As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main talk screen."})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -803,7 +803,7 @@ func eventIncestConsentGiven(mode=''):
 	if mode != 'intro':
 		buttons.append({text = str(globals.randomitemfromarray(['As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main talk screen."})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -851,7 +851,7 @@ func eventIncestConsentRemoved(mode=''):
 	if mode != 'intro':
 		buttons.append({text = str(globals.randomitemfromarray(['As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main talk screen."})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -924,7 +924,7 @@ func thecrystal(mode=''):
 	if blockreturn == false:
 		buttons.append({text = str(globals.randomitemfromarray(['Nothing. Lets go back.'])), function = '_on_talk_pressed', tooltip = "Return to the main Talk screen."})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -981,7 +981,7 @@ func crystalimmortalitytoggle(mode=''):
 	if finish == true:
 		buttons.append({text = str(globals.randomitemfromarray(['As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main Talk screen."})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -1038,7 +1038,7 @@ func crystalconsequences(mode=''):
 	#Return after Choice
 #	buttons.append({text = str(globals.randomitemfromarray(['As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main Talk screen."})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -1074,7 +1074,7 @@ func headgirltopics(mode=''):
 	
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -1151,7 +1151,7 @@ func pregspeedchange(mode = ''):
 		
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -1257,7 +1257,7 @@ func farmmanagertopics(mode=''):
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 	
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -1297,7 +1297,7 @@ func oneperdayconvos(mode=''):
 	
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -1320,7 +1320,7 @@ func talkfetishes(mode=''):
 	var tempbuttons = []
 	#Incomplete Fetish Variables
 	var invalidfetishfound = false
-	var incompletefetishtext = "\n\n\n[color=red]Aric's Note: The following fetishes have no current mechanical value. They may be implemented in the future but were implimented using another, more specific fetish instead. They are only for roleplay purposes at the moment. Any other fetishes that appear are have at least 1 fetish check and provide a mechanical benefit somewhere in the game. [/color]"
+	var incompletefetishtext = "\n\n\n[color=red]Aric's Note: The following fetishes have no current mechanical value. They may be implemented in the future but were implemented using another, more specific fetish instead. They are only for roleplay purposes at the moment. Any other fetishes that appear are have at least 1 fetish check and provide a mechanical benefit somewhere in the game. [/color]"
 	#ralph7
 	if globals.useRalphsTweaks:
 		var fetishstatus = "\n\n" + person.name + " has the following known fetishes:\n"
@@ -1440,7 +1440,7 @@ func talkfetishes(mode=''):
 		for i in tempbuttons:
 			buttons.append(i)
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -1474,7 +1474,7 @@ func talkFetishEncourage(mode=''):
 	
 	buttons.append({text = str(globals.randomitemfromarray(['As we were saying...','Anyways...','On another note...'])), function = '_on_talk_pressed', tooltip = "Go back to the main conversation."})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -1508,7 +1508,7 @@ func talkFetishDiscourage(mode=''):
 	
 	buttons.append({text = str(globals.randomitemfromarray(['As we were saying...','Anyways...','On another note...'])), function = '_on_talk_pressed', tooltip = "Go back to the main conversation."})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -1547,7 +1547,7 @@ func talkSexualityShiftToggle(mode=''):
 	buttons.append({text = str(globals.randomitemfromarray(['While we are on that topic...'])), function = '_on_talk_pressed', args = 'slave_sex_topics', tooltip = "Go back to the previous screen"})
 	buttons.append({text = str(globals.randomitemfromarray(['As we were saying...','Anyways...','On another note...'])), function = '_on_talk_pressed', tooltip = "Go back to the main conversation."})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -1656,7 +1656,7 @@ func eventDrainCum(mode = ''):
 		buttons.append({text = person.dictionary('Force $him to lick up the cum puddle'), function = 'eventDrainCum', args = 'lickuppuddle', tooltip = person.dictionary("Force $him to lick up the puddle - End Event")})
 		buttons.append({text = person.dictionary('Walk away from the cum puddle'), function = 'eventDrainCum', args = 'leavepuddle', tooltip = "Leave the cum puddle for someone else, add to mansion cleaning duties - End Event"})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -1738,7 +1738,7 @@ func talkconsent(mode=''):
 				text += "\n\n[color=green]Unlocked sexual actions with $name.[/color]"
 			if person.levelupreqs.has('code') && person.levelupreqs.code == 'relationship':
 				text += "\n\n[color=green]After getting closer with $name, you felt like $he unlocked new potential. [/color]"
-				person.levelup()
+				### Levelup Removed by Ank BugFix v4a
 			person.consent = true
 
 	if mode == "pregnancy":
@@ -1863,7 +1863,7 @@ func talkconsent(mode=''):
 			if person.consentexp.breeder && person.preg.has_womb:
 				consentstatus += "$He has agreed to [color=green]be bred[/color] by other slaves for you.\n"
 			elif person.preg.has_womb:
-				consentstatus += "$He has not agreed to [color=green]be bred[/color] by other slaves for you.\n"
+				consentstatus += "$He has not agreed to [color=red]be bred[/color] by other slaves for you.\n"
 			if person.consentexp.incest:
 				consentstatus += "$He has consented to have [color=green]incestuous sex[/color].\n"
 			else:
@@ -1910,7 +1910,7 @@ func talkconsent(mode=''):
 		buttons.append({text = person.dictionary("While we are discussing Consent..."), function = 'talkconsent', args = 'intro'})
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -2073,7 +2073,7 @@ func topicclothing(mode=''):
 	expansion.updateBodyImage(person)
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -2162,7 +2162,7 @@ func cheatButton(mode = ''):
 	
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:
@@ -2193,7 +2193,7 @@ func cheatButtonAddItem(mode = ''):
 	
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && str(person.imagetype) != 'naked':
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
 		else:

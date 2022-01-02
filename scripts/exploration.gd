@@ -806,7 +806,7 @@ func townhall_enter(town):
 	var text = "You enter the town hall of [color=aqua]" + str(town).capitalize() + "[/color]. You see a few desks set up for members of the council, receptionists, and local town guard liasons. You know that your reputation here is [color=aqua]" + str(round(globals.state.reputation[town])) + "[/color]. You take a moment to decide what you would like to accomplish here."
 	
 	
-	buttons.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = 'wimborn', textcolor = 'green', tooltip = 'Hear news from yesterday'})
+	buttons.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = town, textcolor = 'green', tooltip = 'Hear news from yesterday'})
 	if !globals.state.townsexpanded[town].townhall.fines.empty():
 		buttons.append({name = "Pay a Fine",function = 'townhall_fines', args = town})
 	
@@ -848,7 +848,7 @@ func townhall_law_change(town):
 	var text = "You approach a receptionist and request that they consider voting on a potential law change. She gives you a form to submit the appeal. She informs you that making this request will cost you [color=aqua]" + str(globals.state.townsexpanded[town].townhall.law_change_cost) + " Reputation[/color] whether it passes or fails as you stake your reputation on it. "
 	
 	#Nudity Law
-	text += "\n\n[center]Laws[/color]\n\nPublic Nudity - "
+	text += "\n\n[center][color=#d1b970]Laws[/color][/center]\n\nPublic Nudity - "
 	if globals.state.townsexpanded[town].laws.public_nudity == false && !globals.state.townsexpanded[town].currentevents.has('vote_public_nudity'):
 		text += "[color=aqua]Illegal[/color] || Current Public Support to Legalize [color=aqua]" + str(globals.state.townsexpanded[town].nudity) + "[/color] "
 		buttons.append({name = "Legalize Public Nudity", function = 'townhall_legalize_public_nudity', args = town})
@@ -878,7 +878,7 @@ func townhall_fines(town):
 	var text = "You approach the Town Guard desk and explain that you are interested in seeing the fines accrued under your estate. The officer brings forth the records of the fines. You will have to pay them in order of oldest to newest, but with a high enough reputation may be able to have some waived at a cost to that reputation."
 	
 	var currenttown =  globals.state.townsexpanded[town]
-	buttons.append({name = "From Date = " + str(currenttown.townhall.fines[0][0]) + "; Gold Cost = " + str(currenttown.townhall.fines[0][1]), function = 'townhall_pay_fine_gold', args = town})
+	buttons.append({name = "From Date = " + str(currenttown.townhall.fines.front()[0]) + "; Gold Cost = " + str(currenttown.townhall.fines.front()[1]), function = 'townhall_pay_fine_gold', args = town})
 	if globals.state.reputation[town] >= 0:
 		buttons.append({name = "Use Your Reputation to Waive 1 Fine", function = 'townhall_pay_fine_rep', args = town})
 		
@@ -893,8 +893,8 @@ func townhall_pay_fine_gold(town):
 	var text = "You state that you are ready to pay your oldest fine. The guard extends their hand patiently. You hand over the pouch of gold and watch as they shred the fine and purge it from their records."
 	
 	var currenttown =  globals.state.townsexpanded[town]
-	globals.resources.gold -= int(currenttown.townhall.fines[0][1])
-	currenttown.townhall.fines.erase([0])
+	globals.resources.gold -= currenttown.townhall.fines.front()[1]
+	currenttown.townhall.fines.pop_front()
 
 	if !globals.state.townsexpanded[town].townhall.fines.empty():
 		buttons.append({name = "Pay another Fine", function = 'townhall_fines', args = town})
@@ -910,8 +910,8 @@ func townhall_pay_fine_rep(town):
 	var text = "You ask if they know who you are and what you've done for this time. The guard nods slowly with growing confusion. You ask if while keeping in mind all of that good that there's anything they can do about this fine. The guard looks exasperated but nods and shreds it. You've lost some reputation with the town but your oldest fine is waived."
 	
 	var currenttown =  globals.state.townsexpanded[town]
-	globals.state.reputation[town] -= round(int(currenttown.townhall.fines[0][1])/15)
-	currenttown.townhall.fines.erase([0])
+	globals.state.reputation[town] -= floor(currenttown.townhall.fines.front()[1]/15)
+	currenttown.townhall.fines.pop_front()
 	
 	if !globals.state.townsexpanded[town].townhall.fines.empty():
 		buttons.append({name = "Pay another Fine", function = 'townhall_fines', args = town})

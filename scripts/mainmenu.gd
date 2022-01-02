@@ -9,7 +9,7 @@ var hobbydescription = {
 	'Curious' : "[color=aqua]Start with the [color=green]Gifted[/color] trait.[/color]\n\n$name spends $his time searching for answers and meaning in this crazy world. This has led $him to become more receptive to new skills and knowledge.",
 	'Genius' : "[color=aqua]Start with the [color=green]Clever[/color] trait and randomly either the [color=green]Responsive[/color] or [color=green]Gifted[/color] trait.[/color]\n[color=red]Gains either the Clumsy, Frail, or Weak trait.[/color]\n\n$name spends $his time studying and thinking and tends to not focus on physical activities.\n",
 	'Socialite' : "[color=aqua]Start with the traits [color=green]Pretty Voice[/color] and either [color=green]Natural Beauty[/color] or [color=green]Ditzy[/color]. Gain [color=red]Fickle[/color].[/color]\n\n$name understands that the only real happiness in life comes from being popular and now even craves the attention from others.\n",
-	'Waifu' : "[color=aqua]Start with the traits [color=green]Monogamous[/color], [color=green]Fertile[/color], [color=green]Ascetic[/color], [color=red]Clingy[/color], and [color=red]Submissive[/color][/color]\n\n$name has spent $his whole life preparing $himself to be the perfect, submissive partner.\n\n[color=yellow]Very Unbalanced[/color]\n",
+	'Waifu' : "[color=aqua]Start with the traits [color=green]Monogamous[/color], [color=green]Fertile[/color], [color=green]Ascetic[/color], [color=red]Clingy[/color].\n\nStarts with the [color=green]Submissive[/color] fetish at [color=lime]Mindblowing[/color] and [color=green]Dominance[/color] at [color=red]Taboo[/color].[/color]\n\n$name has spent $his whole life preparing $himself to be the perfect, submissive partner.\n\n[color=yellow]Very Unbalanced[/color]\n",
 	'Perfect Specimen' : "[color=aqua]Start with the traits [color=green]Strong[/color], [color=green]Quick[/color], [color=green]Robust[/color], and [color=green]Responsive[/color].[/color]\n\n$name has been perfectly crafted to be the perfect specimen of their race.\n\n[color=red]Insanely Unbalanced[/color]\n"
 }
 
@@ -18,131 +18,228 @@ var slaveHobbiesExpanded = ['Graceful','Curious','Genius','Socialite','Waifu','P
 ###---Expansion End---###
 
 #Added Penis Sizes
+#QMod - Incompletely modified, a bit more random now, does not fully implement choice consequences 'properly'
+func _on_quickstart_pressed():
+	var ageArray = ['teen', 'adult']
+	var sexArray = ['male','male','futanari','dickgirl']
+	var playerSpecializationArray = ['Slaver','Hunter'] #Added 'Hunter', 'Alchemist', 'Mage'
+
+	#Select random start location
+	var locationArray = locationDict.keys()
+	#startingLocation = locationArray[rand_range(0, locationArray.size())]
+	startingLocation = 'wimborn'
+	
+	#Generate random Player
+	player.race = globals.getracebygroup('active' if isSandbox || variables.storymodeanyrace else 'starting')
+	
+	if !globals.rules.futa: #If futanari not allowed, remove futa
+		sexArray.erase('futanari')
+
+	if !globals.rules.dickgirl: #If dickgirl not allowed, remove dickgirl
+		sexArray.erase('dickgirl')
+	
+	player.sex = globals.randomfromarray(sexArray)
+	player.age = globals.randomfromarray(ageArray)
+	regenerateplayer()
+	quickstartStats()
+	player.spec = globals.randomfromarray(playerSpecializationArray)
+	
+	#Generate random starting slave
+	if globals.rules.children: #If children allowed, add 'child' age
+		ageArray.push_front('child')
+	
+	slaveDefaults.race = globals.getracebygroup('active' if isSandbox || variables.storymodeanyrace else 'starting')
+	
+	slaveDefaults.age = globals.randomfromarray(ageArray)
+	slaveDefaults.sex = 'random'
+	startSlave = globals.newslave(slaveDefaults.race, slaveDefaults.age, slaveDefaults.sex, 'poor')	
+	player.imagefull = null
+	player.imageportait = playerPortraits[randi()%playerPortraits.size()]
+	startSlave.cleartraits()
+
+	var traitpool = []
+	for i in globals.origins.traitlist.values():
+		if i.tags.has("secondary") || forbiddentraits.has(i):
+			continue
+		traitpool.append(i.name)
+	slaveTrait = globals.randomfromarray(traitpool)
+	startSlaveHobby = globals.randomfromarray(slaveHobbies)
+	_on_slaveconfirm_pressed()
+
+#Stage05 - Select player gender, age, stats
+#QMod
+func _stage5():
+	#Clear age, gender
+	get_node("TextureFrame/newgame/stage5/age").clear()
+	get_node("TextureFrame/newgame/stage5/sex").clear()
+	var listSex = ['male','female','futanari','dickgirl']
+	if !globals.rules.futa:
+		listSex.erase('futanari')
+	if !globals.rules.dickgirl:
+		listSex.erase('dickgirl')
+
+	#Build age & gender lists, display currently selected options
+	for i in listSex:
+		get_node("TextureFrame/newgame/stage5/sex").add_item(i)
+		if player.sex == i:
+			get_node("TextureFrame/newgame/stage5/sex").select(get_node("TextureFrame/newgame/stage5/sex").get_item_count()-1)
+
+	var listAge = ['adult','teen','child']
+	if !globals.rules.children:
+		listAge.erase('child')
+	for i in listAge:
+		get_node("TextureFrame/newgame/stage5/age").add_item(i)
+		if player.age == i:
+			get_node("TextureFrame/newgame/stage5/age").select(get_node("TextureFrame/newgame/stage5/age").get_item_count()-1)
+
+	_update_stage5()
+
+#QMod - Patch fix for women/futa to have womb == true
+func _on_sexconfirm_pressed():
+	globals.assets.getsexfeatures(player) #Also modified assets.gd to set has_womb == true for females/futa
+	if player.vagina != 'none': #Including this here temporarily for compatibility if no other files are modified
+		player.preg.has_womb = true
+	get_node("TextureFrame/newgame/stagespanel/VBoxContainer/sexage").set_text(player.sex.capitalize() + " " + player.age.capitalize())
+	self.stage = 5	
+
 #QMod - Refactor
 func _process_stage6_sex_options():
 	#Add sex size options
-	var sexSizes = []
-	if makeoverPerson.sex == 'male':
+	var sexSizes
+	var arraySelect = makeoverPerson.sex == 'male'
+	var stage6 = get_node("TextureFrame/newgame/stage6")
+
+	sexSizes = malesizes if arraySelect else femalesizes
+	for i in sexSizes:
+		stage6.get_node("asssize").add_item(i)
+		if makeoverPerson.asssize == i:
+			stage6.get_node("asssize").select(stage6.get_node("asssize").get_item_count()-1)
+
+	if arraySelect:
 		sexSizes = malesizes
 	else:
-		sexSizes = femalesizes
-
+		sexSizes = globals.titssizearray.duplicate()
+		sexSizes.pop_front() #remove 'masculine'
+		if makeoverPerson.sex == 'dickgirl':
+			sexSizes.pop_front() #remove 'flat'
 	for i in sexSizes:
-		get_node("TextureFrame/newgame/stage6/asssize").add_item(i)
-		if makeoverPerson.asssize == i:
-			get_node("TextureFrame/newgame/stage6/asssize").select(get_node("TextureFrame/newgame/stage6/asssize").get_item_count()-1)
-		get_node("TextureFrame/newgame/stage6/titssize").add_item(i)
+		stage6.get_node("titssize").add_item(i)
 		if makeoverPerson.titssize == i:
-			get_node("TextureFrame/newgame/stage6/titssize").select(get_node("TextureFrame/newgame/stage6/titssize").get_item_count()-1)
+			stage6.get_node("titssize").select(stage6.get_node("titssize").get_item_count()-1)
 
 	if makeoverPerson.sex != 'female':
-		get_node("TextureFrame/newgame/stage6/penis").set_disabled(false)
-		get_node("TextureFrame/newgame/stage6/balls").set_disabled(false)
-		for i in ['none','micro','tiny','small','average','large','massive']:
-			get_node("TextureFrame/newgame/stage6/penis").add_item(i)
+		stage6.get_node("penis").set_disabled(false)
+		stage6.get_node("balls").set_disabled(false)
+		sexSizes = globals.penissizearray.duplicate()
+		for i in sexSizes:
+			stage6.get_node("penis").add_item(i)
 			if makeoverPerson.penis == i:
-				get_node("TextureFrame/newgame/stage6/penis").select(get_node("TextureFrame/newgame/stage6/penis").get_item_count()-1)
-			get_node("TextureFrame/newgame/stage6/balls").add_item(i)
+				stage6.get_node("penis").select(stage6.get_node("penis").get_item_count()-1)
+		sexSizes.push_front('none')
+		for i in sexSizes:
+			stage6.get_node("balls").add_item(i)
 			if makeoverPerson.balls == i:
-				get_node("TextureFrame/newgame/stage6/balls").select(get_node("TextureFrame/newgame/stage6/balls").get_item_count()-1)
+				stage6.get_node("balls").select(stage6.get_node("balls").get_item_count()-1)
 	else:
-		get_node("TextureFrame/newgame/stage6/penis").set_disabled(true)
-		get_node("TextureFrame/newgame/stage6/penis").add_item('none')
-		get_node("TextureFrame/newgame/stage6/balls").set_disabled(true)
-		get_node("TextureFrame/newgame/stage6/balls").add_item('none')
+		stage6.get_node("penis").set_disabled(true)
+		stage6.get_node("penis").add_item('none')
+		stage6.get_node("balls").set_disabled(true)
+		stage6.get_node("balls").add_item('none')
 
 ###---Added by Expansion---### Traits to Forbidden
 #QMod - Refactor
 func _process_stage6_body_options():
+	var stage6 = get_node("TextureFrame/newgame/stage6")
 	#Process height
 	for i in globals.heightarray:
-		get_node("TextureFrame/newgame/stage6/height").add_item(i)
+		stage6.get_node("height").add_item(i)
 		if makeoverPerson.height == i:
-			get_node("TextureFrame/newgame/stage6/height").select(get_node("TextureFrame/newgame/stage6/height").get_item_count()-1)
+			stage6.get_node("height").select(stage6.get_node("height").get_item_count()-1)
 
 	#Process hair
 	for i in globals.hairlengtharray:
-		get_node("TextureFrame/newgame/stage6/hairlength").add_item(i)
+		stage6.get_node("hairlength").add_item(i)
 		if makeoverPerson.hairlength == i:
-			get_node("TextureFrame/newgame/stage6/hairlength").select(get_node("TextureFrame/newgame/stage6/hairlength").get_item_count()-1)
+			stage6.get_node("hairlength").select(stage6.get_node("hairlength").get_item_count()-1)
 
+	var tempRace = makeoverPerson.race.to_lower()
 	#Process skin hues
 	var skinHues
-	if skindict.has(makeoverPerson.race.to_lower()):
-		skinHues = skindict[makeoverPerson.race.to_lower()]
+	if skindict.has(tempRace):
+		skinHues = skindict[tempRace]
 	else:
 		skinHues = skindict.human
 	for i in skinHues:
-		get_node("TextureFrame/newgame/stage6/skin").add_item(i)
+		stage6.get_node("skin").add_item(i)
 		if makeoverPerson.skin == i:
-			get_node("TextureFrame/newgame/stage6/skin").select(get_node("TextureFrame/newgame/stage6/skin").get_item_count()-1)
+			stage6.get_node("skin").select(stage6.get_node("skin").get_item_count()-1)
 
 	#Process horns
 	var hornTypes
-	if horndict.has(makeoverPerson.race.to_lower()):
-		hornTypes = horndict[makeoverPerson.race.to_lower()]
-		get_node("TextureFrame/newgame/stage6/horns").set_disabled(false)
+	if horndict.has(tempRace):
+		hornTypes = horndict[tempRace]
+		stage6.get_node("horns").set_disabled(false)
 	else:
 		hornTypes = horndict.human
-		get_node("TextureFrame/newgame/stage6/horns").set_disabled(true)
+		stage6.get_node("horns").set_disabled(true)
 	for i in hornTypes:
-		get_node("TextureFrame/newgame/stage6/horns").add_item(i.replace("_", " "))
+		stage6.get_node("horns").add_item(i.replace("_", " "))
 		if makeoverPerson.horns == i:
-			get_node("TextureFrame/newgame/stage6/horns").select(get_node("TextureFrame/newgame/stage6/horns").get_item_count()-1)
+			stage6.get_node("horns").select(stage6.get_node("horns").get_item_count()-1)
 
 	#Process wings
 	var wingTypes
-	if wingsdict.has(makeoverPerson.race.to_lower()):
-		wingTypes = wingsdict[makeoverPerson.race.to_lower()]
-		get_node("TextureFrame/newgame/stage6/wings").set_disabled(false)
+	if wingsdict.has(tempRace):
+		wingTypes = wingsdict[tempRace]
+		stage6.get_node("wings").set_disabled(false)
 	else:
 		wingTypes = wingsdict.human
-		get_node("TextureFrame/newgame/stage6/wings").set_disabled(true)
+		stage6.get_node("wings").set_disabled(true)
 	for i in wingTypes:
-		get_node("TextureFrame/newgame/stage6/wings").add_item(i.replace("_", " "))
+		stage6.get_node("wings").add_item(i.replace("_", " "))
 		###---Added by Expansion---### Ank Bugfix v4
 		if makeoverPerson.wings == i:
-			get_node("TextureFrame/newgame/stage6/wings").select(get_node("TextureFrame/newgame/stage6/wings").get_item_count()-1)
+			stage6.get_node("wings").select(stage6.get_node("wings").get_item_count()-1)
 		###---End Expansion---###
 
 	#Process fur colors
 	var furColors
-	if furcolordict.has(makeoverPerson.race.to_lower()):
-		furColors = furcolordict[makeoverPerson.race.to_lower()]
-		get_node("TextureFrame/newgame/stage6/furcolor").set_disabled(false)
+	if furcolordict.has(tempRace):
+		furColors = furcolordict[tempRace]
+		stage6.get_node("furcolor").set_disabled(false)
 	else:
 		furColors = furcolordict.human
-		get_node("TextureFrame/newgame/stage6/furcolor").set_disabled(true)
+		stage6.get_node("furcolor").set_disabled(true)
 	for i in furColors:
-		get_node("TextureFrame/newgame/stage6/furcolor").add_item(i.replace("_", " "))
+		stage6.get_node("furcolor").add_item(i.replace("_", " "))
 		if makeoverPerson.furcolor == i:
-			get_node("TextureFrame/newgame/stage6/furcolor").select(get_node("TextureFrame/newgame/stage6/furcolor").get_item_count()-1)
+			stage6.get_node("furcolor").select(stage6.get_node("furcolor").get_item_count()-1)
 
 	###---Added by Expansion---### Person Expanded | Sexuality, Lip, Asshole, and Vagina Sizes
 	for i in globals.kinseyscale:
-		get_node("TextureFrame/newgame/stage6/sexuality").add_item(i)
+		stage6.get_node("sexuality").add_item(i)
 		if makeoverPerson.sexuality == i:
-			get_node("TextureFrame/newgame/stage6/sexuality").select(get_node("TextureFrame/newgame/stage6/sexuality").get_item_count()-1)
+			stage6.get_node("sexuality").select(stage6.get_node("sexuality").get_item_count()-1)
 
 	for i in globals.lipssizearray:
-		get_node("TextureFrame/newgame/stage6/lips").add_item(i)
+		stage6.get_node("lips").add_item(i)
 		if makeoverPerson.lips == i:
-			get_node("TextureFrame/newgame/stage6/lips").select(get_node("TextureFrame/newgame/stage6/lips").get_item_count()-1)
+			stage6.get_node("lips").select(stage6.get_node("lips").get_item_count()-1)
 
 	for i in globals.vagsizearray:
-		get_node("TextureFrame/newgame/stage6/asshole").add_item(i)
+		stage6.get_node("asshole").add_item(i)
 		if makeoverPerson.asshole == i:
-			get_node("TextureFrame/newgame/stage6/asshole").select(get_node("TextureFrame/newgame/stage6/asshole").get_item_count()-1)
+			stage6.get_node("asshole").select(stage6.get_node("asshole").get_item_count()-1)
 
-	if makeoverPerson.sex != 'male':
-		get_node("TextureFrame/newgame/stage6/vagina").set_disabled(false)
+	if !makeoverPerson.sex in ['male','dickgirl']:
+		stage6.get_node("vagina").set_disabled(false)
 		for i in globals.vagsizearray:
-			get_node("TextureFrame/newgame/stage6/vagina").add_item(i)
+			stage6.get_node("vagina").add_item(i)
 			if makeoverPerson.vagina == i:
-				get_node("TextureFrame/newgame/stage6/vagina").select(get_node("TextureFrame/newgame/stage6/vagina").get_item_count()-1)
+				stage6.get_node("vagina").select(stage6.get_node("vagina").get_item_count()-1)
 	else:
-		get_node("TextureFrame/newgame/stage6/vagina").set_disabled(true)
-		get_node("TextureFrame/newgame/stage6/vagina").add_item('none')
+		stage6.get_node("vagina").set_disabled(true)
+		stage6.get_node("vagina").add_item('none')
 
 	###---End Expansion---###
 
@@ -218,6 +315,19 @@ func _select_specialization(button):
 	get_node("TextureFrame/newgame/stage7/backgroundconfirm").set_disabled(false)
 
 #QMod - Refactor
+func _process_stage8_sex_options():
+	#Build sex options
+	var sexArray = ['female','futanari','male','dickgirl']
+	if !globals.rules.futa:
+		sexArray.erase('futanari')
+	if !globals.rules.dickgirl:
+		sexArray.erase('dickgirl')
+	for i in sexArray:
+		get_node("TextureFrame/newgame/stage8/slavesex").add_item(i)
+		if startSlave.sex == i:
+			get_node("TextureFrame/newgame/stage8/slavesex").select(get_node("TextureFrame/newgame/stage8/slavesex").get_item_count()-1)
+
+#QMod - Refactor
 func _process_stage8_hobby_list():
 	#Clear slave hobby list
 	for i in get_node("TextureFrame/newgame/stage8/hobbycontainer/VBoxContainer").get_children():
@@ -265,20 +375,13 @@ func _process_stage8_traits():
 		$TextureFrame/newgame/stage8/traitpanel/ScrollContainer/VBoxContainer.add_child(newbutton)
 		newbutton.text = i.name
 
-		if i.name == slaveTrait:
-			newbutton.set_pressed(true)
-		else:
-			newbutton.set_pressed(false)
-
+		newbutton.set_pressed(i.name == slaveTrait)
 		newbutton.connect("pressed",self,'_trait_toggle',[i, newbutton]) #Connect list buttons to trait toggle method
 
 #QMod - Incomplete refactor, removed firecheck
 func _on_slaveconfirm_pressed():
 	#Finish processing slave
 	startSlave.cleartraits() #Clear traits, reset basics
-	###---Added by Expansion---### Ank Bugfix v4
-	startSlave.health = 1000
-	###---End Expansion---###
 
 	#Generate mental stats
 	for i in ['conf','cour','wit','charm']:
@@ -335,7 +438,10 @@ func _on_slaveconfirm_pressed():
 		startSlave.add_trait('Ascetic')
 		startSlave.add_trait('Clingy')
 		startSlave.add_trait('Fertile')
-		startSlave.add_trait('Submissive')
+		startSlave.fetish.submission = 'mindblowing'
+		startSlave.fetish.dominance = 'taboo'
+		startSlave.knownfetishes.append('submission')
+		startSlave.knownfetishes.append('dominance')
 	elif startSlaveHobby == 'Perfect Specimen':
 		startSlave.add_trait('Strong')
 		startSlave.add_trait('Quick')
@@ -345,10 +451,7 @@ func _on_slaveconfirm_pressed():
 
 	#Add traits
 	if slaveTrait != '':
-		if slaveTrait == 'Gifted' && startSlave.traits.has('Gifted') == false:
-			startSlave.add_trait(slaveTrait)
-		else:
-			startSlave.add_trait(slaveTrait)
+		startSlave.add_trait(slaveTrait)
 
 	#Assign start slave to global slave list
 	startSlave.unique = 'startslave'
@@ -359,9 +462,11 @@ func _on_slaveconfirm_pressed():
 	globals.constructor.setRaceDisplay(startSlave)
 	globals.constructor.set_ovulation(startSlave)
 	###---End Expansion---###
-	globals.slaves = startSlave#A bit deceptive as it assigns 'person' to 'array', works because of 'setget'
+	###---Added by Expansion---### Ank Bugfix v4
+	startSlave.health = 1000
+	###---End Expansion---###
+	globals.slaves = startSlave #A bit deceptive as it assigns 'person' to 'array', works because of 'setget'
 
-	player.health = 1000
 
 	#Apply player racial bonuses
 	###---Added by Expansion---### Races Expanded
@@ -410,8 +515,6 @@ func _on_slaveconfirm_pressed():
 
 
 	#Set globals
-	globals.resources.energy = 100
-	globals.resources.day = 1
 	globals.guildslaves.wimborn = []
 	globals.guildslaves.gorn = []
 	globals.guildslaves.frostford = []
@@ -423,123 +526,28 @@ func _on_slaveconfirm_pressed():
 		globals.resources.gold += 250
 		globals.resources.food += 200
 		globals.resources.mana += 10
-		###---Added by Expansion---### Farm Expanded
-		#Unused Below
-		globals.resources.milk = 0
-		globals.resources.semen = 0
-		globals.resources.lube = 0
-		globals.resources.piss = 0
-		#Reset Workstations
-		globals.resources.farmexpanded.workstation.rack = 0
-		globals.resources.farmexpanded.workstation.cage = 0
-		#Reset Bedding
-		globals.resources.farmexpanded.stallbedding.hay = 0
-		globals.resources.farmexpanded.stallbedding.cot = 0
-		globals.resources.farmexpanded.stallbedding.bed = 0
-		#Reset Extractors
-		globals.resources.farmexpanded.extractors.suction = 0
-		globals.resources.farmexpanded.extractors.pump = 0
-		globals.resources.farmexpanded.extractors.pressurepump = 0
-		#Reset Containers
-		globals.resources.farmexpanded.containers.bucket = 0
-		globals.resources.farmexpanded.containers.pail = 0
-		globals.resources.farmexpanded.containers.jug = 0
-		globals.resources.farmexpanded.containers.canister = 0
-		globals.resources.farmexpanded.containers.bottles = 0
-		#Reset Farm Inventory
-		globals.resources.farmexpanded.farminventory.prods = 0
-		#Reset Vats
-		for type in globals.resources.farmexpanded.vats.processingorder:
-			globals.resources.farmexpanded.vats[type].vat = 0
-			globals.resources.farmexpanded.vats[type].new = 0
-			globals.resources.farmexpanded.vats[type].sell = 0
-			globals.resources.farmexpanded.vats[type].food = 0
-			globals.resources.farmexpanded.vats[type].refine = 0
-			globals.resources.farmexpanded.vats[type].bottle2sell = 0
-			globals.resources.farmexpanded.vats[type].bottle2refine = 0
-			globals.resources.farmexpanded.vats[type].priceper = 0
-			globals.resources.farmexpanded.vats[type].foodper = 0
-			globals.resources.farmexpanded.vats[type].auto = 'vat'
-			globals.resources.farmexpanded.vats[type].autobuybottles = false
-		#Reset Incubators
-		if globals.resources.farmexpanded.has('incubators') && globals.resources.farmexpanded.incubators.has('1'):
-			for num in [1,2,3,4,5,6,7,8,9,10]:
-				globals.resources.farmexpanded.incubators[str(num)].level = 0
-				globals.resources.farmexpanded.incubators[str(num)].filled = false
-				globals.resources.farmexpanded.incubators[str(num)].growth = 0
-		#Reset Bottler
-		globals.resources.farmexpanded.bottler.level = 0
-		globals.resources.farmexpanded.bottler.totalproduced = 0
-		globals.expansionsetup.expandGame()
-		###---Expansion End---###
 	else:
-		for i in globals.state.portals.values():
-			if i.code != startingLocation:
-				i.enabled = true
+		for i in globals.state.portals:
+			var temp = globals.state.portals[i]
+			if temp.code != startingLocation:
+				temp.enabled = true
 		globals.resources.upgradepoints = 30
 		globals.resources.gold += 5000
 		globals.resources.food += 500
 		globals.resources.mana += 100
-		###---Added by Expansion---### Farm Expanded
-		#Unused Below
-		globals.resources.milk = 0
-		globals.resources.semen = 0
-		globals.resources.lube = 0
-		globals.resources.piss = 0
-		#Reset Workstations
-		globals.resources.farmexpanded.workstation.rack = 0
-		globals.resources.farmexpanded.workstation.cage = 0
-		#Reset Bedding
-		globals.resources.farmexpanded.stallbedding.hay = 0
-		globals.resources.farmexpanded.stallbedding.cot = 0
-		globals.resources.farmexpanded.stallbedding.bed = 0
-		#Reset Extractors
-		globals.resources.farmexpanded.extractors.suction = 0
-		globals.resources.farmexpanded.extractors.pump = 0
-		globals.resources.farmexpanded.extractors.pressurepump = 0
-		#Reset Containers
-		globals.resources.farmexpanded.containers.bucket = 0
-		globals.resources.farmexpanded.containers.pail = 0
-		globals.resources.farmexpanded.containers.jug = 0
-		globals.resources.farmexpanded.containers.canister = 0
-		globals.resources.farmexpanded.containers.bottles = 0
-		#Reset Farm Inventory
-		globals.resources.farmexpanded.farminventory.prods = 0
-		#Reset Vats
-		for type in globals.resources.farmexpanded.vats.processingorder:
-			globals.resources.farmexpanded.vats[type].vat = 0
-			globals.resources.farmexpanded.vats[type].new = 0
-			globals.resources.farmexpanded.vats[type].sell = 0
-			globals.resources.farmexpanded.vats[type].food = 0
-			globals.resources.farmexpanded.vats[type].refine = 0
-			globals.resources.farmexpanded.vats[type].bottle2sell = 0
-			globals.resources.farmexpanded.vats[type].bottle2refine = 0
-			globals.resources.farmexpanded.vats[type].priceper = 0
-			globals.resources.farmexpanded.vats[type].foodper = 0
-			globals.resources.farmexpanded.vats[type].auto = 'vat'
-			globals.resources.farmexpanded.vats[type].autobuybottles = false
-		#Reset Incubators
-		if globals.resources.farmexpanded.has('incubators') && globals.resources.farmexpanded.incubators.has('1'):
-			for num in [1,2,3,4,5,6,7,8,9,10]:
-				globals.resources.farmexpanded.incubators[str(num)].level = 0
-				globals.resources.farmexpanded.incubators[str(num)].filled = false
-				globals.resources.farmexpanded.incubators[str(num)].growth = 0
-		#Reset Bottler
-		globals.resources.farmexpanded.bottler.level = 0
-		globals.resources.farmexpanded.bottler.totalproduced = 0
-		globals.expansionsetup.expandGame()
-		###---Expansion End---###
+
 		globals.state.mainquest = 42
 		globals.state.rank = 4
 		globals.state.sidequests.brothel = 2
 		globals.state.branding = 2
 		globals.state.farm = 4
-		globals.state.portals.amberguard.enabled = true
 		globals.itemdict.youthingpot.unlocked = true
 		globals.itemdict.maturingpot.unlocked = true
 		globals.state.sidequests.sebastianumbra = 2
-		globals.state.portals.umbra.enabled = true
 		globals.state.sandbox = true #Added this in case it used somewhere in the future?
+
+	###---Added by Expansion---### Reset resources
+
 
 	###---Added by Expansion---### Pregnancy Expanded | Ovulation Cycle/Genealogy
 	#Test Assign
@@ -549,6 +557,7 @@ func _on_slaveconfirm_pressed():
 	globals.constructor.set_ovulation(player)
 	globals.expansion.updatePerson(player)
 	###---End Expansion---###
+	player.health = 1000
 	globals.player = player
 	###---Added by Expansion---### Ovulation Cycle/Genealogy
 	globals.expansion.updatePerson(globals.player)

@@ -349,7 +349,7 @@ func applyConstructorTweaks():
 
 # Apply Combat Data Tweaks here
 func applyCombatDataTweaks():
-	globals.combatdata.enemygrouppools.monstergirl = 15	# Original - -10
+	globals.combatdata.enemygrouppools.monstergirl.awareness = 15	# Original - -10
 
 # Apply Race Tweaks here.
 func applyRaceTweaks():

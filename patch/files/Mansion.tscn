@@ -2199,8 +2199,8 @@ margin_bottom = 150.0
 anchor_bottom = 1.0
 margin_left = 19.0
 margin_top = 189.0
-margin_right = 473.0
-margin_bottom = -78.0
+margin_right = 689.0
+margin_bottom = -82.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 bbcode_enabled = true
@@ -7886,6 +7886,25 @@ custom_fonts/font = ExtResource( 45 )
 text = "Hairstyle"
 align = 1
 
+[node name="namecolor" type="OptionButton" parent="MainScreen/slave_tab/stats/customization"]
+margin_left = 25.0
+margin_top = 150.0
+margin_right = 175.0
+margin_bottom = 190.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="namecolorlabel" type="Label" parent="MainScreen/slave_tab/stats/customization/namecolor"]
+margin_top = -17.0
+margin_right = 150.0
+margin_bottom = 3.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 45 )
+text = "Name Color"
+align = 1
+
 [node name="piercing" type="Button" parent="MainScreen/slave_tab/stats/customization" groups=[
 "prisondisable",
 ]]
@@ -8172,9 +8191,9 @@ selected = 0
 [node name="relativesbutton" type="Button" parent="MainScreen/slave_tab/stats/customization"]
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_left = 25.0
+margin_left = 200.0
 margin_top = -305.0
-margin_right = 175.0
+margin_right = 350.0
 margin_bottom = -265.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -12306,6 +12325,7 @@ current = true
 [connection signal="meta_clicked" from="MainScreen/slave_tab/stats/basics/slavedescript" to="MainScreen/slave_tab" method="_on_slavedescript_meta_clicked"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/basics/fullbodycheck" to="MainScreen/slave_tab" method="_on_fullbodycheck_pressed"]
 [connection signal="item_selected" from="MainScreen/slave_tab/stats/customization/hairstyle" to="MainScreen/slave_tab" method="_on_hairstyle_item_selected"]
+[connection signal="item_selected" from="MainScreen/slave_tab/stats/customization/namecolor" to="MainScreen/slave_tab" method="_on_namecolor_item_selected"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/piercing" to="MainScreen/slave_tab" method="_on_piercing_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/image" to="MainScreen/slave_tab" method="_on_image_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/portrait" to="MainScreen/slave_tab" method="_on_portrait_pressed"]

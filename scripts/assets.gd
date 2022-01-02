@@ -22,9 +22,12 @@ func getsexfeatures(person):
 		#Tit Sizing
 		temp = ['flat','small','average','big','huge']
 		person.asser = rand_range(10,70)
-		pussy = true
-		if person.sex == 'futanari':
+		###---Added by Expansion---### centerflag982 - handle dickgirl genitals
+		if person.sex != 'dickgirl':
+			pussy = true
+		if person.sex == 'futanari' || person.sex == 'dickgirl':
 			dick = true
+		###---End Expansion---###
 		if person.age == 'child':
 			temp.append('flat')
 			temp.append('small')
@@ -44,7 +47,7 @@ func getsexfeatures(person):
 					person.asssize = globals.asssizearray[globals.titssizearray.find(person.asssize)+1]
 		#Add Lip Sizes
 		temp = ['thin','small','average','big','huge','plump']
-		if person.age in ['teen','adult'] && person.sex != 'male':
+		if person.age in ['teen','adult']:
 			temp.append('small')
 			temp.append('average')
 			temp.append('big')
@@ -71,11 +74,12 @@ func getsexfeatures(person):
 				temp.append('large')
 				temp.append('massive')
 		person.penis = getrandomfromarray(temp)
-		if person.sex == 'male' || globals.rules.futaballs == true:
+		###---Added by Expansion---### centerflag982 - handle dickgirl genitals
+		if person.sex == 'male' || person.sex == 'dickgirl' || globals.rules.futaballs == true:
 			person.balls = getrandomfromarray(temp)
 		else:
+		###---End Expansion---###
 			person.balls = 'none'
-		###---Added by Expansion---###
 	else:
 		person.penis = 'none'
 		person.balls = 'none'
@@ -133,3 +137,11 @@ func gethair(person):
 			person.hairstyle = getrandomfromarray(['ponytail', 'twintails', 'braid', 'two braids', 'bun'])
 		else:
 			person.hairstyle = 'straight'
+###---Added by Expansion---### centerflag982 - makes sure dickgirls get names too
+func getname(person):
+	var tempSex = person.sex.replace("futanari",'female').replace("dickgirl",'female')
+	var text = person.race.to_lower()+tempSex
+	if !globals.racefile.names.has(text):
+		text = 'human'+tempSex
+	person.name = getrandomfromarray(globals.names[text])
+###---End Expansion---###

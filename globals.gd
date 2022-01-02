@@ -1,4 +1,33 @@
 
+var rules = {
+	futa = true,
+	futaballs = false,
+	furry = true,
+	furrynipples = true,
+	dickgirl = false, # centerflag982 - added dickgirl
+	male_chance = 15,
+	futa_chance = 10,
+	dickgirl_chance = 5, # centerflag982 - added dickgirl
+	children = false,
+	noadults = false,
+	slaverguildallraces = false,
+	fontsize = 18,
+	musicvol = 24,
+	soundvol = 24,
+	receiving = true,
+	fullscreen = false,
+	oldresize = true,
+	fadinganimation = true,
+	permadeath = false,
+	autoattack = true,
+	showfullbody = true,
+	enddayalise = 1,
+	spritesindialogues = true,
+	instantcombatanimation = false,
+	randomcustomportraits = true,
+	thumbnails = false,
+}
+
 ###---Added by Expansion---### Hucow Specialization
 var specarray = ['geisha','ranger','executor','bodyguard','assassin','housekeeper','trapper','nympho','merchant','tamer','hucow']
 ###---End Expansion---###
@@ -28,6 +57,13 @@ var specimages = {
 	hucow = load("res://files/aric_expansion_images/specialization_icons/cow_icon.png"),
 }
 ###---End Expansion---###
+
+var sexicon = {
+	female = load("res://files/buttons/sexicons/female.png"),
+	male = load("res://files/buttons/sexicons/male.png"),
+	futanari = load("res://files/buttons/sexicons/futa.png"),
+	dickgirl = load("res://files/buttons/sexicons/dickgirl.png"), # centerflag982 - added dickgirl icon
+}
 
 func loadsettings():
 	var file = File.new()
@@ -116,7 +152,7 @@ func clearstate():
 	if useRalphsTweaks:
 		expansionsettings.applyItemMarketCostTweaks()
 		expansionsettings.applySpellManacostTweaks()
-	resources.reset()
+	resources = resource.new()
 
 func slaves_set(person):
 	person.originstrue = person.origins
@@ -145,7 +181,7 @@ class resource:
 	var day = 1 setget day_set
 	var gold = 0 setget gold_set
 	var mana = 0 setget mana_set
-	var energy = 0 setget energy_set
+	var energy = 100 setget energy_set
 	var food = 0 setget food_set
 	var upgradepoints = 0 setget upgradepoints_set
 	var panel
@@ -196,19 +232,6 @@ class resource:
 		for i in array:
 			#self[i] += 0
 			set(i, get(i))
-	
-	func reset():
-		day = 1
-		gold = 0
-		mana = 0
-		energy = 0
-		food = 0
-		###---Added by Expansion---### Farm Expanded
-		milk = 0
-		semen = 0
-		lube = 0
-		piss = 0
-		###---Expansion End---###
 	
 	func gold_set(value):
 		value = round(value)
@@ -1011,7 +1034,8 @@ func slavetooltip(person):
 		node.get_node("name").set('custom_colors/font_color', Color(1,1,0))
 		node.get_node("name").text = globals.state.defaultmasternoun + " " + node.get_node("name").text
 	else:
-		node.get_node("name").set('custom_colors/font_color', Color(1,1,1))
+		#Whims -- added custom colors
+		node.get_node("name").set('custom_colors/font_color', ColorN(person.namecolor))
 	if person != globals.player:
 		node.get_node("spec").set_texture(specimages[str(person.spec)])
 	node.get_node("grade").set_texture(gradeimages[person.origins])
@@ -1197,7 +1221,6 @@ func load_game(text):
 	for i in currentline.allnpcs:
 		if typeof(i) == TYPE_STRING:
 			continue
-		newslave = person.new()
 		if i['@path'].find('.gdc'):
 			i['@path'] = i['@path'].replace('.gdc', '.gd')
 		newslave = dict2inst(i)
@@ -1243,6 +1266,8 @@ func load_game(text):
 	for person in personList:
 		if person.imageportait == null: # try to add portrait if slave doesn't have one
 			constructor.randomportrait(person)
+		if typeof(person.sex) != TYPE_STRING || person.sex.empty():
+			person.checksex()
 
 
 ###---Added by Expansion---### Only to load from Mods folder
@@ -1465,7 +1490,7 @@ func fertilize_egg(mother, father_id, father_unique):
 		father = globals.state.findslave(father_id)
 		#If Father disappeared from the World
 		if father == null:
-			father = globals.newslave(randomitemfromarray(globals.allracesarray), 'adult', 'male')
+			father = globals.newslave('randomany', 'adult', 'male')
 	else:
 		father = globals.newslave('randomany', 'adult', 'male')
 		father.id = '-1'
@@ -1631,8 +1656,8 @@ func slimeConversionCheck(mother, father):
 #I can't remember if I added this or found it elsewhere. Sorry if I didn't!
 func randomitemfromarray(source):
 	if source.size() > 0:
-		#source[randi() % source.size()] Old
-		return source[round(rand_range(0,source.size()-1))]
+		return source[randi() % source.size()]
+	return null
 
 func randomfromarray(array):
 	if !array.empty():

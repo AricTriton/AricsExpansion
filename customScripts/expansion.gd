@@ -696,7 +696,7 @@ func setFamily(person,person2):
 			bonusmin = -200
 			bonusmax = 900
 			isparent = true
-		elif person.sex in ['male','futanari'] && str(person2data.father) == str(-1):
+		elif person.sex in ['male','futanari','dickgirl'] && str(person2data.father) == str(-1):
 			globals.connectrelatives(person, person2, 'father')
 			bonusmin = -200
 			bonusmax = 900
@@ -920,14 +920,14 @@ func getLocation(person):
 			choices.append("You find [color=aqua]$name[/color] sleeping in $his restraints against the wall of $his cell. You enoy watching $his exposed " + str(getGenitals(person)) + " twitch as $he groggily wakes up, barely able to move.")
 	elif person.sleep == 'farm':
 		if person.work == 'cow':
-			choices.append("You find [color=aqua]$name[/color] in the farm. $His " + str(nameTits()) + " are swollen and $his nipples are leaking as you walk up.")
+			choices.append("You find [color=aqua]$name[/color] in the farm. $His " + nameTits() + " are swollen and $his nipples are leaking as you walk up.")
 			choices.append("You find [color=aqua]$name[/color] in the farm. $He is preparing to slide the pumps onto $his swollen nipples as you approach.")
-			choices.append("You find [color=aqua]$name[/color] in the farm. $He is massaging $his swollen " + str(nameTits()) + " and watching milk drip out of $his nipples with fascination.")
-			choices.append("You find [color=aqua]$name[/color] in the farm. $He is sucking on $his " + str(nameTits()) + ". $He sees you approach and releases it, accidentally spilling some milk out of $his drooling lips.")
+			choices.append("You find [color=aqua]$name[/color] in the farm. $He is massaging $his swollen " + nameTits() + " and watching milk drip out of $his nipples with fascination.")
+			choices.append("You find [color=aqua]$name[/color] in the farm. $He is sucking on $his " + nameTits() + ". $He sees you approach and releases it, accidentally spilling some milk out of $his drooling lips.")
 		elif person.work == 'hen':
 			choices.append("You find [color=aqua]$name[/color] in the farm. $He is rubbing $his swollen belly that is squirming with hatched life within.")
-			choices.append("You find [color=aqua]$name[/color] in the farm. As you approach, you see the last tendril of a slug slide from $his stretched " + str(namePussy()))
-			choices.append("You find [color=aqua]$name[/color] in the farm. $He is on all fours pushing violently as something slides out of $him. You give $him a moment to catch $his breath, watching him rub $his sore, dripping " + str(namePussy())+ " and then approach.")
+			choices.append("You find [color=aqua]$name[/color] in the farm. As you approach, you see the last tendril of a slug slide from $his stretched " + namePussy())
+			choices.append("You find [color=aqua]$name[/color] in the farm. $He is on all fours pushing violently as something slides out of $him. You give $him a moment to catch $his breath, watching him rub $his sore, dripping " + namePussy()+ " and then approach.")
 	elif person.work == 'farmmanager':
 		choices.append("You find [color=aqua]$name[/color] in the farm, prepping the milking jugs, buckets, and pumps for the day's activities.")
 		choices.append("You find [color=aqua]$name[/color] in the farm, scrubbing the milking jugs, buckets, and pumps from yesterday's activities.")
@@ -951,36 +951,36 @@ func getExpression(person):
 	var text = ""
 	if person.mood == "happy":
 		if person.restrained in ['cuffed','shackled']:
-			text += str(globals.randomitemfromarray(['puts $his '+str(person.restrained)+' arms in front of him for you to inspect, then','shakes $his '+str(person.restrained)+'s good-naturedly, then']))
-		text += str(globals.randomitemfromarray(['smiles','grins','gleams','smiles brightly','smiles eagerly','brightens up']))
+			text += globals.randomitemfromarray(['puts $his '+str(person.restrained)+' arms in front of him for you to inspect, then','shakes $his '+str(person.restrained)+'s good-naturedly, then'])
+		text += globals.randomitemfromarray(['smiles','grins','gleams','smiles brightly','smiles eagerly','brightens up'])
 	elif person.mood == "sad":
-		text += str(globals.randomitemfromarray(['frowns','grimaces','droops and looks','pouts']))
+		text += globals.randomitemfromarray(['frowns','grimaces','droops and looks','pouts'])
 	elif person.mood == "scared":
-		text += str(globals.randomitemfromarray(['sobs','sniffs','coughs','cries','whines','whimpers']))
+		text += globals.randomitemfromarray(['sobs','sniffs','coughs','cries','whines','whimpers'])
 	elif person.mood == "angry":
-		text += str(globals.randomitemfromarray(['grimaces','grits $his teeth','snarls','sneers','glares']))
+		text += globals.randomitemfromarray(['grimaces','grits $his teeth','snarls','sneers','glares'])
 	elif person.mood == "horny":
-		text += str(globals.randomitemfromarray(['bites $his lip','licks $his lips','looks lustfully','blushes','breathily moans','looks invitingly']))
+		text += globals.randomitemfromarray(['bites $his lip','licks $his lips','looks lustfully','blushes','breathily moans','looks invitingly'])
 	elif person.mood == "playful":
-		text += str(globals.randomitemfromarray(['smiles','grins','gleams','smiles playfully','bounces slightly from side to side and smiles','fidgets eagerly while smiling']))
+		text += globals.randomitemfromarray(['smiles','grins','gleams','smiles playfully','bounces slightly from side to side and smiles','fidgets eagerly while smiling'])
 	elif person.mood == "obediant":
-		text += str(globals.randomitemfromarray(['bows $his head and looks up','meekly looks','submissively bows then looks','puts $his arms behind $his head then glances up']))
+		text += globals.randomitemfromarray(['bows $his head and looks up','meekly looks','submissively bows then looks','puts $his arms behind $his head then glances up'])
 	else:
-		text += str(globals.randomitemfromarray(['looks blankly','stares','looks blankly','neutrally glances'])) #Change Neutral to use Demeanor
-	text += str(globals.randomitemfromarray([' towards you',' at you']))
+		text += globals.randomitemfromarray(['looks blankly','stares','looks blankly','neutrally glances']) #Change Neutral to use Demeanor
+	text += globals.randomitemfromarray([' towards you',' at you'])
 	return text
 
 func getMovementText(person):
 	var text = " while "
 	if person.movement == "flying":
-		text += str(globals.randomitemfromarray(['fluttering around','hovering around','buzzing in the air','flitting about','flying']))
+		text += globals.randomitemfromarray(['fluttering around','hovering around','buzzing in the air','flitting about','flying'])
 	elif person.movement == "crawling":
-		text += str(globals.randomitemfromarray(['crawling on $his knees','on $his hands and knees','on all fours','on the ground like an animal','degradingly crawling']))
+		text += globals.randomitemfromarray(['crawling on $his knees','on $his hands and knees','on all fours','on the ground like an animal','degradingly crawling'])
 	elif person.movement == "none":
-		text += str(globals.randomitemfromarray(['unable to move','laying there','struggling to rise','unable to push $himself up','immobilized']))
+		text += globals.randomitemfromarray(['unable to move','laying there','struggling to rise','unable to push $himself up','immobilized'])
 	else:
-		text += str(globals.randomitemfromarray(['standing','standing up','shifting from foot to foot','standing directly']))
-	text += " " + str(globals.randomitemfromarray(['in front of you','before you']))
+		text += globals.randomitemfromarray(['standing','standing up','shifting from foot to foot','standing directly'])
+	text += " " + globals.randomitemfromarray(['in front of you','before you'])
 	return text
 
 ###Possibly Unneeded, for StartSlave Quest Quirking
@@ -992,10 +992,10 @@ func getStartSlave():
 
 #---Random Generic Names for Body Parts
 func nameTits():
-	return str(globals.randomitemfromarray(['boobs','breasts','tits','boobs','breasts','tits','knockers','udders']))
+	return globals.randomitemfromarray(['boobs','breasts','tits','boobs','breasts','tits','knockers','udders'])
 
 func nameTitsMilking():
-	return str(globals.randomitemfromarray(['nipples','nipples','boobs','breasts','tits','boobs','breasts','tits','knockers','udders']))
+	return globals.randomitemfromarray(['nipples','nipples','boobs','breasts','tits','boobs','breasts','tits','knockers','udders'])
 
 func namePenis():
 	var array = ['penis','cock','member','dick','penis','cock','member','dick']
@@ -1008,10 +1008,10 @@ func namePenis():
 #		array.append('prince charles')
 #		array.append('mighty boosh')
 		array.append('knob')
-	return str(globals.randomitemfromarray(array))
+	return globals.randomitemfromarray(array)
 
 func nameBalls():
-	return str(globals.randomitemfromarray(['balls','balls','nuts','nutsack','testicles','ballsack']))
+	return globals.randomitemfromarray(['balls','balls','nuts','nutsack','testicles','ballsack'])
 
 func namePussy():
 	var array = ['pussy','pussy','twat','cunt','cunt','vagina']
@@ -1023,10 +1023,10 @@ func namePussy():
 		array.append('cunny')
 		array.append('quim')
 #		array.append('tardis')
-	return str(globals.randomitemfromarray(array))
+	return globals.randomitemfromarray(array)
 
 func nameAsshole():
-	return str(globals.randomitemfromarray(['butt','bum','bumhole','asshole','ass','butthole','anus','sphincter']))
+	return globals.randomitemfromarray(['butt','bum','bumhole','asshole','ass','butthole','anus','sphincter'])
 
 func nameAss():
 	var array = ['ass','ass','butt','rump','behind','ass cheeks']
@@ -1035,89 +1035,89 @@ func nameAss():
 		array.append('bum')
 		array.append('arse')
 #		array.append('that which follows constantly')
-	return str(globals.randomitemfromarray(array))
+	return globals.randomitemfromarray(array)
 
 func nameNaked():
-	return str(globals.randomitemfromarray(['completely naked','naked','nude','stripped','exposed','bared','immodestly exposed','revealed']))
+	return globals.randomitemfromarray(['completely naked','naked','nude','stripped','exposed','bared','immodestly exposed','revealed'])
 
 func namePenisCumming():
-	return str(globals.randomitemfromarray(['came','squirted','jizzed','creampied','filled up','popped inside']))
+	return globals.randomitemfromarray(['came','squirted','jizzed','creampied','filled up','popped inside'])
 
 func nameCum():
-	return str(globals.randomitemfromarray(['semen','cum','cum','jizz','spunk','cream']))
+	return globals.randomitemfromarray(['semen','cum','cum','jizz','spunk','cream'])
 
 func nameBelly():
-	return str(globals.randomitemfromarray(['belly','belly','stomach','gut','midriff','tummy']))
+	return globals.randomitemfromarray(['belly','belly','stomach','gut','midriff','tummy'])
 
 func nameKissing():
 	var array = ['kissing','making out with','touching lips with','kissing','locking lips with']
 	if globals.expansionsettings.ihavebloodygoodtaste == true:
 		array.append('snogging')
-	return str(globals.randomitemfromarray(array))
+	return globals.randomitemfromarray(array)
 
 func nameCrying():
 	var array = ['moaning','whining','complaining','crying','sniffling','sobbing','whimpering']
 	if globals.expansionsettings.ihavebloodygoodtaste == true:
 		array.append('whinging')
-	return str(globals.randomitemfromarray(array))
+	return globals.randomitemfromarray(array)
 
 func nameSex():
 	var array = ['fuck','be fucked by','rail','have sex with','do','get nasty','do the deed','pound it out','knock boots']
 	if globals.expansionsettings.ihavebloodygoodtaste == true:
 		array.append('do it for Queen and country')
 		array.append('lay there and think of England')
-	return str(globals.randomitemfromarray(array))
+	return globals.randomitemfromarray(array)
 
 func nameBound():
-	return str(globals.randomitemfromarray(['bound','restrained','chained up','helplessly bound','restrained helplessly']))
+	return globals.randomitemfromarray(['bound','restrained','chained up','helplessly bound','restrained helplessly'])
 
 func nameBred():
-	return str(globals.randomitemfromarray(['bred','knocked up','impregnated','get pregnant','get impregnated','have a baby','have a '+str(globals.randomitemfromarray(['','swollen','big','huge','unbearable','incredible']))+' '+str(globals.randomitemfromarray(['','pregnant','protruding','pot','filled up']))+' '+nameBelly()]))
+	return globals.randomitemfromarray(['bred','knocked up','impregnated','get pregnant','get impregnated','have a baby','have a '+globals.randomitemfromarray(['','swollen','big','huge','unbearable','incredible'])+' '+globals.randomitemfromarray(['','pregnant','protruding','pot','filled up'])+' '+nameBelly()])
 
 func nameBreed():
-	return str(globals.randomitemfromarray(['breed','knock up','impregnate']))
+	return globals.randomitemfromarray(['breed','knock up','impregnate'])
 
 func nameBeBred():
-	return str(globals.randomitemfromarray(['be bred','be knocked up','be impregnated','get pregnant','get impregnated','have a baby','have a '+str(globals.randomitemfromarray(['','swollen','big','huge','incredible']))+' '+str(globals.randomitemfromarray(['','pregnant','protruding','pot','filled up']))+' belly']))
+	return globals.randomitemfromarray(['be bred','be knocked up','be impregnated','get pregnant','get impregnated','have a baby','have a '+globals.randomitemfromarray(['','swollen','big','huge','incredible'])+' '+globals.randomitemfromarray(['','pregnant','protruding','pot','filled up'])+' belly'])
 
 func nameBeingBred():
-	return str(globals.randomitemfromarray(['being bred','being knocked up','being impregnated','getting pregnant','getting impregnated','having a baby','having a '+str(globals.randomitemfromarray(['','swollen','big','huge','incredible']))+' '+str(globals.randomitemfromarray(['','pregnant','protruding','pot','pot','pot']))+' belly']))
+	return globals.randomitemfromarray(['being bred','being knocked up','being impregnated','getting pregnant','getting impregnated','having a baby','having a '+globals.randomitemfromarray(['','swollen','big','huge','incredible'])+' '+globals.randomitemfromarray(['','pregnant','protruding','pot','pot','pot'])+' belly'])
 
 func nameStretching():
-	return str(globals.randomitemfromarray(['stretching','inflating','bloating','swelling','expanding','loosening']))
+	return globals.randomitemfromarray(['stretching','inflating','bloating','swelling','expanding','loosening'])
 
 func nameStretched():
-	return str(globals.randomitemfromarray(['stretched','inflated','bloated','swollen','expanded','filled','puffed up','ready to pop']))
+	return globals.randomitemfromarray(['stretched','inflated','bloated','swollen','expanded','filled','puffed up','ready to pop'])
 
 func nameExecution():
 	var array = ['You grab a piece of rope and wrap it around $his throat, pulling it tightly until $his legs stop kicking.','You whip out a blade and slice through $his neck, leaving $him to pull against the ropes binding $his hands as $he falls into the dirt. $His last few coughs spill $his $race blood onto the ground in front of you.','You stick your blade in $his gut and pull it to the side. $He looks on in complete, helpless shock as $his guts begin to slide out of $his stomach onto the ground in front of you all. $He looks up at you as the light starts to fade from $his eyes and slumps to the side.','You grab a blade from the battle and walk over to $him. You place it against $his neck.\n[color=yellow]-No...no, plea-[/color]\nYou decide not to let $him finish and watch $his head slide with still moving lips onto the ground in front of everyone.','You recall a little magical trick as you watch $him. You reach down, grab $his head, and infuse $his brain. $His head begins to turn bright red before, eventually, exploding off of $his shoulders.']
 	if globals.expansionsettings.ihavebloodygoodtaste == true:
 		array.append('You see the flag sticker on the captives clothing and sense $his patriotism. You begin to regale the doomed victim with tales all about what those damned rowdy colonists are getting up to. About the time that you begin to vividly describe them taking entire crates of tea and throwing them in the harbor, $he clutches $his heart in pain.\n\n$He weakly raises $his hand to $his head in a pitiful, though patriotic, salute.\n[color=yellow]-Tell me...they left...the Crumpets...[/color]\n\nYou shake your head firmly. $He sputters, gasps, and dies of shock.')
-	return str(globals.randomitemfromarray(array))
+	return globals.randomitemfromarray(array)
 
 func nameHelplessOrgasmPreface():
-	return str(globals.randomitemfromarray(['$he ','$his body ','$he, despite $himself ','$his body helplessly ','$he uncontrollably ','$he tried to resist orgasming, but ','$he humiliatingly ','$he vulnerably ','$he lost control and ']))
+	return globals.randomitemfromarray(['$he ','$his body ','$he, despite $himself ','$his body helplessly ','$he uncontrollably ','$he tried to resist orgasming, but ','$he humiliatingly ','$he vulnerably ','$he lost control and '])
 
 func nameHelplessOrgasm():
-	return str(globals.randomitemfromarray(['came','orgasmed','came so hard that $he squirted','relentlessly orgasmed','moaned in orgasm','responded instinctually','gave in to $his animalistic urges','responded helplessly','grunted like a bitch in heat','squealed as $he orgasmed','gushed in esctasy','drenched $himself']))
+	return globals.randomitemfromarray(['came','orgasmed','came so hard that $he squirted','relentlessly orgasmed','moaned in orgasm','responded instinctually','gave in to $his animalistic urges','responded helplessly','grunted like a bitch in heat','squealed as $he orgasmed','gushed in esctasy','drenched $himself'])
 
 func nameBrothelWorking():
 	var array = ["waiting for clients.","sitting on a couch","talking to another whore.","sitting with $his legs spread open.","posing on the stage."] 
-	var client_tasks = str(globals.randomitemfromarray(['leading $him to a room.','being led to a room by $him.','kissing $his neck.','and is fingering her openly.','kissing $him.','getting a blowjob from $him.','sucking $his nipples.']))
-	var text = " with a " + str(globals.randomitemfromarray(['Human','Human','Human','Human','Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome'])) + " " + client_tasks + "."
+	var client_tasks = globals.randomitemfromarray(['leading $him to a room.','being led to a room by $him.','kissing $his neck.','and is fingering her openly.','kissing $him.','getting a blowjob from $him.','sucking $his nipples.'])
+	var text = " with a " + globals.randomitemfromarray(['Human','Human','Human','Human','Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome']) + " " + client_tasks + "."
 	array.append(text)
 	
-	return str(globals.randomitemfromarray(array))
+	return globals.randomitemfromarray(array)
 
 #Non-Generic Description Names for Body Parts
 func getChest(person):
 	var text = ""
 	if person.titssize == "masculine":
-		text = str(globals.randomitemfromarray(['chest','torso','pecs']))
+		text = globals.randomitemfromarray(['chest','torso','pecs'])
 	else:
 		if rand_range(0,1) >= .25:
 			text = str(person.titssize.capitalize()) + " "
-		text += str(nameTits())
+		text += nameTits()
 	return text
 
 func getGenitals(person):
@@ -1125,13 +1125,13 @@ func getGenitals(person):
 	if person.penis != "none":
 		if rand_range(0,1) >= .5:
 			text += str(person.penis) + " "
-		text += str(namePenis())
+		text += namePenis()
 	if person.vagina != "none":
 		if person.penis != "none":
 			text += " and "
 		if rand_range(0,1) >= .5:
 			text += str(person.vagina) + " "
-		text += str(namePussy())
+		text += namePussy()
 	return text
 
 #---Descriptions---#
@@ -1150,31 +1150,31 @@ func getCumCoatedDescription(person,part):
 	var text = ""
 	#Cum on Face
 	if person.cum.face > 0 && part == 'face':
-		text += "\n$His " + str(globals.randomitemfromarray(['','',' ' +str(person.race)+ ' ']))
+		text += "\n$His " + globals.randomitemfromarray(['','',' ' +str(person.race)+ ' '])
 		if person.cum.face >= 10:
-			text += 'face is ' + str(globals.randomitemfromarray(['undiscernable underneath the ','completely coated in the ','unrecognizable in the ','concealed beneath ','hidden under '])) + "layers of "
+			text += 'face is ' + globals.randomitemfromarray(['undiscernable underneath the ','completely coated in the ','unrecognizable in the ','concealed beneath ','hidden under ']) + "layers of "
 		elif person.cum.face > 5:
-			text += 'face is ' + str(globals.randomitemfromarray(['coated ','covered ','drenched ','dripping ','obviously marked  ','soaked ','utterly sprayed '])) + str(globals.randomitemfromarray(['with ','in ']))
+			text += 'face is ' + globals.randomitemfromarray(['coated ','covered ','drenched ','dripping ','obviously marked  ','soaked ','utterly sprayed ']) + globals.randomitemfromarray(['with ','in '])
 		elif person.cum.face > 3:
-			text += str(globals.randomitemfromarray(['face ','cheek ','chin ','nose '])) + ' is ' + str(globals.randomitemfromarray(['sprayed with ','coated in ','speckled with ','dripping in ','marked with ','stained with ']))
+			text += globals.randomitemfromarray(['face ','cheek ','chin ','nose ']) + ' is ' + globals.randomitemfromarray(['sprayed with ','coated in ','speckled with ','dripping in ','marked with ','stained with '])
 		else:
-			text += str(globals.randomitemfromarray(['face ','cheek ','chin ','nose '])) +  str(globals.randomitemfromarray(['streaked with ','dotted with ','speckled with ']))
-		text += '[color=#E0D8C6]' + str(nameCum()) + '[/color].\n'
+			text += globals.randomitemfromarray(['face ','cheek ','chin ','nose ']) +  globals.randomitemfromarray(['streaked with ','dotted with ','speckled with '])
+		text += '[color=#E0D8C6]' + nameCum() + '[/color].\n'
 	#Cum on Body
 	if person.cum.body > 0 && part == 'body':
-		text += "$His " + str(globals.randomitemfromarray(['','',' ' +str(person.race)+ ' '])) + str(getChest(person)) + ' are '
+		text += "$His " + globals.randomitemfromarray(['','',' ' +str(person.race)+ ' ']) + str(getChest(person)) + ' are '
 		if person.exposed.chest == true:
 			if person.cum.body >= 10:
-				text +=  str(globals.randomitemfromarray(['undiscernable underneath the ','completely coated in the ','unrecognizable in the ','concealed beneath ','hidden under '])) + "layers of "
+				text +=  globals.randomitemfromarray(['undiscernable underneath the ','completely coated in the ','unrecognizable in the ','concealed beneath ','hidden under ']) + "layers of "
 			elif person.cum.body > 5:
-				text += str(globals.randomitemfromarray(['coated ','covered ','drenched ','dripping ','obviously marked  ','soaked ','utterly sprayed '])) + str(globals.randomitemfromarray(['with ','in ']))
+				text += globals.randomitemfromarray(['coated ','covered ','drenched ','dripping ','obviously marked  ','soaked ','utterly sprayed ']) + globals.randomitemfromarray(['with ','in '])
 			elif person.cum.body > 3:
-				text += str(globals.randomitemfromarray(['coated ','speckled ','dripping ','marked  ','sprayed ','stained '])) + str(globals.randomitemfromarray(['with ','in ']))
+				text += globals.randomitemfromarray(['coated ','speckled ','dripping ','marked  ','sprayed ','stained ']) + globals.randomitemfromarray(['with ','in '])
 			else:
-				text += str(globals.randomitemfromarray(['streaked with ','dotted with ','speckled with ']))
-			text += '[color=#E0D8C6]' + str(nameCum()) + '[/color].\n'
+				text += globals.randomitemfromarray(['streaked with ','dotted with ','speckled with '])
+			text += '[color=#E0D8C6]' + nameCum() + '[/color].\n'
 		else:
-			text += ' covered by clothing, but you see a series of ' + str(globals.randomitemfromarray(['wet','gloopy','moist','damp','dark'])) + ' spots on $his clothing that seem to be sticking to $his ' + str(getChest(person)) + '. ' + str(globals.randomitemfromarray(['Maybe it is just water?','Could it be water?','Maybe they spilled milk?','What it could be?','Interesting...']))
+			text += ' covered by clothing, but you see a series of ' + globals.randomitemfromarray(['wet','gloopy','moist','damp','dark']) + ' spots on $his clothing that seem to be sticking to $his ' + str(getChest(person)) + '. ' + globals.randomitemfromarray(['Maybe it is just water?','Could it be water?','Maybe they spilled milk?','What it could be?','Interesting...'])
 	return text
 
 func getSwollenDescription(person,short=false):
@@ -1188,22 +1188,22 @@ func getSwollenDescription(person,short=false):
 		#Swollen 5 is a Fully Pregnant Woman
 		if person.swollen > height*2:
 			if short == false:
-				text += "$His " + str(nameBelly()) + " is so " +str(globals.randomitemfromarray(['massive','monstrous','overwhelming','insane'])) + " that it "
+				text += "$His " + nameBelly() + " is so " +globals.randomitemfromarray(['massive','monstrous','overwhelming','insane']) + " that it "
 
 				if person.height in ['towering','tall']:
 					text += " would drag the ground if not for $his height. "
 				elif person.height in ['tiny','petite']:
-					text += "looks like $his " + str(nameBelly()) + " is about to burst open. It doesn't look like $he could be stretched out any more than $he is now. "
+					text += "looks like $his " + nameBelly() + " is about to burst open. It doesn't look like $he could be stretched out any more than $he is now. "
 				else:
 					text += "swallows $his entire body behind it, easily doubling $his size if not more. "
 			else:
 				if person.preg.duration > variables.pregduration * .8 && person.knowledge.has('currentpregnancy'):
-					text += "[color=#F4A7D0]$His unborn child forces $his " + str(nameBelly()) + " to protrude massively. $He will give birth soon, and it looks like $his body will give out if $he doesn't. [/color]"
+					text += "[color=#F4A7D0]$His unborn child forces $his " + nameBelly() + " to protrude massively. $He will give birth soon, and it looks like $his body will give out if $he doesn't. [/color]"
 				else:
-					text += "[color=#E0D8C6]The impossible amount of [/color][color=aqua]" + str(nameCum()) + "[/color][color=#E0D8C6] inside of $him has $his " + str(nameBelly()) + " so swollen that $he looks like $he is about to give birth, and $he keeps coughing up and drooling " + str(nameCum()) + " that worked its way through $his " + str(nameAsshole()) + " up to $his mouth.[/color]"
+					text += "[color=#E0D8C6]The impossible amount of [/color][color=aqua]" + nameCum() + "[/color][color=#E0D8C6] inside of $him has $his " + nameBelly() + " so swollen that $he looks like $he is about to give birth, and $he keeps coughing up and drooling " + nameCum() + " that worked its way through $his " + nameAsshole() + " up to $his mouth.[/color]"
 		elif person.swollen >= height*1.5:
 			if short == false:
-				text += "$His " + str(nameBelly()) + " is incredibly swollen and "
+				text += "$His " + nameBelly() + " is incredibly swollen and "
 				if person.height in ['towering','tall']:
 					text += "compliments $his large frame by rounding $him out. "
 				elif person.height in ['tiny','petite']:
@@ -1212,26 +1212,26 @@ func getSwollenDescription(person,short=false):
 					text += "inflated. $He seems to be in constant discomfort. "
 			else:
 				if person.preg.duration > variables.pregduration * .6 && person.knowledge.has('currentpregnancy'):
-					text += "[color=#F4A7D0]$His " + str(nameBelly()) + " is swollen and heavy with child.[/color]"
+					text += "[color=#F4A7D0]$His " + nameBelly() + " is swollen and heavy with child.[/color]"
 				else:
-					text += "[color=#E0D8C6]$He looks like $he is about to give birth just from the [/color][color=aqua]" + str(nameCum()) + "[/color][color=#E0D8C6] inflating $his body. $His " + str(nameBelly()) + " looks bloated like an inseminated balloon.[/color]"
+					text += "[color=#E0D8C6]$He looks like $he is about to give birth just from the [/color][color=aqua]" + nameCum() + "[/color][color=#E0D8C6] inflating $his body. $His " + nameBelly() + " looks bloated like an inseminated balloon.[/color]"
 		elif person.swollen >= height:
 			if short == false:
-				text += "$His " + str(nameBelly()) + " is plump and swollen. It "
+				text += "$His " + nameBelly() + " is plump and swollen. It "
 				if person.height in ['towering','tall']:
 					text += "hangs demurely from $his large frame. "
 				elif person.height in ['tiny','petite']:
-					text += "has to be at least double $his normal size. $He seems to be struggling to move with the swollen " + str(nameBelly()) + "."
+					text += "has to be at least double $his normal size. $He seems to be struggling to move with the swollen " + nameBelly() + "."
 				else:
 					text += "is starting to look stretched and uncomfortable. "
 			else:
 				if person.preg.duration > variables.pregduration * .4 && person.knowledge.has('currentpregnancy'):
-					text += "[color=#F4A7D0]$His advanced pregnancy is clearly evident by the prominent bulge in $his " + str(nameBelly()) + ".[/color]"
+					text += "[color=#F4A7D0]$His advanced pregnancy is clearly evident by the prominent bulge in $his " + nameBelly() + ".[/color]"
 				else:
-					text += "[color=#E0D8C6]$His " + str(nameBelly()) + " is swollen due to the [/color][color=aqua]" + str(nameCum()) + "[/color][color=#E0D8C6] $he is retaining inside of $him.[/color]"
+					text += "[color=#E0D8C6]$His " + nameBelly() + " is swollen due to the [/color][color=aqua]" + nameCum() + "[/color][color=#E0D8C6] $he is retaining inside of $him.[/color]"
 		elif person.swollen >= height*.5:
 			if short == false:
-				text += "$His " + str(nameBelly()) + " is swollen. It "
+				text += "$His " + nameBelly() + " is swollen. It "
 				if person.height in ['towering','tall']:
 					text += "pokes out nicely from $him. "
 				elif person.height in ['tiny','petite']:
@@ -1240,12 +1240,12 @@ func getSwollenDescription(person,short=false):
 					text += "looks like the bump is firm and tight. "
 			else:
 				if person.preg.duration > variables.pregduration * .2 && person.knowledge.has('currentpregnancy'):
-					text += "[color=#F4A7D0]$His pregnancy is causing $his " + str(nameBelly()) + " to protrude obviously.[/color]"
+					text += "[color=#F4A7D0]$His pregnancy is causing $his " + nameBelly() + " to protrude obviously.[/color]"
 				else:
-					text += "[color=#E0D8C6]$His " + str(nameBelly()) + " is poking out from what must be an unnatural amount of [/color][color=aqua]" + str(nameCum()) + "[/color][color=#E0D8C6] inside of $him.[/color]"
+					text += "[color=#E0D8C6]$His " + nameBelly() + " is poking out from what must be an unnatural amount of [/color][color=aqua]" + nameCum() + "[/color][color=#E0D8C6] inside of $him.[/color]"
 		else:
 			if short == false:
-				text += "$His " + str(nameBelly()) + " is poking out slightly. It "
+				text += "$His " + nameBelly() + " is poking out slightly. It "
 				if person.height in ['towering','tall']:
 					text += "is almost unnoticable on $his tall build. "
 				elif person.height in ['tiny','petite']:
@@ -1254,9 +1254,9 @@ func getSwollenDescription(person,short=false):
 					text += "sticks out of $him rather adorably. "
 			else:
 				if person.preg.duration > 0 && person.knowledge.has('currentpregnancy'):
-					text += "[color=#F4A7D0]$His unborn fetus causes $his " + str(nameBelly()) + " to bulge slightly.[/color] "
+					text += "[color=#F4A7D0]$His unborn fetus causes $his " + nameBelly() + " to bulge slightly.[/color] "
 				else:
-					text += "[color=#E0D8C6]$His " + str(nameBelly()) + " is slightly pronounced. You aren't exactly sure why.[/color] "
+					text += "[color=#E0D8C6]$His " + nameBelly() + " is slightly pronounced. You aren't exactly sure why.[/color] "
 	return text
 
 ###---Inflation (Cum or Pregnancy) Functions---###
@@ -1474,48 +1474,48 @@ func cumOverload(person, mode = ''):
 #		vagdrip = (vagcapacity * 2) - person.cum.pussy
 #		person.cum.pussy = vagcapacity * 2
 		if vagdrip > 10:
-			text += person.dictionary("$name's embarrassment is palpable as every breath or movement $he takes forces "+str(nameCum())+ " to ")
+			text += person.dictionary("$name's embarrassment is palpable as every breath or movement $he takes forces "+nameCum()+ " to ")
 		elif vagdrip >= 7:
-			text += person.dictionary("$name is obviously embarrassed as "+str(nameCum())+ " starts to ")
+			text += person.dictionary("$name is obviously embarrassed as "+nameCum()+ " starts to ")
 		elif vagdrip >= 3:
-			text += person.dictionary("$name's legs are streaked with "+str(nameCum())+ " as it begins to ")
+			text += person.dictionary("$name's legs are streaked with "+nameCum()+ " as it begins to ")
 		else:
-			text += person.dictionary("Little streams of "+str(nameCum())+ " ")
+			text += person.dictionary("Little streams of "+nameCum()+ " ")
 		#Vagina Size Descriptor
 		if person.vagina == 'tiny':
-			text += "shoot like a jet out of her [color=green]tiny "+str(namePussy())+ "[/color] as she overflows with "+str(nameCum())+ "."
+			text += "shoot like a jet out of her [color=green]tiny "+namePussy()+ "[/color] as she overflows with "+nameCum()+ "."
 		elif person.vagina == 'tight':
-			text += "squirt in little streams out of her [color=green]tight "+str(namePussy())+ "[/color] as she overflows with "+str(nameCum())+ "."
+			text += "squirt in little streams out of her [color=green]tight "+namePussy()+ "[/color] as she overflows with "+nameCum()+ "."
 		elif person.vagina == 'average':
-			text += "spray out of her [color=green]"+str(namePussy())+ "[/color] as she overflows with "+str(nameCum())+ "."
+			text += "spray out of her [color=green]"+namePussy()+ "[/color] as she overflows with "+nameCum()+ "."
 		elif person.vagina == 'loose':
-			text += "slip out of her [color=green]loose "+str(namePussy())+ "[/color] as she overflows with "+str(nameCum())+ "."
+			text += "slip out of her [color=green]loose "+namePussy()+ "[/color] as she overflows with "+nameCum()+ "."
 		elif person.vagina == 'gaping':
-			text += "slide straight out of her [color=green]gaping "+str(namePussy())+ "[/color] as she overflows with "+str(nameCum())+ "."
+			text += "slide straight out of her [color=green]gaping "+namePussy()+ "[/color] as she overflows with "+nameCum()+ "."
 	elif mode == 'ass':
 #		assdrip = (asscapacity * 5) - person.cum.ass
 #		person.cum.ass = asscapacity * 5
 		if assdrip >= 15:
-			text += person.dictionary("$name's so flooded with " +str(nameCum())+ " that $he can't stop coughing it up, forcing it to ")
+			text += person.dictionary("$name's so flooded with " +nameCum()+ " that $he can't stop coughing it up, forcing it to ")
 		elif assdrip >= 10:
-			text += person.dictionary("$name's embarrassment is palpable as every breath or movement $he takes forces "+str(nameCum())+ " to ")
+			text += person.dictionary("$name's embarrassment is palpable as every breath or movement $he takes forces "+nameCum()+ " to ")
 		elif assdrip >= 7:
-			text += person.dictionary("$name is obviously embarrassed as "+str(nameCum())+ " starts to ")
+			text += person.dictionary("$name is obviously embarrassed as "+nameCum()+ " starts to ")
 		elif assdrip >= 3:
-			text += person.dictionary("$name's legs are streaked with "+str(nameCum())+ " as it begins to ")
+			text += person.dictionary("$name's legs are streaked with "+nameCum()+ " as it begins to ")
 		else:
-			text += person.dictionary("Little trails of "+str(nameCum())+ " ")
+			text += person.dictionary("Little trails of "+nameCum()+ " ")
 		#Ass Size Descriptor
 		if person.asshole == 'tiny':
-			text += "shoot like a jet out of her [color=green]tiny "+str(nameAsshole())+ "[/color] as she overflows with "+str(nameCum())+ "."
+			text += "shoot like a jet out of her [color=green]tiny "+nameAsshole()+ "[/color] as she overflows with "+nameCum()+ "."
 		elif person.asshole == 'tight':
-			text += "squirt in little streams out of her [color=green]tight "+str(nameAsshole())+ "[/color] as she overflows with "+str(nameCum())+ "."
+			text += "squirt in little streams out of her [color=green]tight "+nameAsshole()+ "[/color] as she overflows with "+nameCum()+ "."
 		elif person.asshole == 'average':
-			text += "spray out of her [color=green]ass[/color] as she overflows with "+str(nameCum())+"."
+			text += "spray out of her [color=green]ass[/color] as she overflows with "+nameCum()+"."
 		elif person.asshole == 'loose':
-			text += "slip out of her [color=green]loose "+str(nameAsshole())+ "[/color] as she overflows with "+str(nameCum())+"."
+			text += "slip out of her [color=green]loose "+nameAsshole()+ "[/color] as she overflows with "+nameCum()+"."
 		elif person.asshole == 'gaping':
-			text += "slide straight out of her [color=green]gaping "+str(nameAsshole())+ "[/color] as she overflows with "+str(nameCum())+"."
+			text += "slide straight out of her [color=green]gaping "+nameAsshole()+ "[/color] as she overflows with "+nameCum()+"."
 	return text
 
 ###Combine Ass and Vag Overload, Turn into "Pushed on Stomach/Drain" convo when swollen
@@ -1528,17 +1528,17 @@ func vagOverload(person):
 	if person.cum.pussy - vagcapacity > 10:
 #		person.cum.pussy -= round(rand_range(1,overage))
 #		person.mind.humiliation += round(rand_range(1,overage))
-		text += 'a bubbling noise, just before a waterfall of hot [color=#E0D8C6]'+str(nameCum())+ '[/color] starts violently draining out of $his '+str(namePussy())+ ' onto the floor. $He moans out an apology and immediately '
+		text += 'a bubbling noise, just before a waterfall of hot [color=#E0D8C6]'+nameCum()+ '[/color] starts violently draining out of $his '+namePussy()+ ' onto the floor. $He moans out an apology and immediately '
 	elif person.cum.pussy - vagcapacity > 5:
 #		person.cum.pussy -= round(rand_range(0,overage))
 #		person.mind.humiliation += round(rand_range(0,overage))
-		text += 'a wet gargling sound, just as a warm jet of [color=#E0D8C6]'+str(nameCum())+ '[/color] suddenly sprays out of $his '+str(namePussy())+ '. $He turns bright red and '
+		text += 'a wet gargling sound, just as a warm jet of [color=#E0D8C6]'+nameCum()+ '[/color] suddenly sprays out of $his '+namePussy()+ '. $He turns bright red and '
 	elif person.cum.pussy - vagcapacity > 0:
 #		person.cum.pussy -= round(rand_range(0,overage))
 #		person.mind.humiliation += round(rand_range(0,overage))
-		text += 'a glob of [color=#E0D8C6]'+str(nameCum())+ '[/color] sloppily slide out of $his '+str(namePussy())+ ' lips and splatter on the ground. $He blushes, straightens up immediately, and '
+		text += 'a glob of [color=#E0D8C6]'+nameCum()+ '[/color] sloppily slide out of $his '+namePussy()+ ' lips and splatter on the ground. $He blushes, straightens up immediately, and '
 	else:
-		text += 'a little [color=#E0D8C6]'+str(nameCum())+ '[/color] trickle out the side of $his '+str(namePussy())+ ' lips onto $his inner thigh. $He pretends like $he did not see it and '
+		text += 'a little [color=#E0D8C6]'+nameCum()+ '[/color] trickle out the side of $his '+namePussy()+ ' lips onto $his inner thigh. $He pretends like $he did not see it and '
 	text += 'squeezes $his thighs together tightly to try to keep it all in. '
 	return text
 
@@ -1551,17 +1551,17 @@ func assOverload(person):
 	if person.cum.ass - capacity > 10:
 #		person.cum.ass -= round(rand_range(1,overage))
 #		person.mind.humiliation += round(rand_range(1,overage))
-		text += 'a river of hot [color=#E0D8C6]'+str(nameCum())+ '[/color] violently starts spewing out of $his '+str(nameAsshole())+ '. $He moans out an apology and immediately '
+		text += 'a river of hot [color=#E0D8C6]'+nameCum()+ '[/color] violently starts spewing out of $his '+nameAsshole()+ '. $He moans out an apology and immediately '
 	elif person.cum.ass - capacity > 5:
 #		person.cum.ass -= round(rand_range(1,overage))
 #		person.mind.humiliation += round(rand_range(0,overage))
-		text += 'a stream of warm [color=#E0D8C6]'+str(nameCum())+ '[/color] suddenly jet out of $his '+str(nameAsshole())+ '. $He turns bright red and '
+		text += 'a stream of warm [color=#E0D8C6]'+nameCum()+ '[/color] suddenly jet out of $his '+nameAsshole()+ '. $He turns bright red and '
 	elif person.cum.ass - capacity > 0:
 #		person.cum.ass -= round(rand_range(1,overage))
 #		person.mind.humiliation += round(rand_range(0,overage))
-		text += 'a glob of [color=#E0D8C6]'+str(nameCum())+ '[/color] sloppily drip out of $his '+str(nameAsshole())+ ' and splatter on the ground. $He straightens up immediately and '
+		text += 'a glob of [color=#E0D8C6]'+nameCum()+ '[/color] sloppily drip out of $his '+nameAsshole()+ ' and splatter on the ground. $He straightens up immediately and '
 	else:
-		text += 'a little [color=#E0D8C6]'+str(nameCum())+ '[/color] trickle out from inside of $his '+str(nameAsshole())+ '. $He acts like $he does not notice and '
+		text += 'a little [color=#E0D8C6]'+nameCum()+ '[/color] trickle out from inside of $his '+nameAsshole()+ '. $He acts like $he does not notice and '
 	text += 'turns back around to face you. '
 	return text
 
@@ -1697,13 +1697,13 @@ func dailyPregnancy(person):
 				number = round(rand_range(1,person.preg.duration*1.5))
 				number = clamp(number, 0, 100)
 				if globals.titssizearray.back() != person.titssize:
-					text += "$name's "+str(getChest(person))+" started "+str(nameStretching())+"  due to $his pregnancy. They are now nice and "
+					text += "$name's "+str(getChest(person))+" started "+nameStretching()+"  due to $his pregnancy. They are now nice and "
 					person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)+1]
 					text += "[color=aqua]" +str(person.titssize)+".[/color] "
 					pregdict.titssizebonus += 1
 				if globals.fetishopinion.find(person.fetish.pregnancy)-3 >= 3 || pregdict.wantedpregnancy == true:
 					person.lust += number/2
-					text += "$He seemed to enjoy the new size of $his "+str(nameTits())+" immensely and got off on knowing what the pregnancy was doing to $him. $He gained [color=green]"+str(number/2)+" Lust[/color].\n"
+					text += "$He seemed to enjoy the new size of $his "+nameTits()+" immensely and got off on knowing what the pregnancy was doing to $him. $He gained [color=green]"+str(number/2)+" Lust[/color].\n"
 				else:
 					person.stress = number/2
 					text += "$He seemed horrified by $his lack of control over $his own body as $he watched $his "+str(getChest(person))+" grow helplessly. $He gained [color=red]"+str(number/2)+" Stress[/color].\n"
@@ -1716,7 +1716,7 @@ func dailyPregnancy(person):
 		#Shrink Tits
 		elif pregdict.titssizebonus > 0:
 			if globals.titssizearray.find(person.titssize) > 0:
-				text += "$name's "+str(nameStretched())+" "+str(getChest(person))+" are starting to shrink back after $his pregnancy. They are now only "
+				text += "$name's "+nameStretched()+" "+str(getChest(person))+" are starting to shrink back after $his pregnancy. They are now only "
 				person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)-1]
 				text += "[color=aqua]" +str(person.titssize)+". "
 				pregdict.titssizebonus -= 1
@@ -1886,9 +1886,9 @@ func dailyUpdate(person):
 
 	#Hole Stretching Notification and Reset
 	if person.dailyevents.has('vagTorn') == true:
-		text += "\n[center][color=red]Stretched Pussy[/color][/center]\n$name's " +str(namePussy())+ " was stretched out and seems to be sore still. $He was seen rubbing it several times today while " + str(nameCrying()) + ". Sleeping should ease $his pain.\n"
+		text += "\n[center][color=red]Stretched Pussy[/color][/center]\n$name's " +namePussy()+ " was stretched out and seems to be sore still. $He was seen rubbing it several times today while " + nameCrying() + ". Sleeping should ease $his pain.\n"
 	if person.dailyevents.has('assTorn') == true:
-		text += "\n[center][color=red]Stretched Asshole[/color][/center]\n$name's " +str(nameAsshole())+ " was stretched out and seems to be sore still. $He was seen rubbing it several times today while " + str(nameCrying()) + ". Sleeping should ease $his pain.\n"
+		text += "\n[center][color=red]Stretched Asshole[/color][/center]\n$name's " +nameAsshole()+ " was stretched out and seems to be sore still. $He was seen rubbing it several times today while " + nameCrying() + ". Sleeping should ease $his pain.\n"
 
 	#Tightening Chance
 	text += dailyTighten(person,'all')
@@ -1898,10 +1898,10 @@ func dailyUpdate(person):
 	var asscapacity = getCapacity(person, person.asshole)
 	
 	if person.cum.mouth > 0 && person.fetish.drinkcum in ['mindblowing','enjoyable','acceptable']:
-		text += "\n$name had " +str(nameCum())+ " still in $his mouth and swallowed it. "
+		text += "\n$name had " +nameCum()+ " still in $his mouth and swallowed it. "
 		person.cum.mouth = 0
 	elif person.cum.mouth > 0:
-		text += "\n$name had " +str(nameCum())+ " still in $his mouth and washed it out. "
+		text += "\n$name had " +nameCum()+ " still in $his mouth and washed it out. "
 		person.cum.mouth = 0
 	
 	#---Daily Baths
@@ -1913,20 +1913,20 @@ func dailyUpdate(person):
 				triggered_cum_cleaning = true
 				person.cum[i] = 0
 		if triggered_cum_cleaning == true:
-			text += "\nYou still had " +str(nameCum())+ " on you, so you washed it all out while taking your daily bath. "
+			text += "\nYou still had " +nameCum()+ " on you, so you washed it all out while taking your daily bath. "
 	#Bath (Cleans All)
 	elif person.rules.personalbath == true:
 		if person.cum.face > 0:
-			text += "\n$name had " +str(nameCum())+ " on $his face from the day's activities and washed it off while bathing. "
+			text += "\n$name had " +nameCum()+ " on $his face from the day's activities and washed it off while bathing. "
 			person.cum.face = 0
 		if person.cum.body > 0:
-			text += "\n$name had " +str(nameCum())+ " stuck to $his body and washed it off while bathing. "
+			text += "\n$name had " +nameCum()+ " stuck to $his body and washed it off while bathing. "
 			person.cum.body = 0
 		if person.cum.ass > 0:
-			text += "\n$name had " +str(nameCum())+ " still in $his " + str(nameAsshole()) + " and washed it all out while bathing. "
+			text += "\n$name had " +nameCum()+ " still in $his " + nameAsshole() + " and washed it all out while bathing. "
 			person.cum.ass = 0
 		if person.cum.pussy > 0:
-			text += "\n$name had " +str(nameCum())+ " still in $his " + str(namePussy()) + " and washed it all out while bathing. "
+			text += "\n$name had " +nameCum()+ " still in $his " + namePussy() + " and washed it all out while bathing. "
 			person.cum.pussy = 0
 		#Semen Clearing for Fun Times
 		for i in person.preg.womb:
@@ -1934,21 +1934,21 @@ func dailyUpdate(person):
 	#Chance to Clean
 	else:
 		if person.cum.face > 15:
-			text += "\n$name had " +str(nameCum())+ " on $his face from the day's activities and washed it off. "
+			text += "\n$name had " +nameCum()+ " on $his face from the day's activities and washed it off. "
 			person.cum.face = 0
 		elif person.cum.face > 0 && person.fetish.wearcumface in ['mindblowing','enjoyable','acceptable']:
-			text += "\n$name had " +str(nameCum())+ " on $his face from the day's activities. "
+			text += "\n$name had " +nameCum()+ " on $his face from the day's activities. "
 		elif person.cum.face > 0:
-			text += "\n$name had " +str(nameCum())+ " on $his face from the day's activities and washed it off. "
+			text += "\n$name had " +nameCum()+ " on $his face from the day's activities and washed it off. "
 			person.cum.face = 0
 		
 		if person.cum.body > 15:
-			text += "\n$name had " +str(nameCum())+ " stuck to $his body and cleaned it off. "
+			text += "\n$name had " +nameCum()+ " stuck to $his body and cleaned it off. "
 			person.cum.body = 0
 		elif person.cum.body > 0 && person.fetish.wearcum in ['mindblowing','enjoyable','acceptable']:
-			text += "\n$name had " +str(nameCum())+ " stuck to $his body. "
+			text += "\n$name had " +nameCum()+ " stuck to $his body. "
 		elif person.cum.body > 0:
-			text += "\n$name had " +str(nameCum())+ " stuck to $his body and cleaned it off. "
+			text += "\n$name had " +nameCum()+ " stuck to $his body and cleaned it off. "
 			person.cum.face = 0
 
 	person.cum.face = max(0, person.cum.face - .5)
@@ -1957,22 +1957,22 @@ func dailyUpdate(person):
 	if person.cum.ass > 0:
 		if person.fetish.creampieass in ['mindblowing','enjoyable','acceptable']:
 			if person.cum.ass > asscapacity * 2:
-				text += "\n$name had " +str(nameCum())+ " still in $his asshole. Throughout the day some drained down $his thighs. "
+				text += "\n$name had " +nameCum()+ " still in $his asshole. Throughout the day some drained down $his thighs. "
 				person.cum.ass -= person.cum.ass *.5
 			elif person.cum.ass > asscapacity:
-				text += "\n$name had " +str(nameCum())+ " still in $his asshole. Throughout the day some drained down $his thighs. "
+				text += "\n$name had " +nameCum()+ " still in $his asshole. Throughout the day some drained down $his thighs. "
 				person.cum.ass -= person.cum.ass *.25
 			else:
-				text += "\n$name had " +str(nameCum())+ " still in $his asshole. "	
+				text += "\n$name had " +nameCum()+ " still in $his asshole. "	
 		else:
 			if person.cum.ass > asscapacity * 2:
-				text += "\n$name had " +str(nameCum())+ " still in $his asshole and washed out as much of it as $he could. "
+				text += "\n$name had " +nameCum()+ " still in $his asshole and washed out as much of it as $he could. "
 				person.cum.ass -= person.cum.ass *.5
 			elif person.cum.ass > asscapacity:
-				text += "\n$name had " +str(nameCum())+ " still in $his asshole and washed out as much of it as $he could. "
+				text += "\n$name had " +nameCum()+ " still in $his asshole and washed out as much of it as $he could. "
 				person.cum.ass -= person.cum.ass *.25
 			else:
-				text += "\n$name had " +str(nameCum())+ " still in $his asshole and washed it out. "
+				text += "\n$name had " +nameCum()+ " still in $his asshole and washed it out. "
 				person.cum.ass = 0
 
 	person.cum.ass = max(0, person.cum.ass - .2)
@@ -1980,31 +1980,31 @@ func dailyUpdate(person):
 	if person.cum.pussy > 0:
 		if person.fetish.creampiepussy in ['mindblowing','enjoyable','acceptable']:
 			if person.cum.pussy > vagcapacity * 2:
-				text += "\n$name had " +str(nameCum())+ " still in $his pussy. Throughout the day some drained down $his thighs. "
+				text += "\n$name had " +nameCum()+ " still in $his pussy. Throughout the day some drained down $his thighs. "
 				person.cum.pussy -= person.cum.pussy *.5	
 			elif person.cum.pussy > vagcapacity:
-				text += "\n$name had " +str(nameCum())+ " still in $his pussy. Throughout the day some drained down $his thighs. "
+				text += "\n$name had " +nameCum()+ " still in $his pussy. Throughout the day some drained down $his thighs. "
 				person.cum.pussy -= person.cum.pussy *.25
 			else:
-				text += "\n$name had " +str(nameCum())+ " still in $his pussy. "
+				text += "\n$name had " +nameCum()+ " still in $his pussy. "
 		elif (person.consentexp.pregnancy == true || person.consentexp.breeder == true || person.consentexp.incestbreeder == true) && person.preg.baby != null:
 			if person.cum.pussy > vagcapacity * 2:
-				text += "\n$name had " +str(nameCum())+ " still in $his pussy. $He left it inside hoping $he would get pregnant. Throughout the day some drained down $his thighs. "
+				text += "\n$name had " +nameCum()+ " still in $his pussy. $He left it inside hoping $he would get pregnant. Throughout the day some drained down $his thighs. "
 				person.cum.pussy -= person.cum.pussy *.5
 			elif person.cum.pussy > vagcapacity:
-				text += "\n$name had " +str(nameCum())+ " still in $his pussy. $He left it inside hoping $he would get pregnant. Throughout the day some drained down $his thighs. "
+				text += "\n$name had " +nameCum()+ " still in $his pussy. $He left it inside hoping $he would get pregnant. Throughout the day some drained down $his thighs. "
 				person.cum.pussy -= person.cum.pussy *.25
 			else:
-				text += "\n$name had " +str(nameCum())+ " still in $his pussy. $He left it inside hoping $he would get pregnant. "
+				text += "\n$name had " +nameCum()+ " still in $his pussy. $He left it inside hoping $he would get pregnant. "
 		else:
 			if person.cum.pussy > vagcapacity * 2:
-				text += "\n$name had " +str(nameCum())+ " still in $his pussy and washed out as much of it as $he could. Throughout the day some drained down $his thighs. "
+				text += "\n$name had " +nameCum()+ " still in $his pussy and washed out as much of it as $he could. Throughout the day some drained down $his thighs. "
 				person.cum.pussy -= person.cum.pussy *.5	
 			elif person.cum.pussy > vagcapacity:
-				text += "\n$name had " +str(nameCum())+ " still in $his pussy and washed out as much of it as $he could. Throughout the day some drained down $his thighs. "
+				text += "\n$name had " +nameCum()+ " still in $his pussy and washed out as much of it as $he could. Throughout the day some drained down $his thighs. "
 				person.cum.pussy -= person.cum.pussy *.25
 			else:
-				text += "\n$name had " +str(nameCum())+ " still in $his pussy and washed it out. "
+				text += "\n$name had " +nameCum()+ " still in $his pussy and washed it out. "
 				person.cum.pussy = 0
 	person.cum.pussy = max(0, person.cum.pussy - .2)
 
@@ -2043,7 +2043,7 @@ func dailyUpdate(person):
 					text += "\n[color=red]$name refused to strip naked as you demanded and broke your rules.[/color]"
 					person.dailyevents.append('brokerulenudity')
 				else:
-					text += "\n[color=green]$name[/color] stripped " + str(nameNaked()) + " " + str(globals.randomitemfromarray(['slowly','eagerly','quickly'])) + " as per your rules."
+					text += "\n[color=green]$name[/color] stripped " + nameNaked() + " " + globals.randomitemfromarray(['slowly','eagerly','quickly']) + " as per your rules."
 					person.dailyevents.append('followedrulenudity')
 					person.exposed.chest = true
 					person.exposed.genitals = true
@@ -2147,7 +2147,7 @@ func dailyTighten(person,hole='all'):
 				clamper = globals.vagsizearray.find(person.vagina)-1
 				number = clamp(clamper,0,globals.vagsizearray.size()-1)
 				person.vagina = globals.vagsizearray[number]
-				text += "[color=green]$name's " +str(namePussy())+ " naturally tightened today. It is now " + str(person.vagina) + ".[/color]\n"
+				text += "[color=green]$name's " +namePussy()+ " naturally tightened today. It is now " + str(person.vagina) + ".[/color]\n"
 	#Check Asshole
 	if hole in ['all','asshole'] && person.asshole != "none" && rand_range(0,100) <= globals.expansionsettings.analtightenchance * ageinverted:
 		averagesize = age + round((1+height)*.5) + mod
@@ -2160,7 +2160,7 @@ func dailyTighten(person,hole='all'):
 				clamper = globals.assholesizearray.find(person.asshole)-1
 				number = clamp(clamper,0,globals.assholesizearray.size()-1)
 				person.asshole = globals.assholesizearray[number]
-				text += "[color=green]$name's " +str(nameAsshole())+ " naturally tightened today. It is now " + str(person.asshole) + ".[/color]\n"
+				text += "[color=green]$name's " +nameAsshole()+ " naturally tightened today. It is now " + str(person.asshole) + ".[/color]\n"
 	return text
 
 
@@ -2635,8 +2635,8 @@ func getTownReportText(senttown):
 	var town = globals.state.townsexpanded[senttown]
 	var nonews = true
 	var text = ""
-	#Old Array, Keep for Outdoors? str(globals.randomitemfromarray(['the local newspaper stand','the town cryer','the daily town scroll','a local urchin']))
-	text += "You approach " + str(globals.randomitemfromarray(['the front desk','a cute but bored looking receptionist','the bulletin board','the newspaper stand','a bored looking guard']))
+	#Old Array, Keep for Outdoors? globals.randomitemfromarray(['the local newspaper stand','the town cryer','the daily town scroll','a local urchin'])
+	text += "You approach " + globals.randomitemfromarray(['the front desk','a cute but bored looking receptionist','the bulletin board','the newspaper stand','a bored looking guard'])
 	text += " to get the local news from yesterday. You learn that yesterday"
 	if town.dailyreport.shopping > 0:
 		text = " [color=aqua]" +str(town.dailyreport.shopping)+ "[/color] new traders and merchants came to town"
@@ -2813,7 +2813,7 @@ func dailyLactation(person):
 	if person.titssize == "masculine":
 		#Always Swells Masculine into Flat so Regen/milkstorage is at least 1
 		person.titssize = "flat"
-		text += "$name's masculine chest swelled up and sprouted into two tiny little bumps. $His " +str(nameTits())+" are now flat."
+		text += "$name's masculine chest swelled up and sprouted into two tiny little bumps. $His " +nameTits()+" are now flat."
 
 	#Generate Milk: Normal Tits
 	if person.lactating.hyperlactation == true:
@@ -2875,7 +2875,7 @@ func dailyLactation(person):
 			#Chance at Swelling
 			if globals.titssizearray.find(person.titssize)*3 < pressure && rand_range(0,100) <= chancelactationincreasetits + pressure:
 				if globals.titssizearray.back() != person.titssize:
-					text += "$name's "+ str(person.titssize) +" "+str(nameTits())+ " were so filled and full of pressure that $his body could only handle it by "+str(nameStretching())
+					text += "$name's "+ str(person.titssize) +" "+nameTits()+ " were so filled and full of pressure that $his body could only handle it by "+nameStretching()
 					person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)+1]
 					var hpdamage = round(rand_range(pressure,pressure*2.5))
 					text += " to "+ str(person.titssize) +".\nThis caused damage to $his health. [color=red]" +str(hpdamage)+ " Health Lost[color]"
@@ -2893,10 +2893,10 @@ func dailyLactation(person):
 			#Apply Pressure Stress
 			if globals.fetishopinion.find(person.fetish.lactation) >= 3 || person.traits.has('Masochist'):
 				person.lust += pressure
-				text += "$name's " +str(nameTits())+ " are so "+str(nameStretched())+"that $he would normally feel incredibly stressed by it. Instead, $he is simply [color=green]turned on[/color] by the pain of $his swollen " +str(nameTits())+ ".\n$He gained [color=red]"+str(pressure)+ " Lust[/color]\n"
+				text += "$name's " +nameTits()+ " are so "+nameStretched()+"that $he would normally feel incredibly stressed by it. Instead, $he is simply [color=green]turned on[/color] by the pain of $his swollen " +nameTits()+ ".\n$He gained [color=red]"+str(pressure)+ " Lust[/color]\n"
 			elif globals.expansionsettings.lactationstressenabled == true:
 				person.stress += pressure
-				text += "$name's " +str(nameTits())+ " are so "+str(nameStretched())+" that $he constantly feels the pain from $his achy " +str(nameTits())+ ".\n$He gained [color=red]"+str(pressure)+ " Stress[/color]\n"
+				text += "$name's " +nameTits()+ " are so "+nameStretched()+" that $he constantly feels the pain from $his achy " +nameTits()+ ".\n$He gained [color=red]"+str(pressure)+ " Stress[/color]\n"
 			person.lactating.pressure = pressure
 	elif person.lactating.milkstorage > person.lactating.milkmax:
 		person.lactating.milkstorage = person.lactating.milkmax
@@ -2959,7 +2959,7 @@ func dailyMilking(person, extraction='', autopump = false):
 						farmmanager.jobskills['farmmanager'] = 1
 					#Add Farm Manager Endurance Tracker
 					efficiency = 1 + (farmmanager.jobskills.farmmanager*.01) + (farmmanager.conf*.01)+(farmmanager.wit*.01)
-#					text += "\n" + farmmanager.dictionary("$name") + " managed to coax slightly better production out of " + person.dictionary("$name's " + str(getChest(person)) + ", recovering [color=green]" + str(regen) + " milk back into $his " + str(nameTits()) + ".")
+#					text += "\n" + farmmanager.dictionary("$name") + " managed to coax slightly better production out of " + person.dictionary("$name's " + str(getChest(person)) + ", recovering [color=green]" + str(regen) + " milk back into $his " + nameTits() + ".")
 				else:
 					efficiency = 0
 #					text += "\n[color=red]There was no manager of the farm today, so $name merely sat there with $his "+getChest(person)+" "+nameSwelling()+".[/color]"
@@ -3087,6 +3087,7 @@ func altereddiet_consumebottle(person):
 
 enum {IMAGE_DEFAULT, IMAGE_NAKED}
 enum {LOW_STRESS, MID_STRESS, HIGH_STRESS}
+var typeEnumToString = ['default','naked']
 
 var dictUniqueImagePaths = {
 	'Ayda': {
@@ -3218,7 +3219,7 @@ func updateBodyImage(person):
 			stress = MID_STRESS
 		else:
 			stress = HIGH_STRESS
-		person.imagetype = imagetype
+		person.imagetype = typeEnumToString[imagetype]
 		var ref = dictUniqueImagePaths[person.unique][imagetype]
 		person.imagefull = ref[stress] if ref.has(stress) else ref[HIGH_STRESS] 
 	###---End Expansion---###
@@ -3250,10 +3251,10 @@ func updateSexualityImage(person):
 	
 	var refSexImg = person.sexuality_images
 	if person.knowledge.has('sexuality'):
-		refSexImg.base = 'base_' + person.sex.trim_suffix('nari')
+		refSexImg.base = 'base_' +  person.sex.trim_suffix('nari').replace('dickgirl','futa')
 		for sex in listSex:
 			var idx = listCompat.find(testSexualCompatibility(person, sex))
-			refSexImg[sex] = null if idx < 1 else (person.sex.trim_suffix('nari') + "_" + str(idx))
+			refSexImg[sex] = null if idx < 1 else (sex.trim_suffix('nari') + "_" + str(idx))
 	else:
 		refSexImg.male = null
 		refSexImg.female = null
@@ -3278,7 +3279,7 @@ func checkGluttony(person):
 		person.dailyevents.append('gluttony')
 		if rand_range(0,10) + person.dailyevents.find('gluttony') >= 10:
 			person.flawknown = true
-			text = "\n[color=green]You have discovered that [he2] is secretly " + str(globals.randomitemfromarray(['a glutton','gluttonous','obsessed with food and drink'])) + " and takes joy in food and drinks.[/color]\n[color=aqua]Food and Drink Interactions will always give the best result.[/color]\n "
+			text = "\n[color=green]You have discovered that [he2] is secretly " + globals.randomitemfromarray(['a glutton','gluttonous','obsessed with food and drink']) + " and takes joy in food and drinks.[/color]\n[color=aqua]Food and Drink Interactions will always give the best result.[/color]\n "
 	return text
 
 func checkGreed(person):
@@ -3287,7 +3288,7 @@ func checkGreed(person):
 		person.dailyevents.append('greed')
 		if rand_range(0,10) + person.dailyevents.find('greed') >= 10:
 			person.flawknown = true
-			text = "\n[color=green]You have discovered that [he2] is secretly " + str(globals.randomitemfromarray(['greedy','obsessed with material possessions','pretty greedy'])) + " and is very susceptible to gifts and money.[/color]\n[color=aqua]Gifts and Money will always give the best result.[/color]\n "
+			text = "\n[color=green]You have discovered that [he2] is secretly " + globals.randomitemfromarray(['greedy','obsessed with material possessions','pretty greedy']) + " and is very susceptible to gifts and money.[/color]\n[color=aqua]Gifts and Money will always give the best result.[/color]\n "
 	return text
 
 func quickStrip(person):
@@ -3299,11 +3300,11 @@ func isSameSex(sex1, sex2):
 	if sex1 == sex2:
 		return true
 	var futaconsideration = globals.expansionsettings.futasexualitymatch
-	if sex1 == 'futanari':
+	if sex1 == 'futanari' || sex1 == 'dickgirl':
 		if futaconsideration == 'both':
 			return true
 		return futaconsideration == sex2
-	if sex2 == 'futanari':
+	if sex2 == 'futanari' || sex2 == 'dickgirl':
 		if futaconsideration == 'both':
 			return true
 		return sex1 == futaconsideration
@@ -3313,7 +3314,9 @@ func getSexualAttraction(person, target):
 	var compatibility = testSexualCompatibility(person, target.sex)
 	if compatibility == 'none':
 		return false
-	var base_attraction = (target.beauty-40) + (person.lewdness*.2) + (person.lust*.1) + rand_range(-10,20)
+	var base_attraction = (target.beauty-40) + (person.lewdness*.25) + (person.lust*.35)
+	if target == globals.player:
+		base_attraction += person.metrics.ownership + person.metrics.orgasm
 	var attraction_modifier = target.level * (target.lust*.05)
 	#Apply Player Attraction Modifier
 	if (person == globals.player || target == globals.player) && globals.expansionsettings.playerattractionmodifier != 0:
@@ -3331,6 +3334,8 @@ func getSexualAttraction(person, target):
 func testSexualCompatibility(person, targetSex):
 	if person == null:
 		return 'none'
+	if person == globals.player:
+		return 'high'
 	#Set Compatibility Rating
 	var idxKS = globals.kinseyscale.find(person.sexuality)
 	if isSameSex(person.sex, targetSex):

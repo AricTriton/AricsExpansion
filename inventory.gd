@@ -76,7 +76,7 @@ func slavegear(person):
 	get_node("gearpanel").visible = true
 	var sex
 	var race
-	sex = person.sex.replace('futanari','female')
+	sex = person.sex.replace('futanari','female').replace('dickgirl','female')
 	race = person.race
 	###---Added by Expansion---### Races Expanded
 	if person.findRace(['Dark Elf', 'Tribal Elf']):
@@ -355,6 +355,7 @@ func applytits():
 				selectedslave.titssize = globals.titssizearray[globals.titssizearray.find(selectedslave.titssize)+2]
 			else:
 				selectedslave.titssize = globals.titssizearray[globals.titssizearray.find(selectedslave.titssize)+1]
+	selectedslave.checksex()
 	#Text
 	if selectedslave == globals.player:
 		text = selectedslave.dictionary("You apply the [color=aqua]" + str(potionname) + "[/color] to your [color=aqua]"+str(globals.expansion.nameTits())+ "[/color]. ")
