@@ -5,8 +5,11 @@
 var modversion = 1.5
 
 #---Aric's and Game's Base Values potentially changed by Ralph's
-var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within ApplyTweaks as well as the Hybrid system.
+var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within applyRalphsTweaks as well as the Hybrid system.
 var unique_trait_generation = false				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
+
+#---Base Game descriptions and the sort changed by Capitulize
+var use_caps_tweaks = false						# Set this to true if you want to use Capitulize's tweaks (namely furry shit)
 
 
 #---Debug Tools (True/False)
@@ -255,13 +258,13 @@ var random_enemy_awareness = [0,0]				# Ralph's - [-7,7], This value applies a r
 
 #Constructor Changes
 var same_type_weight = 2						# Ralph's - 4, The divider value that divides the genealogy of the person's temporary race to determine the sametypeweight used in the constructor.
-
+	
 
 """
 Applies Ralph's tweaks to the game, making it a slightly more challenging experience.
 Feel free to change as you see fit!
 """
-func applyTweaks():
+func applyRalphsTweaks():
 	applyVariableTweaks()
 
 	mage_mana_reduction = false
@@ -438,3 +441,16 @@ func applyRaceTweaks():
 	
 	#Beastkin Tanuki
 	globals.races["Beastkin Tanuki"].stats = {str_max = 3, agi_max = 3, maf_max = 5, end_max = 3}
+
+"""
+Applies Capitulize's tweaks to the game, mostly description and furry based changes.
+"""
+func applyCapitulizeTweaks():
+	#Dragonkin
+	globals.races.Dragonkin.skin = ['none']
+	globals.races.Dragonkin.eyeshape = ['slit']
+	globals.races.Dragonkin.bodyshape = ['reptilian']
+	globals.races.Dragonkin.ears = ['short_reptilian','pointy', 'frilled','none','long_round_reptilian','long_droopy_reptilian','long_pointy_reptilian']
+	globals.races.Dragonkin.skincov = ['fullscales']
+	globals.races.Dragonkin.surname = globals.names.reptiliansurname
+	

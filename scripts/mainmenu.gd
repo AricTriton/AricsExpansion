@@ -1,4 +1,101 @@
 
+var skindict = {
+	human = [ 'pale', 'fair', 'olive', 'tan', 'brown', 'dark' ],
+	kobold = ['none'], # Capitulize
+	dragonkin = ['none'],
+	lizardfolk = ['none'],
+	avali = ['none'], # /Capitulize
+	drow = ['blue', 'purple', 'pale blue'],
+	orc = ['green'],
+	goblin = ['green'],
+	dryad = ['green'],
+	slime = ['jelly'],
+	nereid = ['teal', 'blue', 'pale blue']
+}
+
+var horndict = {
+	human = ['none'],
+	demon = ['short', 'long_straight', 'curved'],
+	dragonkin = ['short', 'long_straight', 'curved'],
+	dragonkin = ['short', 'long_straight', 'curved', 'manyhorned',], # Capitulize
+	lizardfolk = ['short', 'long_straight', 'curved', 'manyhorned'],
+	kobold = ['short', 'long_straight', 'curved', 'manyhorned'], # /Capitulize
+	taurus = ['long_straight'],
+}
+
+var scaledict = { # Capitulize
+	human = ['none'],
+	dragonkin = ['red', 'blue', 'white', 'green', 'black', 'yellow'],
+	lizardfolk = ['red', 'blue', 'white', 'green', 'black', 'yellow'],
+	kobold = ['red', 'blue', 'white', 'green', 'black', 'yellow'],
+}
+
+var feathercolordict = {
+	"human" : ['none'],
+	"harpy" : ['white', 'black', 'brown',],
+	"beastkin bird" : ['white', 'black', 'brown',],
+	"avali" : ['white', 'black', 'brown',],
+}
+
+var eardict = {
+	elf = ['pointy'],
+	"dark elf" : ['pointy'],
+	drow = ['pointy'],
+	orc = ['pointy'],
+	goblin = ['pointy'],
+	fairy = ['pointy'],
+	seraph = ['pointy'],
+	dryad = ['pointy'],
+	slime = ['none'],
+	lamia = ['pointy'],
+	harpy = ['feathery'],
+	arachna = ['pointy'],
+	scylla = ['pointy'],
+	cat	= ['short_furry'],
+	fox = ['long_pointy_furry'],
+	wolf = ['short_furry'],
+	bunny = ['long_round_furry', 'long_droopy_furry'],
+	raccoon = ['short_furry'],
+	centaur = ['short_furry'],
+	nereid = ['fins'],
+	demon = ['pointy'],
+	dragonkin = ['short_reptilian','pointy', 'frilled','none','long_round_reptilian','long_droopy_reptilian','long_pointy_reptilian'],
+	lizardfolk = ['short_reptilian','pointy', 'frilled','none','long_round_reptilian','long_droopy_reptilian','long_pointy_reptilian'],
+	kobold = ['short_reptilian','pointy', 'frilled','none','long_round_reptilian','long_droopy_reptilian','long_pointy_reptilian'],
+	mouse = ['wide_furry'],
+	taurus = ['short_furry'],
+	gnoll = ['short_furry'],
+	squirrel = ['short_furry','long_pointy_furry'],
+	otter = ['short_furry'],
+	bird = ['feathery'],
+	avali = ['avali'],
+}
+
+var wingsdict = {
+	human = ['none'],
+	"fairy" : ['insect', 'gossamer'], #Added 'gossamer' wing type
+	"demon" : ['leather_black', 'leather_red'],
+	"dragonkin" : ['leather_black', 'leather_red'],
+	"dragonkin" : ['leather_black', 'leather_red','leather_blue','leather_white','leather_green',], # /Capitulize
+	"seraph" : ['feathered_black', 'feathered_white', 'feathered_brown'],
+	"beastkin bird" : ['feathered_black', 'feathered_white', 'feathered_brown'], # /Capitulize
+	"halfkin bird" : ['feathered_black', 'feathered_white', 'feathered_brown'], # /Capitulize
+}
+
+var furcolordict = {
+	"human" : ['none'],
+	"beastkin cat" : ['white', 'gray', 'orange_white','black_white','black_gray','black'],
+	"beastkin fox" : ['black_white', 'orange'],
+	"beastkin wolf" : ['gray', 'black_gray', 'brown'],
+	"beastkin bunny" : ['white', 'gray'],
+	"beastkin tanuki" : ['black_gray'],
+	"beastkin mouse" : ['white', 'gray', 'brown', 'black'], # Capitulize
+	"beastkin squirrel" : ['white', 'gray', 'brown', 'black'],
+	"beastkin otter" : ['white', 'gray', 'brown', 'black'],
+	"avali" : ['white', 'gray', 'orange_white','black_white','black_gray','black'], 
+	"gnoll" : ['gray', 'brown','black_white','black_gray','black'] # /Capitulize
+}
+
 ###---Added by Expansion---### Player Expanded | Added new Hobby
 var hobbydescription = {
 	'Physical' : '[color=aqua]+1 Max Strength, +25 Courage[/color]\n\n$name is no stranger to fighting and tends to act boldly in many situations.',
@@ -186,6 +283,48 @@ func _process_stage6_body_options():
 		stage6.get_node("horns").add_item(i.replace("_", " "))
 		if makeoverPerson.horns == i:
 			stage6.get_node("horns").select(stage6.get_node("horns").get_item_count()-1)
+			
+	# Capitulize: Process Scale Color
+	var scaleTypes
+	if scaledict.has(makeoverPerson.race.to_lower()):
+		scaleTypes = scaledict[makeoverPerson.race.to_lower()]
+		get_node("TextureFrame/newgame/stage6/scalecolor").set_disabled(false)
+	else:
+		scaleTypes = scaledict.human
+		get_node("TextureFrame/newgame/stage6/scalecolor").set_disabled(true)
+	for i in scaleTypes:
+		get_node("TextureFrame/newgame/stage6/scalecolor").add_item(i.replace("_", " "))
+		if makeoverPerson.scalecolor == i:
+			get_node("TextureFrame/newgame/stage6/scalecolor").select(get_node("TextureFrame/newgame/stage6/scalecolor").get_item_count()-1)
+			
+	#Process feather color
+	var featherTypes
+	if feathercolordict.has(makeoverPerson.race.to_lower()):
+		featherTypes = feathercolordict[makeoverPerson.race.to_lower()]
+		get_node("TextureFrame/newgame/stage6/feathercolor").set_disabled(false)
+	else:
+		featherTypes = feathercolordict.human
+		get_node("TextureFrame/newgame/stage6/feathercolor").set_disabled(true)
+	for i in featherTypes:
+		get_node("TextureFrame/newgame/stage6/feathercolor").add_item(i.replace("_", " "))
+		if makeoverPerson.feathercolor == i:
+			get_node("TextureFrame/newgame/stage6/feathercolor").select(get_node("TextureFrame/newgame/stage6/feathercolor").get_item_count()-1)
+
+	#Process ears
+	var earTypes
+	if eardict.has(makeoverPerson.race.to_lower().replace("beastkin ", "").replace("halfkin ", "")):
+		earTypes = eardict[makeoverPerson.race.to_lower().replace("beastkin ", "").replace("halfkin ", "")]
+		if earTypes.size() > 1:
+			get_node("TextureFrame/newgame/stage6/ears").set_disabled(false)
+		else:
+			get_node("TextureFrame/newgame/stage6/ears").set_disabled(true)
+	else:
+		earTypes = ['Human']
+		get_node("TextureFrame/newgame/stage6/ears").set_disabled(true)
+	for i in earTypes:
+		get_node("TextureFrame/newgame/stage6/ears").add_item(i.replace("_", " "))
+		if makeoverPerson.ears == i:
+			get_node("TextureFrame/newgame/stage6/ears").select(get_node("TextureFrame/newgame/stage6/ears").get_item_count()-1)# /Capitulize
 
 	#Process wings
 	var wingTypes
@@ -242,6 +381,21 @@ func _process_stage6_body_options():
 		stage6.get_node("vagina").add_item('none')
 
 	###---End Expansion---###
+
+#QMod - Refactor
+func _process_stage6_locked_options():
+	#Set & lock immutable features
+	get_node("TextureFrame/newgame/stage6/bodyshape").set_disabled(true)
+	get_node("TextureFrame/newgame/stage6/bodyshape").add_item(makeoverPerson.bodyshape)
+	get_node("TextureFrame/newgame/stage6/ears").set_disabled(true)
+	get_node("TextureFrame/newgame/stage6/ears").add_item(makeoverPerson.ears.replace("_", " "))
+#	get_node("TextureFrame/newgame/stage6/ears").set_disabled(true) # /Capitulize
+#	get_node("TextureFrame/newgame/stage6/ears").add_item(makeoverPerson.ears.replace("_", " ")) # /Capitulize
+	get_node("TextureFrame/newgame/stage6/tail").set_disabled(true)
+	get_node("TextureFrame/newgame/stage6/tail").add_item(makeoverPerson.tail)
+	get_node("TextureFrame/newgame/stage6/penistype").add_item(makeoverPerson.penistype)
+	get_node("TextureFrame/newgame/stage6/penistype").set_disabled(true)	
+	get_node("TextureFrame/newgame/stage6/penistype").set_disabled(true)
 
 func _update_stage6():
 	###---Added by Expansion---### Quick Strip

@@ -1,3 +1,5 @@
+var scalecolor = 'none'
+var feathercolor = 'none'
 
 
 ###---Added by Expansion---### Modified by Deviate
@@ -782,10 +784,40 @@ func dictionary(text):
 	string = string.replace('$master', getMasterNoun())
 	string = string.replace('[haircolor]', haircolor)
 	string = string.replace('[eyecolor]', eyecolor)
+	string = string.replace('[scalecolor]', scalecolor)
 	var idx = string.find('$stutter') # "$stutter$master" may produce "M-Master"
 	while idx >= 0:
 		string = string.left(idx) + string.substr(idx + 8, randi() % 2 + 1) + "-" + string.right(idx + 8)
 		idx = string.find('$stutter')
+	return string
+	
+func dictionaryplayer(text):
+	var string = text
+	string = string.replace('[Playername]', globals.player.name_short())
+	string = string.replace('$name', name_short())
+	string = string.replace('$sex', sex)
+	string = string.replace('$He', 'You')
+	string = string.replace('$he', 'you')
+	string = string.replace('$His', 'Your')
+	string = string.replace('$his', 'your')
+	string = string.replace('$him', 'your')
+	string = string.replace('$master', getMasterNoun())
+	if sex == 'male':
+		string = string.replace('$penis', globals.fastif(penis == 'none', 'strapon', 'his cock'))
+		string = string.replace('$child', 'boy')
+		string = string.replace('$child', 'son')
+		string = string.replace('$sibling', 'brother')
+		string = string.replace('$sir', 'Sir')
+	else:
+		string = string.replace('$penis', globals.fastif(penis == 'none', 'strapon', 'her cock'))
+		string = string.replace('$child', 'girl')
+		string = string.replace('$child', 'daughter')
+		string = string.replace('$sibling', 'sister')
+		string = string.replace('$sir', "Ma'am")
+	string = string.replace('[haircolor]', haircolor)
+	string = string.replace('[eyecolor]', eyecolor)
+	string = string.replace('[scalecolor]', scalecolor)
+	string = string.replace('$race', race.to_lower())
 	return string
 
 func countluxury():

@@ -1073,9 +1073,14 @@ func slavetooltip(person):
 		node.rect_global_position.y -= node.get_rect().end.y - screen.size.y
 
 var hairlengtharray = ['bald','ear','neck','shoulder','waist','hips']
-var longtails = ['cat','fox','wolf','demon','dragon','scruffy','snake tail','racoon','mouse']
-var alltails = ['cat','fox','wolf','bunny','bird','demon','dragon','scruffy','snake tail','racoon','mouse']
+var longtails = ['cat','fox','neko','hyena','wolf','demon','dragon','scruffy','snake tail','racoon','mouse','reptilian','otter','squirrel','avali',]
+var skincovarray = ['none','scales','fullscales','fullfeathers','feathers','full_body_fur','plants']
+var penistypearray = ['human','canine','feline','equine','reptilian','rodent','bird',]
+var alltails = ['cat','fox','wolf','bunny','bird','demon','dragon','scruffy','snake tail','racoon','mouse','reptilian','squirrel','otter','avali',]
+var allwings = ['feathered_black', 'feathered_white', 'feathered_brown', 'leather_black','leather_red','leather_green','leather_white','leather_blue','insect','gossamer']
+var allears = ['human','feathery','pointy','frilled','none','short_furry','short_reptilian','long_pointy_furry','long_pointy_reptilian','fins','long_round_furry','long_droopy_furry','long_round_reptilian','long_droopy_reptilian','wide_furry','avali',] # /Capitulize
 var alleyecolors = ['blue', 'green', 'brown', 'hazel', 'black', 'gray', 'purple', 'yellow', 'amber', 'red', 'auburn']
+
 ###---Added by Expansion---### Kennels Expanded
 var sleepdict = {communal = {name = 'Communal Room'}, jail = {name = "Jail"}, personal = {name = 'Personal Room'}, your = {name = "Your bed"}, kennel = {name = "Dog Kennel"}}
 
@@ -1278,6 +1283,8 @@ var expansiontalk = loadModFile("AricsExpansion", "customScripts/expansiontalk.g
 var backwardscompatibility = loadModFile("AricsExpansion", "customScripts/backwardscompatibility.gd").new()
 var expansionsettings = loadModFile("AricsExpansion", "customScripts/expansionsettings.gd").new()
 var useRalphsTweaks = expansionsettings.use_ralphs_tweaks
+var useCapsTweaks = expansionsettings.use_caps_tweaks
+
 
 ###---Added by Expansion---### General Arrays
 #Size Arrays
@@ -1375,7 +1382,9 @@ var sexuality_images = {
 <AddTo -1>
 func _ready():
 	if useRalphsTweaks:
-		expansionsettings.applyTweaks()
+		expansionsettings.applyRalphsTweaks()
+	if useCapsTweaks:
+		expansionsettings.applyCapitulizeTweaks
 
 ###---Added by Expansion---### Farm Expanded
 func getVatMaxCapacity(type):
