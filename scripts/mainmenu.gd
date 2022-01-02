@@ -2,7 +2,7 @@
 var skindict = {
 	human = [ 'pale', 'fair', 'olive', 'tan', 'brown', 'dark' ],
 	kobold = ['none'],
-	dragonkin = ['none'],
+	dragonkin = ['scales'],
 	lizardfolk = ['none'],
 	avali = ['none'],
 	drow = ['blue', 'purple', 'pale blue'],
@@ -58,7 +58,7 @@ var eardict = {
 	centaur = ['short_furry'],
 	nereid = ['fins'],
 	demon = ['pointy'],
-	dragonkin = ['short_reptilian','pointy', 'frilled','none','long_round_reptilian','long_droopy_reptilian','long_pointy_reptilian'],
+	dragonkin = ['pointy'],
 	lizardfolk = ['short_reptilian','pointy', 'frilled','none','long_round_reptilian','long_droopy_reptilian','long_pointy_reptilian'],
 	kobold = ['short_reptilian','pointy', 'frilled','none','long_round_reptilian','long_droopy_reptilian','long_pointy_reptilian'],
 	mouse = ['wide_furry'],
@@ -111,6 +111,13 @@ var hobbydescription = {
 #Provides a container for Additional Hobbies
 var slaveHobbiesExpanded = ['Graceful','Curious','Genius','Socialite','Waifu','Perfect Specimen'] #ralph3
 ###---Expansion End---###
+
+<AddTo -1>
+func _ready():
+	if globals.useCapsTweaks:
+		eardict.dragonkin = ['short_reptilian','pointy', 'frilled','none','long_round_reptilian','long_droopy_reptilian','long_pointy_reptilian']
+		skindict.dragonkin = ['none']
+
 
 #Added Penis Sizes
 #QMod - Incompletely modified, a bit more random now, does not fully implement choice consequences 'properly'
@@ -385,10 +392,6 @@ func _process_stage6_locked_options():
 	#Set & lock immutable features
 	get_node("TextureFrame/newgame/stage6/bodyshape").set_disabled(true)
 	get_node("TextureFrame/newgame/stage6/bodyshape").add_item(makeoverPerson.bodyshape)
-	get_node("TextureFrame/newgame/stage6/ears").set_disabled(true)
-	get_node("TextureFrame/newgame/stage6/ears").add_item(makeoverPerson.ears.replace("_", " "))
-#	get_node("TextureFrame/newgame/stage6/ears").set_disabled(true)
-#	get_node("TextureFrame/newgame/stage6/ears").add_item(makeoverPerson.ears.replace("_", " "))
 	get_node("TextureFrame/newgame/stage6/tail").set_disabled(true)
 	get_node("TextureFrame/newgame/stage6/tail").add_item(makeoverPerson.tail)
 	get_node("TextureFrame/newgame/stage6/penistype").add_item(makeoverPerson.penistype)

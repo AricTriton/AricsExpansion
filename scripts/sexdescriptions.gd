@@ -30,9 +30,6 @@ func describeBodyType(group):
 
 var descPenisType = [
 	[ null ], # penisType: human
-	["knotted","tapered"], # penisType: canine
-	["barbed"], # penisType: feline
-	["flared","long"], # penisType: equine
 	["knotted","tapered","canine"], # penisType: canine
 	["barbed","feline"], # penisType: feline
 	["flared","long","equine"], # penisType: equine

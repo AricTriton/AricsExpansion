@@ -1384,7 +1384,7 @@ func _ready():
 	if useRalphsTweaks:
 		expansionsettings.applyRalphsTweaks()
 	if useCapsTweaks:
-		expansionsettings.applyCapitulizeTweaks
+		expansionsettings.applyCapitulizeTweaks()
 
 ###---Added by Expansion---### Farm Expanded
 func getVatMaxCapacity(type):
