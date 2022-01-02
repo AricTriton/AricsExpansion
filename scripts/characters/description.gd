@@ -50,9 +50,6 @@ func getslavedescription(tempperson, mode = 'default'):
 	if text.find('[hairstyle]'):
 		text = text.replace('[hairstyle]', getdescription('hairstyle'))
 
-	if text.find('[feathercolor]'):
-		text = text.replace('[feathercolor]', getdescription('feathercolor'))
-
 	return text
 
 ###---Added by Expansion---### Once Per Day Notifications
@@ -475,9 +472,6 @@ var newdescriptions = {
 	eyecolor = {
 		default = '$His eyes are [color=aqua][eyecolor][/color]. ',
 	},
-	scalecolor = {
-		default = '[scalecolor]',
-	},
 	eyeshape = {
 		normal = "",
 		slit = "$He has [color=aqua]vertical, animalistic pupils[/color]. "
@@ -538,10 +532,10 @@ var newdescriptions = {
 		none = '',
 		plants = 'Various leaves and bits of [color=aqua]plant matter[/color] cover parts of $his body. ',
 		scales = '$His skin is partly covered with [color=aqua][scalecolor] scales[/color]. ',
-		feathers = '$His body is covered in [feathercolor] bird-like feathers[/color] in many places. ',
-		feathers_and_fur = '$His body is sparsely covered with [feathercolor] bird-like feathers[/color]. Beneath that is thick, soft [color=aqua]fur of [furcolor]',
+		feathers = '$His body is covered in [color=aqua][feathercolor] bird-like feathers[/color] in many places. ',
+		feathers_and_fur = '$His body is sparsely covered with [color=aqua][feathercolor] bird-like feathers[/color]. Beneath that is thick, soft [color=aqua]fur of [furcolor]',
 		fullscales = '$His body is covered with [color=aqua][scalecolor] scales[/color]. ',
-		fullfeathers = '$His body is covered with [feathercolor] feathers[/color]. ',
+		fullfeathers = '$His body is covered with [color=aqua][feathercolor] feathers[/color]. ',
 		full_body_fur = '$His body is covered in thick, soft [color=aqua]fur of [furcolor]',
 	},
 	furcolor ={ # fur color
@@ -559,13 +553,12 @@ var newdescriptions = {
 		'guardian white' : 'a glowing white color, tattooed with tribal magical runes[/color]. ',
 	},
 	feathercolor = { # feather color
-		none = '',
-		empty = '', #dumb bugfix
-		white = '[color=aqua]soft white' ,
-		black = '[color=aqua]hard black' ,
-		brown = '[color=aqua]simple brown ',
-		"yellow and orange" : '[color=aqua]vibrant yellow and orange ',
+		default = '[feathercolor]',
 	},
+	scalecolor = {
+		default = '[scalecolor]',
+	},
+
 	#arms = {
 	#	scales = '$His' + fastif(person['legs'] == 'scales', ' arms and legs', ' arms') + ' are covered in [color=aqua]scales[/color]. ',
 	#	winged = "$His arms closely resemblance a [color=aqua]bird's wings[/color]. ",
@@ -604,7 +597,7 @@ var newdescriptions = {
 		tentacles = '',
 		horse = '',
 		"spider abdomen" : '',
-		mouse = 'Below $his waist, you spot a slim [color=aqua]mouse tail[/color] covered in a fine thin layer of fuzz. '
+		mouse = 'Below $his waist, you spot a slim [color=aqua]mouse tail[/color] covered in a fine thin layer of fuzz. ',
 		avali = 'Trailing behind $his waist, you see a very long [color=aqua]avali tail[/color] with feathers at the base and a large feather at the tip. ',
 	},
 	height = {

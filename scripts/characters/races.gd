@@ -794,6 +794,7 @@ var races = {
 		shade = {male = "res://files/buttons/inventory/shades/Harpy_M.png", female = "res://files/buttons/inventory/shades/Harpy_F.png"},
 		bodyshape = ['halfbird'],
 		haircolor = ['white', 'green', 'purple', 'blue', 'blond', 'red', 'auburn'],
+		feathercolor = ['red', 'blue', 'white', 'green', 'black', 'yellow'],
 		tail = ['bird'],
 		ears = ['feathery'],
 		skincov = ['feathers'],

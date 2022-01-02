@@ -611,7 +611,7 @@ class member:
 			values.sens *= rand_range(1.1,1.4)
 			values.lust *= 2
 			
-			if lewd < 50 || scenedict.scene.code in ['doublepen', 'triplepen', 'nipplefuck', 'spitroast', 'spitroastass', 'inserttailv', 'inserttaila', 'doubledildo', doubledildoass', 'tailjob', 'footjob', 'deepthroat', 'tribadismonpenis']:
+			if lewd < 50 || scenedict.scene.code in ['doublepen', 'triplepen', 'nipplefuck', 'spitroast', 'spitroastass', 'inserttailv', 'inserttaila', 'doubledildo', 'doubledildoass', 'tailjob', 'footjob', 'deepthroat', 'tribadismonpenis']:
 				lewd += rand_range(1,3)
 			
 			for i in scenedict.givers + scenedict.takers:

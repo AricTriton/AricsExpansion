@@ -785,6 +785,7 @@ func dictionary(text):
 	string = string.replace('[haircolor]', haircolor)
 	string = string.replace('[eyecolor]', eyecolor)
 	string = string.replace('[scalecolor]', scalecolor)
+	string = string.replace('[feathercolor]', feathercolor)
 	var idx = string.find('$stutter') # "$stutter$master" may produce "M-Master"
 	while idx >= 0:
 		string = string.left(idx) + string.substr(idx + 8, randi() % 2 + 1) + "-" + string.right(idx + 8)
@@ -817,6 +818,7 @@ func dictionaryplayer(text):
 	string = string.replace('[haircolor]', haircolor)
 	string = string.replace('[eyecolor]', eyecolor)
 	string = string.replace('[scalecolor]', scalecolor)
+	string = string.replace('[feathercolor]', feathercolor)
 	string = string.replace('$race', race.to_lower())
 	return string
 

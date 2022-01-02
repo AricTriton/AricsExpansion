@@ -100,7 +100,6 @@ func getsexfeatures(person):
 	if person.penis != 'none' && (person.race.find('Beastkin') >= 0 || person.race.find('Dragonkin') >= 0 || person.race.find('Kobold') >= 0 || person.race.find('Lizardfolk') >= 0 || person.race.find('Avali') >= 0 || person.race.find('Gnoll') >= 0):
 		if person.race.find('Cat') >= 0:
 			person.penistype = 'feline'
-		elif person.race.find('Fox') >= 0 || person.race.find('Wolf') >= 0:
 		elif person.race.find('Fox') >= 0 || person.race.find('Wolf') >= 0 || person.race.find('Gnoll') >= 0:
 			person.penistype = 'canine'
 		elif person.race.find('Dragonkin') >= 0 || person.race.find('Kobold') >= 0 || person.race.find('Lizardfolk') >= 0:
