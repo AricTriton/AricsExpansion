@@ -4,10 +4,12 @@ var animal_races_array = ['bunny','dog','cow','cat','fox','horse','raccoon']
 var humanoid_races_array = ['Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome','Goblin','Demon','Dragonkin']
 var uncommon_races_array = ['Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla']
 var beast_races_array = ['Centaur','Taurus','Beastkin Cat','Beastkin Fox','Beastkin Wolf','Beastkin Bunny','Beastkin Tanuki','Halfkin Cat','Halfkin Fox','Halfkin Wolf','Halfkin Bunny','Halfkin Tanuki']
+var beastkin_races_array = ['Beastkin Cat','Beastkin Fox','Beastkin Wolf','Beastkin Bunny','Beastkin Tanuki','Halfkin Cat','Halfkin Fox','Halfkin Wolf','Halfkin Bunny','Halfkin Tanuki'] #ralphB - not used (yet)
 var magic_races_array = ['Slime']
 var races_beastfree_darkelf_free = ['Human','Elf','Dark Elf','Orc','Gnome','Goblin','Demon','Dragonkin','Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla','Slime']
 var genealogies = ['human','gnome','elf','tribal_elf','dark_elf','orc','goblin','dragonkin','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime','bunny','dog','cow','cat','fox','horse','raccoon']
 var genealogies_beastfree = ['human','gnome','elf','tribal_elf','dark_elf','orc','goblin','dragonkin','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime',]
+var genealogies_beastkin_only = ['bunny','dog','cat','fox','raccoon'] #ralphB - for breeding race consolidation - needs to include all races to be consolidated
 ###---End Expansion---###
 
 ###---Added by Expansion---### centerflag982 - dickgirls can generate in world
@@ -123,12 +125,59 @@ func changerace(person, race = null):
 			if person.get(i) != null:
 				person[i] = races[personrace][i]
 
+# Numbers are the portion children get from their mother, father's portion will be 1 - mother's
+# if one parent doesn't have a body part it will be fully based on the other parent, if neither has it should be set to smallest
+var sizeDict = {
+	"female":{"vagina":1,"tits":1,"asshole":1,"lips":1,"ass":1},
+	"male":{"penis":0,"balls":0,"tits":0,"asshole":0,"lips":0,"ass":0},
+	"futanari":{"vagina":0.5,"penis":0.5,"tits":0.5,"asshole":0.5,"lips":0.5,"ass":0.5},
+	"dickgirl":{"penis":0.5,"balls":0.5,"tits":1,"asshole":1,"lips":1,"ass":1},
+}
+
+func getSizeArrayString(part):
+	var sizeArrayDict = {"balls":"penissizearray","vagina":"vagsizearray"}
+	return sizeArrayDict.get(part,part+"sizearray")
+func getSizeString(part):
+	var sizeStringDict = {"tits":"titssize","ass":"asssize"}
+	return sizeStringDict.get(part,part)
+
+func getRandomMod(part):
+	var randomDict = {"vagina":{"min":-3,"max":1}}
+	var result = randomDict.get(part,{"min":-1,"max":1})
+	return round(rand_range(result["min"],result["max"]))
+
+func setSizes(person,mother,father):
+	for part in sizeDict[person.sex]:
+		var value = sizeDict[person.sex][part]
+		var motherModifier = 0
+		var fatherModifier = 0
+		var type = getSizeString(part)
+		var sizeArray = globals.get(getSizeArrayString(part))
+		var randomMod = getRandomMod(part)
+
+		if part == "tits":
+			motherModifier -= mother.pregexp.titssizebonus
+			fatherModifier -= father.pregexp.titssizebonus
+
+		if mother[type] == "none":
+			value = 0
+		elif father[type] == "none":
+			value = 1
+		var base = (sizeArray.find(mother[type]) + motherModifier)*value + (sizeArray.find(father[type]) + fatherModifier)*(1.0-value)
+		person[type] = sizeArray[clamp(round(base + randomMod), 0, sizeArray.size()-1)]
+		#prints(part,value,person[type],sizeArray.find(person[type]),randomMod,sizeArray.find(mother[type]),sizeArray.find(father[type]))
+	return person
+
 ###---Added by Expansion---### Added by Deviate - Hybrid Races
 func newbaby(mother,father):
+
+	if globals.rules.futaballs:
+		sizeDict["futanari"]["balls"] = 0.5
+
 	var person = globals.newslave(mother.race, 'child', 'random', mother.origins)
 	var body_array = ['skin','tail','ears','wings','horns','arms','legs','bodyshape','haircolor','eyecolor','eyeshape','eyesclera']
-	var tacklearray = ['penis']
-	var temp
+	#var tacklearray = ['penis']
+	#var temp
 
 	#Prep
 	#person.race = ''
@@ -168,7 +217,8 @@ func newbaby(mother,father):
 			else:
 				person[i] = mother[i]
 	
-	#Male Genitals
+	setSizes(person,mother,father)
+	""" #Male Genitals
 	###---Added by Expansion---### centerflag982 - added dickgirl check				
 	if person.sex == 'male' || person.sex == 'dickgirl' || (person.sex == 'futanari' && globals.rules.futaballs == true):
 		tacklearray.append('balls')
@@ -206,7 +256,7 @@ func newbaby(mother,father):
 	#Ass
 	temp = round(globals.asssizearray.find(mother.asssize)+globals.asssizearray.find(father.asssize)*.5)+round(rand_range(-1,1))
 	temp = clamp(temp, 0, globals.asssizearray.size()-1)
-	person.asssize = globals.asssizearray[temp]
+	person.asssize = globals.asssizearray[temp] """
 
 	#Dimensional Crystal
 	if globals.state.mansionupgrades.dimensionalcrystal >= 2:
@@ -596,6 +646,40 @@ func build_genealogy(person, mother, father):
 	while percent != 100:
 		percent = build_genealogy_equalize(person, percent)
 	#/ralph9
+	#ralphB - optional consolidation of beastkin/halfkin races on breeding (offspring will have only one beastkin/halfkin type race with total % that would have been split b/n different beastkin/halfkin races)
+	if globals.useRalphsTweaks && globals.expansionsettings.consolidatebeastDNA:
+		#print('Ralph test: consolidatebeastDNA == true')
+		var total_beastkin_race_percent = 0
+		var babys_beastkin_races = []
+		var count_beastkin_races = 0
+		var selected_race = "human"
+		var highest_beastkin_race_percent = 0
+		for race in genealogies:
+			if race in genealogies_beastkin_only:
+				count_beastkin_races += 1
+				babys_beastkin_races.append(race)
+				total_beastkin_race_percent += person.genealogy[race]
+				if person.genealogy[race] > highest_beastkin_race_percent:
+					selected_race = race
+					highest_beastkin_race_percent = person.genealogy[race]
+			#print('Ralph test: highest_beastkin_race == ', str(person.genealogy[race]))
+			#print('Ralph test: highest_beastkin_race == ', str(selected_race))
+			#print('Ralph test: highest_beastkin_race_percent == ', str(person.genealogy[race]))
+			#print('Ralph test: total_beastkin_race_percent == ', str(total_beastkin_race_percent))
+		if count_beastkin_races > 1:
+			#print('Ralph test: more than 1 beastkin_race detected')
+			for race in babys_beastkin_races:
+				if person.genealogy[race] > rand_range(0,total_beastkin_race_percent):
+					selected_race = race
+					#print('Ralph test: selected_race changed to: ', str(selected_race))
+			for race in babys_beastkin_races:
+				if race == selected_race:
+					person.genealogy[race] = total_beastkin_race_percent
+					#print('Ralph test: total_beastkin_race_percent assigned to (should be selected_race): ', str(race))
+				else:
+					person.genealogy[race] = 0
+					#print('Ralph test: 0% assigned to (should be another beastkin race): ', str(race))
+	#/ralphB
 	globals.traceFile('build genealogy')
 	return
 
