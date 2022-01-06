@@ -315,7 +315,7 @@ func questarray():
 			questreq = true,
 			shortdescription = "Fresh Calamari",
 			description = 'A wealthy widow has requested a sentient tentacle monster for undisclosed purposes.\n\nBreeding Instructions: At least half Scylla and with as much mana corruption as can be managed. ',
-			reqs = [['obed','gte',80]], #['lewdness', 'gte', 20], ['race_display', 'eq', 'Tentacle'],['sex', 'neq', 'female']],
+			reqs = [['obed','gte',80], ['lewdness', 'gte', 20], ['race_display', 'eq', 'Tentacle'],['sex', 'neq', 'female']],
 			reqstemp = [],
 			reqsfunc = [],
 			time = round(rand_range(20,35)),
