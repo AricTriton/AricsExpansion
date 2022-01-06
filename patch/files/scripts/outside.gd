@@ -1325,7 +1325,7 @@ var repeatablesdict = {
 	'hairlength' : "Hair Length", 'haircolor' : "Hair Color", 'eyecolor' : "Eye Color",
 	'bodyshape' : "Body Type", 'titssize' : "Breast Size", 'penis' : "Penis Size",
 	'lactation' : "Lactating", 'titsextradeveloped' : "Developed Extra Nipples into Tits",
-	'titsextra' : "Additional Rows of Tits", 'vagvirgin' : "Virgin",
+	'titsextra' : "Additional Rows of Tits", 'vagvirgin' : "Virgin", "race_display":"Race",
 }
 
 func slavequesttext(quest):

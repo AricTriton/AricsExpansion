@@ -101,6 +101,14 @@ func slavetabopen():
 		if hairstyleBtn.get_item_text(i) == person.hairstyle:
 			hairstyleBtn.select(i)
 			break
+	#Whims -- new colors for the slave list
+	get_tree().get_current_scene().get_node("MainScreen/slave_tab/stats/customization/namecolor").clear()
+	var namecolor = person.namecolor
+	for i in namecolors:
+		get_tree().get_current_scene().get_node("MainScreen/slave_tab/stats/customization/namecolor").add_item(i)
+		if namecolor == i:
+			get_tree().get_current_scene().get_node("MainScreen/slave_tab/stats/customization/namecolor").select(get_tree().get_current_scene().get_node("MainScreen/slave_tab/stats/customization/namecolor").get_item_count()-1)
+
 	###---Added by Expansion---### Removed in current version for some reason?
 #	$stats/customization/hairstyle.set_text(person.hairstyle)
 	###---End Expansion---###
@@ -797,3 +805,11 @@ func _on_sexuality_mouse_entered():
 
 func _on_sexuality_mouse_exited():
 	globals.hidetooltip()
+
+#whims -- color selection stuff
+var namecolors = ['blue', 'brown', 'cyan', 'fuchsia', 'gold', 'gray', 'green', 'orange', 'purple', 'red', 'salmon', 'sienna', 'tan', 'violet', 'white', 'yellow']
+
+func _on_namecolor_item_selected(id):
+	person.namecolor = namecolors[id]
+	get_tree().get_current_scene().rebuild_slave_list()
+###---End Expansion---###

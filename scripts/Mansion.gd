@@ -4242,3 +4242,22 @@ func traitpanelshow(person, effect):
 		newnode.connect("mouse_exited", globals, 'hidetooltip')
 		newnode.connect("pressed", self, 'traitselect', [person, i, manaCost, goldCost, timeCost])
 	$traitselect/RichTextLabel.bbcode_text = text
+
+func updateSlaveListNode(node, person, visible):
+	node.visible = visible
+	node.find_node('name').set_text(person.name_long())
+	#Whims -- change text color
+	node.find_node('name').set('custom_colors/font_color', ColorN(person.namecolor))
+	if person.xp >= 100:
+		node.find_node('name').rect_min_size.x = 208 # manual resize since auto glitched
+		node.find_node('levelup').visible = true
+		node.find_node('levelup').hint_tooltip = person.dictionary("Talk to $him to investigate unlocking $his potential." if person.levelupreqs.empty() else "Check requirements for unlocking $his potential.")
+	else:
+		node.find_node('levelup').visible = false
+		node.find_node('name').rect_min_size.x = 235 # manual resize since auto glitched
+	node.find_node('health').set_normal_texture( person.health_icon())
+	node.find_node('healthvalue').set_text( str(round(person.health)))
+	node.find_node('obedience').set_normal_texture( person.obed_icon())
+	node.find_node('stress').set_normal_texture( person.stress_icon())
+	if person.imageportait != null:
+		node.find_node('portait').set_texture( globals.loadimage(person.imageportait))
