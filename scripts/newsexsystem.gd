@@ -373,9 +373,9 @@ class member:
 					if scene.scene.takerpart == '':
 						penistext += " {^semen:seed:cum} {^pours onto:shoots onto:falls to} the {^ground:floor} as [he1] ejaculate[s/1]."
 					elif ['anus','vagina','mouth'].has(scene.scene.takerpart):
-						if (scene.scene.get('takerpart2') && scene.scene.givers[1] == self) || (scene.scene.get('takerpart3') && scene.scene.givers[2] == self): # /Capitulize
+						if (scene.scene.get('takerpart2') && scene.scene.givers.size() == 2 && scene.scene.givers[1] == self) || (scene.scene.get('takerpart3') && scene.scene.givers.size() == 3 && scene.scene.givers[2] == self):
 							temptext = scene.scene.takerpart2.replace('anus', '[anus2]').replace('vagina','[pussy2]')
-							if scene.scene.takerpart2 == 'anus': # Capitulize
+							if scene.scene.takerpart2 == 'anus':
 								for i in scene.takers:
 									i.person.cum.ass += person.pregexp.cumprod
 							elif scene.scene.takerpart2 == 'mouth':
