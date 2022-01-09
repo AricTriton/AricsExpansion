@@ -105,10 +105,6 @@ func trait_remove(trait):
 	if trait['effect'].empty() != true:
 		add_effect(trait['effect'], true)
 	
-	###---Added by Expansion---### Sort Traits Alphabetically
-		traits.sort()
-	###---End Expansion---###
-	
 	if globals.get_tree().get_current_scene().has_node("infotext") && globals.slaves.find(self) >= 0 && away.at != 'hidden':
 		var text = self.dictionary("$name lost trait: " + trait.name)
 		globals.get_tree().get_current_scene().infotext(text,'yellow')
