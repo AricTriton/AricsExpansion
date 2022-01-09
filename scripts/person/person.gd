@@ -534,28 +534,28 @@ func loyal_set(value):
 ###---Added by Expansion---### Modified by Deviate - Allow current stat up to max stat
 func cour_set(value):
 	if stats.cour_max > 100:
-		stats.cour_base = clamp(value, 0, stats.cour_max)
+		stats.cour_base = clamp(value - stats.cour_racial, 0, stats.cour_max)
 	else:
-		stats.cour_base = clamp(value, 0, min(stats.cour_max, originvalue[origins]))
+		stats.cour_base = clamp(value - stats.cour_racial, 0, min(stats.cour_max, originvalue[origins]))
 
 func conf_set(value):
 	var bonus = max(0, stats.conf_max - originvalue['noble'])
 	if stats.conf_max > 100:
-		stats.conf_base = clamp(value, 0, stats.conf_max)
+		stats.conf_base = clamp(value - stats.conf_racial, 0, stats.conf_max)
 	else:
-		stats.conf_base = clamp(value, 0, min(stats.conf_max, originvalue[origins] + bonus))
+		stats.conf_base = clamp(value - stats.conf_racial, 0, min(stats.conf_max, originvalue[origins] + bonus))
 
 func wit_set(value):
 	if stats.wit_max > 100:
-		stats.wit_base = clamp(value, 0, stats.wit_max)
+		stats.wit_base = clamp(value - stats.wit_racial, 0, stats.wit_max)
 	else:
-		stats.wit_base = clamp(value, 0, min(stats.wit_max, originvalue[origins]))
+		stats.wit_base = clamp(value - stats.wit_racial, 0, min(stats.wit_max, originvalue[origins]))
 
 func charm_set(value):
 	if stats.charm_max > 100:
-		stats.charm_base = clamp(value, 0, stats.charm_max)
+		stats.charm_base = clamp(value - stats.charm_racial, 0, stats.charm_max)
 	else:
-		stats.charm_base = clamp(value, 0, min(stats.charm_max, originvalue[origins]))
+		stats.charm_base = clamp(value - stats.charm_racial, 0, min(stats.charm_max, originvalue[origins]))
 ###---End Expansion---###
 
 

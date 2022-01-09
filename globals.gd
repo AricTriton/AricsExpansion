@@ -1371,7 +1371,7 @@ var sexuality_images = {
 	futa_3 = load("res://files/aric_expansion_images/sexuality_icons/futa_3.png"),
 }
 
-<AddTo -1>
+<AddTo 0>
 func _ready():
 	if useRalphsTweaks:
 		expansionsettings.applyTweaks()

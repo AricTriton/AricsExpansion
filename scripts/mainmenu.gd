@@ -385,7 +385,7 @@ func _on_slaveconfirm_pressed():
 
 	#Generate mental stats
 	for i in ['conf','cour','wit','charm']:
-		startSlave[i] = rand_range(30,35)
+		startSlave.stats[i+'_base'] = rand_range(30,35)
 	startSlave.obed = 90
 	startSlave.beautybase = variables.characterstartbeauty
 	if startSlave.memory.find('$sibling') >= 0:
@@ -461,6 +461,7 @@ func _on_slaveconfirm_pressed():
 	globals.constructor.forceFullblooded(startSlave)
 	globals.constructor.setRaceDisplay(startSlave)
 	globals.constructor.set_ovulation(startSlave)
+	globals.expansionsetup.setRaceBonus(startSlave, true)
 	###---End Expansion---###
 	###---Added by Expansion---### Ank Bugfix v4
 	startSlave.health = 1000
