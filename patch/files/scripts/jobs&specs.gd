@@ -1615,7 +1615,7 @@ func public_nudity_law(person, gold):
 		#Bonus/Penalty due to Wages
 		if d100 <= person.beauty:
 			goldmod = round(gold * (person.charm *.01))
-			text += "$His naked body [color=lime]attracted[/color] others. He ended up earning an extra [color=yellow]" + str(goldmod) + " Gold[/color] due to $his [color=aqua]nudity[/color], [color=aqua]beauty[/color], and [color=aqua]charm[/color]. "
+			text += "$His naked body [color=lime]attracted[/color] others. $He ended up earning an extra [color=yellow]" + str(goldmod) + " Gold[/color] due to $his [color=aqua]nudity[/color], [color=aqua]beauty[/color], and [color=aqua]charm[/color]. "
 			if towndict.laws.public_nudity == false:
 				towndict.nudity += round(rand_range(1,3))
 				text += "You suspect this made some citizens appreciate public nudity. You've gained some local support towards accepting a law legalizing it, increasing the chances of a proposed law passing. "

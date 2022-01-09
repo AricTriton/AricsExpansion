@@ -76,6 +76,27 @@ var stats = {
 	loyal_min = 0,
 }
 
+func add_trait(trait, remove = false):
+	var traitEntry = globals.origins.trait(trait)
+	if traitEntry == null:
+		globals.printErrorCode("adding non-existant trait " + str(trait))
+		return false
+	for i in get_traits():
+		if i.name == traitEntry.name || traitEntry.name in i.conflict:
+			return false
+	traits.append(traitEntry.name)
+	if globals.get_tree().get_current_scene().has_node("infotext") && globals.slaves.has(self) && away.at != 'hidden':
+		var text = self.dictionary("$name acquired new trait: " + traitEntry.name)
+		globals.get_tree().get_current_scene().infotext(text, 'yellow')
+	if !traitEntry.effect.empty():
+		add_effect(traitEntry.effect)
+	
+	###---Added by Expansion---### Sort Traits Alphabetically
+	traits.sort()
+	###---End Expansion---###
+	
+	return true
+
 func trait_remove(trait):
 	trait = globals.origins.trait(trait)
 	if traits.find(trait.name) < 0:
@@ -83,7 +104,11 @@ func trait_remove(trait):
 	traits.erase(trait.name)
 	if trait['effect'].empty() != true:
 		add_effect(trait['effect'], true)
-
+	
+	###---Added by Expansion---### Sort Traits Alphabetically
+		traits.sort()
+	###---End Expansion---###
+	
 	if globals.get_tree().get_current_scene().has_node("infotext") && globals.slaves.find(self) >= 0 && away.at != 'hidden':
 		var text = self.dictionary("$name lost trait: " + trait.name)
 		globals.get_tree().get_current_scene().infotext(text,'yellow')
