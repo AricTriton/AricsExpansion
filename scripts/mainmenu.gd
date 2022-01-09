@@ -461,6 +461,7 @@ func _on_slaveconfirm_pressed():
 	globals.constructor.forceFullblooded(startSlave)
 	globals.constructor.setRaceDisplay(startSlave)
 	globals.constructor.set_ovulation(startSlave)
+	globals.expansionsetup.setRaceBonus(startSlave, true)
 	###---End Expansion---###
 	###---Added by Expansion---### Ank Bugfix v4
 	startSlave.health = 1000
