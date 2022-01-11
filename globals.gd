@@ -29,7 +29,7 @@ var rules = {
 }
 
 ###---Added by Expansion---### Hucow Specialization
-var specarray = ['geisha','ranger','executor','bodyguard','assassin','housekeeper','trapper','nympho','merchant','tamer','hucow']
+var specarray = ['geisha','ranger','executor','bodyguard','assassin','housekeeper','trapper','nympho','merchant','tamer','hucow','mage','warrior','dancer']
 ###---End Expansion---###
 
 var gradeimages = {
@@ -55,6 +55,9 @@ var specimages = {
 	merchant = load("res://files/buttons/mainscreen/35.png"),
 	tamer = load("res://files/buttons/mainscreen/32.png"),
 	hucow = load("res://files/aric_expansion_images/specialization_icons/cow_icon.png"),
+	mage = load("res://files/aric_expansion_images/specialization_icons/mage_icon.png"),
+	warrior = load("res://files/aric_expansion_images/specialization_icons/warrior_icon.png"),
+	dancer = load("res://files/aric_expansion_images/specialization_icons/dancer_icon.png"),
 }
 ###---End Expansion---###
 
@@ -677,6 +680,8 @@ class progress:
 			_slave = globals.state.findslave(i)
 			array.append(_slave)
 			maxweight += max(_slave.sstr*variables.slavecarryweightperstr,0) + variables.baseslavecarryweight
+			if _slave.race.find('Squirrel') >= 0:
+				maxweight += 15
 		for i in globals.state.backpack.stackables:
 			if globals.itemdict[i].has('weight'):
 				currentweight += globals.itemdict[i].weight * globals.state.backpack.stackables[i]
@@ -867,9 +872,9 @@ func addrelations(person, person2, value):
 		value = value/1.5
 	elif person.relations[person2.id] < -500 && value < 0 && checkifrelatives(person,person2):
 		value = value/1.5
-	if value > 0 && (person.race.find('Otter') >= 0 || person2.race.find('Otter') >= 0): # /Capitulize
-		person.relations[person2.id] += value*1.5 # /Capitulize
-	else: # /Capitulize
+	if value > 0 && (person.race.find('Otter') >= 0 || person2.race.find('Otter') >= 0):
+		person.relations[person2.id] += value*1.5
+	else:
 		person.relations[person2.id] += value
 	person.relations[person2.id] = clamp(person.relations[person2.id], -1000, 1000)
 	person2.relations[person.id] = person.relations[person2.id]
@@ -922,6 +927,11 @@ var fatherRaceMods = {
 	'fox': [.4, 4],
 	'horse': [.3, 6],
 	'raccoon': [.4, 4],
+	'hyena': [.6, 6],
+	'mouse': [.3, 3],
+	'squirrel': [.3, 3],
+	'otter': [.4, 4],
+	'bird': [.4, 4]
 }
 # size : penis_mod
 var fatherSizeMods = {
@@ -1273,6 +1283,18 @@ func load_game(text):
 			constructor.randomportrait(person)
 		if typeof(person.sex) != TYPE_STRING || person.sex.empty():
 			person.checksex()
+
+
+func checkfurryrace(text):
+	if text in ['Cat','Wolf','Fox','Bunny','Tanuki','Mouse','Squirrel','Otter','Bird']:
+		if rules.furry == true:
+			if rand_range(0,1) >= 0.5:
+				text = 'Halfkin ' + text
+			else:
+				text = 'Beastkin ' + text
+		else:
+			text = 'Halfkin ' + text
+	return text
 
 
 ###---Added by Expansion---### Only to load from Mods folder

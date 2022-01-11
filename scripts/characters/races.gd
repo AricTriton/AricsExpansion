@@ -1287,6 +1287,388 @@ var races = {
 			end_max = 4,	
 		},
 	},
+	#New Races
+	Gnoll = {
+		# Capitulize
+		description = "Gnolls appear similar to Beastkin Wolves, but only at a distance. Their features are more akin to that of a Hyena, leaner with a shorter coat of fur, and taller than most humanoids by a hand or two. They are seldom found in civilized society and have a reputation for being nomadic savages predisposed to cruelty. Males and females can appear to be indistinguishable to other races, a matter further confused by the abnormal clitoral size and occurences of Gnoll futanari.",
+		bodyshape = ['bestial'],
+		details = "[color=aqua]Racial trait: Passively hunts while on jobs outside of the mansion. (Not Implemented Yet)[/color]\n\n[color=yellow]Stat potential: Strength - 5, Agility - 4, Magic - 2, Endurance - 5 [/color]\n\n",
+		pricemod = 1.5,
+		#ralph5
+		marketup = ["Demand for [color=aqua]gnolls[/color] are up.\n", "A nearby warlord is looking to replenish his infantry. Pricing for [color=aqua]gnolls[/color] are up.\n"],
+		marketdown = ["An unexpected truce between warring factions has put a damper on trade in [color=aqua]gnolls[/color]. Prices fall.\n"],
+		single = " gnoll",
+		plural = " gnolls",
+		singlepos = " gnoll's",
+		pluralpos = " gnolls'",
+		# / ralph5
+		startingrace = true,
+		wimbornrace = false,
+		gornrace = true,
+		frostfordrace = false,
+		banditrace = false,
+		uncivilized = true,
+		sebastian = true,
+		shade = {
+			male = "res://files/buttons/inventory/shades/Orc_-M.png",
+			female = "res://files/buttons/inventory/shades/Orc_F.png"
+		},
+		skin = ['none'],
+		skincov = ['full_body_fur'],
+		furcolor = ['gray', 'brown', 'black_white', 'black_gray', 'black'],
+		tail = ['hyena'],
+		ears = ['short_furry'],
+		legs = ['fur_covered'],
+		arms = ['fur_covered'],
+		eyecolor = ['blue', 'green', 'amber', 'red'],
+		eyeshape = 'slit',
+		stats = {
+			str_max = 5,
+			agi_max = 4,
+			maf_max = 2,
+			end_max = 5
+		}
+	},
+	Ogre = {
+		# Capitulize
+		description = "Ogres are like onions.",
+		details = "[color=aqua]Racial trait: Increased base health, better health gains per point of endurance.[/color]\n\n",
+		pricemod = 1.5,
+		#ralph5
+		marketup = ["Demand for [color=aqua]ogres[/color] is up.\n", "A nearby warlord is looking to replenish his infantry. Pricing for [color=aqua]ogres[/color] is up.\n"],
+		marketdown = ["An unexpected truce between warring factions has put a damper on trade in [color=aqua]ogres[/color]. Prices fall.\n"],
+		single = " ogre",
+		plural = " ogres",
+		singlepos = " ogres's",
+		pluralpos = " ogres'",
+		# / ralph5
+		startingrace = false,
+		wimbornrace = false,
+		gornrace = true,
+		frostfordrace = false,
+		banditrace = false,
+		uncivilized = false,
+		sebastian = true,
+		shade = {
+			male = "res://files/buttons/inventory/shades/Orc_-M.png",
+			female = "res://files/buttons/inventory/shades/Orc_F.png"
+		},
+		skin = ['pale', 'fair', 'brown', 'green'],
+		ears = ['human', 'pointy'],
+		stats = {
+			str_max = 7,
+			agi_max = 2,
+			maf_max = 1,
+			end_max = 7
+		}
+	},
+	Giant = {
+		# Capitulize
+		bodyshape = ['giant'],
+		description = "Giants are big.",
+		details = "[color=aqua]Racial trait: Consumes 3x as much food.[/color]\n\n",
+		pricemod = 3.5,
+		#ralph5
+		marketup = ["Demand for [color=aqua]giants[/color] is up.\n", "A nearby warlord is looking to replenish his infantry. Pricing for [color=aqua]giants[/color] is up.\n"],
+		marketdown = ["An unexpected truce between warring factions has put a damper on trade in [color=aqua]giants[/color]. Prices fall.\n"],
+		single = " giant",
+		plural = " giants",
+		singlepos = " giant's",
+		pluralpos = " giants'",
+		# / ralph5
+		startingrace = false,
+		wimbornrace = false,
+		gornrace = false,
+		frostfordrace = false,
+		banditrace = false,
+		uncivilized = false,
+		sebastian = true,
+		shade = {
+			male = "res://files/buttons/inventory/shades/Orc_-M.png",
+			female = "res://files/buttons/inventory/shades/Orc_F.png"
+		},
+		skin = ['pale', 'fair', 'olive', 'tan'],
+		ears = ['human', ],
+		stats = {
+			str_max = 9,
+			agi_max = 2,
+			maf_max = 3,
+			end_max = 5
+		}
+	},
+	Lizardfolk = {
+		# Capitulize
+		description = "",
+		details = "[color=aqua]Racial trait: Naturally armored scales.[/color]\n\n[color=yellow]Stat potential: Strength - 5, Agility - 4, Magic - 3, Endurance - 5 [/color]\n\nBreeding Note:\n\n\n[color=yellow]Racial Stat Bonus:\nStrength++ \nPure Blood Bonus:\nMagic+\nOther Racial Characteristics:\nCourage+, [/color]\n[color=red]Elemental Modifiers\n100% Fire \nElemental Bonuses:\nFire (Agility+) [/color]\n[color=green]Nature Magic Saturation:\n50% \nNature Bonus:\nEndurance+ [/color]\n[color=purple]Mana Corruption:\n75% \nHigher Corruption:\nMagic+, Endurance- \nLower Corruption:\nMagic-, Endurance+, Demands less luxury [/color]\n[color=aqua]Breeding Quirks:\nFemales tend to be smaller and faster if not as strong \nPossible Mutations:\n [/color]",
+		pricemod = 2,
+		surname = names.reptiliansurname,
+		#ralph5
+		marketup = ["Demand for [color=aqua]lizardfolk[/color] is up.\n", "Word is that an arena boss from across the sea has started an reptillian league and has been looking to buy [color=aqua]lizardfolk[/color].\n"],
+		marketdown = ["Prices for [color=aqua]lizardfolk[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
+		single = " lizard",
+		plural = " lizards",
+		singlepos = " lizard's",
+		pluralpos = " lizards'",
+		# / ralph5
+		startingrace = true,
+		wimbornrace = false,
+		gornrace = false,
+		frostfordrace = false,
+		banditrace = false,
+		uncivilized = true,
+		sebastian = true,
+		shade = {
+			male = "res://files/buttons/inventory/shades/Dragonkin_M.png",
+			female = "res://files/buttons/inventory/shades/Dragonkin_F.png"
+		},
+		skin = ['none'],
+		eyecolor = ['amber', 'red', 'brown'],
+		eyeshape = ['slit'],
+		haircolor = ['white', 'green', 'purple', 'blue', 'blond', 'red', 'auburn'],
+		bodyshape = ['reptilian'],
+		ears = ['short_reptilian', 'pointy', 'frilled', 'none', 'long_round_reptilian', 'long_droopy_reptilian', 'long_pointy_reptilian'],
+		tail = ['reptilian'],
+		horns = ['none', 'short', 'long_straight', 'curved', 'manyhorned'],
+		skincov = ['fullscales'],
+		scalecolor = ['red', 'blue', 'white', 'green', 'black', 'yellow'],
+		arms = ['scales'],
+		legs = ['scales'],
+		stats = {
+			str_max = 5,
+			agi_max = 4,
+			maf_max = 3,
+			end_max = 5,
+			armor_base = 3,
+			armor_cur = 3
+		}
+	},
+	Kobold = {
+		# Capitulize
+		bodyshape = ['reptilianshortstack'],
+		description = "Kobolds are small hardworking reptilian people. Often emphasizing the extremes of personalities, their appearance as a monstrous race is quickly unfounded when they can demonstrate their understanding and intelligence. Kobolds form fiercly loyal bonds to those they consider friends, and have made themselves a staple amongst the humanoid races.",
+		details = "[color=aqua]Racial trait: Slightly more sensitive, orgasm more often.[/color]\n\n[color=yellow]Stat potential: Strength - 2, Agility - 6, Magic - 3, Endurance - 5 [/color]\n\nBreeding Note:\nKobolds are quite capable despite their miniscule and pathetic looking status. In addition, kobolds benefit from all forms of breeding.\n\n[color=yellow]Racial Stat Bonus:\nAgility+, Magic+ \nPure Blood Bonus:\nStrength+, Agility+\nOther Racial Characteristics:\nLewdness+, Confidence----, Height --- [/color]\n[color=red]Elemental Modifiers\n25% Fire \n25% Water \n25% Wind \n25% Earth \nElemental Bonuses:\nFire (Strength+) \nWater (Magic+) \nWind (Agility+) \nEarth (Endurance+) [/color]\n[color=green]Nature Magic Saturation:\n25% \nNature Bonus:\nFertility++ [/color]\n[color=purple]Mana Corruption:\n25% \nHigher Corruption:\nN/A \nLower Corruption:\nN/A \n, [/color]\n[color=aqua]Breeding Quirks:\nExtremely varied, has a little bit of everything. \nPossible Mutations:\nFurbold [/color]",
+		pricemod = 1.5,
+		surname = names.reptiliansurname,
+		#ralph5
+		marketup = ["Demand for [color=aqua]kobolds[/color] is up inexplicably.\n", "Words [color=aqua]kobolds[/color] is up.\n"],
+		marketdown = ["[color=aqua]Kobolds[/color] have become even less popular of late. Prices fall.\n", "Test. Demand for [color=aqua]kobolds[/color] falls.\n", "Prices for [color=aqua]kobolds[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
+		single = " kobold",
+		plural = " kobolds",
+		singlepos = " kobold's",
+		pluralpos = " kobolds'",
+		# / ralph5
+		startingrace = true,
+		wimbornrace = true,
+		gornrace = true,
+		frostfordrace = false,
+		banditrace = true,
+		uncivilized = false,
+		sebastian = true,
+		shade = {
+			male = "res://files/buttons/inventory/shades/Kobold_M.png",
+			female = "res://files/buttons/inventory/shades/Kobold_F.png"
+		},
+		eyecolor = ['amber', 'red', 'brown'],
+		eyeshape = ['slit', 'normal'],
+		haircolor = ['white', 'green', 'purple', 'blue', 'blond', 'red', 'auburn'],
+		skin = ['none'],
+		ears = ['short_reptilian', 'pointy', 'frilled', 'none', 'long_round_reptilian', 'long_droopy_reptilian', 'long_pointy_reptilian'],
+		tail = ['reptilian'],
+		horns = ['short', 'long_straight', 'curved', 'manyhorned'],
+		skincov = ['fullscales'],
+		scalecolor = ['red', 'blue', 'white', 'green', 'black', 'yellow'],
+		arms = ['scales'],
+		legs = ['scales'],
+		stats = {
+			str_max = 2,
+			agi_max = 6,
+			maf_max = 3,
+			end_max = 5
+		}
+	},
+	Avali = {
+		# Capitulize
+		description = "",
+		details = "[color=aqua]Racial trait: Nurse assignment is more effective.[/color]\n\n[color=yellow]Stat potential: Strength - 1, Agility - 8, Magic - 8, Endurance - 3 [/color]\n\nBreeding Note:\n\n\n[color=yellow]Racial Stat Bonus:\nAgility++, Magic Affinity++ \nPure Blood Bonus:\nAgility++, Magic Affinity++\nOther Racial Characteristics:\nWit++, [/color]\n[color=red]Elemental Modifiers\nN/A \nElemental Bonuses:\nN/A[/color]\n[color=green]Nature Magic Saturation:\n0% \nNature Bonus:\nN/A[/color]\n[color=purple]Mana Corruption:\n75% \nHigher Corruption:\nStrength+, Magic- \nLower Corruption:\nStrength-, Magic+ [/color]\n[color=aqua]Breeding Quirks:\nStrength+, Agility+ from breeding with predatory beast races /nFertility+ as a secondary race for egg-laying races \nPossible Mutations:\nGargoyle [/color]",
+		pricemod = 3.5,
+		#ralph5
+		marketup = ["Demand for [color=aqua]avalis[/color] is up.\n", "The popularity of a play featuring a dastardly human villain enslaving a cute transforming [color=aqua]avali[/color] princess to pull his wagon facinates the masses. Demand for [color=aqua]avalis[/color] increases.\n", "Word is that an arena boss from across the sea has started an aerial league and has been buying up [color=aqua]avalis[/color].\n"],
+		marketdown = ["Rumors abound that [color=aqua]avali[/color] are rife with disease. Demand decreases.\n"],
+		single = " avali ",
+		plural = " avalis ",
+		singlepos = " avali's ",
+		pluralpos = " avalis' ",
+		# / ralph5
+		startingrace = false,
+		wimbornrace = false,
+		gornrace = false,
+		frostfordrace = false,
+		banditrace = false,
+		uncivilized = false,
+		sebastian = true,
+		bodyshape = ['raptorshortstack'],
+		haircolor = ['white', 'green', 'purple', 'blue', 'blond', 'red', 'auburn'],
+		tail = ['avali'],
+		ears = ['avali'],
+		skin = ['none'],
+		skincov = ['feathers_and_fur'],
+		furcolor = ['white', 'gray', 'orange_white', 'black_white', 'black_gray', 'black'],
+		feathercolor = ['white', 'black', 'brown', ],
+		arms = ['fur_covered'],
+		legs = ['fur_covered'],
+		surname = '',
+		stats = {
+			str_max = 1,
+			agi_max = 8,
+			maf_max = 8,
+			end_max = 3
+		}
+	},
+	"Beastkin Mouse": {
+		# Capitulize
+		bodyshape = ['furryshortstack'],
+		description = "Mousefolk are a shy and reserved race, but that is not to be mistaken for weakness. Fiercly loyal to their friends and family, they'll defend them with speed and wit. They are quite a staple within cities, serving desk positions such as bank clerks and such.",
+		details = "[color=aqua]Racial trait: More effective at lockpicking chests with a lockpick, can lockpick chests without lockpicks.[/color]\n\n[color=yellow]Stat potential: Strength - 2, Agility - 6, Magic - 6, Endurance - 2 [/color]\n\nBreeding Note:\n  \n\n[color=yellow]Racial Stat Bonus:\nAgility+, Magic+ \nPure Blood Bonus:\nStrength+, Agility+\nOther Racial Characteristics:\nLewdness+, Confidence----, Height --- [/color]\n[color=red]Elemental Modifiers\n25% Earth \nElemental Bonuses:\n[/color]\n[color=green]Nature Magic Saturation:\n50% \nNature Bonus:\n [/color]\n[color=purple]Mana Corruption:\n25% \nHigher Corruption:\nN/A \nLower Corruption:\nN/A \n, [/color]\n[color=aqua]Breeding Quirks:\n \nPossible Mutations:\n [/color]",
+		pricemod = 1.75,
+		#ralph5
+		marketup = ["Demand for [color=aqua]micekin[/color] are up inexplicably.\n", "Words [color=aqua]micekin[/color] is up.\n"],
+		marketdown = ["[color=aqua]Micekin[/color] have become even less popular of late. Prices fall.\n", "Test. Demand for [color=aqua]micekin[/color] falls.\n", "Prices for [color=aqua]micekin[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
+		single = " mousekin",
+		plural = " micekin",
+		singlepos = " mouse's",
+		pluralpos = " mice",
+		# / ralph5
+		startingrace = true,
+		wimbornrace = true,
+		gornrace = false,
+		frostfordrace = true,
+		banditrace = true,
+		uncivilized = false,
+		sebastian = true,
+		eyecolor = ['blue', 'green', 'amber', 'red', 'brown'],
+		eyeshape = ['normal'],
+		ears = ['wide_furry'],
+		tail = ['mouse'],
+		skincov = ['full_body_fur'],
+		furcolor = ['white', 'gray', 'brown', 'black'],
+		arms = ['fur_covered'],
+		legs = ['fur_covered'],
+		stats = {
+			str_max = 2,
+			agi_max = 6,
+			maf_max = 6,
+			end_max = 2
+		}
+	},
+	"Beastkin Squirrel": {
+		# Capitulize
+		bodyshape = ['furryshortstack'],
+		description = ".",
+		details = "[color=aqua]Racial trait: Can carry more.[/color]\n\n[color=yellow]Stat potential: Strength - 3, Agility - 5, Magic - 3, Endurance - 5 [/color]\n\nBreeding Note:\n  \n\n[color=yellow]Racial Stat Bonus:\nAgility+, Magic+ \nPure Blood Bonus:\n\n [/color]\n[color=red]Elemental Modifiers\n25% Earth \nElemental Bonuses:\n [/color]\n[color=green]Nature Magic Saturation:\n50% \nNature Bonus:\nFertility++ [/color]\n[color=purple]Mana Corruption:\n25% \nHigher Corruption:\nN/A \nLower Corruption:\nN/A \n, [/color]\n[color=aqua]Breeding Quirks:\n.\nPossible Mutations:\n [/color]",
+		pricemod = 1.75,
+		#ralph5
+		marketup = ["Demand for [color=aqua]squirrelkin[/color] are up inexplicably.\n", "Words [color=aqua]squirrelkin[/color] is up.\n"],
+		marketdown = ["[color=aqua]Squirrelkin[/color] have become even less popular of late. Prices fall.\n", "Test. Demand for [color=aqua]squirrelkin[/color] falls.\n", "Prices for [color=aqua]squirrelkin[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
+		single = " squirrelkin",
+		plural = " squirrelkin",
+		singlepos = " squirrel's",
+		pluralpos = " squirrels'",
+		# / ralph5
+		startingrace = true,
+		wimbornrace = true,
+		gornrace = false,
+		frostfordrace = true,
+		banditrace = true,
+		uncivilized = false,
+		sebastian = true,
+		eyecolor = ['blue', 'green', 'amber', 'red', 'brown'],
+		eyeshape = ['normal'],
+		ears = ['short_furry', 'long_pointy_furry'],
+		tail = ['squirrel'],
+		skincov = ['full_body_fur'],
+		furcolor = ['brown', 'gray'],
+		arms = ['fur_covered'],
+		legs = ['fur_covered'],
+		stats = {
+			str_max = 3,
+			agi_max = 5,
+			maf_max = 3,
+			end_max = 5
+		}
+	},
+	"Beastkin Otter": {
+		# Capitulize
+		bodyshape = ['bestial'],
+		description = ".",
+		details = "[color=aqua]Racial trait: Relationship gains are improved.[/color]\n\n[color=yellow]Stat potential: Strength - 4, Agility - 4, Magic - 2, Endurance - 6 [/color]\n\nBreeding Note:\n  \n\n[color=yellow]Racial Stat Bonus:\nAgility+, Magic+ \nPure Blood Bonus:\n\n [/color]\n[color=red]Elemental Modifiers\n50% Water \nElemental Bonuses:\nFire (Strength+) \nWater (Magic+) \nWind (Agility+) \nEarth (Endurance+) [/color]\n[color=green]Nature Magic Saturation:\n50% \nNature Bonus:\nFertility++ [/color]\n[color=purple]Mana Corruption:\n25% \nHigher Corruption:\nN/A \nLower Corruption:\nN/A \n, [/color]\n[color=aqua]Breeding Quirks:\n.\nPossible Mutations:\n [/color]",
+		pricemod = 1.75,
+		#ralph5
+		marketup = ["Demand for [color=aqua]otterkin[/color] are up inexplicably.\n", "Words [color=aqua]otterkin[/color] is up.\n"],
+		marketdown = ["[color=aqua]Otterkin[/color] have become even less popular of late. Prices fall.\n", "Test. Demand for [color=aqua]otterkin[/color] falls.\n", "Prices for [color=aqua]otterkin[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
+		single = " otterkin",
+		plural = " otterkin",
+		singlepos = " otter's",
+		pluralpos = " otters'",
+		# / ralph5
+		startingrace = true,
+		wimbornrace = true,
+		gornrace = true,
+		frostfordrace = false,
+		banditrace = true,
+		uncivilized = false,
+		sebastian = true,
+		eyecolor = ['blue', 'green', 'amber', 'red', 'brown'],
+		eyeshape = ['normal'],
+		ears = ['short_furry'],
+		tail = ['otter'],
+		skincov = ['full_body_fur'],
+		furcolor = ['brown'],
+		arms = ['fur_covered'],
+		legs = ['fur_covered'],
+		stats = {
+			str_max = 4,
+			agi_max = 4,
+			maf_max = 2,
+			end_max = 6
+		}
+	},
+	"Beastkin Bird": {
+		# Capitulize
+		bodyshape = ['avian'],
+		description = ".",
+		details = "[color=aqua]Racial trait: Benefits from the flying condition moreso than other races.[/color]\n\n[color=yellow]Stat potential: Strength - 2, Agility - 5, Magic - 3, Endurance - 6 [/color]\n\nBreeding Note:\n  \n\n[color=yellow]Racial Stat Bonus:\nAgility+, Magic+ \nPure Blood Bonus:\n\n [/color]\n[color=red]Elemental Modifiers\n50% Wind \nElemental Bonuses:\nFire (Strength+) \nWater (Magic+) \nWind (Agility+) \nEarth (Endurance+) [/color]\n[color=green]Nature Magic Saturation:\n50% \nNature Bonus:\nFertility++ [/color]\n[color=purple]Mana Corruption:\n25% \nHigher Corruption:\nN/A \nLower Corruption:\nN/A \n, [/color]\n[color=aqua]Breeding Quirks:\n.\nPossible Mutations:\n [/color]",
+		pricemod = 1.75,
+		#ralph5
+		marketup = ["Demand for [color=aqua]birdkin[/color] are up inexplicably.\n", "Words [color=aqua]birdkin[/color] is up.\n"],
+		marketdown = ["[color=aqua]Birdkin[/color] have become even less popular of late. Prices fall.\n", "Test. Demand for [color=aqua]birdkin[/color] falls.\n", "Prices for [color=aqua]birdkin[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
+		single = " birdkin",
+		plural = " birdkin",
+		singlepos = " bird's",
+		pluralpos = " birds'",
+		# / ralph5
+		startingrace = true,
+		wimbornrace = true,
+		gornrace = true,
+		frostfordrace = true,
+		banditrace = true,
+		uncivilized = false,
+		sebastian = true,
+		eyecolor = ['blue', 'green', 'amber', 'red', 'brown'],
+		eyeshape = ['slit'],
+		ears = ['feathery'],
+		tail = ['bird'],
+		skincov = ['fullfeathers'],
+		feathercolor = ['white', 'black', 'brown', ],
+		arms = ['feathers'],
+		legs = ['feathers'],
+		wings = ['feathered_black', 'feathered_white', 'feathered_brown'],
+		stats = {
+			str_max = 2,
+			agi_max = 5,
+			maf_max = 3,
+			end_max = 6
+		}
+	},
 }
 
 var beastkindescription = "The term Beastkin refers to a wide range of sentient species with prominent humanoid and animalistic traits. True beastkin are fully covered in fur, feathers, or scales, with similar stature and proportions to a human. Even among individual species, there are wide differences to be observed with inherited animal traits, such as eyes, claws, and teeth. It is unknown whether Beastkin are man-made or the product of nature, as their spread and diversity often leads to inconsistent findings."

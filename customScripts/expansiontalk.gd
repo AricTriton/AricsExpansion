@@ -154,6 +154,11 @@ func getMasterName(person):
 			names.append('Nestmother')
 		names.append('Strongbeak')
 		names.append('Talonlord')
+	if person.race.find('Kobold') >= 0:
+		names.append('Den Leader')
+		names.append('All Watcher')
+		names.append('Clan Master')
+
 #Statuses
 #"Valued" Statuses
 	if person.mind.status == 'Lover':
