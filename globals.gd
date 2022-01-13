@@ -221,7 +221,7 @@ class resource:
 			upgrademax = 10,
 		},
 		bottler = {level = 0, totalproduced = 0},
-		worker_cycle = [],
+		worker_cycle = {'herder':[], 'milkmaid':[], 'stud':[]},
 		work_type = "",
 	}
 	###---Expansion End---### 
@@ -724,24 +724,15 @@ class progress:
 		return rval
 	
 	func findslave(id):
-		var rval
+		id = str(id)
 		###---Added by Expansion---### Category: NPCs Expanded | Search Baddies if not in Slaves
-		var foundslave = false
-		if str(globals.player.id) == str(id):
+		if str(globals.player.id) == id:
 			return globals.player
-		for i in range(0, globals.slaves.size()):
-			if str(globals.slaves[i].id) == str(id):
-				rval = globals.slaves[i]
-				foundslave = true
-		if foundslave == false:
-			rval = findnpc(id)
+		for person in globals.slaves:
+			if str(person.id) == id:
+				return person
+		return findnpc(id)
 		###---End Expansion---###
-		if str(globals.player.id) == str(id):
-			return globals.player
-		for i in range(0, globals.slaves.size()):
-			if str(globals.slaves[i].id) == str(id):
-				rval = globals.slaves[i]
-		return rval
 
 	###---Added by Expansion---### Category: Better NPCs
 	func npcs_set(refperson):
@@ -767,23 +758,13 @@ class progress:
 		globals.state.allnpcs.append(person)
 	
 	func findnpc(newid):
-		var rval
-		var foundslave = false
-		if !allnpcs.empty():
-			for npc in allnpcs:
-				if npc.id != null:
-					if str(npc.id) == str(newid):
-						rval = npc
-						foundslave = true
-			#How findslave does it
-#			for i in range(0, globals.state.allnpcs.size()):
-#				if str(globals.state.allnpcs[i].id) == str(id):
-#					rval = globals.state.allnpcs[i]
-#					foundslave = true
-#		if foundslave == false:
-#			rval = findslave(newid)
-		return rval
+		newid = str(newid)
+		for npc in allnpcs:
+			if str(npc.id) == newid:
+				return npc
+		return null
 	###---End Expansion---###
+
 	func backpack_set(value):
 		backpack = value
 		checkbackpack()
@@ -1373,6 +1354,7 @@ var sexuality_images = {
 
 <AddTo -1>
 func _ready():
+	constructor.fillSizeArrayDict()
 	if useRalphsTweaks:
 		expansionsettings.applyTweaks()
 
@@ -1541,17 +1523,14 @@ func fertilize_egg(mother, father_id, father_unique):
 		mother.preg.ovulation_day = 0
 	
 	traceFile('fertilize egg')
-	return
 
 func miscarriage(person):
-	var baby
 	var miscarried = false
 	for i in person.preg.unborn_baby:
 		if miscarried == false:
-			baby = globals.state.findslave(i.id)
+			globals.state.findbaby(i.id).death()
 			person.preg.unborn_baby.erase(i)
-#			person.preg.baby_count -= 1
-			baby.state = 'dead'
+			#baby.state = 'dead'
 			miscarried = true
 		
 	if person.preg.unborn_baby.empty():
@@ -1560,7 +1539,6 @@ func miscarriage(person):
 		person.preg.baby = null
 	
 	traceFile('miscarriage')
-	return
 
 func nightly_womb(person):
 	var can_get_preg = true
@@ -1653,14 +1631,44 @@ func slimeConversionCheck(mother, father):
 
 ###---Added by Expansion---### General Usage
 #I can't remember if I added this or found it elsewhere. Sorry if I didn't!
-func randomitemfromarray(source):
-	if source.size() > 0:
-		return source[randi() % source.size()]
-	return null
+func randomitemfromarray(array):
+	if array.empty():
+		print("ERROR: randomitemfromarray() empty")
+		return null
+	else:
+		return array[randi() % array.size()]
 
 func randomfromarray(array):
-	if !array.empty():
+	if array.empty():
+		print("ERROR: randomfromarray() empty")
+		return null
+	else:
 		return array[randi() % array.size()]
 
 func getfromarray(array, index):
 	return array[ clamp(index, 0, array.size()-1) ]
+
+# selects an item matching the given value in the given option button node
+# useMetaData can be an array or a boolean
+#	array - find value in array to determine index
+#	true - find value in node item metadata
+#	false - find value in node item text
+# returns true if an item matching value is found and selected, else false
+func selectForOptionButton(value, node, useMetadata = false):
+	if typeof(useMetadata) == TYPE_ARRAY:
+		var temp = useMetadata.find(value)
+		if temp >= 0 && temp < node.get_item_count():
+			node.select(temp)
+			return true
+	elif useMetadata:
+		for i in range(node.get_item_count()):
+			if node.get_item_(i) == value:
+				node.select(i)
+				return true
+	else:
+		for i in range(node.get_item_count()):
+			if node.get_item_text(i) == value:
+				node.select(i)
+				return true
+	node.select(0)
+	return false

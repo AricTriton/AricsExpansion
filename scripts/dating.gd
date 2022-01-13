@@ -351,7 +351,7 @@ func frenchkiss(person, counter):
 	else:
 		self.mood -= 4
 		text += "[he2] abruptly stops you, showing [his2] disinterest. "
-		if incest != 0:
+		if related != 'unrelated':
 			text += "[he2] looks at you shocked. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " start " + globals.expansion.nameKissing() + " my " + str(related) + ". ")
 	###---End Expansion---###
 	return text

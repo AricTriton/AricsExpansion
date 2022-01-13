@@ -311,16 +311,15 @@ func add_jobskill(job, value = 1):
 	if rand_range(0,100) <= self.wit && self.jobskills[job] + value*2 <= 100:
 		self.jobskills[job] += value*2
 		text += self.dictionary("$name increased $his " + str(job).capitalize() + " Skill by " + str(value*2) + ". ")
-	elif self.jobskills[job] + value <= 100:
+	elif self.jobskills[job] + value < 100:
 		self.jobskills[job] += value
 		text += self.dictionary("$name increased $his " + str(job).capitalize() + " Skill by " + str(value) + ". ")
-	elif self.jobskills[job] + value > 100 && self.npcexpanded.onlyonce.find(job + 'skillmaxed') < 0:
+	elif self.jobskills[job] + value >= 100 && self.npcexpanded.onlyonce.find(job + 'skillmaxed') < 0:
+		self.jobskills[job] = 100
 		self.npcexpanded.onlyonce.append(job + 'skillmaxed')
 		text += self.dictionary("$name's " + str(job).capitalize() + " Skill is at Maximum. ")
 	if globals.get_tree().get_current_scene().has_node("infotext") && globals.slaves.find(self) >= 0 && away.at != 'hidden':
 		globals.get_tree().get_current_scene().infotext(text,'green')
-	
-	return
 
 #Category: Farm Expanded
 var farmexpanded = {
@@ -1060,7 +1059,7 @@ func assignBreedingPartner(partnerid):
 	var text = ""
 	var success = true
 	var partner = globals.state.findslave(partnerid)
-	if partner == null || partnerid == str(-1):
+	if partner == null || partnerid == '-1':
 		text = "Invalid Partner"
 		success = false
 #	#Invalid Breeder Type Check
@@ -1080,19 +1079,16 @@ func assignBreedingPartner(partnerid):
 		farmexpanded.breeding.partner = partnerid
 		partner.unassignPartner()
 		partner.farmexpanded.breeding.partner = self.id
-		text += dictionary("[color=aqua]$name[/color] is now partnered to breed with [color=aqua]" + str(partner.name) + "[/color]. They will continue to breed together until they are given further orders.\n")	
+		text = "[color=aqua]"+name_short()+"[/color] is now partnered to breed with [color=aqua]" + str(partner.name) + "[/color]. They will continue to breed together until they are given further orders.\n"	
 	return text
 
 func unassignPartner():
 	#Unassigned the Old Partner and clears that slot
-	if farmexpanded.breeding.partner != str(-1):
+	if farmexpanded.breeding.partner != '-1':
 		var partner = globals.state.findslave(farmexpanded.breeding.partner)
-		if partner == null:
-			farmexpanded.breeding.partner = str(-1)
-			return
-		else:
-			farmexpanded.breeding.partner = str(-1)
-			partner.farmexpanded.breeding.partner = str(-1)
+		if partner != null && partner.farmexpanded.breeding.partner == self.id:
+			partner.farmexpanded.breeding.partner = '-1'
+		farmexpanded.breeding.partner = '-1'
 ###---End Expansion---###
 
 ###---Added by Expansion---### Deviate New Code
