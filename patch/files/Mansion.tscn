@@ -3192,7 +3192,7 @@ size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
 
-[node name="slavefarminsepct" type="Panel" parent="MainScreen/mansion/farmpanel"]
+[node name="slavefarminspect" type="Panel" parent="MainScreen/mansion/farmpanel"]
 visible = false
 margin_left = 21.0
 margin_top = 44.0
@@ -3202,7 +3202,7 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/panel = ExtResource( 46 )
 
-[node name="TextureBackground" type="TextureRect" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="TextureBackground" type="TextureRect" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = -15.0
 margin_top = 4.0
 margin_right = 910.0
@@ -3210,7 +3210,7 @@ margin_bottom = 540.0
 texture = ExtResource( 74 )
 expand = true
 
-[node name="TextureRectBorder" type="TextureRect" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="TextureRectBorder" type="TextureRect" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -17.0
@@ -3219,7 +3219,7 @@ margin_right = 14.0
 texture = ExtResource( 44 )
 expand = true
 
-[node name="bodypanel" type="Panel" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="bodypanel" type="Panel" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -3231,7 +3231,7 @@ mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
 
-[node name="body" type="TextureRect" parent="MainScreen/mansion/farmpanel/slavefarminsepct/bodypanel"]
+[node name="body" type="TextureRect" parent="MainScreen/mansion/farmpanel/slavefarminspect/bodypanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 14.0
@@ -3245,7 +3245,7 @@ texture = ExtResource( 75 )
 expand = true
 stretch_mode = 6
 
-[node name="dailyaction" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="dailyaction" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 290.0
 margin_top = 30.0
 margin_right = 415.0
@@ -3258,7 +3258,7 @@ align = 1
 items = [ "straight", null, false, 0, null, "ponytail", null, false, 1, null, "twintails", null, false, 2, null, "braid", null, false, 3, null, "two braids", null, false, 4, null, "bun", null, false, 5, null ]
 selected = 0
 
-[node name="dailyactionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction"]
+[node name="dailyactionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/dailyaction"]
 margin_top = -20.0
 margin_right = 125.0
 size_flags_horizontal = 2
@@ -3267,7 +3267,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "Daily Action"
 align = 1
 
-[node name="workstation" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="workstation" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 150.0
 margin_top = 30.0
 margin_right = 275.0
@@ -3278,7 +3278,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "straight"
 align = 1
 
-[node name="workstationlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/workstation"]
+[node name="workstationlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/workstation"]
 margin_top = -20.0
 margin_right = 125.0
 size_flags_horizontal = 2
@@ -3287,7 +3287,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "Work Station"
 align = 1
 
-[node name="stallbedding" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="stallbedding" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 15.0
 margin_top = 30.0
 margin_right = 140.0
@@ -3297,7 +3297,7 @@ align = 1
 items = [ "dirt", null, false, 0, null, "hay", null, false, 1, null, "cot", null, false, 2, null, "bed", null, false, 3, null ]
 selected = 0
 
-[node name="stallbeddinglabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/stallbedding"]
+[node name="stallbeddinglabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/stallbedding"]
 margin_top = -20.0
 margin_right = 125.0
 size_flags_horizontal = 2
@@ -3306,7 +3306,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "Stall Bedding"
 align = 1
 
-[node name="keeprestrained" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="keeprestrained" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 20.0
 margin_top = 75.0
 margin_right = 142.139
@@ -3317,7 +3317,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "Restrain"
 align = 1
 
-[node name="giveaphrodisiac" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="giveaphrodisiac" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 345.0
 margin_top = 465.0
 margin_right = 515.0
@@ -3327,7 +3327,7 @@ size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Use Aphrodisiac"
 
-[node name="specifybreedingpartnerbutton" type="Button" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="specifybreedingpartnerbutton" type="Button" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 14.1638
 margin_top = 485.836
 margin_right = 331.164
@@ -3338,7 +3338,7 @@ size_flags_vertical = 2
 text = "Specify Breeding Partner"
 align = 0
 
-[node name="breedingoption" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="breedingoption" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 15.0
 margin_top = 440.0
 margin_right = 165.0
@@ -3351,7 +3351,7 @@ align = 1
 items = [ "None", null, false, 0, null, "Breeder", null, false, 1, null, "Stud", null, false, 2, null, "Both", null, false, 3, null ]
 selected = 0
 
-[node name="breedingoptionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption"]
+[node name="breedingoptionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/breedingoption"]
 margin_left = 40.0
 margin_top = -17.0
 margin_right = 115.0
@@ -3362,7 +3362,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "Breeding"
 align = 1
 
-[node name="milkcontaineroptions" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="milkcontaineroptions" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 15.0
 margin_top = 265.0
 margin_right = 165.0
@@ -3374,7 +3374,7 @@ text = "straight"
 items = [ "straight", null, false, 0, null, "ponytail", null, false, 1, null, "twintails", null, false, 2, null, "braid", null, false, 3, null, "two braids", null, false, 4, null, "bun", null, false, 5, null ]
 selected = 0
 
-[node name="milkcontaineroptionslabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions"]
+[node name="milkcontaineroptionslabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/milkcontaineroptions"]
 margin_left = 7.81348
 margin_top = -20.4137
 margin_right = 140.813
@@ -3385,7 +3385,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "Milk Container"
 align = 1
 
-[node name="cumcontaineroptions" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="cumcontaineroptions" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 170.0
 margin_top = 265.0
 margin_right = 320.0
@@ -3397,7 +3397,7 @@ text = "straight"
 items = [ "straight", null, false, 0, null, "ponytail", null, false, 1, null, "twintails", null, false, 2, null, "braid", null, false, 3, null, "two braids", null, false, 4, null, "bun", null, false, 5, null ]
 selected = 0
 
-[node name="cumcontaineroptionslabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions"]
+[node name="cumcontaineroptionslabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/cumcontaineroptions"]
 margin_left = 7.81348
 margin_top = -20.4137
 margin_right = 140.813
@@ -3408,7 +3408,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "Cum Container"
 align = 1
 
-[node name="pisscontaineroptions" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="pisscontaineroptions" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 325.0
 margin_top = 265.0
 margin_right = 475.0
@@ -3420,7 +3420,7 @@ text = "straight"
 items = [ "straight", null, false, 0, null, "ponytail", null, false, 1, null, "twintails", null, false, 2, null, "braid", null, false, 3, null, "two braids", null, false, 4, null, "bun", null, false, 5, null ]
 selected = 0
 
-[node name="pisscontaineroptionslabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions"]
+[node name="pisscontaineroptionslabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/pisscontaineroptions"]
 margin_left = 7.81348
 margin_top = -20.4137
 margin_right = 140.813
@@ -3431,7 +3431,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "Piss Container"
 align = 1
 
-[node name="milkextraction" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="milkextraction" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 15.0
 margin_top = 205.0
 margin_right = 165.0
@@ -3443,7 +3443,7 @@ text = "straight"
 items = [ "straight", null, false, 0, null, "ponytail", null, false, 1, null, "twintails", null, false, 2, null, "braid", null, false, 3, null, "two braids", null, false, 4, null, "bun", null, false, 5, null ]
 selected = 0
 
-[node name="milkextractionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction"]
+[node name="milkextractionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/milkextraction"]
 margin_left = 7.81348
 margin_top = -20.4137
 margin_right = 140.813
@@ -3454,7 +3454,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "Milk Extraction"
 align = 1
 
-[node name="cumextraction" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="cumextraction" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 170.0
 margin_top = 205.0
 margin_right = 320.0
@@ -3466,7 +3466,7 @@ text = "straight"
 items = [ "straight", null, false, 0, null, "ponytail", null, false, 1, null, "twintails", null, false, 2, null, "braid", null, false, 3, null, "two braids", null, false, 4, null, "bun", null, false, 5, null ]
 selected = 0
 
-[node name="cumextractionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction"]
+[node name="cumextractionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/cumextraction"]
 margin_left = 7.81348
 margin_top = -20.4137
 margin_right = 140.813
@@ -3477,7 +3477,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "Cum Extraction"
 align = 1
 
-[node name="pissextraction" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="pissextraction" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 325.0
 margin_top = 205.0
 margin_right = 475.0
@@ -3489,7 +3489,7 @@ text = "straight"
 items = [ "straight", null, false, 0, null, "ponytail", null, false, 1, null, "twintails", null, false, 2, null, "braid", null, false, 3, null, "two braids", null, false, 4, null, "bun", null, false, 5, null ]
 selected = 0
 
-[node name="pissextractionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction"]
+[node name="pissextractionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/pissextraction"]
 margin_left = 7.81348
 margin_top = -20.4137
 margin_right = 140.813
@@ -3500,7 +3500,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "Piss Extraction"
 align = 1
 
-[node name="closeslaveinspect" type="Button" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="closeslaveinspect" type="Button" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 693.603
 margin_top = 477.053
 margin_right = 886.603
@@ -3510,7 +3510,7 @@ size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Close"
 
-[node name="releasefromfarm" type="Button" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="releasefromfarm" type="Button" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 694.172
 margin_top = 420.797
 margin_right = 887.172
@@ -3520,7 +3520,7 @@ size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Release"
 
-[node name="slaveassigntext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="slaveassigntext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 502.197
 margin_top = 14.0
 margin_right = 888.197
@@ -3530,7 +3530,7 @@ size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
 
-[node name="usesedative" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="usesedative" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 345.0
 margin_top = 495.0
 margin_right = 500.0
@@ -3540,7 +3540,7 @@ size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Use Sedative"
 
-[node name="extractmilk" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="extractmilk" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 25.0
 margin_top = 155.0
 margin_right = 155.0
@@ -3550,7 +3550,7 @@ size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Extract Milk"
 
-[node name="extractcum" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="extractcum" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 175.0
 margin_top = 155.0
 margin_right = 310.0
@@ -3560,7 +3560,7 @@ size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Extract Cum"
 
-[node name="extractpiss" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="extractpiss" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 335.0
 margin_top = 155.138
 margin_right = 470.0
@@ -3570,7 +3570,7 @@ size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Extract Piss"
 
-[node name="snailbreeding" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="snailbreeding" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 180.0
 margin_top = 450.0
 margin_right = 310.0
@@ -12108,26 +12108,26 @@ current = true
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/slavetofarm/addcowforce" to="." method="_on_addcowforced_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/slavetofarm/closeslavefarm" to="." method="_on_closeslavefarm_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/slavetofarm/addcow" to="." method="_on_addcow_pressed"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction" to="." method="_on_dailyaction_selected"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/workstation" to="." method="_on_workstation_selected"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/stallbedding" to="." method="_on_stallbedding_selected"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/keeprestrained" to="." method="_on_keeprestrained_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/giveaphrodisiac" to="." method="_on_aphrodisiacbutton_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/specifybreedingpartnerbutton" to="." method="_on_specifybreedingpartnerbutton_pressed"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption" to="." method="_on_breeding_option_selected"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions" to="." method="_on_milkcontainer_selected"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions" to="." method="_on_cumcontainer_selected"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions" to="." method="_on_pisscontainer_selected"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction" to="." method="_on_extractmilkselected"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction" to="." method="_on_extractcumselected"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction" to="." method="_on_extractpissselected"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/closeslaveinspect" to="." method="_on_closeslaveinspect_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/releasefromfarm" to="." method="_on_releasefromfarm_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/usesedative" to="." method="_on_usesedative_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/extractmilk" to="." method="_on_extractmilk_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/extractcum" to="." method="_on_extractcum_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/extractpiss" to="." method="_on_extractpiss_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/snailbreeding" to="." method="_on_snailbreeding_pressed"]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/dailyaction" to="." method="_on_dailyaction_selected"]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/workstation" to="." method="_on_workstation_selected"]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/stallbedding" to="." method="_on_stallbedding_selected"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/keeprestrained" to="." method="_on_keeprestrained_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/giveaphrodisiac" to="." method="_on_aphrodisiacbutton_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/specifybreedingpartnerbutton" to="." method="_on_specifybreedingpartnerbutton_pressed"]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/breedingoption" to="." method="_on_breeding_option_selected"]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/milkcontaineroptions" to="." method="_on_fluidcontainer_selected" binds= [ "extractmilk" ]]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/cumcontaineroptions" to="." method="_on_fluidcontainer_selected" binds= [ "extractcum" ]]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/pisscontaineroptions" to="." method="_on_fluidcontainer_selected" binds= [ "extractpiss" ]]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/milkextraction" to="." method="_on_extractfluidselected" binds= [ "extractmilk" ]]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/cumextraction" to="." method="_on_extractfluidselected" binds= [ "extractcum" ]]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/pissextraction" to="." method="_on_extractfluidselected" binds= [ "extractpiss" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/closeslaveinspect" to="." method="_on_closeslaveinspect_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/releasefromfarm" to="." method="_on_releasefromfarm_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/usesedative" to="." method="_on_usesedative_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/extractmilk" to="." method="_on_extractmilk_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/extractcum" to="." method="_on_extractcum_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/extractpiss" to="." method="_on_extractpiss_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/snailbreeding" to="." method="_on_snailbreeding_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatmilkbutton" to="." method="_on_vatmilkbutton_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatsemenbutton" to="." method="_on_vatsemenbutton_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatlubebutton" to="." method="_on_vatlubebutton_pressed"]
@@ -12146,12 +12146,12 @@ current = true
 [connection signal="item_selected" from="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/autoassign" to="." method="_on_vats_autoassign_selected"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/workerspanel/close" to="." method="_on_workerpanelclose_closed"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/snailpanelclose" to="." method="_on_snailpanelclose_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignfood/add" to="." method="_on_snailpanelfoodadd_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignfood/subtract" to="." method="_on_snailpanelfoodsubtract_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignsell/add" to="." method="_on_snailpanelselladd_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignsell/subtract" to="." method="_on_snailpanelsellsubtract_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignhatch/add" to="." method="_on_snailpanelfoodadd_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignhatch/subtract" to="." method="_on_snailpanelhatchsubtract_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignfood/add" to="." method="_on_snailpanelchange_pressed" binds= [ "food", 1 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignfood/subtract" to="." method="_on_snailpanelchange_pressed" binds= [ "food", -1 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignsell/add" to="." method="_on_snailpanelchange_pressed" binds= [ "sell", 1 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignsell/subtract" to="." method="_on_snailpanelchange_pressed" binds= [ "sell", -1 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignhatch/add" to="." method="_on_snailpanelchange_pressed" binds= [ "hatch", 1 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignhatch/subtract" to="." method="_on_snailpanelchange_pressed" binds= [ "hatch", -1 ]]
 [connection signal="item_selected" from="MainScreen/mansion/farmpanel/snailpanel/autoassign" to="." method="_on_snail_autoassign_selected"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/nochefcook" to="." method="_on_nochefcook_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/close" to="." method="_on_storepanel_close"]

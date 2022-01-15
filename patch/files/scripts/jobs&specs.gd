@@ -1623,7 +1623,7 @@ func public_nudity_law(person, gold):
 					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Updated Chance of Law Passing[/color] = [color=aqua]" + str(towndict.nudity) + "[/color] || "
 		elif d100 >= person.beauty + 50:
 			goldmod = -1 * round(gold * ((100 - person.charm) *.01))
-			text += "$His naked body [color=red]disgusted[/color] others. He ended up losing [color=yellow]" + str(goldmod) + " Gold[/color] due to $his [color=aqua]nudity[/color], [color=aqua]beauty[/color], and [color=aqua]charm[/color]. "
+			text += "$His naked body [color=red]disgusted[/color] others. $He ended up losing [color=yellow]" + str(goldmod) + " Gold[/color] due to $his [color=aqua]nudity[/color], [color=aqua]beauty[/color], and [color=aqua]charm[/color]. "
 			if towndict.laws.public_nudity == false:
 				towndict.nudity -= round(rand_range(1,3))
 				text += "You suspect this made some citizens hate public nudity. You've lost some local support towards accepting a law legalizing it, decreasing the chances of a proposed law passing. "
