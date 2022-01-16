@@ -2213,10 +2213,8 @@ func _on_selfrelatives_pressed():
 				text += "Daughter: "
 			text += getentrytext(entry2) + "\n"
 	$MainScreen/mansion/selfinspect/relativespanel/relativestext.bbcode_text = text
-###---End Expansion---###
 
-
-###---Added by Expansion---### Renamed Slaves don't Rename | Ank BugFix v4a
+###---Renamed Slaves don't Rename | Ank BugFix v4a
 func getentrytext(entry):
 	var text = ''
 	var tempPerson = globals.state.findslave(entry.id)

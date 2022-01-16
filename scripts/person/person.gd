@@ -147,7 +147,7 @@ var npcexpanded = {
 #var dietexpanded = {dailyneed = 0, nourishment = {food = 100, milk = 30, cum = 15, piss = 0, blood = 0}, hunger = 0}
 #OLD BELOW Daily: Diet
 
-var diet = {base = 1,type = "food",hunger = 0,dailyneed = 0,nourishment = {food = 100,milk = 30,cum = 15,piss = 0,blood = 0,},}
+var diet = {base = 10, type = "food", hunger = 0, dailyneed = 0, nourishment = {food = 100, milk = 30, cum = 15, piss = 0, blood = 0,},}
 
 #Mind is the "AI" that can be altered for Dialogue
 #Identity: The way they currently think/act | Id: Natural Instincts | Ego: Conscious/Intentional Identity
