@@ -108,6 +108,9 @@ func _ready():
 	
 	for i in [$sexselect/managerypanel/dogplus, $sexselect/managerypanel/dogminus, $sexselect/managerypanel/horseplus, $sexselect/managerypanel/horseminus]:
 		i.connect("pressed", self, 'animalforsex', [i])
+	###---Added by Expansion---###
+	prepareFarmOptionButtons()
+	###---End Expansion---###
 	if get_node("FinishDayPanel/FinishDayScreen/Global Report").get_bbcode().empty():
 		get_node("Navigation/endlog").disabled = true
 	_on_mansion_pressed()
@@ -2213,10 +2216,8 @@ func _on_selfrelatives_pressed():
 				text += "Daughter: "
 			text += getentrytext(entry2) + "\n"
 	$MainScreen/mansion/selfinspect/relativespanel/relativestext.bbcode_text = text
-###---End Expansion---###
 
-
-###---Added by Expansion---### Renamed Slaves don't Rename | Ank BugFix v4a
+###---Renamed Slaves don't Rename | Ank BugFix v4a
 func getentrytext(entry):
 	var text = ''
 	var tempPerson = globals.state.findslave(entry.id)
@@ -2236,6 +2237,45 @@ func getentrytext(entry):
 ###---End Expansion---###
 
 ########FARM
+onready var nodeVatDetails = get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel")
+onready var nodeFarmSlave = get_node("MainScreen/mansion/farmpanel/slavefarminspect")
+onready var nodeSnailPanel = get_node("MainScreen/mansion/farmpanel/snailpanel")
+
+# call in _ready
+func prepareFarmOptionButtons():
+	var containers = globals.expansionfarm.containersarray.duplicate()
+	containers.erase('bottle') #Bottles aren't valid containers for extraction (just for now)
+	# node name : expansionfarm variable ref
+	var dictOptions = {
+		"stallbedding" : globals.expansionfarm.allbeddings,
+		"workstation" : globals.expansionfarm.allworkstations,
+		"dailyaction" : globals.expansionfarm.alldailyactions,
+		"breedingoption" : globals.expansionfarm.breedingoptions,
+		"milkextraction" : globals.expansionfarm.extractorsarray,
+		"cumextraction" : globals.expansionfarm.extractorsarray,
+		"pissextraction" : globals.expansionfarm.extractorsarray,
+		"milkcontaineroptions" : containers,
+		"cumcontaineroptions" : containers,
+		"pisscontaineroptions" : containers,
+	}
+	var nodeTemp
+	for entry in dictOptions:
+		nodeTemp = nodeFarmSlave.get_node(entry)
+		nodeTemp.clear()
+		for i in dictOptions[entry]:
+			nodeTemp.add_item(i)
+
+	nodeTemp = nodeSnailPanel.get_node("autoassign")
+	nodeTemp.clear()
+	for i in globals.expansionfarm.snailautooptions:
+		nodeTemp.add_item(i)
+
+	nodeTemp = nodeVatDetails.get_node("autoassign")
+	nodeTemp.clear()
+	for i in globals.expansionfarm.vatsautooptions:
+		nodeTemp.add_item(i)
+
+
 func _on_farm_pressed(inputslave = null):
 	_on_mansion_pressed()
 	###---Added by Expansion---### Farm Expansion
@@ -2247,6 +2287,7 @@ func _on_farm_pressed(inputslave = null):
 	for i in globals.slaves:
 		if i.work == 'farmmanager':
 			manager = i
+			break
 	if manager != null:
 		manager.work = 'farmmanager'
 		text = manager.dictionary('Your farm manager is [color=aqua]' + manager.name_long() + '[/color].')
@@ -2271,15 +2312,12 @@ func _on_farm_pressed(inputslave = null):
 			newbutton.show()
 			list.add_child(newbutton)
 			newbutton.connect("pressed",self,'farminspect',[i])
-	if counter >= residentlimit:
-		get_node("MainScreen/mansion/farmpanel/ScrollContainer/VBoxContainer/farmadd").set_disabled(true)
-	else:
-		get_node("MainScreen/mansion/farmpanel/ScrollContainer/VBoxContainer/farmadd").set_disabled(false)
+	get_node("MainScreen/mansion/farmpanel/ScrollContainer/VBoxContainer/farmadd").set_disabled(counter >= residentlimit)
 #	if globals.state.mansionupgrades.farmtreatment == 1:
 #		text += "\n\n[color=green]Your farm won't break down its residents. [/color]"
 #	else:
 #		text += "\n\n[color=red]Your farm may cause heavy stress to its residents. [/color]"
-	text = text + '\n\nYou have ' + str(counter)+ '/' + str(residentlimit) + ' people present in farm. '
+	text += '\n\nYou have ' + str(counter)+ '/' + str(residentlimit) + ' people present in farm. '
 	get_node("MainScreen/mansion/farmpanel").show()
 	get_node("MainScreen/mansion/farmpanel/farminfo").set_bbcode(text)
 	if globals.state.tutorial.farm == false:
@@ -2289,418 +2327,267 @@ func _on_farm_pressed(inputslave = null):
 func farminspect(person):
 	###---Added by Expansion---### Farm Expansion
 	hide_farm_panels()
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct").show()
+	nodeFarmSlave.show()
 	var text = globals.expansionfarm.getFarmDescription(person)
 	if person.work == 'cow':
-	#	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/slaveassigntext").set_bbcode(person.dictionary("You walk to the pen with $name. The " +person.race+ " $child is tightly kept here being milked out of $his mind all day long. $His eyes are devoid of sentience barely reacting at your approach."))
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/slaveassigntext").set_bbcode(person.dictionary(text))
-	elif person.work == 'hen':
-	#	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/slaveassigntext").set_bbcode(person.dictionary("You walk to the pen with $name. The " +person.race+ " $child is tightly kept here as a hatchery for giant snail, with a sturdy leather harness covering $his body. $His eyes are devoid of sentience barely reacting at your approach. Crouching down next to $him, you can see the swollen curve of $his stomach, stuffed full of the creature's eggs. As you lay a hand on it, you can feel some movement inside - seems like something hatched quite recently and is making its way to be 'born' from $name's well-used hole."))
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/slaveassigntext").set_bbcode(person.dictionary(text))
+	#	nodeFarmSlave.get_node("slaveassigntext").set_bbcode(person.dictionary("You walk to the pen with $name. The " +person.race+ " $child is tightly kept here being milked out of $his mind all day long. $His eyes are devoid of sentience barely reacting at your approach."))
+		nodeFarmSlave.get_node("slaveassigntext").set_bbcode(person.dictionary(text))
+#	elif person.work == 'hen':
+	#	nodeFarmSlave.get_node("slaveassigntext").set_bbcode(person.dictionary("You walk to the pen with $name. The " +person.race+ " $child is tightly kept here as a hatchery for giant snail, with a sturdy leather harness covering $his body. $His eyes are devoid of sentience barely reacting at your approach. Crouching down next to $him, you can see the swollen curve of $his stomach, stuffed full of the creature's eggs. As you lay a hand on it, you can feel some movement inside - seems like something hatched quite recently and is making its way to be 'born' from $name's well-used hole."))
+#		nodeFarmSlave.get_node("slaveassigntext").set_bbcode(person.dictionary(text))
 	selectedfarmslave = person
 
-	#---Bedding
-	var haycounter = 0
-	var cotcounter = 0
-	var bedcounter = 0
-	for i in globals.slaves:
-		if i == person:
-			continue
-		if i.farmexpanded.stallbedding == 'hay':
-			haycounter += 1
-		elif i.farmexpanded.stallbedding == 'cot':
-			cotcounter += 1
-		elif i.farmexpanded.stallbedding == 'bed':
-			bedcounter += 1
-	#Build Buttons
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/stallbedding").clear()
-	for i in globals.expansionfarm.allbeddings:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/stallbedding").add_item(i)
-		if person.farmexpanded.stallbedding == i:
-			get_node("MainScreen/mansion/farmpanel/slavefarminsepct/stallbedding").select(get_node("MainScreen/mansion/farmpanel/slavefarminsepct/stallbedding").get_item_count()-1)
-			
-	#Disable if Needed
-	#Hay
-	if haycounter >= globals.resources.farmexpanded.stallbedding.hay:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/stallbedding").set_item_disabled(1, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/stallbedding").set_item_text(1, 'Insufficient Hay')
-	#Cot
-	if cotcounter >= globals.resources.farmexpanded.stallbedding.cot:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/stallbedding").set_item_disabled(2, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/stallbedding").set_item_text(2, 'Insufficient Cots')
-	#Bed
-	if bedcounter >= globals.resources.farmexpanded.stallbedding.bed:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/stallbedding").set_item_disabled(3, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/stallbedding").set_item_text(3, 'Insufficient Beds')
-	
-	#---Workstations
-	var workstations = globals.expansionfarm.allworkstations
-	var rackcounter = 0
-	var cagecounter = 0
 	#Counters
-	for i in globals.slaves:
-		if i == person:
-			continue
-		if i.farmexpanded.workstation == 'rack':
-			rackcounter += 1
-		elif i.farmexpanded.workstation == 'cage':
-			cagecounter += 1
-	#Build Buttons
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/workstation").clear()
-	for i in workstations:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/workstation").add_item(i)
-		if person.farmexpanded.workstation == i:
-			get_node("MainScreen/mansion/farmpanel/slavefarminsepct/workstation").select(get_node("MainScreen/mansion/farmpanel/slavefarminsepct/workstation").get_item_count()-1)
-		
-	#Disable if Needed
-	#Racks
-	if rackcounter >= globals.resources.farmexpanded.workstation.rack:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/workstation").set_item_disabled(1, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/workstation").set_item_text(1, 'Insufficient Racks')
-	#Cages
-	if cagecounter >= globals.resources.farmexpanded.workstation.cage:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/workstation").set_item_disabled(2, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/workstation").set_item_text(2, 'Insufficient Cages')
-	
-	#---Daily Actions
+	var beddingCounters = {'hay':0, 'cot':0, 'bed':0}
+	var workstationCounters = {'rack':0, 'cage':0}
+	var dailyactionCounters = {'exhaust':0, 'inspection':0, 'pamper':0, 'stimulate':0, 'prod':0}
+	var liquidExtraction = []
+	for type in globals.expansionfarm.liquidtypes:
+		liquidExtraction.append('extract'+type)
+	var extractorCounters = {'suction':0, 'pump':0, 'pressurepump':0}
+	var containerCounters = {'bucket':0, 'pail':0, 'jug':0, 'canister':0}
+
 	var farmhandcounter = 0
-	var exhaustcounter = 0
-	var inspectioncounter = 0
-	var stimulatecounter = 0
-	var pampercounter = 0
-	var prodcounter = 0
-	#Counter
-	for i in globals.slaves:
-		if i == person:
-			continue
-		#Count FarmHands to do Actions
+	var snailBreeders = 0
+
+	var minInt = -99999 # values not listed in counters recieve this value to prevent deficit
+	var listSlaves = globals.slaves.duplicate()
+	listSlaves.erase(person)
+	for i in listSlaves:
 		if i.work == 'farmhand':
 			farmhandcounter += 1
-		if i.farmexpanded.dailyaction == 'exhaust':
-			exhaustcounter += 1
-		elif i.farmexpanded.dailyaction == 'inspection':
-			inspectioncounter += 1
-		elif i.farmexpanded.dailyaction == 'pamper':
-			pampercounter += 1
-		elif i.farmexpanded.dailyaction == 'stimulate':
-			stimulatecounter += 1
-		elif i.farmexpanded.dailyaction == 'prod':
-			prodcounter += 1
+		if i.sleep == 'farm':
+			beddingCounters[i.farmexpanded.stallbedding] = beddingCounters.get(i.farmexpanded.stallbedding, minInt) + 1
+			workstationCounters[i.farmexpanded.workstation] = workstationCounters.get(i.farmexpanded.workstation, minInt) + 1
+			dailyactionCounters[i.farmexpanded.dailyaction] = dailyactionCounters.get(i.farmexpanded.dailyaction, minInt) + 1
+			for liquid in liquidExtraction:
+				var refLiquid = i.farmexpanded[liquid]
+				if refLiquid.enabled:
+					extractorCounters[refLiquid.method] = extractorCounters.get(refLiquid.method, minInt) + 1
+					containerCounters[refLiquid.container] = containerCounters.get(refLiquid.container, minInt) + 1
+			if i.farmexpanded.breeding.snails == true:
+				snailBreeders += 1
+	#temp fix, add selectedfarmslave to liquid counts to prevent assigning more than player has in stock
+	for liquid in liquidExtraction:
+		var refLiquid = person.farmexpanded[liquid]
+		if refLiquid.enabled:
+			extractorCounters[refLiquid.method] = extractorCounters.get(refLiquid.method, minInt) + 1
+			containerCounters[refLiquid.container] = containerCounters.get(refLiquid.container, minInt) + 1
+
+	#---Bedding
+	#Update Buttons
+	var counter = 0
+	var nodeBedding = nodeFarmSlave.get_node("stallbedding")
+	if !globals.selectForOptionButton(person.farmexpanded.stallbedding, nodeBedding, globals.expansionfarm.allbeddings):
+		person.farmexpanded.stallbedding = 'dirt'
+	for i in globals.expansionfarm.allbeddings:
+		# Disable if not enough
+		if beddingCounters.get(i,minInt) >= globals.resources.farmexpanded.stallbedding.get(i, 0):
+			nodeBedding.set_item_disabled(counter, true)
+			nodeBedding.set_item_text(counter, globals.expansionfarm.beddingdict[i].textLack)
+		else:
+			nodeBedding.set_item_disabled(counter, false)
+			nodeBedding.set_item_text(counter, i)
+		counter += 1
 	
+	#---Workstations
 	#Build Buttons
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").clear()
-	for i in globals.expansionfarm.alldailyactions:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").add_item(i)
-		if person.farmexpanded.dailyaction == i:
-			get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").select(get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").get_item_count()-1)
+	counter = 0
+	var nodeWorkstation = nodeFarmSlave.get_node("workstation")
+	if !globals.selectForOptionButton(person.farmexpanded.workstation, nodeWorkstation, globals.expansionfarm.allworkstations):
+		person.farmexpanded.workstation = 'free'
+	for i in globals.expansionfarm.allworkstations:
+		# Disable if not enough
+		if workstationCounters.get(i,minInt) >= globals.resources.farmexpanded.workstation.get(i, 0):
+			nodeWorkstation.set_item_disabled(counter, true)
+			nodeWorkstation.set_item_text(counter, globals.expansionfarm.workstationsdict[i].textLack)
+		else:
+			nodeWorkstation.set_item_disabled(counter, false)
+			nodeWorkstation.set_item_text(counter, i)
+		counter += 1
+	
+	#---Daily Actions
+	#Build Buttons
+	var nodeDailyaction = nodeFarmSlave.get_node("dailyaction")
+	if !globals.selectForOptionButton(person.farmexpanded.dailyaction, nodeDailyaction, globals.expansionfarm.alldailyactions):
+		person.farmexpanded.dailyaction = 'none'
 	
 	#Disable if Needed
-	#Pamper
-	if pampercounter >= farmhandcounter - (prodcounter + stimulatecounter):
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_disabled(1, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_text(1, 'Insufficient Farmhands')
-	else:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_disabled(1, false)
-	#Stimulate
-	if stimulatecounter >= farmhandcounter - (prodcounter + pampercounter):
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_disabled(2, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_text(2, 'Insufficient Farmhands')
-	else:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_disabled(2, false)
-	#Exhaust
-	if exhaustcounter >= farmhandcounter - inspectioncounter:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_disabled(3, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_text(3, 'Insufficient Farmhands')
-	else:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_disabled(3, false)
-	#Inspection
-	if inspectioncounter >= farmhandcounter - exhaustcounter:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_disabled(5, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_text(5, 'Insufficient Farmhands')
-	else:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_disabled(5, false)
-	#Prod
-	if prodcounter >= globals.resources.farmexpanded.farminventory.prods:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_disabled(6, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_text(6, 'Insufficient Prods')
-	elif prodcounter >= farmhandcounter - (pampercounter + stimulatecounter):
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_disabled(6, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_text(6, 'Insufficient Farmhands')
-	else:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction").set_item_disabled(6, false)
+	counter = 0
+	for i in globals.expansionfarm.alldailyactions:
+		var refDict = globals.expansionfarm.dailyActionReqDict[i]
+		if refDict.has('farmitems'):
+			if refDict.farmitems.has('prods') && dailyactionCounters.prod >= globals.resources.farmexpanded.farminventory.prods:
+				nodeDailyaction.set_item_disabled(counter, true)
+				nodeDailyaction.set_item_text(counter, 'Insufficient Prods')
+				counter += 1
+				continue
+		if refDict.farmhand:
+			var reqWorkers = dailyactionCounters[i]
+			for j in refDict.overlaps:
+				reqWorkers += dailyactionCounters[j]
+			if reqWorkers >= farmhandcounter:
+				nodeDailyaction.set_item_disabled(counter, true)
+				nodeDailyaction.set_item_text(counter, 'Insufficient Farmhands')
+			else:
+				nodeDailyaction.set_item_disabled(counter, false)
+				nodeDailyaction.set_item_text(counter, i)
+		counter += 1
 	
 	#---Breeding
-	var choices = globals.expansionfarm.breedingoptions
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption").set_disabled(false)
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption").clear()
-	for i in choices:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption").add_item(i)
-		if person.farmexpanded.breeding.status == i:
-			get_node("MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption").select(get_node("MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption").get_item_count()-1)
+	var nodeBreedingoption = nodeFarmSlave.get_node("breedingoption")
+	if !globals.selectForOptionButton(person.farmexpanded.breeding.status, nodeBreedingoption, globals.expansionfarm.breedingoptions):
+		person.farmexpanded.breeding.status = 'none'
 	
 	#Disable if Needed
-	if person.vagina == 'none':
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption").set_item_disabled(1, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption").set_item_text(1, 'No Vagina Present')
-	if person.penis == 'none':
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption").set_item_disabled(2, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption").set_item_text(2, 'No Penis Present')
-	if person.vagina == 'none' || person.penis == 'none':
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption").set_item_disabled(3, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption").set_item_text(3, 'Both Genitals are needed')
-	
+	counter = 0
+	var listBreedingReqs = [false, person.vagina == 'none', person.penis == 'none', person.vagina == 'none' || person.penis == 'none']
+	var listBreedingDisableText = ['', 'No Vagina Present', 'No Penis Present', 'Both Genitals are needed']
+	for i in globals.expansionfarm.breedingoptions:
+		if listBreedingReqs[counter]:
+			nodeBreedingoption.set_item_disabled(counter, true)
+			nodeBreedingoption.set_item_text(counter, listBreedingDisableText[counter])
+		else:
+			nodeBreedingoption.set_item_disabled(counter, false)
+			nodeBreedingoption.set_item_text(counter, i)
+		counter += 1
+
+
 	#Breeding & Snails
 	if person.farmexpanded.breeding.snails == true:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption").clear()
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption").add_item('snails')
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption").set_item_disabled(0, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption").set_item_text(0, 'Breeding Snails')
+		nodeBreedingoption.set_disabled(true)
+		nodeBreedingoption.set_text('Breeding Snails')
 		person.farmexpanded.breeding.status = 'snails'
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/specifybreedingpartnerbutton").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/specifybreedingpartnerbutton").set_tooltip(person.dictionary("$name's womb is being used to breed snails currently."))
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/snailbreeding").set_pressed(person.farmexpanded.breeding.snails)
+		nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_disabled(true)
+		nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_tooltip(person.dictionary("$name's womb is being used to breed snails currently."))
+		nodeFarmSlave.get_node("snailbreeding").set_pressed(person.farmexpanded.breeding.snails)
 	else:
+		nodeBreedingoption.set_disabled(false)
 		if person.farmexpanded.breeding.status == 'none':
-			get_node("MainScreen/mansion/farmpanel/slavefarminsepct/specifybreedingpartnerbutton").set_disabled(true)
-			get_node("MainScreen/mansion/farmpanel/slavefarminsepct/specifybreedingpartnerbutton").set_tooltip(person.dictionary('$name is not assigned to breed or be bred'))
+			nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_disabled(true)
+			nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_tooltip(person.dictionary('$name is not assigned to breed or be bred'))
 		else:
-			if person.farmexpanded.breeding.partner == str(-1):
-				get_node("MainScreen/mansion/farmpanel/slavefarminsepct/specifybreedingpartnerbutton").set_text("No Partner Specified")
-				get_node("MainScreen/mansion/farmpanel/slavefarminsepct/specifybreedingpartnerbutton").set_disabled(false)
+			var partner
+			if person.farmexpanded.breeding.partner != '-1':
+				partner = globals.state.findslave(person.farmexpanded.breeding.partner)
+				if partner == null:
+					person.unassignPartner()
+			nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_disabled(false)
+			if partner == null:
+				nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_text("No Partner Specified")
+				nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_tooltip('Click to choose new partner')
 			else:
-				var partner = globals.state.findslave(person.farmexpanded.breeding.partner)
-				get_node("MainScreen/mansion/farmpanel/slavefarminsepct/specifybreedingpartnerbutton").set_text(partner.name_long())
-				get_node("MainScreen/mansion/farmpanel/slavefarminsepct/specifybreedingpartnerbutton").set_disabled(false)
-				get_node("MainScreen/mansion/farmpanel/slavefarminsepct/specifybreedingpartnerbutton").set_tooltip('')
+				nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_text(partner.name_long())
+				nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_tooltip('Click to unassign partner')
 
-		var counter = 0
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/snailbreeding").set_disabled(false)
-		for i in globals.slaves:
-			if i.farmexpanded.breeding.snails == true:
-				counter += 1
 		if globals.state.mansionupgrades.farmhatchery == 0:
-			get_node("MainScreen/mansion/farmpanel/slavefarminsepct/snailbreeding").set_disabled(true)
-			get_node("MainScreen/mansion/farmpanel/slavefarminsepct/snailbreeding").set_tooltip("You have to unlock Hatchery first.")
+			nodeFarmSlave.get_node("snailbreeding").set_disabled(true)
+			nodeFarmSlave.get_node("snailbreeding").set_tooltip("You have to unlock Hatchery first.")
+		elif snailBreeders >= globals.state.snails:
+			nodeFarmSlave.get_node("snailbreeding").set_disabled(true)
+			nodeFarmSlave.get_node("snailbreeding").set_tooltip("You don't have any free snails.")
 		else:
-			if counter >= globals.state.snails:
-				get_node("MainScreen/mansion/farmpanel/slavefarminsepct/snailbreeding").set_disabled(true)
-				get_node("MainScreen/mansion/farmpanel/slavefarminsepct/snailbreeding").set_tooltip("You don't have any free snails.")
-			else:
-				get_node("MainScreen/mansion/farmpanel/slavefarminsepct/snailbreeding").set_pressed(person.farmexpanded.breeding.snails)
-				get_node("MainScreen/mansion/farmpanel/slavefarminsepct/snailbreeding").set_tooltip(person.dictionary('Set $name to breed snails.'))
-	
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/keeprestrained").set_pressed(person.farmexpanded.restrained)
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/usesedative").set_pressed(person.farmexpanded.usesedative)
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/giveaphrodisiac").set_pressed(person.farmexpanded.giveaphrodisiac)
-	
-	#Milk Extraction
+			nodeFarmSlave.get_node("snailbreeding").set_disabled(false)
+			nodeFarmSlave.get_node("snailbreeding").set_pressed(person.farmexpanded.breeding.snails)
+			nodeFarmSlave.get_node("snailbreeding").set_tooltip(person.dictionary('Set $name to breed snails.'))
+
+
+	nodeFarmSlave.get_node("keeprestrained").set_pressed(person.farmexpanded.restrained)
+	nodeFarmSlave.get_node("usesedative").set_pressed(person.farmexpanded.usesedative)
+	nodeFarmSlave.get_node("giveaphrodisiac").set_pressed(person.farmexpanded.giveaphrodisiac)
+
+
+	#Milk Extraction only if lactating
 	if person.lactation == true:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/extractmilk").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/extractmilk").set_tooltip('')
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/extractmilk").set_pressed(person.farmexpanded.extractmilk.enabled)
+		nodeFarmSlave.get_node("extractmilk").set_disabled(false)
+		nodeFarmSlave.get_node("extractmilk").set_tooltip('')
 	else:
 		person.farmexpanded.extractmilk.enabled = false
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/extractmilk").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/extractmilk").set_tooltip(person.dictionary("$name is not currently lactating."))
-	#Disable if Not Extracting
-	if person.farmexpanded.extractmilk.enabled == false:
-		person.farmexpanded.extractmilk.method = 'leak'
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction").set_tooltip(person.dictionary("$name is not having Milk collected."))
-		person.farmexpanded.extractmilk.container = 'cup'
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions").set_tooltip(person.dictionary("$name is not having Milk collected."))
-	else:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction").set_tooltip('')
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions").set_tooltip('')
-	
-	#Cum Extraction
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/extractcum").set_pressed(person.farmexpanded.extractcum.enabled)
-	#Disable if Not Extracting
-	if person.farmexpanded.extractcum.enabled == false:
-		person.farmexpanded.extractcum.method = 'leak'
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction").set_tooltip(person.dictionary("$name is not having their Cum collected."))
-		person.farmexpanded.extractcum.container = 'cup'
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions").set_tooltip(person.dictionary("$name is not having their Cum collected."))
-	else:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions").set_disabled(false)
-	
-	#Piss Extraction
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/extractpiss").set_pressed(person.farmexpanded.extractpiss.enabled)
-	#Disable if Not Extracting
-	if person.farmexpanded.extractpiss.enabled == false:
-		person.farmexpanded.extractpiss.method = 'leak'
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction").set_tooltip(person.dictionary("$name is not having their Piss collected."))
-		person.farmexpanded.extractpiss.container = 'cup'
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions").set_tooltip(person.dictionary("$name is not having their Piss collected."))
-	else:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions").set_disabled(false)
+		nodeFarmSlave.get_node("extractmilk").set_disabled(true)
+		nodeFarmSlave.get_node("extractmilk").set_tooltip(person.dictionary("$name is not currently lactating."))
 
-	#Build Extraction Options
-	var types = globals.expansionfarm.liquidtypes
+	var nodesMethod = [nodeFarmSlave.get_node("milkextraction"), nodeFarmSlave.get_node("cumextraction"), nodeFarmSlave.get_node("pissextraction")]
+	var nodesContainer = [nodeFarmSlave.get_node("milkcontaineroptions"), nodeFarmSlave.get_node("cumcontaineroptions"), nodeFarmSlave.get_node("pisscontaineroptions")]
+	var nodeTemp1
+	var nodeTemp2
+	var temp
+	#Disable if Not Extracting
+	for i in range(liquidExtraction.size()):
+		nodeTemp1 = nodesMethod[i]
+		nodeTemp2 = nodesContainer[i]
+		temp = person.farmexpanded[liquidExtraction[i]]
+		nodeFarmSlave.get_node(liquidExtraction[i]).set_pressed(temp.enabled)
+		if temp.enabled:
+			nodeTemp1.set_disabled(false)
+			nodeTemp1.set_tooltip('')
+			nodeTemp2.set_disabled(false)
+			nodeTemp2.set_tooltip('')
+		else:
+			temp.method = 'leak'
+			temp.container = 'cup'
+			temp = person.dictionary("$name is not having $his "+globals.expansionfarm.liquidtypes[i].capitalize()+" collected.")
+			nodeTemp1.set_disabled(true)
+			nodeTemp1.set_tooltip(temp)
+			nodeTemp2.set_disabled(true)
+			nodeTemp2.set_tooltip(temp)
+
+
 	#Set up Extraction options
-	choices = globals.expansionfarm.extractorsarray
-	var suctioncounter = 0
-	var pumpcounter = 0
-	var pressurepumpcounter = 0
-	#Run Counts
-	for i in globals.slaves:
-		if i == person:
-			continue
-		for type in types:
-			if i.farmexpanded['extract'+type].method == 'suction':
-				suctioncounter += 1
-			if i.farmexpanded['extract'+type].method == 'pump':
-				pumpcounter += 1
-			if i.farmexpanded['extract'+type].method == 'pressurepump':
-				pressurepumpcounter += 1
-	
-	#Milk Extractions
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction").clear()
-	for i in choices:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction").add_item(i)
-		if person.farmexpanded.extractmilk.method == i:
-			get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction").select(get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction").get_item_count()-1)
-	#Cum Extractions
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction").clear()
-	for i in choices:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction").add_item(i)
-		if person.farmexpanded.extractcum.method == i:
-			get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction").select(get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction").get_item_count()-1)
-	#Piss Extractions
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction").clear()
-	for i in choices:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction").add_item(i)
-		if person.farmexpanded.extractpiss.method == i:
-			get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction").select(get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction").get_item_count()-1)
+	var choices = globals.expansionfarm.extractorsarray
+
+	#Select Extractions
+	if !globals.selectForOptionButton(person.farmexpanded.extractmilk.method, nodesMethod[0], choices):
+		person.farmexpanded.extractmilk.method = 'leak'
+
+	if !globals.selectForOptionButton(person.farmexpanded.extractcum.method, nodesMethod[1], choices):
+		person.farmexpanded.extractcum.method = 'leak'
+
+	if !globals.selectForOptionButton(person.farmexpanded.extractpiss.method, nodesMethod[2], choices):
+		person.farmexpanded.extractpiss.method = 'leak'
 
 	#Disable Extractions per available items
-	if suctioncounter >= globals.resources.farmexpanded.extractors.suction:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction").set_item_disabled(3, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction").set_item_disabled(3, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction").set_item_disabled(3, true)
-	else:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction").set_item_disabled(3, false)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction").set_item_disabled(3, false)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction").set_item_disabled(3, false)
-	if pumpcounter >= globals.resources.farmexpanded.extractors.pump:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction").set_item_disabled(4, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction").set_item_disabled(4, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction").set_item_disabled(4, true)
-	else:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction").set_item_disabled(4, false)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction").set_item_disabled(4, false)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction").set_item_disabled(4, false)
-	if pressurepumpcounter >= globals.resources.farmexpanded.extractors.pressurepump:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction").set_item_disabled(5, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction").set_item_disabled(5, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction").set_item_disabled(5, true)
-	else:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction").set_item_disabled(5, false)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction").set_item_disabled(5, false)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction").set_item_disabled(5, false)
-	
+	counter = 0
+	for i in choices:
+		temp = extractorCounters.get(i,minInt) >= globals.resources.farmexpanded.extractors.get(i, 0)
+		for node in nodesMethod:
+			node.set_item_disabled(counter, temp)
+		counter += 1
+
+
 	#Set up Containers options ['cup','bucket','pail','jug','canister', 'bottle']
-	choices = globals.expansionfarm.containersarray
-	var bucketcounter = 0
-	var pailcounter = 0
-	var jugcounter = 0
-	var canistercounter = 0
-	#Run Counts
-	for i in globals.slaves:
-		if i == person:
-			continue
-		for type in types:
-			if i.farmexpanded['extract'+type].container == 'bucket':
-				bucketcounter += 1
-			elif i.farmexpanded['extract'+type].container == 'pail':
-				pailcounter += 1
-			elif i.farmexpanded['extract'+type].container == 'jug':
-				jugcounter += 1
-			elif i.farmexpanded['extract'+type].container == 'canister':
-				canistercounter += 1
-	
-	#Milk Containers
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions").clear()
-	for i in choices:
-		#Bottles aren't valid containers for extraction (just for now)
-		if i == 'bottle':
-			continue
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions").add_item(i)
-		if person.farmexpanded.extractmilk.container == i:
-			get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions").select(get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions").get_item_count()-1)
-	#Cum Containers
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions").clear()
-	for i in choices:
-		#Bottles aren't valid containers for extraction (just for now)
-		if i == 'bottle':
-			continue
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions").add_item(i)
-		if person.farmexpanded.extractcum.container == i:
-			get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions").select(get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions").get_item_count()-1)
-	#Piss Containers
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions").clear()
-	for i in choices:
-		#Bottles aren't valid containers for extraction (just for now)
-		if i == 'bottle':
-			continue
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions").add_item(i)
-		if person.farmexpanded.extractpiss.container == i:
-			get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions").select(get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions").get_item_count()-1)
-	
+	choices = globals.expansionfarm.containersarray.duplicate()
+	choices.erase('bottle') #Bottles aren't valid containers for extraction (just for now)
+
+	#Select Containers
+	if !globals.selectForOptionButton(person.farmexpanded.extractmilk.container, nodesContainer[0], choices):
+		person.farmexpanded.extractmilk.container = 'cup'
+
+	if !globals.selectForOptionButton(person.farmexpanded.extractcum.container, nodesContainer[1], choices):
+		person.farmexpanded.extractcum.container = 'cup'
+
+	if !globals.selectForOptionButton(person.farmexpanded.extractpiss.container, nodesContainer[2], choices):
+		person.farmexpanded.extractpiss.container = 'cup'
+
 	#Disable Containers per available items
-	if bucketcounter >= globals.resources.farmexpanded.containers.bucket:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions").set_item_disabled(1, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions").set_item_disabled(1, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions").set_item_disabled(1, true)
-#	else:
-#		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions").set_item_disabled(1, false)
-#		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions").set_item_disabled(1, false)
-#		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions").set_item_disabled(1, false)
-	if pailcounter >= globals.resources.farmexpanded.containers.pail:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions").set_item_disabled(2, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions").set_item_disabled(2, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions").set_item_disabled(2, true)
-#	else:
-#		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions").set_item_disabled(2, false)
-#		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions").set_item_disabled(2, false)
-#		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions").set_item_disabled(2, false)
-	if jugcounter >= globals.resources.farmexpanded.containers.jug:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions").set_item_disabled(3, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions").set_item_disabled(3, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions").set_item_disabled(3, true)
-	else:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions").set_item_disabled(3, false)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions").set_item_disabled(3, false)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions").set_item_disabled(3, false)
-	if canistercounter >= globals.resources.farmexpanded.containers.canister:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions").set_item_disabled(4, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions").set_item_disabled(4, true)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions").set_item_disabled(4, true)
-	else:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions").set_item_disabled(4, false)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions").set_item_disabled(4, false)
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions").set_item_disabled(4, false)
-	
+	counter = 0
+	for i in choices:
+		temp = containerCounters.get(i,minInt) >= globals.resources.farmexpanded.containers.get(i, 0)
+		for node in nodesContainer:
+			node.set_item_disabled(counter, temp)
+		counter += 1
+
+
 	#Show Cattle Avatar | Mirroring SlaveTab
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/bodypanel/body").set_texture(null)
+	nodeFarmSlave.get_node("bodypanel/body").set_texture(null)
 	if person.imagefull != null && globals.loadimage(person.imagefull) != null:
-		get_node("MainScreen/mansion/farmpanel/slavefarminsepct/bodypanel/body").set_texture(globals.loadimage(person.imagefull))
+		nodeFarmSlave.get_node("bodypanel/body").set_texture( globals.loadimage(person.imagefull))
 	elif globals.gallery.nakedsprites.has(person.unique):
 		if person.obed <= 50 || person.stress > 50:
-			get_node("MainScreen/mansion/farmpanel/slavefarminsepct/bodypanel/body").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothrape])
+			nodeFarmSlave.get_node("bodypanel/body").set_texture( globals.spritedict[ globals.gallery.nakedsprites[ person.unique].clothrape])
 		else:
-			get_node("MainScreen/mansion/farmpanel/slavefarminsepct/bodypanel/body").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothcons])
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/bodypanel/body").show()
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct/bodypanel").show()
+			nodeFarmSlave.get_node("bodypanel/body").set_texture( globals.spritedict[ globals.gallery.nakedsprites[ person.unique].clothcons])
+	nodeFarmSlave.get_node("bodypanel/body").show()
+	nodeFarmSlave.get_node("bodypanel").show()
 	###---End Expansion---###
 
 var selectedfarmslave
@@ -2852,112 +2739,82 @@ func _on_releasefromfarm_pressed():
 		person.farmexpanded[i].enabled = false
 		person.farmexpanded[i].method = 'leak'
 		person.farmexpanded[i].container = 'cup'
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct").hide()
+	nodeFarmSlave.hide()
 	_on_farm_pressed()
 	rebuild_slave_list()
 
 func _on_closeslaveinspect_pressed():
 	_on_farm_pressed()
 	rebuild_slave_list()
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct").hide()
+	nodeFarmSlave.hide()
 
 #Currently Unused
 func _on_sellproduction_pressed():
-	selectedfarmslave.farmoutcome = get_node("MainScreen/mansion/farmpanel/slavefarminsepct/sellproduction").is_pressed()
+	selectedfarmslave.farmoutcome = nodeFarmSlave.get_node("sellproduction").is_pressed()
 
 func _on_over_pressed():
 	mainmenu()
 
 ###---Added by Expansion---### Farm Expansion
 func _on_workstation_selected( ID ):
-	var person = selectedfarmslave
-	var choices = globals.expansionfarm.allworkstations
-	person.farmexpanded.workstation = choices[ID]
-	farminspect(person)
+	selectedfarmslave.farmexpanded.workstation = globals.expansionfarm.allworkstations[ID]
+	farminspect(selectedfarmslave)
 
 func _on_stallbedding_selected( ID ):
-	var person = selectedfarmslave
-	var choices = globals.expansionfarm.allbeddings
-	person.farmexpanded.stallbedding = choices[ID]
-	farminspect(person)
+	selectedfarmslave.farmexpanded.stallbedding = globals.expansionfarm.allbeddings[ID]
+	farminspect(selectedfarmslave)
 
 func _on_dailyaction_selected( ID ):
-	var person = selectedfarmslave
-	var choices = globals.expansionfarm.alldailyactions
-	person.farmexpanded.dailyaction = choices[ID]
-	farminspect(person)
+	selectedfarmslave.farmexpanded.dailyaction = globals.expansionfarm.alldailyactions[ID]
+	farminspect(selectedfarmslave)
 
 func _on_aphrodisiacbutton_pressed():
-	selectedfarmslave.farmexpanded.giveaphrodisiac = get_node("MainScreen/mansion/farmpanel/slavefarminsepct/giveaphrodisiac").is_pressed()
+	selectedfarmslave.farmexpanded.giveaphrodisiac = nodeFarmSlave.get_node("giveaphrodisiac").is_pressed()
+	farminspect(selectedfarmslave)
+
+func _on_usesedative_pressed():
+	selectedfarmslave.farmexpanded.usesedative = nodeFarmSlave.get_node("usesedative").is_pressed()
 	farminspect(selectedfarmslave)
 
 func _on_keeprestrained_pressed():
-	selectedfarmslave.farmexpanded.restrained = get_node("MainScreen/mansion/farmpanel/slavefarminsepct/keeprestrained").is_pressed()
+	selectedfarmslave.farmexpanded.restrained = nodeFarmSlave.get_node("keeprestrained").is_pressed()
 	farminspect(selectedfarmslave)
 
 func _on_extractmilk_pressed():
-	selectedfarmslave.farmexpanded.extractmilk.enabled = get_node("MainScreen/mansion/farmpanel/slavefarminsepct/extractmilk").is_pressed()
+	selectedfarmslave.farmexpanded.extractmilk.enabled = nodeFarmSlave.get_node("extractmilk").is_pressed()
 	farminspect(selectedfarmslave)
 
-func _on_extractmilkselected( ID ):
-	var person = selectedfarmslave
-	var choices = globals.expansionfarm.extractorsarray
-	person.farmexpanded.extractmilk.method = choices[ID]
-	farminspect(person)
+func _on_extractfluidselected( ID, fluidExtract ):
+	selectedfarmslave.farmexpanded[fluidExtract].method = globals.expansionfarm.extractorsarray[ID]
+	farminspect(selectedfarmslave)
 
-func _on_milkcontainer_selected( ID ):
-	var person = selectedfarmslave
-	var choices = globals.expansionfarm.containersarray
-	person.farmexpanded.extractmilk.container = choices[ID]
-	farminspect(person)
+func _on_fluidcontainer_selected( ID, fluidExtract ):
+	selectedfarmslave.farmexpanded[fluidExtract].container = globals.expansionfarm.containersarray[ID]
+	farminspect(selectedfarmslave)
 
 func _on_extractcum_pressed():
-	selectedfarmslave.farmexpanded.extractcum.enabled = get_node("MainScreen/mansion/farmpanel/slavefarminsepct/extractcum").is_pressed()
+	selectedfarmslave.farmexpanded.extractcum.enabled = nodeFarmSlave.get_node("extractcum").is_pressed()
 	farminspect(selectedfarmslave)
-
-func _on_extractcumselected( ID ):
-	var person = selectedfarmslave
-	var choices = globals.expansionfarm.extractorsarray
-	person.farmexpanded.extractcum.method = choices[ID]
-	farminspect(person)
-
-func _on_cumcontainer_selected( ID ):
-	var person = selectedfarmslave
-	var choices = globals.expansionfarm.containersarray
-	person.farmexpanded.extractcum.container = choices[ID]
-	farminspect(person)
 
 func _on_extractpiss_pressed():
-	selectedfarmslave.farmexpanded.extractpiss.enabled = get_node("MainScreen/mansion/farmpanel/slavefarminsepct/extractpiss").is_pressed()
+	selectedfarmslave.farmexpanded.extractpiss.enabled = nodeFarmSlave.get_node("extractpiss").is_pressed()
 	farminspect(selectedfarmslave)
 
-func _on_extractpissselected( ID ):
-	var person = selectedfarmslave
-	var choices = globals.expansionfarm.extractorsarray
-	person.farmexpanded.extractpiss.method = choices[ID]
-	farminspect(person)
-
-func _on_pisscontainer_selected( ID ):
-	var person = selectedfarmslave
-	var choices = globals.expansionfarm.containersarray
-	person.farmexpanded.extractpiss.container = choices[ID]
-	farminspect(person)
-
 func _on_breeding_option_selected( ID ):
-	var person = selectedfarmslave
-	var breeding = globals.expansionfarm.breedingoptions
-	person.farmexpanded.breeding.status = breeding[ID]
+	selectedfarmslave.farmexpanded.breeding.status = globals.expansionfarm.breedingoptions[ID]
 #Tried to get it to check consent first
 #	person.assignBreedingJob(breeding[ID])
-	farminspect(person)
+	farminspect(selectedfarmslave)
 
 func _on_specifybreedingpartnerbutton_pressed():
-	var person = selectedfarmslave
-	selectslavelist_breedingpartner(false, 'assignspecificbreedingpartner', self, 'true', true)
-	farminspect(person)
+	if selectedfarmslave.farmexpanded.breeding.partner == '-1':
+		selectslavelist_breedingpartner(false, 'assignspecificbreedingpartner', self, 'true', true)
+	else:
+		selectedfarmslave.unassignPartner()
+		farminspect(selectedfarmslave)
+	
 
 func selectslavelist_breedingpartner(prisoners = false, calledfunction = 'popup', targetnode = self, reqs = 'true', player = false, onlyparty = false):
-	var cattle = selectedfarmslave
 	var array = []
 	nodetocall = targetnode
 	functiontocall = calledfunction
@@ -2969,7 +2826,7 @@ func selectslavelist_breedingpartner(prisoners = false, calledfunction = 'popup'
 		array.append(globals.player)
 	for person in globals.slaves:
 		globals.currentslave = person
-		if person == cattle:
+		if person == selectedfarmslave:
 			continue
 		if person.away.duration != 0:
 			continue
@@ -2978,13 +2835,13 @@ func selectslavelist_breedingpartner(prisoners = false, calledfunction = 'popup'
 		if person.work != 'cow' && person.work != 'hen':
 			if !globals.jobs.jobdict[person.work].location.has('farm') && !globals.jobs.jobdict[person.work].location.has('mansion') && !globals.jobs.jobdict[person.work].tags.has('farm') && !globals.jobs.jobdict[person.work].tags.has('mansion'):
 				continue
-		if cattle.farmexpanded.breeding.status == 'breeder':
+		if selectedfarmslave.farmexpanded.breeding.status == 'breeder':
 			if person.penis == 'none':
 				continue
-		elif cattle.farmexpanded.breeding.status == 'stud':
+		elif selectedfarmslave.farmexpanded.breeding.status == 'stud':
 			if person.vagina == 'none':
 				continue
-		elif cattle.farmexpanded.breeding.status == 'both':
+		elif selectedfarmslave.farmexpanded.breeding.status == 'both':
 			if person.vagina == 'none' && person.penis == 'none':
 				continue
 		if globals.evaluate(reqs) == false:
@@ -3011,27 +2868,23 @@ func selectslavelist_breedingpartner(prisoners = false, calledfunction = 'popup'
 	get_node("chooseslavepanel").show()
 
 func assignspecificbreedingpartner(inputslave = null):
-	var person = selectedfarmslave
-	var person2 = inputslave
-	var text = person.assignBreedingPartner(person2.id)
-#	popup(person2.dictionary("You assign $name to be ") + person.dictionary("$name's breeding partner. They will breed together each day until your further instructions."))
-	popup(text)
+	popup( selectedfarmslave.assignBreedingPartner(inputslave.id) )
 	rebuild_slave_list()
-	farminspect(person)
-
-func _on_usesedative_pressed():
-	selectedfarmslave.farmexpanded.usesedative = get_node("MainScreen/mansion/farmpanel/slavefarminsepct/usesedative").is_pressed()
 	farminspect(selectedfarmslave)
 	
 func _on_snailbreeding_pressed():
-	if selectedfarmslave.farmexpanded.breeding.status != 'none':
-		selectedfarmslave.farmexpanded.breeding.status = 'none'
-	if selectedfarmslave.farmexpanded.breeding.partner != '-1':
-		selectedfarmslave.unassignPartner()
-	selectedfarmslave.farmexpanded.breeding.snails = get_node("MainScreen/mansion/farmpanel/slavefarminsepct/snailbreeding").is_pressed()
+	selectedfarmslave.farmexpanded.breeding.status = 'none'
+	selectedfarmslave.unassignPartner()
+	selectedfarmslave.farmexpanded.breeding.snails = nodeFarmSlave.get_node("snailbreeding").is_pressed()
 	farminspect(selectedfarmslave)
 
 #---Snail Panel
+var dictPiles = {
+	'food': {'node':"assignfood", 'pos': "\nEggs for [color=aqua]Food[/color]: [color=aqua]", 'none': "\n[color=red]No Snail Eggs assigned to [color=aqua]Cook[/color][/color] "},
+	'sell': {'node':"assignsell", 'pos': "\nEggs for [color=aqua]Sale[/color]: [color=aqua]", 'none': "\n[color=red]No Snail Eggs assigned to [color=aqua]Sell[/color][/color] "},
+	'hatch': {'node':"assignhatch", 'pos': "\nEggs for [color=aqua]Hatching[/color]: [color=aqua]", 'none': "\n[color=red]No Snail Eggs assigned to [color=aqua]Hatch[/color] in the Incubators[/color] "},
+}
+
 func _on_snailbutton_pressed():
 	hide_farm_panels()
 	var text = "[center]Snail Pit Management[/center]"
@@ -3040,73 +2893,51 @@ func _on_snailbutton_pressed():
 		text += "\n[center]Total Snails Available: [color=aqua]" + str(globals.state.snails) + "[/color][/center] "
 	else:
 		text += "\n[center][color=red]No Snails Available[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/snailpanel/snailheadertext").set_bbcode(text)
-	
+	nodeSnailPanel.get_node("snailheadertext").set_bbcode(text)
 	text = ""
+
 	#Unassigned Eggs Display
-	get_node("MainScreen/mansion/farmpanel/snailpanel/assignstockpile/counter").set_bbcode(str(globals.resources.farmexpanded.snails.eggs))
-	if globals.resources.farmexpanded.snails.eggs > 0:
-		text += "\nTotal Unassigned Snail Eggs Available: [color=aqua]" + str(globals.resources.farmexpanded.snails.eggs) + "[/color] "
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignfood/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignfood/add").set_tooltip('Pull from the Unassigned stockpile')
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignsell/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignsell/add").set_tooltip('Pull from the Unassigned stockpile')
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignhatch/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignhatch/add").set_tooltip('Pull from the Unassigned stockpile')
+	var nodesAdd = [nodeSnailPanel.get_node("assignfood/add"), nodeSnailPanel.get_node("assignsell/add"), nodeSnailPanel.get_node("assignhatch/add")]
+	var temp = globals.resources.farmexpanded.snails.eggs
+	nodeSnailPanel.get_node("assignstockpile/counter").set_bbcode(str(temp))
+	if temp > 0:
+		text += "\nTotal Unassigned Snail Eggs Available: [color=aqua]" + str(temp) + "[/color] "
+		for node in nodesAdd:
+			node.set_disabled(false)
+			node.set_tooltip('Pull from the Unassigned stockpile')
 	else:
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignfood/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignfood/add").set_tooltip('No unassigned eggs are available.')
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignsell/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignsell/add").set_tooltip('No unassigned eggs are available.')
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignhatch/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignhatch/add").set_tooltip('No unassigned eggs are available.')
 		text += "\n[color=red]No Unassigned Snail Eggs Available[/color] "
-		
-	#Food
-	get_node("MainScreen/mansion/farmpanel/snailpanel/assignfood/counter").set_bbcode(str(globals.resources.farmexpanded.snails.food))
-	if globals.resources.farmexpanded.snails.food > 0: 
-		text += "\nEggs for [color=aqua]Food[/color]: [color=aqua]" + str(globals.resources.farmexpanded.snails.food) + "[/color] "
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignfood/subtract").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignfood/subtract").set_tooltip('Assign back to the Unassigned stockpile.')
-	else:
-		text += "\n[color=red]No Snail Eggs waiting to be [color=aqua]Cooked[/color][/color] "
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignfood/subtract").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignfood/subtract").set_tooltip('No eggs are available in this stockpile.')
-	if globals.resources.farmexpanded.snails.cookwithoutchef == true:
-		text += "|| [color=green]Eggs will be still be cooked without a Chef present[/color] "
-	else:
-		text += "|| [color=green]Eggs will be not be cooked without a Chef present[/color] "
-	get_node("MainScreen/mansion/farmpanel/snailpanel/nochefcook").set_pressed(globals.resources.farmexpanded.snails.cookwithoutchef)
-	
-	#Sell
-	get_node("MainScreen/mansion/farmpanel/snailpanel/assignstockpile/counter").set_bbcode(str(globals.resources.farmexpanded.snails.sell))
-	if globals.resources.farmexpanded.snails.sell > 0: 
-		text += "\nEggs for [color=aqua]Sale[/color]: [color=aqua]" + str(globals.resources.farmexpanded.snails.sell) + "[/color] "
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignsell/subtract").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignsell/subtract").set_tooltip('Assign back to the Unassigned stockpile.')
-	else:
-		text += "\n[color=red]No Snail Eggs Assigned to [color=aqua]Sell[/color][/color] "
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignsell/subtract").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignsell/subtract").set_tooltip('No eggs are available in this stockpile.')
-	text += "|| Current Price per Egg: [color=aqua]" +str(globals.resources.farmexpanded.snails.goldperegg)+ "[/color]"
-	
-	#Hatch
-	get_node("MainScreen/mansion/farmpanel/snailpanel/assignhatch/counter").set_bbcode(str(globals.resources.farmexpanded.snails.hatch))
-	if globals.resources.farmexpanded.snails.hatch > 0: 
-		text += "\nEggs for [color=aqua]Hatching[/color]: [color=aqua]" + str(globals.resources.farmexpanded.snails.hatch) + "[/color] "
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignhatch/subtract").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignhatch/subtract").set_tooltip('Assign back to the Unassigned stockpile.')
-	else:
-		text += "\n[color=red]No Snail Eggs Assigned to [color=aqua]Hatch[/color] in the Incubators[/color] "
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignhatch/subtract").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/snailpanel/assignhatch/subtract").set_tooltip('No eggs are available in this stockpile.')
+		for node in nodesAdd:
+			node.set_disabled(true)
+			node.set_tooltip('No unassigned eggs are available.')
+
+	for pile in dictPiles:
+		temp = globals.resources.farmexpanded.snails[pile]
+		var node = nodeSnailPanel.get_node(dictPiles[pile].node)
+		node.get_node("counter").set_bbcode(str(temp))
+		if temp > 0: 
+			text += dictPiles[pile].pos + str(temp) + "[/color] "
+			node.get_node("subtract").set_disabled(false)
+			node.get_node("subtract").set_tooltip('Assign back to the Unassigned stockpile.')
+		else:
+			text += dictPiles[pile].none
+			node.get_node("subtract").set_disabled(true)
+			node.get_node("subtract").set_tooltip('No eggs are available in this stockpile.')
+		if pile == 'food':
+			if globals.resources.farmexpanded.snails.cookwithoutchef == true:
+				text += "|| [color=green]Eggs will still be cooked without a Chef present[/color] "
+			else:
+				text += "|| [color=green]Eggs will not be cooked without a Chef present[/color] "
+		elif pile == 'sell':
+			text += "|| Current Price per Egg: [color=aqua]" +str(globals.resources.farmexpanded.snails.goldperegg)+ "[/color]"
+
+	nodeSnailPanel.get_node("nochefcook").set_pressed(globals.resources.farmexpanded.snails.cookwithoutchef)
 	
 	#Incubators
 	var counter = 0
 	var temptext = ""
 	var incubators = globals.resources.farmexpanded.incubators
-	var incs = ['1','2','3','4','5','6','7','8','9','10']
-	for i in incs:
+	for i in globals.expansionfarm.inc_array:
 		if incubators[i].level > 0:
 			counter += 1
 			temptext += "\n" + incubators[i].name + ": [color=aqua]Level " +str(incubators[i].level)+"[/color] - "
@@ -3115,168 +2946,81 @@ func _on_snailbutton_pressed():
 			else:
 				temptext += "[color=red]Empty[/color]"
 	text += "\n\n[center]Incubators[/center]\n[center]Total Incubators: [color=aqua]" +str(counter)+ " / 10[/color][/center]\n" + temptext
-	get_node("MainScreen/mansion/farmpanel/snailpanel/snaildetailstext").set_bbcode(text)
+	nodeSnailPanel.get_node("snaildetailstext").set_bbcode(text)
 	
 	#AutoPanel
-	get_node("MainScreen/mansion/farmpanel/snailpanel/autoassign").clear()
-	for i in globals.expansionfarm.snailautooptions:
-		get_node("MainScreen/mansion/farmpanel/snailpanel/autoassign").add_item(i)
-		if globals.resources.farmexpanded.snails.auto == i:
-			get_node("MainScreen/mansion/farmpanel/snailpanel/autoassign").select(get_node("MainScreen/mansion/farmpanel/snailpanel/autoassign").get_item_count()-1)
+	if !globals.selectForOptionButton(globals.resources.farmexpanded.snails.auto, nodeSnailPanel.get_node("autoassign"), globals.expansionfarm.snailautooptions):
+		globals.resources.farmexpanded.snails.auto = 'none'
 	
-	get_node("MainScreen/mansion/farmpanel/snailpanel").show()
+	nodeSnailPanel.show()
 
-func _on_snailpanelfoodadd_pressed():
-	globals.resources.farmexpanded.snails.food += 1
-	globals.resources.farmexpanded.snails.eggs -= 1
-	_on_snailbutton_pressed()
-
-func _on_snailpanelfoodsubtract_pressed():
-	globals.resources.farmexpanded.snails.food -= 1
-	globals.resources.farmexpanded.snails.eggs += 1
-	_on_snailbutton_pressed()
-
-func _on_snailpanelselladd_pressed():
-	globals.resources.farmexpanded.snails.sell += 1
-	globals.resources.farmexpanded.snails.eggs -= 1
-	_on_snailbutton_pressed()
-
-func _on_snailpanelsellsubtract_pressed():
-	globals.resources.farmexpanded.snails.sell -= 1
-	globals.resources.farmexpanded.snails.eggs += 1
-	_on_snailbutton_pressed()
-
-func _on_snailpanelhatchadd_pressed():
-	globals.resources.farmexpanded.snails.hatch += 1
-	globals.resources.farmexpanded.snails.eggs -= 1
-	_on_snailbutton_pressed()
-
-func _on_snailpanelhatchsubtract_pressed():
-	globals.resources.farmexpanded.snails.hatch -= 1
-	globals.resources.farmexpanded.snails.eggs += 1
+func _on_snailpanelchange_pressed(type, amount):
+	globals.resources.farmexpanded.snails[type] += amount
+	globals.resources.farmexpanded.snails.eggs -= amount
 	_on_snailbutton_pressed()
 
 func _on_nochefcook_pressed():
-	globals.resources.farmexpanded.snails.cookwithoutchef = get_node("MainScreen/mansion/farmpanel/snailpanel/nochefcook").is_pressed()
+	globals.resources.farmexpanded.snails.cookwithoutchef = nodeSnailPanel.get_node("nochefcook").is_pressed()
 	_on_snailbutton_pressed()
 
 func _on_snail_autoassign_selected( ID ):
-	var options = globals.expansionfarm.snailautooptions
-	globals.resources.farmexpanded.snails.auto = options[ID]
+	globals.resources.farmexpanded.snails.auto = globals.expansionfarm.snailautooptions[ID]
 	_on_snailbutton_pressed()
 
 func _on_snailpanelclose_pressed():
-	get_node("MainScreen/mansion/farmpanel/snailpanel").hide()
+	nodeSnailPanel.hide()
 
 #Vats
 func _on_vatsbutton_pressed():
 	hide_farm_panels()
-	#Vat Header
-	var text = "[center][color=#d1b970]Vat Management[/color]\n"
-	var vattypes = ['vatmilk', 'vatsemen', 'vatlube', 'vatpiss']
+	var text
 	var vatcount = 0
 	var vatmax = 0
-	for vats in vattypes:
-		if globals.state.mansionupgrades[vats] > 0:
+	var bottlecount = globals.resources.farmexpanded.containers.bottle
+	var vats = globals.resources.farmexpanded.vats
+
+	#Vat Capacities
+	for fluid in globals.expansionfarm.fluidtypes:
+		var fluidVat = "vat" + fluid
+		var nodeButton = get_node("MainScreen/mansion/farmpanel/vatspanel/vat"+fluid+"button")
+		if globals.state.mansionupgrades[fluidVat] > 0:
+			nodeButton.set_disabled(false)
+			nodeButton.set_tooltip('Manage '+fluid.capitalize()+' Vat.')
 			vatcount += 1
+			vatmax = globals.getVatMaxCapacity(fluidVat)
+			if vats[fluid].vat < vatmax:
+				text = "[center][color=aqua]"
+			else:
+				text = "[center][color=red]"
+			text += str(vats[fluid].vat) + "[/color] / [color=aqua]" + str(vatmax) + "[/color][/center]"
+		else: #Disable Unpurchased Buttons
+			nodeButton.set_disabled(true)
+			nodeButton.set_tooltip('No '+fluid.capitalize()+' Vat Installed.')
+			text = "[center][color=red]No "+fluid.capitalize()+" Vat[/color][/center]"
+		get_node("MainScreen/mansion/farmpanel/vatspanel/capacity"+fluid+"text").set_bbcode(text)
+		bottlecount -= vats[fluid].bottle2refine + vats[fluid].bottle2sell
+
+	#Vat Header
+	text = "[center][color=#d1b970]Vat Management[/color]\n"
 	if vatcount >= globals.state.mansionupgrades.vatspace:
 		text += "[color=red]No Remaining Space for new Vats. " + str(vatcount) + " / " + str(globals.state.mansionupgrades.vatspace) + "[/color][/center]"
 	else:
 		vatcount = globals.state.mansionupgrades.vatspace - vatcount
-		text += "[color=aqua]Space Open for New Vats: " + str(vatcount) + " / " + str(globals.state.mansionupgrades.vatspace) + "[/color][/center]"
+		text += "[color=aqua]Space Open for new Vats: " + str(vatcount) + " / " + str(globals.state.mansionupgrades.vatspace) + "[/color][/center]"
 	get_node("MainScreen/mansion/farmpanel/vatspanel/vatheadertext").set_bbcode(text)
-	#Vat Capacity: Milk
-	text = ""
-	if globals.state.mansionupgrades.vatmilk > 0:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatmilkbutton").set_meta('type', 'milk')
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatmilkbutton").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatmilkbutton").set_tooltip('Manage Milk Vat.')
-		vatmax = globals.getVatMaxCapacity('vatmilk')
-		if globals.resources.farmexpanded.vats.milk.vat < vatmax:
-			text += "[center][color=aqua]" + str(globals.resources.farmexpanded.vats.milk.vat) + "[/color] / [color=aqua]" + str(vatmax) + "[/color][/center]"
-		else:
-			text += "[center][color=red]" + str(globals.resources.farmexpanded.vats.milk.vat) + "[/color] / [color=aqua]" + str(vatmax) + "[/color][/center]"
-	else:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatmilkbutton").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatmilkbutton").set_tooltip('No Milk Vat Installed.')
-		text += "[center][color=red]No Milk Vat[/color][/center]"
-	get_node("MainScreen/mansion/farmpanel/vatspanel/capacitymilktext").set_bbcode(text)
-	#Vat Capacity: Semen
-	text = ""
-	if globals.state.mansionupgrades.vatsemen > 0:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatsemenbutton").set_meta('type', 'semen')
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatsemenbutton").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatsemenbutton").set_tooltip('Manage Semen Vat.')
-		vatmax = globals.getVatMaxCapacity('vatsemen')
-		if globals.resources.farmexpanded.vats.semen.vat < vatmax:
-			text += "[center][color=aqua]" + str(globals.resources.farmexpanded.vats.semen.vat) + "[/color] / [color=aqua]" + str(vatmax) + "[/color][/center]"
-		else:
-			text += "[center][color=red]" + str(globals.resources.farmexpanded.vats.semen.vat) + "[/color] / [color=aqua]" + str(vatmax) + "[/color][/center]"
-	else:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatsemenbutton").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatsemenbutton").set_tooltip('No Semen Vat Installed.')
-		text += "[center][color=red]No Semen Vat[/color][/center]"
-	get_node("MainScreen/mansion/farmpanel/vatspanel/capacitysementext").set_bbcode(text)
-	#Vat Capacity: Lube
-	text = ""
-	if globals.state.mansionupgrades.vatlube > 0:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatlubebutton").set_meta('type', 'lube')
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatlubebutton").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatlubebutton").set_tooltip('Manage Lube Vat.')
-		vatmax = globals.getVatMaxCapacity('vatlube')
-		if globals.resources.farmexpanded.vats.lube.vat < vatmax:
-			text += "[center][color=aqua]" + str(globals.resources.farmexpanded.vats.lube.vat) + "[/color] / [color=aqua]" + str(vatmax) + "[/color][/center]"
-		else:
-			text += "[center][color=red]" + str(globals.resources.farmexpanded.vats.lube.vat) + "[/color] / [color=aqua]" + str(vatmax) + "[/color][/center]"
-	else:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatlubebutton").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatlubebutton").set_tooltip('No Lube Vat Installed.')
-		text += "[center][color=red]No Lube Vat[/color][/center]"
-	get_node("MainScreen/mansion/farmpanel/vatspanel/capacitylubetext").set_bbcode(text)
-	#Vat Capacity: Piss
-	text = ""
-	if globals.state.mansionupgrades.vatpiss > 0:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatpissbutton").set_meta('type', 'piss')
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatpissbutton").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatpissbutton").set_tooltip('Manage Piss Vat.')
-		vatmax = globals.getVatMaxCapacity('vatpiss')
-		if globals.resources.farmexpanded.vats.piss.vat < vatmax:
-			text += "[center][color=aqua]" + str(globals.resources.farmexpanded.vats.piss.vat) + "[/color] / [color=aqua]" + str(vatmax) + "[/color][/center]"
-		else:
-			text += "[center][color=red]" + str(globals.resources.farmexpanded.vats.piss.vat) + "[/color] / [color=aqua]" + str(vatmax) + "[/color][/center]"
-	else:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatpissbutton").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatpissbutton").set_tooltip('No Piss Vat Installed.')
-		text += "[center][color=red]No Piss Vat[/color][/center]"
-	get_node("MainScreen/mansion/farmpanel/vatspanel/capacitypisstext").set_bbcode(text)
 	
-	#Disable Unpurchased Buttons
-	for vats in vattypes:
-		if globals.state.mansionupgrades[vats] == 0:
-			get_node("MainScreen/mansion/farmpanel/vatspanel/"+str(vats)+"button").set_disabled(true)
-			get_node("MainScreen/mansion/farmpanel/vatspanel/"+str(vats)+"button").set_tooltip("You haven't purchased that type of Vat.")
 	
 	#Bottler
 	globals.resources.farmexpanded.bottler.level = globals.state.mansionupgrades.bottler
 	text = "[center][color=#d1b970]Bottler Level:[/color] [color=aqua]" + str(globals.resources.farmexpanded.bottler.level) + "[/color][/center]"
 	text += "\n\n[color=#d1b970]Total Bottles Produced:[/color] [color=aqua]" + str(globals.resources.farmexpanded.bottler.totalproduced) + "[/color]"
-	text += "\n\n[color=#d1b970]Energy Cost per Bottle Created: [/color]\nMilk: [color=aqua]" + str(globals.resources.farmexpanded.vats.milk.basebottlingenergy - globals.resources.farmexpanded.bottler.level) + "[/color]\nSemen: [color=aqua]" + str(globals.resources.farmexpanded.vats.semen.basebottlingenergy - globals.resources.farmexpanded.bottler.level)
-	text += "[/color]\nLube: [color=aqua]" + str(globals.resources.farmexpanded.vats.lube.basebottlingenergy - globals.resources.farmexpanded.bottler.level) + "[/color]\nPiss: [color=aqua]" + str(globals.resources.farmexpanded.vats.piss.basebottlingenergy - globals.resources.farmexpanded.bottler.level) + "[/color]"
+	text += "\n\n[color=#d1b970]Energy Cost per Bottle Created: [/color]\nMilk: [color=aqua]" + str(vats.milk.basebottlingenergy - globals.resources.farmexpanded.bottler.level) + "[/color]\nSemen: [color=aqua]" + str(vats.semen.basebottlingenergy - globals.resources.farmexpanded.bottler.level)
+	text += "[/color]\nLube: [color=aqua]" + str(vats.lube.basebottlingenergy - globals.resources.farmexpanded.bottler.level) + "[/color]\nPiss: [color=aqua]" + str(vats.piss.basebottlingenergy - globals.resources.farmexpanded.bottler.level) + "[/color]"
 	get_node("MainScreen/mansion/farmpanel/vatspanel/bottlertext").set_bbcode(text)
 	
 	#Bottle Count
-	var count = globals.resources.farmexpanded.containers.bottle
-	var vats = globals.resources.farmexpanded.vats
-	for i in ['milk','semen','lube','piss']:
-		if vats[i].bottle2refine > 0:
-			count -= vats[i].bottle2refine
-		if vats[i].bottle2sell > 0:
-			count -= vats[i].bottle2sell
-	text = "[center]Stockpile: "
-	if count > 0:
-		text += "([color=aqua]" + str(count) + "[/color]) / " + str(globals.resources.farmexpanded.containers.bottle) + "[/center] "
-	else:
-		text += "([color=red]" + str(count) + "[/color]) / " + str(globals.resources.farmexpanded.containers.bottle) + "[/center] "
+	text = "[center]Stockpile: " + ( "([color=aqua]" if bottlecount > 0 else "([color=red]" )
+	text += str(bottlecount) + "[/color]) / " + str(globals.resources.farmexpanded.containers.bottle) + "[/center] "
 	get_node("MainScreen/mansion/farmpanel/vatspanel/buybottles/counter").set_bbcode(text)
 	
 	text = "[center]Cost: " + str(globals.expansionfarm.containerdict.bottle.cost) + "[/center]"
@@ -3336,10 +3080,10 @@ func vatsdetailspanel(type):
 	var vatmax = globals.getVatMaxCapacity('vat'+type)
 	var text = ""
 	
-	get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel").set_meta('type', type)
+	nodeVatDetails.set_meta('type', type)
 	#Header Text
 	text = "[center][color=aqua]" + str(type).capitalize() + " Vat Management[/color][/center]"
-	get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/vatheadertext").set_bbcode(text)
+	nodeVatDetails.get_node("vatheadertext").set_bbcode(text)
 	
 	#Body Text
 	text = "Vat Level: [color=aqua]" + str(globals.state.mansionupgrades['vat'+type]) + "[/color]"
@@ -3358,135 +3102,132 @@ func vatsdetailspanel(type):
 	
 	#Unassigned (General Vat)
 	text = "[center]" + str(vatscode.vat) + " / " + str(vatmax) + " [/center] "
-	get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignstockpile/counter").set_bbcode(text)
+	nodeVatDetails.get_node("assignstockpile/counter").set_bbcode(text)
 	var freespace = vatmax - (vatscode.vat + vatscode.food + vatscode.bottle2refine + vatscode.bottle2sell)
 	freespace = clamp(freespace, 0, 1000)
 	if freespace > 0:
 		text = "[center]Free Space: [color=aqua]" + str(freespace) + "[/color] "
 	else:
 		text = "[center]Free Space: [color=red]" + str(freespace) + "[/color] "
-	get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignstockpile/freespace").set_bbcode(text)
+	nodeVatDetails.get_node("assignstockpile/freespace").set_bbcode(text)
 	
 	#Food
 	text = "[center]" + str(vatscode.food) + "[/center] "
-	get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignfood/counter").set_bbcode(text)
+	nodeVatDetails.get_node("assignfood/counter").set_bbcode(text)
 	#Enable/Disable Add/Subtract buttons
 	#Subtract Buttons
 	if vatscode.food > 0:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignfood/subtract").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignfood/subtract").set_tooltip('Remove from the Food Stockpile.')
+		nodeVatDetails.get_node("assignfood/subtract").set_disabled(false)
+		nodeVatDetails.get_node("assignfood/subtract").set_tooltip('Remove from the Food Stockpile.')
 	else:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignfood/subtract").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignfood/subtract").set_tooltip('Nothing has been set to be cooked.')
+		nodeVatDetails.get_node("assignfood/subtract").set_disabled(true)
+		nodeVatDetails.get_node("assignfood/subtract").set_tooltip('Nothing has been set to be cooked.')
 	#Add Buttons
 	if vatscode.vat > 0:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignfood/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignfood/add").set_tooltip('Assign to the Kitchen to be cooked.')
+		nodeVatDetails.get_node("assignfood/add").set_disabled(false)
+		nodeVatDetails.get_node("assignfood/add").set_tooltip('Assign to the Kitchen to be cooked.')
 	else:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignfood/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignfood/add").set_tooltip('All of the liquid in the vat has been assigned to a stockpile.')
+		nodeVatDetails.get_node("assignfood/add").set_disabled(true)
+		nodeVatDetails.get_node("assignfood/add").set_tooltip('All of the liquid in the vat has been assigned to a stockpile.')
 	
 	#Refine
 	text = "[center]Stockpile: " + str(globals.itemdict['bottled'+type].amount) + "[/center] "
-	get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine/actualcounter").set_bbcode(text)
+	nodeVatDetails.get_node("assignrefine/actualcounter").set_bbcode(text)
 	text = "[center]" + str(vatscode.bottle2refine) + "[/center] "
-	get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine/pendingcounter").set_bbcode(text)
+	nodeVatDetails.get_node("assignrefine/pendingcounter").set_bbcode(text)
 	#Subtract Buttons
 	if vatscode.bottle2refine > 0:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine/subtract").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine/subtract").set_tooltip('Remove from the Refined Stockpile.')
+		nodeVatDetails.get_node("assignrefine/subtract").set_disabled(false)
+		nodeVatDetails.get_node("assignrefine/subtract").set_tooltip('Remove from the Refined Stockpile.')
 	else:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine/subtract").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine/subtract").set_tooltip('Nothing has been set to be refined.')
+		nodeVatDetails.get_node("assignrefine/subtract").set_disabled(true)
+		nodeVatDetails.get_node("assignrefine/subtract").set_tooltip('Nothing has been set to be refined.')
 	#Add Buttons
 	if vatscode.vat > 0:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine/add").set_tooltip('Assign to be refined into usable bottles.')
+		nodeVatDetails.get_node("assignrefine/add").set_disabled(false)
+		nodeVatDetails.get_node("assignrefine/add").set_tooltip('Assign to be refined into usable bottles.')
 	else:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine/add").set_tooltip('All of the liquid in the vat has been assigned to a stockpile.')
+		nodeVatDetails.get_node("assignrefine/add").set_disabled(true)
+		nodeVatDetails.get_node("assignrefine/add").set_tooltip('All of the liquid in the vat has been assigned to a stockpile.')
 	
 	#Sell
 	text = "[center]Stockpile: " + str(vatscode.sell) + "[/center] "
-	get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell/actualcounter").set_bbcode(text)
+	nodeVatDetails.get_node("assignsell/actualcounter").set_bbcode(text)
 	text = "[center]" + str(vatscode.bottle2sell) + "[/center] "
-	get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell/pendingcounter").set_bbcode(text)
+	nodeVatDetails.get_node("assignsell/pendingcounter").set_bbcode(text)
 	#Subtract Buttons
 	if vatscode.bottle2sell > 0:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell/subtract").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell/subtract").set_tooltip('Remove from the Sales Stockpile.')
+		nodeVatDetails.get_node("assignsell/subtract").set_disabled(false)
+		nodeVatDetails.get_node("assignsell/subtract").set_tooltip('Remove from the Sales Stockpile.')
 	else:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell/subtract").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell/subtract").set_tooltip('Nothing has been set to be sold.')
+		nodeVatDetails.get_node("assignsell/subtract").set_disabled(true)
+		nodeVatDetails.get_node("assignsell/subtract").set_tooltip('Nothing has been set to be sold.')
 	#Add Buttons
 	if vatscode.vat > 0:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell/add").set_tooltip('Assign to be bottled for sale.')
+		nodeVatDetails.get_node("assignsell/add").set_disabled(false)
+		nodeVatDetails.get_node("assignsell/add").set_tooltip('Assign to be bottled for sale.')
 	else:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell/add").set_tooltip('All of the liquid in the vat has been assigned to a stockpile.')
+		nodeVatDetails.get_node("assignsell/add").set_disabled(true)
+		nodeVatDetails.get_node("assignsell/add").set_tooltip('All of the liquid in the vat has been assigned to a stockpile.')
 	
 	#AutoBuy Bottles
-	get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/autobuybottles").set_pressed(globals.resources.farmexpanded.vats[type].autobuybottles)
+	nodeVatDetails.get_node("autobuybottles").set_pressed(globals.resources.farmexpanded.vats[type].autobuybottles)
 	
 	#AutoAssign Options
-	get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/autoassign").clear()
-	for i in globals.expansionfarm.vatsautooptions:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/autoassign").add_item(i)
-		if globals.resources.farmexpanded.vats[type].auto == i:
-			get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/autoassign").select(get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/autoassign").get_item_count()-1)
+	if !globals.selectForOptionButton(globals.resources.farmexpanded.vats[type].auto, nodeVatDetails.get_node("autoassign"), globals.expansionfarm.vatsautooptions):
+		globals.resources.farmexpanded.vats[type].auto = 'vat'
 	
-	get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel").show()
+	nodeVatDetails.show()
 
 func _on_vatfood_add_pressed():
-	var type = get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel").get_meta('type')
+	var type = nodeVatDetails.get_meta('type')
 	globals.resources.farmexpanded.vats[type].vat -= 1
 	globals.resources.farmexpanded.vats[type].food += 1
 	vatsdetailspanel(type)
 
 func _on_vatfood_subtract_pressed():
-	var type = get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel").get_meta('type')
+	var type = nodeVatDetails.get_meta('type')
 	globals.resources.farmexpanded.vats[type].vat += 1
 	globals.resources.farmexpanded.vats[type].food -= 1
 	vatsdetailspanel(type)
 
 func _on_vatrefine_add_pressed():
-	var type = get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel").get_meta('type')
+	var type = nodeVatDetails.get_meta('type')
 	globals.resources.farmexpanded.vats[type].vat -= 1
 	globals.resources.farmexpanded.vats[type].bottle2refine += 1
 	vatsdetailspanel(type)
 
 func _on_vatrefine_subtract_pressed():
-	var type = get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel").get_meta('type')
+	var type = nodeVatDetails.get_meta('type')
 	globals.resources.farmexpanded.vats[type].vat += 1
 	globals.resources.farmexpanded.vats[type].bottle2refine -= 1
 	vatsdetailspanel(type)
 
 func _on_vatsell_add_pressed():
-	var type = get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel").get_meta('type')
+	var type = nodeVatDetails.get_meta('type')
 	globals.resources.farmexpanded.vats[type].vat -= 1
 	globals.resources.farmexpanded.vats[type].bottle2sell += 1
 	vatsdetailspanel(type)
 
 func _on_vatsell_subtract_pressed():
-	var type = get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel").get_meta('type')
+	var type = nodeVatDetails.get_meta('type')
 	globals.resources.farmexpanded.vats[type].vat += 1
 	globals.resources.farmexpanded.vats[type].bottle2sell -= 1
 	vatsdetailspanel(type)
 
 func _on_autobuybottles_pressed():
-	var type = get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel").get_meta('type')
-	globals.resources.farmexpanded.vats[type].autobuybottles = get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/autobuybottles").is_pressed()
+	var type = nodeVatDetails.get_meta('type')
+	globals.resources.farmexpanded.vats[type].autobuybottles = nodeVatDetails.get_node("autobuybottles").is_pressed()
 	vatsdetailspanel(type)
 
 func _on_vats_autoassign_selected( ID ):
-	var type = get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel").get_meta('type')
+	var type = nodeVatDetails.get_meta('type')
 	var options = globals.expansionfarm.vatsautooptions
 	globals.resources.farmexpanded.vats[type].auto = options[ID]
 	vatsdetailspanel(type)
 
 func _on_vatsdetailspanelclose_pressed():
-	get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel").hide()
+	nodeVatDetails.hide()
 	_on_vatsbutton_pressed()
 
 func _on_workersbutton_pressed():
@@ -4004,9 +3745,10 @@ func _on_farmhelpbutton_close():
 	get_node("MainScreen/mansion/farmpanel/farmhelppanel").hide()
 
 func hide_farm_panels():
-	get_node("MainScreen/mansion/farmpanel/slavefarminsepct").hide()
-	get_node("MainScreen/mansion/farmpanel/snailpanel").hide()
+	nodeFarmSlave.hide()
+	nodeSnailPanel.hide()
 	get_node("MainScreen/mansion/farmpanel/vatspanel").hide()
+	nodeVatDetails.hide()
 	get_node("MainScreen/mansion/farmpanel/workerspanel").hide()
 	get_node("MainScreen/mansion/farmpanel/storepanel").hide()
 	get_node("MainScreen/mansion/farmpanel/storepanel/incubatorspanel").hide()

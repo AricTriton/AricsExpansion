@@ -1615,7 +1615,7 @@ func public_nudity_law(person, gold):
 		#Bonus/Penalty due to Wages
 		if d100 <= person.beauty:
 			goldmod = round(gold * (person.charm *.01))
-			text += "$His naked body [color=lime]attracted[/color] others. He ended up earning an extra [color=yellow]" + str(goldmod) + " Gold[/color] due to $his [color=aqua]nudity[/color], [color=aqua]beauty[/color], and [color=aqua]charm[/color]. "
+			text += "$His naked body [color=lime]attracted[/color] others. $He ended up earning an extra [color=yellow]" + str(goldmod) + " Gold[/color] due to $his [color=aqua]nudity[/color], [color=aqua]beauty[/color], and [color=aqua]charm[/color]. "
 			if towndict.laws.public_nudity == false:
 				towndict.nudity += round(rand_range(1,3))
 				text += "You suspect this made some citizens appreciate public nudity. You've gained some local support towards accepting a law legalizing it, increasing the chances of a proposed law passing. "
@@ -1623,7 +1623,7 @@ func public_nudity_law(person, gold):
 					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Updated Chance of Law Passing[/color] = [color=aqua]" + str(towndict.nudity) + "[/color] || "
 		elif d100 >= person.beauty + 50:
 			goldmod = -1 * round(gold * ((100 - person.charm) *.01))
-			text += "$His naked body [color=red]disgusted[/color] others. He ended up losing [color=yellow]" + str(goldmod) + " Gold[/color] due to $his [color=aqua]nudity[/color], [color=aqua]beauty[/color], and [color=aqua]charm[/color]. "
+			text += "$His naked body [color=red]disgusted[/color] others. $He ended up losing [color=yellow]" + str(goldmod) + " Gold[/color] due to $his [color=aqua]nudity[/color], [color=aqua]beauty[/color], and [color=aqua]charm[/color]. "
 			if towndict.laws.public_nudity == false:
 				towndict.nudity -= round(rand_range(1,3))
 				text += "You suspect this made some citizens hate public nudity. You've lost some local support towards accepting a law legalizing it, decreasing the chances of a proposed law passing. "
@@ -1639,7 +1639,7 @@ func public_nudity_law(person, gold):
 			d100 = round(rand_range(0,100))
 			if d100 <= towndict.guardskill:
 				var fine = 50
-				text += "\n[color=aqua]$name[/color] was stopped by the local guards in [color=aqua]" + str(joblocation).capitalize() + "[/color]. [color=red]$He was informed that $he was breaking the local [color=aqua]Public Nudity[/color] law and would receive a fine of [color=yellow]50[/color] for public indecency.[/color] "
+				text += "\n[color=aqua]$name[/color] was stopped by the local guards in [color=aqua]" + str(joblocation).capitalize() + "[/color]. [color=red]$He was informed that $he was breaking the local [/color][color=aqua]Public Nudity[/color][color=red] law and would receive a fine of [/color][color=yellow]50[/color][color=red] for public indecency.[/color] "
 				if globals.expansionsettings.perfectinfo == true:
 					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Public Indecency Fine Chance[/color] of [color=aqua]" + str(towndict.guardskill) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color] || "
 				

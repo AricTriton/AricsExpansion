@@ -9,7 +9,7 @@ var hobbydescription = {
 	'Curious' : "[color=aqua]Start with the [color=green]Gifted[/color] trait.[/color]\n\n$name spends $his time searching for answers and meaning in this crazy world. This has led $him to become more receptive to new skills and knowledge.",
 	'Genius' : "[color=aqua]Start with the [color=green]Clever[/color] trait and randomly either the [color=green]Responsive[/color] or [color=green]Gifted[/color] trait.[/color]\n[color=red]Gains either the Clumsy, Frail, or Weak trait.[/color]\n\n$name spends $his time studying and thinking and tends to not focus on physical activities.\n",
 	'Socialite' : "[color=aqua]Start with the traits [color=green]Pretty Voice[/color] and either [color=green]Natural Beauty[/color] or [color=green]Ditzy[/color]. Gain [color=red]Fickle[/color].[/color]\n\n$name understands that the only real happiness in life comes from being popular and now even craves the attention from others.\n",
-	'Waifu' : "[color=aqua]Start with the traits [color=green]Monogamous[/color], [color=green]Fertile[/color], [color=green]Ascetic[/color], [color=red]Clingy[/color].\n\nStarts with the [color=green]Submissive[/color] fetish at [color=lime]Mindblowing[/color] and [color=green]Dominance[/color] at [color=red]Taboo[/color].[/color]\n\n$name has spent $his whole life preparing $himself to be the perfect, submissive partner.\n\n[color=yellow]Very Unbalanced[/color]\n",
+	'Waifu' : "[color=aqua]Start with the traits [color=green]Monogamous[/color], [color=green]Fertile[/color], [color=green]Ascetic[/color], and [color=red]Clingy[/color].\n\nStarts with the [color=green]Submissive[/color] fetish at [color=lime]Mindblowing[/color] and [color=green]Dominance[/color] at [color=red]Taboo[/color].[/color]\n\n$name has spent $his whole life preparing $himself to be the perfect, submissive partner.\n\n[color=yellow]Very Unbalanced[/color]\n",
 	'Perfect Specimen' : "[color=aqua]Start with the traits [color=green]Strong[/color], [color=green]Quick[/color], [color=green]Robust[/color], and [color=green]Responsive[/color].[/color]\n\n$name has been perfectly crafted to be the perfect specimen of their race.\n\n[color=red]Insanely Unbalanced[/color]\n"
 }
 
@@ -385,7 +385,7 @@ func _on_slaveconfirm_pressed():
 
 	#Generate mental stats
 	for i in ['conf','cour','wit','charm']:
-		startSlave[i] = rand_range(30,35)
+		startSlave.stats[i+'_base'] = rand_range(30,35)
 	startSlave.obed = 90
 	startSlave.beautybase = variables.characterstartbeauty
 	if startSlave.memory.find('$sibling') >= 0:
@@ -461,6 +461,7 @@ func _on_slaveconfirm_pressed():
 	globals.constructor.forceFullblooded(startSlave)
 	globals.constructor.setRaceDisplay(startSlave)
 	globals.constructor.set_ovulation(startSlave)
+	globals.expansionsetup.setRaceBonus(startSlave, true)
 	###---End Expansion---###
 	###---Added by Expansion---### Ank Bugfix v4
 	startSlave.health = 1000

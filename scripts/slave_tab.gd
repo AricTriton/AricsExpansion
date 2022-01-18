@@ -1,24 +1,5 @@
 
-extends Control
-
-
-
-func buyattributepoint():
-	#ralphA - added "if globals.useRalphsTweaks:" section and adjusted tabs for original code 
-	if globals.useRalphsTweaks: #ralphA - closes attribute point to upgrade point conversion unless npcs are Loyalty 50 (no using recent additions for quick upgrade points)
-		if person.loyal >=50 && person.skillpoints >= variables.attributepointsperupgradepoint:
-			person.skillpoints -= variables.attributepointsperupgradepoint
-			globals.resources.upgradepoints += 1
-		else:
-			get_tree().get_root().get_node("Mansion").infotext("Not enough attribute points or loyalty", 'red')
-	else:
-		if person.skillpoints >= variables.attributepointsperupgradepoint:
-			person.skillpoints -= variables.attributepointsperupgradepoint
-			globals.resources.upgradepoints += 1
-		else:
-			get_tree().get_root().get_node("Mansion").infotext("Not enough attribute points", 'red')
-	#/ralphA
-	upgradecostupdate()
+#var showfullbody = true
 
 func slavetabopen():
 	var label
@@ -101,14 +82,6 @@ func slavetabopen():
 		if hairstyleBtn.get_item_text(i) == person.hairstyle:
 			hairstyleBtn.select(i)
 			break
-	#Whims -- new colors for the slave list
-	get_tree().get_current_scene().get_node("MainScreen/slave_tab/stats/customization/namecolor").clear()
-	var namecolor = person.namecolor
-	for i in namecolors:
-		get_tree().get_current_scene().get_node("MainScreen/slave_tab/stats/customization/namecolor").add_item(i)
-		if namecolor == i:
-			get_tree().get_current_scene().get_node("MainScreen/slave_tab/stats/customization/namecolor").select(get_tree().get_current_scene().get_node("MainScreen/slave_tab/stats/customization/namecolor").get_item_count()-1)
-
 	###---Added by Expansion---### Removed in current version for some reason?
 #	$stats/customization/hairstyle.set_text(person.hairstyle)
 	###---End Expansion---###
@@ -337,7 +310,6 @@ func buildmetrics():
 		###---End Expansion---###
 
 	$stats/statisticpanel/relations/RichTextLabel.bbcode_text = text
-		
 
 func relationword(value):
 	var text = 'neutral'
@@ -358,6 +330,8 @@ func relationword(value):
 	elif value <= -200:
 		text = 'aloof'
 	return text
+
+##############Regulation screen
 
 ###---Added by Expansion---### Deviate / Kennel Sleep Location
 func regulationdescription():
@@ -397,6 +371,7 @@ func regulationdescription():
 		text = text + 'At the night $he will be sleeping with the hounds in the [color=purple]kennel[/color].\n'
 	###---End Expansion---###
 	return find_node('regulationdescript').set_bbcode(person.dictionary(text))
+###---End Expansion---###
 
 
 ###########Brand popup window
@@ -430,10 +405,6 @@ func _on_brandbutton_pressed():
 			confirm.set_meta('value', 2)
 		###---End Expansion---###
 
-func _on_cancel_pressed():
-	$stats/customization/brandpopup.visible = false
-
-
 func _on_confirm_pressed():
 	var confirm = find_node('confirm')
 	var popup = find_node('brandpopup')
@@ -453,7 +424,6 @@ func _on_confirm_pressed():
 		###---End Expansion---###
 	slavetabopen()
 
-
 ###---Added by Expansion---### Added by Deviate
 var sleepdict = {
 	'communal': 0,
@@ -472,7 +442,8 @@ func sleeprooms():
 	###---Added by Expansion---### Added by Deviate
 	$stats/sleep.set_item_disabled(4, globals.state.mansionupgrades.mansionkennels == 0)
 	###---End Expansion---###
-
+###---End Expansion---###
+							 
 
 ###---Added by Expansion---### Family Expanded
 func _on_relativesbutton_pressed():
@@ -597,6 +568,7 @@ func _on_relativesbutton_pressed():
 				text += "Daughter: "
 			text += getentrytext(entry2) + "\n"
 	$stats/customization/relativespanel/relativestext.bbcode_text = text
+###---End Expansion---###
 
 ###---Added by Expansion---### Renamed Slaves don't Rename | Ank BugFix v4a
 func getentrytext(entry):
@@ -615,14 +587,7 @@ func getentrytext(entry):
 		text += " - Status Unknown"
 	text += ", " + entry.race
 	return text
-
-func _on_nickaccept_pressed():
-	$stats/customization/nicknamepanel.visible = false
-	person.nickname = $stats/customization/nicknamepanel/nickline.get_text()
-	if globals.state.relativesdata.has(person.id):
-		globals.state.relativesdata[person.id].name = person.name_long()
-	get_tree().get_current_scene().rebuild_slave_list()
-	slavetabopen()
+###---End Expansion---###
 
 func _on_piercing_pressed():
 	$stats/customization/piercingpanel.popup()
@@ -733,17 +698,6 @@ func updatestats():
 	$stats/statspanel/sexuality_base.set_texture(sexuality_images[str(person.sexuality_images.base)])
 	###---End Expansion---###
 
-func _process(delta):
-	var panel = $stats/basics/bodypanel
-	if panel.is_visible_in_tree():
-		if globals.main && globals.main.get_node("dialogue").visible:
-			panel.modulate.a = max(panel.modulate.a - 0.1, 0.0)
-		else:
-			var pos = panel.get_local_mouse_position()
-			var area = panel.rect_size
-			var val = -0.05 if (0 <= pos.x && 0 <= pos.y && pos.x <= area.x && pos.y <= area.y) else 0.05
-			panel.modulate.a = clamp(panel.modulate.a + val, 0.2, 1.0)
-
 ###---Added by Expansion---### New Images and Icons
 #---Movement Images
 var movementimages = globals.movementimages
@@ -806,10 +760,5 @@ func _on_sexuality_mouse_entered():
 func _on_sexuality_mouse_exited():
 	globals.hidetooltip()
 
-#whims -- color selection stuff
-var namecolors = ['blue', 'brown', 'cyan', 'fuchsia', 'gold', 'gray', 'green', 'orange', 'purple', 'red', 'salmon', 'sienna', 'tan', 'violet', 'white', 'yellow']
-
-func _on_namecolor_item_selected(id):
-	person.namecolor = namecolors[id]
-	get_tree().get_current_scene().rebuild_slave_list()
 ###---End Expansion---###
+

@@ -2,7 +2,7 @@
 
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
-var modversion = 1.5
+var modversion = 1.6
 
 #---Aric's and Game's Base Values potentially changed by Ralph's
 var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within ApplyTweaks as well as the Hybrid system.
@@ -161,7 +161,7 @@ var sedativewitlosschance = 75
 
 #---Towns Expanded
 #The Base Chance that local town guards will have arrested/killed escaped enemies to clear room in the array
-var minimum_npcs_to_detain = 20
+var minimum_npcs_to_detain = 50
 var townguardefficiency = 15
 #Laws: Public Nudity Bonus and Penalty
 var enable_public_nudity_system = true
