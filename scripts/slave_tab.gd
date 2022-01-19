@@ -504,25 +504,12 @@ func _on_relativesbutton_pressed():
 	###---End Expansion---###
 	
 	###---Added by Expansion---### Family Expanded
-	var halfsiblings_banner = false
-	if entry.siblings.size() > 0:
-		var tempperson
+	var halfsiblings = []
+	if !entry.siblings.empty():
 		text += '\n[center]Full-Blooded Siblings[/center]\n'
 		for i in entry.siblings:
-			var samedad = false
-			var samemom = false
 			entry2 = relativesdata[i]
-			for f in ['father']:
-				if int(entry[f]) == int(entry2[f]):
-					samedad = true
-				else:
-					samedad = false
-			for m in ['mother']:
-				if int(entry[m]) == int(entry2[m]):
-					samemom = true
-				else:
-					samemom = false
-			if samedad == true && samemom == true:
+			if int(entry.father) == int(entry2.father) && int(entry.mother) == int(entry2.mother):
 				if entry2.state == 'fetus':
 					continue
 				if entry2.sex == 'male':
@@ -532,45 +519,13 @@ func _on_relativesbutton_pressed():
 				if entry2.state == 'free':
 					text += "[color=aqua]Free[/color] "
 				text += getentrytext(entry2) + "\n"
-		
-		for i in entry.siblings:
-			var samedad = false
-			var samemom = false
-			entry2 = relativesdata[i]
-			for f in ['father']:
-				if int(entry[f]) <= 0:
-					samedad = false
-				elif int(entry[f]) == int(entry2[f]):
-					samedad = true
-				else:
-					samedad = false
-			for m in ['mother']:
-				if int(entry[m]) <= 0:
-					samemom = false
-				elif int(entry[m]) == int(entry2[m]):
-					samemom = true
-				else:
-					samemom = false
-			if samedad == false && samemom == true || samedad == true && samemom == false:
-				if halfsiblings_banner == false:
-					text += '\n[center]Half-Siblings[/center]\n'
-					halfsiblings_banner = true
-				if entry2.state == 'fetus':
-					continue
-				if entry2.sex == 'male':
-					text += "Half-Brother: "
-				else:
-					text += "Half-Sister: "
-				if entry2.state == 'free':
-					text += "[color=aqua]Free[/color] "
-				text += getentrytext(entry2) + "\n"
+			else:
+				halfsiblings.append(i)
 	
-	
-	if !entry.halfsiblings.empty():
-		if halfsiblings_banner == false:
-			text += '\n[center]Half-Siblings[/center]\n'
-			halfsiblings_banner = true
-		for i in entry.halfsiblings:
+	halfsiblings.append_array(entry.halfsiblings)
+	if !halfsiblings.empty():
+		text += '\n[center]Half-Siblings[/center]\n'
+		for i in halfsiblings:
 			entry2 = relativesdata[i]
 			if entry2.state == 'fetus':
 				continue
@@ -578,6 +533,8 @@ func _on_relativesbutton_pressed():
 				text += "Half-Brother: " 
 			else:
 				text += "Half-Sister: "
+			if entry2.state == 'free':
+				text += "[color=aqua]Free[/color] "
 			text += getentrytext(entry2) + "\n"
 	###---End Expansion---###
 	
@@ -740,17 +697,9 @@ func _on_movement_mouse_entered():
 		text = "[center][color=red]Error[/color][/center]\n$name is somehow moving in an unnatural way. While interesting, you may want to report this to Aric on the itch.io forums or Discord. "
 	
 	#Give Reason for Crawling/Immobilized
-	var first = true
-	if !person.movementreasons.empty():
-		for i in person.movementreasons:
-			if first == true:
-				text += "\n\nReason for Movement: " + str(i)
-				first = false
-			else:
-				text += "\n" + str(i)
+	text += "\n\nReason for Movement: " + PoolStringArray(person.movementreasons).join("\n")
 	
-	text = person.dictionary(text)
-	globals.showtooltip(text)
+	globals.showtooltip( person.dictionary(text))
 
 func _on_movement_mouse_exited():
 	globals.hidetooltip()
