@@ -305,7 +305,7 @@ func newbaby(mother,father):
 	
 	#Genealogy
 	build_genealogy(person, mother, father)
-	setRace(person)
+	setRace(person,mother)
 	setRaceDisplay(person)
 	set_race_secondary(person)
 	
@@ -626,15 +626,17 @@ func build_genealogy_equalize(person, percent):
 	
 	return lpercent
 
-func setRace(person):
+func setRace(person,mother):
 	var currentrace = ""
 	var highestpercent = 0
 	
 	#Pick Highest Genetics
 	for race in genealogies:
-		if person.genealogy[race] >= highestpercent:
+		if person.genealogy[race] > highestpercent:
 			currentrace = race
 			highestpercent = person.genealogy[race]
+		elif person.genealogy[race] == highestpercent && mother.race == race:
+			currentrace = race
 	
 	#Assign Race Type/Race
 	var caprace = currentrace.capitalize()
