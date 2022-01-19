@@ -142,7 +142,11 @@ func fillSizeArrayDict():
 	}
 
 func setSizes(person,mother,father):
-	sizeDict.futanari.balls = 0.5 if globals.rules.futaballs else 0
+	#The key needs to not exist to not be added
+	if globals.rules.futaballs:
+		sizeDict.futanari.balls = 0.5
+	else:
+		sizeDict.futanari.erase("balls")
 	for part in sizeDict[person.sex]:
 		var motherModifier = 0
 		var fatherModifier = 0
