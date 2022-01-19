@@ -400,8 +400,8 @@ func dailyFarm():
 			if cattle.farmexpanded.dailyaction == 'stimulate':
 				text += stimulateCattle(cattle)
 			
-			if person.farmexpanded.breeding.status in ["both","breeder"]:
-				if person.vagina != 'none':
+			if cattle.farmexpanded.breeding.status in ["both","breeder"]:
+				if cattle.vagina != 'none':
 					text += breedCattle(cattle, studs)
 
 			if cattle.farmexpanded.breeding.status == 'snails' || cattle.farmexpanded.breeding.snails == true:
@@ -1670,13 +1670,13 @@ func milkMarket(person, town, bottles):
 # takes a reference to a containerdict entry, a worker carrying a fluid, and the total fluid gathered
 # returns the remaining amount of fluid
 func calcUnspilled(refContainer, worker, totalFluid):
-	var chancelevel = spillchances[refContainer.spillchance]
-	if worker == null || chancelevel == 'none':
-		return 0
+	var chances = spillchances[refContainer.spillchance]
+	if worker == null || chances.max <= 0:
+		return totalFluid
 	var trips = ceil(totalFluid / refContainer.size)
 	var workerMod = worker.sagi*2
 	while trips > 0:
-		if rand_range(0,100) <= rand_range(chancelevel.min, chancelevel.max) - workerMod:
+		if rand_range(0,100) <= rand_range(chances.min, chances.max) - workerMod:
 			totalFluid -= round(refContainer.size * rand_range(.1,.5))
 		trips -= 1
 	return totalFluid

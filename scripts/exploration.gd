@@ -669,7 +669,7 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 				else:
 					text += person.dictionary('\n$name watches your deeds with some interest despite $himself. After a few minutes, you see $his hand moving inside of $his pants as $he watches. \n')
 					person.lust = rand_range(15,25)
-			elif person.lust >= 50 || person.lust >= 40 && person.lewdness >= 40 || person.traits.has('Sex-Crazed') || person.traits.has('Perverted'):
+			elif person.lust >= 50 || person.lust >= 40 && person.lewdness >= 40 || person.traits.has('Sex-Crazed') || person.traits.has('Pervert'):
 					person.asser += rand_range(6,12)
 					person.lastsexday = globals.resources.day
 					person.lust -= rand_range(5,15)

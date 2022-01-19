@@ -638,37 +638,37 @@ func quirk(text):
 	#replaceRand(string, 'target', 'new', 50, 1)
 	#---Phrase Additions
 	if traits.has('Foul Mouth'):
-		string = replaceRand(string, '. ', '.'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCursing(' '))])), 50, 2)
-		string = replaceRand(string, '! ', '!'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCursing(' '))])), 50, 1)
-		string = replaceRand(string, ', ', ','+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCursing(' '))])), 50, 3)
-		string = replaceRand(string, '? ', '?'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCursing(' '))])), 50, 2)
+		string = replaceRand(string, '. ', '.'+globals.expansiontalk.quirkCursing(' '), 50, 2)
+		string = replaceRand(string, '! ', '!'+globals.expansiontalk.quirkCursing(' '), 50, 1)
+		string = replaceRand(string, ', ', ','+globals.expansiontalk.quirkCursing(' '), 50, 3)
+		string = replaceRand(string, '? ', '?'+globals.expansiontalk.quirkCursing(' '), 50, 2)
 	if traits.has('Ditzy'):
-		string = replaceRand(string, '. ', '.'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkDitzy(' '))])), 50, 2)
-		string = replaceRand(string, '! ', '!'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkDitzy(' '))])), 50, 2)
-		string = replaceRand(string, ', ', ','+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkDitzy(' '))])), 50, 1)
-		string = replaceRand(string, '? ', '?'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkDitzy(' '))])), 50, 1)
+		string = replaceRand(string, '. ', '.'+globals.expansiontalk.quirkDitzy(' '), 50, 2)
+		string = replaceRand(string, '! ', '!'+globals.expansiontalk.quirkDitzy(' '), 50, 2)
+		string = replaceRand(string, ', ', ','+globals.expansiontalk.quirkDitzy(' '), 50, 1)
+		string = replaceRand(string, '? ', '?'+globals.expansiontalk.quirkDitzy(' '), 50, 1)
 	if race.find('Cat') > 0:
-		string = replaceRand(string, ' ', str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCat(self,' '))])), 50, 2)
+		string = replaceRand(string, ' ', globals.expansiontalk.quirkCat(self,' '), 50, 2)
 	if race.find('Dog') > 0:
-		string = replaceRand(string, ' ', str(globals.randomitemfromarray([str(globals.expansiontalk.quirkDog(self,' '))])), 50, 2)
+		string = replaceRand(string, ' ', globals.expansiontalk.quirkDog(self,' '), 50, 2)
 	if mood == "crying":
-		string = replaceRand(string, ' ', str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCrying(self,' '))])), 50, 2)
+		string = replaceRand(string, ' ', globals.expansiontalk.quirkCrying(self,' '), 50, 2)
 	#---Letter Replacers
 	if race.find('Lamia') > 0:
-		string = replaceRand(string, 's', str(globals.randomitemfromarray(['s','ss','sss','ssss','sssss'])), 50, 1)
+		string = replaceRand(string, 's', globals.randomitemfromarray(['s','ss','sss','ssss','sssss']), 50, 1)
 	if race.find('Arachna') > 0:
-		string = replaceRand(string, 's', str(globals.randomitemfromarray(['s','ss','sss','ssss','sssss'])), 50, 2)
+		string = replaceRand(string, 's', globals.randomitemfromarray(['s','ss','sss','ssss','sssss']), 50, 2)
 	if race.find('Taurus') > 0:
-		string = replaceRand(string, 'mo', str(globals.randomitemfromarray(['mo','moo','mooo','moooo'])), 50, 1)
+		string = replaceRand(string, 'mo', globals.randomitemfromarray(['mo','moo','mooo','moooo']), 50, 1)
 	if traits.has('Lisp'):
 		string = replaceRand(string, 's', 'th', 100, 0)
 	if traits.has('Stutter') || mood == "scared" || mood == "crying":
-		string = replaceRand(string, 'st', str(globals.randomitemfromarray(['st-st','s-st-st','s-st'])), 50, 1)
-		string = replaceRand(string, 'rr', str(globals.randomitemfromarray(['rr-r','rr-rr','rr-r-r'])), 25, 1)
-		string = replaceRand(string, 'g',str(globals.randomitemfromarray(['g-g','gg-g','gg-gg-g'])), 50, 1)
-		string = replaceRand(string, 'k',str(globals.randomitemfromarray(['k-k','kk-k','kk-kk-k'])), 75, 1)
-		string = replaceRand(string, 'ch',str(globals.randomitemfromarray(['ch-ch','c-ch','ch-c-ch'])), 75, 1)
-		string = replaceRand(string, 'b',str(globals.randomitemfromarray(['bb-b','b-b','bb-bb-b'])), 25, 1)
+		string = replaceRand(string, 'st', globals.randomitemfromarray(['st-st','s-st-st','s-st']), 50, 1)
+		string = replaceRand(string, 'rr', globals.randomitemfromarray(['rr-r','rr-rr','rr-r-r']), 25, 1)
+		string = replaceRand(string, 'g', globals.randomitemfromarray(['g-g','gg-g','gg-gg-g']), 50, 1)
+		string = replaceRand(string, 'k', globals.randomitemfromarray(['k-k','kk-k','kk-kk-k']), 75, 1)
+		string = replaceRand(string, 'ch', globals.randomitemfromarray(['ch-ch','c-ch','ch-c-ch']), 75, 1)
+		string = replaceRand(string, 'b', globals.randomitemfromarray(['bb-b','b-b','bb-bb-b']), 25, 1)
 	#---Casual Additions || rand_range(0,100) < obed
 	if mind.identity == 'proper' || rand_range(0,1) > .5:
 		string = string.replace('$Thanks','Thank you')
@@ -679,9 +679,9 @@ func quirk(text):
 	#---Text Replacers
 	#Cancel All Text for Mute && (obed+loyal)*.5 >= 50
 	if rules.silence == true:
-		string = str(globals.randomitemfromarray(['...','...','...','...um...can I talk?','...I am not supposed to talk...','*cough*','*clears throat*','*shrugs at you*','*gestures that $he is not allowed to speak*']))
+		string = globals.randomitemfromarray(['...','...','...','...um...can I talk?','...I am not supposed to talk...','*cough*','*clears throat*','*shrugs at you*','*gestures that $he is not allowed to speak*'])
 	if traits.has('Mute'):
-		string = str(globals.randomitemfromarray(['...','...','...']))
+		string = '...'
 
 	return string
 
@@ -1149,31 +1149,29 @@ var genealogy = {
 }
 
 func get_birth_amount_name():
-	var rvar
-	if preg.unborn_baby.size() == 1:
-		rvar = 'one baby'
-	elif preg.unborn_baby.size() == 2:
-		rvar = 'twins'
-	elif preg.unborn_baby.size() == 3:
-		rvar = 'triplets'
-	elif preg.unborn_baby.size() == 4:
-		rvar = 'quadruplets'
-	elif preg.unborn_baby.size() == 5:
-		rvar = 'quintuplets '
-	elif preg.unborn_baby.size() == 6:
-		rvar = 'sextuplets'
-	elif preg.unborn_baby.size() == 7:
-		rvar = 'septuplets'
-	elif preg.unborn_baby.size() == 8:
-		rvar = 'octuplets'
-	elif preg.unborn_baby.size() == 9:
-		rvar = 'nonuplets'
-	elif preg.unborn_baby.size() >= 10:
-		rvar = 'litter'
-	else:
-		rvar = ''
-	
-	return rvar
+	match int(clamp(preg.unborn_baby.size(),0,10)):
+		1:
+			return 'one baby'
+		2:
+			return 'twins'
+		3:
+			return 'triplets'
+		4:
+			return 'quadruplets'
+		5:
+			return 'quintuplets '
+		6:
+			return 'sextuplets'
+		7:
+			return 'septuplets'
+		8:
+			return 'octuplets'
+		9:
+			return 'nonuplets'
+		10:
+			return 'litter'
+		0:
+			return ''
 
 func get_race_display():
 	var rvar = ''

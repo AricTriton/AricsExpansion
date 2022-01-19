@@ -202,7 +202,7 @@ func expandGame():
 			globals.expansion.updatePerson(person)
 
 	#v1.5b
-	if typeof(globals.resources.farmexpanded.worker_cycle) != TYPE_DICTIONARY:
+	if typeof(globals.resources.farmexpanded.worker_cycle) != TYPE_DICTIONARY || globals.resources.farmexpanded.worker_cycle.has('herder'):
 		globals.resources.farmexpanded.worker_cycle = {'farmhand':[], 'milkmaid':[], 'stud':[]}
 		globals.resources.farmexpanded.work_type = ''
 

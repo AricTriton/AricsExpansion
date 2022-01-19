@@ -1624,11 +1624,11 @@ func dailyPregnancy(person):
 					person.lactation = true
 
 				getSwollen(person)
-				if person.swollen > globals.heightarrayexp.find(person.height)/2 && (!person.mind.secrets.has('pregnancy') && !person.knowledge.has('pregnancy')):
-					getSecret(person,'pregnancy')
+				if person.swollen > globals.heightarrayexp.find(person.height)/2 && (!person.mind.secrets.has('currentpregnancy') && !person.knowledge.has('currentpregnancy')):
+					getSecret(person,'currentpregnancy')
 
 			#Set Wanted Pregnancy
-			if person.mind.secrets.has('pregnancy') || person.knowledge.has('pregnancy'):
+			if person.mind.secrets.has('currentpregnancy') || person.knowledge.has('currentpregnancy'):
 				setWantedPregnancy(person)
 			if person.pregexp.wantedpregnancy == true && !person.knowledge.has('currentpregnancywanted'):
 				person.dailytalk.append('wantpregnancy')
@@ -1643,11 +1643,11 @@ func dailyPregnancy(person):
 			if person.lactation == false:
 				person.lactation = true
 			#Realize Pregnant if haven't yet
-			if !person.mind.secrets.has('pregnancy') && !person.knowledge.has('pregnancy'):
-				getSecret(person,'pregnancy')
+			if !person.mind.secrets.has('currentpregnancy') && !person.knowledge.has('currentpregnancy'):
+				getSecret(person,'currentpregnancy')
 	
 			#Set Wanted Pregnancy
-			if person.mind.secrets.has('pregnancy') || person.knowledge.has('pregnancy'):
+			if person.mind.secrets.has('currentpregnancy') || person.knowledge.has('currentpregnancy'):
 				setWantedPregnancy(person)
 			if person.pregexp.wantedpregnancy == true && !person.knowledge.has('currentpregnancywanted'):
 				person.dailytalk.append('wantpregnancy')
@@ -1662,11 +1662,11 @@ func dailyPregnancy(person):
 			if person.lactation == false:
 				person.lactation = true
 
-			if !person.mind.secrets.has('pregnancy') && !person.knowledge.has('pregnancy'):
-				getSecret(person,'pregnancy')
+			if !person.mind.secrets.has('currentpregnancy') && !person.knowledge.has('currentpregnancy'):
+				getSecret(person,'currentpregnancy')
 			
 			#Set Wanted Pregnancy
-			if person.mind.secrets.has('pregnancy') || person.knowledge.has('pregnancy'):
+			if person.mind.secrets.has('currentpregnancy') || person.knowledge.has('currentpregnancy'):
 				setWantedPregnancy(person)
 			if person.pregexp.wantedpregnancy == true && !person.knowledge.has('currentpregnancywanted'):
 				person.dailytalk.append('wantpregnancy')
@@ -2745,30 +2745,23 @@ func dailyFetish(person):
 			numDailyFetish -= 1
 
 func getSecret(person,discovery='none'):
-	var realdiscovery = discovery
 	var share = false
 	if discovery != 'none':
 		#Create Fetish if there isn't one
 		if !person.fetish.has(discovery):
 			person.fetish[discovery] = globals.randomitemfromarray(globals.fetishopinion)
+		if person.knowledge.has(discovery):
+			return false
 		#Check Fetish + Loyalty (max 13) vs Default 5
 		if ((globals.fetishopinion.find(person.fetish[discovery])-3)*10) + person.loyal >= secretsharechance:
-			if discovery == 'pregnancy':
-				realdiscovery = 'currentpregnancy'
-			if person.knowledge.has(realdiscovery):
-				return
 			setWantedPregnancy(person)
-			person.dailytalk.append(realdiscovery)
-			person.mind.secrets.erase(realdiscovery)
+			person.dailytalk.append(discovery)
+			person.mind.secrets.erase(discovery)
 			share = true
 		else:
-			if discovery == 'pregnancy':
-				realdiscovery = 'currentpregnancy'
-			if person.knowledge.has(realdiscovery):
-				return
 			setWantedPregnancy(person)
-			person.mind.secrets.append(realdiscovery)
-			person.dailytalk.erase(realdiscovery)
+			person.mind.secrets.append(discovery)
+			person.dailytalk.erase(discovery)
 			share = false
 	return share
 

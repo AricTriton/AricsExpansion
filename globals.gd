@@ -221,7 +221,7 @@ class resource:
 			upgrademax = 10,
 		},
 		bottler = {level = 0, totalproduced = 0},
-		worker_cycle = {'herder':[], 'milkmaid':[], 'stud':[]},
+		worker_cycle = {'farmhand':[], 'milkmaid':[], 'stud':[]},
 		work_type = "",
 	}
 	###---Expansion End---### 
