@@ -453,9 +453,7 @@ class combatant:
 			var skill = globals.abilities.abilitydict[i]
 			var newbutton = scene.get_node("grouppanel/skilline/skill").duplicate()
 			scene.get_node("grouppanel/skilline").add_child(newbutton)
-			var cost = skill.costmana * globals.expansionsettings.spellcost
-			if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction:
-				cost = round(cost/2)
+			var cost = globals.spells.spellCostCalc(skill.costmana)
 			newbutton.set_disabled(cooldowns.has(skill.code) || skill.costenergy > energy || cost > globals.resources.mana)
 			newbutton.show()
 			
@@ -635,9 +633,7 @@ func showskilltooltip(skill):
 	if skill.costenergy > 0:
 		text += "\n[color=yellow]Energy: " + str(skill.costenergy) + "[/color]"
 	if skill.costmana > 0:
-		var cost = skill.costmana * globals.expansionsettings.spellcost
-		if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction:
-			cost = round(cost/2)
+		var cost = globals.spells.spellCostCalc(skill.costmana)
 		text += "\n[color=aqua]Mana: " + str(cost) + "[/color]"
 	text += '\nBasic cooldown: ' + str(skill.cooldown)
 	if selectedcharacter.cooldowns.has(skill.code):
@@ -645,9 +641,7 @@ func showskilltooltip(skill):
 	globals.showtooltip(text)
 
 func pressskill(skill):
-	var cost = skill.costmana * globals.expansionsettings.spellcost
-	if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction:
-		cost = round(cost/2)
+	var cost = globals.spells.spellCostCalc(skill.costmana)
 	if (cost > 0 && globals.resources.mana < cost) || (skill.costenergy > 0 && selectedcharacter.energy < skill.costenergy):
 		return
 	if skill.target in ['one']:
@@ -690,9 +684,7 @@ func useskills(skill, caster = null, target = null, retarget = false):
 		caster.cooldowns[skill.code] = skill.cooldown
 	if playergroup.has(caster):
 		if skill.costmana > 0:
-			var cost = skill.costmana * globals.expansionsettings.spellcost
-			if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction:
-				cost = round(cost/2)
+			var cost = globals.spells.spellCostCalc(skill.costmana)
 			globals.resources.mana -= cost
 		caster.energy -= skill.costenergy
 	else:
