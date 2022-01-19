@@ -23,11 +23,8 @@ var person
 ###Randomly choose the name for "Master" each Convo
 func getMasterName(person):
 	var names = []
-	var related = ''
-	var text = ''
+	var related = globals.expansion.relatedCheck(globals.player, person)
 	#Begin
-	names.clear()
-	related = globals.expansion.relatedCheck(globals.player, person)
 ###Normal
 	if globals.player.sex == 'male':
 		names.append('Master')
@@ -365,14 +362,10 @@ func getMasterName(person):
 		names.append('...')
 		names.append('Mmm')
 
-	text = globals.randomitemfromarray(names)
-	#Quick Fix to stop "Null" names
-	if text == null:
-		if globals.player.sex == 'male':
-			text = "Master"
-		else:
-			text = "Mistress"
-	person.masternoun = str(text)
+	if names.empty():
+		person.masternoun = "Master" if globals.player.sex == 'male' else "Mistress"
+	else:
+		person.masternoun = globals.randomitemfromarray(names)
 
 var difficultyarray = ['None','Simple','Easy','Medium','Hard','Impossible']
 var chatchecktypearray = ['degrading','lewd','respectful']

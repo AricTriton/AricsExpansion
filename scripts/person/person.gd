@@ -78,6 +78,27 @@ var stats = {
 	loyal_min = 0,
 }
 
+func add_trait(trait, remove = false):
+	var traitEntry = globals.origins.trait(trait)
+	if traitEntry == null:
+		globals.printErrorCode("adding non-existant trait " + str(trait))
+		return false
+	for i in get_traits():
+		if i.name == traitEntry.name || traitEntry.name in i.conflict:
+			return false
+	traits.append(traitEntry.name)
+	if globals.get_tree().get_current_scene().has_node("infotext") && globals.slaves.has(self) && away.at != 'hidden':
+		var text = self.dictionary("$name acquired new trait: " + traitEntry.name)
+		globals.get_tree().get_current_scene().infotext(text, 'yellow')
+	if !traitEntry.effect.empty():
+		add_effect(traitEntry.effect)
+	
+	###---Added by Expansion---### Sort Traits Alphabetically
+	traits.sort()
+	###---End Expansion---###
+	
+	return true
+
 func trait_remove(trait):
 	trait = globals.origins.trait(trait)
 	if traits.find(trait.name) < 0:
@@ -85,7 +106,7 @@ func trait_remove(trait):
 	traits.erase(trait.name)
 	if trait['effect'].empty() != true:
 		add_effect(trait['effect'], true)
-
+	
 	if globals.get_tree().get_current_scene().has_node("infotext") && globals.slaves.find(self) >= 0 && away.at != 'hidden':
 		var text = self.dictionary("$name lost trait: " + trait.name)
 		globals.get_tree().get_current_scene().infotext(text,'yellow')
@@ -128,7 +149,7 @@ var npcexpanded = {
 #var dietexpanded = {dailyneed = 0, nourishment = {food = 100, milk = 30, cum = 15, piss = 0, blood = 0}, hunger = 0}
 #OLD BELOW Daily: Diet
 
-var diet = {base = 1,type = "food",hunger = 0,dailyneed = 0,nourishment = {food = 100,milk = 30,cum = 15,piss = 0,blood = 0,},}
+var diet = {base = 10, type = "food", hunger = 0, dailyneed = 0, nourishment = {food = 100, milk = 30, cum = 15, piss = 0, blood = 0,},}
 
 #Mind is the "AI" that can be altered for Dialogue
 #Identity: The way they currently think/act | Id: Natural Instincts | Ego: Conscious/Intentional Identity
@@ -313,16 +334,15 @@ func add_jobskill(job, value = 1):
 	if rand_range(0,100) <= self.wit && self.jobskills[job] + value*2 <= 100:
 		self.jobskills[job] += value*2
 		text += self.dictionary("$name increased $his " + str(job).capitalize() + " Skill by " + str(value*2) + ". ")
-	elif self.jobskills[job] + value <= 100:
+	elif self.jobskills[job] + value < 100:
 		self.jobskills[job] += value
 		text += self.dictionary("$name increased $his " + str(job).capitalize() + " Skill by " + str(value) + ". ")
-	elif self.jobskills[job] + value > 100 && self.npcexpanded.onlyonce.find(job + 'skillmaxed') < 0:
+	elif self.jobskills[job] + value >= 100 && self.npcexpanded.onlyonce.find(job + 'skillmaxed') < 0:
+		self.jobskills[job] = 100
 		self.npcexpanded.onlyonce.append(job + 'skillmaxed')
 		text += self.dictionary("$name's " + str(job).capitalize() + " Skill is at Maximum. ")
 	if globals.get_tree().get_current_scene().has_node("infotext") && globals.slaves.find(self) >= 0 && away.at != 'hidden':
 		globals.get_tree().get_current_scene().infotext(text,'green')
-	
-	return
 
 #Category: Farm Expanded
 var farmexpanded = {
@@ -536,28 +556,28 @@ func loyal_set(value):
 ###---Added by Expansion---### Modified by Deviate - Allow current stat up to max stat
 func cour_set(value):
 	if stats.cour_max > 100:
-		stats.cour_base = clamp(value, 0, stats.cour_max)
+		stats.cour_base = clamp(value - stats.cour_racial, 0, stats.cour_max)
 	else:
-		stats.cour_base = clamp(value, 0, min(stats.cour_max, originvalue[origins]))
+		stats.cour_base = clamp(value - stats.cour_racial, 0, min(stats.cour_max, originvalue[origins]))
 
 func conf_set(value):
 	var bonus = max(0, stats.conf_max - originvalue['noble'])
 	if stats.conf_max > 100:
-		stats.conf_base = clamp(value, 0, stats.conf_max)
+		stats.conf_base = clamp(value - stats.conf_racial, 0, stats.conf_max)
 	else:
-		stats.conf_base = clamp(value, 0, min(stats.conf_max, originvalue[origins] + bonus))
+		stats.conf_base = clamp(value - stats.conf_racial, 0, min(stats.conf_max, originvalue[origins] + bonus))
 
 func wit_set(value):
 	if stats.wit_max > 100:
-		stats.wit_base = clamp(value, 0, stats.wit_max)
+		stats.wit_base = clamp(value - stats.wit_racial, 0, stats.wit_max)
 	else:
-		stats.wit_base = clamp(value, 0, min(stats.wit_max, originvalue[origins]))
+		stats.wit_base = clamp(value - stats.wit_racial, 0, min(stats.wit_max, originvalue[origins]))
 
 func charm_set(value):
 	if stats.charm_max > 100:
-		stats.charm_base = clamp(value, 0, stats.charm_max)
+		stats.charm_base = clamp(value - stats.charm_racial, 0, stats.charm_max)
 	else:
-		stats.charm_base = clamp(value, 0, min(stats.charm_max, originvalue[origins]))
+		stats.charm_base = clamp(value - stats.charm_racial, 0, min(stats.charm_max, originvalue[origins]))
 ###---End Expansion---###
 
 
@@ -620,37 +640,37 @@ func quirk(text):
 	#replaceRand(string, 'target', 'new', 50, 1)
 	#---Phrase Additions
 	if traits.has('Foul Mouth'):
-		string = replaceRand(string, '. ', '.'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCursing(' '))])), 50, 2)
-		string = replaceRand(string, '! ', '!'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCursing(' '))])), 50, 1)
-		string = replaceRand(string, ', ', ','+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCursing(' '))])), 50, 3)
-		string = replaceRand(string, '? ', '?'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCursing(' '))])), 50, 2)
+		string = replaceRand(string, '. ', '.'+globals.expansiontalk.quirkCursing(' '), 50, 2)
+		string = replaceRand(string, '! ', '!'+globals.expansiontalk.quirkCursing(' '), 50, 1)
+		string = replaceRand(string, ', ', ','+globals.expansiontalk.quirkCursing(' '), 50, 3)
+		string = replaceRand(string, '? ', '?'+globals.expansiontalk.quirkCursing(' '), 50, 2)
 	if traits.has('Ditzy'):
-		string = replaceRand(string, '. ', '.'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkDitzy(' '))])), 50, 2)
-		string = replaceRand(string, '! ', '!'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkDitzy(' '))])), 50, 2)
-		string = replaceRand(string, ', ', ','+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkDitzy(' '))])), 50, 1)
-		string = replaceRand(string, '? ', '?'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkDitzy(' '))])), 50, 1)
+		string = replaceRand(string, '. ', '.'+globals.expansiontalk.quirkDitzy(' '), 50, 2)
+		string = replaceRand(string, '! ', '!'+globals.expansiontalk.quirkDitzy(' '), 50, 2)
+		string = replaceRand(string, ', ', ','+globals.expansiontalk.quirkDitzy(' '), 50, 1)
+		string = replaceRand(string, '? ', '?'+globals.expansiontalk.quirkDitzy(' '), 50, 1)
 	if race.find('Cat') > 0:
-		string = replaceRand(string, ' ', str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCat(self,' '))])), 50, 2)
+		string = replaceRand(string, ' ', globals.expansiontalk.quirkCat(self,' '), 50, 2)
 	if race.find('Dog') > 0:
-		string = replaceRand(string, ' ', str(globals.randomitemfromarray([str(globals.expansiontalk.quirkDog(self,' '))])), 50, 2)
+		string = replaceRand(string, ' ', globals.expansiontalk.quirkDog(self,' '), 50, 2)
 	if mood == "crying":
-		string = replaceRand(string, ' ', str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCrying(self,' '))])), 50, 2)
+		string = replaceRand(string, ' ', globals.expansiontalk.quirkCrying(self,' '), 50, 2)
 	#---Letter Replacers
 	if race.find('Lamia') > 0:
-		string = replaceRand(string, 's', str(globals.randomitemfromarray(['s','ss','sss','ssss','sssss'])), 50, 1)
+		string = replaceRand(string, 's', globals.randomitemfromarray(['s','ss','sss','ssss','sssss']), 50, 1)
 	if race.find('Arachna') > 0:
-		string = replaceRand(string, 's', str(globals.randomitemfromarray(['s','ss','sss','ssss','sssss'])), 50, 2)
+		string = replaceRand(string, 's', globals.randomitemfromarray(['s','ss','sss','ssss','sssss']), 50, 2)
 	if race.find('Taurus') > 0:
-		string = replaceRand(string, 'mo', str(globals.randomitemfromarray(['mo','moo','mooo','moooo'])), 50, 1)
+		string = replaceRand(string, 'mo', globals.randomitemfromarray(['mo','moo','mooo','moooo']), 50, 1)
 	if traits.has('Lisp'):
 		string = replaceRand(string, 's', 'th', 100, 0)
 	if traits.has('Stutter') || mood == "scared" || mood == "crying":
-		string = replaceRand(string, 'st', str(globals.randomitemfromarray(['st-st','s-st-st','s-st'])), 50, 1)
-		string = replaceRand(string, 'rr', str(globals.randomitemfromarray(['rr-r','rr-rr','rr-r-r'])), 25, 1)
-		string = replaceRand(string, 'g',str(globals.randomitemfromarray(['g-g','gg-g','gg-gg-g'])), 50, 1)
-		string = replaceRand(string, 'k',str(globals.randomitemfromarray(['k-k','kk-k','kk-kk-k'])), 75, 1)
-		string = replaceRand(string, 'ch',str(globals.randomitemfromarray(['ch-ch','c-ch','ch-c-ch'])), 75, 1)
-		string = replaceRand(string, 'b',str(globals.randomitemfromarray(['bb-b','b-b','bb-bb-b'])), 25, 1)
+		string = replaceRand(string, 'st', globals.randomitemfromarray(['st-st','s-st-st','s-st']), 50, 1)
+		string = replaceRand(string, 'rr', globals.randomitemfromarray(['rr-r','rr-rr','rr-r-r']), 25, 1)
+		string = replaceRand(string, 'g', globals.randomitemfromarray(['g-g','gg-g','gg-gg-g']), 50, 1)
+		string = replaceRand(string, 'k', globals.randomitemfromarray(['k-k','kk-k','kk-kk-k']), 75, 1)
+		string = replaceRand(string, 'ch', globals.randomitemfromarray(['ch-ch','c-ch','ch-c-ch']), 75, 1)
+		string = replaceRand(string, 'b', globals.randomitemfromarray(['bb-b','b-b','bb-bb-b']), 25, 1)
 	#---Casual Additions || rand_range(0,100) < obed
 	if mind.identity == 'proper' || rand_range(0,1) > .5:
 		string = string.replace('$Thanks','Thank you')
@@ -661,9 +681,9 @@ func quirk(text):
 	#---Text Replacers
 	#Cancel All Text for Mute && (obed+loyal)*.5 >= 50
 	if rules.silence == true:
-		string = str(globals.randomitemfromarray(['...','...','...','...um...can I talk?','...I am not supposed to talk...','*cough*','*clears throat*','*shrugs at you*','*gestures that $he is not allowed to speak*']))
+		string = globals.randomitemfromarray(['...','...','...','...um...can I talk?','...I am not supposed to talk...','*cough*','*clears throat*','*shrugs at you*','*gestures that $he is not allowed to speak*'])
 	if traits.has('Mute'):
-		string = str(globals.randomitemfromarray(['...','...','...']))
+		string = '...'
 
 	return string
 
@@ -1094,7 +1114,7 @@ func assignBreedingPartner(partnerid):
 	var text = ""
 	var success = true
 	var partner = globals.state.findslave(partnerid)
-	if partner == null || partnerid == str(-1):
+	if partner == null || partnerid == '-1':
 		text = "Invalid Partner"
 		success = false
 #	#Invalid Breeder Type Check
@@ -1114,19 +1134,16 @@ func assignBreedingPartner(partnerid):
 		farmexpanded.breeding.partner = partnerid
 		partner.unassignPartner()
 		partner.farmexpanded.breeding.partner = self.id
-		text += dictionary("[color=aqua]$name[/color] is now partnered to breed with [color=aqua]" + str(partner.name) + "[/color]. They will continue to breed together until they are given further orders.\n")	
+		text = "[color=aqua]"+name_short()+"[/color] is now partnered to breed with [color=aqua]" + str(partner.name) + "[/color]. They will continue to breed together until they are given further orders.\n"	
 	return text
 
 func unassignPartner():
 	#Unassigned the Old Partner and clears that slot
-	if farmexpanded.breeding.partner != str(-1):
+	if farmexpanded.breeding.partner != '-1':
 		var partner = globals.state.findslave(farmexpanded.breeding.partner)
-		if partner == null:
-			farmexpanded.breeding.partner = str(-1)
-			return
-		else:
-			farmexpanded.breeding.partner = str(-1)
-			partner.farmexpanded.breeding.partner = str(-1)
+		if partner != null && partner.farmexpanded.breeding.partner == self.id:
+			partner.farmexpanded.breeding.partner = '-1'
+		farmexpanded.breeding.partner = '-1'
 ###---End Expansion---###
 
 ###---Added by Expansion---### Deviate New Code
@@ -1166,31 +1183,29 @@ var genealogy = {
 }
 
 func get_birth_amount_name():
-	var rvar
-	if preg.unborn_baby.size() == 1:
-		rvar = 'one baby'
-	elif preg.unborn_baby.size() == 2:
-		rvar = 'twins'
-	elif preg.unborn_baby.size() == 3:
-		rvar = 'triplets'
-	elif preg.unborn_baby.size() == 4:
-		rvar = 'quadruplets'
-	elif preg.unborn_baby.size() == 5:
-		rvar = 'quintuplets '
-	elif preg.unborn_baby.size() == 6:
-		rvar = 'sextuplets'
-	elif preg.unborn_baby.size() == 7:
-		rvar = 'septuplets'
-	elif preg.unborn_baby.size() == 8:
-		rvar = 'octuplets'
-	elif preg.unborn_baby.size() == 9:
-		rvar = 'nonuplets'
-	elif preg.unborn_baby.size() >= 10:
-		rvar = 'litter'
-	else:
-		rvar = ''
-	
-	return rvar
+	match int(clamp(preg.unborn_baby.size(),0,10)):
+		1:
+			return 'one baby'
+		2:
+			return 'twins'
+		3:
+			return 'triplets'
+		4:
+			return 'quadruplets'
+		5:
+			return 'quintuplets '
+		6:
+			return 'sextuplets'
+		7:
+			return 'septuplets'
+		8:
+			return 'octuplets'
+		9:
+			return 'nonuplets'
+		10:
+			return 'litter'
+		0:
+			return ''
 
 func get_race_display():
 	var rvar = ''

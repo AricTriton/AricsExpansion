@@ -201,6 +201,11 @@ func expandGame():
 				globals.backwardscompatibility.backwardsCompatibility(person)
 			globals.expansion.updatePerson(person)
 
+	#v1.5b
+	if typeof(globals.resources.farmexpanded.worker_cycle) != TYPE_DICTIONARY || globals.resources.farmexpanded.worker_cycle.has('herder'):
+		globals.resources.farmexpanded.worker_cycle = {'farmhand':[], 'milkmaid':[], 'stud':[]}
+		globals.resources.farmexpanded.work_type = ''
+
 func expandPerson(person):
 	var sexvag = int(round(person.metrics.vag/10))
 	var sexass = int(round(person.metrics.anal/10))
@@ -360,19 +365,19 @@ func setExpansionTraits(person):
 		for i in person.traitstorage:
 			var trait = globals.origins.trait(i)
 			if trait.tags.has('fertility-trait') && trait.tags.has('virilitytrait'):
-				person.add_trait(trait)
+				person.add_trait(i)
 				person.traitstorage.erase(trait)
 				hasvirility = true
 			if trait.tags.has('fertility-trait') && trait.tags.has('eggstrtrait'):
-				person.add_trait(trait)
+				person.add_trait(i)
 				person.traitstorage.erase(trait)
 				haseggstr = true
 			if trait.tags.has('pliabilitytrait'):
-				person.add_trait(trait)
+				person.add_trait(i)
 				person.traitstorage.erase(trait)
 				haspliability == true
 			if trait.tags.has('elasticitytrait'):
-				person.add_trait(trait)
+				person.add_trait(i)
 				person.traitstorage.erase(trait)
 				haselasticity = true
 		if hasvirility == false:
@@ -458,11 +463,11 @@ func setLactation(person):
 		for i in person.traitstorage:
 			var trait = globals.origins.trait(i)
 			if trait.tags.has('lactation-trait') && trait.tags.has('regentrait'):
-				person.add_trait(trait)
+				person.add_trait(i)
 				person.traitstorage.erase(trait)
 				hasregentrait = true
 			if trait.tags.has('lactation-trait') && trait.tags.has('storagetrait'):
-				person.add_trait(trait)
+				person.add_trait(i)
 				person.traitstorage.erase(trait)
 				hasstoragetrait = true
 		if hasregentrait == false:

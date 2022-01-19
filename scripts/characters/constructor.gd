@@ -131,89 +131,63 @@ var sizeDict = {
 	"futanari":{"vagina":0.5,"penis":0.5,"tits":0.5,"asshole":0.5,"lips":0.5,"ass":0.5},
 	"dickgirl":{"penis":0.5,"balls":0.5,"tits":1,"asshole":1,"lips":1,"ass":1},
 }
+var sizeArrayDict
+var sizeStringDict = {"tits":"titssize","ass":"asssize"}
 
-func getSizeArrayString(part):
-	var sizeArrayDict = {"balls":"penissizearray","vagina":"vagsizearray"}
-	return sizeArrayDict.get(part,part+"sizearray")
-func getSizeString(part):
-	var sizeStringDict = {"tits":"titssize","ass":"asssize"}
-	return sizeStringDict.get(part,part)
-
-func getRandomMod(part):
-	var randomDict = {"vagina":{"min":-3,"max":1}}
-	var result = randomDict.get(part,{"min":-1,"max":1})
-	return round(rand_range(result["min"],result["max"]))
+#refs to globals.gd cannot be made until after init
+func fillSizeArrayDict():
+	sizeArrayDict = {
+		"vagina": globals.vagsizearray, "tits": globals.titssizearray, "penis": globals.penissizearray, "balls": globals.penissizearray,
+		"asshole": globals.assholesizearray, "lips": globals.lipssizearray, "ass": globals.asssizearray
+	}
 
 func setSizes(person,mother,father):
+	sizeDict.futanari.balls = 0.5 if globals.rules.futaballs else 0
 	for part in sizeDict[person.sex]:
-		var value = sizeDict[person.sex][part]
 		var motherModifier = 0
 		var fatherModifier = 0
-		var type = getSizeString(part)
-		var sizeArray = globals.get(getSizeArrayString(part))
-		var randomMod = getRandomMod(part)
+		var type = sizeStringDict.get(part,part)
+		var sizeArray = sizeArrayDict[part]
+		var randomMod = round(rand_range(-3 if part == "vagina" else -1,1))
 
 		if part == "tits":
 			motherModifier -= mother.pregexp.titssizebonus
 			fatherModifier -= father.pregexp.titssizebonus
 
+		var base
 		if mother[type] == "none":
-			value = 0
+			base = sizeArray.find(father[type]) + fatherModifier
 		elif father[type] == "none":
-			value = 1
-		var base = (sizeArray.find(mother[type]) + motherModifier)*value + (sizeArray.find(father[type]) + fatherModifier)*(1.0-value)
+			base = sizeArray.find(mother[type]) + motherModifier
+		else:
+			var value = sizeDict[person.sex][part]
+			base = (sizeArray.find(mother[type]) + motherModifier)*value + (sizeArray.find(father[type]) + fatherModifier)*(1.0-value)
 		person[type] = sizeArray[clamp(round(base + randomMod), 0, sizeArray.size()-1)]
 		#prints(part,value,person[type],sizeArray.find(person[type]),randomMod,sizeArray.find(mother[type]),sizeArray.find(father[type]))
 	return person
 
 ###---Added by Expansion---### Added by Deviate - Hybrid Races
+var body_array = ['skin','tail','ears','wings','horns','arms','legs','bodyshape','haircolor','eyecolor','eyeshape','eyesclera']
+var listMaxStats = ['str_max','agi_max','maf_max','end_max']
+
 func newbaby(mother,father):
-
-	if globals.rules.futaballs:
-		sizeDict["futanari"]["balls"] = 0.5
-
-	var person = globals.newslave(mother.race, 'child', 'random', mother.origins)
-	var body_array = ['skin','tail','ears','wings','horns','arms','legs','bodyshape','haircolor','eyecolor','eyeshape','eyesclera']
+	var person = globals.newslave(mother.race, 'child' if globals.rules.children else 'teen', 'random', mother.origins)
+	person.cleartraits()
 	#var tacklearray = ['penis']
 	#var temp
-
-	#Prep
-	#person.race = ''
-	#person.age = ''
-	#person.sex = ''
 
 	#General
 	person.state = 'fetus'
 	person.surname = mother.surname
-	
-	#Sex
-	#if globals.rules.male_chance > 0 && rand_range(0, 100) < globals.rules.male_chance:
-	#	person.sex = 'male'
-	#elif rand_range(0, 100) < globals.rules.futa_chance && globals.rules.futa == true:
-	#	person.sex = 'futanari'
-	#else:
-	#	person.sex = 'female'
-
-	#Age
-	if globals.rules.children == true:
-		person.age = 'child'
-	else: 
-		person.age = 'teen'
 
 	#Body
 	for i in body_array:
 		###---Added by Expansion---### centerflag982 - dickgirls take after their mothers
 		if person.sex == 'female' || person.sex == 'dickgirl':
-			if rand_range(0,10) > 3:
-				person[i] = mother[i]
-			else:
-				person[i] = father[i]
+			person[i] = mother[i] if rand_range(0,10) < 7 else father[i]
 		###---End Expansion---###
 		else:
-			if rand_range(0,10) > 3:
-				person[i] = father[i]
-			else:
-				person[i] = mother[i]
+			person[i] = father[i] if rand_range(0,10) < 7 else mother[i]
 	
 	setSizes(person,mother,father)
 	""" #Male Genitals
@@ -258,43 +232,17 @@ func newbaby(mother,father):
 
 	#Dimensional Crystal
 	if globals.state.mansionupgrades.dimensionalcrystal >= 2:
-		var str_max
-		var agi_max
-		var maf_max
-		var end_max
-		if father.stats.str_max >= mother.stats.str_max && father != null:
-			str_max = father.stats.str_max
-		else:
-			str_max = mother.stats.str_max
-		if father.stats.agi_max >= mother.stats.agi_max && father != null:
-			agi_max = father.stats.agi_max
-		else:
-			agi_max = mother.stats.agi_max
-		if father.stats.maf_max >= mother.stats.maf_max && father != null:
-			maf_max = father.stats.maf_max
-		else:
-			maf_max = mother.stats.maf_max
-		if father.stats.end_max >= mother.stats.end_max && father != null:
-			end_max = father.stats.end_max
-		else:
-			end_max = mother.stats.end_max
-		if person.stats.str_max < str_max:
-			person.stats.str_max += round((str_max-person.stats.str_max)*.6)
-		if person.stats.agi_max < agi_max:
-			person.stats.agi_max += round((agi_max-person.stats.agi_max)*.6)
-		if person.stats.maf_max < maf_max:
-			person.stats.maf_max += round((maf_max-person.stats.maf_max)*.6)
-		if person.stats.end_max < end_max:
-			person.stats.end_max += round((end_max-person.stats.end_max)*.6)
+		var pStats = person.stats
+		var temp
+		for i in listMaxStats:
+			temp = max(father.stats[i], mother.stats[i])
+			if pStats.str_max < temp:
+				pStats[i] += round((temp - pStats[i]) *.6)
 
 	#Bodyshape
 	if person.race.find('Halfkin')>=0 && mother.race.find('Beastkin') >= 0 && father.race.find('Beastkin') < 0:
 		person.bodyshape = 'humanoid'
-	if father.beautybase > mother.beautybase:
-		person.beautybase = father.beautybase + rand_range(-2,5)
-	else:
-		person.beautybase = mother.beautybase + rand_range(-2,5)
-	person.cleartraits()
+	person.beautybase = max(father.beautybase, mother.beautybase) + rand_range(-2,5)
 
 	var traitpool = father.traits + mother.traits
 	var excluded = []
@@ -307,7 +255,7 @@ func newbaby(mother,father):
 				continue
 			#Increase if Same
 			for expansiontraits in globals.expansion.subtraitlines:
-				if trait.tags.has(expansiontraits):
+				if trait.tags.has(expansiontraits) && !excluded.has(expansiontraits):
 					var traitline = globals.expansion[expansiontraits]
 					var matchrank = -1
 					var newtraitrank
@@ -318,24 +266,16 @@ func newbaby(mother,father):
 						if trait2 != null && trait2.tags.has(expansiontraits):
 							matchrank = traitline.find(ii)
 					if matchrank >= 0:
-						if matchrank > traitline.find(i):
-							if rand_range(0,100) <= 50:
-								newtraitrank = round( rand_range( traitline.find(i), matchrank)) + 1
-							else:
-								newtraitrank = round( rand_range( traitline.find(i), matchrank))
-						elif matchrank < traitline.find(i):
-							if rand_range(0,100) <= 50:
-								newtraitrank = round( rand_range( matchrank, traitline.find(i))) + 1
-							else:
-								newtraitrank = round( rand_range( matchrank, traitline.find(i)))
+						if matchrank != traitline.find(i):
+							newtraitrank = round( rand_range( traitline.find(i), matchrank)) + randi() % 2
 						else:
-							newtraitrank = round( rand_range( matchrank+1, matchrank+2))
+							newtraitrank = round( matchrank + rand_range(1,2))
 					else:
 						newtraitrank = round( traitline.find(i) + rand_range(-1,1))
 					var newtraitname = traitline[ clamp(newtraitrank, 0, traitline.size()-1) ]
 					var newtrait = globals.origins.trait(newtraitname)
-					if newtrait != null && !excluded.has(traitline):
-						excluded.append(traitline)
+					if newtrait != null:
+						excluded.append(expansiontraits)
 						if newtrait.tags.has('lactation-trait'):
 							person.traitstorage.append(newtraitname)
 						else:

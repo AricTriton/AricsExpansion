@@ -1854,23 +1854,13 @@ stretch_mode = 5
 [node name="sstr" type="TextureRect" parent="MainScreen/mansion/selfinspect/statspanel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -546.0
-margin_top = 10.0
-margin_right = -546.0
-margin_bottom = 34.0
+margin_left = -580.0
+margin_top = 12.0
+margin_right = -580.0
+margin_bottom = 36.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
-
-[node name="base" type="Label" parent="MainScreen/mansion/selfinspect/statspanel/sstr"]
-margin_left = 1.0
-margin_top = 2.0
-margin_right = 41.0
-margin_bottom = 22.0
-text = "1"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="cur" type="Label" parent="MainScreen/mansion/selfinspect/statspanel/sstr"]
 margin_left = 36.0
@@ -1901,9 +1891,6 @@ margin_right = 86.0
 margin_bottom = 22.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Button" type="Button" parent="MainScreen/mansion/selfinspect/statspanel/sstr"]
 margin_left = 84.0
@@ -1919,26 +1906,13 @@ custom_styles/normal = SubResource( 10 )
 [node name="sagi" type="TextureRect" parent="MainScreen/mansion/selfinspect/statspanel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -546.0
-margin_top = 44.0
-margin_right = -546.0
-margin_bottom = 68.0
+margin_left = -580.0
+margin_top = 46.0
+margin_right = -580.0
+margin_bottom = 70.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="base" type="Label" parent="MainScreen/mansion/selfinspect/statspanel/sagi"]
-margin_left = 1.0
-margin_top = 2.0
-margin_right = 41.0
-margin_bottom = 22.0
-text = "1"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="cur" type="Label" parent="MainScreen/mansion/selfinspect/statspanel/sagi"]
 margin_left = 36.0
@@ -1984,26 +1958,13 @@ custom_styles/normal = SubResource( 10 )
 [node name="smaf" type="TextureRect" parent="MainScreen/mansion/selfinspect/statspanel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -546.0
-margin_top = 78.0
-margin_right = -546.0
-margin_bottom = 102.0
+margin_left = -580.0
+margin_top = 79.0
+margin_right = -580.0
+margin_bottom = 103.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="base" type="Label" parent="MainScreen/mansion/selfinspect/statspanel/smaf"]
-margin_left = 1.0
-margin_top = 2.0
-margin_right = 41.0
-margin_bottom = 22.0
-text = "1"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="cur" type="Label" parent="MainScreen/mansion/selfinspect/statspanel/smaf"]
 margin_left = 36.0
@@ -2049,26 +2010,13 @@ custom_styles/normal = SubResource( 10 )
 [node name="send" type="TextureRect" parent="MainScreen/mansion/selfinspect/statspanel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -546.0
-margin_top = 110.0
-margin_right = -546.0
-margin_bottom = 134.0
+margin_left = -580.0
+margin_top = 113.0
+margin_right = -580.0
+margin_bottom = 137.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="base" type="Label" parent="MainScreen/mansion/selfinspect/statspanel/send"]
-margin_left = 1.0
-margin_top = 2.0
-margin_right = 41.0
-margin_bottom = 22.0
-text = "1"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="cur" type="Label" parent="MainScreen/mansion/selfinspect/statspanel/send"]
 margin_left = 36.0
@@ -2918,27 +2866,27 @@ custom_styles/panel = ExtResource( 46 )
 
 [node name="TextureFarmBack" type="TextureRect" parent="MainScreen/mansion/farmpanel"]
 margin_left = 10.0
-margin_top = 45.0
+margin_top = 49.0
 margin_right = 930.0
-margin_bottom = 589.0
+margin_bottom = 585.0
 texture = ExtResource( 64 )
 expand = true
 
 [node name="farminfo_panel" type="Panel" parent="MainScreen/mansion/farmpanel"]
-margin_left = 20.0
+margin_left = 18.0
 margin_top = 54.0
-margin_right = 461.0
-margin_bottom = 435.0
+margin_right = 464.0
+margin_bottom = 425.0
 
 [node name="farminfo" type="RichTextLabel" parent="MainScreen/mansion/farmpanel"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -902.204
-margin_top = -548.006
-margin_right = -490.204
-margin_bottom = -196.006
+margin_left = -901.0
+margin_top = -545.0
+margin_right = -495.0
+margin_bottom = -214.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -2947,20 +2895,20 @@ bbcode_text = "Your farm manager blablabalb"
 text = "Your farm manager blablabalb"
 
 [node name="slavescroll_panel" type="Panel" parent="MainScreen/mansion/farmpanel"]
-margin_left = 485.0
-margin_top = 52.8025
-margin_right = 926.0
-margin_bottom = 433.803
+margin_left = 475.0
+margin_top = 54.0
+margin_right = 921.0
+margin_bottom = 425.0
 
 [node name="vatsbutton" type="TextureButton" parent="MainScreen/mansion/farmpanel"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -749.0
-margin_top = -179.0
-margin_right = -602.0
-margin_bottom = -27.0
+margin_left = -719.0
+margin_top = -184.0
+margin_right = -569.0
+margin_bottom = -34.0
 hint_tooltip = "Open the Vats Panel. You will need Vats to store excess Milk/Piss/Cum to be able to Bottle, Refine, or Sell it."
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -2970,35 +2918,36 @@ texture_hover = ExtResource( 65 )
 texture_disabled = ExtResource( 66 )
 expand = true
 
-[node name="BorderFrameText2" type="TextureRect" parent="MainScreen/mansion/farmpanel/vatsbutton"]
-margin_top = -3.0
-margin_right = 150.0
-margin_bottom = 177.0
-rect_clip_content = true
-mouse_filter = 2
-texture = SubResource( 18 )
-expand = true
-
 [node name="Label" type="Label" parent="MainScreen/mansion/farmpanel/vatsbutton"]
-margin_left = 20.0
-margin_top = 150.0
-margin_right = 133.0
-margin_bottom = 170.0
+margin_top = 151.0
+margin_right = 150.0
+margin_bottom = 171.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.761719, 0.660181, 0.261841, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 text = "Storage Vats"
+align = 1
+
+[node name="BorderFrameText2" type="TextureRect" parent="MainScreen/mansion/farmpanel/vatsbutton"]
+margin_left = -1.0
+margin_top = -1.0
+margin_right = 151.0
+margin_bottom = 176.0
+rect_clip_content = true
+mouse_filter = 2
+texture = SubResource( 18 )
+expand = true
 
 [node name="snailsbutton" type="TextureButton" parent="MainScreen/mansion/farmpanel"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -589.0
-margin_top = -179.0
-margin_right = -439.0
-margin_bottom = -29.0
+margin_left = -539.0
+margin_top = -184.0
+margin_right = -389.0
+margin_bottom = -34.0
 hint_tooltip = "Manage any Snails you've caught, breed them, sell them, or cook them."
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -3009,20 +2958,21 @@ texture_disabled = ExtResource( 68 )
 expand = true
 
 [node name="Label" type="Label" parent="MainScreen/mansion/farmpanel/snailsbutton"]
-margin_left = 40.8588
-margin_top = 150.78
-margin_right = 108.859
-margin_bottom = 170.78
+margin_top = 151.0
+margin_right = 150.0
+margin_bottom = 171.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.761719, 0.660181, 0.261841, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 text = "Snail Pit"
+align = 1
 
 [node name="BorderFrameText" type="TextureRect" parent="MainScreen/mansion/farmpanel/snailsbutton"]
-margin_top = -1.19751
-margin_right = 150.0
-margin_bottom = 173.802
+margin_left = -1.0
+margin_top = -1.0
+margin_right = 151.0
+margin_bottom = 176.0
 rect_clip_content = true
 mouse_filter = 2
 texture = SubResource( 18 )
@@ -3033,10 +2983,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -909.0
-margin_top = -179.0
-margin_right = -759.0
-margin_bottom = -29.0
+margin_left = -899.0
+margin_top = -184.0
+margin_right = -749.0
+margin_bottom = -34.0
 hint_tooltip = "See who all is working in the farm currently."
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -3047,19 +2997,21 @@ texture_disabled = ExtResource( 70 )
 expand = true
 
 [node name="Label" type="Label" parent="MainScreen/mansion/farmpanel/workersbutton"]
-margin_left = 30.0
-margin_top = 150.0
-margin_right = 115.152
-margin_bottom = 173.175
+margin_top = 151.0
+margin_right = 150.0
+margin_bottom = 171.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.761719, 0.660181, 0.261841, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 text = "Workers"
+align = 1
 
 [node name="BorderFrameText" type="TextureRect" parent="MainScreen/mansion/farmpanel/workersbutton"]
-margin_right = 150.0
-margin_bottom = 175.0
+margin_left = -1.0
+margin_top = -1.0
+margin_right = 151.0
+margin_bottom = 176.0
 rect_clip_content = true
 mouse_filter = 2
 texture = SubResource( 18 )
@@ -3070,10 +3022,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -164.0
-margin_top = -179.0
-margin_right = -14.0
-margin_bottom = -29.0
+margin_left = -190.0
+margin_top = -184.0
+margin_right = -39.9999
+margin_bottom = -34.0
 hint_tooltip = "Buy Farm Equipment or Upgrade Incubators to Hatch Snail Eggs"
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -3088,18 +3040,21 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -125.0
-margin_right = -24.9234
-margin_bottom = 20.4573
+margin_left = -150.0
+margin_top = 1.00003
+margin_bottom = 21.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.761719, 0.660181, 0.261841, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 text = "Farm Store"
+align = 1
 
 [node name="BorderFrameText" type="TextureRect" parent="MainScreen/mansion/farmpanel/storebutton"]
-margin_right = 150.0
-margin_bottom = 175.0
+margin_left = -1.0
+margin_top = -1.0
+margin_right = 151.0
+margin_bottom = 176.0
 rect_clip_content = true
 mouse_filter = 2
 texture = SubResource( 18 )
@@ -3134,18 +3089,18 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -377.488
-margin_top = -554.101
-margin_right = -74.4882
-margin_bottom = -196.101
+margin_left = -391.0
+margin_top = -550.0
+margin_right = -71.0
+margin_bottom = -204.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/mansion/farmpanel/ScrollContainer"]
-margin_right = 300.0
+margin_right = 320.0
 margin_bottom = 39.0
-size_flags_horizontal = 2
+size_flags_horizontal = 3
 size_flags_vertical = 2
 custom_constants/separation = 4
 
@@ -3175,49 +3130,48 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -936.0
-margin_top = -578.0
-margin_right = -2.0
-margin_bottom = -26.0
+margin_left = -939.0
+margin_top = -565.0
+margin_right = 6.10352e-05
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/panel = ExtResource( 46 )
 
 [node name="addcowforce" type="Button" parent="MainScreen/mansion/farmpanel/slavetofarm"]
-margin_left = 15.0
-margin_top = 485.0
-margin_right = 325.0
-margin_bottom = 535.0
+margin_left = 20.0
+margin_top = 495.0
+margin_right = 340.0
+margin_bottom = 545.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Assign as Livestock (Forcefully)"
 
 [node name="closeslavefarm" type="Button" parent="MainScreen/mansion/farmpanel/slavetofarm"]
-margin_left = 725.0
-margin_top = 490.0
-margin_right = 918.0
-margin_bottom = 537.0
+margin_left = 726.0
+margin_top = 495.0
+margin_right = 919.0
+margin_bottom = 545.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Close"
 
 [node name="addcow" type="Button" parent="MainScreen/mansion/farmpanel/slavetofarm"]
-margin_left = 15.0
-margin_top = 440.0
-margin_right = 328.0
-margin_bottom = 489.236
+margin_left = 20.0
+margin_top = 445.0
+margin_right = 340.0
+margin_bottom = 495.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Assign as Livestock (Consentually)"
 
 [node name="image" type="TextureRect" parent="MainScreen/mansion/farmpanel/slavetofarm"]
-margin_left = 15.0
+margin_left = 40.0
 margin_top = 20.0
-margin_right = 336.0
-margin_bottom = 267.0
+margin_right = 320.0
+margin_bottom = 300.0
 rect_min_size = Vector2( 180, 180 )
 mouse_filter = 2
 texture = ExtResource( 73 )
@@ -3225,65 +3179,66 @@ expand = true
 stretch_mode = 6
 
 [node name="slaveassigntext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/slavetofarm"]
-margin_left = 356.0
-margin_top = 14.0
-margin_right = 916.0
-margin_bottom = 439.0
+margin_left = 360.0
+margin_top = 30.0
+margin_right = 910.0
+margin_bottom = 455.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
 
 [node name="underpictext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/slavetofarm"]
-margin_left = 15.0
-margin_top = 280.0
-margin_right = 347.0
-margin_bottom = 426.0
+margin_left = 20.0
+margin_top = 310.0
+margin_right = 340.0
+margin_bottom = 430.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
 
-[node name="slavefarminsepct" type="Panel" parent="MainScreen/mansion/farmpanel"]
+[node name="slavefarminspect" type="Panel" parent="MainScreen/mansion/farmpanel"]
 visible = false
-margin_left = 21.0
-margin_top = 44.0
-margin_right = 921.0
-margin_bottom = 584.0
+margin_left = 10.0
+margin_top = 64.0
+margin_right = 929.0
+margin_bottom = 609.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/panel = ExtResource( 46 )
 
-[node name="TextureBackground" type="TextureRect" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
-margin_left = -15.0
-margin_top = 4.0
-margin_right = 910.0
-margin_bottom = 540.0
+[node name="TextureBackground" type="TextureRect" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
+margin_left = -4.0
+margin_top = -9.0
+margin_right = 923.0
+margin_bottom = 550.0
 texture = ExtResource( 74 )
 expand = true
 
-[node name="TextureRectBorder" type="TextureRect" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="TextureRectBorder" type="TextureRect" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -17.0
-margin_top = 1.0
-margin_right = 14.0
+margin_left = -5.0
+margin_top = -10.0
+margin_right = 5.0
+margin_bottom = 5.0
 texture = ExtResource( 44 )
 expand = true
 
-[node name="bodypanel" type="Panel" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="bodypanel" type="Panel" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 22.0
-margin_top = -48.0
-margin_right = 420.0
-margin_bottom = 129.0
+margin_left = 10.0
+margin_top = -82.0
+margin_right = 408.0
+margin_bottom = 95.0
 mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
 
-[node name="body" type="TextureRect" parent="MainScreen/mansion/farmpanel/slavefarminsepct/bodypanel"]
+[node name="body" type="TextureRect" parent="MainScreen/mansion/farmpanel/slavefarminspect/bodypanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 14.0
@@ -3297,10 +3252,10 @@ texture = ExtResource( 75 )
 expand = true
 stretch_mode = 6
 
-[node name="dailyaction" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
-margin_left = 290.0
+[node name="dailyaction" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
+margin_left = 320.0
 margin_top = 30.0
-margin_right = 415.0
+margin_right = 460.0
 margin_bottom = 70.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -3310,87 +3265,86 @@ align = 1
 items = [ "straight", null, false, 0, null, "ponytail", null, false, 1, null, "twintails", null, false, 2, null, "braid", null, false, 3, null, "two braids", null, false, 4, null, "bun", null, false, 5, null ]
 selected = 0
 
-[node name="dailyactionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction"]
+[node name="dailyactionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/dailyaction"]
 margin_top = -20.0
-margin_right = 125.0
+margin_right = 140.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
 text = "Daily Action"
 align = 1
 
-[node name="workstation" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
-margin_left = 150.0
+[node name="workstation" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
+margin_left = 165.0
 margin_top = 30.0
-margin_right = 275.0
-margin_bottom = 70.0004
+margin_right = 305.0
+margin_bottom = 70.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "straight"
 align = 1
 
-[node name="workstationlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/workstation"]
+[node name="workstationlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/workstation"]
 margin_top = -20.0
-margin_right = 125.0
+margin_right = 140.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
 text = "Work Station"
 align = 1
 
-[node name="stallbedding" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="stallbedding" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 15.0
 margin_top = 30.0
-margin_right = 140.0
+margin_right = 155.0
 margin_bottom = 70.0
 text = "dirt"
 align = 1
 items = [ "dirt", null, false, 0, null, "hay", null, false, 1, null, "cot", null, false, 2, null, "bed", null, false, 3, null ]
 selected = 0
 
-[node name="stallbeddinglabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/stallbedding"]
+[node name="stallbeddinglabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/stallbedding"]
 margin_top = -20.0
-margin_right = 125.0
+margin_right = 140.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
 text = "Stall Bedding"
 align = 1
 
-[node name="keeprestrained" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
-margin_left = 20.0
+[node name="keeprestrained" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
+margin_left = 25.0
 margin_top = 75.0
-margin_right = 142.139
-margin_bottom = 103.935
+margin_right = 150.0
+margin_bottom = 97.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Restrain"
 align = 1
 
-[node name="giveaphrodisiac" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
-margin_left = 345.0
-margin_top = 465.0
-margin_right = 515.0
-margin_bottom = 365.0
+[node name="giveaphrodisiac" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
+margin_left = 175.0
+margin_top = 105.0
+margin_right = 345.0
+margin_bottom = 127.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Use Aphrodisiac"
 
-[node name="specifybreedingpartnerbutton" type="Button" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
-margin_left = 14.1638
-margin_top = 485.836
-margin_right = 331.164
-margin_bottom = 524.836
-rect_min_size = Vector2( 300, 30 )
+[node name="specifybreedingpartnerbutton" type="Button" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
+margin_left = 15.0
+margin_top = 491.0
+margin_right = 332.0
+margin_bottom = 530.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "Specify Breeding Partner"
 align = 0
 
-[node name="breedingoption" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="breedingoption" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 15.0
 margin_top = 440.0
 margin_right = 165.0
@@ -3403,22 +3357,20 @@ align = 1
 items = [ "None", null, false, 0, null, "Breeder", null, false, 1, null, "Stud", null, false, 2, null, "Both", null, false, 3, null ]
 selected = 0
 
-[node name="breedingoptionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption"]
-margin_left = 40.0
-margin_top = -17.0
-margin_right = 115.0
-margin_bottom = 3.0
+[node name="breedingoptionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/breedingoption"]
+margin_top = -20.0
+margin_right = 150.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
 text = "Breeding"
 align = 1
 
-[node name="milkcontaineroptions" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="milkcontaineroptions" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 15.0
-margin_top = 265.0
+margin_top = 300.0
 margin_right = 165.0
-margin_bottom = 305.0
+margin_bottom = 340.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
@@ -3426,22 +3378,20 @@ text = "straight"
 items = [ "straight", null, false, 0, null, "ponytail", null, false, 1, null, "twintails", null, false, 2, null, "braid", null, false, 3, null, "two braids", null, false, 4, null, "bun", null, false, 5, null ]
 selected = 0
 
-[node name="milkcontaineroptionslabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions"]
-margin_left = 7.81348
-margin_top = -20.4137
-margin_right = 140.813
-margin_bottom = -0.413696
+[node name="milkcontaineroptionslabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/milkcontaineroptions"]
+margin_top = -20.0
+margin_right = 150.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
 text = "Milk Container"
 align = 1
 
-[node name="cumcontaineroptions" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="cumcontaineroptions" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 170.0
-margin_top = 265.0
+margin_top = 300.0
 margin_right = 320.0
-margin_bottom = 305.0
+margin_bottom = 340.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
@@ -3449,22 +3399,20 @@ text = "straight"
 items = [ "straight", null, false, 0, null, "ponytail", null, false, 1, null, "twintails", null, false, 2, null, "braid", null, false, 3, null, "two braids", null, false, 4, null, "bun", null, false, 5, null ]
 selected = 0
 
-[node name="cumcontaineroptionslabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions"]
-margin_left = 7.81348
-margin_top = -20.4137
-margin_right = 140.813
-margin_bottom = -0.413696
+[node name="cumcontaineroptionslabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/cumcontaineroptions"]
+margin_top = -20.0
+margin_right = 150.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
 text = "Cum Container"
 align = 1
 
-[node name="pisscontaineroptions" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="pisscontaineroptions" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 325.0
-margin_top = 265.0
+margin_top = 300.0
 margin_right = 475.0
-margin_bottom = 305.0
+margin_bottom = 340.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
@@ -3472,22 +3420,20 @@ text = "straight"
 items = [ "straight", null, false, 0, null, "ponytail", null, false, 1, null, "twintails", null, false, 2, null, "braid", null, false, 3, null, "two braids", null, false, 4, null, "bun", null, false, 5, null ]
 selected = 0
 
-[node name="pisscontaineroptionslabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions"]
-margin_left = 7.81348
-margin_top = -20.4137
-margin_right = 140.813
-margin_bottom = -0.413696
+[node name="pisscontaineroptionslabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/pisscontaineroptions"]
+margin_top = -20.0
+margin_right = 150.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
 text = "Piss Container"
 align = 1
 
-[node name="milkextraction" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="milkextraction" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 15.0
-margin_top = 205.0
+margin_top = 235.0
 margin_right = 165.0
-margin_bottom = 245.0
+margin_bottom = 275.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
@@ -3495,22 +3441,20 @@ text = "straight"
 items = [ "straight", null, false, 0, null, "ponytail", null, false, 1, null, "twintails", null, false, 2, null, "braid", null, false, 3, null, "two braids", null, false, 4, null, "bun", null, false, 5, null ]
 selected = 0
 
-[node name="milkextractionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction"]
-margin_left = 7.81348
-margin_top = -20.4137
-margin_right = 140.813
-margin_bottom = -0.413696
+[node name="milkextractionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/milkextraction"]
+margin_top = -20.0
+margin_right = 150.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
 text = "Milk Extraction"
 align = 1
 
-[node name="cumextraction" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="cumextraction" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 170.0
-margin_top = 205.0
+margin_top = 235.0
 margin_right = 320.0
-margin_bottom = 245.0
+margin_bottom = 275.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
@@ -3518,22 +3462,20 @@ text = "straight"
 items = [ "straight", null, false, 0, null, "ponytail", null, false, 1, null, "twintails", null, false, 2, null, "braid", null, false, 3, null, "two braids", null, false, 4, null, "bun", null, false, 5, null ]
 selected = 0
 
-[node name="cumextractionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction"]
-margin_left = 7.81348
-margin_top = -20.4137
-margin_right = 140.813
-margin_bottom = -0.413696
+[node name="cumextractionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/cumextraction"]
+margin_top = -20.0
+margin_right = 150.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
 text = "Cum Extraction"
 align = 1
 
-[node name="pissextraction" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="pissextraction" type="OptionButton" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 325.0
-margin_top = 205.0
+margin_top = 235.0
 margin_right = 475.0
-margin_bottom = 245.0
+margin_bottom = 275.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
@@ -3541,88 +3483,87 @@ text = "straight"
 items = [ "straight", null, false, 0, null, "ponytail", null, false, 1, null, "twintails", null, false, 2, null, "braid", null, false, 3, null, "two braids", null, false, 4, null, "bun", null, false, 5, null ]
 selected = 0
 
-[node name="pissextractionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction"]
-margin_left = 7.81348
-margin_top = -20.4137
-margin_right = 140.813
-margin_bottom = -0.413696
+[node name="pissextractionlabel" type="Label" parent="MainScreen/mansion/farmpanel/slavefarminspect/pissextraction"]
+margin_top = -20.0
+margin_right = 150.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
 text = "Piss Extraction"
 align = 1
 
-[node name="closeslaveinspect" type="Button" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
-margin_left = 693.603
-margin_top = 477.053
-margin_right = 886.603
-margin_bottom = 524.053
+[node name="closeslaveinspect" type="Button" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
+margin_left = 711.0
+margin_top = 483.0
+margin_right = 904.0
+margin_bottom = 530.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Close"
 
-[node name="releasefromfarm" type="Button" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
-margin_left = 694.172
-margin_top = 420.797
-margin_right = 887.172
-margin_bottom = 467.797
+[node name="releasefromfarm" type="Button" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
+margin_left = 711.0
+margin_top = 426.0
+margin_right = 904.0
+margin_bottom = 473.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Release"
 
-[node name="slaveassigntext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
-margin_left = 502.197
+[node name="slaveassigntext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
+margin_left = 500.0
 margin_top = 14.0
-margin_right = 888.197
-margin_bottom = 403.0
+margin_right = 900.0
+margin_bottom = 406.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
+text = "assign text"
 
-[node name="usesedative" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
-margin_left = 345.0
-margin_top = 495.0
-margin_right = 500.0
-margin_bottom = 405.0
+[node name="usesedative" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
+margin_left = 175.0
+margin_top = 75.0
+margin_right = 330.0
+margin_bottom = 95.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Use Sedative"
 
-[node name="extractmilk" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="extractmilk" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 25.0
-margin_top = 155.0
-margin_right = 155.0
-margin_bottom = 184.0
+margin_top = 180.0
+margin_right = 160.0
+margin_bottom = 210.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Extract Milk"
 
-[node name="extractcum" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
-margin_left = 175.0
-margin_top = 155.0
-margin_right = 310.0
-margin_bottom = 185.0
+[node name="extractcum" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
+margin_left = 180.0
+margin_top = 180.0
+margin_right = 315.0
+margin_bottom = 210.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Extract Cum"
 
-[node name="extractpiss" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="extractpiss" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 335.0
-margin_top = 155.138
+margin_top = 180.0
 margin_right = 470.0
-margin_bottom = 185.138
+margin_bottom = 210.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Extract Piss"
 
-[node name="snailbreeding" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminsepct"]
+[node name="snailbreeding" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 180.0
 margin_top = 450.0
 margin_right = 310.0
@@ -3638,159 +3579,166 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -838.12
-margin_top = -568.855
-margin_right = -116.12
-margin_bottom = -147.855
+margin_left = -929.0
+margin_top = -555.0
+margin_right = -9.99994
+margin_bottom = -10.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/panel = ExtResource( 46 )
 
 [node name="TextureBackground" type="TextureRect" parent="MainScreen/mansion/farmpanel/vatspanel"]
-margin_left = -94.0
-margin_top = -8.0
-margin_right = 835.0
-margin_bottom = 536.0
+margin_left = -4.0
+margin_top = -9.0
+margin_right = 923.0
+margin_bottom = 550.0
 texture = ExtResource( 76 )
 expand = true
 
 [node name="TextureRectBorder" type="TextureRect" parent="MainScreen/mansion/farmpanel/vatspanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -100.197
-margin_top = -7.00632
-margin_right = 105.803
-margin_bottom = 120.994
+margin_left = -5.0
+margin_top = -10.0
+margin_right = 5.0
+margin_bottom = 5.0
 texture = ExtResource( 44 )
 expand = true
 
 [node name="vatmilkbutton" type="Button" parent="MainScreen/mansion/farmpanel/vatspanel"]
-margin_left = 20.0
-margin_top = 320.0
-margin_right = 170.0
-margin_bottom = 367.0
+margin_left = 105.0
+margin_top = 380.0
+margin_right = 255.0
+margin_bottom = 427.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Milk Vat"
 
 [node name="vatsemenbutton" type="Button" parent="MainScreen/mansion/farmpanel/vatspanel"]
-margin_left = 200.0
-margin_top = 320.0
-margin_right = 350.0
-margin_bottom = 367.0
+margin_left = 295.0
+margin_top = 380.0
+margin_right = 445.0
+margin_bottom = 427.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Semen Vat"
 
 [node name="vatlubebutton" type="Button" parent="MainScreen/mansion/farmpanel/vatspanel"]
-margin_left = 380.0
-margin_top = 320.0
-margin_right = 530.0
-margin_bottom = 367.0
+margin_left = 485.0
+margin_top = 380.0
+margin_right = 635.0
+margin_bottom = 427.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Lube Vat"
 
 [node name="vatpissbutton" type="Button" parent="MainScreen/mansion/farmpanel/vatspanel"]
-margin_left = 550.0
-margin_top = 320.0
-margin_right = 700.0
-margin_bottom = 367.0
+margin_left = 675.0
+margin_top = 380.0
+margin_right = 825.0
+margin_bottom = 427.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Piss Vat"
 
 [node name="vatspanelclose" type="Button" parent="MainScreen/mansion/farmpanel/vatspanel"]
-margin_left = 625.0
-margin_top = 480.0
-margin_right = 818.0
-margin_bottom = 527.0
+margin_left = 711.0
+margin_top = 483.0
+margin_right = 904.0
+margin_bottom = 530.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Close"
 
 [node name="vatheadertext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel"]
-margin_left = 223.0
-margin_top = 7.0
-margin_right = 695.0
-margin_bottom = 52.0
+margin_left = 327.0
+margin_top = 5.0
+margin_right = 599.0
+margin_bottom = 35.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]Vat Details[/center]"
-text = "Vat Details"
+bbcode_text = "[center][color=#d1b970]Vat Management[/color]"
+text = "Vat Management"
 
 [node name="vatgeneraltext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel"]
-margin_left = 218.0
-margin_top = 58.0
-margin_right = 698.0
-margin_bottom = 313.0
+margin_left = 404.0
+margin_top = 40.0
+margin_right = 884.0
+margin_bottom = 300.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
+text = "General Text"
 
 [node name="capacitymilktext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel"]
-margin_left = 23.0
-margin_top = 292.0
-margin_right = 166.0
-margin_bottom = 322.0
+margin_left = 105.0
+margin_top = 350.0
+margin_right = 255.0
+margin_bottom = 380.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
+text = "Vat Text"
 
 [node name="capacitysementext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel"]
-margin_left = 202.131
-margin_top = 291.56
-margin_right = 345.131
-margin_bottom = 321.56
+margin_left = 295.0
+margin_top = 350.0
+margin_right = 445.0
+margin_bottom = 380.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
+text = "Vat Text"
 
 [node name="capacitylubetext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel"]
-margin_left = 384.344
-margin_top = 291.12
-margin_right = 527.344
-margin_bottom = 321.12
+margin_left = 485.0
+margin_top = 350.0
+margin_right = 635.0
+margin_bottom = 380.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
+text = "Vat Text"
 
 [node name="capacitypisstext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel"]
-margin_left = 552.032
-margin_top = 292.88
-margin_right = 695.032
-margin_bottom = 322.88
+margin_left = 675.0
+margin_top = 350.0
+margin_right = 825.0
+margin_bottom = 380.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
+text = "Vat Text"
 
 [node name="bottlertext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel"]
-margin_left = -70.0
-margin_top = 7.0
-margin_right = 243.0
-margin_bottom = 187.0
+margin_left = 30.0
+margin_top = 40.0
+margin_right = 370.0
+margin_bottom = 220.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
+text = "bottler text
+"
 
 [node name="buybottles" type="Label" parent="MainScreen/mansion/farmpanel/vatspanel"]
-margin_left = 25.0
-margin_top = 190.0
-margin_right = 195.0
-margin_bottom = 210.0
+margin_left = 75.0
+margin_top = 235.0
+margin_right = 245.0
+margin_bottom = 255.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
@@ -3848,15 +3796,17 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -722.0
-margin_top = -421.0
+margin_left = -879.0
+margin_top = -540.0
+margin_right = -39.0
+margin_bottom = -70.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/panel = ExtResource( 46 )
 
 [node name="TextureRectBackground" type="TextureRect" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel"]
-margin_right = 722.0
-margin_bottom = 421.0
+margin_right = 840.0
+margin_bottom = 470.0
 texture = SubResource( 19 )
 expand = true
 
@@ -3867,10 +3817,10 @@ texture = ExtResource( 44 )
 expand = true
 
 [node name="assignstockpile" type="Label" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel"]
-margin_left = 11.0
-margin_top = 290.0
-margin_right = 165.0
-margin_bottom = 310.0
+margin_left = 10.0
+margin_top = 295.0
+margin_right = 180.0
+margin_bottom = 315.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
@@ -3878,23 +3828,21 @@ text = "Vat Stockpile"
 align = 1
 
 [node name="counter" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignstockpile"]
-margin_left = 15.0
-margin_top = 25.0
-margin_right = 138.0
-margin_bottom = 60.0
-rect_min_size = Vector2( 125, 35 )
+margin_top = 27.0
+margin_right = 170.0
+margin_bottom = 52.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
 bbcode_text = "[center]0[/center]"
 text = "0"
+scroll_active = false
 
 [node name="freespace" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignstockpile"]
-margin_left = -10.0
-margin_top = 55.0
-margin_right = 158.0
-margin_bottom = 85.0
+margin_top = 54.0
+margin_right = 170.0
+margin_bottom = 84.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -3903,10 +3851,10 @@ bbcode_text = "[center]Free Space: 1000[/center]"
 text = "Free Space: 1000"
 
 [node name="assignfood" type="Label" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel"]
-margin_left = 175.0
-margin_top = 290.0
-margin_right = 306.0
-margin_bottom = 310.0
+margin_left = 200.0
+margin_top = 295.0
+margin_right = 380.0
+margin_bottom = 315.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
@@ -3914,21 +3862,22 @@ text = "Kitchen Stock"
 align = 1
 
 [node name="counter" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignfood"]
-margin_left = 50.0
-margin_top = 35.0
-margin_right = 75.0
-margin_bottom = 60.0
+margin_left = 55.0
+margin_top = 38.0
+margin_right = 125.0
+margin_bottom = 68.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
 bbcode_text = "[center]0[/center]"
 text = "0"
+scroll_active = false
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignfood"]
-margin_left = 85.0
+margin_left = 125.0
 margin_top = 25.0
-margin_right = 135.0
+margin_right = 175.0
 margin_bottom = 75.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -3936,9 +3885,9 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="subtract" type="Button" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignfood"]
-margin_left = -5.0
+margin_left = 5.0
 margin_top = 25.0
-margin_right = 45.0
+margin_right = 55.0
 margin_bottom = 75.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -3946,10 +3895,10 @@ custom_fonts/font = ExtResource( 45 )
 text = "-"
 
 [node name="assignrefine" type="Label" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel"]
-margin_left = 325.0
+margin_left = 410.0
 margin_top = 270.0
-margin_right = 495.0
-margin_bottom = 290.0
+margin_right = 590.0
+margin_bottom = 295.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
@@ -3957,23 +3906,22 @@ text = "Refined Bottles"
 align = 1
 
 [node name="pendingcounter" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine"]
-margin_left = 45.389
-margin_top = 48.2358
-margin_right = 116.389
-margin_bottom = 97.2358
+margin_left = 55.0
+margin_top = 63.0
+margin_right = 125.0
+margin_bottom = 93.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]Pending
-0[/center]"
-text = "Pending
-0"
+bbcode_text = "[center]0[/center]"
+text = "0"
+scroll_active = false
 
 [node name="actualcounter" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine"]
-margin_top = 22.0
-margin_right = 170.0
-margin_bottom = 47.0
+margin_top = 25.0
+margin_right = 180.0
+margin_bottom = 50.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -3983,29 +3931,29 @@ text = "Stockpile: 0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine"]
 margin_left = 125.0
-margin_top = 45.0
+margin_top = 50.0
 margin_right = 175.0
-margin_bottom = 95.0
+margin_bottom = 100.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="subtract" type="Button" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine"]
-margin_left = -10.0
-margin_top = 45.0
-margin_right = 40.0
-margin_bottom = 95.0
+margin_left = 5.0
+margin_top = 50.0
+margin_right = 55.0
+margin_bottom = 100.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "-"
 
 [node name="assignsell" type="Label" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel"]
-margin_left = 525.0
+margin_left = 620.0
 margin_top = 270.0
-margin_right = 695.0
-margin_bottom = 290.0
+margin_right = 800.0
+margin_bottom = 295.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
@@ -4013,23 +3961,22 @@ text = "Bottles for Sale"
 align = 1
 
 [node name="pendingcounter" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell"]
-margin_left = 45.389
-margin_top = 48.2358
-margin_right = 116.389
-margin_bottom = 97.2358
+margin_left = 55.0
+margin_top = 63.0
+margin_right = 125.0
+margin_bottom = 93.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]Pending
-0[/center]"
-text = "Pending
-0"
+bbcode_text = "[center]0[/center]"
+text = "0"
+scroll_active = false
 
 [node name="actualcounter" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell"]
-margin_top = 22.0
-margin_right = 170.0
-margin_bottom = 47.0
+margin_top = 25.0
+margin_right = 180.0
+margin_bottom = 50.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -4039,49 +3986,49 @@ text = "Stockpile: 0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell"]
 margin_left = 125.0
-margin_top = 45.0
+margin_top = 50.0
 margin_right = 175.0
-margin_bottom = 95.0
+margin_bottom = 100.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="subtract" type="Button" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell"]
-margin_left = -10.0
-margin_top = 45.0
-margin_right = 40.0
-margin_bottom = 95.0
+margin_left = 5.0
+margin_top = 50.0
+margin_right = 55.0
+margin_bottom = 100.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "-"
 
 [node name="closevatdetails" type="Button" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel"]
-margin_left = 520.0
-margin_top = 370.0
-margin_right = 713.0
-margin_bottom = 417.0
+margin_left = 627.0
+margin_top = 403.0
+margin_right = 820.0
+margin_bottom = 450.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Close"
 
 [node name="autobuybottles" type="CheckBox" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel"]
-margin_left = 15.0
-margin_top = 380.0
-margin_right = 205.0
-margin_bottom = 410.0
+margin_left = 20.0
+margin_top = 415.0
+margin_right = 210.0
+margin_bottom = 445.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Auto-Buy Bottles"
 
 [node name="vatheadertext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel"]
-margin_left = 48.0
-margin_top = 14.0
-margin_right = 700.0
-margin_bottom = 59.0
+margin_left = 320.0
+margin_top = 20.0
+margin_right = 520.0
+margin_bottom = 50.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -4090,20 +4037,21 @@ bbcode_text = "[center]Vat Details[/center]"
 text = "Vat Details"
 
 [node name="vatdetailstext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel"]
-margin_left = 42.0
-margin_top = 88.0
-margin_right = 691.0
-margin_bottom = 228.0
+margin_left = 120.0
+margin_top = 60.0
+margin_right = 720.0
+margin_bottom = 200.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
+text = "details text"
 
 [node name="autoassign" type="OptionButton" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel"]
-margin_left = 340.0
-margin_top = 373.0
-margin_right = 490.0
-margin_bottom = 413.0
+margin_left = 380.0
+margin_top = 410.0
+margin_right = 530.0
+margin_bottom = 450.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
@@ -4113,9 +4061,9 @@ items = [ "straight", null, false, 0, null, "ponytail", null, false, 1, null, "t
 selected = 0
 
 [node name="autoassignlabel" type="Label" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/autoassign"]
-margin_left = -130.0
+margin_left = -135.0
 margin_top = 10.0
-margin_right = 3.0
+margin_right = -2.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
@@ -4129,29 +4077,28 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -937.0
-margin_top = -578.0
-margin_right = -7.0
-margin_bottom = -31.0
+margin_left = -939.0
+margin_top = -565.0
+margin_right = 6.10352e-05
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/panel = ExtResource( 46 )
 
 [node name="textbody" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/workerspanel"]
-margin_left = 28.0
-margin_top = 18.0
-margin_right = 912.0
-margin_bottom = 472.0
+margin_left = 30.0
+margin_top = 25.0
+margin_right = 909.0
+margin_bottom = 473.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
 
 [node name="close" type="Button" parent="MainScreen/mansion/farmpanel/workerspanel"]
-margin_left = 720.0
-margin_top = 485.0
-margin_right = 913.0
-margin_bottom = 532.0
+margin_left = 721.0
+margin_top = 493.0
+margin_right = 914.0
+margin_bottom = 540.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
@@ -4163,56 +4110,61 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -633.12
-margin_top = -506.88
-margin_right = 88.8802
-margin_bottom = -85.8802
+margin_left = -929.0
+margin_top = -555.0
+margin_right = -9.99994
+margin_bottom = -10.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/panel = ExtResource( 46 )
 
 [node name="TextureBackground" type="TextureRect" parent="MainScreen/mansion/farmpanel/snailpanel"]
-margin_top = -0.975342
-margin_right = 722.0
-margin_bottom = 420.025
+margin_left = -4.0
+margin_top = -9.0
+margin_right = 923.0
+margin_bottom = 550.0
 texture = ExtResource( 77 )
 expand = true
 
 [node name="TextureRectBorder" type="TextureRect" parent="MainScreen/mansion/farmpanel/snailpanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -0.975342
-margin_bottom = -0.975281
+margin_left = -5.0
+margin_top = -10.0
+margin_right = 5.0
+margin_bottom = 5.0
 texture = ExtResource( 44 )
 expand = true
 
 [node name="snailheadertext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/snailpanel"]
-margin_left = 48.0
+margin_left = 330.0
 margin_top = 14.0
-margin_right = 700.0
-margin_bottom = 59.0
+margin_right = 590.0
+margin_bottom = 44.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]Snail Management[/center]"
-text = "Snail Management"
+bbcode_text = "[center]Snail Pit Management[/center]"
+text = "Snail Pit Management"
 
 [node name="snaildetailstext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/snailpanel"]
-margin_left = 42.9266
-margin_top = 88.0
-margin_right = 687.927
-margin_bottom = 278.0
+margin_left = 50.0
+margin_top = 64.0
+margin_right = 869.0
+margin_bottom = 324.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
+bbcode_text = "details text"
+text = "details text"
 
 [node name="snailpanelclose" type="Button" parent="MainScreen/mansion/farmpanel/snailpanel"]
-margin_left = 515.0
-margin_top = 365.0
-margin_right = 708.0
-margin_bottom = 412.0
+margin_left = 721.0
+margin_top = 493.0
+margin_right = 914.0
+margin_bottom = 540.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
@@ -4220,9 +4172,9 @@ text = "Close"
 
 [node name="assignstockpile" type="Label" parent="MainScreen/mansion/farmpanel/snailpanel"]
 margin_left = 40.0
-margin_top = 290.0
-margin_right = 169.0
-margin_bottom = 310.0
+margin_top = 350.0
+margin_right = 190.0
+margin_bottom = 375.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
@@ -4231,9 +4183,9 @@ align = 1
 
 [node name="counter" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/snailpanel/assignstockpile"]
 margin_left = 50.0
-margin_top = 35.0
-margin_right = 75.0
-margin_bottom = 60.0
+margin_top = 40.0
+margin_right = 100.0
+margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -4242,10 +4194,10 @@ bbcode_text = "[center]0[/center]"
 text = "0"
 
 [node name="assignfood" type="Label" parent="MainScreen/mansion/farmpanel/snailpanel"]
-margin_left = 190.0
-margin_top = 290.0
-margin_right = 321.0
-margin_bottom = 310.0
+margin_left = 250.0
+margin_top = 350.0
+margin_right = 400.0
+margin_bottom = 375.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
@@ -4254,9 +4206,9 @@ align = 1
 
 [node name="counter" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/snailpanel/assignfood"]
 margin_left = 50.0
-margin_top = 35.0
-margin_right = 75.0
-margin_bottom = 60.0
+margin_top = 40.0
+margin_right = 100.0
+margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -4265,9 +4217,9 @@ bbcode_text = "[center]0[/center]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/snailpanel/assignfood"]
-margin_left = 85.0
+margin_left = 100.0
 margin_top = 25.0
-margin_right = 135.0
+margin_right = 150.0
 margin_bottom = 75.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -4275,9 +4227,8 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="subtract" type="Button" parent="MainScreen/mansion/farmpanel/snailpanel/assignfood"]
-margin_left = -5.0
 margin_top = 25.0
-margin_right = 45.0
+margin_right = 50.0
 margin_bottom = 75.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -4285,10 +4236,10 @@ custom_fonts/font = ExtResource( 45 )
 text = "-"
 
 [node name="assignsell" type="Label" parent="MainScreen/mansion/farmpanel/snailpanel"]
-margin_left = 339.0
-margin_top = 290.0
-margin_right = 470.0
-margin_bottom = 310.0
+margin_left = 475.0
+margin_top = 350.0
+margin_right = 625.0
+margin_bottom = 375.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
@@ -4297,9 +4248,9 @@ align = 1
 
 [node name="counter" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/snailpanel/assignsell"]
 margin_left = 50.0
-margin_top = 35.0
-margin_right = 75.0
-margin_bottom = 60.0
+margin_top = 40.0
+margin_right = 100.0
+margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -4308,9 +4259,9 @@ bbcode_text = "[center]0[/center]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/snailpanel/assignsell"]
-margin_left = 85.0
+margin_left = 100.0
 margin_top = 25.0
-margin_right = 135.0
+margin_right = 150.0
 margin_bottom = 75.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -4318,9 +4269,8 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="subtract" type="Button" parent="MainScreen/mansion/farmpanel/snailpanel/assignsell"]
-margin_left = -5.0
 margin_top = 25.0
-margin_right = 45.0
+margin_right = 50.0
 margin_bottom = 75.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -4328,10 +4278,10 @@ custom_fonts/font = ExtResource( 45 )
 text = "-"
 
 [node name="assignhatch" type="Label" parent="MainScreen/mansion/farmpanel/snailpanel"]
-margin_left = 485.0
-margin_top = 290.0
-margin_right = 616.0
-margin_bottom = 310.0
+margin_left = 700.0
+margin_top = 350.0
+margin_right = 850.0
+margin_bottom = 375.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
@@ -4340,9 +4290,9 @@ align = 1
 
 [node name="counter" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/snailpanel/assignhatch"]
 margin_left = 50.0
-margin_top = 35.0
-margin_right = 75.0
-margin_bottom = 60.0
+margin_top = 40.0
+margin_right = 100.0
+margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -4351,9 +4301,9 @@ bbcode_text = "[center]0[/center]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/snailpanel/assignhatch"]
-margin_left = 85.0
+margin_left = 100.0
 margin_top = 25.0
-margin_right = 135.0
+margin_right = 150.0
 margin_bottom = 75.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -4361,9 +4311,8 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="subtract" type="Button" parent="MainScreen/mansion/farmpanel/snailpanel/assignhatch"]
-margin_left = -5.0
 margin_top = 25.0
-margin_right = 45.0
+margin_right = 50.0
 margin_bottom = 75.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -4371,10 +4320,10 @@ custom_fonts/font = ExtResource( 45 )
 text = "-"
 
 [node name="autoassign" type="OptionButton" parent="MainScreen/mansion/farmpanel/snailpanel"]
-margin_left = 31.0
-margin_top = 370.88
-margin_right = 181.0
-margin_bottom = 410.88
+margin_left = 190.0
+margin_top = 470.0
+margin_right = 340.0
+margin_bottom = 510.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
@@ -4382,9 +4331,10 @@ text = "none"
 align = 1
 
 [node name="autoassignlabel" type="Label" parent="MainScreen/mansion/farmpanel/snailpanel/autoassign"]
-margin_left = 10.0
-margin_top = -20.0
-margin_right = 143.0
+margin_left = -135.0
+margin_top = 10.0
+margin_right = -2.0
+margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
@@ -4392,10 +4342,10 @@ text = "Auto-Assign"
 align = 1
 
 [node name="nochefcook" type="CheckBox" parent="MainScreen/mansion/farmpanel/snailpanel"]
-margin_left = 275.0
-margin_top = 380.0
-margin_right = 465.0
-margin_bottom = 410.0
+margin_left = 420.0
+margin_top = 475.0
+margin_right = 610.0
+margin_bottom = 505.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
@@ -4407,37 +4357,37 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -909.0
-margin_top = -519.0
-margin_right = -187.0
-margin_bottom = -98.0002
+margin_left = -929.0
+margin_top = -555.0
+margin_right = -9.99994
+margin_bottom = -10.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/panel = ExtResource( 46 )
 
 [node name="TextureFarm" type="TextureRect" parent="MainScreen/mansion/farmpanel/storepanel"]
-margin_left = -25.0
-margin_top = -58.0
-margin_right = 897.0
-margin_bottom = 495.0
+margin_left = -4.0
+margin_top = -9.0
+margin_right = 923.0
+margin_bottom = 550.0
 texture = ExtResource( 78 )
 expand = true
 
 [node name="TextureRectBorder" type="TextureRect" parent="MainScreen/mansion/farmpanel/storepanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -27.0
-margin_top = -57.0
-margin_right = 178.0
-margin_bottom = 71.0002
+margin_left = -5.0
+margin_top = -10.0
+margin_right = 5.0
+margin_bottom = 5.0
 texture = ExtResource( 44 )
 expand = true
 
 [node name="headertext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel"]
-margin_left = 350.0
-margin_top = -50.0
-margin_right = 530.0
-margin_bottom = -25.0
+margin_left = 360.0
+margin_top = 30.0
+margin_right = 560.0
+margin_bottom = 55.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -4446,81 +4396,83 @@ bbcode_text = "[center][color=yellow]The Farm Store[/color][/center]"
 text = "The Farm Store"
 
 [node name="close" type="Button" parent="MainScreen/mansion/farmpanel/storepanel"]
-margin_left = 690.0
-margin_top = 435.0
-margin_right = 883.0
-margin_bottom = 482.0
+margin_left = 721.0
+margin_top = 493.0
+margin_right = 914.0
+margin_bottom = 540.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Close"
 
 [node name="incubators" type="Button" parent="MainScreen/mansion/farmpanel/storepanel"]
-margin_left = 350.0
-margin_top = -15.0
-margin_right = 543.0
-margin_bottom = 32.0
+margin_left = 530.0
+margin_top = 420.0
+margin_right = 750.0
+margin_bottom = 467.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Upgrade Incubators"
 
 [node name="containers" type="Label" parent="MainScreen/mansion/farmpanel/storepanel"]
-margin_top = -20.0
-margin_right = 130.0
+margin_left = 30.0
+margin_top = 80.0
+margin_right = 180.0
+margin_bottom = 107.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
+custom_colors/font_color = Color( 0.819608, 0.72549, 0.439216, 1 )
 text = "Containers"
-align = 1
 
-[node name="header2" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/containers"]
-margin_left = 120.0
-margin_right = 321.0
+[node name="header" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/containers"]
+margin_left = 150.0
+margin_right = 370.0
 margin_bottom = 27.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center][color=#d1b970]Owned   |   Price  |  Buy[/color][/center]"
-text = "Owned   |   Price  |  Buy"
+bbcode_text = "[color=#d1b970]Owned   |   Price   |   Buy[/color]"
+text = "Owned   |   Price   |   Buy"
 
 [node name="bucket" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/containers"]
+margin_left = 25.0
 margin_top = 35.0
-margin_right = 129.0
+margin_right = 154.0
 margin_bottom = 55.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "*Buckets"
-align = 1
+text = "Buckets"
 
 [node name="current" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/containers/bucket"]
-margin_left = 145.0
-margin_right = 195.0
+margin_left = 137.0
+margin_right = 187.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=aqua]0[/color][/right]"
 text = "0"
 
 [node name="price" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/containers/bucket"]
-margin_left = 220.0
-margin_right = 270.0
+margin_left = 210.0
+margin_right = 260.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/containers/bucket"]
-margin_left = 275.0
+margin_left = 285.0
 margin_top = -10.0
-margin_right = 315.0
+margin_right = 325.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -4528,41 +4480,41 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="pail" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/containers"]
+margin_left = 25.0
 margin_top = 75.0
-margin_right = 129.0
+margin_right = 154.0
 margin_bottom = 95.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "*Pails"
-align = 1
+text = "Pails"
 
 [node name="current" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/containers/pail"]
-margin_left = 145.0
-margin_right = 195.0
+margin_left = 137.0
+margin_right = 187.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=aqua]0[/color][/right]"
 text = "0"
 
 [node name="price" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/containers/pail"]
-margin_left = 220.0
-margin_right = 270.0
+margin_left = 210.0
+margin_right = 260.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/containers/pail"]
-margin_left = 275.0
+margin_left = 285.0
 margin_top = -10.0
-margin_right = 315.0
+margin_right = 325.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -4570,41 +4522,41 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="jug" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/containers"]
+margin_left = 25.0
 margin_top = 115.0
-margin_right = 129.0
+margin_right = 154.0
 margin_bottom = 135.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "*Jugs"
-align = 1
+text = "Jugs"
 
 [node name="current" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/containers/jug"]
-margin_left = 145.0
-margin_right = 195.0
+margin_left = 137.0
+margin_right = 187.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=aqua]0[/color][/right]"
 text = "0"
 
 [node name="price" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/containers/jug"]
-margin_left = 220.0
-margin_right = 270.0
+margin_left = 210.0
+margin_right = 260.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/containers/jug"]
-margin_left = 275.0
+margin_left = 285.0
 margin_top = -10.0
-margin_right = 315.0
+margin_right = 325.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -4612,41 +4564,41 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="canister" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/containers"]
+margin_left = 25.0
 margin_top = 155.0
-margin_right = 129.0
+margin_right = 154.0
 margin_bottom = 175.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "*Canisters"
-align = 1
+text = "Canisters"
 
 [node name="current" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/containers/canister"]
-margin_left = 145.0
-margin_right = 195.0
+margin_left = 137.0
+margin_right = 187.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=aqua]0[/color][/right]"
 text = "0"
 
 [node name="price" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/containers/canister"]
-margin_left = 220.0
-margin_right = 270.0
+margin_left = 210.0
+margin_right = 260.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/containers/canister"]
-margin_left = 275.0
+margin_left = 285.0
 margin_top = -10.0
-margin_right = 315.0
+margin_right = 325.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -4654,62 +4606,63 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="extractors" type="Label" parent="MainScreen/mansion/farmpanel/storepanel"]
-margin_top = 170.0
-margin_right = 130.0
-margin_bottom = 190.0
+margin_left = 30.0
+margin_top = 270.0
+margin_right = 180.0
+margin_bottom = 297.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
+custom_colors/font_color = Color( 0.819608, 0.72549, 0.439216, 1 )
 text = "Extrators"
-align = 1
 
 [node name="header" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/extractors"]
-margin_left = 120.0
-margin_right = 321.0
+margin_left = 150.0
+margin_right = 370.0
 margin_bottom = 27.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center][color=#d1b970]Owned   |   Price  |  Buy[/color][/center]"
-text = "Owned   |   Price  |  Buy"
+bbcode_text = "[color=#d1b970]Owned   |   Price   |   Buy[/color]"
+text = "Owned   |   Price   |   Buy"
 
 [node name="suction" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/extractors"]
+margin_left = 25.0
 margin_top = 35.0
-margin_right = 129.0
+margin_right = 154.0
 margin_bottom = 55.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "*Suction-Cups"
-align = 1
+text = "Suction-Cups"
 
 [node name="current" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/extractors/suction"]
-margin_left = 145.0
-margin_right = 195.0
+margin_left = 137.0
+margin_right = 187.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=aqua]0[/color][/right]"
 text = "0"
 
 [node name="price" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/extractors/suction"]
-margin_left = 220.0
-margin_right = 270.0
+margin_left = 210.0
+margin_right = 260.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/extractors/suction"]
-margin_left = 275.0
+margin_left = 285.0
 margin_top = -10.0
-margin_right = 315.0
+margin_right = 325.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -4717,41 +4670,41 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="pump" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/extractors"]
+margin_left = 25.0
 margin_top = 75.0
-margin_right = 129.0
+margin_right = 154.0
 margin_bottom = 95.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "*Basic Pumps"
-align = 1
+text = "Basic Pumps"
 
 [node name="current" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/extractors/pump"]
-margin_left = 145.0
-margin_right = 195.0
+margin_left = 137.0
+margin_right = 187.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=aqua]0[/color][/right]"
 text = "0"
 
 [node name="price" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/extractors/pump"]
-margin_left = 220.0
-margin_right = 270.0
+margin_left = 210.0
+margin_right = 260.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/extractors/pump"]
-margin_left = 275.0
+margin_left = 285.0
 margin_top = -10.0
-margin_right = 315.0
+margin_right = 325.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -4759,41 +4712,41 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="pressurepump" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/extractors"]
+margin_left = 25.0
 margin_top = 115.0
-margin_right = 129.0
+margin_right = 172.0
 margin_bottom = 135.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "*Pressure Pumps"
-align = 1
+text = "Pressure Pumps"
 
 [node name="current" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/extractors/pressurepump"]
-margin_left = 145.0
-margin_right = 195.0
+margin_left = 137.0
+margin_right = 187.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=aqua]0[/color][/right]"
 text = "0"
 
 [node name="price" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/extractors/pressurepump"]
-margin_left = 220.0
-margin_right = 270.0
+margin_left = 210.0
+margin_right = 260.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/extractors/pressurepump"]
-margin_left = 275.0
+margin_left = 285.0
 margin_top = -10.0
-margin_right = 315.0
+margin_right = 325.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -4801,62 +4754,63 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="workstations" type="Label" parent="MainScreen/mansion/farmpanel/storepanel"]
-margin_top = 320.0
-margin_right = 130.0
-margin_bottom = 340.0
+margin_left = 30.0
+margin_top = 420.0
+margin_right = 180.0
+margin_bottom = 447.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
+custom_colors/font_color = Color( 0.819608, 0.72549, 0.439216, 1 )
 text = "Workstation"
-align = 1
 
 [node name="header" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/workstations"]
-margin_left = 120.0
-margin_right = 321.0
+margin_left = 150.0
+margin_right = 370.0
 margin_bottom = 27.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center][color=#d1b970]Owned   |   Price  |  Buy[/color][/center]"
-text = "Owned   |   Price  |  Buy"
+bbcode_text = "[color=#d1b970]Owned   |   Price   |   Buy[/color]"
+text = "Owned   |   Price   |   Buy"
 
 [node name="rack" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/workstations"]
+margin_left = 25.0
 margin_top = 35.0
-margin_right = 129.0
+margin_right = 154.0
 margin_bottom = 55.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "*Milk Racks"
-align = 1
+text = "Milk Racks"
 
 [node name="current" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/workstations/rack"]
-margin_left = 145.0
-margin_right = 195.0
+margin_left = 137.0
+margin_right = 187.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=aqua]0[/color][/right]"
 text = "0"
 
 [node name="price" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/workstations/rack"]
-margin_left = 220.0
-margin_right = 270.0
+margin_left = 210.0
+margin_right = 260.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/workstations/rack"]
-margin_left = 275.0
+margin_left = 285.0
 margin_top = -10.0
-margin_right = 315.0
+margin_right = 325.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -4864,42 +4818,42 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="cage" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/workstations"]
+margin_left = 25.0
 margin_top = 75.0
-margin_right = 129.0
+margin_right = 154.0
 margin_bottom = 95.0
 rect_scale = Vector2( 1, 1.00772 )
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "*Cages"
-align = 1
+text = "Cages"
 
 [node name="current" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/workstations/cage"]
-margin_left = 145.0
-margin_right = 195.0
+margin_left = 137.0
+margin_right = 187.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=aqua]0[/color][/right]"
 text = "0"
 
 [node name="price" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/workstations/cage"]
-margin_left = 220.0
-margin_right = 270.0
+margin_left = 210.0
+margin_right = 260.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/workstations/cage"]
-margin_left = 275.0
+margin_left = 285.0
 margin_top = -10.0
-margin_right = 315.0
+margin_right = 325.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -4907,63 +4861,63 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="bedding" type="Label" parent="MainScreen/mansion/farmpanel/storepanel"]
-margin_left = 560.0
-margin_top = -15.0
-margin_right = 690.0
-margin_bottom = 5.0
+margin_left = 530.0
+margin_top = 80.0
+margin_right = 680.0
+margin_bottom = 107.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
+custom_colors/font_color = Color( 0.819608, 0.72549, 0.439216, 1 )
 text = "Bedding"
-align = 1
 
 [node name="header" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/bedding"]
-margin_left = 120.0
-margin_right = 321.0
+margin_left = 150.0
+margin_right = 370.0
 margin_bottom = 27.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center][color=#d1b970]Owned   |   Price  |  Buy[/color][/center]"
-text = "Owned   |   Price  |  Buy"
+bbcode_text = "[color=#d1b970]Owned   |   Price   |   Buy[/color]"
+text = "Owned   |   Price   |   Buy"
 
 [node name="hay" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/bedding"]
+margin_left = 25.0
 margin_top = 35.0
-margin_right = 129.0
+margin_right = 154.0
 margin_bottom = 55.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "*Hay"
-align = 1
+text = "Hay"
 
 [node name="current" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/bedding/hay"]
-margin_left = 145.0
-margin_right = 195.0
+margin_left = 137.0
+margin_right = 187.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=aqua]0[/color][/right]"
 text = "0"
 
 [node name="price" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/bedding/hay"]
-margin_left = 220.0
-margin_right = 270.0
+margin_left = 210.0
+margin_right = 260.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/bedding/hay"]
-margin_left = 275.0
+margin_left = 285.0
 margin_top = -10.0
-margin_right = 315.0
+margin_right = 325.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -4971,41 +4925,41 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="cot" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/bedding"]
+margin_left = 25.0
 margin_top = 75.0
-margin_right = 129.0
+margin_right = 154.0
 margin_bottom = 95.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "*Cots"
-align = 1
+text = "Cots"
 
 [node name="current" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/bedding/cot"]
-margin_left = 145.0
-margin_right = 195.0
+margin_left = 137.0
+margin_right = 187.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=aqua]0[/color][/right]"
 text = "0"
 
 [node name="price" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/bedding/cot"]
-margin_left = 220.0
-margin_right = 270.0
+margin_left = 210.0
+margin_right = 260.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/bedding/cot"]
-margin_left = 275.0
+margin_left = 285.0
 margin_top = -10.0
-margin_right = 315.0
+margin_right = 325.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -5013,41 +4967,41 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="bed" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/bedding"]
+margin_left = 25.0
 margin_top = 115.0
-margin_right = 129.0
+margin_right = 154.0
 margin_bottom = 135.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "*Beds"
-align = 1
+text = "Beds"
 
 [node name="current" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/bedding/bed"]
-margin_left = 145.0
-margin_right = 195.0
+margin_left = 137.0
+margin_right = 187.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=aqua]0[/color][/right]"
 text = "0"
 
 [node name="price" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/bedding/bed"]
-margin_left = 220.0
-margin_right = 270.0
+margin_left = 210.0
+margin_right = 260.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/bedding/bed"]
-margin_left = 275.0
+margin_left = 285.0
 margin_top = -10.0
-margin_right = 315.0
+margin_right = 325.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -5055,63 +5009,63 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="items" type="Label" parent="MainScreen/mansion/farmpanel/storepanel"]
-margin_left = 560.0
-margin_top = 160.0
-margin_right = 690.0
-margin_bottom = 180.0
+margin_left = 530.0
+margin_top = 260.0
+margin_right = 680.0
+margin_bottom = 287.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "Misc Items"
-align = 1
+custom_colors/font_color = Color( 0.819608, 0.72549, 0.439216, 1 )
+text = "Misc. Items"
 
 [node name="header" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/items"]
-margin_left = 120.0
-margin_right = 321.0
+margin_left = 150.0
+margin_right = 370.0
 margin_bottom = 27.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center][color=#d1b970]Owned   |   Price  |  Buy[/color][/center]"
-text = "Owned   |   Price  |  Buy"
+bbcode_text = "[color=#d1b970]Owned   |   Price   |   Buy[/color]"
+text = "Owned   |   Price   |   Buy"
 
 [node name="aphrodisiac" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/items"]
+margin_left = 25.0
 margin_top = 35.0
-margin_right = 129.0
+margin_right = 154.0
 margin_bottom = 55.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "*Aphrodisiacs"
-align = 1
+text = "Aphrodisiacs"
 
 [node name="current" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/items/aphrodisiac"]
-margin_left = 145.0
-margin_right = 195.0
+margin_left = 137.0
+margin_right = 187.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=aqua]0[/color][/right]"
 text = "0"
 
 [node name="price" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/items/aphrodisiac"]
-margin_left = 220.0
-margin_right = 270.0
+margin_left = 210.0
+margin_right = 260.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/items/aphrodisiac"]
-margin_left = 275.0
+margin_left = 285.0
 margin_top = -10.0
-margin_right = 315.0
+margin_right = 325.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -5119,41 +5073,41 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="sedative" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/items"]
+margin_left = 25.0
 margin_top = 75.0
-margin_right = 129.0
+margin_right = 154.0
 margin_bottom = 95.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "*Sedatives"
-align = 1
+text = "Sedatives"
 
 [node name="current" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/items/sedative"]
-margin_left = 145.0
-margin_right = 195.0
+margin_left = 137.0
+margin_right = 187.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=aqua]0[/color][/right]"
 text = "0"
 
 [node name="price" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/items/sedative"]
-margin_left = 220.0
-margin_right = 270.0
+margin_left = 210.0
+margin_right = 260.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/items/sedative"]
-margin_left = 275.0
+margin_left = 285.0
 margin_top = -10.0
-margin_right = 315.0
+margin_right = 325.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -5161,41 +5115,41 @@ custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="prods" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/items"]
+margin_left = 25.0
 margin_top = 115.0
-margin_right = 129.0
+margin_right = 154.0
 margin_bottom = 135.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "*Prods"
-align = 1
+text = "Prods"
 
 [node name="current" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/items/prods"]
-margin_left = 145.0
-margin_right = 195.0
+margin_left = 137.0
+margin_right = 187.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=aqua]0[/color][/right]"
 text = "0"
 
 [node name="price" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/items/prods"]
-margin_left = 220.0
-margin_right = 270.0
+margin_left = 210.0
+margin_right = 260.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="add" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/items/prods"]
-margin_left = 275.0
+margin_left = 285.0
 margin_top = -10.0
-margin_right = 315.0
+margin_right = 325.0
 margin_bottom = 30.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -5208,32 +5162,33 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -722.0
-margin_top = -421.975
-margin_bottom = -0.975342
+margin_left = -914.0
+margin_top = -495.0
+margin_right = -5.0
+margin_bottom = -10.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/panel = ExtResource( 46 )
 
 [node name="TextureRectBackground" type="TextureRect" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel"]
-margin_right = 722.0
-margin_bottom = 421.0
+margin_left = 1.0
+margin_top = 1.0
+margin_right = 908.0
+margin_bottom = 484.0
 texture = SubResource( 19 )
 expand = true
 
 [node name="TextureRectBorder" type="TextureRect" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -1.08075
-margin_bottom = -1.08075
 texture = ExtResource( 44 )
 expand = true
 
 [node name="headertext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel"]
-margin_left = 50.0
-margin_top = 10.0
-margin_right = 700.0
-margin_bottom = 35.0
+margin_left = 335.0
+margin_top = 15.0
+margin_right = 575.0
+margin_bottom = 42.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -5243,20 +5198,20 @@ text = "Incubators"
 
 [node name="inc_1" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel"]
 margin_left = 30.0
-margin_top = 35.0
-margin_right = 338.0
-margin_bottom = 55.0
+margin_top = 50.0
+margin_right = 400.0
+margin_bottom = 77.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "Incubator 1 |  Level  |  Upgrade  | Cost"
+text = "Incubator 1   |   Level  |   Cost   |   Upgrade"
 align = 1
 
 [node name="status" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_1"]
-margin_left = -15.0
-margin_top = 30.0
-margin_right = 115.0
-margin_bottom = 60.0
+margin_left = 7.0
+margin_top = 35.0
+margin_right = 137.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -5265,34 +5220,34 @@ bbcode_text = "[center][color=red]Not Installed[/color][/center]"
 text = "Not Installed"
 
 [node name="level" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_1"]
-margin_left = 120.0
-margin_top = 30.0
-margin_right = 150.0
-margin_bottom = 60.0
+margin_left = 143.0
+margin_top = 35.0
+margin_right = 183.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
-text = "0"
+bbcode_text = "[center][color=red]X[/color][/center]"
+text = "X"
 
 [node name="cost" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_1"]
-margin_left = 270.0
-margin_top = 30.0
-margin_right = 310.0
-margin_bottom = 65.0
+margin_left = 191.0
+margin_top = 35.0
+margin_right = 251.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="upgrade" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_1"]
-margin_left = 185.0
-margin_top = 20.0
-margin_right = 235.0
-margin_bottom = 70.0
+margin_left = 294.0
+margin_top = 25.0
+margin_right = 334.0
+margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
@@ -5300,20 +5255,20 @@ text = "+"
 
 [node name="inc_2" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel"]
 margin_left = 30.0
-margin_top = 100.0
-margin_right = 338.0
-margin_bottom = 120.0
+margin_top = 125.0
+margin_right = 400.0
+margin_bottom = 152.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "Incubator 2 |  Level  |  Upgrade  | Cost"
+text = "Incubator 2   |   Level  |   Cost   |   Upgrade"
 align = 1
 
 [node name="status" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_2"]
-margin_left = -15.0
-margin_top = 30.0
-margin_right = 115.0
-margin_bottom = 60.0
+margin_left = 7.0
+margin_top = 35.0
+margin_right = 137.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -5322,34 +5277,34 @@ bbcode_text = "[center][color=red]Not Installed[/color][/center]"
 text = "Not Installed"
 
 [node name="level" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_2"]
-margin_left = 120.0
-margin_top = 30.0
-margin_right = 150.0
-margin_bottom = 60.0
+margin_left = 143.0
+margin_top = 35.0
+margin_right = 183.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
-text = "0"
+bbcode_text = "[center][color=red]X[/color][/center]"
+text = "X"
 
 [node name="cost" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_2"]
-margin_left = 270.0
-margin_top = 30.0
-margin_right = 310.0
-margin_bottom = 65.0
+margin_left = 191.0
+margin_top = 35.0
+margin_right = 251.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="upgrade" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_2"]
-margin_left = 185.0
-margin_top = 20.0
-margin_right = 235.0
-margin_bottom = 70.0
+margin_left = 294.0
+margin_top = 25.0
+margin_right = 334.0
+margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
@@ -5357,20 +5312,20 @@ text = "+"
 
 [node name="inc_3" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel"]
 margin_left = 30.0
-margin_top = 170.0
-margin_right = 342.0
-margin_bottom = 190.0
+margin_top = 200.0
+margin_right = 400.0
+margin_bottom = 227.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "Incubator 3 |  Level  |  Upgrade  | Cost"
+text = "Incubator 3   |   Level  |   Cost   |   Upgrade"
 align = 1
 
 [node name="status" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_3"]
-margin_left = -15.0
-margin_top = 30.0
-margin_right = 115.0
-margin_bottom = 60.0
+margin_left = 7.0
+margin_top = 35.0
+margin_right = 137.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -5379,34 +5334,34 @@ bbcode_text = "[center][color=red]Not Installed[/color][/center]"
 text = "Not Installed"
 
 [node name="level" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_3"]
-margin_left = 120.0
-margin_top = 30.0
-margin_right = 150.0
-margin_bottom = 60.0
+margin_left = 143.0
+margin_top = 35.0
+margin_right = 183.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
-text = "0"
+bbcode_text = "[center][color=red]X[/color][/center]"
+text = "X"
 
 [node name="cost" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_3"]
-margin_left = 270.0
-margin_top = 30.0
-margin_right = 310.0
-margin_bottom = 65.0
+margin_left = 191.0
+margin_top = 35.0
+margin_right = 251.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="upgrade" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_3"]
-margin_left = 185.0
-margin_top = 20.0
-margin_right = 235.0
-margin_bottom = 70.0
+margin_left = 294.0
+margin_top = 25.0
+margin_right = 334.0
+margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
@@ -5414,20 +5369,20 @@ text = "+"
 
 [node name="inc_4" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel"]
 margin_left = 30.0
-margin_top = 245.0
-margin_right = 342.0
-margin_bottom = 265.0
+margin_top = 275.0
+margin_right = 400.0
+margin_bottom = 302.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "Incubator 4 |  Level  |  Upgrade  | Cost"
+text = "Incubator 4   |   Level  |   Cost   |   Upgrade"
 align = 1
 
 [node name="status" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_4"]
-margin_left = -15.0
-margin_top = 30.0
-margin_right = 115.0
-margin_bottom = 60.0
+margin_left = 7.0
+margin_top = 35.0
+margin_right = 137.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -5436,34 +5391,34 @@ bbcode_text = "[center][color=red]Not Installed[/color][/center]"
 text = "Not Installed"
 
 [node name="level" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_4"]
-margin_left = 120.0
-margin_top = 30.0
-margin_right = 150.0
-margin_bottom = 60.0
+margin_left = 143.0
+margin_top = 35.0
+margin_right = 183.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
-text = "0"
+bbcode_text = "[center][color=red]X[/color][/center]"
+text = "X"
 
 [node name="cost" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_4"]
-margin_left = 270.0
-margin_top = 30.0
-margin_right = 310.0
-margin_bottom = 65.0
+margin_left = 191.0
+margin_top = 35.0
+margin_right = 251.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="upgrade" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_4"]
-margin_left = 185.0
-margin_top = 20.0
-margin_right = 235.0
-margin_bottom = 70.0
+margin_left = 294.0
+margin_top = 25.0
+margin_right = 334.0
+margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
@@ -5471,20 +5426,20 @@ text = "+"
 
 [node name="inc_5" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel"]
 margin_left = 30.0
-margin_top = 310.0
-margin_right = 344.0
-margin_bottom = 330.0
+margin_top = 350.0
+margin_right = 400.0
+margin_bottom = 377.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "Incubator 5 |  Level  |  Upgrade  | Cost"
+text = "Incubator 5   |   Level  |   Cost   |   Upgrade"
 align = 1
 
 [node name="status" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_5"]
-margin_left = -15.0
-margin_top = 30.0
-margin_right = 115.0
-margin_bottom = 60.0
+margin_left = 7.0
+margin_top = 35.0
+margin_right = 137.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -5493,55 +5448,55 @@ bbcode_text = "[center][color=red]Not Installed[/color][/center]"
 text = "Not Installed"
 
 [node name="level" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_5"]
-margin_left = 120.0
-margin_top = 30.0
-margin_right = 150.0
-margin_bottom = 60.0
+margin_left = 143.0
+margin_top = 35.0
+margin_right = 183.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
-text = "0"
+bbcode_text = "[center][color=red]X[/color][/center]"
+text = "X"
 
 [node name="cost" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_5"]
-margin_left = 270.0
-margin_top = 30.0
-margin_right = 310.0
-margin_bottom = 65.0
+margin_left = 191.0
+margin_top = 35.0
+margin_right = 251.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="upgrade" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_5"]
-margin_left = 185.0
-margin_top = 20.0
-margin_right = 235.0
-margin_bottom = 70.0
+margin_left = 294.0
+margin_top = 25.0
+margin_right = 334.0
+margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="inc_6" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel"]
-margin_left = 375.0
-margin_top = 35.0
-margin_right = 683.0
-margin_bottom = 55.0
+margin_left = 500.0
+margin_top = 50.0
+margin_right = 870.0
+margin_bottom = 77.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "Incubator 6 |  Level  |  Upgrade  | Cost"
+text = "Incubator 6   |   Level  |   Cost   |   Upgrade"
 align = 1
 
 [node name="status" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_6"]
-margin_left = -15.0
-margin_top = 30.0
-margin_right = 115.0
-margin_bottom = 60.0
+margin_left = 7.0
+margin_top = 35.0
+margin_right = 137.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -5550,55 +5505,55 @@ bbcode_text = "[center][color=red]Not Installed[/color][/center]"
 text = "Not Installed"
 
 [node name="level" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_6"]
-margin_left = 120.0
-margin_top = 30.0
-margin_right = 150.0
-margin_bottom = 60.0
+margin_left = 143.0
+margin_top = 35.0
+margin_right = 183.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
-text = "0"
+bbcode_text = "[center][color=red]X[/color][/center]"
+text = "X"
 
 [node name="cost" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_6"]
-margin_left = 270.0
-margin_top = 30.0
-margin_right = 310.0
-margin_bottom = 65.0
+margin_left = 191.0
+margin_top = 35.0
+margin_right = 251.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="upgrade" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_6"]
-margin_left = 185.0
-margin_top = 20.0
-margin_right = 235.0
-margin_bottom = 70.0
+margin_left = 294.0
+margin_top = 25.0
+margin_right = 334.0
+margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="inc_7" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel"]
-margin_left = 375.0
-margin_top = 105.0
-margin_right = 687.0
-margin_bottom = 125.0
+margin_left = 500.0
+margin_top = 125.0
+margin_right = 870.0
+margin_bottom = 152.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "Incubator 7 |  Level  |  Upgrade  | Cost"
+text = "Incubator 7   |   Level  |   Cost   |   Upgrade"
 align = 1
 
 [node name="status" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_7"]
-margin_left = -15.0
-margin_top = 30.0
-margin_right = 115.0
-margin_bottom = 60.0
+margin_left = 7.0
+margin_top = 35.0
+margin_right = 137.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -5607,55 +5562,55 @@ bbcode_text = "[center][color=red]Not Installed[/color][/center]"
 text = "Not Installed"
 
 [node name="level" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_7"]
-margin_left = 120.0
-margin_top = 30.0
-margin_right = 150.0
-margin_bottom = 60.0
+margin_left = 143.0
+margin_top = 35.0
+margin_right = 183.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
-text = "0"
+bbcode_text = "[center][color=red]X[/color][/center]"
+text = "X"
 
 [node name="cost" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_7"]
-margin_left = 270.0
-margin_top = 30.0
-margin_right = 310.0
-margin_bottom = 65.0
+margin_left = 191.0
+margin_top = 35.0
+margin_right = 251.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="upgrade" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_7"]
-margin_left = 185.0
-margin_top = 20.0
-margin_right = 235.0
-margin_bottom = 70.0
+margin_left = 294.0
+margin_top = 25.0
+margin_right = 334.0
+margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="inc_8" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel"]
-margin_left = 375.0
-margin_top = 175.0
-margin_right = 687.0
-margin_bottom = 195.0
+margin_left = 500.0
+margin_top = 200.0
+margin_right = 870.0
+margin_bottom = 227.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "Incubator 8 |  Level  |  Upgrade  | Cost"
+text = "Incubator 8   |   Level  |   Cost   |   Upgrade"
 align = 1
 
 [node name="status" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_8"]
-margin_left = -15.0
-margin_top = 30.0
-margin_right = 115.0
-margin_bottom = 60.0
+margin_left = 7.0
+margin_top = 35.0
+margin_right = 137.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -5664,55 +5619,55 @@ bbcode_text = "[center][color=red]Not Installed[/color][/center]"
 text = "Not Installed"
 
 [node name="level" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_8"]
-margin_left = 120.0
-margin_top = 30.0
-margin_right = 150.0
-margin_bottom = 60.0
+margin_left = 143.0
+margin_top = 35.0
+margin_right = 183.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
-text = "0"
+bbcode_text = "[center][color=red]X[/color][/center]"
+text = "X"
 
 [node name="cost" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_8"]
-margin_left = 270.0
-margin_top = 30.0
-margin_right = 310.0
-margin_bottom = 65.0
+margin_left = 191.0
+margin_top = 35.0
+margin_right = 251.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="upgrade" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_8"]
-margin_left = 185.0
-margin_top = 20.0
-margin_right = 235.0
-margin_bottom = 70.0
+margin_left = 294.0
+margin_top = 25.0
+margin_right = 334.0
+margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="inc_9" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel"]
-margin_left = 375.0
-margin_top = 245.0
-margin_right = 688.0
-margin_bottom = 265.0
+margin_left = 500.0
+margin_top = 275.0
+margin_right = 870.0
+margin_bottom = 302.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "Incubator 9 |  Level  |  Upgrade  | Cost"
+text = "Incubator 9   |   Level  |   Cost   |   Upgrade"
 align = 1
 
 [node name="status" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_9"]
-margin_left = -15.0
-margin_top = 30.0
-margin_right = 115.0
-margin_bottom = 60.0
+margin_left = 7.0
+margin_top = 35.0
+margin_right = 137.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -5721,55 +5676,55 @@ bbcode_text = "[center][color=red]Not Installed[/color][/center]"
 text = "Not Installed"
 
 [node name="level" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_9"]
-margin_left = 120.0
-margin_top = 30.0
-margin_right = 150.0
-margin_bottom = 60.0
+margin_left = 143.0
+margin_top = 35.0
+margin_right = 183.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
-text = "0"
+bbcode_text = "[center][color=red]X[/color][/center]"
+text = "X"
 
 [node name="cost" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_9"]
-margin_left = 270.0
-margin_top = 30.0
-margin_right = 310.0
-margin_bottom = 65.0
+margin_left = 191.0
+margin_top = 35.0
+margin_right = 251.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="upgrade" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_9"]
-margin_left = 185.0
-margin_top = 20.0
-margin_right = 235.0
-margin_bottom = 70.0
+margin_left = 294.0
+margin_top = 25.0
+margin_right = 334.0
+margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="inc_10" type="Label" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel"]
-margin_left = 375.0
-margin_top = 315.0
-margin_right = 688.0
-margin_bottom = 335.0
+margin_left = 500.0
+margin_top = 350.0
+margin_right = 870.0
+margin_bottom = 377.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 45 )
-text = "Incubator 10 |  Level  |  Upgrade  | Cost"
+text = "Incubator 10   |   Level  |   Cost   |   Upgrade"
 align = 1
 
 [node name="status" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_10"]
-margin_left = -15.0
-margin_top = 30.0
-margin_right = 115.0
-margin_bottom = 60.0
+margin_left = 7.0
+margin_top = 35.0
+margin_right = 137.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
@@ -5778,44 +5733,44 @@ bbcode_text = "[center][color=red]Not Installed[/color][/center]"
 text = "Not Installed"
 
 [node name="level" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_10"]
-margin_left = 120.0
-margin_top = 30.0
-margin_right = 150.0
-margin_bottom = 60.0
+margin_left = 143.0
+margin_top = 35.0
+margin_right = 183.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
-text = "0"
+bbcode_text = "[center][color=red]X[/color][/center]"
+text = "X"
 
 [node name="cost" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_10"]
-margin_left = 270.0
-margin_top = 30.0
-margin_right = 310.0
-margin_bottom = 65.0
+margin_left = 191.0
+margin_top = 35.0
+margin_right = 251.0
+margin_bottom = 62.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "[center]0[/center]"
+bbcode_text = "[right][color=yellow]0[/color][/right]"
 text = "0"
 
 [node name="upgrade" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_10"]
-margin_left = 185.0
-margin_top = 20.0
-margin_right = 235.0
-margin_bottom = 70.0
+margin_left = 294.0
+margin_top = 25.0
+margin_right = 334.0
+margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "+"
 
 [node name="close" type="Button" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel"]
-margin_left = 285.0
-margin_top = 370.0
-margin_right = 478.0
-margin_bottom = 417.0
+margin_left = 359.0
+margin_top = 428.0
+margin_right = 552.0
+margin_bottom = 468.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
@@ -5886,11 +5841,12 @@ custom_fonts/font = ExtResource( 45 )
 text = "Livestock Details"
 
 [node name="Label" type="Label" parent="MainScreen/mansion/farmpanel"]
-margin_left = 435.45
-margin_top = 14.4312
-margin_right = 515.45
-margin_bottom = 34.4312
+margin_left = 370.0
+margin_top = 20.0
+margin_right = 570.0
+margin_bottom = 50.0
 text = "The Farm"
+align = 1
 
 [node name="portalspanel" type="Popup" parent="MainScreen/mansion"]
 anchor_left = 1.0
@@ -6219,26 +6175,13 @@ stretch_mode = 5
 [node name="sstr" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -546.0
-margin_top = 10.0
-margin_right = -546.0
-margin_bottom = 34.0
+margin_left = -580.0
+margin_top = 12.0
+margin_right = -580.0
+margin_bottom = 36.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="base" type="Label" parent="MainScreen/slave_tab/stats/statspanel/sstr"]
-margin_left = 1.0
-margin_top = 2.0
-margin_right = 41.0
-margin_bottom = 22.0
-text = "1"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="cur" type="Label" parent="MainScreen/slave_tab/stats/statspanel/sstr"]
 margin_left = 36.0
@@ -6269,9 +6212,6 @@ margin_right = 86.0
 margin_bottom = 22.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Button" type="Button" parent="MainScreen/slave_tab/stats/statspanel/sstr"]
 margin_left = 84.0
@@ -6287,26 +6227,13 @@ custom_styles/normal = SubResource( 10 )
 [node name="sagi" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -546.0
-margin_top = 44.0
-margin_right = -546.0
-margin_bottom = 68.0
+margin_left = -580.0
+margin_top = 46.0
+margin_right = -580.0
+margin_bottom = 70.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="base" type="Label" parent="MainScreen/slave_tab/stats/statspanel/sagi"]
-margin_left = 1.0
-margin_top = 2.0
-margin_right = 41.0
-margin_bottom = 22.0
-text = "1"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="cur" type="Label" parent="MainScreen/slave_tab/stats/statspanel/sagi"]
 margin_left = 36.0
@@ -6352,26 +6279,13 @@ custom_styles/normal = SubResource( 10 )
 [node name="smaf" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -546.0
-margin_top = 78.0
-margin_right = -546.0
-margin_bottom = 102.0
+margin_left = -580.0
+margin_top = 79.0
+margin_right = -580.0
+margin_bottom = 103.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="base" type="Label" parent="MainScreen/slave_tab/stats/statspanel/smaf"]
-margin_left = 1.0
-margin_top = 2.0
-margin_right = 41.0
-margin_bottom = 22.0
-text = "1"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="cur" type="Label" parent="MainScreen/slave_tab/stats/statspanel/smaf"]
 margin_left = 36.0
@@ -6417,23 +6331,13 @@ custom_styles/normal = SubResource( 10 )
 [node name="send" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -546.0
-margin_top = 110.0
-margin_right = -546.0
-margin_bottom = 134.0
+margin_left = -580.0
+margin_top = 113.0
+margin_right = -580.0
+margin_bottom = 137.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
-
-[node name="base" type="Label" parent="MainScreen/slave_tab/stats/statspanel/send"]
-margin_left = 1.0
-margin_top = 2.0
-margin_right = 41.0
-margin_bottom = 22.0
-text = "1"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="cur" type="Label" parent="MainScreen/slave_tab/stats/statspanel/send"]
 margin_left = 36.0
@@ -6459,9 +6363,9 @@ text = "5"
 
 [node name="Control" type="Control" parent="MainScreen/slave_tab/stats/statspanel/send"]
 margin_left = -5.0
-margin_top = -1.5
+margin_top = -1.0
 margin_right = 86.0
-margin_bottom = 21.5
+margin_bottom = 22.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 
@@ -6479,10 +6383,10 @@ custom_styles/normal = SubResource( 10 )
 [node name="cour" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -428.0
-margin_top = 11.0
-margin_right = -428.0
-margin_bottom = 35.0
+margin_left = -462.0
+margin_top = 12.0
+margin_right = -462.0
+margin_bottom = 36.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
@@ -6523,16 +6427,13 @@ size_flags_vertical = 2
 [node name="conf" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -428.0
-margin_top = 44.0
-margin_right = -428.0
-margin_bottom = 68.0
+margin_left = -462.0
+margin_top = 45.0
+margin_right = -462.0
+margin_bottom = 69.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="cur" type="Label" parent="MainScreen/slave_tab/stats/statspanel/conf"]
 margin_left = 28.0
@@ -6570,16 +6471,13 @@ size_flags_vertical = 2
 [node name="wit" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -428.0
-margin_top = 77.0
-margin_right = -428.0
-margin_bottom = 101.0
+margin_left = -462.0
+margin_top = 79.0
+margin_right = -462.0
+margin_bottom = 103.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="cur" type="Label" parent="MainScreen/slave_tab/stats/statspanel/wit"]
 margin_left = 28.0
@@ -6617,10 +6515,10 @@ size_flags_vertical = 2
 [node name="charm" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -428.0
-margin_top = 111.0
-margin_right = -428.0
-margin_bottom = 135.0
+margin_left = -462.0
+margin_top = 113.0
+margin_right = -462.0
+margin_bottom = 137.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
@@ -6935,7 +6833,7 @@ margin_right = 175.0
 margin_bottom = 281.0
 text = "Communal"
 align = 1
-items = [ "Communal", null, false, 0, null, "Personal", null, false, 1, null, "Your Bed", null, false, 2, null, "Jail", null, false, 3, null, "Dog Kennel", null, false, 4, null ]
+items = [ "Communal", null, false, -1, null, "Personal", null, false, -1, null, "Your Bed", null, false, -1, null, "Jail", null, false, -1, null, "Dog Kennel", null, false, -1, null ]
 selected = 0
 
 [node name="sleeplabel" type="Label" parent="MainScreen/slave_tab/stats/sleep"]
@@ -7392,7 +7290,7 @@ caret_blink = true
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 634.0
+margin_left = 594.0
 margin_top = -610.0
 margin_right = -10.0
 margin_bottom = -470.0
@@ -7461,9 +7359,6 @@ mouse_filter = 1
 size_flags_horizontal = 2
 size_flags_vertical = 2
 scroll_horizontal_enabled = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="traitlist" type="VBoxContainer" parent="MainScreen/slave_tab/stats/basics/traits"]
 margin_right = 110.0
@@ -7494,9 +7389,6 @@ mouse_filter = 1
 size_flags_horizontal = 2
 size_flags_vertical = 2
 scroll_horizontal_enabled = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="traitlist" type="VBoxContainer" parent="MainScreen/slave_tab/stats/basics/sextraits"]
 margin_right = 110.0
@@ -7684,8 +7576,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Aphrodisiac in food"
 
 [node name="silence" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"advrules",
 "slaverules",
+"advrules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -7702,8 +7594,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Enforced Silence"
 
 [node name="pet" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"advrules",
 "slaverules",
+"advrules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -7722,8 +7614,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Pet Behavior"
 
 [node name="masturbation" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"advrules",
 "slaverules",
+"advrules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -7741,8 +7633,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "No Masturbation"
 
 [node name="nudity" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"advrules",
 "slaverules",
+"advrules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -8018,7 +7910,7 @@ rect_min_size = Vector2( 135, 0 )
 size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "None"
-items = [ "None", null, false, 0, null ]
+items = [ "None", null, false, -1, null ]
 selected = 0
 
 [node name="piercestate" type="Label" parent="MainScreen/slave_tab/stats/customization/piercingpanel"]
@@ -8185,7 +8077,7 @@ margin_bottom = 198.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "None"
-items = [ "None", null, false, 0, null, "Nature", null, false, 1, null, "Tribal", null, false, 2, null, "Derogatory", null, false, 3, null, "Animalistic", null, false, 4, null, "Magic", null, false, 5, null ]
+items = [ "None", null, false, -1, null, "Nature", null, false, -1, null, "Tribal", null, false, -1, null, "Derogatory", null, false, -1, null, "Animalistic", null, false, -1, null, "Magic", null, false, -1, null ]
 selected = 0
 
 [node name="relativesbutton" type="Button" parent="MainScreen/slave_tab/stats/customization"]
@@ -9619,7 +9511,7 @@ margin_bottom = 37.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "Leave"
-items = [ "Leave", null, false, 0, null, "Rape", null, false, 1, null, "Kill", null, false, 2, null ]
+items = [ "Leave", null, false, -1, null, "Rape", null, false, -1, null, "Kill", null, false, -1, null ]
 selected = 0
 
 [node name="Label" type="Label" parent="explorationnode/winningpanel/ScrollContainer/VBoxContainer/Button"]
@@ -12209,79 +12101,79 @@ current = true
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/slavetofarm/addcowforce" to="." method="_on_addcowforced_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/slavetofarm/closeslavefarm" to="." method="_on_closeslavefarm_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/slavetofarm/addcow" to="." method="_on_addcow_pressed"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/dailyaction" to="." method="_on_dailyaction_selected"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/workstation" to="." method="_on_workstation_selected"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/stallbedding" to="." method="_on_stallbedding_selected"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/keeprestrained" to="." method="_on_keeprestrained_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/giveaphrodisiac" to="." method="_on_aphrodisiacbutton_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/specifybreedingpartnerbutton" to="." method="_on_specifybreedingpartnerbutton_pressed"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/breedingoption" to="." method="_on_breeding_option_selected"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/milkcontaineroptions" to="." method="_on_milkcontainer_selected"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/cumcontaineroptions" to="." method="_on_cumcontainer_selected"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/pisscontaineroptions" to="." method="_on_pisscontainer_selected"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/milkextraction" to="." method="_on_extractmilkselected"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/cumextraction" to="." method="_on_extractcumselected"]
-[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminsepct/pissextraction" to="." method="_on_extractpissselected"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/closeslaveinspect" to="." method="_on_closeslaveinspect_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/releasefromfarm" to="." method="_on_releasefromfarm_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/usesedative" to="." method="_on_usesedative_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/extractmilk" to="." method="_on_extractmilk_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/extractcum" to="." method="_on_extractcum_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/extractpiss" to="." method="_on_extractpiss_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminsepct/snailbreeding" to="." method="_on_snailbreeding_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatmilkbutton" to="." method="_on_vatmilkbutton_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatsemenbutton" to="." method="_on_vatsemenbutton_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatlubebutton" to="." method="_on_vatlubebutton_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatpissbutton" to="." method="_on_vatpissbutton_pressed"]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/dailyaction" to="." method="_on_dailyaction_selected"]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/workstation" to="." method="_on_workstation_selected"]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/stallbedding" to="." method="_on_stallbedding_selected"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/keeprestrained" to="." method="_on_keeprestrained_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/giveaphrodisiac" to="." method="_on_aphrodisiacbutton_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/specifybreedingpartnerbutton" to="." method="_on_specifybreedingpartnerbutton_pressed"]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/breedingoption" to="." method="_on_breeding_option_selected"]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/milkcontaineroptions" to="." method="_on_fluidcontainer_selected" binds= [ "extractmilk" ]]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/cumcontaineroptions" to="." method="_on_fluidcontainer_selected" binds= [ "extractcum" ]]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/pisscontaineroptions" to="." method="_on_fluidcontainer_selected" binds= [ "extractpiss" ]]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/milkextraction" to="." method="_on_extractfluidselected" binds= [ "extractmilk" ]]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/cumextraction" to="." method="_on_extractfluidselected" binds= [ "extractcum" ]]
+[connection signal="item_selected" from="MainScreen/mansion/farmpanel/slavefarminspect/pissextraction" to="." method="_on_extractfluidselected" binds= [ "extractpiss" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/closeslaveinspect" to="." method="_on_closeslaveinspect_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/releasefromfarm" to="." method="_on_releasefromfarm_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/usesedative" to="." method="_on_usesedative_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/extractmilk" to="." method="_on_extractmilk_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/extractcum" to="." method="_on_extractcum_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/extractpiss" to="." method="_on_extractpiss_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/slavefarminspect/snailbreeding" to="." method="_on_snailbreeding_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatmilkbutton" to="." method="vatsdetailspanel" binds= [ "milk" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatsemenbutton" to="." method="vatsdetailspanel" binds= [ "semen" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatlubebutton" to="." method="vatsdetailspanel" binds= [ "lube" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatpissbutton" to="." method="vatsdetailspanel" binds= [ "piss" ]]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatspanelclose" to="." method="_on_vatspanelclose_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/buybottles/add10" to="." method="_on_buy10bottles_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/buybottles/add1" to="." method="_on_buybottle_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignfood/add" to="." method="_on_vatfood_add_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignfood/subtract" to="." method="_on_vatfood_subtract_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine/add" to="." method="_on_vatrefine_add_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine/subtract" to="." method="_on_vatrefine_subtract_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell/add" to="." method="_on_vatsell_add_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell/subtract" to="." method="_on_vatsell_subtract_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/buybottles/add10" to="." method="_on_buybottles_pressed" binds= [ 10 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/buybottles/add1" to="." method="_on_buybottles_pressed" binds= [ 1 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignfood/add" to="." method="_on_vat_change_pressed" binds= [ "food", 1 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignfood/subtract" to="." method="_on_vat_change_pressed" binds= [ "food", -1 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine/add" to="." method="_on_vat_change_pressed" binds= [ "bottle2refine", 1 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignrefine/subtract" to="." method="_on_vat_change_pressed" binds= [ "bottle2refine", -1 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell/add" to="." method="_on_vat_change_pressed" binds= [ "bottle2sell", 1 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/assignsell/subtract" to="." method="_on_vat_change_pressed" binds= [ "bottle2sell", -1 ]]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/closevatdetails" to="." method="_on_vatsdetailspanelclose_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/autobuybottles" to="." method="_on_autobuybottles_pressed"]
 [connection signal="item_selected" from="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel/autoassign" to="." method="_on_vats_autoassign_selected"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/workerspanel/close" to="." method="_on_workerpanelclose_closed"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/snailpanelclose" to="." method="_on_snailpanelclose_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignfood/add" to="." method="_on_snailpanelfoodadd_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignfood/subtract" to="." method="_on_snailpanelfoodsubtract_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignsell/add" to="." method="_on_snailpanelselladd_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignsell/subtract" to="." method="_on_snailpanelsellsubtract_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignhatch/add" to="." method="_on_snailpanelfoodadd_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignhatch/subtract" to="." method="_on_snailpanelhatchsubtract_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignfood/add" to="." method="_on_snailpanelchange_pressed" binds= [ "food", 1 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignfood/subtract" to="." method="_on_snailpanelchange_pressed" binds= [ "food", -1 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignsell/add" to="." method="_on_snailpanelchange_pressed" binds= [ "sell", 1 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignsell/subtract" to="." method="_on_snailpanelchange_pressed" binds= [ "sell", -1 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignhatch/add" to="." method="_on_snailpanelchange_pressed" binds= [ "hatch", 1 ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/assignhatch/subtract" to="." method="_on_snailpanelchange_pressed" binds= [ "hatch", -1 ]]
 [connection signal="item_selected" from="MainScreen/mansion/farmpanel/snailpanel/autoassign" to="." method="_on_snail_autoassign_selected"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/snailpanel/nochefcook" to="." method="_on_nochefcook_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/close" to="." method="_on_storepanel_close"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubators" to="." method="_on_incubatorspanel_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/containers/bucket/add" to="." method="_on_buy_bucket"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/containers/pail/add" to="." method="_on_buy_pail"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/containers/jug/add" to="." method="_on_buy_jug"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/containers/canister/add" to="." method="_on_buy_canister_add"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/extractors/suction/add" to="." method="_on_buy_suction_add"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/extractors/pump/add" to="." method="_on_buy_pump_add"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/extractors/pressurepump/add" to="." method="_on_buy_pressurepump_add"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/workstations/rack/add" to="." method="_on_buy_rack_add"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/workstations/cage/add" to="." method="_on_buy_cage_add"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/bedding/hay/add" to="." method="_on_buy_hay_add"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/bedding/cot/add" to="." method="_on_buy_cot_add"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/bedding/bed/add" to="." method="_on_buy_bed_add"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/items/aphrodisiac/add" to="." method="_on_buy_aphrodisiac_add"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/items/sedative/add" to="." method="_on_buy_sedative_add"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/items/prods/add" to="." method="_on_buy_prods_add"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_1/upgrade" to="." method="_on_inc1_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_2/upgrade" to="." method="_on_inc2_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_3/upgrade" to="." method="_on_inc3_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_4/upgrade" to="." method="_on_inc2_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_5/upgrade" to="." method="_on_inc5_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_6/upgrade" to="." method="_on_inc6_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_7/upgrade" to="." method="_on_inc7_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_8/upgrade" to="." method="_on_inc8_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_9/upgrade" to="." method="_on_inc9_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_10/upgrade" to="." method="_on_inc10_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/containers/bucket/add" to="." method="_on_buy_container" binds= [ "bucket" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/containers/pail/add" to="." method="_on_buy_container" binds= [ "pail" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/containers/jug/add" to="." method="_on_buy_container" binds= [ "jug" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/containers/canister/add" to="." method="_on_buy_container" binds= [ "canister" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/extractors/suction/add" to="." method="_on_buy_extractor" binds= [ "suction" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/extractors/pump/add" to="." method="_on_buy_extractor" binds= [ "pump" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/extractors/pressurepump/add" to="." method="_on_buy_extractor" binds= [ "pressurepump" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/workstations/rack/add" to="." method="_on_buy_workstation" binds= [ "rack" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/workstations/cage/add" to="." method="_on_buy_workstation" binds= [ "cage" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/bedding/hay/add" to="." method="_on_buy_bedding" binds= [ "hay" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/bedding/cot/add" to="." method="_on_buy_bedding" binds= [ "cot" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/bedding/bed/add" to="." method="_on_buy_bedding" binds= [ "bed" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/items/aphrodisiac/add" to="." method="_on_buy_farmitem" binds= [ "aphrodisiac" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/items/sedative/add" to="." method="_on_buy_farmitem" binds= [ "sedative" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/items/prods/add" to="." method="_on_buy_farmitem" binds= [ "prods" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_1/upgrade" to="." method="_on_incubator_upgrade" binds= [ "1" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_2/upgrade" to="." method="_on_incubator_upgrade" binds= [ "2" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_3/upgrade" to="." method="_on_incubator_upgrade" binds= [ "3" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_4/upgrade" to="." method="_on_incubator_upgrade" binds= [ "4" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_5/upgrade" to="." method="_on_incubator_upgrade" binds= [ "5" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_6/upgrade" to="." method="_on_incubator_upgrade" binds= [ "6" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_7/upgrade" to="." method="_on_incubator_upgrade" binds= [ "7" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_8/upgrade" to="." method="_on_incubator_upgrade" binds= [ "8" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_9/upgrade" to="." method="_on_incubator_upgrade" binds= [ "9" ]]
+[connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/inc_10/upgrade" to="." method="_on_incubator_upgrade" binds= [ "10" ]]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/storepanel/incubatorspanel/close" to="." method="_on_incubatorspanel_close"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/farmhelppanel/close" to="." method="_on_farmhelpbutton_close"]
 [connection signal="pressed" from="MainScreen/mansion/farmpanel/farmhelppanel/faq" to="." method="_on_farmhelpbutton_pressed"]

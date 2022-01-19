@@ -271,6 +271,27 @@ func _on_grade_mouse_exited():
 func _on_spec_mouse_exited():
 	globals.hidetooltip()
 
+func _on_movement_mouse_entered():
+	var text 
+	if partyselectedchar.movement == 'walk':
+		text = "[center][color=aqua]Normal Movement.[/color][/center]\n$name is walking around like normal."
+	elif partyselectedchar.movement == 'fly':
+		text = "[center][color=aqua]Will Fly until under 50 Energy[/color][/center]\n$name is currently flapping $his wings and hovering a foot or two off of the ground.\n\n[color=green]Attack and Speed increased by 125%\n[/color]"
+	elif partyselectedchar.movement == 'crawl':
+		text = "[center][color=red]Only able to Crawl.\nAttack and Speed Penalties in Combat.\nWill not Join the Party.\nUnable to work many jobs.[/color][/center]\n$name is currently crawling on the ground on all fours.\n\n"
+	elif partyselectedchar.movement == 'none':
+		text = "[center][color=red]Unable to Move.\nAttack and Speed Penalties in Combat.\nWill not Join the Party.\nUnable to work many jobs.[/color][/center]\n$name is currently unable to move at all. $He is currently completely incapacitated."
+	else:
+		text = "[center][color=red]Error[/color][/center]\n$name is somehow moving in an unnatural way. While interesting, you may want to report this to Aric on the itch.io forums or Discord. "
+	
+	#Give Reason for Crawling/Immobilized
+	text += "\n\nReason for Movement: " + PoolStringArray(partyselectedchar.movementreasons).join("\n")
+	
+	globals.showtooltip( partyselectedchar.dictionary(text))
+
+func _on_movement_mouse_exited():
+	globals.hidetooltip()
+
 func _on_closechar_pressed():
 	$playergrouppanel/characterinfo.visible = false
 
