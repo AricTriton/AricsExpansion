@@ -240,7 +240,7 @@ func newbaby(mother,father):
 		var temp
 		for i in listMaxStats:
 			temp = max(father.stats[i], mother.stats[i])
-			if pStats.str_max < temp:
+			if pStats[i] < temp:
 				pStats[i] += round((temp - pStats[i]) *.6)
 
 	#Bodyshape
