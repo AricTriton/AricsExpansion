@@ -803,15 +803,31 @@ func useskills(skill, caster = null, target = null, retarget = false):
 		
 	emit_signal("skillplayed")
 
+func useAutoAbility(combatant):
+	for abilityName in combatant.activeabilities:
+		var ability = globals.abilities.abilitydict[abilityName]
+		if !combatant.cooldowns.has(abilityName) && combatant.energy >= ability.costenergy && globals.resources.mana >= ability.costmana && ability.targetgroup == "enemy":
+			for j in enemygroup:
+				if j.node != null && j.state == 'normal':
+					useskills(ability, combatant, j)
+					return
+	for j in enemygroup:
+		if j.node != null && j.state == 'normal':
+			useskills(globals.abilities.abilitydict.attack, combatant, j)
+			return
+
 ###---Added by Expansion---### Combat Stress Alteration
 func enemyturn():
 	if $autoattack.pressed == true:
 		for i in playergroup:
 			if i.state == 'normal' && i.actionpoints > 0:
-				for j in enemygroup:
-					if j.node != null && j.state == 'normal':
-						useskills(globals.abilities.abilitydict.attack, i, j)
-						break
+				if globals.expansionsettings.autoattackability:
+					useAutoAbility(i)
+				else:
+					for j in enemygroup:
+						if j.node != null && j.state == 'normal':
+							useskills(globals.abilities.abilitydict.attack, i, j)
+							break
 				yield(self, 'skillplayed')
 				endcombatcheck()
 				if period == 'win':
