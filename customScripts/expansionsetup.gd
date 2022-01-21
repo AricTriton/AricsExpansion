@@ -236,7 +236,7 @@ func expandPerson(person):
 		setDemeanor(person)
 		setSexuality(person)
 		setDesiredOffspring(person)
-		expandSuccubi(person) #ralphC - if Succubus, enters values for any missing person.whatever  
+		expandSuccubi(person) #ralphC - if Succubus, enters values for any missing person.whatever
 		#getPersonality(person)
 		
 		#Check Relation Data and Add if Non-Existant
