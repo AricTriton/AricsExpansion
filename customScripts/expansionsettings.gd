@@ -13,6 +13,8 @@ var unique_trait_generation = false				# Set this to true if you want a 1 in 5 c
 var perfectinfo = false
 var enablecheatbutton = false
 
+#-- Use abilities on auto attack, left to right. Hint: reorder/activate abilities in the character info menu when out.
+var autoattackability = false
 
 #---Content Filter | Partially Enabled (True/False)
 var brutalcontent = true
