@@ -629,6 +629,164 @@ func checkforresults():
 	if counter >= enemygroup.size():
 		win()
 
+func showskilltooltip(skill):
+	var text = ''
+	text += '[center]' + skill.name + '[/center]\n\n' + skill.description 
+	if skill.costenergy > 0:
+		text += "\n[color=yellow]Energy: " + str(skill.costenergy) + "[/color]"
+	if skill.costmana > 0:
+		var cost = skill.costmana
+		if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction: #ralphC - fixed 1.0d update omission
+			cost = round(cost/2)
+		text += "\n[color=aqua]Mana: " + str(round(cost*globals.expansionsettings.spellcost)) + "[/color]" #ralphC - fixed 1.0d update omission
+	text += '\nBasic cooldown: ' + str(skill.cooldown)
+	if selectedcharacter.cooldowns.has(skill.code):
+		text += '\n\nCooldown: ' + str(selectedcharacter.cooldowns[skill.code])
+	globals.showtooltip(text)
+
+func useskills(skill, caster = null, target = null, retarget = false):
+	if caster == null || target == null:
+		return
+	else:
+		deselectall()
+	var text = ''
+	var damage = 0
+	var group
+	var hit = 'hit'
+	var targetparty
+	var targetarray
+	globals.hidetooltip()
+	if caster.group != target.group && target.effects.has('protecteffect') && retarget == false:
+		if target.effects.protecteffect.caster.state == 'normal' && target.effects.protecteffect.caster.hp > 0:
+			self.combatlog += combatantdictionary(target.effects.protecteffect.caster, target, "[name1] covers [targetname1] from attack.")
+			useskills(skill, caster, target.effects.protecteffect.caster, true)
+			return
+	caster.actionpoints -= 1
+	if skill.cooldown > 0:
+		caster.cooldowns[skill.code] = skill.cooldown
+	if playergroup.has(caster):
+		if skill.costmana > 0:
+			var cost = skill.costmana
+			if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction: #ralphC - meant to add the ralphs mage_mana_reduction condition in while porting to 1.0d - oops, fixed now
+				cost = round(cost/2)
+			globals.resources.mana -= cost*globals.expansionsettings.spellcost #ralphC - meant to add this Ralphs spellcost in while porting to 1.0d - oops, fixed now
+		caster.energy -= skill.costenergy
+	else:
+		group = 'enemy'
+
+	var skillcounter = 1
+	if caster.passives.has('doubleattack') && rand_range(0,100) < caster.passives.doubleattack.effectvalue && skill.type == 'physical':
+		skillcounter += 1
+		text += "[color=yellow]Double attack![/color] "
+	while skillcounter > 0:
+		skillcounter -= 1
+		if skill.has('castersfx'):
+			call(skill.castersfx, caster)
+			yield(self, "damagetrigger")
+		else:
+			animationskip = true
+		
+		if skill.has('targetsfx'):
+			call(skill.targetsfx, target)
+		#target skills
+		if skill.target == 'one':
+			if skill.code == 'attack':
+				text += '[color=lime][name1][/color] tries to attack [color=#ec636a][targetname1][/color]. '
+			else:
+				text += '[name1] uses [color=aqua]' + skill.name + "[/color] on [targetname1]. "
+			if skill.attributes.has('damage'):
+				if skill.can_miss == true:
+					hit = calculatehit(caster, target, skill)
+				if skill.type == 'physical' && hit != 'miss':
+					damage = physdamage(caster, target, skill)
+					text += '[targetname1] takes [color=#f05337]' + str(damage) + '[/color] damage.' 
+				elif skill.type == 'spell':
+					damage = spelldamage(caster, target, skill)
+					text += '[targetname1] takes [color=#f05337]' + str(damage) + '[/color] spell damage.' 
+				
+				if skill.type == 'physical' && hit == 'miss':
+					target.dodge()
+					text += '[targetname1] [color=yellow]dodges[/color] it. '
+				else:
+					target.hp -= damage
+		#aoe skills
+		elif skill.target == 'all':
+			if group == 'player':
+				targetarray = enemygroup
+			else:
+				targetarray = playergroup
+			
+			text += '[name1] uses [color=aqua]' + skill.name + '[/color]. '
+			var counter = 0
+			for i in targetarray:
+				if i.state != 'normal':
+					continue
+				if skill.attributes.has('damage'):
+					if skill.can_miss == true:
+						hit = calculatehit(caster, target, skill)
+					if skill.type == 'physical' && hit != 'miss':
+						damage = physdamage(caster, target, skill)
+					elif skill.type == 'spell':
+						damage = spelldamage(caster, target, skill)
+					if !i.effects.has("protecteffect"):
+						if hit == 'hit':
+							i.hp -= damage
+							text += "[targetname" + str(counter) + "] takes [color=#f05337]" + str(damage) + '[/color] damage. '
+						else:
+							i.dodge()
+							text += "[targetname" + str(counter) + "] [color=yellow]dodges[/color]. "
+					if hit == 'hit' && skill.effect != null:
+						sendbuff(caster, i, skill.effect)
+					counter += 1
+			
+		elif skill.target == 'self':
+			if skill.code == 'escape' && globals.main.get_node("explorationnode").launchonwin != null && caster.group == 'player':
+				globals.main.popup("You can't escape from this fight")
+				caster.energy += skill.costenergy
+				caster.actionpoints += 1
+				period = 'base'
+				caster.cooldowns.erase('escape')
+				return
+			if skill.code == 'mindread':
+				caster.actionpoints += 1
+		#buffs and effects
+		if skill.attributes.has('noescape') && target.effects.has('escapeeffect'):
+			text += "[targetname1] being held in place! "
+			removebuff("escapeeffect",target)
+		
+		if skill.effect != null && hit == 'hit' && skill.target != 'all':
+			sendbuff(caster, target, skill.effect)
+		if skill.has('script') && hit == 'hit':
+			scripteffect(caster,target,skill.script)
+		if skill.has('effectself') && skill.effectself != null:
+			sendbuff(caster, caster, skill.effectself)
+		
+		yield(self, 'tweenfinished')
+		if skill.target == 'one' && target.animationplaying == true:
+			yield(self, 'defeat2finished')
+	if skill.code == 'heal':
+		globals.abilities.restorehealth(caster,target)
+	elif skill.code == "masshealcouncil":
+		for i in targetarray:
+			if i != caster:
+				globals.abilities.restorehealth(caster,i)
+	elif skill.code == 'escape':
+		text += "[name1] prepares to escape! "
+	
+	
+	if skill.target == 'all':
+		target = targetarray
+	
+	self.combatlog += '\n' + combatantdictionary(caster, target, text)
+	if period != 'enemyturn':
+		endcombatcheck()
+		if period == 'win':
+			playerwin() 
+		if period == 'skilluse':
+			period = 'base'
+		
+	emit_signal("skillplayed")
+
 ###---Added by Expansion---### Combat Stress Alteration
 func enemyturn():
 	if $autoattack.pressed == true:

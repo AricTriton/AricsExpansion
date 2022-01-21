@@ -1,6 +1,23 @@
 
 #var showfullbody = true
 
+func buyattributepoint():
+	#ralphA - added "if globals.useRalphsTweaks:" section and adjusted tabs for original code 
+	if globals.useRalphsTweaks: #ralphA - closes attribute point to upgrade point conversion unless npcs are Loyalty 50 (no using recent additions for quick upgrade points)
+		if person.loyal >=50 && person.skillpoints >= variables.attributepointsperupgradepoint:
+			person.skillpoints -= variables.attributepointsperupgradepoint
+			globals.resources.upgradepoints += 1
+		else:
+			get_tree().get_root().get_node("Mansion").infotext("Not enough attribute points or loyalty", 'red')
+	else:
+		if person.skillpoints >= variables.attributepointsperupgradepoint:
+			person.skillpoints -= variables.attributepointsperupgradepoint
+			globals.resources.upgradepoints += 1
+		else:
+			get_tree().get_root().get_node("Mansion").infotext("Not enough attribute points", 'red')
+	#/ralphA
+	upgradecostupdate()
+	
 func slavetabopen():
 	var label
 	var text = ""

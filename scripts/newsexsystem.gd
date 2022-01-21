@@ -1,4 +1,7 @@
 
+var takercategories = ['cunnilingus','rimjob','handjob','titjob','tailjob','blowjob','footjob'] #ralphC - added footjob
+var penetratecategories = ['missionary','missionaryanal','doggy','doggyanal','lotus','lotusanal','revlotus','revlotusanal','doubledildo','doubledildoass','inserttailv','inserttaila','tribadism','frottage','deepthroat'] #ralphC - added deepthroat
+
 class member:
 	var name
 	var person
@@ -70,6 +73,8 @@ class member:
 	var vagTorn = false
 	var assTorn = false
 	var actionshad = {addtraits = [], removetraits = [], samesex = 0, samesexorgasms = 0, oppositesex = 0, oppositesexorgasms = 0, punishments = 0, group = 0, incest = 0, incestorgasms = 0}
+	var succubusdrain = 0 #ralphC
+	var succubusdraincount = 0 #ralphC
 	###---Expansion End---###
 	
 	func _init(source, fileref, isAnimal = false):
@@ -144,6 +149,16 @@ class member:
 		if person.vagina != 'none':
 			lube = lube + (sens/200)
 			lube = min(5+lewd/20,lube)
+
+	#ralphC
+	func succubus_spunked(): #increments the orgasm count credited to succubi (used after for loop through penis orgasm givers)
+		#print("Ralph Test: Getting ready to spunk any Succubi. " )
+		if succubusdrain > 0:
+			succubusdraincount += 1 #will be used to decrement orgasms for totalmana calc
+			variables.succubuscounter += 1
+			succubusdrain = 0 #reset for next checks
+			#print("Ralph Test: A Succubus gave an orgasm and got spunked. Succubusdraincount = " + str(succubusdraincount) + "\n")
+	#/ralphC
 
 	func orgasm():
 		var text = ''
@@ -353,6 +368,15 @@ class member:
 							i.person.checkFetish('wearcum')
 						###---End Expansion---###
 					penistext = sceneref.decoder(penistext, [self], scene.takers)
+					#ralphC - if any of the TAKERS is a Succubus, count this orgasm so it can be deducted from totalmana calc
+					#print("Ralph Test: Checking for a Succubus TAKING a cumshot from a penis...")
+					for i in scene.takers:
+						if i.person.race_display == "Succubus":
+							#print("Ralph Test: " + str(i.person.name) + " was detected TAKING a cumshot with her "+ str(scene.scene.takerpart) +" . Her manahunger is " + str(i.person.metrics.mana_hunger))
+							succubusdrain += 1
+							i.person.metrics.mana_hunger -= variables.orgasmmana 
+					succubus_spunked()
+					#/ralphC
 				#penis in taker slot
 				elif scene.takers.find(self) >= 0:
 					if randf() < 0.4:
@@ -435,6 +459,15 @@ class member:
 										penistext += " spits it on the ground. "
 						###---End Expansion---###
 					penistext = sceneref.decoder(penistext, scene.givers, [self])
+					#ralphC - if any of the GIVERS is a Succubus, count this orgasm so it can be deducted from totalmana calc
+					#print("Ralph Test: Checking for a Succubus GIVING and making a penis cum...")
+					for i in scene.givers:
+						if i.person.race_display == "Succubus":
+							#print("Ralph Test: " + str(i.person.name) + " was detected GIVING and making a penis come with her "+ str(scene.scene.giverpart) +". It was a scene.code: "+str(scene.scene.code)+". Her manahunger is " + str(i.person.metrics.mana_hunger))
+							succubusdrain += 1
+							i.person.metrics.mana_hunger -= variables.orgasmmana
+					succubus_spunked()
+					#/ralphC
 			#orgasm without penis, secondary ejaculation
 			else:
 				if randf() < 0.4:
@@ -1951,8 +1984,10 @@ func endencounter():
 		if i.person.unique in ['dog','horse']:
 			continue
 		i.person.lewdness = i.lewd
-		if i.orgasms > 0:
+		if i.orgasms > 0 && !i.person.race_display in ['Succubus']: #ralphC - added "&& i.person.race_display != "Succubus""
 			i.person.lust = 0
+		elif i.orgasms > 0 && i.person.race_display in ['Succubus']: #ralphC
+			i.person.lust = round(i.person.lust * 0.75) #ralphC - Succubus orgasms don't give enough relief to prevent going sex-crazed if too hungery
 		else:
 			i.person.lust = i.sens/10
 		i.person.lastsexday = globals.resources.day
@@ -2226,7 +2261,17 @@ func endencounter():
 				rewardtext += "\nIngredient Gained from [color=aqua]"+i.name_short()+"[/color]: [color=yellow]" + globals.itemdict[essence].name + "[/color]"
 				###---End Expansion---###
 				globals.itemdict[essence].amount += 1
-			mana += i.orgasms*3 + rand_range(1,2)
+			#ralphC
+			#print('\nRalph Test: ' + str(i.orgasms) + ' orgasms had by: ' + str(i.person.name) + ' ') #ralphC temp
+			#print("Ralph Test: " + str(mana) + " mana before i.orgasms*3 added") #ralphC temp
+			mana += i.orgasms * variables.orgasmmana + rand_range(1,2) #ralphC - replaced 3 with variables.orgasmmana
+			#print("Ralph Test: " + str(mana) + " mana after i.orgasms*3 added (+1 or 2)") #ralphC temp
+			#print("Ralph Test: succubusdraincount = " + str(i.succubusdraincount) + ") for: " + str(i.person.name) + " ") #ralphC temp
+			mana -= i.succubusdraincount * variables.orgasmmana #ralphC - no mana from the orgasms eaten by Succubi
+			#print("Ralph Test: " + str(mana) + " mana after i.succubusdraincount*3 subtracted") #ralphC temp
+			i.succubusdraincount = 0
+			#print("Ralph Test: succubusdraincount set to 0 (so i.succubusdraincount = " + str(i.succubusdraincount) + ") for: " + str(i.person.name) + " ") #ralphC temp
+			#/ralphC
 		else:
 			mana += i.sens/500
 		###---Added by Expansion---### Hybrid Support
@@ -2242,9 +2287,14 @@ func endencounter():
 			###---Added by Expansion---### Removed , added \n
 			text += "\n[color=aqua]Desires fullfiled: " + str(i.requestsdone) + '[/color]'
 			###---End Expansion---###
+		if i.person.race_display == "Succubus": #ralphC - Succubus orgasms don't produce mana
+			#print("Ralph Test: Trying to set mana from Succubus's orgasm to zero. Mana before attempt:" + str(mana) + " mana") #ralphC temp
+			mana -= mana  #ralphC
+			#print("Ralph Test: Trying to set mana from Succubus's orgasm to zero. Mana after attempt:" + str(mana) + " mana") #ralphC temp
 		mana = round(mana)
 		manaDict[i.person] = mana
 		totalmana += mana
+		#print("Ralph Test: Trying to set mana from Succubus's orgasm to zero. Totalmana after mana added:" + str(mana) + " mana") #ralphC temp
 		text = i.person.dictionary(text + "\n")
 
 	###---Added by Expansion---### Colored Mana / Reward Text Ease of Reading
@@ -2255,6 +2305,9 @@ func endencounter():
 		totalmana += mana
 		person.metrics.manaearn += mana
 	
+	if variables.succubuscounter > 0: #ralphC
+		text += "\n[color=red]Succubi managed to siphon off mana from [/color]"+str(int(variables.succubuscounter))+" orgasms.\n" #ralphC
+	variables.succubuscounter = 0 #ralphC
 	text += "\n[color=green][center]---Rewards Earned---[/center][/color]"
 	text += "\nEarned Mana: [color=aqua]" + str(totalmana) + "[/color]"
 	text += rewardtext

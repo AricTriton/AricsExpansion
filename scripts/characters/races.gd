@@ -3,7 +3,7 @@ extends Node
 var namefile = load("res://files/scripts/characters/names.gd").new()
 var names = namefile.names
 
-
+#ralphC - Added The Alchemist, Redrassa's new marketup and marketdown events for all vanilla races
 var races = {
 	Human = {
 		skin = ['pale', 'fair', 'olive', 'tan'],
@@ -32,8 +32,8 @@ var races = {
 		mutations = "None",
 		pricemod = 1,
 		#ralph5
-		marketup = ["Demand for [color=aqua]humans[/color] rises inexplicably.\n"],
-		marketdown = ["It seems [color=aqua]humans[/color] aren't being purchased very quickly. Prices fall.\n"],
+		marketup = ["Demand for [color=aqua]humans[/color] rises inexplicably.\n","A sudden spike of requests for [color=aqua]humans[/color] follows after a rumor circulates of a lost royal heir.\n"],
+		marketdown = ["It seems [color=aqua]humans[/color] aren't being purchased very quickly. Prices fall.\n","Prices plummet for [color=aqua]humans[/color] as tastes shift more to the exotic.\n"],
 		single = "human",
 		plural = "humans",
 		singlepos = "human's",
@@ -80,8 +80,8 @@ var races = {
 		mutations = "Huldrekall, Nymph, Siren",
 		pricemod = 1.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]elves[/color] is up.\n"],
-		marketdown = ["[color=aqua]Elves[/color] just aren't in demand lately. Prices fall.\n"],
+		marketup = ["Demand for [color=aqua]elves[/color] is up.\n","Demand for [color=aqua]elves[/color] is up as researchers in the capitol are buying up the market.\n"],
+		marketdown = ["[color=aqua]Elves[/color] just aren't in demand lately. Prices fall.\n","[color=aqua]Elf[/color] value falls as a flood of northern prisoners enters the market.\n","A scam artist has been selling select gnomes as pure [color=aqua]elven children[/color] and paranoid buyers are avoiding counterfeit purchases.\n"],
 		single = " elf",
 		plural = " elves",
 		singlepos = " elf's",
@@ -126,8 +126,8 @@ var races = {
 		mutations = "Huldrekall, Nymph, Ifrit",
 		pricemod = 1.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]tribal elves[/color] is up.\n","The capitol is going through a serious phase of forest fever. Demand for [color=aqua]tribal elves[/color] is up.\n"],
-		marketdown = ["[color=aqua]Tribal elves[/color] just aren't in as much demand lately. Prices fall.\n"],
+		marketup = ["Demand for [color=aqua]tribal elves[/color] is up.\n","The capitol is going through a serious phase of forest fever. Demand for [color=aqua]tribal elves[/color] is up.\n","A wealthy demon has drained the market of [color=aqua]tribal elves[/color] after reading a book on hybrid breeding.\n"],
+		marketdown = ["[color=aqua]Tribal elves[/color] just aren't in as much demand lately. Prices fall.\n","Prices for [color=aqua]Tribal elves[/color] dip after a slaver's death causes a mass selling of his stock.\n"],
 		single = " elf",
 		plural = " elves",
 		singlepos = " elf's",
@@ -177,7 +177,7 @@ var races = {
 		pricemod = 2.5,
 		#ralph5
 		marketup = ["Demand for [color=aqua]dark elves[/color] is up.\n","[color=aqua]Dark Elves[/color] are the latest status symbols for up and coming mages. Slavers simply cannot keep up with demand.\n","A consortium of mages is attempting to create a new species and [color=aqua]dark elves[/color] are in higher demand for their mana output.\n"],
-		marketdown = ["[color=aqua]Dark Elves[/color] just aren't selling for what they used to.\n","Rumors abound that sex with subterranean species promotes the cockrot. Demand for [color=aqua]dark elves[/color] falls.\n"],
+		marketdown = ["A new form of fungal infection is being blamed on newly acquired [color=aqua]dark elves[/color]. Panic causes their prices to plunge.\n","[color=aqua]Dark Elves[/color] just aren't selling for what they used to.\n","Rumors abound that sex with subterranean species promotes the cockrot. Demand for [color=aqua]dark elves[/color] falls.\n"],
 		single = " elf",
 		plural = " elves",
 		singlepos = " elf's",
@@ -225,8 +225,8 @@ var races = {
 		mutations = "Gnoll, Lizardman, Troll",
 		pricemod = 1.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]orcs[/color] is up.\n","A nearby warlord is looking to replenish his infantry. Pricing for [color=aqua]orcs[/color] is up.\n"],
-		marketdown = ["An unexpected truce between warring factions has put a damper on trade in [color=aqua]orcs[/color]. Prices fall.\n"],
+		marketup = ["Initial appraisal for [color=aqua]orcs[/color] is up as the carpenters guild increases the number of writs it will grant annually and carpenters put in large orders for hard ‘orkers.\n","Demand for [color=aqua]orcs[/color] is up.\n","A nearby warlord is looking to replenish his infantry. Pricing for [color=aqua]orcs[/color] is up.\n"],
+		marketdown = ["An unexpected truce between warring factions has put a damper on trade in [color=aqua]orcs[/color]. Prices fall.\n","A mercenary group of [color=aqua]orcs[/color] have threatened a slaver for improper treatment. Slave rates drop due to concerns.\n"],
 		single = " orc",
 		plural = " orcs",
 		singlepos = " orc's",
@@ -273,8 +273,8 @@ var races = {
 		mutations = "Imp, Mousekin",
 		pricemod = 1.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]gnomes[/color] is up.\n","Goblins revolt at a nearby mine and they are left shorthanded. The taskmasters are looking for an alternative species of slaves and have begun offering a premium for [color=aqua]gnomes[/color].\n"],
-		marketdown = ["Pricing for [color=aqua]gnomes[/color] falls. Employers and slaveholders alike must have had enough of the little know-it-alls.\n"],
+		marketup = ["Demand for [color=aqua]gnomes[/color] is up.\n","Goblins revolt at a nearby mine and they are left shorthanded. The taskmasters are looking for an alternative species of slaves and have begun offering a premium for [color=aqua]gnomes[/color].\n","Demand for [color=aqua]gnomes[/color] is up as a new fad of brothels offering them as a 'two-for-one' gimmick picks up."],
+		marketdown = ["Desire for [color=aqua]gnomes[/color] fall after a rogue gnome is caught planting explosives.\n","Pricing for [color=aqua]gnomes[/color] falls. Employers and slaveholders alike must have had enough of the little know-it-alls.\n"],
 		single = " gnome",
 		plural = " gnomes",
 		singlepos = " gnome's",
@@ -320,8 +320,8 @@ var races = {
 		mutations = "Kobold, Gremlin, Hobgoblin, Redcap",
 		pricemod = 1.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]goblins[/color] is up inexplicably.\n","A nearby warlord is looking for sappers and cannon fodder for a siege. Pricing for [color=aqua]goblins[/color] is up.\n"],
-		marketdown = ["[color=aqua]Goblins[/color] have become even less popular of late. Prices fall.\n","Rumors abound that sex with subterranean species promotes the cockrot. Demand for [color=aqua]goblins[/color] falls.\n","Prices for [color=aqua]goblins[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
+		marketup = ["After a mild pestilence, demand for new [color=aqua]goblins[/color] drives up value.\n","Demand for [color=aqua]goblins[/color] is up inexplicably.\n","A nearby warlord is looking for sappers and cannon fodder for a siege. Pricing for [color=aqua]goblins[/color] is up.\n"],
+		marketdown = ["Due to improper handling, the local [color=aqua]goblin[/color] population explodes and tanks demand.\n","[color=aqua]Goblins[/color] have become even less popular of late. Prices fall.\n","Rumors abound that sex with subterranean species promotes the cockrot. Demand for [color=aqua]goblins[/color] falls.\n","Prices for [color=aqua]goblins[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
 		single = " goblin",
 		plural = " goblins",
 		singlepos = " goblin's",
@@ -369,8 +369,8 @@ var races = {
 		mutations = "Sylph",
 		pricemod = 2,
 		#ralph5
-		marketup = ["Demand for [color=aqua]faeries[/color] is up.\n","Word is that an arena boss from across the sea has started an aerial league and has been buying up [color=aqua]faeries[/color].\n"],
-		marketdown = ["Mages have been favoring hardier races and demand for [color=aqua]faeries[/color] is down. Prices fall.\n"],
+		marketup = ["A strange yearning for [color=aqua]faeries[/color] arises after a popular poet sings praises about them.\n","A shortage of mana increases [color=aqua]fairy[/color] value.\n","Demand for [color=aqua]faeries[/color] is up.\n","Word is that an arena boss from across the sea has started an aerial league and has been buying up [color=aqua]faeries[/color].\n"],
+		marketdown = ["A rumor that [color=aqua]fairy[/color] wings cause allergies reduces their appeal.\n","Mages have been favoring hardier races and demand for [color=aqua]faeries[/color] is down. Prices fall.\n"],
 		single = " fairy",
 		plural = " fairies",
 		singlepos = " fairy's",
@@ -421,8 +421,8 @@ var races = {
 		mutations = "Nephilim",
 		pricemod = 2.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]seraphs[/color] is up.\n","Word is that an arena boss from across the sea has started an aerial league and has been buying up [color=aqua]seraphs[/color].\n"],
-		marketdown = ["Some lab-rat mage has been modifying humans and passing them off as [color=aqua]Seraphs[/color]. Prices fall as buyers become leary of being cheated.\n"],
+		marketup = ["Thirst for pure [color=aqua]seraphs[/color] improves pricing.\n","Demand for [color=aqua]seraphs[/color] is up.\n","Word is that an arena boss from across the sea has started an aerial league and has been buying up [color=aqua]seraphs[/color].\n"],
+		marketdown = ["Rumors that hybrid [color=aqua]Seraphs[/color] are sickly hurts overall appeal.\n","Some lab-rat mage has been modifying humans and passing them off as [color=aqua]Seraphs[/color]. Prices fall as buyers become leary of being cheated.\n"],
 		single = " seraph",
 		plural = " seraphs",
 		singlepos = " seraph's",
@@ -467,8 +467,8 @@ var races = {
 		mutations = "Ogre, Succubus, Incubus, Rusalka",
 		pricemod = 2.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]demons[/color] is up.\n","Word is that an arena boss from across the sea has started an aerial league and has been buying up [color=aqua]demons[/color].\n"],
-		marketdown = ["Supply of [color=aqua]demons[/color] exceeds demand. Prices fall.\n","Prices for [color=aqua]demons[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
+		marketup = ["A shortage of tainted essence drives up [color=aqua]demon[/color] demand.\n","Demand for [color=aqua]demons[/color] is up.\n","Word is that an arena boss from across the sea has started an aerial league and has been buying up [color=aqua]demons[/color].\n"],
+		marketdown = ["Unfounded claims that sex with [color=aqua]demons[/color] causes genital mutation collapses the market.\n","Supply of [color=aqua]demons[/color] exceeds demand. Prices fall.\n","Prices for [color=aqua]demons[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
 		single = " demon",
 		plural = " demon's",
 		singlepos = " demon's",
@@ -516,8 +516,8 @@ var races = {
 		mutations = "Naiad, Ent, Spriggan",
 		pricemod = 2,
 		#ralph5
-		marketup = ["Demand for [color=aqua]dryads[/color] is up.\n","A noble house in the capitol has lavishly decorated their garden with topiaries of [color=aqua]dryads[/color] mixed in with the real thing and prices are up as the novelty catches on.\n"],
-		marketdown = ["Rumors abound that sex with [color=aqua]dryads[/color] can give you splinters. Prices fall.\n"],
+		marketup = ["A popular poet has recently published a sonnet about flowering [color=aqua]dryads[/color] and the market can't keep up with demand.\n","Demand for [color=aqua]dryads[/color] is up.\n","A noble house in the capitol has lavishly decorated their garden with topiaries of [color=aqua]dryads[/color] mixed in with the real thing and prices are up as the novelty catches on.\n"],
+		marketdown = ["Claims that [color=aqua]dryads[/color] require excessive maintenance to avoid wilting reduces their appeal.\n","Rumors abound that sex with [color=aqua]dryads[/color] can give you splinters. Prices fall.\n"],
 		single = " dryad",
 		plural = " dryads",
 		singlepos = " dryad's",
@@ -567,8 +567,8 @@ var races = {
 		mutations = "Salamander, Tiefling, Sharkkin",
 		pricemod = 3.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]dragonkin[/color] is up.\n","Word is that an arena boss from across the sea has started an aerial league and has been looking to buy [color=aqua]dragonkin[/color].\n"],
-		marketdown = ["Prices for [color=aqua]dragonkin[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
+		marketup = ["Demand for [color=aqua]dragonkin[/color] is up as a few entrepreneurial mages buy test subjects to experiment with as they seek to produce full dragon quality scales for armor crafting.\n","Demand for [color=aqua]dragonkin[/color] is up.\n","Word is that an arena boss from across the sea has started an aerial league and has been looking to buy [color=aqua]dragonkin[/color].\n"],
+		marketdown = ["Prices for [color=aqua]dragonkin[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n","Rumors that artificially created [color=aqua]dragonkin[/color] lose their scales after a few weeks decreases appeal.\n"],
 		single = " dragon",
 		plural = " dragons",
 		singlepos = " dragon's",
@@ -622,8 +622,8 @@ var races = {
 		mutations = "Minotaur",
 		pricemod = 2,
 		#ralph5
-		marketup = ["Demand for [color=aqua]tauruses[/color] is up.\n","A popular refreshment with a not so secret ingredient takes the capitol by storm. Demand for [color=aqua]tauruses[/color] is up.","[color=aqua]Taurus[/color] milk is finally catching on across the sea and entrepreneurs there are buying up available [color=aqua]tauruses[/color]. Prices increase.\n"],
-		marketdown = ["Breeders seem to have gotten carried away acquiring [color=aqua]tauruses[/color] and demand tapers off.\n"],
+		marketup = ["A special kind of farm is buying up [color=aqua]tauruses[/color] for a strange combination of fetishistic farming. \n","Demand for [color=aqua]tauruses[/color] is up.\n","A popular refreshment with a not so secret ingredient takes the capitol by storm. Demand for [color=aqua]tauruses[/color] is up.","[color=aqua]Taurus[/color] milk is finally catching on across the sea and entrepreneurs there are buying up available [color=aqua]tauruses[/color]. Prices increase.\n"],
+		marketdown = ["Improper milk labeling causes [color=aqua]taurus[/color] milk to be sold to unwilling consumers. Public approval of the race dips.\n","Breeders seem to have gotten carried away acquiring [color=aqua]tauruses[/color] and demand tapers off.\n"],
 		single = " taurus",
 		plural = " tauruses",
 		singlepos = " taurus'",
@@ -670,8 +670,8 @@ var races = {
 		mutations = "",
 		pricemod = 2.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]slimes[/color] is up.\n","[color=aqua]Slime[/color] semen and vaginal secretions are being marketed by peddlers as a panacea for all manner of illnesses. Demand rises as the rich and sickly clamber to harvest fresh from the tap.\n"],
-		marketdown = ["Rumors of [color=aqua]slimes[/color] eating infants cause demand for [color=aqua]slimes[/color] to fall.\n"],
+		marketup = ["During a formal event, multiple [color=aqua]slimes[/color] were displayed with internal glow orbs. The novelty drives up appeal.\n","Demand for [color=aqua]slimes[/color] is up.\n","[color=aqua]Slime[/color] semen and vaginal secretions are being marketed by peddlers as a panacea for all manner of illnesses. Demand rises as the rich and sickly clamber to harvest fresh from the tap.\n"],
+		marketdown = ["Rumors of [color=aqua]slimes[/color] eating infants cause demand for [color=aqua]slimes[/color] to fall.\n","Claims that [color=aqua]slime[/color] goo is toxic harshly destabilizes the market.\n"],
 		single = " slime",
 		plural = " slimes",
 		singlepos = " slime's",
@@ -719,8 +719,8 @@ var races = {
 		mutations = "Merfolk, Naga, Slugkin",
 		pricemod = 2.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]lamias[/color] is up.\n","A pornographic leaflet has been widely sold to young rich boys depicting [color=aqua]lamia[/color] performing very creative acts of oral sex. Every rich and noble teen boy and even some girls are begging their parents for [color=aqua]lamia[/color] playmates.\n"],
-		marketdown = ["A dramatized story of a [color=aqua]lamia[/color] who ate her master in the capitol is spreading like wildfire. Demand for [color=aqua]lamias[/color] is down.\n"],
+		marketup = ["A poor haul from the marshes means low supply of [color=aqua]lamia[/color]. Prices soar due to the scarcity.\n","Demand for [color=aqua]lamias[/color] is up.\n","A pornographic leaflet has been widely sold to young rich boys depicting [color=aqua]lamia[/color] performing very creative acts of oral sex. Every rich and noble teen boy and even some girls are begging their parents for [color=aqua]lamia[/color] playmates.\n"],
+		marketdown = ["A disgruntled slaver is claiming that [color=aqua]lamia[/color] genitalia are cold to the touch. Demand for [color=aqua]lamias[/color] declines.\n","A dramatized story of a [color=aqua]lamia[/color] who ate her master in the capitol is spreading like wildfire. Demand for [color=aqua]lamias[/color] is down.\n"],
 		single = " lamia",
 		plural = " lamias",
 		singlepos = " lamia's",
@@ -774,8 +774,8 @@ var races = {
 		mutations = "Gargoyle",
 		pricemod = 2.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]harpies[/color] is up.\n","The popularity of a play featuring a dastardly human villain enslaving a cute transforming [color=aqua]harpy[/color] princess to pull his wagon facinates the masses. Demand for [color=aqua]harpies[/color] increases.\n","Word is that an arena boss from across the sea has started an aerial league and has been buying up [color=aqua]harpies[/color].\n"],
-		marketdown = ["Rumors abound that [color=aqua]harpies[/color] are rife with disease. Demand decreases.\n"],
+		marketup = ["A popular bard came to town singing a song about a flock of [color=aqua]harpies[/color] that lay golden eggs. Demand sharply increased.\n","Demand for [color=aqua]harpies[/color] is up.\n","The popularity of a play featuring a dastardly human villain enslaving a cute transforming [color=aqua]harpy[/color] princess to pull his wagon facinates the masses. Demand for [color=aqua]harpies[/color] increases.\n","Word is that an arena boss from across the sea has started an aerial league and has been buying up [color=aqua]harpies[/color].\n"],
+		marketdown = ["Molting season for [color=aqua]harpies[/color] begins and annoyed owners are mass selling. Supply exceeds demand.\n","Rumors abound that [color=aqua]harpies[/color] are rife with disease. Demand decreases.\n"],
 		single = " harpy",
 		plural = " harpies",
 		singlepos = " harpy's",
@@ -827,8 +827,8 @@ var races = {
 		mutations = "Crabkin, Bee",
 		pricemod = 2.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]arachnas[/color] is up.\n","News is that a weaver in Frostford has been selling designer silks spun from [color=aqua]arachna[/color] webbing. Prices for [color=aqua]arachnas[/color] have increased.\n"],
-		marketdown = ["Rumors abound that insect-like species of any sex implant eggs in their partners. Demand for [color=aqua]arachnas[/color] falls.\n"],
+		marketup = ["[color=aqua]Arachnas[/color] become prized for their hunting ability after a poor harvest.\n","Demand for [color=aqua]arachnas[/color] is up.\n","News is that a weaver in Frostford has been selling designer silks spun from [color=aqua]arachna[/color] webbing. Prices for [color=aqua]arachnas[/color] have increased.\n"],
+		marketdown = ["Claims that [color=aqua]arachna[/color] bites are highly venomous causes demand to fall.\n","Rumors abound that insect-like species of any sex implant eggs in their partners. Demand for [color=aqua]arachnas[/color] falls.\n"],
 		single = " arachna",
 		plural = " arachnas",
 		singlepos = " arachna's",
@@ -881,8 +881,8 @@ var races = {
 		mutations = "Pegasus, Bicorn, Kelpie",
 		pricemod = 1.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]centaurs[/color] is up.\n","Demand for [color=aqua]centaurs[/color] is up as they become popular combination escorts and mounts.\n"],
-		marketdown = ["Prices for [color=aqua]centaurs[/color] drops as equine sex enthusiasts realize they can buy horses for less and without any of the backtalk.\n"],
+		marketup = ["Demand for [color=aqua]centaurs[/color] quietly increases after a small scandal circulates involving a rich widow and her centuar lover.\n","Demand for [color=aqua]centaurs[/color] is up.\n","Demand for [color=aqua]centaurs[/color] is up as they become popular combination escorts and mounts.\n"],
+		marketdown = ["[color=aqua]Centaur[/color] value plummets after an accidental bucking causes a jockey to break their neck.\n","Prices for [color=aqua]centaurs[/color] drops as equine sex enthusiasts realize they can buy horses for less and without any of the backtalk.\n"],
 		single = " centaur",
 		plural = " centaurs",
 		singlepos = " centaur's",
@@ -931,8 +931,8 @@ var races = {
 		mutations = "Frogkin, Toadkin, Kappa, Lobsterman, Ciguapa",
 		pricemod = 2.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]nereids[/color] is up.\n","Seafood is in season and prices for [color=aqua]nereids[/color] are up.","A new fad amongst nobles is to employ all aquatic servants and throw undersea balls. Demand for [color=aqua]nereids[/color] is up.\n"],
-		marketdown = ["Rumors abound that all [color=aqua]nereids'[/color] genitalia reeks of dead fish. Prices fall.\n"],
+		marketup = ["A popular new play involving a beautiful [color=aqua]nereid[/color] gifting a young man a silver pearl improves their value.\n","Demand for [color=aqua]nereids[/color] is up.\n","Seafood is in season and prices for [color=aqua]nereids[/color] are up.","A new fad amongst nobles is to employ all aquatic servants and throw undersea balls. Demand for [color=aqua]nereids[/color] is up.\n"],
+		marketdown = ["Rumors abound that all [color=aqua]nereids'[/color] genitalia reeks of dead fish. Prices fall.\n","Claims that [color=aqua]nereids[/color] require daily baths of fresh spring water reduce their appeal.\n"],
 		single = " nereid",
 		plural = " nereids",
 		singlepos = " nereid's",
@@ -987,8 +987,8 @@ var races = {
 		mutations = "Tentacle, Alraune",
 		pricemod = 2.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]scyllas[/color] is up.\n","Seafood is in season and prices for [color=aqua]scyllas[/color] are up.","A new fad amongst nobles is to employ all aquatic servants and throw undersea balls. Demand for [color=aqua]scyllas[/color] is up.\n"],
-		marketdown = ["Rumors abound that all [color=aqua]scyllas'[/color] genitalia reeks of dead fish. Prices fall.\n"],
+		marketup = ["Owning a [color=aqua]scylla[/color] lover has become fashionable among ladies of the upper classes. Prices reflect this growing thirst.\n","Demand for [color=aqua]scyllas[/color] is up.\n","Seafood is in season and prices for [color=aqua]scyllas[/color] are up.","A new fad amongst nobles is to employ all aquatic servants and throw undersea balls. Demand for [color=aqua]scyllas[/color] is up.\n"],
+		marketdown = ["Claims that [color=aqua]scyllas[/color] require daily baths of fresh spring water reduce their appeal.\n","Rumors abound that all [color=aqua]scyllas'[/color] genitalia reeks of dead fish. Prices fall.\n"],
 		single = " scylla",
 		plural = " scyllas",
 		singlepos = " scylla's",
@@ -1038,8 +1038,8 @@ var races = {
 		mutations = "Manticore, Nekomata",
 		pricemod = 1.75,
 		#ralph5
-		marketup = ["Demand for [color=aqua]catkin[/color] is up.\n","Rumors concerning the supposed superiority of feline genitalia abound. Demand for [color=aqua]catkin[/color] increases.\n"],
-		marketdown = ["Irresponsible pet owners fail to spay and neuter. There are just more[color=aqua]catkin[/color] on the market than buyers.\n"],
+		marketup = ["A troupe of [color=aqua]catkin[/color] dancers has boosted appeal for the breed.\n","Demand for [color=aqua]catkin[/color] is up.\n","Rumors concerning the supposed superiority of feline genitalia abound. Demand for [color=aqua]catkin[/color] increases.\n"],
+		marketdown = ["Claims surface that catkin have hard penile barbs that are more trouble to remove than is worthwhile. Desire for [color=aqua]catkin[/color] drops.\n","Irresponsible pet owners fail to spay and neuter. There are just more[color=aqua]catkin[/color] on the market than buyers.\n"],
 		single = " catkin",
 		plural = " catkin",
 		singlepos = " cat's",
@@ -1092,8 +1092,8 @@ var races = {
 		mutations = "Kitsune",
 		pricemod = 2,
 		#ralph5
-		marketup = ["Demand for [color=aqua]foxkin[/color] is up.\n","Demand for foxy bedwarmers is up. Prices for [color=aqua]foxkin[/color] increase.\n"],
-		marketdown = ["Rumors abound that [color=aqua]foxkin[/color] have the mysterious ability to escape their owners at will despite slave brands and restraints. Prices fall.\n"],
+		marketup = ["Preference for [color=aqua]foxkin[/color] increases after a series of obscene prints featuring a royal concubine circulate. The market is being picked clean in desperation.\n","Demand for [color=aqua]foxkin[/color] is up.\n","Demand for foxy bedwarmers is up. Prices for [color=aqua]foxkin[/color] increase.\n"],
+		marketdown = ["Changing laws revolving around the sale of [color=aqua]foxkin[/color] tails causes uncertainty in the slave market and demand drops. Amputation had become typical for slave labor mine operators due to practicality and for extra revenue.\n","Rumors abound that [color=aqua]foxkin[/color] have the mysterious ability to escape their owners at will despite slave brands and restraints. Prices fall.\n"],
 		single = " foxkin",
 		plural = " foxkin",
 		singlepos = " fox's",
@@ -1146,8 +1146,8 @@ var races = {
 		mutations = "Infernus, Dog, Werewolf",
 		pricemod = 1.75,
 		#ralph5
-		marketup = ["Demand for [color=aqua]wolfkin[/color] is up.\n"],
-		marketdown = ["Irresponsible pet owners fail to spay and neuter. There are just more [color=aqua]wolfkin[/color] on the market than buyers.\n"],
+		marketup = ["Popularity for training [color=aqua]wolfkin[/color] is up, improving their overall value.\n","Demand for [color=aqua]wolfkin[/color] is up.\n"],
+		marketdown = ["The stigma of 'dog fucking' harshly drops demand for [color=aqua]wolfkin[/color].\n","Irresponsible pet owners fail to spay and neuter. There are just more [color=aqua]wolfkin[/color] on the market than buyers.\n"],
 		single = " wolfkin",
 		plural = " wolfkin",
 		singlepos = " wolf's",
@@ -1200,8 +1200,8 @@ var races = {
 		mutations = "None",
 		pricemod = 1.75,
 		#ralph5
-		marketup = ["Demand for [color=aqua]bunnykin[/color] is up.\n"],
-		marketdown = ["Irresponsible pet owners fail to spay and neuter. There are just more [color=aqua]bunnykin[/color] on the market than buyers.\n","Rumors abound that [color=aqua]bunnykin[/color] simply aren't all that in the sack. Prices fall.\n"],
+		marketup = ["Appeal for [color=aqua]bunnykin[/color] increases after a local bar uses them as cute waitstaff. Now demand exceeds the current supply.\n","Demand for [color=aqua]bunnykin[/color] is up.\n"],
+		marketdown = ["Going off a bad trade tip, a slaver sells the majority of his [color=aqua]bunnykin[/color] stock and crashes the market.\n","Irresponsible pet owners fail to spay and neuter. There are just more [color=aqua]bunnykin[/color] on the market than buyers.\n","Rumors abound that [color=aqua]bunnykin[/color] simply aren't all that in the sack. Prices fall.\n"],
 		single = " bunnykin",
 		plural = " bunnykin",
 		singlepos = " bunny's",
@@ -1253,8 +1253,8 @@ var races = {
 		mutations = "Werebear",
 		pricemod = 1.75,
 		#ralph5
-		marketup = ["Demand for [color=aqua]tanuki[/color] is up.\n","The popularity of a play involving a dastardly human villain dragging around a cute smitten [color=aqua]tanuki[/color] slave girl facinates the masses. Demand for [color=aqua]tanuki[/color] increases.\n"],
-		marketdown = ["Rumors abound that [color=aqua]tanuki[/color] have the mysterious ability to escape their owners at will despite slave brands and restraints. Prices fall.\n","Rumor of a [color=aqua]tanuki[/color] crushing his master with testicles spread and the market shrinks.\n"],
+		marketup = ["A fashionable widow has bought up the local [color=aqua]tanuki[/color] market and caused prices to dramatically rise in response.\n","Demand for [color=aqua]tanuki[/color] is up.\n","The popularity of a play involving a dastardly human villain dragging around a cute smitten [color=aqua]tanuki[/color] slave girl facinates the masses. Demand for [color=aqua]tanuki[/color] increases.\n"],
+		marketdown = ["Complaints that shed [color=aqua]tanuki[/color] fur is difficult to clean and causes allergies lowers their market value.\n","Rumors abound that [color=aqua]tanuki[/color] have the mysterious ability to escape their owners at will despite slave brands and restraints. Prices fall.\n","Rumor of a [color=aqua]tanuki[/color] crushing his master with testicles spread and the market shrinks.\n"],
 		single = " tanuki",
 		plural = " tanukis",
 		singlepos = " tanuki's",

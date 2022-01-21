@@ -2615,14 +2615,14 @@ func dailyTownEvents():
 		if !currenttown.townhall.fines.empty():
 			if currenttown.townhall.autopay_fines == true:
 				for fine in currenttown.townhall.fines:
-					gold_lost -= int(fine[1])
+					gold_lost -= int(currenttown.townhall.fines[fine][1])
 					currenttown.townhall.fines.erase(fine)
 			else:
 				for fine in currenttown.townhall.fines:
-					if int(fine[0]) >= globals.resources.day + 3:
-						rep_loss = round(fine[1]/5)
+					if int(currenttown.townhall.fines[fine][0]) >= globals.resources.day + 3:
+						rep_loss = round(int(currenttown.townhall.fines[fine][1])/5)
 						globals.state.reputation[town] -= rep_loss
-						text += "\n[color=red]An outstanding fine in [color=aqua]" + town.capitalize() + "[/color] for [color=yellow]" + str(fine[1]) + "[/color] expired today due to non-payment. You lost [color=aqua]" + str(rep_loss) + " Reputation[/color] with the town due to this. "
+						text += "\n[color=red]An outstanding fine in [color=aqua]" + town.capitalize() + "[/color] for [color=yellow]" + str(currenttown.townhall.fines[fine][1]) + "[/color] expired today due to non-payment. You lost [color=aqua]" + str(rep_loss) + " Reputation[/color] with the town due to this. "
 						currenttown.townhall.fines.erase(fine)
 			if gold_lost > 0:
 				text += "\n\nYou spent a total of [color=yellow]" + str(gold_lost) + "[/color] paying off existing [color=red]fines[/color] today in [color=aqua]" + town.capitalize() + "[/color]. "
@@ -2731,18 +2731,19 @@ func dailyFetish(person):
 	#Update and Possibly Increase Fetishes Daily
 	for i in globals.fetishesarray:
 		var numDailyFetish = person.dailyevents.count(i)
-		var idxFetishOpinion = globals.fetishopinion.find( person.fetish[i])
-		#Chance to Increase Fetish
-		if idxFetishOpinion < globals.fetishopinion.size() - 1:
+		if numDailyFetish >= 0:
+			#Chance to Increase Fetish
+			var idxFetishOpinion = globals.fetishopinion.find( person.fetish[i])
 			if numDailyFetish + rand_range(0,2) >= idxFetishOpinion * 2:
-				person.fetish[i] = globals.fetishopinion[ idxFetishOpinion + 1]
-		#Chance to Lower Fetish (Changable Per Setting)
-		elif globals.expansionsettings.fetishescanlower == true && idxFetishOpinion > 3  && person.away.duration != 0:
-			if rand_range(0,1) <= .1 && numDailyFetish < idxFetishOpinion/3:
-				person.fetish[i] = globals.fetishopinion[ idxFetishOpinion - 1]
-		while numDailyFetish > 0:
-			person.dailyevents.erase(i)
-			numDailyFetish -= 1
+				if idxFetishOpinion < globals.fetishopinion.size() - 1:
+					person.fetish[i] = globals.fetishopinion[ idxFetishOpinion + 1]
+			#Chance to Lower Fetish (Changable Per Setting)
+			elif globals.expansionsettings.fetishescanlower == true && idxFetishOpinion > 0:
+				if rand_range(0,1) <= .1 && numDailyFetish + rand_range(0,2) < idxFetishOpinion/3:
+					person.fetish[i] = globals.fetishopinion[ idxFetishOpinion - 1]
+			while numDailyFetish > 0:
+				person.dailyevents.erase(i)
+				numDailyFetish -= 1
 
 func getSecret(person,discovery='none'):
 	var realdiscovery = discovery
@@ -3302,7 +3303,7 @@ func isSameSex(sex1, sex2):
 	if sex1 == 'futanari' || sex1 == 'dickgirl':
 		if futaconsideration == 'both':
 			return true
-		sex1 = futaconsideration
+		return futaconsideration == sex2
 	if sex2 == 'futanari' || sex2 == 'dickgirl':
 		if futaconsideration == 'both':
 			return true
@@ -3313,20 +3314,21 @@ func getSexualAttraction(person, target):
 	var compatibility = testSexualCompatibility(person, target.sex)
 	if compatibility == 'none':
 		return false
-	var base_attraction = (target.beauty-40) + (person.lewdness*.25) + (person.lust*.35) + person.sexexp.orgasmpartners.get(target.id,0)
+	var base_attraction = (target.beauty-40) + (person.lewdness*.25) + (person.lust*.35)
+	if target == globals.player:
+		base_attraction += person.metrics.ownership + person.metrics.orgasm
 	var attraction_modifier = target.level * (target.lust*.05)
-	if person == globals.player:
-		base_attraction += globals.expansionsettings.playerattractionmodifier
-	elif target == globals.player:
-		attraction_modifier += person.obed*.15 + person.metrics.ownership*.25 + globals.expansionsettings.playerattractionmodifier
+	#Apply Player Attraction Modifier
+	if (person == globals.player || target == globals.player) && globals.expansionsettings.playerattractionmodifier != 0:
+		attraction_modifier += globals.expansionsettings.playerattractionmodifier
 	#Check Attraction for Success/Failure
-	base_attraction += attraction_modifier
+	var attraction = base_attraction + attraction_modifier
 	if compatibility == 'low':
-		return base_attraction >= 75
+		return attraction >= 75
 	elif compatibility == 'medium':
-		return base_attraction >= 40
+		return attraction >= 40
 	elif compatibility == 'high':
-		return base_attraction >= 10
+		return attraction >= 10
 	return false
 
 func testSexualCompatibility(person, targetSex):

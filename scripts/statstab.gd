@@ -264,6 +264,11 @@ func _on_talk_pressed(mode = 'talk'):
 		#Quick Strip Option
 		if (person.exposed.chest == false || person.exposed.genitals == false || person.exposed.ass == false) && person.obed >= 50:
 			buttons.append({text = person.dictionary("Strip Immediately!"), function = 'topicclothing', args = 'full strip', tooltip = "Remove all Clothing"})		
+		#Succubus Talk Options	#ralphC
+		if person.race_display in ["Succubus"]:
+			#buttons.append({text = str(globals.randomitemfromarray(['General Slave Topics','General Slave Matters','General Slave Issues'])), function = '_on_talk_pressed', args = 'general_slave_topics', tooltip = "General topics for all slaves such as changing the Master Name, Releasing the Slave, etc"})
+			buttons.append({text = person.dictionary("Lets talk about your hunger."), function = 'succubustopics', args = 'intro'})
+		#/ralphC
 
 	#General Slave Topics
 	elif mode == 'general_slave_topics':
@@ -2206,3 +2211,150 @@ func cheatButtonAddItem(mode = ''):
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
+
+#ralphC - Succubus Topics
+func succubustopics(mode=''):
+	var text = ""
+	var state = false
+	var buttons = []
+	var sprite = []
+	
+	#Intro Text
+	text += str(expansion.getIntro(person)) + "\n[color=yellow]-"+ person.quirk(str(talk.introsuccubus(person)) + "[/color]")
+	if person.metrics.mana_hunger > 0 && !person.vagvirgin:
+		var manahungertext = ""
+		if person.metrics.mana_hunger >= variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]:
+			manahungertext = "[color=red]"+str(person.metrics.mana_hunger)+"[/color]"
+		elif person.metrics.mana_hunger >= variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]:
+			manahungertext = "[color=yellow]"+str(person.metrics.mana_hunger)+"[/color]"
+		else:
+			manahungertext = "[color=green]"+str(person.metrics.mana_hunger)+"[/color]"
+		text += "\n\nLooking deep into $name's eyes, you can sense that $his \ncurrent hunger for mana is: " + manahungertext + "\n\n$He needs to absorb \n[color=yellow]" + str(variables.basemanafoodconsumption * variables.succubusagemod[person.age]) + "[/color] mana per day to keep $his hunger from increasing.\n"
+	#The Birds and the Bees
+	if !person.knowledge.has('issuccubus'):
+		buttons.append({text = person.dictionary("The Birds and the Bees."), function = 'birdsandbees', args = 'start', tooltip = "Explain $his true nature to $him."})	
+	#Mana Feeding Policy
+	elif (person.age == 'child' && person.vagvirgin == false) || person.age != 'child':
+		buttons.append({text = person.dictionary("Set min mana storage before feeding $name."), function = 'setmanafeedfloor', args = 'getmanafloor', tooltip = 'mana reserves will not be fed to $name at the end of each day if below this amount'})
+	#Whoring Rules (later expansion)
+	#if timeswhoredout > 1 && person.work in ['all whore types','etc']:
+	#	priotitize feeding
+	#	prioritize making money		
+	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
+		else:
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
+	elif person.imagefull != null:
+		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().rebuild_slave_list()
+	get_parent().slavetabopen()
+
+func birdsandbees(mode = ''):
+	var text = ''
+	var state = false
+	var buttons = []
+	var sprite = []
+	if mode == "revealsuccubus":
+		if person.vagvirgin && person.age == 'child':
+			text += "You explain to $name that $he is a "+str(person.race_display)+", that once $he's older or loses $his virginity, $he will require mana derived from sexual energy in order to survive. "+"\n\n[color=yellow]-"+ person.quirk(str(talk.succubusrevealed1(person)) + "[/color]") 
+		else:
+			text += "You explain to $name that $he is a "+str(person.race_display)+" and that only mana derived from sexual energy can sustain $him. "+"\n\n[color=yellow]-"+ person.quirk(str(talk.succubusrevealed2(person)) + "[/color]") 
+		person.knowledge.append('issuccubus')
+	if mode == "start":
+		if !person.knowledge.has('issuccubus'):
+			buttons.append({text = person.dictionary("Reveal a "+str(person.race_display)+"'s true nature."), function = 'birdsandbees', args = 'revealsuccubus', tooltip = "Explain $his true nature to $him."})
+		elif rand_range(0,10) > 6:
+			text += "I know $master. Some day I'll grow up to be a Succuba- a Succubutts? No I mean a suck, a suck, a Succubus!"
+		else:
+			text += "I already understand $master. When I grow up, I'll need to make a lot of men really, really happy instead of eating."
+	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
+		else:
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
+	elif person.imagefull != null:
+		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().rebuild_slave_list()
+	get_parent().slavetabopen()	
+
+func setmanafeedfloor(mode = ''):
+	var text = ''
+	var state = false
+	var buttons = []
+	var sprite = []
+	if mode == 'selection_0':
+		person.manafeedpolicy = 0
+		text += "Don't worry, so long as I have mana, I'll always feed you."
+		text += "\n\n[color=aqua]Mana will always be shared with $name according to $his hunger.[/color]"
+	if mode == 'selection_50':
+		person.manafeedpolicy = 50
+		text += "I'll feed you, but I have to keep some minimal reserves."
+		text += "\n\n[color=aqua]50 mana will be kept in reserve even if $name is hungry.[/color]"
+	if mode == 'selection_100':
+		person.manafeedpolicy = 100
+		text += "I'll feed you, but I have to keep some minimal reserves."
+		text += "\n\n[color=aqua]100 mana will be kept in reserve even if $name is hungry.[/color]"
+	if mode == 'selection_250':
+		person.manafeedpolicy = 250
+		text += "I'll feed you, but I have to keep some minimal reserves."
+		text += "\n\n[color=aqua]250 mana will be kept in reserve even if $name is hungry.[/color]"	
+	if mode == 'selection_500':
+		person.manafeedpolicy = 500
+		text += "I'll feed you, but I have to keep some minimal reserves."
+		text += "\n\n[color=aqua]500 mana will be kept in reserve even if $name is hungry.[/color]"
+	if mode == 'selection_1000':
+		person.manafeedpolicy = 1000
+		text += "I'll feed you, but I have to keep some minimal reserves."
+		text += "\n\n[color=aqua]1,000 mana will be kept in reserve even if $name is hungry.[/color]"
+	if mode == 'selection_10000':
+		person.manafeedpolicy = 10000
+		text += "I'll feed you, but I have to keep some minimal reserves."
+		text += "\n\n[color=aqua]10,000 mana will be kept in reserve even if $name is hungry.[/color]"
+	if mode == 'selection_99999':
+		person.manafeedpolicy = 99999
+		text += "You'll be expected to gather your own mana."
+		text += "\n\n[color=aqua]Mana will not be shared with $name unless you have a tremendous stockpile.[/color]"
+	if mode == 'getmanafloor':
+		text += "As long as there is at least this amount of mana in reserve,\n $name will be fed at the end of each day.\n\n[color=gold]Otherwise $his only source of sustenance will be male orgasms $he absorbs during interactions, jobs, or events[/color]."
+		buttons.append({text = "0 (Always try to feed)", function = 'setmanafeedfloor', args = "selection_0"})
+		buttons.append({text = "50 mana", function = 'setmanafeedfloor', args = "selection_50"})
+		buttons.append({text = "100 mana", function = 'setmanafeedfloor', args = "selection_100"})
+		buttons.append({text = "250 mana", function = 'setmanafeedfloor', args = "selection_250"})
+		buttons.append({text = "500 mana", function = 'setmanafeedfloor', args = "selection_500"})
+		buttons.append({text = "1000 mana", function = 'setmanafeedfloor', args = "selection_1000"})
+		buttons.append({text = "10000 mana", function = 'setmanafeedfloor', args = "selection_10000"})
+		buttons.append({text = "99999 (Probably never feed)", function = 'setmanafeedfloor', args = "selection_99999"})
+		#get_node("slaverename").popup()
+		#get_node("slaverename/Label").set_text(person.dictionary("Enter a number between 0 and 99999."))
+		#print("Ralph Test: person.manafeedpolicy == " + str(person.manafeedpolicy))
+		#get_node("slaverename/LineEdit").set_text(person.manafeedpolicy)
+		#pending_slave_rename = "manapolicyfloor"
+	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
+	###---Added by Expansion---### Naked Images for Uniques Fix
+	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
+		else:
+			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
+	elif person.imagefull != null:
+		sprite = [[person.imagefull,'slave','opac']]
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	###---End Expansion---###
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().rebuild_slave_list()
+	get_parent().slavetabopen()
+#/ralphC

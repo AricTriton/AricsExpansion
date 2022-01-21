@@ -17,8 +17,15 @@ var ropewearoutrate = 10.0
 var learnpointsperstat = 3.0
 var attributepointsperupgradepoint = 1.0
 var specializationchance = 5.0
-
-
+#ralphC - Mana Eater Mechanics (incl Succubus, Golem, etc.)
+var basemanafoodconsumption = 10.0 #ralphC
+var orgasmmana = 3 #ralphC - 3 is default
+var succubusagemod = { #ralphC - [child,teen,adult] Succubus base mana food consumption multiplier
+	child = 1.0, teen = 2.0, adult = 3.0
+}
+var succubushungerlevel = [1.5,3.0,7.0] #ralphC - [munchies = 1.5, sex crazed 3, death 7] see mansion.gd
+var succubuscounter = 0 #ralphC - actually just used to count orgasms drained by succubi in newsexsystem.gd
+#/ralphC
 ###---Added by Expansion---### Difficulty Adjustment
 var playerstartbeauty = 70.0
 var characterstartbeauty = 50.0
