@@ -4,7 +4,7 @@ var hobbydescription = {
 	'Physical' : '[color=aqua]+1 Max Strength, +25 Courage[/color]\n\n$name is no stranger to fighting and tends to act boldly in many situations.',
 	'Etiquette' : "[color=aqua]+20 Confidence, +15 Charm[/color]\n\n$name has spent $his youth among elderly people and high society, learning how to be liked and present $himself while also feeling superior to commonfolk.",
 	'Graceful' : "[color=aqua]+1 Max Agility, +10 Confidence[/color]\n\n$name was the fastest kid $he knew growing up and a natural when it came to hand-eye coordination in general.", #ralph3
-	'Magic' : "[color=aqua]+" + str(globals.expansionsettings.magic_hobby_maf_max) + " Max Magic, +25 Wit[/color]\n\n$name was a very curious child and spent a lot of $his time reading and studying various things, including magic.", #ralph3
+	'Magic' : "[color=aqua]+{maf} Max Magic, +25 Wit[/color]\n\n$name was a very curious child and spent a lot of $his time reading and studying various things, including magic.", #ralph3
 	'Servitude' : "[color=aqua]+1 Max Endurance, +35 Min Obedience, +20 Loyalty[/color]\n\n$name has spent $his youth in harsh training which lead to $him being more physically fit and respecting to $his superiors.",
 	'Curious' : "[color=aqua]Start with the [color=green]Gifted[/color] trait.[/color]\n\n$name spends $his time searching for answers and meaning in this crazy world. This has led $him to become more receptive to new skills and knowledge.",
 	'Genius' : "[color=aqua]Start with the [color=green]Clever[/color] trait and randomly either the [color=green]Responsive[/color] or [color=green]Gifted[/color] trait.[/color]\n[color=red]Gains either the Clumsy, Frail, or Weak trait.[/color]\n\n$name spends $his time studying and thinking and tends to not focus on physical activities.\n",
@@ -12,6 +12,15 @@ var hobbydescription = {
 	'Waifu' : "[color=aqua]Start with the traits [color=green]Monogamous[/color], [color=green]Fertile[/color], [color=green]Ascetic[/color], and [color=red]Clingy[/color].\n\nStarts with the [color=green]Submissive[/color] fetish at [color=lime]Mindblowing[/color] and [color=green]Dominance[/color] at [color=red]Taboo[/color].[/color]\n\n$name has spent $his whole life preparing $himself to be the perfect, submissive partner.\n\n[color=yellow]Very Unbalanced[/color]\n",
 	'Perfect Specimen' : "[color=aqua]Start with the traits [color=green]Strong[/color], [color=green]Quick[/color], [color=green]Robust[/color], and [color=green]Responsive[/color].[/color]\n\n$name has been perfectly crafted to be the perfect specimen of their race.\n\n[color=red]Insanely Unbalanced[/color]\n"
 }
+
+func _slave_hobby(button):
+	for i in get_tree().get_nodes_in_group("slavehobby"):
+		if i != button:
+			i.set_pressed(false)
+		else:
+			i.set_pressed(true)
+	startSlaveHobby = button.get_meta('hobby')
+	get_node("TextureFrame/newgame/stage8/backgroundtext").set_bbcode(startSlave.dictionary(hobbydescription[startSlaveHobby].format({"maf":str(globals.expansionsettings.magic_hobby_maf_max)})))
 
 #Provides a container for Additional Hobbies
 var slaveHobbiesExpanded = ['Graceful','Curious','Genius','Socialite','Waifu','Perfect Specimen'] #ralph3

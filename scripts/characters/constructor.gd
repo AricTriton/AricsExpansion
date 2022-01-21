@@ -142,7 +142,11 @@ func fillSizeArrayDict():
 	}
 
 func setSizes(person,mother,father):
-	sizeDict.futanari.balls = 0.5 if globals.rules.futaballs else 0
+	#The key needs to not exist to not be added
+	if globals.rules.futaballs:
+		sizeDict.futanari.balls = 0.5
+	else:
+		sizeDict.futanari.erase("balls")
 	for part in sizeDict[person.sex]:
 		var motherModifier = 0
 		var fatherModifier = 0
@@ -236,7 +240,7 @@ func newbaby(mother,father):
 		var temp
 		for i in listMaxStats:
 			temp = max(father.stats[i], mother.stats[i])
-			if pStats.str_max < temp:
+			if pStats[i] < temp:
 				pStats[i] += round((temp - pStats[i]) *.6)
 
 	#Bodyshape
@@ -301,7 +305,7 @@ func newbaby(mother,father):
 	
 	#Genealogy
 	build_genealogy(person, mother, father)
-	setRace(person)
+	setRace(person,mother)
 	setRaceDisplay(person)
 	set_race_secondary(person)
 	
@@ -622,15 +626,17 @@ func build_genealogy_equalize(person, percent):
 	
 	return lpercent
 
-func setRace(person):
+func setRace(person,mother):
 	var currentrace = ""
 	var highestpercent = 0
 	
 	#Pick Highest Genetics
 	for race in genealogies:
-		if person.genealogy[race] >= highestpercent:
+		if person.genealogy[race] > highestpercent:
 			currentrace = race
 			highestpercent = person.genealogy[race]
+		elif person.genealogy[race] == highestpercent && mother.race == race:
+			currentrace = race
 	
 	#Assign Race Type/Race
 	var caprace = currentrace.capitalize()
