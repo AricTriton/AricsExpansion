@@ -687,7 +687,7 @@ class member:
 			if relation != 'unrelated' && person != globals.player:
 				self.actionshad.incest += 1
 				#Below is Temporary
-				var compare = (globals.fetishopinion.find(person.fetish.incest)-3)*100 + (i.person.beauty-40)*3 + (person.lewdness*.5 + person.lust*.5)*3
+				var compare = (globals.fetishopinion.find(person.fetish.incest)-3)*100 + (i.person.beauty-40)*3 + (person.lewdness + person.lust)*1.5
 				text += " "
 #					var compare = int((500+abs(person.relations[i.person.id]))/globals.fetishopinion.find(person.fetish.incest))
 				if compare >= 500:
@@ -1794,8 +1794,8 @@ func startscene(scenescript, cont = false, pretext = ''):
 			if i.request == 'stop':
 				if !i.effects.has('resist'):
 					i.request = null
-			elif i.effects.has('resist') && !member.person.traits.has('Likes it rough') && randf() < 0.66:
-				$Panel/sceneeffects.bbcode_text += ("[color=#f4adf4]Desire: " + i.person.dictionary(requests[i.request]) + '[/color]\n')
+			elif i.effects.has('resist') && !i.person.traits.has('Likes it rough') && randf() < 0.66:
+				$Panel/sceneeffects.bbcode_text += ("[color=#f4adf4]Desire: " + i.person.dictionary(requests.stop) + '[/color]\n')
 				i.request = 'stop'
 			continue
 		elif i.person == globals.player || i.person.unique in ['dog','horse'] || i.effects.has('resist'):
@@ -2258,7 +2258,7 @@ func endencounter():
 			var essence = i.person.getessence()
 			if essence != null && i.person.smaf*20 > rand_range(0,100):
 				###---Added by Expansion---### Ease of Reading
-				rewardtext += "\nIngredient Gained from [color=aqua]"+i.name_short()+"[/color]: [color=yellow]" + globals.itemdict[essence].name + "[/color]"
+				rewardtext += "\nIngredient Gained from [color=aqua]"+i.name+"[/color]: [color=yellow]" + globals.itemdict[essence].name + "[/color]"
 				###---End Expansion---###
 				globals.itemdict[essence].amount += 1
 			#ralphC

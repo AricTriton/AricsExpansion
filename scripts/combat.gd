@@ -629,6 +629,158 @@ func checkforresults():
 	if counter >= enemygroup.size():
 		win()
 
+###---Added by Expansion---### Combat Stress Alteration
+func enemyturn():
+	if $autoattack.pressed == true:
+		for i in playergroup:
+			if i.state == 'normal' && i.actionpoints > 0:
+				for j in enemygroup:
+					if j.node != null && j.state == 'normal':
+						useskills(globals.abilities.abilitydict.attack, i, j)
+						break
+				yield(self, 'skillplayed')
+				endcombatcheck()
+				if period == 'win':
+					playerwin() 
+					return
+
+	for i in enemygroup + playergroup:
+		if i.state != 'normal':
+			continue
+		
+		for effect in i.effects.values():
+			if effect.caster.group == 'enemy':
+				if effect.code == 'escapeeffect':
+					if i.effects.has('stun'):
+						continue
+					if trapper != null && randf() > 0.5:
+
+						self.combatlog += combatantdictionary(trapper, i,"\n[color=aqua][targetname1] has tried to escape but was caught in one of [name1]'s traps...[/color] ")
+						i.defeat()
+						yield(self, 'defeat2finished')
+						continue
+					i.escape()
+				if effect.type == 'onendturn':
+					self.combatlog += "\n" + combatantdictionary(i, i, globals.abilities.call(globals.abilities.effects[effect.code].script, i))
+				if effect.duration > 0:
+					effect.duration -= 1
+				if effect.duration == 0:
+					removebuff(effect.code, i)
+	enemyturn = true
+	var target
+	for combatant in enemygroup:
+		if combatant.state != 'normal' || combatant.effects.has('stun'):
+			continue
+		for effect in combatant.effects.values():
+			if effect.code == 'escapeeffect':
+				combatant.escape()
+		var skill = []
+		for k in combatant.abilities:
+			var i = globals.abilities.abilitydict[k]
+			
+			if combatant.ai == 'escape':
+				if !combatant.effects.has('shackleeffect'):
+					skill = 'escape'
+				else:
+					combatant.ai = 'attack'
+			if combatant.ai == 'attack':
+				if combatant.cooldowns.has(i.code):
+					continue
+				if i.aipatterns.has('attack'):
+					skill.append({value = i, weight = i.aipriority})
+		
+		
+		
+		
+		if playergroup.size() == 0:
+			lose()
+			return
+		
+		if typeof(skill) == TYPE_ARRAY:
+			skill = globals.weightedrandom(skill)
+			combatant.aimemory = skill.code
+		if skill == null:
+			skill = globals.abilities.abilitydict[combatant.abilities[0]]
+		elif typeof(skill) == TYPE_STRING:
+			skill = globals.abilities.abilitydict[skill]
+		var targetarray = []
+		if skill.targetgroup == 'enemy':
+			for i in playergroup:
+				if i.state == 'normal':
+					targetarray.append(i)
+		elif skill.target == 'self':
+			targetarray = [combatant]
+		else:
+			for i in enemygroup:
+				if i.state == 'normal':
+					targetarray.append(i)
+		if targetarray.size() <= 0:
+			return
+		target = targetarray[randi()%targetarray.size()]
+		if combatant.state in ['normal']:
+			useskills(skill, combatant, target)
+			yield(self, 'skillplayed')
+	
+	
+	for i in enemygroup:
+#		i.stress += 3
+		i.actionpoints = 1
+		if i.effects.has('stun'):
+			i.actionpoints = 0
+		var cooldownstoerase = []
+		for k in i.cooldowns:
+			i.cooldowns[k] -= 1
+			if i.cooldowns[k] <= 0:
+				cooldownstoerase.append(k)
+		for k in cooldownstoerase:
+			i.cooldowns.erase(k)
+		for effect in i.effects.values():
+			if effect.caster.group == 'player':
+				if effect.duration > 0:
+					effect.duration -= 1
+				if effect.duration == 0:
+					removebuff(effect.code, i)
+	for i in playergroup:
+		checkforinheritdebuffs(i)
+#		i.stress += 3
+#		if i.person.traits.has("Coward"):
+#			i.stress += 3
+		i.actionpoints = 1
+		if i.effects.has("stun"):
+			i.actionpoints = 0
+		for k in i.cooldowns.duplicate():
+			i.cooldowns[k] -= 1
+			if i.cooldowns[k] <= 0:
+				i.cooldowns.erase(k)
+		###---Added by Expansion---### Ank BugFix v4a
+		for e in i.geareffects:
+			if e.type == 'incombatturn':
+				if e.effect == 'lust':
+					i.person.lust += e.effectvalue
+		###---End Expansion---###
+		for effect in i.effects.values():
+			if effect.caster.group == 'player':
+				if effect.duration > 0:
+					effect.duration -= 1
+				if effect.duration == 0:
+					if effect.code == 'escapeeffect':
+						i.state = 'escaped'
+					removebuff(effect.code, i)
+	
+	if endcombatcheck() == 'continue':
+		enemyturn = false
+		
+		period = 'nextturn'
+	else:
+		if $autoattack.pressed != globals.rules.autoattack:
+			globals.rules.autoattack = $autoattack.pressed
+			globals.overwritesettings()
+		if period == 'escape':
+			playerescape()
+		elif period == 'win':
+			playerwin()
+###---End Expansion---###
+
 func showskilltooltip(skill):
 	var text = ''
 	text += '[center]' + skill.name + '[/center]\n\n' + skill.description 
@@ -786,158 +938,6 @@ func useskills(skill, caster = null, target = null, retarget = false):
 			period = 'base'
 		
 	emit_signal("skillplayed")
-
-###---Added by Expansion---### Combat Stress Alteration
-func enemyturn():
-	if $autoattack.pressed == true:
-		for i in playergroup:
-			if i.state == 'normal' && i.actionpoints > 0:
-				for j in enemygroup:
-					if j.node != null && j.state == 'normal':
-						useskills(globals.abilities.abilitydict.attack, i, j)
-						break
-				yield(self, 'skillplayed')
-				endcombatcheck()
-				if period == 'win':
-					playerwin() 
-					return
-
-	for i in enemygroup + playergroup:
-		if i.state != 'normal':
-			continue
-		
-		for effect in i.effects.values():
-			if effect.caster.group == 'enemy':
-				if effect.code == 'escapeeffect':
-					if i.effects.has('stun'):
-						continue
-					if trapper != null && randf() > 0.5:
-
-						self.combatlog += combatantdictionary(trapper, i,"\n[color=aqua][targetname1] has tried to escape but was caught in one of [name1]'s traps...[/color] ")
-						i.defeat()
-						yield(self, 'defeat2finished')
-						continue
-					i.escape()
-				if effect.type == 'onendturn':
-					self.combatlog += "\n" + combatantdictionary(i, i, globals.abilities.call(globals.abilities.effects[effect.code].script, i))
-				if effect.duration > 0:
-					effect.duration -= 1
-				if effect.duration == 0:
-					removebuff(effect.code, i)
-	enemyturn = true
-	var target
-	for combatant in enemygroup:
-		if combatant.state != 'normal' || combatant.effects.has('stun'):
-			continue
-		for effect in combatant.effects.values():
-			if effect.code == 'escapeeffect':
-				combatant.escape()
-		var skill = []
-		for k in combatant.abilities:
-			var i = globals.abilities.abilitydict[k]
-			
-			if combatant.ai == 'escape':
-				if !combatant.effects.has('shackleeffect'):
-					skill = 'escape'
-				else:
-					combatant.ai = 'attack'
-			if combatant.ai == 'attack':
-				if combatant.cooldowns.has(i.code):
-					continue
-				if i.aipatterns.has('attack'):
-					skill.append({value = i, weight = i.aipriority})
-		
-		
-		
-		
-		if playergroup.size() == 0:
-			lose()
-			return
-		
-		if typeof(skill) == TYPE_ARRAY:
-			skill = globals.weightedrandom(skill)
-			combatant.aimemory = skill.code
-		if skill == null:
-			skill = globals.abilities.abilitydict[combatant.abilities[0]]
-		elif typeof(skill) == TYPE_STRING:
-			skill = globals.abilities.abilitydict[skill]
-		var targetarray = []
-		if skill.targetgroup == 'enemy':
-			for i in playergroup:
-				if i.state == 'normal':
-					targetarray.append(i)
-		elif skill.target == 'self':
-			targetarray = [combatant]
-		else:
-			for i in enemygroup:
-				if i.state == 'normal':
-					targetarray.append(i)
-		if targetarray.size() <= 0:
-			return
-		target = targetarray[randi()%targetarray.size()]
-		if combatant.state in ['normal']:
-			useskills(skill, combatant, target)
-			yield(self, 'skillplayed')
-	
-	
-	for i in enemygroup:
-#		i.stress += 3
-		i.actionpoints = 1
-		if i.effects.has('stun'):
-			i.actionpoints = 0
-		var cooldownstoerase = []
-		for k in i.cooldowns:
-			i.cooldowns[k] -= 1
-			if i.cooldowns[k] <= 0:
-				cooldownstoerase.append(k)
-		for k in cooldownstoerase:
-			i.cooldowns.erase(k)
-		for effect in i.effects.values():
-			if effect.caster.group == 'player':
-				if effect.duration > 0:
-					effect.duration -= 1
-				if effect.duration == 0:
-					removebuff(effect.code, i)
-	for i in playergroup:
-		checkforinheritdebuffs(i)
-#		i.stress += 3
-#		if i.person.traits.has("Coward"):
-#			i.stress += 3
-		i.actionpoints = 1
-		if i.effects.has("stun"):
-			i.actionpoints = 0
-		for k in i.cooldowns.duplicate():
-			i.cooldowns[k] -= 1
-			if i.cooldowns[k] <= 0:
-				i.cooldowns.erase(k)
-		###---Added by Expansion---### Ank BugFix v4a
-		for e in i.geareffects:
-			if e.type == 'incombatturn':
-				if e.effect == 'lust':
-					i.person.lust += e.effectvalue
-		###---End Expansion---###
-		for effect in i.effects.values():
-			if effect.caster.group == 'player':
-				if effect.duration > 0:
-					effect.duration -= 1
-				if effect.duration == 0:
-					if effect.code == 'escapeeffect':
-						i.state = 'escaped'
-					removebuff(effect.code, i)
-	
-	if endcombatcheck() == 'continue':
-		enemyturn = false
-		
-		period = 'nextturn'
-	else:
-		if $autoattack.pressed != globals.rules.autoattack:
-			globals.rules.autoattack = $autoattack.pressed
-			globals.overwritesettings()
-		if period == 'escape':
-			playerescape()
-		elif period == 'win':
-			playerwin()
-###---End Expansion---###
 
 func checkforinheritdebuffs(combatant):
 	if combatant.energy > 0 && combatant.passives.has('exhausted'):

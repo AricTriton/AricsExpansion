@@ -1517,7 +1517,7 @@ func _on_mansion_pressed():
 	get_node("ResourcePanel/menu").disabled = false
 	get_node("ResourcePanel/helpglossary").disabled = false
 	get_node("MainScreen/mansion/sexbutton").set_disabled(globals.state.sexactions < 1 && globals.state.nonsexactions < 1)
-	if globals.player.imageportait != null && globals.canloadimage(globals.player.imageportait):
+	if globals.canloadimage(globals.player.imageportait):
 		$Navigation/personal/TextureRect.texture = globals.loadimage(globals.player.imageportait)
 	else:
 		$Navigation/personal/TextureRect.texture = selftexture
@@ -1913,14 +1913,15 @@ func childbirth(person,baby_id):
 		###---End Expansion---###
 	
 	#---Added Portrait
-	get_node("birthpanel/portraitpanel/portrait").set_texture(null)
-	if person.imageportait != null && globals.loadimage(person.imageportait) != null:
+	if globals.canloadimage(person.imageportait):
 		get_node("birthpanel/portraitpanel/portrait").set_texture(globals.loadimage(person.imageportait))
 	elif globals.gallery.nakedsprites.has(person.unique):
 		if person.obed <= 50 || person.stress > 50:
 			get_node("birthpanel/portraitpanel/portrait").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothrape])
 		else:
 			get_node("birthpanel/portraitpanel/portrait").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothcons])
+	else:
+		get_node("birthpanel/portraitpanel/portrait").set_texture(null)
 	get_node("birthpanel/portraitpanel/portrait").show()
 	
 	get_node("birthpanel/birthtext").set_bbcode(text)
@@ -2183,25 +2184,12 @@ func _on_selfrelatives_pressed():
 	###---End Expansion---###
 	
 	###---Added by Expansion---### Family Expanded
-	var halfsiblings_banner = false
-	if entry.siblings.size() > 0:
-		var tempperson
+	var halfsiblings = []
+	if !entry.siblings.empty():
 		text += '\n[center]Full-Blooded Siblings[/center]\n'
 		for i in entry.siblings:
-			var samedad = false
-			var samemom = false
 			entry2 = relativesdata[i]
-			for f in ['father']:
-				if int(entry[f]) == int(entry2[f]):
-					samedad = true
-				else:
-					samedad = false
-			for m in ['mother']:
-				if int(entry[m]) == int(entry2[m]):
-					samemom = true
-				else:
-					samemom = false
-			if samedad == true && samemom == true:
+			if int(entry.father) == int(entry2.father) && int(entry.mother) == int(entry2.mother):
 				if entry2.state == 'fetus':
 					continue
 				if entry2.sex == 'male':
@@ -2211,45 +2199,13 @@ func _on_selfrelatives_pressed():
 				if entry2.state == 'free':
 					text += "[color=aqua]Free[/color] "
 				text += getentrytext(entry2) + "\n"
-		
-		for i in entry.siblings:
-			var samedad = false
-			var samemom = false
-			entry2 = relativesdata[i]
-			for f in ['father']:
-				if int(entry[f]) <= 0:
-					samedad = false
-				elif int(entry[f]) == int(entry2[f]):
-					samedad = true
-				else:
-					samedad = false
-			for m in ['mother']:
-				if int(entry[m]) <= 0:
-					samemom = false
-				elif int(entry[m]) == int(entry2[m]):
-					samemom = true
-				else:
-					samemom = false
-			if samedad == false && samemom == true || samedad == true && samemom == false:
-				if halfsiblings_banner == false:
-					text += '\n[center]Half-Siblings[/center]\n'
-					halfsiblings_banner = true
-				if entry2.state == 'fetus':
-					continue
-				if entry2.sex == 'male':
-					text += "Half-Brother: "
-				else:
-					text += "Half-Sister: "
-				if entry2.state == 'free':
-					text += "[color=aqua]Free[/color] "
-				text += getentrytext(entry2) + "\n"
+			else:
+				halfsiblings.append(i)
 	
-	
-	if !entry.halfsiblings.empty():
-		if halfsiblings_banner == false:
-			text += '\n[center]Half-Siblings[/center]\n'
-			halfsiblings_banner = true
-		for i in entry.halfsiblings:
+	halfsiblings.append_array(entry.halfsiblings)
+	if !halfsiblings.empty():
+		text += '\n[center]Half-Siblings[/center]\n'
+		for i in halfsiblings:
 			entry2 = relativesdata[i]
 			if entry2.state == 'fetus':
 				continue
@@ -2257,6 +2213,8 @@ func _on_selfrelatives_pressed():
 				text += "Half-Brother: " 
 			else:
 				text += "Half-Sister: "
+			if entry2.state == 'free':
+				text += "[color=aqua]Free[/color] "
 			text += getentrytext(entry2) + "\n"
 	###---End Expansion---###
 	
@@ -2272,8 +2230,10 @@ func _on_selfrelatives_pressed():
 				text += "Daughter: "
 			text += getentrytext(entry2) + "\n"
 	$MainScreen/mansion/selfinspect/relativespanel/relativestext.bbcode_text = text
+###---End Expansion---###
 
-###---Renamed Slaves don't Rename | Ank BugFix v4a
+
+###---Added by Expansion---### Renamed Slaves don't Rename | Ank BugFix v4a
 func getentrytext(entry):
 	var text = ''
 	var tempPerson = globals.state.findslave(entry.id)
@@ -2293,9 +2253,12 @@ func getentrytext(entry):
 ###---End Expansion---###
 
 ########FARM
+onready var nodeVats = get_node("MainScreen/mansion/farmpanel/vatspanel")
 onready var nodeVatDetails = get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel")
 onready var nodeFarmSlave = get_node("MainScreen/mansion/farmpanel/slavefarminspect")
 onready var nodeSnailPanel = get_node("MainScreen/mansion/farmpanel/snailpanel")
+onready var nodeFarmStore = get_node("MainScreen/mansion/farmpanel/storepanel")
+onready var nodeSlaveToFarm = get_node("MainScreen/mansion/farmpanel/slavetofarm")
 
 # call in _ready
 func prepareFarmOptionButtons():
@@ -2634,14 +2597,16 @@ func farminspect(person):
 
 
 	#Show Cattle Avatar | Mirroring SlaveTab
-	nodeFarmSlave.get_node("bodypanel/body").set_texture(null)
-	if person.imagefull != null && globals.loadimage(person.imagefull) != null:
+	
+	if globals.canloadimage(person.imagefull):
 		nodeFarmSlave.get_node("bodypanel/body").set_texture( globals.loadimage(person.imagefull))
 	elif globals.gallery.nakedsprites.has(person.unique):
 		if person.obed <= 50 || person.stress > 50:
 			nodeFarmSlave.get_node("bodypanel/body").set_texture( globals.spritedict[ globals.gallery.nakedsprites[ person.unique].clothrape])
 		else:
 			nodeFarmSlave.get_node("bodypanel/body").set_texture( globals.spritedict[ globals.gallery.nakedsprites[ person.unique].clothcons])
+	else:
+		nodeFarmSlave.get_node("bodypanel/body").set_texture(null)
 	nodeFarmSlave.get_node("bodypanel/body").show()
 	nodeFarmSlave.get_node("bodypanel").show()
 	###---End Expansion---###
@@ -2663,7 +2628,7 @@ func _on_addcow_pressed():
 	popup(person.dictionary("You lead $name into the farm and inform $him that $he is now going to be one of your livestock. $He nods understandingly, obviously prepared for this fate from your previous discussions.\nYou explain that $his clothing is not permitted here and will only get dirty. $He calmly removes $his clothing and hands it to you, exposing $his naked body.\nYou explain that all livestock must crawl to ensure gravity helps with fluid production. $He drops to $his hands and knees and crawls behind you into $his new stall.\n\nNow you must determine how you want $him to be used."))
 #	popup(person.dictionary("You put $name into specially designed pen and hook milking cups onto $his nipples, leaving $him shortly after in the custody of farm."))
 #	_on_closeslavefarm_pressed()
-	get_node("MainScreen/mansion/farmpanel/slavetofarm").hide()
+	nodeSlaveToFarm.hide()
 	_on_farm_pressed()
 	rebuild_slave_list()
 	farminspect(person)
@@ -2693,7 +2658,7 @@ func _on_addcowforced_pressed():
 		popup(person.dictionary("You lead $name into the farm and coldly tell $him that $he is now going to be one of your livestock. $He screams, sobs, and begs you to spare $him. $He pleads with you to release $him from the farm and not force this on $him.\n\nYou order $him to strip naked as livestock don't need to wear clothing. $He clutches $his clothing desparately, forcing you to rip and shred it off of $him. You collect the shredded remains of cloth from $his trembling naked body.\n\nYou order $him to $his knees, saying that livestock must crawl like the animals they are. $He struggles to stand and resist you, forcing you to hit the back of $his knees to force $him to the ground. $He is dragged away sobbing to the stall where $he will be kept until further notice. The experience added [color=red]" + str(stress)+ " Stress[/color] and $name has lost [color=red]" + str(loyalloss)+ " Loyalty[/color] to you for this 'betrayal'.\n\nNow you must determine how you want $him to be used."))
 #	popup(person.dictionary("You put $name into specially designed pen and hook milking cups onto $his nipples, leaving $him shortly after in the custody of farm."))
 #	_on_closeslavefarm_pressed()
-	get_node("MainScreen/mansion/farmpanel/slavetofarm").hide()
+	nodeSlaveToFarm.hide()
 	_on_farm_pressed()
 	rebuild_slave_list()
 	farminspect(person)
@@ -2736,50 +2701,52 @@ func farmassignpanel(person):
 	hide_farm_panels()
 	selectedfarmslave = person
 	if person.consentexp.livestock == true:
-		get_node("MainScreen/mansion/farmpanel/slavetofarm/addcow").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/slavetofarm/addcow").set_tooltip('')
+		nodeSlaveToFarm.get_node("addcow").set_disabled(false)
+		nodeSlaveToFarm.get_node("addcow").set_tooltip('')
 	else:
-		get_node("MainScreen/mansion/farmpanel/slavetofarm/addcow").set_tooltip(person.dictionary('$name is not willing to become your livestock. Try talking to them about it first.'))
-		get_node("MainScreen/mansion/farmpanel/slavetofarm/addcow").set_disabled(true)
+		nodeSlaveToFarm.get_node("addcow").set_tooltip(person.dictionary('$name is not willing to become your livestock. Try talking to them about it first.'))
+		nodeSlaveToFarm.get_node("addcow").set_disabled(true)
 	if person.sstr <= globals.player.sstr || person.sagi <= globals.player.sagi || person.energy < 50:
-		get_node("MainScreen/mansion/farmpanel/slavetofarm/addcowforce").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/slavetofarm/addcowforce").set_tooltip(person.dictionary('This action will be very stressful to $name.'))
+		nodeSlaveToFarm.get_node("addcowforce").set_disabled(false)
+		nodeSlaveToFarm.get_node("addcowforce").set_tooltip(person.dictionary('This action will be very stressful to $name.'))
 	else:
-		get_node("MainScreen/mansion/farmpanel/slavetofarm/addcowforce").set_tooltip(person.dictionary('$name is both stronger and faster than you and has over most of their energy. Try again when you can overpower them or when they have less than half energy.'))
-		get_node("MainScreen/mansion/farmpanel/slavetofarm/addcowforce").set_disabled(true)
+		nodeSlaveToFarm.get_node("addcowforce").set_tooltip(person.dictionary('$name is both stronger and faster than you and has over most of their energy. Try again when you can overpower them or when they have less than half energy.'))
+		nodeSlaveToFarm.get_node("addcowforce").set_disabled(true)
 	
 #	var counter = 0
 #	for i in globals.slaves:
 #		if i.work == 'hen':
 #			counter += 1
 #	if globals.state.mansionupgrades.farmhatchery == 0:
-#		get_node("MainScreen/mansion/farmpanel/slavetofarm/addhen").set_disabled(true)
-#		get_node("MainScreen/mansion/farmpanel/slavetofarm/addhen").set_tooltip("You have to unlock Hatchery first.")
+#		nodeSlaveToFarm.get_node("addhen").set_disabled(true)
+#		nodeSlaveToFarm.get_node("addhen").set_tooltip("You have to unlock Hatchery first.")
 #	else:
 #		if counter >= globals.state.snails:
-#			get_node("MainScreen/mansion/farmpanel/slavetofarm/addhen").set_disabled(true)
-#			get_node("MainScreen/mansion/farmpanel/slavetofarm/addhen").set_tooltip("You don't have any free snails.")
+#			nodeSlaveToFarm.get_node("addhen").set_disabled(true)
+#			nodeSlaveToFarm.get_node("addhen").set_tooltip("You don't have any free snails.")
 #		else:
-#			get_node("MainScreen/mansion/farmpanel/slavetofarm/addhen").set_disabled(false)
-#			get_node("MainScreen/mansion/farmpanel/slavetofarm/addhen").set_tooltip("")
-	
-	get_node("MainScreen/mansion/farmpanel/slavetofarm/slaveassigntext").set_bbcode("[color=#d1b970][center]Breasts[/center][/color]\nTits Size : [color=aqua]" + person.titssize.capitalize() + "[/color]\nLactation: " +globals.fastif(person.lactation == true, '[color=lime]present[/color]', '[color=#ff4949]not present[/color]')+ '. \nHyper-Lactation: ' +globals.fastif(person.lactating.hyperlactation == true, '[color=lime]present[/color]', '[color=#ff4949]not present[/color]')+ '. \n\n[color=#d1b970][center]Genitals[/center][/color]\nPenis: ' +globals.fastif(person.penis != 'none', '[color=green]present[/color]', '[color=#ff4949]not present[/color]')+ '. \nVagina: ' +globals.fastif(person.vagina != 'none', '[color=green]present[/color]', '[color=#ff4949]not present[/color]')+ '.\n\n' +globals.fastif(person.spec == 'hucow', '[color=lime]Trained Hucow[/color]', ''))
+#			nodeSlaveToFarm.get_node("addhen").set_disabled(false)
+#			nodeSlaveToFarm.get_node("addhen").set_tooltip("")
+	var text = "[color=#d1b970][center]Breasts[/center][/color]\nTits Size: [color=aqua]" + person.titssize.capitalize() + "[/color]\nLactation: " + ('[color=lime]' if person.lactation == true else '[color=#ff4949]not ') + 'present[/color]\nHyper-Lactation: '
+	text += ('[color=lime]' if person.lactating.hyperlactation == true else '[color=#ff4949]not ')+ 'present[/color]\n\n[color=#d1b970][center]Genitals[/center][/color]\nPenis: ' +('[color=green]' if person.penis != 'none' else '[color=#ff4949]not ')
+	text += 'present[/color]\nVagina: ' +('[color=green]' if person.vagina != 'none' else '[color=#ff4949]not ')+ 'present[/color]\n\n' +('[color=lime]Trained Hucow[/color]' if person.spec == 'hucow' else '')
+	nodeSlaveToFarm.get_node("slaveassigntext").set_bbcode(text)
 	
 	###---Added by Expansion---### Display Image and Text | Ankmairdor's BugFix v4
 	#Image
-	get_node("MainScreen/mansion/farmpanel/slavetofarm/image").set_texture(null)
-	if person.imageportait != null && globals.loadimage(person.imageportait) != null:
-		get_node("MainScreen/mansion/farmpanel/slavetofarm/image").set_texture(globals.loadimage(person.imageportait))
+	if globals.canloadimage(person.imageportait):
+		nodeSlaveToFarm.get_node("image").set_texture(globals.loadimage(person.imageportait))
 	elif globals.gallery.nakedsprites.has(person.unique):
 		if person.obed <= 50 || person.stress > 50:
-			get_node("MainScreen/mansion/farmpanel/slavetofarm/image").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothrape])
+			nodeSlaveToFarm.get_node("image").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothrape])
 		else:
-			get_node("MainScreen/mansion/farmpanel/slavetofarm/image").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothcons])
-	get_node("MainScreen/mansion/farmpanel/slavetofarm/image").show()
+			nodeSlaveToFarm.get_node("image").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothcons])
+	else:
+		nodeSlaveToFarm.get_node("image").set_texture(null)
 	#Image Text
-	get_node("MainScreen/mansion/farmpanel/slavetofarm/underpictext").set_bbcode("[center][color=aqua]" + person.name_long()+ "[/color]\n\n" + globals.fastif(person.consentexp.livestock == true, '[color=lime]Consent Granted[/color]', '[color=#ff4949]Consent Not Granted[/color][/center]'))
+	nodeSlaveToFarm.get_node("underpictext").set_bbcode("[center][color=aqua]" + person.name_long()+ "[/color]\n\n" + ('[color=lime]Consent' if person.consentexp.livestock == true else '[color=#ff4949]Consent Not') +' Granted[/color][/center]')
 	
-	get_node("MainScreen/mansion/farmpanel/slavetofarm").show()
+	nodeSlaveToFarm.show()
 	###---End Expansion---###
 
 func _on_releasefromfarm_pressed():
@@ -2864,64 +2831,45 @@ func _on_breeding_option_selected( ID ):
 
 func _on_specifybreedingpartnerbutton_pressed():
 	if selectedfarmslave.farmexpanded.breeding.partner == '-1':
-		selectslavelist_breedingpartner(false, 'assignspecificbreedingpartner', self, 'true', true)
+		selectslavelist_breedingpartner()
 	else:
 		selectedfarmslave.unassignPartner()
 		farminspect(selectedfarmslave)
 	
 
-func selectslavelist_breedingpartner(prisoners = false, calledfunction = 'popup', targetnode = self, reqs = 'true', player = false, onlyparty = false):
+func selectslavelist_breedingpartner():
 	var array = []
-	nodetocall = targetnode
-	functiontocall = calledfunction
-	for i in $chooseslavepanel/ScrollContainer/chooseslavelist.get_children():
-		if i.name != 'Button':
-			i.hide()
-			i.free()
-	if player == true:
-		array.append(globals.player)
+	var breeding = selectedfarmslave.farmexpanded.breeding.status
+	if breeding == 'breeder':
+		if globals.player.penis != 'none':
+			array.append(globals.player)
+	elif breeding == 'stud':
+		if globals.player.vagina != 'none':
+			array.append(globals.player)
+	elif breeding == 'both':
+		if globals.player.vagina != 'none' || globals.player.penis != 'none':
+			array.append(globals.player)
 	for person in globals.slaves:
-		globals.currentslave = person
 		if person == selectedfarmslave:
 			continue
 		if person.away.duration != 0:
 			continue
-		if onlyparty == true && !globals.state.playergroup.has(person.id):
-			continue
 		if person.work != 'cow' && person.work != 'hen':
 			if !globals.jobs.jobdict[person.work].location.has('farm') && !globals.jobs.jobdict[person.work].location.has('mansion') && !globals.jobs.jobdict[person.work].tags.has('farm') && !globals.jobs.jobdict[person.work].tags.has('mansion'):
 				continue
-		if selectedfarmslave.farmexpanded.breeding.status == 'breeder':
-			if person.penis == 'none':
+		if breeding == 'breeder': # TODO better consent limiting?
+			if person.penis == 'none': # || !person.consentexp.stud:
 				continue
-		elif selectedfarmslave.farmexpanded.breeding.status == 'stud':
-			if person.vagina == 'none':
+		elif breeding == 'stud':
+			if person.vagina == 'none': # || !person.consentexp.breeder:
 				continue
-		elif selectedfarmslave.farmexpanded.breeding.status == 'both':
-			if person.vagina == 'none' && person.penis == 'none':
+		elif breeding == 'both':
+			if person.vagina == 'none' && person.penis == 'none': #(person.vagina == 'none' || !person.consentexp.breeder) && (person.penis == 'none' || !person.consentexp.stud):
 				continue
-		if globals.evaluate(reqs) == false:
-			continue
-		if prisoners == false && person.sleep == 'jail' :
+		if person.sleep == 'jail' :
 			continue
 		array.append(person)
-	for person in array:
-		var button = $chooseslavepanel/ScrollContainer/chooseslavelist/Button.duplicate()
-		button.show()
-		button.get_node('Label').text = person.name_long()
-		button.connect('mouse_entered', globals, "slavetooltip", [person])
-		button.connect('mouse_exited', globals, "slavetooltiphide")
-		#button.get_node("slaveinfo").set_bbcode(person.name_long()+', '+person.race+ ', occupation - ' + person.work + ", grade - " + person.origins.capitalize())
-		button.connect("pressed", self, "slaveselected", [button])
-		button.connect("pressed", self, 'hideslaveselection')
-		button.set_meta("slave", person)
-		button.get_node("portrait").set_texture(globals.loadimage(person.imageportait))
-		$chooseslavepanel/ScrollContainer/chooseslavelist/.add_child(button)
-	if array.size() == 0:
-		$chooseslavepanel/Label.text = "No characters fit the condition"
-	else:
-		$chooseslavepanel/Label.text = "Select Character"
-	get_node("chooseslavepanel").show()
+	showChoosePerson(array, 'assignspecificbreedingpartner', self)
 
 func assignspecificbreedingpartner(inputslave = null):
 	popup( selectedfarmslave.assignBreedingPartner(inputslave.id) )
@@ -2943,14 +2891,13 @@ var dictPiles = {
 
 func _on_snailbutton_pressed():
 	hide_farm_panels()
-	var text = "[center]Snail Pit Management[/center]"
+
+	var text
 	#Snail Display
 	if globals.state.snails > 0:
-		text += "\n[center]Total Snails Available: [color=aqua]" + str(globals.state.snails) + "[/color][/center] "
+		text = "[center]Total Snails Available: [color=aqua]" + str(globals.state.snails) + "[/color][/center] "
 	else:
-		text += "\n[center][color=red]No Snails Available[/color][/center] "
-	nodeSnailPanel.get_node("snailheadertext").set_bbcode(text)
-	text = ""
+		text = "[center][color=red]No Snails Available[/color][/center] "
 
 	#Unassigned Eggs Display
 	var nodesAdd = [nodeSnailPanel.get_node("assignfood/add"), nodeSnailPanel.get_node("assignsell/add"), nodeSnailPanel.get_node("assignhatch/add")]
@@ -3033,153 +2980,118 @@ func _on_vatsbutton_pressed():
 	var vatcount = 0
 	var vatmax = 0
 	var bottlecount = globals.resources.farmexpanded.containers.bottle
-	var vats = globals.resources.farmexpanded.vats
+	var refVats = globals.resources.farmexpanded.vats
 
 	#Vat Capacities
 	for fluid in globals.expansionfarm.fluidtypes:
 		var fluidVat = "vat" + fluid
-		var nodeButton = get_node("MainScreen/mansion/farmpanel/vatspanel/vat"+fluid+"button")
+		var nodeButton = nodeVats.get_node(fluidVat+"button")
 		if globals.state.mansionupgrades[fluidVat] > 0:
 			nodeButton.set_disabled(false)
 			nodeButton.set_tooltip('Manage '+fluid.capitalize()+' Vat.')
 			vatcount += 1
 			vatmax = globals.getVatMaxCapacity(fluidVat)
-			if vats[fluid].vat < vatmax:
+			if refVats[fluid].vat < vatmax:
 				text = "[center][color=aqua]"
 			else:
 				text = "[center][color=red]"
-			text += str(vats[fluid].vat) + "[/color] / [color=aqua]" + str(vatmax) + "[/color][/center]"
+			text += str(refVats[fluid].vat) + "[/color] / [color=aqua]" + str(vatmax) + "[/color][/center]"
 		else: #Disable Unpurchased Buttons
 			nodeButton.set_disabled(true)
 			nodeButton.set_tooltip('No '+fluid.capitalize()+' Vat Installed.')
 			text = "[center][color=red]No "+fluid.capitalize()+" Vat[/color][/center]"
-		get_node("MainScreen/mansion/farmpanel/vatspanel/capacity"+fluid+"text").set_bbcode(text)
-		bottlecount -= vats[fluid].bottle2refine + vats[fluid].bottle2sell
+		nodeVats.get_node("capacity"+fluid+"text").set_bbcode(text)
+		bottlecount -= refVats[fluid].bottle2refine + refVats[fluid].bottle2sell
 
-	#Vat Header
-	text = "[center][color=#d1b970]Vat Management[/color]\n"
-	if vatcount >= globals.state.mansionupgrades.vatspace:
-		text += "[color=red]No Remaining Space for new Vats. " + str(vatcount) + " / " + str(globals.state.mansionupgrades.vatspace) + "[/color][/center]"
-	else:
-		vatcount = globals.state.mansionupgrades.vatspace - vatcount
-		text += "[color=aqua]Space Open for new Vats: " + str(vatcount) + " / " + str(globals.state.mansionupgrades.vatspace) + "[/color][/center]"
-	get_node("MainScreen/mansion/farmpanel/vatspanel/vatheadertext").set_bbcode(text)
-	
-	
 	#Bottler
-	globals.resources.farmexpanded.bottler.level = globals.state.mansionupgrades.bottler
-	text = "[center][color=#d1b970]Bottler Level:[/color] [color=aqua]" + str(globals.resources.farmexpanded.bottler.level) + "[/color][/center]"
+	var bottlerLevel = globals.state.mansionupgrades.bottler
+	globals.resources.farmexpanded.bottler.level = bottlerLevel
+	text = "[center][color=#d1b970]Bottler Level:[/color] [color=aqua]" + str(bottlerLevel) + "[/color][/center]"
+	text += "\n[color=#d1b970]Energy Cost per Bottle Created: [/color]\nMilk: [color=aqua]" + str(refVats.milk.basebottlingenergy - bottlerLevel) + "[/color]\nSemen: [color=aqua]" + str(refVats.semen.basebottlingenergy - bottlerLevel)
+	text += "[/color]\nLube: [color=aqua]" + str(refVats.lube.basebottlingenergy - bottlerLevel) + "[/color]\nPiss: [color=aqua]" + str(refVats.piss.basebottlingenergy - bottlerLevel) + "[/color]"
 	text += "\n\n[color=#d1b970]Total Bottles Produced:[/color] [color=aqua]" + str(globals.resources.farmexpanded.bottler.totalproduced) + "[/color]"
-	text += "\n\n[color=#d1b970]Energy Cost per Bottle Created: [/color]\nMilk: [color=aqua]" + str(vats.milk.basebottlingenergy - globals.resources.farmexpanded.bottler.level) + "[/color]\nSemen: [color=aqua]" + str(vats.semen.basebottlingenergy - globals.resources.farmexpanded.bottler.level)
-	text += "[/color]\nLube: [color=aqua]" + str(vats.lube.basebottlingenergy - globals.resources.farmexpanded.bottler.level) + "[/color]\nPiss: [color=aqua]" + str(vats.piss.basebottlingenergy - globals.resources.farmexpanded.bottler.level) + "[/color]"
-	get_node("MainScreen/mansion/farmpanel/vatspanel/bottlertext").set_bbcode(text)
-	
+	nodeVats.get_node("bottlertext").set_bbcode(text)
+
 	#Bottle Count
 	text = "[center]Stockpile: " + ( "([color=aqua]" if bottlecount > 0 else "([color=red]" )
 	text += str(bottlecount) + "[/color]) / " + str(globals.resources.farmexpanded.containers.bottle) + "[/center] "
-	get_node("MainScreen/mansion/farmpanel/vatspanel/buybottles/counter").set_bbcode(text)
+	nodeVats.get_node("buybottles/counter").set_bbcode(text)
 	
 	text = "[center]Cost: " + str(globals.expansionfarm.containerdict.bottle.cost) + "[/center]"
-	get_node("MainScreen/mansion/farmpanel/vatspanel/buybottles/cost").set_bbcode(text)
+	nodeVats.get_node("buybottles/cost").set_bbcode(text)
 	
 	if globals.resources.gold >= globals.expansionfarm.containerdict.bottle.cost:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/buybottles/add1").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/buybottles/add1").set_tooltip('Buy 1 Bottle to use for Refining or Sales.')
+		nodeVats.get_node("buybottles/add1").set_disabled(false)
+		nodeVats.get_node("buybottles/add1").set_tooltip('Buy 1 Bottle to use for Refining or Sales.')
 	else:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/buybottles/add1").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/buybottles/add1").set_tooltip('You cannot afford 1 Bottle.')
+		nodeVats.get_node("buybottles/add1").set_disabled(true)
+		nodeVats.get_node("buybottles/add1").set_tooltip('You cannot afford 1 Bottle.')
 	if globals.resources.gold >= globals.expansionfarm.containerdict.bottle.cost*10:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/buybottles/add10").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/buybottles/add10").set_tooltip('Buy 10 Bottles to use for Refining or Sales.')
+		nodeVats.get_node("buybottles/add10").set_disabled(false)
+		nodeVats.get_node("buybottles/add10").set_tooltip('Buy 10 Bottles to use for Refining or Sales.')
 	else:
-		get_node("MainScreen/mansion/farmpanel/vatspanel/buybottles/add10").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/vatspanel/buybottles/add10").set_tooltip('You cannot afford 10 Bottles.')
-	
+		nodeVats.get_node("buybottles/add10").set_disabled(true)
+		nodeVats.get_node("buybottles/add10").set_tooltip('You cannot afford 10 Bottles.')
+
 	#Main Text: Spruce up with lively details or events later
-	text = "[center]You walk into the area of your farm that you have sectioned off and secured for your Vats. You see the " + str(vatcount) + " vats before you to store the fluids and liquids gathered from your slaves."
-	get_node("MainScreen/mansion/farmpanel/vatspanel/vatgeneraltext").set_bbcode(text)
-	
-	get_node("MainScreen/mansion/farmpanel/vatspanel").show()
+	text = "You walk into the area of your farm that you have sectioned off and secured for your Vats. You see the " + str(vatcount) + (" vats" if vatcount != 1 else " vat") + " before you to store the fluids and liquids gathered from your slaves."
+	if vatcount >= globals.state.mansionupgrades.vatspace:
+		text += "[center][color=red]No Remaining Space for new Vats. " + str(vatcount) + " / " + str(globals.state.mansionupgrades.vatspace) + "[/color][/center]"
+	else:
+		text += "[center][color=aqua]Space Open for new Vats: " + str(globals.state.mansionupgrades.vatspace - vatcount) + " / " + str(globals.state.mansionupgrades.vatspace) + "[/color][/center]"
+	nodeVats.get_node("vatgeneraltext").set_bbcode(text)
 
-func _on_buybottle_pressed():
-	globals.resources.gold -= globals.expansionfarm.containerdict.bottle.cost
-	globals.resources.farmexpanded.containers.bottle += 1
-	_on_vatsbutton_pressed()
+	nodeVats.show()
 
-func _on_buy10bottles_pressed():
-	globals.resources.gold -= globals.expansionfarm.containerdict.bottle.cost*10
-	globals.resources.farmexpanded.containers.bottle += 10
+func _on_buybottles_pressed(num):
+	globals.resources.gold -= globals.expansionfarm.containerdict.bottle.cost*num
+	globals.resources.farmexpanded.containers.bottle += num
 	_on_vatsbutton_pressed()
 
 func _on_vatspanelclose_pressed():
-	get_node("MainScreen/mansion/farmpanel/vatspanel").hide()
+	nodeVats.hide()
 
 #---Vat Details (To manage the specific Vats)
-func _on_vatmilkbutton_pressed():
-	var type = 'milk'
-	vatsdetailspanel(type)
-
-func _on_vatsemenbutton_pressed():
-	var type = 'semen'
-	vatsdetailspanel(type)
-
-func _on_vatlubebutton_pressed():
-	var type = 'lube'
-	vatsdetailspanel(type)
-
-func _on_vatpissbutton_pressed():
-	var type = 'piss'
-	vatsdetailspanel(type)
-
 func vatsdetailspanel(type):
-	var vatscode = globals.resources.farmexpanded.vats[type]
-	var vatmax = globals.getVatMaxCapacity('vat'+type)
-	var text = ""
-	
 	nodeVatDetails.set_meta('type', type)
+
+	var refVats = globals.resources.farmexpanded.vats
+	var vatCur = refVats[type]
+	var vatmax = globals.getVatMaxCapacity('vat'+type)
+	var text
+	
 	#Header Text
-	text = "[center][color=aqua]" + str(type).capitalize() + " Vat Management[/color][/center]"
-	nodeVatDetails.get_node("vatheadertext").set_bbcode(text)
+	nodeVatDetails.get_node("vatheadertext").set_bbcode("[center][color=aqua]" + str(type).capitalize() + " Vat Management[/color][/center]")
 	
 	#Body Text
 	text = "Vat Level: [color=aqua]" + str(globals.state.mansionupgrades['vat'+type]) + "[/color]"
 	#Bottle Count
-	var count = globals.resources.farmexpanded.containers.bottle
-	for i in ['milk','semen','lube','piss']:
-		if globals.resources.farmexpanded.vats[i].bottle2refine > 0:
-			count -= globals.resources.farmexpanded.vats[i].bottle2refine
-		if globals.resources.farmexpanded.vats[i].bottle2sell > 0:
-			count -= globals.resources.farmexpanded.vats[i].bottle2sell
-	text += "\nTotal Bottles: [color=aqua]" + str(globals.resources.farmexpanded.containers.bottle) + "[/color]"
-	if count >= 0:
-		text += "\nUnassigned Bottles: [color=aqua]" + str(count) + "[/color] "
-	else:
-		text += "\nUnassigned Bottles: [color=red]" + str(count) + "[/color] "
+	var bottlecount = globals.resources.farmexpanded.containers.bottle
+	for fluid in globals.expansionfarm.fluidtypes:
+		bottlecount -= refVats[fluid].bottle2refine + refVats[fluid].bottle2sell
+	text += "\nTotal Bottles: [color=aqua]" + str(globals.resources.farmexpanded.containers.bottle) + "[/color]\nUnassigned Bottles: "
+	text += ("[color=aqua]" if bottlecount >= 0 else "[color=red]") + str(bottlecount) + "[/color]"
+	nodeVatDetails.get_node("vatdetailstext").set_bbcode(text)
 	
 	#Unassigned (General Vat)
-	text = "[center]" + str(vatscode.vat) + " / " + str(vatmax) + " [/center] "
-	nodeVatDetails.get_node("assignstockpile/counter").set_bbcode(text)
-	var freespace = vatmax - (vatscode.vat + vatscode.food + vatscode.bottle2refine + vatscode.bottle2sell)
+	nodeVatDetails.get_node("assignstockpile/counter").set_bbcode("[center]" + str(vatCur.vat) + " / " + str(vatmax) + " [/center]")
+	var freespace = vatmax - (vatCur.vat + vatCur.food + vatCur.bottle2refine + vatCur.bottle2sell)
 	freespace = clamp(freespace, 0, 1000)
-	if freespace > 0:
-		text = "[center]Free Space: [color=aqua]" + str(freespace) + "[/color] "
-	else:
-		text = "[center]Free Space: [color=red]" + str(freespace) + "[/color] "
+	text = ("[center]Free Space: [color=aqua]" if freespace > 0 else "[center]Free Space: [color=red]") + str(freespace) + "[/color]"
 	nodeVatDetails.get_node("assignstockpile/freespace").set_bbcode(text)
 	
 	#Food
-	text = "[center]" + str(vatscode.food) + "[/center] "
-	nodeVatDetails.get_node("assignfood/counter").set_bbcode(text)
+	nodeVatDetails.get_node("assignfood/counter").set_bbcode("[center]" + str(vatCur.food) + "[/center]")
 	#Enable/Disable Add/Subtract buttons
 	#Subtract Buttons
-	if vatscode.food > 0:
+	if vatCur.food > 0:
 		nodeVatDetails.get_node("assignfood/subtract").set_disabled(false)
 		nodeVatDetails.get_node("assignfood/subtract").set_tooltip('Remove from the Food Stockpile.')
 	else:
 		nodeVatDetails.get_node("assignfood/subtract").set_disabled(true)
 		nodeVatDetails.get_node("assignfood/subtract").set_tooltip('Nothing has been set to be cooked.')
 	#Add Buttons
-	if vatscode.vat > 0:
+	if vatCur.vat > 0:
 		nodeVatDetails.get_node("assignfood/add").set_disabled(false)
 		nodeVatDetails.get_node("assignfood/add").set_tooltip('Assign to the Kitchen to be cooked.')
 	else:
@@ -3187,19 +3099,17 @@ func vatsdetailspanel(type):
 		nodeVatDetails.get_node("assignfood/add").set_tooltip('All of the liquid in the vat has been assigned to a stockpile.')
 	
 	#Refine
-	text = "[center]Stockpile: " + str(globals.itemdict['bottled'+type].amount) + "[/center] "
-	nodeVatDetails.get_node("assignrefine/actualcounter").set_bbcode(text)
-	text = "[center]" + str(vatscode.bottle2refine) + "[/center] "
-	nodeVatDetails.get_node("assignrefine/pendingcounter").set_bbcode(text)
+	nodeVatDetails.get_node("assignrefine/actualcounter").set_bbcode("[center]Stockpile: " + str(globals.itemdict['bottled'+type].amount) + "[/center]")
+	nodeVatDetails.get_node("assignrefine/pendingcounter").set_bbcode("[center]" + str(vatCur.bottle2refine) + "[/center]")
 	#Subtract Buttons
-	if vatscode.bottle2refine > 0:
+	if vatCur.bottle2refine > 0:
 		nodeVatDetails.get_node("assignrefine/subtract").set_disabled(false)
 		nodeVatDetails.get_node("assignrefine/subtract").set_tooltip('Remove from the Refined Stockpile.')
 	else:
 		nodeVatDetails.get_node("assignrefine/subtract").set_disabled(true)
 		nodeVatDetails.get_node("assignrefine/subtract").set_tooltip('Nothing has been set to be refined.')
 	#Add Buttons
-	if vatscode.vat > 0:
+	if vatCur.vat > 0:
 		nodeVatDetails.get_node("assignrefine/add").set_disabled(false)
 		nodeVatDetails.get_node("assignrefine/add").set_tooltip('Assign to be refined into usable bottles.')
 	else:
@@ -3207,19 +3117,17 @@ func vatsdetailspanel(type):
 		nodeVatDetails.get_node("assignrefine/add").set_tooltip('All of the liquid in the vat has been assigned to a stockpile.')
 	
 	#Sell
-	text = "[center]Stockpile: " + str(vatscode.sell) + "[/center] "
-	nodeVatDetails.get_node("assignsell/actualcounter").set_bbcode(text)
-	text = "[center]" + str(vatscode.bottle2sell) + "[/center] "
-	nodeVatDetails.get_node("assignsell/pendingcounter").set_bbcode(text)
+	nodeVatDetails.get_node("assignsell/actualcounter").set_bbcode("[center]Stockpile: " + str(vatCur.sell) + "[/center]")
+	nodeVatDetails.get_node("assignsell/pendingcounter").set_bbcode("[center]" + str(vatCur.bottle2sell) + "[/center]")
 	#Subtract Buttons
-	if vatscode.bottle2sell > 0:
+	if vatCur.bottle2sell > 0:
 		nodeVatDetails.get_node("assignsell/subtract").set_disabled(false)
 		nodeVatDetails.get_node("assignsell/subtract").set_tooltip('Remove from the Sales Stockpile.')
 	else:
 		nodeVatDetails.get_node("assignsell/subtract").set_disabled(true)
 		nodeVatDetails.get_node("assignsell/subtract").set_tooltip('Nothing has been set to be sold.')
 	#Add Buttons
-	if vatscode.vat > 0:
+	if vatCur.vat > 0:
 		nodeVatDetails.get_node("assignsell/add").set_disabled(false)
 		nodeVatDetails.get_node("assignsell/add").set_tooltip('Assign to be bottled for sale.')
 	else:
@@ -3227,48 +3135,18 @@ func vatsdetailspanel(type):
 		nodeVatDetails.get_node("assignsell/add").set_tooltip('All of the liquid in the vat has been assigned to a stockpile.')
 	
 	#AutoBuy Bottles
-	nodeVatDetails.get_node("autobuybottles").set_pressed(globals.resources.farmexpanded.vats[type].autobuybottles)
+	nodeVatDetails.get_node("autobuybottles").set_pressed(vatCur.autobuybottles)
 	
 	#AutoAssign Options
-	if !globals.selectForOptionButton(globals.resources.farmexpanded.vats[type].auto, nodeVatDetails.get_node("autoassign"), globals.expansionfarm.vatsautooptions):
-		globals.resources.farmexpanded.vats[type].auto = 'vat'
+	if !globals.selectForOptionButton(vatCur.auto, nodeVatDetails.get_node("autoassign"), globals.expansionfarm.vatsautooptions):
+		vatCur.auto = 'vat'
 	
 	nodeVatDetails.show()
 
-func _on_vatfood_add_pressed():
+func _on_vat_change_pressed(stockpile, amount):
 	var type = nodeVatDetails.get_meta('type')
-	globals.resources.farmexpanded.vats[type].vat -= 1
-	globals.resources.farmexpanded.vats[type].food += 1
-	vatsdetailspanel(type)
-
-func _on_vatfood_subtract_pressed():
-	var type = nodeVatDetails.get_meta('type')
-	globals.resources.farmexpanded.vats[type].vat += 1
-	globals.resources.farmexpanded.vats[type].food -= 1
-	vatsdetailspanel(type)
-
-func _on_vatrefine_add_pressed():
-	var type = nodeVatDetails.get_meta('type')
-	globals.resources.farmexpanded.vats[type].vat -= 1
-	globals.resources.farmexpanded.vats[type].bottle2refine += 1
-	vatsdetailspanel(type)
-
-func _on_vatrefine_subtract_pressed():
-	var type = nodeVatDetails.get_meta('type')
-	globals.resources.farmexpanded.vats[type].vat += 1
-	globals.resources.farmexpanded.vats[type].bottle2refine -= 1
-	vatsdetailspanel(type)
-
-func _on_vatsell_add_pressed():
-	var type = nodeVatDetails.get_meta('type')
-	globals.resources.farmexpanded.vats[type].vat -= 1
-	globals.resources.farmexpanded.vats[type].bottle2sell += 1
-	vatsdetailspanel(type)
-
-func _on_vatsell_subtract_pressed():
-	var type = nodeVatDetails.get_meta('type')
-	globals.resources.farmexpanded.vats[type].vat += 1
-	globals.resources.farmexpanded.vats[type].bottle2sell -= 1
+	globals.resources.farmexpanded.vats[type].vat -= amount
+	globals.resources.farmexpanded.vats[type][stockpile] += amount
 	vatsdetailspanel(type)
 
 func _on_autobuybottles_pressed():
@@ -3278,8 +3156,7 @@ func _on_autobuybottles_pressed():
 
 func _on_vats_autoassign_selected( ID ):
 	var type = nodeVatDetails.get_meta('type')
-	var options = globals.expansionfarm.vatsautooptions
-	globals.resources.farmexpanded.vats[type].auto = options[ID]
+	globals.resources.farmexpanded.vats[type].auto = globals.expansionfarm.vatsautooptions[ID]
 	vatsdetailspanel(type)
 
 func _on_vatsdetailspanelclose_pressed():
@@ -3289,63 +3166,63 @@ func _on_vatsdetailspanelclose_pressed():
 func _on_workersbutton_pressed():
 	hide_farm_panels()
 	#Display Farmhands, Milkmaids, Milk Merchants, and Studs
-	var worker = null
 	var hasworkers = false
 	var text = "[color=#d1b970][center]Workers Panel[/center][/color]"
 	
-	#Farm Manager
-	hasworkers = false
-	text += "\n\n\n[color=#d1b970][center]Farm Manager[/center][/color]"
+	var workersDict = {
+		'farmmanager' : [],
+		'farmhand' : [],
+		'milkmaid' : [],
+		'bottler' : [],
+		'milkmerchant' : [],
+	}
+
 	for person in globals.slaves:
-		if person.work == 'farmmanager':
-			hasworkers = true
-			text += person.dictionary("\n[color=aqua]$name[/color] - Energy: " + globals.fastif(person.energy >= 20, "[color=green]"+str(person.energy)+"[/color]", "[color=red]"+str(person.energy)+"[/color]") + " - Job Experience: " + str(person.jobskills.farmmanager) + " ")
-			text += "\n\n[color=yellow]Your Farm Manager will serve as a substitute Farm Hand, Milk Maid, or Bottler if none are assigned.[/color]"
-	if hasworkers == false:
+		if workersDict.has(person.work):
+			workersDict[person.work].append(person)
+
+	#Farm Manager
+	text += "\n\n\n[color=#d1b970][center]Farm Manager[/center][/color]"
+	for person in workersDict.farmmanager:
+		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(person.energy) + "[/color] - Job Experience: " + str(person.jobskills.farmmanager)
+		text += "\n\n[color=yellow]Your Farm Manager will serve as a substitute Farm Hand, Milk Maid, or Bottler if none are assigned.[/color]"
+	if workersDict.farmmanager.empty():
 		text += "\n[color=red]None Assigned[/color]"
 	
 	#Farmhands
 	text += "\n\n[color=#d1b970][center]Farm Hands[/center][/color]"
-	for person in globals.slaves:
-		if person.work == 'farmhand':
-			hasworkers = true
-			text += person.dictionary("\n[color=aqua]$name[/color] - Energy: " + globals.fastif(person.energy >= 20, "[color=green]"+str(person.energy)+"[/color]", "[color=red]"+str(person.energy)+"[/color]") + " - Job Experience: " + str(person.jobskills.farmhand) + " ")
-			if person.traits.has('Sadist'):
-				text += " - [color=aqua]Sadist[/color]"
-			if person.traits.has('Dominant'):
-				text += " - [color=aqua]Dominant[/color]"
-	if hasworkers == false:
+	for person in workersDict.farmhand:
+		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(person.energy) + "[/color] - Job Experience: " + str(person.jobskills.farmhand)
+		if person.traits.has('Sadist'):
+			text += " - [color=aqua]Sadist[/color]"
+		if person.traits.has('Dominant'):
+			text += " - [color=aqua]Dominant[/color]"
+	if workersDict.farmhand.empty():
 		text += "\n[color=red]None Assigned[/color]"
+
 	#Milk-Maids
-	hasworkers = false
 	text += "\n\n[color=#d1b970][center]Milk Maids[/center][/color]"
-	for person in globals.slaves:
-		if person.work == 'milkmaid':
-			hasworkers = true
-			text += person.dictionary("\n[color=aqua]$name[/color] - Energy: " + globals.fastif(person.energy >= 20, "[color=green]"+str(person.energy)+"[/color]", "[color=red]"+str(person.energy)+"[/color]") + " - Job Experience: " + str(person.jobskills.milking) + " ")
-			if person.traits.has('Sadist'):
-				text += " - [color=aqua]Sadist[/color]"
-			if person.traits.has('Dominant'):
-				text += " - [color=aqua]Dominant[/color]"
-	if hasworkers == false:
+	for person in workersDict.milkmaid:
+		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(person.energy) + "[/color] - Job Experience: " + str(person.jobskills.milking)
+		if person.traits.has('Sadist'):
+			text += " - [color=aqua]Sadist[/color]"
+		if person.traits.has('Dominant'):
+			text += " - [color=aqua]Dominant[/color]"
+	if workersDict.milkmaid.empty():
 		text += "\n[color=red]None Assigned[/color]"
+
 	#Milk Merchant
-	hasworkers = false
 	text += "\n\n[color=#d1b970][center]Milk Merchants[/center][/color]"
-	for person in globals.slaves:
-		if person.work == 'milkmerchant':
-			hasworkers = true
-			text += person.dictionary("\n[color=aqua]$name[/color] - Energy: " + globals.fastif(person.energy >= 20, "[color=green]"+str(person.energy)+"[/color]", "[color=red]"+str(person.energy)+"[/color]") + " - Job Experience: " + str(person.jobskills.milkmerchant) + " ")
-	if hasworkers == false:
+	for person in workersDict.milkmerchant:
+		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(person.energy) + "[/color] - Job Experience: " + str(person.jobskills.milkmerchant)
+	if workersDict.milkmerchant.empty():
 		text += "\n[color=red]None Assigned[/color]"
+
 	#Bottlers
-	hasworkers = false
 	text += "\n\n[color=#d1b970][center]Bottlers[/center][/color]"
-	for person in globals.slaves:
-		if person.work == 'bottler':
-			hasworkers = true
-			text += person.dictionary("\n[color=aqua]$name[/color] - Energy: " + globals.fastif(person.energy >= 20, "[color=green]"+str(person.energy)+"[/color]", "[color=red]"+str(person.energy)+"[/color]") + " - Job Experience: " + str(person.jobskills.bottler) + " ")
-	if hasworkers == false:
+	for person in workersDict.bottler:
+		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(person.energy) + "[/color] - Job Experience: " + str(person.jobskills.bottler)
+	if workersDict.bottler.empty():
 		text += "\n[color=red]None Assigned[/color]"
 	
 	#Apply Text
@@ -3358,350 +3235,159 @@ func _on_workerpanelclose_closed():
 #---Store Panel
 func _on_storebutton_pressed():
 	hide_farm_panels()
-	var text = ""
 	var farm = globals.resources.farmexpanded
-	#globals.expansionfarm.extractorsdict | containersdict
-	
+	var nodeTemp
+	var temp
+	var refDict
+
 	#---Containers
-	#Bucket
-	text = "[center][color=aqua]" + str(farm.containers.bucket) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/containers/bucket/current").set_bbcode(text)
-	text = "[center][color=yellow]" + str(globals.expansionfarm.containerdict.bucket.cost) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/containers/bucket/price").set_bbcode(text)
-	if globals.resources.gold >= globals.expansionfarm.containerdict.bucket.cost:
-		get_node("MainScreen/mansion/farmpanel/storepanel/containers/bucket/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/storepanel/containers/bucket/add").set_tooltip('Purchase 1 Bucket')
-	else:
-		get_node("MainScreen/mansion/farmpanel/storepanel/containers/bucket/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/storepanel/containers/bucket/add").set_tooltip('Insufficient Funds')
-	#Pail
-	text = "[center][color=aqua]" + str(farm.containers.pail) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/containers/pail/current").set_bbcode(text)
-	text = "[center][color=yellow]" + str(globals.expansionfarm.containerdict.pail.cost) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/containers/pail/price").set_bbcode(text)
-	if globals.resources.gold >= globals.expansionfarm.containerdict.pail.cost:
-		get_node("MainScreen/mansion/farmpanel/storepanel/containers/pail/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/storepanel/containers/pail/add").set_tooltip('Purchase 1 Pail')
-	else:
-		get_node("MainScreen/mansion/farmpanel/storepanel/containers/pail/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/storepanel/containers/pail/add").set_tooltip('Insufficient Funds')
-	#Jug
-	text = "[center][color=aqua]" + str(farm.containers.jug) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/containers/jug/current").set_bbcode(text)
-	text = "[center][color=yellow]" + str(globals.expansionfarm.containerdict.jug.cost) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/containers/jug/price").set_bbcode(text)
-	if globals.resources.gold >= globals.expansionfarm.containerdict.jug.cost:
-		get_node("MainScreen/mansion/farmpanel/storepanel/containers/jug/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/storepanel/containers/jug/add").set_tooltip('Purchase 1 Jug')
-	else:
-		get_node("MainScreen/mansion/farmpanel/storepanel/containers/jug/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/storepanel/containers/jug/add").set_tooltip('Insufficient Funds')
-	#Canister
-	text = "[center][color=aqua]" + str(farm.containers.canister) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/containers/canister/current").set_bbcode(text)
-	text = "[center][color=yellow]" + str(globals.expansionfarm.containerdict.canister.cost) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/containers/canister/price").set_bbcode(text)
-	if globals.resources.gold >= globals.expansionfarm.containerdict.canister.cost:
-		get_node("MainScreen/mansion/farmpanel/storepanel/containers/canister/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/storepanel/containers/canister/add").set_tooltip('Purchase 1 Canister')
-	else:
-		get_node("MainScreen/mansion/farmpanel/storepanel/containers/canister/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/storepanel/containers/canister/add").set_tooltip('Insufficient Funds')
-	
+	refDict = globals.expansionfarm.containerdict
+	for i in refDict:
+		temp = refDict[i]
+		if temp.size <= 8: #quick filter (cup and bottle) - keep an eye on this if container stats change
+			continue
+		nodeTemp = nodeFarmStore.get_node("containers/" + i)
+		nodeTemp.get_node("current").set_bbcode("[right][color=aqua]" + str(farm.containers[i]) + "[/color][/right]")
+		nodeTemp.get_node("price").set_bbcode("[right][color=yellow]" + str(temp.cost) + "[/color][/right]")
+		if globals.resources.gold >= temp.cost:
+			nodeTemp.get_node("add").set_disabled(false)
+			nodeTemp.get_node("add").set_tooltip('Purchase 1 ' + i.capitalize())
+		else:
+			nodeTemp.get_node("add").set_disabled(true)
+			nodeTemp.get_node("add").set_tooltip('Insufficient Funds')
+
 	#---Extractors
-	#Suction
-	text = "[center][color=aqua]" + str(farm.extractors.suction) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/extractors/suction/current").set_bbcode(text)
-	text = "[center][color=yellow]" + str(globals.expansionfarm.extractorsdict.suction.cost) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/extractors/suction/price").set_bbcode(text)
-	if globals.resources.gold >= globals.expansionfarm.extractorsdict.suction.cost:
-		get_node("MainScreen/mansion/farmpanel/storepanel/extractors/suction/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/storepanel/extractors/suction/add").set_tooltip('Purchase 1 ' + str(globals.expansionfarm.extractorsdict.suction.name))
-	else:
-		get_node("MainScreen/mansion/farmpanel/storepanel/extractors/suction/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/storepanel/extractors/suction/add").set_tooltip('Insufficient Funds')
-	#Pump
-	text = "[center][color=aqua]" + str(farm.extractors.pump) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/extractors/pump/current").set_bbcode(text)
-	text = "[center][color=yellow]" + str(globals.expansionfarm.extractorsdict.pump.cost) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/extractors/pump/price").set_bbcode(text)
-	if globals.resources.gold >= globals.expansionfarm.extractorsdict.pump.cost:
-		get_node("MainScreen/mansion/farmpanel/storepanel/extractors/pump/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/storepanel/extractors/pump/add").set_tooltip('Purchase 1 ' + str(globals.expansionfarm.extractorsdict.pump.name))
-	else:
-		get_node("MainScreen/mansion/farmpanel/storepanel/extractors/pump/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/storepanel/extractors/pump/add").set_tooltip('Insufficient Funds')
-	#Pressure Pump
-	text = "[center][color=aqua]" + str(farm.extractors.pressurepump) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/extractors/pressurepump/current").set_bbcode(text)
-	text = "[center][color=yellow]" + str(globals.expansionfarm.extractorsdict.pressurepump.cost) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/extractors/pressurepump/price").set_bbcode(text)
-	if globals.resources.gold >= globals.expansionfarm.extractorsdict.pressurepump.cost:
-		get_node("MainScreen/mansion/farmpanel/storepanel/extractors/pressurepump/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/storepanel/extractors/pressurepump/add").set_tooltip('Purchase 1 ' + str(globals.expansionfarm.extractorsdict.pressurepump.name))
-	else:
-		get_node("MainScreen/mansion/farmpanel/storepanel/extractors/pressurepump/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/storepanel/extractors/pressurepump/add").set_tooltip('Insufficient Funds')
-	
+	refDict = globals.expansionfarm.extractorsdict
+	for i in refDict:
+		temp = refDict[i]
+		if temp.cost <= 0:
+			continue
+		nodeTemp = nodeFarmStore.get_node("extractors/" + i)
+		nodeTemp.get_node("current").set_bbcode("[right][color=aqua]" + str(farm.extractors[i]) + "[/color][/right]")
+		nodeTemp.get_node("price").set_bbcode("[right][color=yellow]" + str(temp.cost) + "[/color][/right]")
+		if globals.resources.gold >= temp.cost:
+			nodeTemp.get_node("add").set_disabled(false)
+			nodeTemp.get_node("add").set_tooltip('Purchase 1 ' + temp.name)
+		else:
+			nodeTemp.get_node("add").set_disabled(true)
+			nodeTemp.get_node("add").set_tooltip('Insufficient Funds')
+
 	#---Workstations
-	#Rack
-	text = "[center][color=aqua]" + str(farm.workstation.rack) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/workstations/rack/current").set_bbcode(text)
-	text = "[center][color=yellow]" + str(globals.expansionfarm.workstationsdict.rack.cost) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/workstations/rack/price").set_bbcode(text)
-	if globals.resources.gold >= globals.expansionfarm.workstationsdict.rack.cost:
-		get_node("MainScreen/mansion/farmpanel/storepanel/workstations/rack/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/storepanel/workstations/rack/add").set_tooltip('Purchase 1 ' + str(globals.expansionfarm.workstationsdict.rack.name))
-	else:
-		get_node("MainScreen/mansion/farmpanel/storepanel/workstations/rack/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/storepanel/workstations/rack/add").set_tooltip('Insufficient Funds')
-	#Cage
-	text = "[center][color=aqua]" + str(farm.workstation.cage) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/workstations/cage/current").set_bbcode(text)
-	text = "[center][color=yellow]" + str(globals.expansionfarm.workstationsdict.cage.cost) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/workstations/cage/price").set_bbcode(text)
-	if globals.resources.gold >= globals.expansionfarm.workstationsdict.cage.cost:
-		get_node("MainScreen/mansion/farmpanel/storepanel/workstations/cage/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/storepanel/workstations/cage/add").set_tooltip('Purchase 1 ' + str(globals.expansionfarm.workstationsdict.cage.name))
-	else:
-		get_node("MainScreen/mansion/farmpanel/storepanel/workstations/cage/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/storepanel/workstations/cage/add").set_tooltip('Insufficient Funds')
+	refDict = globals.expansionfarm.workstationsdict
+	for i in refDict:
+		temp = refDict[i]
+		if temp.cost <= 0:
+			continue
+		nodeTemp = nodeFarmStore.get_node("workstations/" + i)
+		nodeTemp.get_node("current").set_bbcode("[right][color=aqua]" + str(farm.workstation[i]) + "[/color][/right]")
+		nodeTemp.get_node("price").set_bbcode("[right][color=yellow]" + str(temp.cost) + "[/color][/right]")
+		if globals.resources.gold >= temp.cost:
+			nodeTemp.get_node("add").set_disabled(false)
+			nodeTemp.get_node("add").set_tooltip('Purchase 1 ' + temp.name)
+		else:
+			nodeTemp.get_node("add").set_disabled(true)
+			nodeTemp.get_node("add").set_tooltip('Insufficient Funds')
 	
 	#---Bedding
-	#Hay
-	text = "[center][color=aqua]" + str(farm.stallbedding.hay) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/bedding/hay/current").set_bbcode(text)
-	text = "[center][color=yellow]" + str(globals.expansionfarm.beddingdict.hay.cost) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/bedding/hay/price").set_bbcode(text)
-	if globals.resources.gold >= globals.expansionfarm.beddingdict.hay.cost:
-		get_node("MainScreen/mansion/farmpanel/storepanel/bedding/hay/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/storepanel/bedding/hay/add").set_tooltip('Purchase 1 ' + str(globals.expansionfarm.beddingdict.hay.name))
-	else:
-		get_node("MainScreen/mansion/farmpanel/storepanel/bedding/hay/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/storepanel/bedding/hay/add").set_tooltip('Insufficient Funds')
-	#Cot
-	text = "[center][color=aqua]" + str(farm.stallbedding.cot) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/bedding/cot/current").set_bbcode(text)
-	text = "[center][color=yellow]" + str(globals.expansionfarm.beddingdict.cot.cost) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/bedding/cot/price").set_bbcode(text)
-	if globals.resources.gold >= globals.expansionfarm.beddingdict.cot.cost:
-		get_node("MainScreen/mansion/farmpanel/storepanel/bedding/cot/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/storepanel/bedding/cot/add").set_tooltip('Purchase 1 ' + str(globals.expansionfarm.beddingdict.cot.name))
-	else:
-		get_node("MainScreen/mansion/farmpanel/storepanel/bedding/cot/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/storepanel/bedding/cot/add").set_tooltip('Insufficient Funds')
-	#Bed
-	text = "[center][color=aqua]" + str(farm.stallbedding.bed) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/bedding/bed/current").set_bbcode(text)
-	text = "[center][color=yellow]" + str(globals.expansionfarm.beddingdict.bed.cost) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/bedding/bed/price").set_bbcode(text)
-	if globals.resources.gold >= globals.expansionfarm.beddingdict.bed.cost:
-		get_node("MainScreen/mansion/farmpanel/storepanel/bedding/bed/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/storepanel/bedding/bed/add").set_tooltip('Purchase 1 ' + str(globals.expansionfarm.beddingdict.bed.name))
-	else:
-		get_node("MainScreen/mansion/farmpanel/storepanel/bedding/bed/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/storepanel/bedding/bed/add").set_tooltip('Insufficient Funds')
+	refDict = globals.expansionfarm.beddingdict
+	for i in refDict:
+		temp = refDict[i]
+		if temp.cost <= 0:
+			continue
+		nodeTemp = nodeFarmStore.get_node("bedding/" + i)
+		nodeTemp.get_node("current").set_bbcode("[right][color=aqua]" + str(farm.stallbedding[i]) + "[/color][/right]")
+		nodeTemp.get_node("price").set_bbcode("[right][color=yellow]" + str(temp.cost) + "[/color][/right]")
+		if globals.resources.gold >= temp.cost:
+			nodeTemp.get_node("add").set_disabled(false)
+			nodeTemp.get_node("add").set_tooltip('Purchase 1 ' + temp.name)
+		else:
+			nodeTemp.get_node("add").set_disabled(true)
+			nodeTemp.get_node("add").set_tooltip('Insufficient Funds')
 	
 	#---Misc Items
-	#Aphrodisiac
-	text = "[center][color=aqua]" + str(globals.itemdict.aphrodisiac.amount) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/items/aphrodisiac/current").set_bbcode(text)
-	text = "[center][color=yellow]" + str(globals.expansionfarm.itemsdict.aphrodisiac.cost) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/items/aphrodisiac/price").set_bbcode(text)
-	if globals.resources.gold >= globals.expansionfarm.itemsdict.aphrodisiac.cost:
-		get_node("MainScreen/mansion/farmpanel/storepanel/items/aphrodisiac/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/storepanel/items/aphrodisiac/add").set_tooltip('Purchase 1 ' + str(globals.expansionfarm.itemsdict.aphrodisiac.name))
-	else:
-		get_node("MainScreen/mansion/farmpanel/storepanel/items/aphrodisiac/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/storepanel/items/aphrodisiac/add").set_tooltip('Insufficient Funds')
-	#Sedative
-	text = "[center][color=aqua]" + str(globals.itemdict.sedative.amount) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/items/sedative/current").set_bbcode(text)
-	text = "[center][color=yellow]" + str(globals.expansionfarm.itemsdict.sedative.cost) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/items/sedative/price").set_bbcode(text)
-	if globals.resources.gold >= globals.expansionfarm.itemsdict.sedative.cost:
-		get_node("MainScreen/mansion/farmpanel/storepanel/items/sedative/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/storepanel/items/sedative/add").set_tooltip('Purchase 1 ' + str(globals.expansionfarm.itemsdict.sedative.name))
-	else:
-		get_node("MainScreen/mansion/farmpanel/storepanel/items/sedative/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/storepanel/items/sedative/add").set_tooltip('Insufficient Funds')
-	#Prods
-	text = "[center][color=aqua]" + str(farm.farminventory.prods) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/items/prods/current").set_bbcode(text)
-	text = "[center][color=yellow]" + str(globals.expansionfarm.itemsdict.prods.cost) + "[/color][/center] "
-	get_node("MainScreen/mansion/farmpanel/storepanel/items/prods/price").set_bbcode(text)
-	if globals.resources.gold >= globals.expansionfarm.itemsdict.prods.cost:
-		get_node("MainScreen/mansion/farmpanel/storepanel/items/prods/add").set_disabled(false)
-		get_node("MainScreen/mansion/farmpanel/storepanel/items/prods/add").set_tooltip('Purchase 1 ' + str(globals.expansionfarm.itemsdict.prods.name))
-	else:
-		get_node("MainScreen/mansion/farmpanel/storepanel/items/prods/add").set_disabled(true)
-		get_node("MainScreen/mansion/farmpanel/storepanel/items/prods/add").set_tooltip('Insufficient Funds')
+	refDict = globals.expansionfarm.itemsdict
+	for i in refDict:
+		temp = refDict[i]
+		nodeTemp = nodeFarmStore.get_node("items/" + i)
+		nodeTemp.get_node("current").set_bbcode("[right][color=aqua]" + str(globals.itemdict.aphrodisiac.amount) + "[/color][/right]")
+		nodeTemp.get_node("price").set_bbcode("[right][color=yellow]" + str(temp.cost) + "[/color][/right]")
+		if globals.resources.gold >= temp.cost:
+			nodeTemp.get_node("add").set_disabled(false)
+			nodeTemp.get_node("add").set_tooltip('Purchase 1 ' + temp.name)
+		else:
+			nodeTemp.get_node("add").set_disabled(true)
+			nodeTemp.get_node("add").set_tooltip('Insufficient Funds')
 	
-	get_node("MainScreen/mansion/farmpanel/storepanel").show()
+	nodeFarmStore.show()
 
 #Buy Buttons
-func _on_buy_bucket():
-	globals.resources.gold -= globals.expansionfarm.containerdict.bucket.cost
-	globals.resources.farmexpanded.containers.bucket += 1
+func _on_buy_container(type):
+	globals.resources.gold -= globals.expansionfarm.containerdict[type].cost
+	globals.resources.farmexpanded.containers[type] += 1
 	_on_storebutton_pressed()
 
-func _on_buy_pail():
-	globals.resources.gold -= globals.expansionfarm.containerdict.pail.cost
-	globals.resources.farmexpanded.containers.pail += 1
+func _on_buy_extractor(type):
+	globals.resources.gold -= globals.expansionfarm.extractorsdict[type].cost
+	globals.resources.farmexpanded.extractors[type] += 1
 	_on_storebutton_pressed()
 
-func _on_buy_jug():
-	globals.resources.gold -= globals.expansionfarm.containerdict.jug.cost
-	globals.resources.farmexpanded.containers.jug += 1
+func _on_buy_workstation(type):
+	globals.resources.gold -= globals.expansionfarm.workstationsdict[type].cost
+	globals.resources.farmexpanded.workstation[type] += 1
 	_on_storebutton_pressed()
 
-func _on_buy_canister_add():
-	globals.resources.gold -= globals.expansionfarm.containerdict.canister.cost
-	globals.resources.farmexpanded.containers.canister += 1
+func _on_buy_bedding(type):
+	globals.resources.gold -= globals.expansionfarm.beddingdict[type].cost
+	globals.resources.farmexpanded.stallbedding[type] += 1
 	_on_storebutton_pressed()
 
-func _on_buy_suction_add():
-	globals.resources.gold -= globals.expansionfarm.extractorsdict.suction.cost
-	globals.resources.farmexpanded.extractors.suction += 1
-	_on_storebutton_pressed()
-
-func _on_buy_pump_add():
-	globals.resources.gold -= globals.expansionfarm.extractorsdict.pump.cost
-	globals.resources.farmexpanded.extractors.pump += 1
-	_on_storebutton_pressed()
-
-func _on_buy_pressurepump_add():
-	globals.resources.gold -= globals.expansionfarm.extractorsdict.pressurepump.cost
-	globals.resources.farmexpanded.extractors.pressurepump += 1
-	_on_storebutton_pressed()
-
-func _on_buy_rack_add():
-	globals.resources.gold -= globals.expansionfarm.workstationsdict.rack.cost
-	globals.resources.farmexpanded.workstation.rack += 1
-	_on_storebutton_pressed()
-
-func _on_buy_cage_add():
-	globals.resources.gold -= globals.expansionfarm.workstationsdict.cage.cost
-	globals.resources.farmexpanded.workstation.cage += 1
-	_on_storebutton_pressed()
-
-func _on_buy_hay_add():
-	globals.resources.gold -= globals.expansionfarm.beddingdict.hay.cost
-	globals.resources.farmexpanded.stallbedding.hay += 1
-	_on_storebutton_pressed()
-
-func _on_buy_cot_add():
-	globals.resources.gold -= globals.expansionfarm.beddingdict.cot.cost
-	globals.resources.farmexpanded.stallbedding.cot += 1
-	_on_storebutton_pressed()
-
-func _on_buy_bed_add():
-	globals.resources.gold -= globals.expansionfarm.beddingdict.bed.cost
-	globals.resources.farmexpanded.stallbedding.bed += 1
-	_on_storebutton_pressed()
-
-func _on_buy_aphrodisiac_add():
-	globals.resources.gold -= globals.expansionfarm.itemsdict.aphrodisiac.cost
-	globals.itemdict.aphrodisiac.amount += 1
-	_on_storebutton_pressed()
-
-func _on_buy_sedative_add():
-	globals.resources.gold -= globals.expansionfarm.itemsdict.sedative.cost
-	globals.itemdict.sedative.amount += 1
-	_on_storebutton_pressed()
-
-func _on_buy_prods_add():
-	globals.resources.gold -= globals.expansionfarm.itemsdict.prods.cost
-	globals.resources.farmexpanded.farminventory.prods += 1
+func _on_buy_farmitem(type):
+	globals.resources.gold -= globals.expansionfarm.itemsdict[type].cost
+	globals.itemdict[type].amount += 1
 	_on_storebutton_pressed()
 
 func _on_incubatorspanel_pressed():
 	var text = ""
 	var incubators = globals.resources.farmexpanded.incubators
-	var inc = ""
-	var inc_array = [1,2,3,4,5,6,7,8,9,10]
-	for num in inc_array:
-		inc = 'inc_' + str(num)
-		#Status
-		if incubators[str(num)].level <= 0:
-			text = '[center][color=red]Not Installed[/color][/center]'
-		else:
-			if incubators[str(num)].filled == true:
-				text = '[center][color=green]Hatching Egg[/color][/center]'
-			else:
-				text = '[center][color=aqua]Installed[/color][/center]'
-		get_node("MainScreen/mansion/farmpanel/storepanel/incubatorspanel/" + inc + "/status").set_bbcode(text)
-		#Level
-		if incubators[str(num)].level <= 0:
-			text = '[center][color=red]X[/color][/center]'
-		else:
-			text = '[center][color=aqua]'+ str(incubators[str(num)].level) +'[/color][/center]'
-		get_node("MainScreen/mansion/farmpanel/storepanel/incubatorspanel/" + inc + "/level").set_bbcode(text)
-		#Cost
-		var cost = 0
-		if incubators[str(num)].level <= 0:
+	for num in globals.expansionfarm.inc_array:
+		var nodeInc = nodeFarmStore.get_node("incubatorspanel/inc_" + num)
+		var cost
+		if incubators[num].level <= 0:
+			nodeInc.get_node("status").set_bbcode('[center][color=red]Not Installed[/color][/center]')
+			nodeInc.get_node("level").set_bbcode('[center][color=red]X[/color][/center]')
 			cost = incubators.basecost
 		else:
-			cost = round((incubators[str(num)].level * incubators.upgrademultiplier) * incubators.basecost)
-		text = '[center][color=red]'+ str(cost) + '[/color][/center]'
-		get_node("MainScreen/mansion/farmpanel/storepanel/incubatorspanel/" + inc + "/cost").set_bbcode(text)
-		#Upgrade
+			if incubators[num].filled == true:
+				nodeInc.get_node("status").set_bbcode('[center][color=green]Hatching Egg[/color][/center]')
+			else:
+				nodeInc.get_node("status").set_bbcode('[center][color=aqua]Installed[/color][/center]')
+			nodeInc.get_node("level").set_bbcode('[center][color=aqua]'+ str(incubators[num].level) +'[/color][/center]')
+			cost = round((incubators[num].level * incubators.upgrademultiplier) * incubators.basecost)
+
+		nodeInc.get_node("cost").set_bbcode('[right][color=yellow]'+ str(cost) + '[/color][/right]')
 		if globals.resources.gold >= cost:
-			get_node("MainScreen/mansion/farmpanel/storepanel/incubatorspanel/" + inc + "/upgrade").set_disabled(false)
-			get_node("MainScreen/mansion/farmpanel/storepanel/incubatorspanel/" + inc + "/upgrade").set_tooltip('Spend ' + str(cost) + ' Gold to upgrade this Incubator')
+			nodeInc.get_node("upgrade").set_disabled(false)
+			nodeInc.get_node("upgrade").set_tooltip('Spend ' + str(cost) + ' Gold to upgrade this Incubator')
 		else:
-			get_node("MainScreen/mansion/farmpanel/storepanel/incubatorspanel/" + inc + "/upgrade").set_disabled(true)
-			get_node("MainScreen/mansion/farmpanel/storepanel/incubatorspanel/" + inc + "/upgrade").set_tooltip('Insufficient Funds')
+			nodeInc.get_node("upgrade").set_disabled(true)
+			nodeInc.get_node("upgrade").set_tooltip('Insufficient Funds')
 	
-	get_node("MainScreen/mansion/farmpanel/storepanel/incubatorspanel").show()
-
-func _on_inc1_pressed():
-	_on_incubator_upgrade('1')
-
-func _on_inc2_pressed():
-	_on_incubator_upgrade('2')
-
-func _on_inc3_pressed():
-	_on_incubator_upgrade('3')
-
-func _on_inc4_pressed():
-	_on_incubator_upgrade('4')
-
-func _on_inc5_pressed():
-	_on_incubator_upgrade('5')
-
-func _on_inc6_pressed():
-	_on_incubator_upgrade('6')
-
-func _on_inc7_pressed():
-	_on_incubator_upgrade('7')
-
-func _on_inc8_pressed():
-	_on_incubator_upgrade('8')
-
-func _on_inc9_pressed():
-	_on_incubator_upgrade('9')
-
-func _on_inc10_pressed():
-	_on_incubator_upgrade('10')
+	nodeFarmStore.get_node("incubatorspanel").show()
 
 func _on_incubator_upgrade(number):
-	var num = number
 	var incubators = globals.resources.farmexpanded.incubators
-	var cost = 0
-	if incubators[num].level <= 0:
-		cost = incubators.basecost
+	if incubators[number].level <= 0:
+		globals.resources.gold -= incubators.basecost
 	else:
-		cost = round((incubators[num].level * incubators.upgrademultiplier) * incubators.basecost)
-	globals.resources.gold -= cost
-	incubators[num].level += 1
+		globals.resources.gold -= round((incubators[number].level * incubators.upgrademultiplier) * incubators.basecost)
+	incubators[number].level += 1
 	_on_incubatorspanel_pressed()
 
 func _on_incubatorspanel_close():
-	get_node("MainScreen/mansion/farmpanel/storepanel/incubatorspanel").hide()
+	nodeFarmStore.get_node("incubatorspanel").hide()
 
 func _on_storepanel_close():
-	get_node("MainScreen/mansion/farmpanel/storepanel").hide()
+	nodeFarmStore.hide()
 
 #---Help Button
 func _on_farmhelpbutton_pressed():
@@ -3803,11 +3489,11 @@ func _on_farmhelpbutton_close():
 func hide_farm_panels():
 	nodeFarmSlave.hide()
 	nodeSnailPanel.hide()
-	get_node("MainScreen/mansion/farmpanel/vatspanel").hide()
+	nodeVats.hide()
 	nodeVatDetails.hide()
 	get_node("MainScreen/mansion/farmpanel/workerspanel").hide()
-	get_node("MainScreen/mansion/farmpanel/storepanel").hide()
-	get_node("MainScreen/mansion/farmpanel/storepanel/incubatorspanel").hide()
+	nodeFarmStore.hide()
+	nodeFarmStore.get_node("incubatorspanel").hide()
 	get_node("MainScreen/mansion/farmpanel/farmhelppanel").hide()
 ###---End Expansion---###
 

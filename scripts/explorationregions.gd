@@ -121,7 +121,7 @@ var database = {
 		combat = true,
 		code = 'mountains',
 		name = 'Mountains',
-		description = "You climb over small hills in search for any activity in these elevated grounds. The cloudy peak, home to the Seraphs, is barely visible far above you.", #ralphA
+		description = "You climb over small hills in search for any activity in these elevated grounds.",
 		enemies = [{value = 'slaversmedium', weight = 3},{value = 'seraph1', weight = 0.25},{value = 'harpyattackers', weight = 0.5},{value = 'harpy', weight = 4},{value = 'banditsmedium', weight = 6}, {value = 'fewcougars', weight = 8}], #ralphA
 		encounters = [],
 		length = 6,
