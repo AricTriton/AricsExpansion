@@ -1519,7 +1519,8 @@ func manageVats(workersDict):
 
 
 #Sell Non-Milk
-func sellFluids(workersDict):	
+func sellFluids(workersDict):
+	var text = ""
 	if workersDict.milkmerchant.empty() && merchantcounter == 0:
 		return text
 

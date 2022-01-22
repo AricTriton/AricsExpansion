@@ -1302,9 +1302,9 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -379.0
+margin_left = -395.0
 margin_top = -67.0
-margin_right = -226.0
+margin_right = -242.0
 margin_bottom = -28.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -1318,13 +1318,29 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -190.0
+margin_left = -173.0
 margin_top = -67.0
-margin_right = -28.0
+margin_right = -11.0
 margin_bottom = -28.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "Slave Spreadsheet"
+
+[node name="interactionbutton" type="Button" parent="charlistcontrol" groups=[
+"mansioncontrols",
+]]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -238.0
+margin_top = -67.0
+margin_right = -180.0
+margin_bottom = -28.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 3 )
+text = "#|#"
 
 [node name="MainScreen" type="Panel" parent="."]
 self_modulate = Color( 1, 1, 1, 0 )
@@ -3132,7 +3148,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -939.0
 margin_top = -565.0
-margin_right = 6.10352e-05
+margin_right = 6.10352e-005
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/panel = ExtResource( 46 )
@@ -3521,7 +3537,6 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-text = "assign text"
 
 [node name="usesedative" type="CheckBox" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = 175.0
@@ -3676,7 +3691,6 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-text = "General Text"
 
 [node name="capacitymilktext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel"]
 margin_left = 105.0
@@ -3687,7 +3701,6 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-text = "Vat Text"
 
 [node name="capacitysementext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel"]
 margin_left = 295.0
@@ -3698,7 +3711,6 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-text = "Vat Text"
 
 [node name="capacitylubetext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel"]
 margin_left = 485.0
@@ -3709,7 +3721,6 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-text = "Vat Text"
 
 [node name="capacitypisstext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel"]
 margin_left = 675.0
@@ -3720,7 +3731,6 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-text = "Vat Text"
 
 [node name="bottlertext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/vatspanel"]
 margin_left = 30.0
@@ -3731,8 +3741,6 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-text = "bottler text
-"
 
 [node name="buybottles" type="Label" parent="MainScreen/mansion/farmpanel/vatspanel"]
 margin_left = 75.0
@@ -4045,7 +4053,6 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-text = "details text"
 
 [node name="autoassign" type="OptionButton" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel"]
 margin_left = 380.0
@@ -4079,7 +4086,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -939.0
 margin_top = -565.0
-margin_right = 6.10352e-05
+margin_right = 6.10352e-005
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/panel = ExtResource( 46 )
@@ -12043,6 +12050,7 @@ current = true
 [connection signal="pressed" from="charlistcontrol/CharList/scroll_list/slave_list/awayCategory" to="." method="_on_category_pressed"]
 [connection signal="pressed" from="charlistcontrol/orderbutton" to="." method="_on_orderbutton_pressed"]
 [connection signal="pressed" from="charlistcontrol/slavelist" to="." method="_on_slavelist_pressed"]
+[connection signal="pressed" from="charlistcontrol/interactionbutton" to="." method="_on_sexbutton_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/portals" to="." method="_on_portals_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/questlog" to="." method="_on_questlog_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/mansionsettings" to="." method="_on_mansionsettings_pressed"]

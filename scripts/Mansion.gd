@@ -116,6 +116,81 @@ func _ready():
 	_on_mansion_pressed()
 	#startending()
 
+func rebuild_slave_list():
+	var personList = get_node("charlistcontrol/CharList/scroll_list/slave_list")
+	var categoryButtons = [personList.get_node("mansionCategory"), personList.get_node("prisonCategory"), personList.get_node("farmCategory"), personList.get_node("awayCategory")]
+	var awayLabel = personList.get_node('awayLabel')
+	var nodeIndex = 0
+	var isSlaveAway = false
+	
+	for catIdx in range(3):
+		personList.move_child( categoryButtons[catIdx], nodeIndex)
+		nodeIndex += 1
+		
+		var startIndex = nodeIndex
+		for person in globals.slaves:
+			if person.away.duration != 0:
+				if person.away.at != 'hidden':
+					isSlaveAway = true
+				continue
+			if catIdx == 0:
+				if person.sleep == 'jail' || person.sleep == 'farm':
+					continue
+			elif catIdx == 1:
+				if person.sleep != 'jail':
+					continue
+			elif catIdx == 2:
+				if person.sleep != 'farm':
+					continue
+
+			if nodeIndex < personList.get_children().size() - (3 - catIdx):
+				if personList.get_children()[nodeIndex].has_meta('id') && personList.get_children()[nodeIndex].get_meta('id') == person.id:
+					updateSlaveListNode(personList.get_children()[nodeIndex], person, categoryButtons[catIdx].pressed)
+				else: #search for correct node
+					var notFound = true
+					for searchIndex in range(nodeIndex, personList.get_children().size()):
+						var searchNode = personList.get_children()[searchIndex]
+						if searchNode.has_meta('id') && searchNode.get_meta('id') == person.id:
+							personList.move_child( searchNode, nodeIndex)
+							updateSlaveListNode(searchNode, person, categoryButtons[catIdx].pressed)
+							notFound = false
+							break
+					if notFound:
+						createSlaveListNode(personList, person, nodeIndex, categoryButtons[catIdx].pressed)
+			else:
+				createSlaveListNode(personList, person, nodeIndex, categoryButtons[catIdx].pressed)
+			nodeIndex += 1
+		categoryButtons[catIdx].visible = (startIndex != nodeIndex)
+
+	personList.move_child( categoryButtons[3], nodeIndex)
+	categoryButtons[3].visible = isSlaveAway
+	nodeIndex += 1
+	personList.move_child( awayLabel, nodeIndex)
+	awayLabel.visible = isSlaveAway && categoryButtons[3].pressed
+	nodeIndex += 1
+
+	if isSlaveAway && categoryButtons[3].pressed:
+		var text = ''
+		for person in globals.slaves:
+			if person.away.duration != 0 && person.away.at != 'hidden':
+				text += "%s[color=aqua]%s[/color] %s[color=yellow]%s day%s[/color]." % ['' if text.empty() else '\n', person.name_long(), awayText.get(person.away.at, awayText.default), person.away.duration, 's' if (person.away.duration > 1) else '']
+		awayLabel.bbcode_text = text
+		call_deferred("fixAwayLabel", awayLabel)
+
+	for clearIndex in range(nodeIndex, personList.get_children().size()):
+		var clearNode = personList.get_children()[clearIndex]
+		if clearNode.has_meta('id'):
+			clearNode.hide()
+			clearNode.queue_free()
+	
+	get_node("charlistcontrol/CharList/res_number").set_bbcode('[center]Residents: ' + str(globals.slavecount()) +'[/center]')
+	get_node("ResourcePanel/population").set_text(str(globals.slavecount()))
+	###---Added by Expansion---### Interactions Remaining
+	get_node("charlistcontrol/interactionbutton").set_text(str(globals.state.nonsexactions)+"|"+str(globals.state.sexactions))
+	get_node("charlistcontrol/interactionbutton").set_disabled(globals.state.sexactions < 1 && globals.state.nonsexactions < 1)
+	###---End Expansion---###
+	_on_orderbutton_pressed()
+
 func _input(event):
 	###---Added by Expansion---### Minor Tweaks by Dabros Integration
 	## CHANGED NEW - 26/5/19 - for allowing prev/next keys for slave selection
@@ -3614,6 +3689,85 @@ func _on_sexbutton_pressed():
 	updatedescription()
 	if globals.state.tutorial.interactions == false:
 		get_node("tutorialnode").interactions()
+
+func updatedescription():
+	var text = ''
+	
+	if sexmode == 'meet':
+		text += "[center][color=yellow]Meet[/color][/center]\nBuild relationship or train your servant: "
+		for person in sexslaves:
+			text += '[color=aqua]%s[/color]. ' % person.name_short()
+	elif sexmode == 'sex':
+		var consensual = true
+		for person in sexslaves:
+			if !person.consent:
+				consensual = false
+				break
+		if sexslaves.empty():
+			text += "[center][color=yellow]Sex[/color][/center]\nCurrent participants: "
+		else:
+			if sexslaves.size() == 1:
+				if consensual:
+					text += "[center][color=yellow]Consensual Sex[/color][/center]"
+				else:
+					text += "[center][color=yellow]Rape[/color][/center]"
+			elif sexslaves.size() in [2,3]:
+				if consensual:
+					text += "[center][color=yellow]Consensual Group Sex[/color][/center]"
+				else:
+					text += "[center][color=yellow]Group Rape[/color][/center]"
+			else:
+				text += "[center][color=yellow]Orgy[/color][/center]\n[color=aqua]Aphrodite's Brew[/color] is required to initialize an orgy."
+
+			if consensual:
+				text += "\nAll participants have given consent."
+			else:
+				text += "\nNot all participants have given consent."
+			text += "\nCurrent participants: "
+			for person in sexslaves:
+				if person.consent:
+					text += '[color=aqua]%s[/color], ' % person.name_short()
+				else:
+					text += '[color=#ff3333]%s[/color], ' % person.name_short()
+			text = text.substr(0, text.length() - 2) + '.'
+		for animal in sexanimals:
+			if sexanimals[animal] != 0:
+				text += "\n" + animal.capitalize() + '(s): ' + str(sexanimals[animal])
+		
+#	elif sexmode == 'abuse':
+#		text += "[center][color=yellow]Rape[/color][/center]"
+#		text += "\nRequires a target and an optional assistant. Can be initiated with prisoners. \nCurrent target: "
+#		for i in sexslaves:
+#			text += i.dictionary('[color=aqua]$name[/color]') + ". "
+#		text += "\nCurrent assistant: "
+#		for i in sexassist:
+#			text += i.dictionary('[color=aqua]$name[/color]') + ". "
+#		for i in sexanimals:
+#			if sexanimals[i] != 0:
+#				text += "\n" + i.capitalize() + '(s): ' + str(sexanimals[i])
+#		get_node("sexselect/startbutton").set_disabled(sexslaves.size() == 1 && sexassist.size() <= 1)
+	if sexslaves.empty():
+		text += '\nSelect slaves to start.'
+	else:
+		text += '\nClick Start to initiate.'
+	###---Added by Expansion---### Interaction Hint
+	text += "\n\nNon-sex Interactions left for today: [color=aqua]" + str(globals.state.nonsexactions) + "[/color]"
+	text += "\nSex Interactions left for today: [color=red]" + str(globals.state.sexactions) + "[/color]"
+	###---End Expansion---###
+	get_node("sexselect/sextext").set_bbcode(text)
+	
+	var enablebutton = true
+	if sexslaves.size() == 0:
+		enablebutton = false
+	elif sexmode == 'meet':
+		if globals.state.nonsexactions < 1:
+			enablebutton = false 
+	elif sexmode == 'sex':
+		if globals.state.sexactions < 1:
+			enablebutton = false 
+		elif sexslaves.size() >= 4 && sexmode == 'sex' && globals.itemdict.aphroditebrew.amount < 1:
+			enablebutton = false 
+	$sexselect/startbutton.disabled = !enablebutton
 
 ###---End Expansion---###
 
