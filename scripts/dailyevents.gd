@@ -1,5 +1,14 @@
 
 
+#ralphC
+func succubuscheck(npc,minorgasms,maxorgasms):
+	var succubusfed = false
+	if npc != null && npc.race_display == "Succubus":
+		npc.metrics.mana_hunger -= variables.orgasmmana * randi()%(max(maxorgasms-1,1)+minorgasms)
+		succubusfed = true
+	return succubusfed
+#/ralphC
+
 func play(stage = 0):
 	var tempbuttons
 	showntext = eventstext[currentevent][stage]
