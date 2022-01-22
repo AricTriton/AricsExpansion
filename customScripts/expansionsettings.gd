@@ -15,6 +15,8 @@ var gratitude_for_all = false					# Set this to true so that babies aged up to C
 var perfectinfo = false
 var enablecheatbutton = false
 
+#-- Use abilities on auto attack, left to right. Hint: reorder/activate abilities in the character info menu when out.
+var autoattackability = false
 
 #---Content Filter | Partially Enabled (True/False)
 var brutalcontent = true

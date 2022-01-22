@@ -836,6 +836,7 @@ func dailyFarm():
 					stud.energy -= effort
 					
 					text += "[color=aqua]" + stud.name_short() + "[/color] spent [color=aqua]" + str(effort) + "[/color] Energy while fucking [color=aqua]$name[/color]. \n"
+
 					#ralphC
 					if cattle.race_display == "Succubus":
 						person.metrics.mana_hunger -= timesfucked * variables.orgasmmana
