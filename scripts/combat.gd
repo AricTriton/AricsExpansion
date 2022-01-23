@@ -453,9 +453,7 @@ class combatant:
 			var skill = globals.abilities.abilitydict[i]
 			var newbutton = scene.get_node("grouppanel/skilline/skill").duplicate()
 			scene.get_node("grouppanel/skilline").add_child(newbutton)
-			var cost = skill.costmana
-			if globals.state.spec == 'Mage':
-				cost = round(cost/2)
+			var cost = globals.spells.spellCostCalc(skill.costmana)
 			newbutton.set_disabled(cooldowns.has(skill.code) || skill.costenergy > energy || cost > globals.resources.mana)
 			newbutton.show()
 			
@@ -635,15 +633,35 @@ func showskilltooltip(skill):
 	if skill.costenergy > 0:
 		text += "\n[color=yellow]Energy: " + str(skill.costenergy) + "[/color]"
 	if skill.costmana > 0:
-		var cost = skill.costmana
-		if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction: #ralphC - fixed 1.0d update omission
-			cost = round(cost/2)
-		text += "\n[color=aqua]Mana: " + str(round(cost*globals.expansionsettings.spellcost)) + "[/color]" #ralphC - fixed 1.0d update omission
+		var cost = globals.spells.spellCostCalc(skill.costmana)
+		text += "\n[color=aqua]Mana: " + str(cost) + "[/color]"
 	text += '\nBasic cooldown: ' + str(skill.cooldown)
 	if selectedcharacter.cooldowns.has(skill.code):
 		text += '\n\nCooldown: ' + str(selectedcharacter.cooldowns[skill.code])
 	globals.showtooltip(text)
 
+func pressskill(skill):
+	var cost = globals.spells.spellCostCalc(skill.costmana)
+	if (cost > 0 && globals.resources.mana < cost) || (skill.costenergy > 0 && selectedcharacter.energy < skill.costenergy):
+		return
+	if skill.target in ['one']:
+		period = 'skilltarget'
+		targetskill = skill
+		if skill.targetgroup == 'enemy':
+			var counter = 0
+			var tempenemy
+			for i in enemygroup:
+				if i.state in ['escaped','captured','defeated']:
+					counter += 1
+				else:
+					tempenemy = i
+			if enemygroup.size() - counter <= 1:
+				period = 'skilluse'
+				useskills(skill, selectedcharacter, tempenemy)
+	else:
+		period = 'skilluse'
+		useskills(skill, selectedcharacter, selectedcharacter)
+	
 func useskills(skill, caster = null, target = null, retarget = false):
 	if caster == null || target == null:
 		return
@@ -666,10 +684,8 @@ func useskills(skill, caster = null, target = null, retarget = false):
 		caster.cooldowns[skill.code] = skill.cooldown
 	if playergroup.has(caster):
 		if skill.costmana > 0:
-			var cost = skill.costmana
-			if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction: #ralphC - meant to add the ralphs mage_mana_reduction condition in while porting to 1.0d - oops, fixed now
-				cost = round(cost/2)
-			globals.resources.mana -= cost*globals.expansionsettings.spellcost #ralphC - meant to add this Ralphs spellcost in while porting to 1.0d - oops, fixed now
+			var cost = globals.spells.spellCostCalc(skill.costmana)
+			globals.resources.mana -= cost
 		caster.energy -= skill.costenergy
 	else:
 		group = 'enemy'
@@ -787,15 +803,31 @@ func useskills(skill, caster = null, target = null, retarget = false):
 		
 	emit_signal("skillplayed")
 
+func useAutoAbility(combatant):
+	for abilityName in combatant.activeabilities:
+		var ability = globals.abilities.abilitydict[abilityName]
+		if !combatant.cooldowns.has(abilityName) && combatant.energy >= ability.costenergy && globals.resources.mana >= ability.costmana && ability.targetgroup == "enemy":
+			for j in enemygroup:
+				if j.node != null && j.state == 'normal':
+					useskills(ability, combatant, j)
+					return
+	for j in enemygroup:
+		if j.node != null && j.state == 'normal':
+			useskills(globals.abilities.abilitydict.attack, combatant, j)
+			return
+
 ###---Added by Expansion---### Combat Stress Alteration
 func enemyturn():
 	if $autoattack.pressed == true:
 		for i in playergroup:
 			if i.state == 'normal' && i.actionpoints > 0:
-				for j in enemygroup:
-					if j.node != null && j.state == 'normal':
-						useskills(globals.abilities.abilitydict.attack, i, j)
-						break
+				if globals.expansionsettings.autoattackability:
+					useAutoAbility(i)
+				else:
+					for j in enemygroup:
+						if j.node != null && j.state == 'normal':
+							useskills(globals.abilities.abilitydict.attack, i, j)
+							break
 				yield(self, 'skillplayed')
 				endcombatcheck()
 				if period == 'win':

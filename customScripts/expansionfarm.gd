@@ -849,6 +849,11 @@ func breedCattle(cattle, studs):
 
 	text += "[color=aqua]" + stud.name_short() + "[/color] spent [color=aqua]" + str(effort) + "[/color] Energy while fucking [color=aqua]$name[/color]. \n"
 
+	#ralphC
+	if cattle.race_display == "Succubus":
+		cattle.mana_hunger -= timesfucked * variables.orgasmmana
+	#/ralphC
+
 	#Trigger Orgasms (Capture Fluids)
 	var corgasms = floor(clust / 100)
 	clust -= 100 * corgasms

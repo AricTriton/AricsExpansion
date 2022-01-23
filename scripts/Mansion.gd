@@ -664,42 +664,38 @@ func _on_end_pressed():
 			var feedmana = true
 			if person.race_display in manaeaters || person.race in manaeaters:
 				hungryforfood = 0
-				#print("Ralph Test: Succubus detected for feeding.")
 				if !person.traits.has('Clockwork'): #trait to be added with Golem race expansion - needs no mana or food
-					if person.race_display in ["Succubus"] && person.vagvirgin && person.age in ["child"]:
+					if person.race_display == 'Succubus' && person.vagvirgin && person.age in ["child"]:
 						hungryforfood += 1
 						feedmana = false
-						#print("Ralph Test: Succubus child flagged for normal food today.")
-					elif person.race_display in ["Succubus"]:
-						person.metrics.mana_hunger += manaconsumption * variables.succubusagemod[person.age]
-						#print("Ralph Test: Succubus hunger added:" + str(manaconsumption * variables.succubusagemod[person.age]))
+					elif person.race_display == 'Succubus':
+						person.mana_hunger += manaconsumption * variables.succubusagemod[person.age]
 					else:
-						person.metrics.mana_hunger += manaconsumption
+						person.mana_hunger += manaconsumption
 					if feedmana && globals.resources.mana > person.manafeedpolicy:
 						#print("Ralph Test: About to try channelling mana to Succubus: " + str(person.name))
-						if globals.resources.mana > person.metrics.mana_hunger + person.manafeedpolicy: #if there's enough mana
-							text0.set_bbcode(text0.get_bbcode()+person.dictionary('[color=yellow]You channel ' + str(int(person.metrics.mana_hunger)) + ' mana into ' + str(person.name_short()) + '[/color]\n'))
-							globals.resources.mana -= person.metrics.mana_hunger
-							person.metrics.mana_hunger = 0
+						if globals.resources.mana > person.mana_hunger + person.manafeedpolicy: #if there's enough mana
+							text0.set_bbcode(text0.get_bbcode()+person.dictionary('[color=yellow]You channel ' + str(int(person.mana_hunger)) + ' mana into ' + str(person.name_short()) + '[/color]\n'))
+							globals.resources.mana -= person.mana_hunger
+							person.mana_hunger = 0
 							#print("Ralph Test: Fully fed Succubus: " + str(person.name))
 						else: #if there's not enough mana
-							text0.set_bbcode(text0.get_bbcode()+person.dictionary('[color=yellow]You attempt to channel ' + str(int(person.metrics.mana_hunger)) + ' mana into ' + str(person.name_short()) + ' but your reserves run low before you can finish.[/color]\n'))
-							person.metrics.mana_hunger -= globals.resources.mana - person.manafeedpolicy
+							text0.set_bbcode(text0.get_bbcode()+person.dictionary('[color=yellow]You attempt to channel ' + str(int(person.mana_hunger)) + ' mana into ' + str(person.name_short()) + ' but your reserves run low before you can finish.[/color]\n'))
+							person.mana_hunger -= globals.resources.mana - person.manafeedpolicy
 							globals.resources.mana = person.manafeedpolicy
-							#print("Ralph Test: Partially fed Succubus: " + str(person.name))
-							if person.race_display in ['Succubus']:
-								if person.metrics.mana_hunger > variables.succubushungerlevel[2] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]:
+							if person.race_display == 'Succubus':
+								if person.mana_hunger > variables.succubushungerlevel[2] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]:
 									person.health -= person.stats.health_max
 									text = person.dictionary('[color=#ff4949]$name has died of mana starvation.[/color]\n')
 									deads_array.append({number = count, reason = text})
-								elif person.metrics.mana_hunger > variables.succubushungerlevel[1] * variables.basemanafoodconsumption && person.lust >= 90:
+								elif person.mana_hunger > variables.succubushungerlevel[1] * variables.basemanafoodconsumption && person.lust >= 90:
 									person.add_trait('Sex-crazed')
 									hungryforfood = 1.5
 									person.stress += 20
 									person.obed -= max(35 - person.loyal/3,10)
 									person.attention += 40
 									person.attention += 40
-								elif person.metrics.mana_hunger > variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]:
+								elif person.mana_hunger > variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]:
 									person.lust += 25
 									hungryforfood = 1.5
 									person.stress += 15
@@ -739,6 +735,7 @@ func _on_end_pressed():
 					if person.health < 1:
 						text = person.dictionary('[color=#ff4949]$name has died of starvation.[/color]\n')
 						deads_array.append({number = count, reason = text})
+						continue
 			#/ralphC
 			if person.obed < 25 && person.cour >= 50 && person.rules.silence == false && person.traits.find('Mute') < 0 && person.sleep != 'jail' && person.sleep != 'farm' && person.brand != 'advanced'&& rand_range(0,1) > 0.5:
 				text0.set_bbcode(text0.get_bbcode()+person.dictionary('$name dares to openly show $his disrespect towards you and instigates other servants. \n'))
@@ -892,7 +889,6 @@ func _on_end_pressed():
 					text2.bbcode_text += person.dictionary("[color=yellow]$name seems no longer to be afraid of you.[/color]\n")
 					person.fear = 0
 			if person.toxicity > 0:
-				var temphealth = person.health #ralphC - bug fix for toxicity incorrectly being blamed for death
 				if person.toxicity > 35 && randf() > 0.65:
 					person.stress += rand_range(10,15)
 					person.health -= rand_range(10,15)
@@ -901,7 +897,7 @@ func _on_end_pressed():
 					globals.spells.person = person
 					text0.set_bbcode(text0.get_bbcode()+globals.spells.mutate(person.toxicity/30) + "\n\n")
 				person.toxicity -= rand_range(1,5)
-				if person.health < 1 && temphealth > 0: #ralphC - bug fix for toxicity incorrectly being blamed for death
+				if person.health < 1:
 					text = person.dictionary('[color=#ff4949]$name has died of magical toxicity.[/color]\n')
 					deads_array.append({number = count, reason = text})
 					continue

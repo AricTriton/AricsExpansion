@@ -264,8 +264,9 @@ func _on_talk_pressed(mode = 'talk'):
 		#Quick Strip Option
 		if (person.exposed.chest == false || person.exposed.genitals == false || person.exposed.ass == false) && person.obed >= 50:
 			buttons.append({text = person.dictionary("Strip Immediately!"), function = 'topicclothing', args = 'full strip', tooltip = "Remove all Clothing"})		
+
 		#Succubus Talk Options	#ralphC
-		if person.race_display in ["Succubus"]:
+		if person.race_display == 'Succubus':
 			#buttons.append({text = str(globals.randomitemfromarray(['General Slave Topics','General Slave Matters','General Slave Issues'])), function = '_on_talk_pressed', args = 'general_slave_topics', tooltip = "General topics for all slaves such as changing the Master Name, Releasing the Slave, etc"})
 			buttons.append({text = person.dictionary("Lets talk about your hunger."), function = 'succubustopics', args = 'intro'})
 		#/ralphC
@@ -2211,7 +2212,7 @@ func cheatButtonAddItem(mode = ''):
 	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
-
+	
 #ralphC - Succubus Topics
 func succubustopics(mode=''):
 	var text = ""
@@ -2221,14 +2222,14 @@ func succubustopics(mode=''):
 	
 	#Intro Text
 	text += str(expansion.getIntro(person)) + "\n[color=yellow]-"+ person.quirk(str(talk.introsuccubus(person)) + "[/color]")
-	if person.metrics.mana_hunger > 0 && !person.vagvirgin:
+	if person.mana_hunger > 0 && !person.vagvirgin:
 		var manahungertext = ""
-		if person.metrics.mana_hunger >= variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]:
-			manahungertext = "[color=red]"+str(person.metrics.mana_hunger)+"[/color]"
-		elif person.metrics.mana_hunger >= variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]:
-			manahungertext = "[color=yellow]"+str(person.metrics.mana_hunger)+"[/color]"
+		if person.mana_hunger >= variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]:
+			manahungertext = "[color=red]"+str(person.mana_hunger)+"[/color]"
+		elif person.mana_hunger >= variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]:
+			manahungertext = "[color=yellow]"+str(person.mana_hunger)+"[/color]"
 		else:
-			manahungertext = "[color=green]"+str(person.metrics.mana_hunger)+"[/color]"
+			manahungertext = "[color=green]"+str(person.mana_hunger)+"[/color]"
 		text += "\n\nLooking deep into $name's eyes, you can sense that $his \ncurrent hunger for mana is: " + manahungertext + "\n\n$He needs to absorb \n[color=yellow]" + str(variables.basemanafoodconsumption * variables.succubusagemod[person.age]) + "[/color] mana per day to keep $his hunger from increasing.\n"
 	#The Birds and the Bees
 	if !person.knowledge.has('issuccubus'):

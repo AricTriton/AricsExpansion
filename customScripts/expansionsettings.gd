@@ -2,18 +2,20 @@
 
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
-var modversion = 1.5
+var modversion = 1.6
 
 #---Aric's and Game's Base Values potentially changed by Ralph's
 var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within ApplyTweaks as well as the Hybrid system.
 var unique_trait_generation = false				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
-var consolidatebeastDNA = true					# Set this to true if you don't like npcs with a mix of Beastkin/Halfkin race%'s (no half cat half foxes, etc.) #ralphB
-var gratitude_for_all = false					# Set this to true so that babies aged up to Child or Teen have as much chance to spawn with the Gratitude trait as ones aged up to Adult (Ralph sets this to False, but up to you) #ralphC
+var consolidatebeastDNA = false					# Set this to true if you don't like npcs with a mix of Beastkin/Halfkin race%'s (no half cat half foxes, etc.) #ralphB
+var gratitude_for_all = false					# Set this to true so that babies aged up to Child or Teen have as much chance to spawn with the Grateful trait as ones aged up to Adult (Ralph sets this to False, but up to you) #ralphC
 
 #---Debug Tools (True/False)
 var perfectinfo = false
 var enablecheatbutton = false
 
+#-- Use abilities on auto attack, left to right. Hint: reorder/activate abilities in the character info menu when out.
+var autoattackability = false
 
 #---Content Filter | Partially Enabled (True/False)
 var brutalcontent = true
@@ -162,7 +164,7 @@ var sedativewitlosschance = 75
 
 #---Towns Expanded
 #The Base Chance that local town guards will have arrested/killed escaped enemies to clear room in the array
-var minimum_npcs_to_detain = 20
+var minimum_npcs_to_detain = 50
 var townguardefficiency = 15
 #Laws: Public Nudity Bonus and Penalty
 var enable_public_nudity_system = true

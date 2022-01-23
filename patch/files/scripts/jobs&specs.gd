@@ -562,8 +562,6 @@ var weakitemslist1 = ['aphrodisiac','hairdye', 'beautypot']
 var weakitemslist2 = ['aphrodisiac','hairdye', 'hairgrowthpot', 'stimulantpot', 'deterrentpot', 'beautypot']
 var gearitemslist = ['clothsundress','clothmaid','clothkimono','clothmiko','clothbutler','underwearlacy','underwearboxers','armorleather','armorchain','weapondagger','weaponsword','accslavecollar','acchandcuffs']
 var ingredlist = ['bestialessenceing', 'natureessenceing','taintedessenceing','magicessenceing','fluidsubstanceing']
-
-var sexactstoday = 0 #ralphC - added for Succubus meal count
 var succubusgonewild = 0.75 #ralphC - lower == easier to trigger extreme hunger whoring events for Succubi
 
 func vacation(person):
@@ -902,15 +900,15 @@ func ffprostitution(person):
 		gold = gold * 1.15
 	#ralphC
 	person.metrics.randompartners += round(rand_range(2,5))
-	sexactstoday = round(rand_range(2,5))
+	var sexactstoday = round(rand_range(2,5))
 	if person.race_display == "Succubus":
 		var extrasexactstoday = 0
-		if person.metrics.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+		if person.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
 			extrasexactstoday += round(rand_range(1,sexactstoday*2+1))
-		elif person.metrics.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+		elif person.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
 			extrasexactstoday += round(rand_range(1,sexactstoday+1))
 		var manameal = (sexactstoday + extrasexactstoday) * variables.orgasmmana
-		person.metrics.mana_hunger -= manameal
+		person.mana_hunger -= manameal
 		if extrasexactstoday >= sexactstoday * succubusgonewild:
 			text += "$name fucked $his [color=yellow]" +str(sexactstoday)+ "[/color] clients into unconsciousness and beyond in $his mad hunger for cum instead of moving on to others and [color=red]was berated by $his employer[/color].\n"
 			gold = gold * 0.7
@@ -1040,15 +1038,15 @@ func fucktoy(person):
 		person.lewdness += rand_range(0,1)
 	#ralphC
 	person.metrics.randompartners += round(rand_range(3,6))
-	sexactstoday = round(rand_range(3,6))
+	var sexactstoday = round(rand_range(3,6))
 	if person.race_display == "Succubus":
 		var extrasexactstoday = 0
-		if person.metrics.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+		if person.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
 			extrasexactstoday += round(rand_range(1,sexactstoday*2+1))
-		elif person.metrics.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+		elif person.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
 			extrasexactstoday += round(rand_range(1,sexactstoday+1))
 		var manameal = (sexactstoday + extrasexactstoday) * variables.orgasmmana
-		person.metrics.mana_hunger -= manameal
+		person.mana_hunger -= manameal
 		if extrasexactstoday >= sexactstoday * succubusgonewild:
 			text += "Under the influence of a "+str(person.race_display)+" in heat, $name's " +str(sexactstoday)+ " clients each poured multiple loads into $him.\n"
 		elif extrasexactstoday > 0:
@@ -1261,6 +1259,7 @@ func whorewimborn(person):
 	var gold = 0
 	person.metrics.brothel += 1
 	var jobactions = ['vaginal','anal','oral','toys']
+	var sexactstoday = 0 #ralphC
 	if person.vagvirgin == true:
 		person.vagvirgin = false
 		#slave.pussy.first = 'brothel'
@@ -1285,7 +1284,7 @@ func whorewimborn(person):
 		#ralphC
 		sexactstoday = round(rand_range(1,3))
 		if person.race_display == "Succubus":
-			person.metrics.mana_hunger -= sexactstoday * variables.orgasmmana
+			person.mana_hunger -= sexactstoday * variables.orgasmmana
 		person.metrics.sex += sexactstoday
 		#/ralphC
 		person.metrics.randompartners += round(rand_range(1,2))
@@ -1295,12 +1294,12 @@ func whorewimborn(person):
 		sexactstoday = round(rand_range(2,5))
 		if person.race_display == "Succubus":
 			var extrasexactstoday = 0
-			if person.metrics.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+			if person.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
 				extrasexactstoday += round(rand_range(1,sexactstoday*2+1))
-			elif person.metrics.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+			elif person.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
 				extrasexactstoday += round(rand_range(1,sexactstoday+1))
 			var manameal = (sexactstoday + extrasexactstoday) * variables.orgasmmana
-			person.metrics.mana_hunger -= manameal
+			person.mana_hunger -= manameal
 			if extrasexactstoday >= sexactstoday * succubusgonewild:
 				text += "$name fucked $his [color=yellow]" +str(sexactstoday)+ "[/color] clients into unconsciousness and beyond in $his mad hunger for cum instead of moving on to others and was [color=red]berated by $his employer[/color].\n"
 				gold = gold * 0.7
@@ -1395,15 +1394,15 @@ func escortwimborn(person):
 	person.xp += gold/6
 	#ralphC
 	person.metrics.randompartners += round(rand_range(1,2))
-	sexactstoday = round(rand_range(1,2))
+	var sexactstoday = round(rand_range(1,2))
 	if person.race_display == "Succubus":
 		var extrasexactstoday = 0
-		if person.metrics.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+		if person.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
 			extrasexactstoday += round(rand_range(1,sexactstoday*2+1))
-		elif person.metrics.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+		elif person.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
 			extrasexactstoday += round(rand_range(1,sexactstoday+1))
 		var manameal = (sexactstoday + extrasexactstoday) * variables.orgasmmana
-		person.metrics.mana_hunger -= manameal
+		person.mana_hunger -= manameal
 		if extrasexactstoday >= sexactstoday * succubusgonewild:
 			text += "Under the influence of a "+str(person.race_display)+" in heat, $name's client abandoned his plans and took $him a shocking [color=green]"+ str(extrasexactstoday + sexactstoday) +"[/color]. times\n"
 		elif extrasexactstoday > 0:
@@ -1450,7 +1449,7 @@ func fucktoywimborn(person):
 		#ralphC
 		sexactstoday += round(rand_range(2,4))
 		if person.race_display == "Succubus":
-			person.metrics.mana_hunger -= sexactstoday * variables.orgasmmana
+			person.mana_hunger -= sexactstoday * variables.orgasmmana
 		person.metrics.sex += sexactstoday
 		#/ralphC
 		gold = gold/2
@@ -1461,12 +1460,12 @@ func fucktoywimborn(person):
 		sexactstoday = round(rand_range(3,6))
 		if person.race_display == "Succubus":
 			var extrasexactstoday = 0
-			if person.metrics.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+			if person.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
 				extrasexactstoday += round(rand_range(1,sexactstoday*2+1))
-			elif person.metrics.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+			elif person.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
 				extrasexactstoday += round(rand_range(1,sexactstoday+1))
 			var manameal = (sexactstoday + extrasexactstoday) * variables.orgasmmana
-			person.metrics.mana_hunger -= manameal
+			person.mana_hunger -= manameal
 			if extrasexactstoday >= sexactstoday * succubusgonewild:
 				text += "Under the influence of a "+str(person.race_display)+" in heat, $name's " +str(sexactstoday)+ " clients each poured multiple loads into $him.\n"
 			elif extrasexactstoday > 0:
@@ -1474,7 +1473,7 @@ func fucktoywimborn(person):
 			text += "$He drained [color=green]" + str(manameal) + "[/color] total mana from $his customers.\n"
 			sexactstoday += extrasexactstoday
 		person.metrics.sex += sexactstoday
-		#/ralphC
+		#/ralphC	
 	if person.lewdness < 50:
 		person.lewdness = min(person.lewdness + rand_range(3,5), 50)
 	else:
@@ -1557,12 +1556,12 @@ func housepet(person):
 				sexactstoday = int(rand_range(1,6))
 				person.metrics.animalpartners += sexactstoday
 				var extrasexactstoday = 0
-				if person.metrics.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+				if person.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
 					extrasexactstoday += round(rand_range(1,sexactstoday*2+1))
-				elif person.metrics.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+				elif person.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
 					extrasexactstoday += round(rand_range(1,sexactstoday+1))
 				var manameal = (sexactstoday + extrasexactstoday) * variables.orgasmmana / 2
-				person.metrics.mana_hunger -= manameal
+				person.mana_hunger -= manameal
 				if extrasexactstoday > 0:
 					text += "$name presented to nearly every hound in the kennel and spent the day being pumped full of dog cum while being dragged around by knotted cock and absorbed [color=green]"+str(manameal)+"[/color] mana (less than $he would have gotten from sentient partners).\n"
 				else: 
@@ -1598,7 +1597,7 @@ func housepet(person):
 			if person.race_display == "Succubus":
 				sexactstoday = int(rand_range(1,6))
 				person.metrics.animalpartners += sexactstoday
-				person.metrics.mana_hunger -= sexactstoday * variables.orgasmmana
+				person.mana_hunger -= sexactstoday * variables.orgasmmana
 			else:
 				globals.resources.mana += int(rand_range(1,6)) #ralphC
 			#/ralphC

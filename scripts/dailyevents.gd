@@ -4,7 +4,7 @@
 func succubuscheck(npc,minorgasms,maxorgasms):
 	var succubusfed = false
 	if npc != null && npc.race_display == "Succubus":
-		npc.metrics.mana_hunger -= variables.orgasmmana * randi()%(max(maxorgasms-1,1)+minorgasms)
+		npc.mana_hunger -= variables.orgasmmana * randi()%(max(maxorgasms-1,1)+minorgasms)
 		succubusfed = true
 	return succubusfed
 #/ralphC
@@ -40,7 +40,6 @@ func play(stage = 0):
 		person.obed += -rand_range(15,25)
 	if stage != 0 && stage != 4:
 		globals.player.energy -= 25
-	person.customdesc += customtext #ralphC
 	buttons = tempbuttons
 	showevent()
 
@@ -262,19 +261,19 @@ func pervertevent(stage = 0):
 		slave2.lust = -rand_range(10,15)
 		globals.player.energy -= 25
 		#ralphC
-		if person.race_display in ['Succubus'] && slave2.race_display in ['Succubus']: #ralphC - also indented below
+		if person.race_display == 'Succubus' && slave2.race_display == 'Succubus': #ralphC - also indented below
 			globals.resources.mana += 0
 			if globals.player.penis != "none":
 				temp = succubuscheck(person,1,1)
 				temp = succubuscheck(slave2,1,1)
-		elif slave2.race_display in ['Succubus']:
+		elif slave2.race_display == 'Succubus':
 			if globals.player.penis != "none":
 				peniscount += 1
 			if person.penis != "none":
 				peniscount += 1
 			temp = succubuscheck(slave2,peniscount,peniscount)
 			globals.resources.mana += (2 - peniscount) * variables.orgasmmana
-		elif person.race_display in ['Succubus']:
+		elif person.race_display == 'Succubus':
 			if globals.player.penis != "none":
 				peniscount += 1
 			if slave2.penis != "none":

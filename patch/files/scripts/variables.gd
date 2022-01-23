@@ -26,6 +26,7 @@ var succubusagemod = { #ralphC - [child,teen,adult] Succubus base mana food cons
 var succubushungerlevel = [1.5,3.0,7.0] #ralphC - [munchies = 1.5, sex crazed 3, death 7] see mansion.gd
 var succubuscounter = 0 #ralphC - actually just used to count orgasms drained by succubi in newsexsystem.gd
 #/ralphC
+
 ###---Added by Expansion---### Difficulty Adjustment
 var playerstartbeauty = 70.0
 var characterstartbeauty = 50.0

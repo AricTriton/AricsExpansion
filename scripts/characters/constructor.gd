@@ -4,7 +4,6 @@ var animal_races_array = ['bunny','dog','cow','cat','fox','horse','raccoon']
 var humanoid_races_array = ['Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome','Goblin','Demon','Dragonkin']
 var uncommon_races_array = ['Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla']
 var beast_races_array = ['Centaur','Taurus','Beastkin Cat','Beastkin Fox','Beastkin Wolf','Beastkin Bunny','Beastkin Tanuki','Halfkin Cat','Halfkin Fox','Halfkin Wolf','Halfkin Bunny','Halfkin Tanuki']
-var beastkin_races_array = ['Beastkin Cat','Beastkin Fox','Beastkin Wolf','Beastkin Bunny','Beastkin Tanuki','Halfkin Cat','Halfkin Fox','Halfkin Wolf','Halfkin Bunny','Halfkin Tanuki'] #ralphB - not used (yet)
 var magic_races_array = ['Slime']
 var races_beastfree_darkelf_free = ['Human','Elf','Dark Elf','Orc','Gnome','Goblin','Demon','Dragonkin','Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla','Slime']
 var genealogies = ['human','gnome','elf','tribal_elf','dark_elf','orc','goblin','dragonkin','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime','bunny','dog','cow','cat','fox','horse','raccoon']
@@ -592,37 +591,26 @@ func build_genealogy(person, mother, father):
 	#/ralph9
 	#ralphB - optional consolidation of beastkin/halfkin races on breeding (offspring will have only one beastkin/halfkin type race with total % that would have been split b/n different beastkin/halfkin races)
 	if globals.useRalphsTweaks && globals.expansionsettings.consolidatebeastDNA:
-		#print('Ralph test: consolidatebeastDNA == true')
 		var total_beastkin_race_percent = 0
 		var babys_beastkin_races = []
-		var count_beastkin_races = 0
 		var selected_race = "human"
 		var highest_beastkin_race_percent = 0
 		for race in genealogies:
 			if race in genealogies_beastkin_only:
-				count_beastkin_races += 1
 				babys_beastkin_races.append(race)
 				total_beastkin_race_percent += person.genealogy[race]
 				if person.genealogy[race] > highest_beastkin_race_percent:
 					selected_race = race
 					highest_beastkin_race_percent = person.genealogy[race]
-			#print('Ralph test: highest_beastkin_race == ', str(person.genealogy[race]))
-			#print('Ralph test: highest_beastkin_race == ', str(selected_race))
-			#print('Ralph test: highest_beastkin_race_percent == ', str(person.genealogy[race]))
-			#print('Ralph test: total_beastkin_race_percent == ', str(total_beastkin_race_percent))
-		if count_beastkin_races > 1:
-			#print('Ralph test: more than 1 beastkin_race detected')
+		if babys_beastkin_races.size() > 1:
 			for race in babys_beastkin_races:
 				if person.genealogy[race] > rand_range(0,total_beastkin_race_percent):
 					selected_race = race
-					#print('Ralph test: selected_race changed to: ', str(selected_race))
 			for race in babys_beastkin_races:
 				if race == selected_race:
 					person.genealogy[race] = total_beastkin_race_percent
-					#print('Ralph test: total_beastkin_race_percent assigned to (should be selected_race): ', str(race))
 				else:
 					person.genealogy[race] = 0
-					#print('Ralph test: 0% assigned to (should be another beastkin race): ', str(race))
 	#/ralphB
 	globals.traceFile('build genealogy')
 	return

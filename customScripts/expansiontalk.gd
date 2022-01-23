@@ -23,11 +23,8 @@ var person
 ###Randomly choose the name for "Master" each Convo
 func getMasterName(person):
 	var names = []
-	var related = ''
-	var text = ''
+	var related = globals.expansion.relatedCheck(globals.player, person)
 	#Begin
-	names.clear()
-	related = globals.expansion.relatedCheck(globals.player, person)
 ###Normal
 	if globals.player.sex == 'male':
 		names.append('Master')
@@ -360,14 +357,10 @@ func getMasterName(person):
 		names.append('...')
 		names.append('Mmm')
 
-	text = globals.randomitemfromarray(names)
-	#Quick Fix to stop "Null" names
-	if text == null:
-		if globals.player == 'male':
-			text = "Master"
-		else:
-			text = "Mistress"
-	person.masternoun = str(text)
+	if names.empty():
+		person.masternoun = "Master" if globals.player.sex == 'male' else "Mistress"
+	else:
+		person.masternoun = globals.randomitemfromarray(names)
 
 var difficultyarray = ['None','Simple','Easy','Medium','Hard','Impossible']
 var chatchecktypearray = ['degrading','lewd','respectful']
@@ -741,7 +734,7 @@ func introsuccubus(person):
 			choice.append('My... hunger?')
 			if person.mind.demeanor in ['open','excitable'] || person.mood in ['happy', 'playful']:
 				choice.append('Why did you bring me candy or something, $master?')
-		elif person.metrics.mana_hunger >= variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]:
+		elif person.mana_hunger >= variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]:
 			if person.mind.demeanor in ['meek'] || person.mood == 'scared':
 				choice.append('I am sorry $master. I have been eating more than anyone else lately.')
 			if person.mind.demeanor == "reserved":
@@ -767,7 +760,7 @@ func introsuccubus(person):
 		if person.mood == 'indifferent':
 			choice.append("Sure, whatever.")
 			choice.append("Sure thing, $master...")
-		if person.metrics.mana_hunger >= (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+		if person.mana_hunger >= (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
 			if person.mood == 'playful':
 				choice.append("You're going to let me eat all I want now, I know it!")
 			if person.mood == 'happy':
@@ -831,7 +824,7 @@ func succubusrevealed2(person):
 			choice.append("Oh no, I'm a liability to you, $master! I promise I'll work hard, please take care of me.")
 		else:
 			choice.append("Oh no, how will I feed myself when I get old?")
-	if person.metrics.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+	if person.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
 		if person.traits.has('Sex-crazed'):
 			if person.wit > 70:
 				choice.append("So that's why? Well, let's go fix my Viamin D deficiency then $master.")

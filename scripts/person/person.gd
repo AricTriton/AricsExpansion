@@ -11,13 +11,14 @@
 # preg.baby variable is not used, only populated with dummy value when pregnant to not break other mods which might look at it
 var preg = {fertility = 0, bonus_fertility = 0, has_womb = true, is_preg = false, duration = 0, baby = null, baby_type = '',  ovulation_type = 0, ovulation_stage = 0, ovulation_day = 0, womb = [], offspring_count = 0, unborn_baby = [],}
 var manafeedpolicy = 99999 #ralphC - mana resource value set for each npc below which mana eaters do not get fed (only relevant for mana eaters; ie. Succubus, Golem)
+var mana_hunger = 0 #ralphC - only used for Succubus and future mana eating races/hybrids
 ###---End Expansion---###
 
 
 ###---Added by Expansion---### Modified by Deviate
 #var metrics = {ownership = 0, jail = 0, mods = 0, brothel = 0, sex = 0, partners = [], randompartners = 0, item = 0, spell = 0, orgy = 0, threesome = 0, win = 0, capture = 0, goldearn = 0, foodearn = 0, manaearn = 0, birth = 0, preg = 0, vag = 0, anal = 0, oral = 0, roughsex = 0, roughsexlike = 0, orgasm = 0}
 # metrics.animalpartners used to track times had sex with animal
-var metrics = {ownership = 0, jail = 0, mods = 0, brothel = 0, sex = 0, partners = [], randompartners = 0, animalpartners = 0, item = 0, spell = 0, orgy = 0, threesome = 0, win = 0, capture = 0, goldearn = 0, foodearn = 0, manaearn = 0, birth = 0, preg = 0, vag = 0, anal = 0, oral = 0, roughsex = 0, roughsexlike = 0, orgasm = 0, mana_hunger = 0} #ralphC - added mana hunger
+var metrics = {ownership = 0, jail = 0, mods = 0, brothel = 0, sex = 0, partners = [], randompartners = 0, animalpartners = 0, item = 0, spell = 0, orgy = 0, threesome = 0, win = 0, capture = 0, goldearn = 0, foodearn = 0, manaearn = 0, birth = 0, preg = 0, vag = 0, anal = 0, oral = 0, roughsex = 0, roughsexlike = 0, orgasm = 0}
 ###---End Expansion---###
 
 var stats = {
