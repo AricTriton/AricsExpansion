@@ -7,7 +7,8 @@ var modversion = 1.6
 #---Aric's and Game's Base Values potentially changed by Ralph's
 var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within ApplyTweaks as well as the Hybrid system.
 var unique_trait_generation = false				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
-
+var consolidatebeastDNA = false					# Set this to true if you don't like npcs with a mix of Beastkin/Halfkin race%'s (no half cat half foxes, etc.) #ralphB
+var gratitude_for_all = false					# Set this to true so that babies aged up to Child or Teen have as much chance to spawn with the Grateful trait as ones aged up to Adult (Ralph sets this to False, but up to you) #ralphC
 
 #---Debug Tools (True/False)
 var perfectinfo = false
@@ -248,7 +249,7 @@ var magic_hobby_maf_max = 2						# Ralph's - 2, The value responsible for how mu
 #Sell Slave Prices
 var mansion_bred_and_breeder = 2				# Ralph's - 1.5, The multiplicative value that modifies the price.
 var calculate_price_bonus_divide = 1			# Ralph's - 2, The divider value that modifies the bonus value that multiplies the price when calculating.
-var quicksell_slave_pressed = 2					# Ralph's - 1.11, The divider value that affects the sellprice of a slave when quicksell is pressed.
+var quicksell_slave_pressed = 0.5				# Ralph's - 0.9, The multiplier value that affects the sellprice of a slave when quicksell is pressed. (Ralph tweaked so you only get docked 10% when you quicksell vs 50% deduction in vanilla) #ralphC
 
 #Capture Changes
 var times_rescued_multiplier = 0				# Ralph's - 10, The multiplicative value that is used with how many times an npc has been rescued when determining whether they will join you willingly after saving them from bandits.
