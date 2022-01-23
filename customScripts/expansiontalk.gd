@@ -756,6 +756,8 @@ func introsuccubus(person):
 				choice.append("O-o-okay $master...if that's what you want...")
 			if person.mood == 'angry':
 				choice.append("I'm just really hungry, ok. What's it to you?")
+		else:
+			choice.append('My... hunger?')
 	else:
 		if person.mood == 'indifferent':
 			choice.append("Sure, whatever.")
@@ -788,6 +790,8 @@ func introsuccubus(person):
 				choice.append("As you wish, $master.")
 			if person.mood == 'happy':
 				choice.append("Thanks for thinking of me, $master!")
+			else:
+				choice.append('Yes $master?')
 	if choice == null:
 		choice.append("Alright $master.")
 		choice.append('Yes $master?')
