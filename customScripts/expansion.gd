@@ -2484,6 +2484,7 @@ func dailyTownGuard():
 
 	for town in citiesarray:
 		text = ""
+		var guard_efficiency = globals.state.townsexpanded[town].guardskill + globals.expansionsettings.townguardefficiency
 		for npcs in globals.state.offscreennpcs:
 			var zonecode = npcs[NPC_ZONE]
 			var zone = zones[zonecode]
@@ -2504,7 +2505,7 @@ func dailyTownGuard():
 			if location != town || location == null:
 				continue
 
-			if globals.state.offscreennpcs.size() > globals.expansionsettings.minimum_npcs_to_detain && rand_range(0,100) - rand_range(0,globals.state.allnpcs.size()-1) <= globals.state.townsexpanded[town].guardskill + npcs[NPC_REMEET] + globals.expansionsettings.townguardefficiency:
+			if globals.state.offscreennpcs.size() > globals.expansionsettings.minimum_npcs_to_detain && rand_range(0,100) - rand_range(0,globals.state.allnpcs.size() - globals.expansionsettings.minimum_npcs_to_detain) <= guard_efficiency + npcs[NPC_REMEET]:
 				if npcs[NPC_REP] < 0 || npcs[NPC_ACTION] in ['fleeing','escaping','crime','plottedcrime','hiding']:
 					npcs[NPC_ACTION] = 'detained'
 

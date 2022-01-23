@@ -6180,6 +6180,7 @@ expand = true
 stretch_mode = 5
 
 [node name="sstr" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -580.0
@@ -6232,6 +6233,7 @@ custom_styles/pressed = SubResource( 11 )
 custom_styles/normal = SubResource( 10 )
 
 [node name="sagi" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -580.0
@@ -6284,6 +6286,7 @@ custom_styles/pressed = SubResource( 11 )
 custom_styles/normal = SubResource( 10 )
 
 [node name="smaf" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -580.0
@@ -6336,6 +6339,7 @@ custom_styles/pressed = SubResource( 11 )
 custom_styles/normal = SubResource( 10 )
 
 [node name="send" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -580.0
@@ -6388,6 +6392,7 @@ custom_styles/pressed = SubResource( 11 )
 custom_styles/normal = SubResource( 10 )
 
 [node name="cour" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -462.0
@@ -6432,6 +6437,7 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 
 [node name="conf" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -462.0
@@ -6476,6 +6482,7 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 
 [node name="wit" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -462.0
@@ -6520,6 +6527,7 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 
 [node name="charm" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -462.0
@@ -6610,6 +6618,7 @@ texture_under = ExtResource( 53 )
 texture_progress = ExtResource( 56 )
 
 [node name="TextureRect" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 margin_left = 14.0
 margin_top = 13.0
 margin_right = 154.0
@@ -7656,7 +7665,7 @@ size_flags_vertical = 2
 custom_styles/focus = SubResource( 32 )
 custom_fonts/font = ExtResource( 45 )
 custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
-text = "Partial Nudity"
+text = "Maintain Nudity"
 
 [node name="betterfood" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
 "prisondisable",
@@ -7851,6 +7860,22 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Tattoo"
+
+[node name="ae_strip_toggle" type="CheckBox" parent="MainScreen/slave_tab/stats/customization"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -729.0
+margin_top = 310.0
+margin_right = -604.0
+margin_bottom = 338.0
+hint_tooltip = "While in mansion, servant will be wearing 
+special clothes, revealing their naughty pieces."
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/focus = SubResource( 32 )
+custom_fonts/font = ExtResource( 45 )
+custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
+text = "Strip Immediately"
 
 [node name="piercingpanel" type="Popup" parent="MainScreen/slave_tab/stats/customization"]
 anchor_left = 1.0
@@ -12230,6 +12255,7 @@ current = true
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/image" to="MainScreen/slave_tab" method="_on_image_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/portrait" to="MainScreen/slave_tab" method="_on_portrait_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/tattoo" to="MainScreen/slave_tab" method="_on_tattoo_pressed"]
+[connection signal="pressed" from="MainScreen/slave_tab/stats/customization/ae_strip_toggle" to="MainScreen/slave_tab" method="_on_strip_toggle_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/piercingpanel/closebutton" to="MainScreen/slave_tab" method="_on_closebutton_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/tattoopanel/applybutton" to="MainScreen/slave_tab" method="_on_applybutton_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/tattoopanel/tattooclose" to="MainScreen/slave_tab" method="_on_tattooclose_pressed"]

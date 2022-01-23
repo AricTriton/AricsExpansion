@@ -186,7 +186,7 @@ func rebuild_slave_list():
 	get_node("charlistcontrol/CharList/res_number").set_bbcode('[center]Residents: ' + str(globals.slavecount()) +'[/center]')
 	get_node("ResourcePanel/population").set_text(str(globals.slavecount()))
 	###---Added by Expansion---### Interactions Remaining
-	get_node("charlistcontrol/interactionbutton").set_text(str(globals.state.nonsexactions)+"|"+str(globals.state.sexactions))
+	get_node("charlistcontrol/interactionbutton").set_text(str(globals.state.nonsexactions)+" | "+str(globals.state.sexactions))
 	get_node("charlistcontrol/interactionbutton").set_disabled(globals.state.sexactions < 1 && globals.state.nonsexactions < 1)
 	###---End Expansion---###
 	_on_orderbutton_pressed()
