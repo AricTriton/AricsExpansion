@@ -798,9 +798,9 @@ func succubusrevealed1(person):
 	var text = ""
 	var choice = []
 	if person.mood == 'scared':
-		if person.stats.loyal_cur <= 20:
+		if person.stats.loyal <= 20:
 			choice.append("But then I won't be able to live without you $master! $sir, I'll be good, please just make it so I never grow up, please.")
-		elif person.stats.loyal_cur <= 70:
+		elif person.stats.loyal <= 70:
 			choice.append("So, I wouldn't be able to live without you would I, $master? Could you... make it so I never grow up, please?")
 		else:
 			choice.append("It's scary, but I know you'll take care of me, $master. Whatever you decide for me will be ok.")
@@ -809,7 +809,7 @@ func succubusrevealed1(person):
 		choice.append("That...is...soooo naughty! I can do it, I know I can!")
 	elif person.mood in ['respectful','obediant']:
 		choice.append('Yes... $master. I understand.')
-	if person.mood in ['indifferent','angry'] || person.stats.loyal_cur <= 20:
+	if person.mood in ['indifferent','angry'] || person.stats.loyal <= 20:
 		choice.append("Whatever... whether I live or die is just up to you either way.")
 	if choice == null:
 		choice.append('Yes... $master. I understand.')
@@ -839,13 +839,13 @@ func succubusrevealed2(person):
 	else:
 		if person.lewdness > 40:
 			choice.append("I guess I just need to keep on fucking then don't I, $master?")
-		if person.stats.loyal_cur > 50:
+		if person.stats.loyal > 50:
 			choice.append("So, I'd have hard time living without you wouldn't I, $master? Thank you for taking care of me.")
 		if person.metrics.ownership < 3:
 			choice.append("Thanks for telling me right away. I hope you'll take care of me, $master.")
 		if person.metrics.ownership >= 3:
 			choice.append('Yes $master. I understand now. I... have a lot to think about.')
-		if person.mood in ['indifferent','angry'] || person.stats.loyal_cur <= 20:
+		if person.mood in ['indifferent','angry'] || person.stats.loyal <= 20:
 			choice.append("Whatever... whether I live or die is just up to you either way.")
 	if choice == null:
 		choice.append('Yes... $master. I understand.')

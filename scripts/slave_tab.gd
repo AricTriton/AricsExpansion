@@ -97,6 +97,13 @@ func slavetabopen():
 		if hairstyleBtn.get_item_text(i) == person.hairstyle:
 			hairstyleBtn.select(i)
 			break
+	###---Added by Expansion---###
+	#Strip Toggle
+	if int(person.exposed.chest) + int(person.exposed.genitals) + int(person.exposed.ass) >= 2:
+		$stats/customization/ae_strip_toggle.set_pressed(true)
+	else:
+		$stats/customization/ae_strip_toggle.set_pressed(false)
+	
 	#Whims -- new colors for the slave list
 	get_tree().get_current_scene().get_node("MainScreen/slave_tab/stats/customization/namecolor").clear()
 	var namecolor = person.namecolor
@@ -104,8 +111,7 @@ func slavetabopen():
 		get_tree().get_current_scene().get_node("MainScreen/slave_tab/stats/customization/namecolor").add_item(i)
 		if namecolor == i:
 			get_tree().get_current_scene().get_node("MainScreen/slave_tab/stats/customization/namecolor").select(get_tree().get_current_scene().get_node("MainScreen/slave_tab/stats/customization/namecolor").get_item_count()-1)
-
-	###---Added by Expansion---### Removed in current version for some reason?
+	#Removed in New Version for some reason?
 #	$stats/customization/hairstyle.set_text(person.hairstyle)
 	###---End Expansion---###
 	updatestats()
@@ -733,7 +739,15 @@ func _on_sexuality_mouse_entered():
 func _on_sexuality_mouse_exited():
 	globals.hidetooltip()
 
-#whims -- color selection stuff
+###---Added by Expansion---###
+#---Strip Toggle
+func _on_strip_toggle_pressed():
+	person.exposed.chest = $stats/customization/ae_strip_toggle.pressed
+	person.exposed.genitals = $stats/customization/ae_strip_toggle.pressed
+	person.exposed.ass = $stats/customization/ae_strip_toggle.pressed
+	slavetabopen()
+
+#---Whim's Name Coloration
 var namecolors = ['blue', 'brown', 'cyan', 'fuchsia', 'gold', 'gray', 'green', 'orange', 'purple', 'red', 'salmon', 'sienna', 'tan', 'violet', 'white', 'yellow']
 
 func _on_namecolor_item_selected(id):
