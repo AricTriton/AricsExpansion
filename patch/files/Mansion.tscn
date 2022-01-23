@@ -6180,6 +6180,7 @@ expand = true
 stretch_mode = 5
 
 [node name="sstr" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -580.0
@@ -6232,6 +6233,7 @@ custom_styles/pressed = SubResource( 11 )
 custom_styles/normal = SubResource( 10 )
 
 [node name="sagi" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -580.0
@@ -6284,6 +6286,7 @@ custom_styles/pressed = SubResource( 11 )
 custom_styles/normal = SubResource( 10 )
 
 [node name="smaf" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -580.0
@@ -6336,6 +6339,7 @@ custom_styles/pressed = SubResource( 11 )
 custom_styles/normal = SubResource( 10 )
 
 [node name="send" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -580.0
@@ -6388,6 +6392,7 @@ custom_styles/pressed = SubResource( 11 )
 custom_styles/normal = SubResource( 10 )
 
 [node name="cour" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -462.0
@@ -6432,6 +6437,7 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 
 [node name="conf" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -462.0
@@ -6476,6 +6482,7 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 
 [node name="wit" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -462.0
@@ -6520,6 +6527,7 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 
 [node name="charm" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -462.0
@@ -6610,6 +6618,7 @@ texture_under = ExtResource( 53 )
 texture_progress = ExtResource( 56 )
 
 [node name="TextureRect" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+editor/display_folded = true
 margin_left = 14.0
 margin_top = 13.0
 margin_right = 154.0
@@ -7551,10 +7560,8 @@ margin_left = -286.0
 margin_top = 40.0
 margin_right = -79.0
 margin_bottom = 68.0
-hint_tooltip = "Daily intake of special herbal medicine will
-prevent pregnancy for a few days at
-minor cost in gold (5 per intake). 
-This will only start working starting next day."
+hint_tooltip = "Require that they take an herbal supplement that prevents ovulation. This will prevent pregnancy. This only takes place the day after it is ordered.
+Cost: 5 Gold Daily"
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 27 )
@@ -7572,9 +7579,9 @@ margin_left = -286.0
 margin_top = 64.0
 margin_right = -95.0
 margin_bottom = 92.0
-hint_tooltip = "Servant's daily food will be mixed with untraceable
-amounts of aphrodisiac constantly boosting their
-libido for some cost in (8 per day) gold. "
+hint_tooltip = "Their daily food will be mixed with untraceable
+amounts of aphrodisiac that constantly boosting their libido.
+Cost: 8 Gold Daily"
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 28 )
@@ -7592,7 +7599,8 @@ margin_left = -286.0
 margin_top = 246.0
 margin_right = -119.0
 margin_bottom = 274.0
-hint_tooltip = "Servant will not be able to talk unless addressed."
+hint_tooltip = "They may not speak unless spoken to.
+Resistant slaves may attempt to refuse to comply"
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 29 )
@@ -7610,9 +7618,7 @@ margin_left = -286.0
 margin_top = 270.0
 margin_right = -152.0
 margin_bottom = 298.0
-hint_tooltip = "Servant will be forced to act like animal: 
-walk on all fours and not interact with 
-others with human words."
+hint_tooltip = "They will be forced to act animalistically. They will be forced to crawl on all fours and may not speak using anything but animal noises."
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 30 )
@@ -7630,8 +7636,8 @@ margin_left = -286.0
 margin_top = 294.0
 margin_right = -115.0
 margin_bottom = 322.0
-hint_tooltip = "Servant won't be able to relieve from 
-sexual build up on their own."
+hint_tooltip = "They may not masturbate or orgasm without your permission.
+Resistant slaves may attempt to refuse to comply."
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 31 )
@@ -7649,14 +7655,15 @@ margin_left = -286.0
 margin_top = 318.0
 margin_right = -146.0
 margin_bottom = 346.0
-hint_tooltip = "While in mansion, servant will be wearing 
-special clothes, revealing their naughty pieces."
+hint_tooltip = "They will be required to remain naked at all times.
+This may risk Public Nudity fines if they work in Public depending on the town.
+Resistant slaves may attempt to refuse to comply."
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 32 )
 custom_fonts/font = ExtResource( 45 )
 custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
-text = "Partial Nudity"
+text = "Maintain Nudity"
 
 [node name="betterfood" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
 "prisondisable",
@@ -7668,9 +7675,8 @@ margin_left = -286.0
 margin_top = 119.0
 margin_right = -161.0
 margin_bottom = 147.0
-hint_tooltip = "Servant will receive additional 
-selection of higher grade food 
-(-5 food per day)"
+hint_tooltip = "They will be permitted a higher quality and extra portion of food.
+Cost: 5 Food Daily"
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 29 )
@@ -7688,9 +7694,8 @@ margin_left = -286.0
 margin_top = 143.0
 margin_right = -142.0
 margin_bottom = 171.0
-hint_tooltip = "Servant will be able to take 
-personal bath on their own
-(-2 supplies per day)"
+hint_tooltip = "They will be permitted 1 personal bath a day. This will clean out any remaining cum from their orifaces.
+Cost: 2 Supplies Daily"
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 30 )
@@ -7708,9 +7713,8 @@ margin_left = -286.0
 margin_top = 167.0
 margin_right = -171.0
 margin_bottom = 195.0
-hint_tooltip = "Servant will use various available cosmetics
-to keep themselves in better shape
-(-1 supply per day)"
+hint_tooltip = "They will be permitted various cosmetics to enhance their beauty and self-worth.
+Cost: 1 Supply Daily"
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 32 )
@@ -7728,9 +7732,8 @@ margin_left = -286.0
 margin_top = 191.0
 margin_right = -136.0
 margin_bottom = 219.0
-hint_tooltip = "Servant will receive some money
-which they can use for their needs
-(-10 gold per day)"
+hint_tooltip = "They will be paid a small sum daily which they may use for their personal luxuries.
+Cost: 10 Gold Daily"
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 31 )
@@ -7851,6 +7854,22 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Tattoo"
+
+[node name="ae_strip_toggle" type="CheckBox" parent="MainScreen/slave_tab/stats/customization"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -729.0
+margin_top = 310.0
+margin_right = -604.0
+margin_bottom = 338.0
+hint_tooltip = "While in mansion, servant will be wearing 
+special clothes, revealing their naughty pieces."
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/focus = SubResource( 32 )
+custom_fonts/font = ExtResource( 45 )
+custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
+text = "Strip Immediately"
 
 [node name="piercingpanel" type="Popup" parent="MainScreen/slave_tab/stats/customization"]
 anchor_left = 1.0
@@ -12230,6 +12249,7 @@ current = true
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/image" to="MainScreen/slave_tab" method="_on_image_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/portrait" to="MainScreen/slave_tab" method="_on_portrait_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/tattoo" to="MainScreen/slave_tab" method="_on_tattoo_pressed"]
+[connection signal="pressed" from="MainScreen/slave_tab/stats/customization/ae_strip_toggle" to="MainScreen/slave_tab" method="_on_strip_toggle_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/piercingpanel/closebutton" to="MainScreen/slave_tab" method="_on_closebutton_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/tattoopanel/applybutton" to="MainScreen/slave_tab" method="_on_applybutton_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/tattoopanel/tattooclose" to="MainScreen/slave_tab" method="_on_tattooclose_pressed"]
