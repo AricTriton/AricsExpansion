@@ -17,7 +17,7 @@ var enablecheatbutton = false
 #-- Use abilities on auto attack, left to right. Hint: reorder/activate abilities in the character info menu when out.
 var autoattackability = false
 
-#---Content Filter | Partially Enabled (True/False)
+#---Content Filters | Partially Enabled (Set to true/false)
 var brutalcontent = true
 var messycontent = true
 

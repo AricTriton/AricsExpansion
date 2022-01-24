@@ -3904,7 +3904,7 @@ func updatedescription():
 		text += '\nClick Start to initiate.'
 	###---Added by Expansion---### Interaction Hint
 	text += "\n\nNon-sex Interactions left for today: [color=aqua]" + str(globals.state.nonsexactions) + "[/color]"
-	text += "\nSex Interactions left for today: [color=red]" + str(globals.state.sexactions) + "[/color]"
+	text += "\nSex Interactions left for today: [color=aqua]" + str(globals.state.sexactions) + "[/color]"
 	###---End Expansion---###
 	get_node("sexselect/sextext").set_bbcode(text)
 	
