@@ -3238,6 +3238,7 @@ func updateBodyImage(person):
 
 var listCompat = ['','low','medium','high']
 var listSex = ['male', 'female', 'futanari']
+
 func updateSexualityImage(person):
 	if person == null:
 		return

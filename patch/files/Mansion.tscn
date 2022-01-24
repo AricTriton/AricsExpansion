@@ -46,17 +46,17 @@
 [ext_resource path="res://files/buttons/mainscreen/3.png" type="Texture" id=44]
 [ext_resource path="res://mainfont.tres" type="DynamicFont" id=45]
 [ext_resource path="res://files/paneltexturebland.tres" type="StyleBox" id=46]
-[ext_resource path="res://files/buttons/menupanel.png" type="Texture" id=47]
-[ext_resource path="res://files/images/items/aphrodisiacpot.png" type="Texture" id=48]
-[ext_resource path="res://files/buttons/chek.png" type="Texture" id=49]
-[ext_resource path="res://files/buttons/mainscreen/6.png" type="Texture" id=50]
-[ext_resource path="res://files/buttons/levelup.png" type="Texture" id=51]
-[ext_resource path="res://files/buttons/levelupdown.png" type="Texture" id=52]
-[ext_resource path="res://files/buttons/mainscreen/8.png" type="Texture" id=53]
-[ext_resource path="res://files/buttons/mainscreen/9.png" type="Texture" id=54]
-[ext_resource path="res://files/buttons/mainscreen/10.png" type="Texture" id=55]
-[ext_resource path="res://files/buttons/mainscreen/11.png" type="Texture" id=56]
-[ext_resource path="res://files/buttons/mainscreen/7.png" type="Texture" id=57]
+[ext_resource path="res://files/buttons/mainscreen/7.png" type="Texture" id=47]
+[ext_resource path="res://files/buttons/menupanel.png" type="Texture" id=48]
+[ext_resource path="res://files/images/items/aphrodisiacpot.png" type="Texture" id=49]
+[ext_resource path="res://files/buttons/chek.png" type="Texture" id=50]
+[ext_resource path="res://files/buttons/mainscreen/6.png" type="Texture" id=51]
+[ext_resource path="res://files/buttons/levelup.png" type="Texture" id=52]
+[ext_resource path="res://files/buttons/levelupdown.png" type="Texture" id=53]
+[ext_resource path="res://files/buttons/mainscreen/8.png" type="Texture" id=54]
+[ext_resource path="res://files/buttons/mainscreen/9.png" type="Texture" id=55]
+[ext_resource path="res://files/buttons/mainscreen/10.png" type="Texture" id=56]
+[ext_resource path="res://files/buttons/mainscreen/11.png" type="Texture" id=57]
 [ext_resource path="res://Roundo-Medium.otf" type="DynamicFontData" id=58]
 [ext_resource path="res://files/scripts/laboratory.gd" type="Script" id=59]
 [ext_resource path="res://files/buttons/book/librarybook.png" type="Texture" id=60]
@@ -158,7 +158,7 @@ texture = ExtResource( 44 )
 region_rect = Rect2( 0, 0, 1317, 830 )
 
 [sub_resource type="StyleBoxTexture" id=8]
-texture = ExtResource( 47 )
+texture = ExtResource( 48 )
 region_rect = Rect2( 0, 0, 500, 500 )
 margin_left = 10.0
 margin_right = 10.0
@@ -166,7 +166,7 @@ margin_top = 10.0
 margin_bottom = 10.0
 
 [sub_resource type="StyleBoxTexture" id=9]
-texture = ExtResource( 49 )
+texture = ExtResource( 50 )
 region_rect = Rect2( 0, 0, 20, 20 )
 margin_left = 10.0
 margin_right = 10.0
@@ -174,11 +174,11 @@ margin_top = 10.0
 margin_bottom = 10.0
 
 [sub_resource type="StyleBoxTexture" id=10]
-texture = ExtResource( 51 )
+texture = ExtResource( 52 )
 region_rect = Rect2( 0, 0, 26, 25 )
 
 [sub_resource type="StyleBoxTexture" id=11]
-texture = ExtResource( 52 )
+texture = ExtResource( 53 )
 region_rect = Rect2( 0, 0, 26, 25 )
 
 [sub_resource type="DynamicFont" id=12]
@@ -290,7 +290,7 @@ margin_top = 10.0
 margin_bottom = 10.0
 
 [sub_resource type="StyleBoxTexture" id=37]
-texture = ExtResource( 47 )
+texture = ExtResource( 48 )
 region_rect = Rect2( 0, 0, 500, 500 )
 
 [sub_resource type="StyleBoxTexture" id=38]
@@ -298,7 +298,7 @@ texture = ExtResource( 96 )
 region_rect = Rect2( 0, 0, 500, 294 )
 
 [sub_resource type="StyleBoxTexture" id=39]
-texture = ExtResource( 47 )
+texture = ExtResource( 48 )
 region_rect = Rect2( 0, 0, 500, 500 )
 
 [sub_resource type="StyleBoxTexture" id=40]
@@ -429,7 +429,7 @@ margin_bottom = 20.0
 [sub_resource type="StyleBoxTexture" id=66]
 
 [sub_resource type="StyleBoxTexture" id=67]
-texture = ExtResource( 47 )
+texture = ExtResource( 48 )
 region_rect = Rect2( 0, 0, 500, 500 )
 margin_left = 10.0
 margin_right = 10.0
@@ -437,11 +437,11 @@ margin_top = 10.0
 margin_bottom = 10.0
 
 [sub_resource type="StyleBoxTexture" id=68]
-texture = ExtResource( 47 )
+texture = ExtResource( 48 )
 region_rect = Rect2( 0, 0, 500, 500 )
 
 [sub_resource type="StyleBoxTexture" id=69]
-texture = ExtResource( 47 )
+texture = ExtResource( 48 )
 region_rect = Rect2( 0, 0, 500, 500 )
 
 [sub_resource type="StyleBoxTexture" id=70]
@@ -1480,10 +1480,10 @@ size_flags_vertical = 2
 custom_styles/panel = ExtResource( 46 )
 
 [node name="jailtext" type="RichTextLabel" parent="MainScreen/mansion/jailpanel"]
-margin_left = 36.0
-margin_top = 19.0
-margin_right = 893.0
-margin_bottom = 107.0
+margin_left = 175.0
+margin_top = 30.0
+margin_right = 896.0
+margin_bottom = 128.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/normal_font = ExtResource( 45 )
@@ -1497,17 +1497,68 @@ $name is a jailer.
 
 "
 
+[node name="TextureRect" type="TextureRect" parent="MainScreen/mansion/jailpanel"]
+margin_left = 30.0
+margin_top = 5.0
+margin_right = 155.0
+margin_bottom = 130.0
+texture = ExtResource( 47 )
+expand = true
+
+[node name="portrait" type="TextureRect" parent="MainScreen/mansion/jailpanel/TextureRect"]
+show_behind_parent = true
+margin_right = 124.0
+margin_bottom = 124.0
+expand = true
+stretch_mode = 6
+
+[node name="jailer_text" type="RichTextLabel" parent="MainScreen/mansion/jailpanel"]
+margin_left = 30.0
+margin_top = 130.0
+margin_right = 522.0
+margin_bottom = 194.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/normal_font = ExtResource( 45 )
+bbcode_enabled = true
+bbcode_text = "[color=#d1b970]Current Jailer[/color]
+
+"
+text = "Current Jailer
+
+"
+scroll_active = false
+
+[node name="jailer_button" type="VBoxContainer" parent="MainScreen/mansion/jailpanel"]
+margin_left = 30.0
+margin_top = 149.0
+margin_right = 240.0
+margin_bottom = 199.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+alignment = 1
+
+[node name="Button" type="Button" parent="MainScreen/mansion/jailpanel/jailer_button"]
+margin_right = 210.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 210, 50 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 45 )
+text = "Jailer"
+
 [node name="ScrollContainer" type="ScrollContainer" parent="MainScreen/mansion/jailpanel"]
-margin_left = 183.0
-margin_top = 110.0
-margin_right = 576.0
-margin_bottom = 302.0
+margin_left = 25.0
+margin_top = 225.0
+margin_right = 225.0
+margin_bottom = 417.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 scroll_horizontal_enabled = false
 
 [node name="prisonerlist" type="VBoxContainer" parent="MainScreen/mansion/jailpanel/ScrollContainer"]
-margin_right = 400.0
+margin_right = 250.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 200, 0 )
 size_flags_horizontal = 2
@@ -1515,15 +1566,83 @@ size_flags_vertical = 2
 alignment = 1
 
 [node name="Button" type="Button" parent="MainScreen/mansion/jailpanel/ScrollContainer/prisonerlist"]
-margin_right = 400.0
+margin_right = 250.0
 margin_bottom = 50.0
-rect_min_size = Vector2( 400, 50 )
+rect_min_size = Vector2( 250, 50 )
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Prisoner X"
+clip_text = true
+
+[node name="Scroll_Release" type="ScrollContainer" parent="MainScreen/mansion/jailpanel"]
+margin_left = 275.0
+margin_top = 225.0
+margin_right = 475.0
+margin_bottom = 417.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="ready_prisonerlist" type="VBoxContainer" parent="MainScreen/mansion/jailpanel/Scroll_Release"]
+margin_right = 250.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+alignment = 1
+
+[node name="Button" type="Button" parent="MainScreen/mansion/jailpanel/Scroll_Release/ready_prisonerlist"]
+margin_right = 250.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 250, 50 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 45 )
+text = "Prisoner X"
+clip_text = true
+
+[node name="header_allprisoners" type="RichTextLabel" parent="MainScreen/mansion/jailpanel"]
+margin_left = 35.0
+margin_top = 200.0
+margin_right = 235.0
+margin_bottom = 225.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/normal_font = ExtResource( 45 )
+bbcode_enabled = true
+bbcode_text = "[center][color=#d1b970]All Prisoners[/color][/center]"
+text = "All Prisoners"
+scroll_active = false
+
+[node name="header_prisoners_for_release" type="RichTextLabel" parent="MainScreen/mansion/jailpanel"]
+margin_left = 270.0
+margin_top = 200.0
+margin_right = 495.0
+margin_bottom = 225.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/normal_font = ExtResource( 45 )
+bbcode_enabled = true
+bbcode_text = "[center][color=#d1b970]Non-Rebellious Prisoners[/color][/center]"
+text = "Non-Rebellious Prisoners"
+scroll_active = false
+
+[node name="header_jail" type="RichTextLabel" parent="MainScreen/mansion/jailpanel"]
+margin_left = 270.0
+margin_top = 5.0
+margin_right = 653.0
+margin_bottom = 30.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/normal_font = ExtResource( 45 )
+bbcode_enabled = true
+bbcode_text = "[center][color=#d1b970]The Dungeon[/color][/center]"
+text = "The Dungeon"
+scroll_active = false
 
 [node name="jailsettings" type="Button" parent="MainScreen/mansion/jailpanel"]
+editor/display_folded = true
 visible = false
 margin_left = 457.0
 margin_top = 21.0
@@ -1597,6 +1716,7 @@ bbcode_text = "Your current jailer - $name"
 text = "Your current jailer - $name"
 
 [node name="alchemypanel" type="Panel" parent="MainScreen/mansion"]
+editor/display_folded = true
 visible = false
 self_modulate = Color( 1, 1, 1, 0.486196 )
 anchor_right = 1.0
@@ -1720,7 +1840,7 @@ margin_right = 28.0
 margin_bottom = 26.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 48 )
+texture = ExtResource( 49 )
 expand = true
 
 [node name="Label" type="Label" parent="MainScreen/mansion/alchemypanel"]
@@ -1841,7 +1961,7 @@ margin_right = 211.0
 margin_bottom = 211.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 48 )
+texture = ExtResource( 49 )
 expand = true
 stretch_mode = 6
 
@@ -1863,7 +1983,7 @@ margin_right = 940.0
 margin_bottom = 173.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 50 )
+texture = ExtResource( 51 )
 expand = true
 stretch_mode = 5
 
@@ -2096,8 +2216,8 @@ margin_bottom = 119.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 value = 59.0
-texture_under = ExtResource( 53 )
-texture_progress = ExtResource( 54 )
+texture_under = ExtResource( 54 )
+texture_progress = ExtResource( 55 )
 
 [node name="en" type="TextureProgress" parent="MainScreen/mansion/selfinspect/statspanel"]
 margin_left = 162.0
@@ -2107,8 +2227,8 @@ margin_bottom = 135.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 value = 59.0
-texture_under = ExtResource( 53 )
-texture_progress = ExtResource( 55 )
+texture_under = ExtResource( 54 )
+texture_progress = ExtResource( 56 )
 
 [node name="xp" type="TextureProgress" parent="MainScreen/mansion/selfinspect/statspanel"]
 margin_left = 162.0
@@ -2118,15 +2238,15 @@ margin_bottom = 151.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 value = 59.0
-texture_under = ExtResource( 53 )
-texture_progress = ExtResource( 56 )
+texture_under = ExtResource( 54 )
+texture_progress = ExtResource( 57 )
 
 [node name="TextureRect" type="TextureRect" parent="MainScreen/mansion/selfinspect/statspanel"]
 margin_left = 14.0
 margin_top = 13.0
 margin_right = 154.0
 margin_bottom = 153.0
-texture = ExtResource( 57 )
+texture = ExtResource( 47 )
 expand = true
 
 [node name="portrait" type="TextureRect" parent="MainScreen/mansion/selfinspect/statspanel/TextureRect"]
@@ -6175,7 +6295,7 @@ margin_right = 943.0
 margin_bottom = 174.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 50 )
+texture = ExtResource( 51 )
 expand = true
 stretch_mode = 5
 
@@ -6592,8 +6712,8 @@ margin_bottom = 119.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 value = 59.0
-texture_under = ExtResource( 53 )
-texture_progress = ExtResource( 54 )
+texture_under = ExtResource( 54 )
+texture_progress = ExtResource( 55 )
 
 [node name="en" type="TextureProgress" parent="MainScreen/slave_tab/stats/statspanel"]
 margin_left = 162.0
@@ -6603,8 +6723,8 @@ margin_bottom = 135.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 value = 59.0
-texture_under = ExtResource( 53 )
-texture_progress = ExtResource( 55 )
+texture_under = ExtResource( 54 )
+texture_progress = ExtResource( 56 )
 
 [node name="xp" type="TextureProgress" parent="MainScreen/slave_tab/stats/statspanel"]
 margin_left = 162.0
@@ -6614,8 +6734,8 @@ margin_bottom = 151.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 value = 59.0
-texture_under = ExtResource( 53 )
-texture_progress = ExtResource( 56 )
+texture_under = ExtResource( 54 )
+texture_progress = ExtResource( 57 )
 
 [node name="TextureRect" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
 editor/display_folded = true
@@ -6623,7 +6743,7 @@ margin_left = 14.0
 margin_top = 13.0
 margin_right = 154.0
 margin_bottom = 153.0
-texture = ExtResource( 57 )
+texture = ExtResource( 47 )
 expand = true
 
 [node name="portrait" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel/TextureRect"]
@@ -6663,7 +6783,7 @@ expand = true
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
-texture = ExtResource( 57 )
+texture = ExtResource( 47 )
 expand = true
 
 [node name="movement" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
@@ -6677,7 +6797,7 @@ expand = true
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
-texture = ExtResource( 57 )
+texture = ExtResource( 47 )
 expand = true
 
 [node name="sexuality_base" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
@@ -6691,7 +6811,7 @@ expand = true
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
-texture = ExtResource( 57 )
+texture = ExtResource( 47 )
 expand = true
 
 [node name="sexuality_male" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
@@ -6705,7 +6825,7 @@ expand = true
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
-texture = ExtResource( 57 )
+texture = ExtResource( 47 )
 expand = true
 
 [node name="sexuality_female" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
@@ -6719,7 +6839,7 @@ expand = true
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
-texture = ExtResource( 57 )
+texture = ExtResource( 47 )
 expand = true
 
 [node name="sexuality_futa" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
@@ -6733,7 +6853,7 @@ expand = true
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
-texture = ExtResource( 57 )
+texture = ExtResource( 47 )
 expand = true
 
 [node name="attribute" type="Label" parent="MainScreen/slave_tab/stats/statspanel"]
@@ -7590,8 +7710,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Aphrodisiac in food"
 
 [node name="silence" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"slaverules",
 "advrules",
+"slaverules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -7609,8 +7729,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Enforced Silence"
 
 [node name="pet" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"slaverules",
 "advrules",
+"slaverules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -7627,8 +7747,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Pet Behavior"
 
 [node name="masturbation" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"slaverules",
 "advrules",
+"slaverules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -7646,8 +7766,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "No Masturbation"
 
 [node name="nudity" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"slaverules",
 "advrules",
+"slaverules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -8739,8 +8859,8 @@ theme = ExtResource( 3 )
 bbcode_enabled = true
 
 [node name="birthpanel" type="Panel" parent="." groups=[
-"blockmaininput",
 "blocknextdayevents",
+"blockmaininput",
 ]]
 visible = false
 anchor_left = 1.0
@@ -9664,8 +9784,8 @@ custom_fonts/font = ExtResource( 45 )
 text = "Confirm"
 
 [node name="dialogue" type="Control" parent="." groups=[
-"blockmaininput",
 "blocknextdayevents",
+"blockmaininput",
 ]]
 visible = false
 anchor_right = 1.0
@@ -9864,8 +9984,8 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 
 [node name="scene" type="Control" parent="." groups=[
-"blockmaininput",
 "blocknextdayevents",
+"blockmaininput",
 ]]
 visible = false
 anchor_right = 1.0
@@ -12012,8 +12132,8 @@ expand = true
 stretch_mode = 6
 
 [node name="screenchange" type="TextureRect" parent="." groups=[
-"blockmaininput",
 "blockoutsideinput",
+"blockmaininput",
 ]]
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
