@@ -1476,6 +1476,11 @@ func nextdayevents():
 	if player.preg.duration > variables.pregduration && player.preg.is_preg == true:
 		childbirth_loop(player)
 		checkforevents = true
+		#ralphD - trying to stop my MC from being eternally fertilized 8P
+		player.cum.pussy = 0
+		if !player.preg.womb.empty():
+			player.preg.womb.clear()
+		#/ralphD
 		return
 	for i in globals.slaves:
 		###---Added by Expansion---### Hybrid Support
@@ -1487,6 +1492,7 @@ func nextdayevents():
 				i.away.duration = 3
 			i.away.at = 'in labor'
 			childbirth_loop(i)
+			i.cum.pussy = 0 #ralphD - better help npcs keep from being eternally preggers from 1 f%$& too
 			if !i.preg.womb.empty():
 				i.preg.womb.clear()
 			checkforevents = true
