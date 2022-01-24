@@ -1530,6 +1530,7 @@ func maid(person):
 func housepet(person):
 	var text = ""
 	var count = 0
+	var sexactstoday = 0 #ralphC
 	person.add_jobskill('pet', 1)
 	if globals.state.mansionupgrades.mansionkennels > 0:
 		text = "$name spent the day crawling around the mansion as a house's pet, playing with the house servants and kennel hounds.\n"
