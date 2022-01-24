@@ -1872,6 +1872,100 @@ func build_mansion_info():
 	else:
 		get_node("charlistcontrol/slavelist").hide()
 
+func _on_jailpanel_visibility_changed():
+	var temp = ''
+	var text = ''
+	var count = 0
+	var prisoners = []
+	var jailer
+	
+	for i in get_node("MainScreen/mansion/jailpanel/ScrollContainer/prisonerlist").get_children():
+		i.hide()
+		i.queue_free()
+	###---Added by Expansion---### Prisoner Release Panel
+	for i in get_node("MainScreen/mansion/jailpanel/Scroll_Release/ready_prisonerlist").get_children():
+		i.hide()
+		i.queue_free()
+	for i in get_node("MainScreen/mansion/jailpanel/jailer_button").get_children():
+		i.hide()
+		i.queue_free()
+	###---End Expansion---###
+	
+	if get_node("MainScreen/mansion/jailpanel").visible == false:
+		return
+	for i in globals.slaves:
+		if i.sleep == 'jail' && i.away.duration == 0:
+			temp = temp + i.name
+			prisoners.append(i)
+			var button = Button.new()
+			var node = get_node("MainScreen/mansion/jailpanel/ScrollContainer/prisonerlist")
+			node.add_child(button)
+			button.set_text(i.name_long())
+			button.set_name(str(count))
+			button.connect('pressed', self, 'prisonertab', [count])
+			###---Added by Expansion---### Prisoner Release Panel
+			var rebelling = false
+			for check_captured in i.effects.values():
+				if check_captured.code == 'captured':
+					rebelling = true
+					break
+			if rebelling == false:
+				button = Button.new()
+				node = get_node("MainScreen/mansion/jailpanel/Scroll_Release/ready_prisonerlist")
+				node.add_child(button)
+				button.set_text(i.name_long())
+				button.set_name(str(count))
+				button.connect('pressed', self, 'prisonertab', [count])
+			###---End Expansion---###
+		if i.work == 'jailer' && i.away.duration == 0:
+			jailer = i
+			
+		count += 1
+	###---Added by Expansion---### Jail Expanded
+	if temp == '':
+		text = 'There are no prisoners currently in the Dungeon.'
+	else:
+		#Colorized Text
+		text = 'There are a total of [color=aqua] '+str(prisoners.size()) + '[/color] prisoner(s) in the Dungeon.\nThere are currently [color=aqua]' + str(globals.state.mansionupgrades.jailcapacity-prisoners.size()) + '[/color] free cell(s).\nPrisoners can be disciplined via [color=aqua]Interactions > Meet[/color]. '
+	if globals.state.mansionupgrades.jailtreatment:
+		text += "\n[color=lime]Your jail is decently furnished and tiled. [/color]"
+	if globals.state.mansionupgrades.jailincenses:
+		text += "\n[color=lime]You can smell soft burning incenses in the air.[/color]"
+	if jailer == null:
+		get_node("MainScreen/mansion/jailpanel/jailer_text").set_bbcode('[color=#d1b970]Current Jailer[/color]\n[color=red]No [color=aqua]Jailer[/color] is assigned to manage the Dungeon.[/color]')
+		get_node("MainScreen/mansion/jailpanel/TextureRect").visible = false
+	else:
+		get_node("MainScreen/mansion/jailpanel/jailer_text").set_bbcode('[color=#d1b970]Current Jailer[/color]')
+		#Add Button
+		var button = Button.new()
+		var node = get_node("MainScreen/mansion/jailpanel/jailer_button")
+		node.add_child(button)
+		button.set_text(jailer.name_long())
+		button.set_name(str(jailer.id))
+		button.connect('pressed', self, 'openslavetab', [jailer])
+		#Assign Portrait
+		if jailer.imageportait != null && globals.loadimage(jailer.imageportait):
+			get_node("MainScreen/mansion/jailpanel/TextureRect").visible = true
+			get_node("MainScreen/mansion/jailpanel/TextureRect/portrait").set_texture(globals.loadimage(jailer.imageportait))
+		else:
+			jailer.imageportait = null
+			#TBK - Debating on leaving Hidden or not
+			get_node("MainScreen/mansion/jailpanel/TextureRect").visible = true
+			get_node("MainScreen/mansion/jailpanel/TextureRect/portrait").set_texture(globals.loadimage(globals.sexuality_images.unknown))
+		#text = text + jailer.dictionary('\n$name is assigned as jailer.')
+	###---End Expansion---###
+	
+	get_node("MainScreen/mansion/jailpanel/jailtext").set_bbcode(text)
+
+func prisonertab(number):
+	self.currentslave = number
+	###---Added by Expansion---### Jail Expanded
+	background_set('jail')
+	yield(self, 'animfinished')
+	hide_everything()
+	###---End Expansion---###
+	get_node("MainScreen/slave_tab").tab = 'prison'
+	get_node("MainScreen/slave_tab").slavetabopen()
 
 ###---Added by Expansion---### Added by Deviate, Tweaked by Aric, Tested by Banana
 var birthmother
