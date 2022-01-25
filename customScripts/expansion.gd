@@ -3157,6 +3157,14 @@ var dictUniqueImagePaths = {
 			HIGH_STRESS: 'res://files/images/melissa/melissanakedneutral.png',
 		},
 	},
+	'Tia': {
+		IMAGE_DEFAULT: {
+			HIGH_STRESS: 'res://files/aric_expansion_images/characters/tiaclothed.png',
+		},
+		IMAGE_NAKED: {
+			HIGH_STRESS: 'res://files/aric_expansion_images/characters/tianaked.png',
+		},
+	},
 	'Tisha': {
 		IMAGE_DEFAULT: {
 			LOW_STRESS: 'res://files/images/tisha/tishahappy.png',
