@@ -806,7 +806,7 @@ func useskills(skill, caster = null, target = null, retarget = false):
 func useAutoAbility(combatant):
 	for abilityName in combatant.activeabilities:
 		var ability = globals.abilities.abilitydict[abilityName]
-		if !combatant.cooldowns.has(abilityName) && combatant.energy >= ability.costenergy && globals.resources.mana >= ability.costmana && ability.targetgroup == "enemy":
+		if !combatant.cooldowns.has(abilityName) && combatant.energy >= ability.costenergy && globals.resources.mana >= globals.spells.spellCostCalc(ability.costmana) && ability.targetgroup == "enemy":
 			for j in enemygroup:
 				if j.node != null && j.state == 'normal':
 					useskills(ability, combatant, j)
