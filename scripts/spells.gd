@@ -272,11 +272,13 @@ var spelllist = {
 ###---End Expansion---###
 }
 
-func spellcost(spell):
-	var cost = spell.manacost
+func spellCostCalc(cost):
 	if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction:
 		cost = cost/2
 	return cost*globals.expansionsettings.spellcost
+	
+func spellcost(spell):
+	return spellCostCalc(spell.manacost)
 
 func mindreadeffect():
 	var spell = globals.spelldict.mindread

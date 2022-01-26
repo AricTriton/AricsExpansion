@@ -2484,6 +2484,7 @@ func dailyTownGuard():
 
 	for town in citiesarray:
 		text = ""
+		var guard_efficiency = globals.state.townsexpanded[town].guardskill + globals.expansionsettings.townguardefficiency
 		for npcs in globals.state.offscreennpcs:
 			var zonecode = npcs[NPC_ZONE]
 			var zone = zones[zonecode]
@@ -2504,7 +2505,7 @@ func dailyTownGuard():
 			if location != town || location == null:
 				continue
 
-			if globals.state.offscreennpcs.size() > globals.expansionsettings.minimum_npcs_to_detain && rand_range(0,100) - rand_range(0,globals.state.allnpcs.size()-1) <= globals.state.townsexpanded[town].guardskill + npcs[NPC_REMEET] + globals.expansionsettings.townguardefficiency:
+			if globals.state.offscreennpcs.size() > globals.expansionsettings.minimum_npcs_to_detain && rand_range(0,100) - rand_range(0,globals.state.allnpcs.size() - globals.expansionsettings.minimum_npcs_to_detain) <= guard_efficiency + npcs[NPC_REMEET]:
 				if npcs[NPC_REP] < 0 || npcs[NPC_ACTION] in ['fleeing','escaping','crime','plottedcrime','hiding']:
 					npcs[NPC_ACTION] = 'detained'
 
@@ -3156,6 +3157,14 @@ var dictUniqueImagePaths = {
 			HIGH_STRESS: 'res://files/images/melissa/melissanakedneutral.png',
 		},
 	},
+	'Tia': {
+		IMAGE_DEFAULT: {
+			HIGH_STRESS: 'res://files/aric_expansion_images/characters/tiaclothed.png',
+		},
+		IMAGE_NAKED: {
+			HIGH_STRESS: 'res://files/aric_expansion_images/characters/tianaked.png',
+		},
+	},
 	'Tisha': {
 		IMAGE_DEFAULT: {
 			LOW_STRESS: 'res://files/images/tisha/tishahappy.png',
@@ -3237,6 +3246,7 @@ func updateBodyImage(person):
 
 var listCompat = ['','low','medium','high']
 var listSex = ['male', 'female', 'futanari']
+
 func updateSexualityImage(person):
 	if person == null:
 		return

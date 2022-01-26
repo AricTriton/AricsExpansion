@@ -8,6 +8,7 @@ var magic_races_array = ['Slime']
 var races_beastfree_darkelf_free = ['Human','Elf','Dark Elf','Orc','Gnome','Goblin','Demon','Dragonkin','Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla','Slime']
 var genealogies = ['human','gnome','elf','tribal_elf','dark_elf','orc','goblin','dragonkin','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime','bunny','dog','cow','cat','fox','horse','raccoon']
 var genealogies_beastfree = ['human','gnome','elf','tribal_elf','dark_elf','orc','goblin','dragonkin','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime',]
+var genealogies_beastkin_only = ['bunny','dog','cat','fox','raccoon'] #ralphB - for breeding race consolidation - needs to include all races to be consolidated
 ###---End Expansion---###
 
 ###---Added by Expansion---### centerflag982 - dickgirls can generate in world
@@ -142,7 +143,11 @@ func fillSizeArrayDict():
 	}
 
 func setSizes(person,mother,father):
-	sizeDict.futanari.balls = 0.5 if globals.rules.futaballs else 0
+	#The key needs to not exist to not be added
+	if globals.rules.futaballs:
+		sizeDict.futanari.balls = 0.5
+	else:
+		sizeDict.futanari.erase("balls")
 	for part in sizeDict[person.sex]:
 		var motherModifier = 0
 		var fatherModifier = 0
@@ -236,7 +241,7 @@ func newbaby(mother,father):
 		var temp
 		for i in listMaxStats:
 			temp = max(father.stats[i], mother.stats[i])
-			if pStats.str_max < temp:
+			if pStats[i] < temp:
 				pStats[i] += round((temp - pStats[i]) *.6)
 
 	#Bodyshape
@@ -301,7 +306,7 @@ func newbaby(mother,father):
 	
 	#Genealogy
 	build_genealogy(person, mother, father)
-	setRace(person)
+	setRace(person,mother)
 	setRaceDisplay(person)
 	set_race_secondary(person)
 	
@@ -584,6 +589,29 @@ func build_genealogy(person, mother, father):
 	while percent != 100:
 		percent = build_genealogy_equalize(person, percent)
 	#/ralph9
+	#ralphB - optional consolidation of beastkin/halfkin races on breeding (offspring will have only one beastkin/halfkin type race with total % that would have been split b/n different beastkin/halfkin races)
+	if globals.useRalphsTweaks && globals.expansionsettings.consolidatebeastDNA:
+		var total_beastkin_race_percent = 0
+		var babys_beastkin_races = []
+		var selected_race = "human"
+		var highest_beastkin_race_percent = 0
+		for race in genealogies:
+			if race in genealogies_beastkin_only:
+				babys_beastkin_races.append(race)
+				total_beastkin_race_percent += person.genealogy[race]
+				if person.genealogy[race] > highest_beastkin_race_percent:
+					selected_race = race
+					highest_beastkin_race_percent = person.genealogy[race]
+		if babys_beastkin_races.size() > 1:
+			for race in babys_beastkin_races:
+				if person.genealogy[race] > rand_range(0,total_beastkin_race_percent):
+					selected_race = race
+			for race in babys_beastkin_races:
+				if race == selected_race:
+					person.genealogy[race] = total_beastkin_race_percent
+				else:
+					person.genealogy[race] = 0
+	#/ralphB
 	globals.traceFile('build genealogy')
 	return
 
@@ -622,15 +650,17 @@ func build_genealogy_equalize(person, percent):
 	
 	return lpercent
 
-func setRace(person):
+func setRace(person,mother):
 	var currentrace = ""
 	var highestpercent = 0
 	
 	#Pick Highest Genetics
 	for race in genealogies:
-		if person.genealogy[race] >= highestpercent:
+		if person.genealogy[race] > highestpercent:
 			currentrace = race
 			highestpercent = person.genealogy[race]
+		elif person.genealogy[race] == highestpercent && mother.race == race:
+			currentrace = race
 	
 	#Assign Race Type/Race
 	var caprace = currentrace.capitalize()

@@ -1,6 +1,7 @@
 
 ###---Added by Expansion---### Deviate
 var corejobs = ['rest','forage','hunt','cooking','library','nurse','maid','storewimborn','artistwimborn','assistwimborn','whorewimborn','escortwimborn','fucktoywimborn', 'lumberer', 'ffprostitution','guardian', 'research', 'slavecatcher','fucktoy','housepet']
+var manaeaters = ['Succubus','Golem'] #ralphC - used in food consumption calcs, etc.
 ###---End Expansion---###
 
 func _ready():
@@ -115,6 +116,81 @@ func _ready():
 		get_node("Navigation/endlog").disabled = true
 	_on_mansion_pressed()
 	#startending()
+
+func rebuild_slave_list():
+	var personList = get_node("charlistcontrol/CharList/scroll_list/slave_list")
+	var categoryButtons = [personList.get_node("mansionCategory"), personList.get_node("prisonCategory"), personList.get_node("farmCategory"), personList.get_node("awayCategory")]
+	var awayLabel = personList.get_node('awayLabel')
+	var nodeIndex = 0
+	var isSlaveAway = false
+	
+	for catIdx in range(3):
+		personList.move_child( categoryButtons[catIdx], nodeIndex)
+		nodeIndex += 1
+		
+		var startIndex = nodeIndex
+		for person in globals.slaves:
+			if person.away.duration != 0:
+				if person.away.at != 'hidden':
+					isSlaveAway = true
+				continue
+			if catIdx == 0:
+				if person.sleep == 'jail' || person.sleep == 'farm':
+					continue
+			elif catIdx == 1:
+				if person.sleep != 'jail':
+					continue
+			elif catIdx == 2:
+				if person.sleep != 'farm':
+					continue
+
+			if nodeIndex < personList.get_children().size() - (3 - catIdx):
+				if personList.get_children()[nodeIndex].has_meta('id') && personList.get_children()[nodeIndex].get_meta('id') == person.id:
+					updateSlaveListNode(personList.get_children()[nodeIndex], person, categoryButtons[catIdx].pressed)
+				else: #search for correct node
+					var notFound = true
+					for searchIndex in range(nodeIndex, personList.get_children().size()):
+						var searchNode = personList.get_children()[searchIndex]
+						if searchNode.has_meta('id') && searchNode.get_meta('id') == person.id:
+							personList.move_child( searchNode, nodeIndex)
+							updateSlaveListNode(searchNode, person, categoryButtons[catIdx].pressed)
+							notFound = false
+							break
+					if notFound:
+						createSlaveListNode(personList, person, nodeIndex, categoryButtons[catIdx].pressed)
+			else:
+				createSlaveListNode(personList, person, nodeIndex, categoryButtons[catIdx].pressed)
+			nodeIndex += 1
+		categoryButtons[catIdx].visible = (startIndex != nodeIndex)
+
+	personList.move_child( categoryButtons[3], nodeIndex)
+	categoryButtons[3].visible = isSlaveAway
+	nodeIndex += 1
+	personList.move_child( awayLabel, nodeIndex)
+	awayLabel.visible = isSlaveAway && categoryButtons[3].pressed
+	nodeIndex += 1
+
+	if isSlaveAway && categoryButtons[3].pressed:
+		var text = ''
+		for person in globals.slaves:
+			if person.away.duration != 0 && person.away.at != 'hidden':
+				text += "%s[color=aqua]%s[/color] %s[color=yellow]%s day%s[/color]." % ['' if text.empty() else '\n', person.name_long(), awayText.get(person.away.at, awayText.default), person.away.duration, 's' if (person.away.duration > 1) else '']
+		awayLabel.bbcode_text = text
+		call_deferred("fixAwayLabel", awayLabel)
+
+	for clearIndex in range(nodeIndex, personList.get_children().size()):
+		var clearNode = personList.get_children()[clearIndex]
+		if clearNode.has_meta('id'):
+			clearNode.hide()
+			clearNode.queue_free()
+	
+	get_node("charlistcontrol/CharList/res_number").set_bbcode('[center]Residents: ' + str(globals.slavecount()) +'[/center]')
+	get_node("ResourcePanel/population").set_text(str(globals.slavecount()))
+	###---Added by Expansion---### Interactions Remaining
+	get_node("charlistcontrol/interactionbutton").set_text(str(globals.state.nonsexactions)+" | "+str(globals.state.sexactions))
+	get_node("charlistcontrol/interactionbutton").set_disabled(globals.state.sexactions < 1 && globals.state.nonsexactions < 1)
+	###---End Expansion---###
+	_on_orderbutton_pressed()
 
 func _input(event):
 	###---Added by Expansion---### Minor Tweaks by Dabros Integration
@@ -582,36 +658,85 @@ func _on_end_pressed():
 				if i.has("ondayend"):
 					globals.effects.call(i.ondayend, person)
 			var consumption = variables.basefoodconsumption
-			if chef != null:
-				consumption = max(3, consumption - (chef.sagi + (chef.wit/20))/2)
-				###---Added by Expansion---### Hybrid Support
-				if chef.race.find('Scylla') >= 0:
-					consumption = max(3, consumption - 1)
-				###---End Expansion---###
-			if person.traits.has("Small Eater"):
-				consumption = consumption/3
-			###---Added by Expansion---### ---PENDING: Add option to "Drink from the Source"
-			if person.traits.has("Altered Dietary Needs"):
-				if globals.expansion.altereddiet_foodavailable(person) == true:
-					temptext
-					consumption = 0
-					temptext = globals.expansion.altereddiet_consumebottle(person)
-					text2.set_bbcode(text2.get_bbcode()+person.dictionary(temptext))
-				else:
-					consumption = consumption * 2
-					text0.set_bbcode(text0.get_bbcode()+person.dictionary('$name could not find any bottles that matched their new dietary needs and had to try to consume twice as much food to avoid starvation. \n'))
+			#ralphC - Succubus, Golem, and any future mana eaters
+			var hungryforfood = 1 #ralphC - only changed for mana eaters (ie. Succubus) below
+			var manaconsumption = variables.basemanafoodconsumption
+			var feedmana = true
+			if person.race_display in manaeaters || person.race in manaeaters:
+				hungryforfood = 0
+				if !person.traits.has('Clockwork'): #trait to be added with Golem race expansion - needs no mana or food
+					if person.race_display == 'Succubus' && person.vagvirgin && person.age in ["child"]:
+						hungryforfood += 1
+						feedmana = false
+					elif person.race_display == 'Succubus':
+						person.mana_hunger += manaconsumption * variables.succubusagemod[person.age]
+					else:
+						person.mana_hunger += manaconsumption
+					if feedmana && globals.resources.mana > person.manafeedpolicy:
+						#print("Ralph Test: About to try channelling mana to Succubus: " + str(person.name))
+						if globals.resources.mana > person.mana_hunger + person.manafeedpolicy: #if there's enough mana
+							text0.set_bbcode(text0.get_bbcode()+person.dictionary('[color=yellow]You channel ' + str(int(person.mana_hunger)) + ' mana into ' + str(person.name_short()) + '[/color]\n'))
+							globals.resources.mana -= person.mana_hunger
+							person.mana_hunger = 0
+							#print("Ralph Test: Fully fed Succubus: " + str(person.name))
+						else: #if there's not enough mana
+							text0.set_bbcode(text0.get_bbcode()+person.dictionary('[color=yellow]You attempt to channel ' + str(int(person.mana_hunger)) + ' mana into ' + str(person.name_short()) + ' but your reserves run low before you can finish.[/color]\n'))
+							person.mana_hunger -= globals.resources.mana - person.manafeedpolicy
+							globals.resources.mana = person.manafeedpolicy
+							if person.race_display == 'Succubus':
+								if person.mana_hunger > variables.succubushungerlevel[2] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]:
+									person.health -= person.stats.health_max
+									text = person.dictionary('[color=#ff4949]$name has died of mana starvation.[/color]\n')
+									deads_array.append({number = count, reason = text})
+								elif person.mana_hunger > variables.succubushungerlevel[1] * variables.basemanafoodconsumption && person.lust >= 90:
+									person.add_trait('Sex-crazed')
+									hungryforfood = 1.5
+									person.stress += 20
+									person.obed -= max(35 - person.loyal/3,10)
+									person.attention += 40
+									person.attention += 40
+								elif person.mana_hunger > variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]:
+									person.lust += 25
+									hungryforfood = 1.5
+									person.stress += 15
+									person.obed -= max(35 - person.loyal/3,10)
+									person.attention += 25
+					#elif person.race_display in ['Golem']:
+					# make the Golem sleep?
+			if hungryforfood > 0: #ralphC - just indents below except where commented #ralphC
+				if chef != null:
+					consumption = max(3, consumption - (chef.sagi + (chef.wit/20))/2)
+					###---Added by Expansion---### Hybrid Support
+					if chef.race.find('Scylla') >= 0:
+						consumption = max(3, consumption - 1)
+					###---End Expansion---###
+				if person.traits.has("Small Eater"):
+					consumption = consumption/3
+				###---Added by Expansion---### ---PENDING: Add option to "Drink from the Source"
+				consumption = consumption * hungryforfood #ralphC - hungryforfood should be 1 unless starving Succubus
+				if person.traits.has("Altered Dietary Needs"): 
+					if globals.expansion.altereddiet_foodavailable(person) == true:
+						temptext
+						consumption = 0
+						temptext = globals.expansion.altereddiet_consumebottle(person)
+						text2.set_bbcode(text2.get_bbcode()+person.dictionary(temptext))
+					else:
+						consumption = consumption * 2
+						text0.set_bbcode(text0.get_bbcode()+person.dictionary('$name could not find any bottles that matched their new dietary needs and had to try to consume twice as much food to avoid starvation. \n'))
 			###---Expansion End---###
-			if globals.resources.food >= consumption:
-				person.loyal += rand_range(0,1)
-				person.obed += person.loyal/5 - (person.cour+person.conf)/10
-				globals.resources.food -= consumption
-			else:
-				person.stress += 20
-				person.health -= rand_range(person.stats.health_max/6,person.stats.health_max/4)
-				person.obed -= max(35 - person.loyal/3,10)
-				if person.health < 1:
-					text = person.dictionary('[color=#ff4949]$name has died of starvation.[/color]\n')
-					deads_array.append({number = count, reason = text})
+				if globals.resources.food >= consumption:
+					person.loyal += rand_range(0,1)
+					person.obed += person.loyal/5 - (person.cour+person.conf)/10
+					globals.resources.food -= consumption
+				else:
+					person.stress += 20
+					person.health -= rand_range(person.stats.health_max/6,person.stats.health_max/4)
+					person.obed -= max(35 - person.loyal/3,10)
+					if person.health < 1:
+						text = person.dictionary('[color=#ff4949]$name has died of starvation.[/color]\n')
+						deads_array.append({number = count, reason = text})
+						continue
+			#/ralphC
 			if person.obed < 25 && person.cour >= 50 && person.rules.silence == false && person.traits.find('Mute') < 0 && person.sleep != 'jail' && person.sleep != 'farm' && person.brand != 'advanced'&& rand_range(0,1) > 0.5:
 				text0.set_bbcode(text0.get_bbcode()+person.dictionary('$name dares to openly show $his disrespect towards you and instigates other servants. \n'))
 				for ii in globals.slaves:
@@ -1351,6 +1476,11 @@ func nextdayevents():
 	if player.preg.duration > variables.pregduration && player.preg.is_preg == true:
 		childbirth_loop(player)
 		checkforevents = true
+		#ralphD - trying to stop my MC from being eternally fertilized 8P
+		player.cum.pussy = 0
+		if !player.preg.womb.empty():
+			player.preg.womb.clear()
+		#/ralphD
 		return
 	for i in globals.slaves:
 		###---Added by Expansion---### Hybrid Support
@@ -1362,6 +1492,7 @@ func nextdayevents():
 				i.away.duration = 3
 			i.away.at = 'in labor'
 			childbirth_loop(i)
+			i.cum.pussy = 0 #ralphD - better help npcs keep from being eternally preggers from 1 f%$& too
 			if !i.preg.womb.empty():
 				i.preg.womb.clear()
 			checkforevents = true
@@ -1747,6 +1878,100 @@ func build_mansion_info():
 	else:
 		get_node("charlistcontrol/slavelist").hide()
 
+func _on_jailpanel_visibility_changed():
+	var temp = ''
+	var text = ''
+	var count = 0
+	var prisoners = []
+	var jailer
+	
+	for i in get_node("MainScreen/mansion/jailpanel/ScrollContainer/prisonerlist").get_children():
+		i.hide()
+		i.queue_free()
+	###---Added by Expansion---### Prisoner Release Panel
+	for i in get_node("MainScreen/mansion/jailpanel/Scroll_Release/ready_prisonerlist").get_children():
+		i.hide()
+		i.queue_free()
+	for i in get_node("MainScreen/mansion/jailpanel/jailer_button").get_children():
+		i.hide()
+		i.queue_free()
+	###---End Expansion---###
+	
+	if get_node("MainScreen/mansion/jailpanel").visible == false:
+		return
+	for i in globals.slaves:
+		if i.sleep == 'jail' && i.away.duration == 0:
+			temp = temp + i.name
+			prisoners.append(i)
+			var button = Button.new()
+			var node = get_node("MainScreen/mansion/jailpanel/ScrollContainer/prisonerlist")
+			node.add_child(button)
+			button.set_text(i.name_long())
+			button.set_name(str(count))
+			button.connect('pressed', self, 'prisonertab', [count])
+			###---Added by Expansion---### Prisoner Release Panel
+			var rebelling = false
+			for check_captured in i.effects.values():
+				if check_captured.code == 'captured':
+					rebelling = true
+					break
+			if rebelling == false:
+				button = Button.new()
+				node = get_node("MainScreen/mansion/jailpanel/Scroll_Release/ready_prisonerlist")
+				node.add_child(button)
+				button.set_text(i.name_long())
+				button.set_name(str(count))
+				button.connect('pressed', self, 'prisonertab', [count])
+			###---End Expansion---###
+		if i.work == 'jailer' && i.away.duration == 0:
+			jailer = i
+			
+		count += 1
+	###---Added by Expansion---### Jail Expanded
+	if temp == '':
+		text = 'There are no prisoners currently in the Dungeon.'
+	else:
+		#Colorized Text
+		text = 'There are a total of [color=aqua] '+str(prisoners.size()) + '[/color] prisoner(s) in the Dungeon.\nThere are currently [color=aqua]' + str(globals.state.mansionupgrades.jailcapacity-prisoners.size()) + '[/color] free cell(s).\nPrisoners can be disciplined via [color=aqua]Interactions > Meet[/color]. '
+	if globals.state.mansionupgrades.jailtreatment:
+		text += "\n[color=lime]Your jail is decently furnished and tiled. [/color]"
+	if globals.state.mansionupgrades.jailincenses:
+		text += "\n[color=lime]You can smell soft burning incenses in the air.[/color]"
+	if jailer == null:
+		get_node("MainScreen/mansion/jailpanel/jailer_text").set_bbcode('[color=#d1b970]Current Jailer[/color]\n[color=red]No [color=aqua]Jailer[/color] is assigned to manage the Dungeon.[/color]')
+		get_node("MainScreen/mansion/jailpanel/TextureRect").visible = false
+	else:
+		get_node("MainScreen/mansion/jailpanel/jailer_text").set_bbcode('[color=#d1b970]Current Jailer[/color]')
+		#Add Button
+		var button = Button.new()
+		var node = get_node("MainScreen/mansion/jailpanel/jailer_button")
+		node.add_child(button)
+		button.set_text(jailer.name_long())
+		button.set_name(str(jailer.id))
+		button.connect('pressed', self, 'openslavetab', [jailer])
+		#Assign Portrait
+		if jailer.imageportait != null && globals.loadimage(jailer.imageportait):
+			get_node("MainScreen/mansion/jailpanel/TextureRect").visible = true
+			get_node("MainScreen/mansion/jailpanel/TextureRect/portrait").set_texture(globals.loadimage(jailer.imageportait))
+		else:
+			jailer.imageportait = null
+			#TBK - Debating on leaving Hidden or not
+			get_node("MainScreen/mansion/jailpanel/TextureRect").visible = true
+			get_node("MainScreen/mansion/jailpanel/TextureRect/portrait").set_texture(globals.loadimage(globals.sexuality_images.unknown))
+		#text = text + jailer.dictionary('\n$name is assigned as jailer.')
+	###---End Expansion---###
+	
+	get_node("MainScreen/mansion/jailpanel/jailtext").set_bbcode(text)
+
+func prisonertab(number):
+	self.currentslave = number
+	###---Added by Expansion---### Jail Expanded
+	background_set('jail')
+	yield(self, 'animfinished')
+	hide_everything()
+	###---End Expansion---###
+	get_node("MainScreen/slave_tab").tab = 'prison'
+	get_node("MainScreen/slave_tab").slavetabopen()
 
 ###---Added by Expansion---### Added by Deviate, Tweaked by Aric, Tested by Banana
 var birthmother
@@ -1926,7 +2151,8 @@ func ClearBabyTraits(age):
 		baby.trait_remove('Sadist')
 		baby.trait_remove('Likes it rough')
 		baby.trait_remove('Enjoys Anal')
-		baby.trait_remove('Grateful')
+		if !globals.expansionsettings.gratitude_for_all: #ralphC - by request
+			baby.trait_remove('Grateful') #ralphC
 		baby.trait_remove('Sex-crazed')
 	elif age == 'teen':
 		if baby.traits.has('Slutty') || baby.traits.has('Devoted'):
@@ -1946,7 +2172,8 @@ func ClearBabyTraits(age):
 		if baby.traits.has('Enjoys Anal') && rand_range(0,100) < 50:
 			baby.trait_remove('Enjoys Anal')
 		if baby.traits.has('Grateful') && rand_range(0,100) < 50:
-			baby.trait_remove('Grateful')
+			if !globals.expansionsettings.gratitude_for_all: #ralphC - by request
+				baby.trait_remove('Grateful') #ralphC
 		if baby.traits.has('Sex-crazed') && rand_range(0,100) < 75:
 			baby.trait_remove('Sex-crazed')
 	elif age == 'adult':
@@ -3649,6 +3876,85 @@ func _on_sexbutton_pressed():
 	updatedescription()
 	if globals.state.tutorial.interactions == false:
 		get_node("tutorialnode").interactions()
+
+func updatedescription():
+	var text = ''
+	
+	if sexmode == 'meet':
+		text += "[center][color=yellow]Meet[/color][/center]\nBuild relationship or train your servant: "
+		for person in sexslaves:
+			text += '[color=aqua]%s[/color]. ' % person.name_short()
+	elif sexmode == 'sex':
+		var consensual = true
+		for person in sexslaves:
+			if !person.consent:
+				consensual = false
+				break
+		if sexslaves.empty():
+			text += "[center][color=yellow]Sex[/color][/center]\nCurrent participants: "
+		else:
+			if sexslaves.size() == 1:
+				if consensual:
+					text += "[center][color=yellow]Consensual Sex[/color][/center]"
+				else:
+					text += "[center][color=yellow]Rape[/color][/center]"
+			elif sexslaves.size() in [2,3]:
+				if consensual:
+					text += "[center][color=yellow]Consensual Group Sex[/color][/center]"
+				else:
+					text += "[center][color=yellow]Group Rape[/color][/center]"
+			else:
+				text += "[center][color=yellow]Orgy[/color][/center]\n[color=aqua]Aphrodite's Brew[/color] is required to initialize an orgy."
+
+			if consensual:
+				text += "\nAll participants have given consent."
+			else:
+				text += "\nNot all participants have given consent."
+			text += "\nCurrent participants: "
+			for person in sexslaves:
+				if person.consent:
+					text += '[color=aqua]%s[/color], ' % person.name_short()
+				else:
+					text += '[color=#ff3333]%s[/color], ' % person.name_short()
+			text = text.substr(0, text.length() - 2) + '.'
+		for animal in sexanimals:
+			if sexanimals[animal] != 0:
+				text += "\n" + animal.capitalize() + '(s): ' + str(sexanimals[animal])
+		
+#	elif sexmode == 'abuse':
+#		text += "[center][color=yellow]Rape[/color][/center]"
+#		text += "\nRequires a target and an optional assistant. Can be initiated with prisoners. \nCurrent target: "
+#		for i in sexslaves:
+#			text += i.dictionary('[color=aqua]$name[/color]') + ". "
+#		text += "\nCurrent assistant: "
+#		for i in sexassist:
+#			text += i.dictionary('[color=aqua]$name[/color]') + ". "
+#		for i in sexanimals:
+#			if sexanimals[i] != 0:
+#				text += "\n" + i.capitalize() + '(s): ' + str(sexanimals[i])
+#		get_node("sexselect/startbutton").set_disabled(sexslaves.size() == 1 && sexassist.size() <= 1)
+	if sexslaves.empty():
+		text += '\nSelect slaves to start.'
+	else:
+		text += '\nClick Start to initiate.'
+	###---Added by Expansion---### Interaction Hint
+	text += "\n\nNon-sex Interactions left for today: [color=aqua]" + str(globals.state.nonsexactions) + "[/color]"
+	text += "\nSex Interactions left for today: [color=aqua]" + str(globals.state.sexactions) + "[/color]"
+	###---End Expansion---###
+	get_node("sexselect/sextext").set_bbcode(text)
+	
+	var enablebutton = true
+	if sexslaves.size() == 0:
+		enablebutton = false
+	elif sexmode == 'meet':
+		if globals.state.nonsexactions < 1:
+			enablebutton = false 
+	elif sexmode == 'sex':
+		if globals.state.sexactions < 1:
+			enablebutton = false 
+		elif sexslaves.size() >= 4 && sexmode == 'sex' && globals.itemdict.aphroditebrew.amount < 1:
+			enablebutton = false 
+	$sexselect/startbutton.disabled = !enablebutton
 
 ###---End Expansion---###
 

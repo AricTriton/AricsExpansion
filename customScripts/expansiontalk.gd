@@ -730,4 +730,135 @@ func consentBreederAccept(person):
 	text = globals.randomitemfromarray(choice)
 	return text
 
+#ralphC - Succubus text
+func introsuccubus(person):
+	var text = ""
+	var choice = []
+	if !person.knowledge.has('issuccubus'):
+		if person.age == 'child' && person.vagvirgin:
+			choice.append('My... hunger?')
+			if person.mind.demeanor in ['open','excitable'] || person.mood in ['happy', 'playful']:
+				choice.append('Why did you bring me candy or something, $master?')
+		elif person.mana_hunger >= variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]:
+			if person.mind.demeanor in ['meek'] || person.mood == 'scared':
+				choice.append('I am sorry $master. I have been eating more than anyone else lately.')
+			if person.mind.demeanor == "reserved":
+				choice.append('I have been very, very hungry $master...')
+			if person.mood in ['playful','happy']:
+				choice.append('Oh my gods, I have been sooo hungry lately!  No matter how much I eat it never ends.')
+				choice.append("I am so totally starving!  Like so hungry it doesn't even make sense $master.")
+				choice.append("Thanks for thinking of me, $master! I have been famished lately. Did you bring me something?")
+			if person.mood == 'respectful':
+				choice.append("Yes $master, as you will.")
+			if person.mood == 'horny':
+				choice.append("Um, about all the extra food I've been eating. Maybe you could be persuaded to look the other way in exchange for...")
+				choice.append("I could pay for the extra portions with my body, $master...")
+			if person.mood == 'obediant':
+				choice.append("$master, I'm sorry. I have been sneaking extra servings at meals.")
+			if person.mood == 'indifferent':
+				choice.append("Sure thing, $master...")
+			if person.mood == 'scared':
+				choice.append("O-o-okay $master...if that's what you want...")
+			if person.mood == 'angry':
+				choice.append("I'm just really hungry, ok. What's it to you?")
+		else:
+			choice.append('My... hunger?')
+	else:
+		if person.mood == 'indifferent':
+			choice.append("Sure, whatever.")
+			choice.append("Sure thing, $master...")
+		if person.mana_hunger >= (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+			if person.mood == 'playful':
+				choice.append("You're going to let me eat all I want now, I know it!")
+			if person.mood == 'happy':
+				choice.append("Thanks for thinking of me, $master! Now that you mention it, I'm starving.")
+			if person.mood == 'respectful':
+				choice.append("$master, if that is your will. I will "+str(globals.expansion.nameBeBred())+".")
+			if person.mood == 'horny':
+				choice.append("Sounds...enticing. I'm ready whenever you are, $master!")
+				choice.append("Yes! I mean you'll feed me...yes. Yes. YES! ...Yes? Shit...finally...yes.")
+			if person.mood == 'obediant':
+				choice.append("Yes, $master. My "+str(globals.expansion.namePussy())+" is yours to command.")
+			if person.mood == 'scared':
+				choice.append("O-o-okay $master...if that's what you want...")
+				choice.append("Yes $master... I'll do anything. Please feed me...")
+			if person.mood == 'sad':
+				choice.append("I'm sorry $master. I'm so hungry I haven't been able to stop from "+str(globals.expansion.nameCrying())+".")
+			if person.mood == 'angry':
+				choice.append("It's about time! If you don't feed me I'll die you know.")
+		else:
+			if person.mood == 'scared':
+				choice.append("O-o-okay $master... please, please, please don't stop feeding me...")
+			if person.mood == 'angry':
+				choice.append("Yeah, what about it?")
+			if person.mood == 'obediant':
+				choice.append("As you wish, $master.")
+			if person.mood == 'happy':
+				choice.append("Thanks for thinking of me, $master!")
+			else:
+				choice.append('Yes $master?')
+	if choice == null:
+		choice.append("Alright $master.")
+		choice.append('Yes $master?')
+	text = globals.randomitemfromarray(choice)
+	return text
+	
+func succubusrevealed1(person):
+	var text = ""
+	var choice = []
+	if person.mood == 'scared':
+		if person.stats.loyal <= 20:
+			choice.append("But then I won't be able to live without you $master! $sir, I'll be good, please just make it so I never grow up, please.")
+		elif person.stats.loyal <= 70:
+			choice.append("So, I wouldn't be able to live without you would I, $master? Could you... make it so I never grow up, please?")
+		else:
+			choice.append("It's scary, but I know you'll take care of me, $master. Whatever you decide for me will be ok.")
+	elif person.mood in ['happy','playful','horny'] || person.lewdness > 50:
+		choice.append("$master, that's amazing!  I can't wait to actually EAT orgasms. This is best news ever!")
+		choice.append("That...is...soooo naughty! I can do it, I know I can!")
+	elif person.mood in ['respectful','obediant']:
+		choice.append('Yes... $master. I understand.')
+	if person.mood in ['indifferent','angry'] || person.stats.loyal <= 20:
+		choice.append("Whatever... whether I live or die is just up to you either way.")
+	if choice == null:
+		choice.append('Yes... $master. I understand.')
+	text = globals.randomitemfromarray(choice)
+	return text
+
+func succubusrevealed2(person):
+	var text = ""
+	var choice = []
+	if person.mood == 'scared':
+		if person.wit > 70:
+			choice.append("Oh no, I'm a liability to you, $master! I promise I'll work hard, please take care of me.")
+		else:
+			choice.append("Oh no, how will I feed myself when I get old?")
+	if person.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+		if person.traits.has('Sex-crazed'):
+			if person.wit > 70:
+				choice.append("So that's why? Well, let's go fix my Viamin D deficiency then $master.")
+			elif person.wit < 15:
+				choice.append("Um, I don't really get it... it's so hard to pay attention. I just need to get plowed so bad it hurts.")
+			else:
+				choice.append("So that's why I can't stop thinking about cock? Well, I guess I know what I need to do now...")
+		elif person.lewdness < 10 || person.traits.has('Prude'):
+			choice.append("Could you... I don't know... just give me mana directly then? I don't want to die, but I don't think I want to be a whore either.")
+		else:
+			choice.append("Well, my recurring dream of competing in a sausage eating contest makes a different kind of sense now...")
+	else:
+		if person.lewdness > 40:
+			choice.append("I guess I just need to keep on fucking then don't I, $master?")
+		if person.stats.loyal > 50:
+			choice.append("So, I'd have hard time living without you wouldn't I, $master? Thank you for taking care of me.")
+		if person.metrics.ownership < 3:
+			choice.append("Thanks for telling me right away. I hope you'll take care of me, $master.")
+		if person.metrics.ownership >= 3:
+			choice.append('Yes $master. I understand now. I... have a lot to think about.')
+		if person.mood in ['indifferent','angry'] || person.stats.loyal <= 20:
+			choice.append("Whatever... whether I live or die is just up to you either way.")
+	if choice == null:
+		choice.append('Yes... $master. I understand.')
+	text = globals.randomitemfromarray(choice)
+	return text
+#/ralphC
 #---End Intro---#

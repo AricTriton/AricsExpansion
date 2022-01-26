@@ -136,6 +136,34 @@ var enemygrouppools = {
 		units = [['arachna1',1,1],['spider',2,5]], awareness = -10, captured = ['webvictim'], special = null,
 		description = 'You freeze in your tracks and turn to see [color=aqua]Giant Spiders led by a wild Arachna[/color] spinning a [color=yellow]large cocoon[/color] containing some wayward traveler entangled in their webs. You could attack the humungous arachnids, but they will not give up their prize without a fight.',
 	},
+	delfvsgob1 = {
+		units = [['darkelf1',2,3],['goblin',3,7]], awareness = 20, captured = null, special = null,
+		description = 'You come upon [color=aqua]dark elves and goblins skirmishing[/color]. They seem intent on killing one another and are unaware of your presence as of yet. ',
+		descriptionambush = 'You walk right into the middle of a [color=aqua]pitched battle between goblins and dark elves[/color]. Despite their animosity toward one another, they must have some sort of pact because they charge at you together.',
+	},
+	delfattackers1 = {
+		units = [['darkelf1',2,3]], awareness = -10, captured = ['goblinvictim'], special = null,
+		description = 'You hear the ring of steel on steel and follow it to find [color=aqua]dark elves[/color] circling a [color=yellow]lone goblin survivor[/color] surrounded by the bodies of its peers. One of the dark elves prepares a finishing blow.',
+	},
+	delfattackers2 = {
+		units = [['darkelf1',2,4],['cougarmount',3,7]], awareness = 40, captured = null, special = null,
+		description = 'You spot a [color=aqua]group of dark elf guards[/color] patrolling the tunnels mounted on [color=aqua]massive cougars[/color]. You remain hidden for the moment.',
+		descriptionambush = "A [color=aqua]group of dark elf guards[/color] takes your party by surprise, barreling through the caves at you while mounted on [color=aqua]massive cougars[/color]. You are not certain when you strayed into their territory, but these dark elves will not tolerate your invasion.",
+	},
+	delffew = {
+		units = [['darkelf1',2,4]], awareness = -10, captured = null, special = null, escape = 50,
+		description = 'You spot a [color=aqua]small group of dark elves[/color] walking through the caves. ',
+		descriptionescape = "A group of dark elves escapes from you before you can get close to them. How many more have been watching you from the darkness?",
+	},
+	goblinattackers1 = {
+		units = [['goblin',3,6],['ooze',3,6]], awareness = 30, captured = null, special = null,
+		description = 'You smell the [color=aqua]filthy cave goblins[/color] before you see them. They appear to be watching over a [color=aqua]quivering mass of oozes[/color]. You remain hidden for the moment.',
+		descriptionambush = "A [color=aqua]group of goblins[/color] ambushes and harries you right into a [color=aqua]mass of oozes[/color]. The goblins have prepared a lethal trap, and you've fallen right into it.",
+	},
+	goblinattackers2 = {
+		units = [['goblin',3,6]], awareness = -10, captured = ['delfvictim'], special = null,
+		description = 'You come upon a [color=aqua]group of slavering goblins[/color] cackling and looking down upon a prone [color=yellow]young dark elf[/color] who must have strayed too close to goblin territory. It is unclear whether they intend to rape or devour their victim.',
+	},
 	#/ralphA
 	goblingroup = {
 		units = [['goblin',3,7]], awareness = 9, captured = null, special = null,
@@ -387,6 +415,20 @@ var capturespool = {
 		capturesex = ['any'],
 		faction = 'stranger',
 	},
+	goblinvictim = {
+		capturerace = [['Goblin',1]],
+		captureoriginspool = [{value = 'poor', weight = 1},{value = 'slave', weight = 1}],
+		captureagepool = [{value = 'child', weight = 2},{value = 'teen', weight = 5}, {value = 'adult', weight = 4}],
+		capturesex = ['any'],
+		faction = 'stranger',
+	},
+	delfvictim = {
+		capturerace = [['Dark Elf',1]],
+		captureoriginspool = [{value = 'poor', weight = 2},{value = 'commoner', weight = 1}],
+		captureagepool = [{value = 'child', weight = 2},{value = 'teen', weight = 1}],
+		capturesex = ['any'],
+		faction = 'stranger',
+	},
 	#/ralphA
 	slavervictim = {
 		capturerace = ['area'],
@@ -495,6 +537,20 @@ var enemypool = {
 		rewardgold = 0,
 		rewardexp = 20,
 		stats = {health = 60, power = 13, speed = 20, energy = 50, armor = 1, magic = 0, abilities = ['attack'], passives = ['doubleattack15']},
+		skills = [],
+	},
+	cougarmount = {
+		name = 'Cougar',
+		code = 'cougar',
+		faction = 'animal',
+		icon = load("res://files/images/enemies/cougar.png"),
+		special = null,
+		capture = null,
+		level = 8,
+		rewardpool = {bestialessenceing = 35},
+		rewardgold = 0,
+		rewardexp = 20,
+		stats = {health = 90, power = 25, speed = 30, energy = 50, armor = 2, magic = 0, abilities = ['attack'], passives = ['doubleattack15']},
 		skills = [],
 	},
 	spider = {
@@ -879,6 +935,24 @@ var enemypool = {
 		rewardexp = 30,
 		stats = {health = 65, power = 6, speed = 18, energy = 50, armor = 2, magic = 0, abilities = ['attack']},
 		gear = 'forest',
+		skills = [],
+	},
+	darkelf1 = {
+		name = 'Dark Elf',
+		code = 'darkelf1',
+		faction = 'monster',
+		icon = load("res://files/images/enemies/elfguard.png"),
+		special = '',
+		capture = true,
+		capturerace = [['Dark Elf',100]],
+		captureoriginspool = [{value = 'slave', weight = 1},{value = 'poor', weight = 3}],
+		captureagepool = [{value = 'teen', weight = 1}, {value = 'adult', weight = 3}],
+		capturesex = ['any'],
+		rewardpool = {gold = 20, supply = 35},
+		rewardgold = [1,5],
+		rewardexp = 30,
+		stats = {health = 65, power = 6, speed = 18, energy = 50, armor = 2, magic = 0, abilities = ['attack']},
+		gear = 'elfs',
 		skills = [],
 	},
 	#/ralphA
