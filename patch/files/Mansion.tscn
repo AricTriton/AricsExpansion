@@ -11505,6 +11505,35 @@ margin_right = 53.0
 margin_bottom = -10.0
 text = "Cooking Job Settings"
 
+[node name="manastock" type="SpinBox" parent="mansionsettings/Panel"]
+margin_left = 500.0
+margin_top = 140.0
+margin_right = 616.0
+margin_bottom = 174.0
+hint_tooltip = "Market workers will buy mana up to this amount"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+max_value = 3000.0
+step = 20.0
+value = 200.0
+rounded = true
+
+[node name="manabuy" type="CheckBox" parent="mansionsettings/Panel/manastock"]
+margin_top = 40.0
+margin_right = 267.0
+margin_bottom = 65.0
+hint_tooltip = "If enabled, market workers will attempt to buy mana up to the amount above"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Purchase"
+
+[node name="Label2" type="Label" parent="mansionsettings/Panel/manastock"]
+margin_left = -30.0
+margin_top = -30.0
+margin_right = 69.0
+margin_bottom = -10.0
+text = "Mana"
+
 [node name="supplykeep" type="SpinBox" parent="mansionsettings/Panel"]
 margin_left = 680.0
 margin_top = 140.0
@@ -12436,6 +12465,8 @@ current = true
 [connection signal="pressed" from="mansionsettings/Panel/cleanbutton" to="." method="_on_cleanbutton_pressed"]
 [connection signal="item_selected" from="mansionsettings/Panel/headgirlbehavior" to="." method="_on_headgirlbehavior_item_selected"]
 [connection signal="value_changed" from="mansionsettings/Panel/foodbuy" to="." method="_on_foodbuy_value_changed"]
+[connection signal="value_changed" from="mansionsettings/Panel/manastock" to="." method="_on_manastock_value_changed"]
+[connection signal="pressed" from="mansionsettings/Panel/manastock/manabuy" to="." method="_on_manabuy_pressed"]
 [connection signal="value_changed" from="mansionsettings/Panel/supplykeep" to="." method="_on_supplykeep_value_changed"]
 [connection signal="pressed" from="mansionsettings/Panel/supplykeep/supplybuy" to="." method="_on_supplybuy_pressed"]
 [connection signal="meta_clicked" from="tutorialnode/speech/RichTextLabel" to="tutorialnode" method="_on_RichTextLabel_meta_clicked"]
