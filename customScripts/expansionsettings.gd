@@ -450,6 +450,7 @@ func applyRaceTweaks():
 Applies Capitulize's tweaks to the game, mostly description and furry based changes.
 """
 func applyCapitulizeTweaks():
+	#--- Race Changes
 	#Dragonkin
 	globals.races.Dragonkin.skin = ['none']
 	globals.races.Dragonkin.eyeshape = ['slit']
@@ -457,4 +458,31 @@ func applyCapitulizeTweaks():
 	globals.races.Dragonkin.ears = ['short_reptilian','pointy', 'frilled','none','long_round_reptilian','long_droopy_reptilian','long_pointy_reptilian']
 	globals.races.Dragonkin.skincov = ['fullscales']
 	globals.races.Dragonkin.surname = globals.names.reptiliansurname
+	
+	#---Trait Tweaks
+	
+	#Strength
+	globals.origins.traitlist["Weak"].description = "$name is rather weak compared to others. \n\n[color=aqua]Strength -2, Strength Max -2[/color]"
+	globals.origins.traitlist["Weak"].effect.str_max = -2
+	globals.origins.traitlist["Strong"].description = "$name has been blessed with greater strength than most. $He also appears to be harder to tame. \n\n[color=aqua]Strength +2, Strength Max +2, Obedience growth -20%[/color]"
+	globals.origins.traitlist["Strong"].effect.str_max = 2
+	#Agility
+	globals.origins.traitlist["Clumsy"].description = "$name's reflexes are somewhat slower, than the others. \n\n[color=aqua]Agility -2, Agility Max -2, physical occupations are less effective[/color]"
+	globals.origins.traitlist["Clumsy"].effect.agi_max = -2
+	globals.origins.traitlist["Quick"].description = "$name is very active whenever $he does something. However, it also makes $his nervous system less stable. \n\n[color=aqua]Agility +2, Agility Max +2, Stress change +20%[/color]"
+	globals.origins.traitlist["Quick"].effect.agi_max = 2
+	#Magic Affinity
+	globals.origins.traitlist["Magic Deaf"].description = "$name's senses are very dull when it comes to magic. \n\n[color=aqua]Magic Affinity -2, Magic Affinity Max -2[/color]"
+	globals.origins.traitlist["Magic Deaf"].effect.maf_max = -2
+	globals.origins.traitlist["Responsive"].description = "$name is in touch with raw energy, making $him potentially useful in magic area. \n\n[color=aqua]Magic Affinity +2, Magic Affinity Max +2, Toxicity change +20%[/color]"
+	globals.origins.traitlist["Responsive"].effect.maf_max = 2
+	#Endurance
+	globals.origins.traitlist["Frail"].description = "$name's body is much less durable than most. $His physical potential is severely impaired. \n\n[color=aqua]Endurance -2, Endurance Max -2,[/color]"
+	globals.origins.traitlist["Frail"].effect.end_max = -2
+	globals.origins.traitlist["Robust"].description = "$name's physique is way better than most. \n\n[color=aqua]Endurance +2, Endurance Max +2, Fear change -20%[/color]"
+	globals.origins.traitlist["Robust"].effect.end_max = 2
+
+	
+	#Variable Tweaks
+	variables.banditishumanchance = 25.0				# Original - 70.0
 	

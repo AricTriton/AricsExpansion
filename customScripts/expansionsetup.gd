@@ -1278,29 +1278,29 @@ func setRaceBonus_Ralph(person, increasestats):
 	#	person.trait_remove(trait)
 	#	person.add_trait(trait)
 	if person.traits.has('Weak'):
-		person.stats.str_mod -= 2
-		person.stats.str_max -= globals.expansionsettings.
+		person.stats.str_mod -= globals.origins.traitlist["Weak"].str_mod
+		person.stats.str_max -= globals.origins.traitlist["Weak"].str_max
 	if person.traits.has('Strong'):
-		person.stats.str_mod += 2
-		person.stats.str_max -= globals.expansionsettings.
+		person.stats.str_mod += globals.origins.traitlist["Strong"].str_mod
+		person.stats.str_max -= globals.origins.traitlist["Strong"].str_max
 	if person.traits.has('Quick'):
-		person.stats.agi_mod += 2
-		person.stats.agi_max -= globals.expansionsettings.
+		person.stats.agi_mod += globals.origins.traitlist["Quick"].agi_mod
+		person.stats.agi_max -= globals.origins.traitlist["Quick"].agi_max
 	if person.traits.has('Clumsy'):
-		person.stats.agi_mod -= 2
-		person.stats.agi_max -= globals.expansionsettings.
+		person.stats.agi_mod -= globals.origins.traitlist["Clumsy"].agi_mod
+		person.stats.agi_max -= globals.origins.traitlist["Clumsy"].agi_max
 	if person.traits.has('Responsive'):
-		person.stats.maf_mod += 2
-		person.stats.maf_max -= globals.expansionsettings.
+		person.stats.maf_mod += globals.origins.traitlist["Responsive"].maf_mod
+		person.stats.maf_max -= globals.origins.traitlist["Responsive"].maf_max
 	if person.traits.has('Magic Deaf'):
-		person.stats.maf_mod -= 2
-		person.stats.maf_max -= globals.expansionsettings.
+		person.stats.maf_mod -= globals.origins.traitlist["Magic Deaf"].maf_mod
+		person.stats.maf_max -= globals.origins.traitlist["Magic Deaf"].maf_max
 	if person.traits.has('Robust'):
-		person.stats.end_mod += 2
-		person.stats.end_max -= globals.expansionsettings.
+		person.stats.end_mod += globals.origins.traitlist["Robust"].end_mod
+		person.stats.end_max -= globals.origins.traitlist["Robust"].end_max
 	if person.traits.has('Frail'):
-		person.stats.end_mod -= 2
-		person.stats.end_max -= globals.expansionsettings.
+		person.stats.end_mod -= globals.origins.traitlist["Frail"].end_mod
+		person.stats.end_max -= globals.origins.traitlist["Frail"].end_max
 	#/ralph
 	
 	var racedict = ['human':'Human', 'gnome':'Gnome', 'elf':'Elf', 'tribal_elf':'Tribal Elf', 'dark_elf':'Dark Elf' ,'orc':'Orc', 'goblin':'Goblin', 'dragonkin':'Dragonkin', 'dryad':'Dryad', 'arachna':'Arachna', 'lamia':'Lamia', 'fairy':'Fairy', 'harpy':'Harpy', 'seraph':'Seraph', 'demon':'Demon', 'nereid':'Nereid', 'scylla':'Scylla', 'slime':'Slime', 'bunny':'Beastkin Bunny', 'dog':'Beastkin Dog', 'cow':'Taurus', 'cat':'Beastkin Cat', 'fox':'Beastkin Fox', 'horse':'Centaur', 'raccoon':'Beastkin Tanuki', 'hyena':'Gnoll', 'ogre':'Ogre', 'giant':'Giant', 'lizardfolk':'Lizardfolk', 'kobold':'Kobold', 'avali':'Avali', 'mouse':'Beastkin Mouse', 'squirrel':'Beastkin Squirrel', 'otter':'Beastkin Otter', 'bird':'Beastkin Bird']

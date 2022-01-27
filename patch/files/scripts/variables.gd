@@ -1,7 +1,9 @@
 extends Node
 
 var basehealth = 50.0
+var ogrebasehealth = 65.0
 var healthperend = 25.0
+var ogrehealthperend = 40.0
 ###---Added by Expansion---### Difficulty Adjustment
 var geardropchance = 30.0
 var timeformeetinteraction = 20.0
@@ -56,7 +58,9 @@ var ovulationtype2stage2 = 15
 
 #slave stats & combat
 
-var damageperstr = 3.0
+var damageperstr = 4.0
+var damagepermaf = 3.0
+var damageperagi = 2.0
 var speedperagi = 3.0
 var speedbase = 10.0
 var baseattack = 5.0
@@ -111,7 +115,9 @@ var resident_farm_limit = [2,5,8,12,15,18,21,24,27,30,35,40,45,50,55,60,65,70,75
 var list = {
 	'Character Creation & Stats' : {
 		basehealth = {descript = "Character's health before modifiers", min = 1.0, max = 1000.0},
+		ogrebasehealth = {descript = "Ogre character's health before modifiers", min = 1.0, max = 1000.0},
 		healthperend = {descript = "Bonus health per point of endurance", min = 0.0, max = 1000.0},
+		ogrehealthperend = {descript = "Enhanced health per point of endurance", min = 0.0, max = 1000.0},
 		playerbonusstatpoint = {descript = "Bonus player stat points during char creation", min = 0.0, max = 1000.0},
 		playermaxstats = {descript = "Max points per player stat during char creation", min = 4.0, max = 1000.0},
 		storymodeanyrace = {descript = "Choose any race when starting story mode"},
@@ -148,6 +154,8 @@ var list = {
 	},
 	'Combat' : {
 		damageperstr = {descript = "Raw damage per strength", min = 0.0, max = 100.0},
+		damagepermaf = {descript = "Raw damage per magic affinity", min = 0.0, max = 100.0},
+		damageperagi = {descript = "Raw damage per agility", min = 0.0, max = 100.0},
 		speedperagi = {descript = "Raw speed per agility", min = 0.0, max = 100.0},
 		speedbase = {descript = "Base speed for all characters", min = 0.0, max = 100.0},
 		baseattack = {descript = "Base attack for all characters", min = 0.0, max = 100.0},
