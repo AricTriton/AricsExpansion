@@ -552,7 +552,6 @@ class combatant:
 		node.hide()
 		effects.clear()
 		scene.combatantnodes.erase(node)
-		scene.combatlog += scene.combatantdictionary(self, self, "\n[color=aqua][name1] has been defeated.[/color]")
 		if group == 'enemy':
 			for i in scene.enemygroup:
 				if i.passives.has("cultleaderpassive") && i.state != 'defeated':
@@ -560,6 +559,7 @@ class combatant:
 					i.hp += 300
 					i.attack += 50
 					scene.combatlog += "\n[color=red]Cult leader absorbs the power of defeated ally and grows stronger![/color]"
+			scene.combatlog += scene.combatantdictionary(self, self, "\n[color=aqua][name1] has been defeated.[/color]")
 		if group == 'player':
 			scene.playergroup.remove(scene.playergroup.find(self))
 			if person == globals.player:
