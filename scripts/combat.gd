@@ -769,12 +769,11 @@ func useskills(skill, caster = null, target = null, retarget = false):
 				if skill.attributes.has('damage'):
 					if skill.can_miss == true:
 						hit = calculatehit(caster, i, skill)
-						if skill.type == 'physical' && globals.expansionsettings.perfectinfo:
+						if skill.type == 'physical':
 							infoText += "H: "+str(hitChance(caster, i, skill))+"% "
 					if skill.type == 'physical' && hit != 'miss':
 						damage = physdamage(caster, i, skill)
-						if globals.expansionsettings.perfectinfo:
-							infoText += "B: "+str(caster.attack*skill.power)+" A: " + str(i.armor) + " P: " + str(i.protection)+"% "
+						infoText += "B: "+str(caster.attack*skill.power)+" A: " + str(i.armor) + " P: " + str(i.protection)+"% "
 					elif skill.type == 'spell':
 						damage = spelldamage(caster, i, skill)
 					if !i.effects.has("protecteffect"):
