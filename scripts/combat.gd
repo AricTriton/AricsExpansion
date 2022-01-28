@@ -662,6 +662,26 @@ func pressskill(skill):
 		period = 'skilluse'
 		useskills(skill, selectedcharacter, selectedcharacter)
 	
+func hitChance(caster,target,skill):
+	var hitchance = 80
+	if caster.speed >= target.speed:
+		hitchance += (caster.speed - target.speed)*2.5
+	else:
+		hitchance -= (target.speed - caster.speed)*4
+	if caster.person != null && caster.person.traits.has("Nimble"):
+		hitchance *= 1.25
+	if skill.has('accuracy'):
+		hitchance = hitchance*skill.accuracy
+	if target.person != null && target.person.race.findn("cat") >= 0:
+		hitchance = hitchance*0.9
+	return hitchance
+
+func calculatehit(caster,target,skill):
+	if rand_range(0,100) > hitChance(caster,target,skill):
+		return 'miss'
+	else:
+		return 'hit'
+
 func useskills(skill, caster = null, target = null, retarget = false):
 	if caster == null || target == null:
 		return
@@ -706,6 +726,7 @@ func useskills(skill, caster = null, target = null, retarget = false):
 			call(skill.targetsfx, target)
 		#target skills
 		if skill.target == 'one':
+			var infoText = " "
 			if skill.code == 'attack':
 				text += '[color=lime][name1][/color] tries to attack [color=#ec636a][targetname1][/color]. '
 			else:
@@ -713,9 +734,13 @@ func useskills(skill, caster = null, target = null, retarget = false):
 			if skill.attributes.has('damage'):
 				if skill.can_miss == true:
 					hit = calculatehit(caster, target, skill)
+					if skill.type == 'physical':
+						infoText += "H: "+str(hitChance(caster, target, skill))+"% "
 				if skill.type == 'physical' && hit != 'miss':
 					damage = physdamage(caster, target, skill)
 					text += '[targetname1] takes [color=#f05337]' + str(damage) + '[/color] damage.' 
+					infoText += "B: "+str(caster.attack*skill.power)+" A: " + str(target.armor) + " P: " + str(target.protection)+"% "
+
 				elif skill.type == 'spell':
 					damage = spelldamage(caster, target, skill)
 					text += '[targetname1] takes [color=#f05337]' + str(damage) + '[/color] spell damage.' 
@@ -725,6 +750,9 @@ func useskills(skill, caster = null, target = null, retarget = false):
 					text += '[targetname1] [color=yellow]dodges[/color] it. '
 				else:
 					target.hp -= damage
+
+				if globals.expansionsettings.perfectinfo:
+					text += infoText
 		#aoe skills
 		elif skill.target == 'all':
 			if group == 'player':
@@ -735,13 +763,18 @@ func useskills(skill, caster = null, target = null, retarget = false):
 			text += '[name1] uses [color=aqua]' + skill.name + '[/color]. '
 			var counter = 0
 			for i in targetarray:
+				var infoText = " "
 				if i.state != 'normal':
 					continue
 				if skill.attributes.has('damage'):
 					if skill.can_miss == true:
 						hit = calculatehit(caster, i, skill)
+						if skill.type == 'physical' && globals.expansionsettings.perfectinfo:
+							infoText += "H: "+str(hitChance(caster, i, skill))+"% "
 					if skill.type == 'physical' && hit != 'miss':
 						damage = physdamage(caster, i, skill)
+						if globals.expansionsettings.perfectinfo:
+							infoText += "B: "+str(caster.attack*skill.power)+" A: " + str(i.armor) + " P: " + str(i.protection)+"% "
 					elif skill.type == 'spell':
 						damage = spelldamage(caster, i, skill)
 					if !i.effects.has("protecteffect"):
@@ -754,6 +787,9 @@ func useskills(skill, caster = null, target = null, retarget = false):
 					if hit == 'hit' && skill.effect != null:
 						sendbuff(caster, i, skill.effect)
 					counter += 1
+
+					if globals.expansionsettings.perfectinfo:
+						text += infoText
 			
 		elif skill.target == 'self':
 			if skill.code == 'escape' && globals.main.get_node("explorationnode").launchonwin != null && caster.group == 'player':
