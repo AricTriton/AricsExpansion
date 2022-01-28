@@ -669,7 +669,7 @@ func useskills(skill, caster = null, target = null, retarget = false):
 		deselectall()
 	var text = ''
 	var damage = 0
-	var group
+	var group = 'player'
 	var hit = 'hit'
 	var targetparty
 	var targetarray
