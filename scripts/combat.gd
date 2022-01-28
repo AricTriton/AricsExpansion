@@ -739,11 +739,11 @@ func useskills(skill, caster = null, target = null, retarget = false):
 					continue
 				if skill.attributes.has('damage'):
 					if skill.can_miss == true:
-						hit = calculatehit(caster, target, skill)
+						hit = calculatehit(caster, i, skill)
 					if skill.type == 'physical' && hit != 'miss':
-						damage = physdamage(caster, target, skill)
+						damage = physdamage(caster, i, skill)
 					elif skill.type == 'spell':
-						damage = spelldamage(caster, target, skill)
+						damage = spelldamage(caster, i, skill)
 					if !i.effects.has("protecteffect"):
 						if hit == 'hit':
 							i.hp -= damage
