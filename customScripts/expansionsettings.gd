@@ -351,8 +351,8 @@ func applyItemMarketCostTweaks():
 
 # Apply Constructor Changes here.
 func applyConstructorTweaks():
-	globals.constructor.humanoid_races_array = ['Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome','Goblin','Demon']					# Original - ['Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome','Goblin','Demon','Dragonkin']
-	globals.constructor.uncommon_races_array = ['Dragonkin','Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla']		# Original - ['Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla']
+	globals.constructor.humanoid_races_array = ['Human','Elf','Dark Elf','Tribal Elf','Orc','Ogre','Giant','Gnome','Goblin','Kobold','Demon']			# Original - ['Human','Elf','Dark Elf','Tribal Elf','Orc','Ogre','Giant','Gnome','Goblin','Kobold','Demon','Dragonkin']
+	globals.constructor.uncommon_races_array = ['Dragonkin','Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla','Lizardfolk','Avali']	# Original - ['Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla','Lizardfolk','Avali']
 
 # Apply Combat Data Tweaks here
 func applyCombatDataTweaks():
@@ -482,7 +482,7 @@ func applyCapitulizeTweaks():
 	globals.origins.traitlist["Robust"].description = "$name's physique is way better than most. \n\n[color=aqua]Endurance +2, Endurance Max +2, Fear change -20%[/color]"
 	globals.origins.traitlist["Robust"].effect.end_max = 2
 
+	#---Variable Tweaks
 	
-	#Variable Tweaks
 	variables.banditishumanchance = 25.0				# Original - 70.0
 	

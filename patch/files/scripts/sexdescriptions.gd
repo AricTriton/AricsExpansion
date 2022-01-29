@@ -674,6 +674,18 @@ var racenames = {
 		singlepos = " orc's",
 		pluralpos = " orcs'"
 	},
+	Ogre = {
+		single = " ogre",
+		plural = " ogres",
+		singlepos = " ogre's",
+		pluralpos = " ogres'"
+	},
+	Giant = {
+		single = " giant",
+		plural = " giants",
+		singlepos = " giant's",
+		pluralpos = " giants'"
+	},
 	Gnome = {
 		single = " gnome",
 		plural = " gnomes",
@@ -716,6 +728,24 @@ var racenames = {
 		singlepos = " dragon's",
 		pluralpos = " dragons'"
 	},
+	Lizardfolk = {
+		single = " lizard",
+		plural = " lizards",
+		singlepos = " lizard's",
+		pluralpos = " lizards'",
+	},
+	Kobold = {
+		single = " kobold",
+		plural = " kobolds",
+		singlepos = " kobold's",
+		pluralpos = " kobolds'",
+	}, 
+	Gnoll = {
+		single = " gnoll",
+		plural = " gnolls",
+		singlepos = " gnoll's",
+		pluralpos = " gnolls'"
+	},
 	Taurus = {
 		single = " taurus",
 		plural = " tauruses",
@@ -739,6 +769,12 @@ var racenames = {
 		plural = " harpies",
 		singlepos = " harpy's",
 		pluralpos = " harpies'"
+	},
+	Avali = {
+		single = " avali",
+		plural = " avalis",
+		singlepos = " avali's",
+		pluralpos = " avalis''"
 	},
 	Arachna = {
 		single = " arachna",
@@ -794,6 +830,30 @@ var racenames = {
 		singlepos = " tanuki's",
 		pluralpos = " tanukis'"
 	},
+	"Beastkin Mouse" : {
+		single = " mousekin",
+		plural = " micekin",
+		singlepos = " mouse's",
+		pluralpos = " mice",
+	},
+	"Beastkin Squirrel" : {
+		single = " squirrelkin",
+		plural = " squirrelkin",
+		singlepos = " squirrel's",
+		pluralpos = " squirrels'",
+	},
+	"Beastkin Otter" : {
+		single = " otterkin",
+		plural = " otterkin",
+		singlepos = " otter's",
+		pluralpos = " otters'",
+	},
+	"Beastkin Bird" : {
+		single = " birdkin",
+		plural = " birdkin",
+		singlepos = " bird's",
+		pluralpos = " birds'",
+	},
 	"Halfkin Cat" : {
 		single = " cat",
 		plural = " cats",
@@ -823,6 +883,30 @@ var racenames = {
 		plural = " tanukis",
 		singlepos = " tanuki's",
 		pluralpos = " tanukis'"
+	},
+	"Halfkin Mouse" : {
+		single = " mousekin",
+		plural = " micekin",
+		singlepos = " mouse's",
+		pluralpos = " mice",
+	},
+	"Halfkin Squirrel" : {
+		single = " squirrelkin",
+		plural = " squirrelkin",
+		singlepos = " squirrel's",
+		pluralpos = " squirrels'",
+	},
+	"Halfkin Otter" : {
+		single = " otterkin",
+		plural = " otterkin",
+		singlepos = " otter's",
+		pluralpos = " otters'",
+	},
+	"Halfkin Bird" : {
+		single = " birdkin",
+		plural = " birdkin",
+		singlepos = " bird's",
+		pluralpos = " birds'",
 	},
 }
 

@@ -1,4 +1,18 @@
 
+var racebonusdict = {
+	human = {descript = 'Reputation with Wimborn increased'},
+	elf = {descript = 'Start with +1 Magic Affinity'},
+	"tribal elf" : {descript = 'Start with +1 Agility'},
+	orc = {descript = 'Reputation with Gorn increased'},
+	demon = {descript = 'Start with +1 unassigned Skillpoint, all starting reputation lowered slightly'},
+	beastkin = {descript = 'Reputation with Frostford increased'},
+	halfkin = {descript = 'All starting reputation increased slightly'},
+	taurus = {descript = 'Start with +1 Endurance'},
+	kobold = {descript = 'Start with +1 Agility'},
+	gnoll = {descript = 'Start with +1 Strength'},
+	avali = {descript = 'Start with +1 Magic Affinity'},
+}
+
 var skindict = {
 	human = [ 'pale', 'fair', 'olive', 'tan', 'brown', 'dark' ],
 	kobold = ['none'],

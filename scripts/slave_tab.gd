@@ -685,7 +685,6 @@ func updatestats():
 	$stats/statspanel/sexuality_base.set_texture(sexuality_images[str(person.sexuality_images.base)])
 	###---End Expansion---###
 
-<<<<<<< HEAD
 func _on_hairstyle_item_selected( ID ):
 	person = globals.currentslave
 	var hairstyles = ['bald', 'straight', 'ponytail', 'twintails', 'braid', 'two braids', 'bun']

@@ -1069,7 +1069,7 @@ var skincovarray = ['none','scales','fullscales','fullfeathers','feathers','full
 var penistypearray = ['human','canine','feline','equine','reptilian','rodent','bird',]
 var alltails = ['cat','fox','wolf','bunny','bird','demon','dragon','scruffy','snake tail','racoon','mouse','reptilian','squirrel','otter','avali',]
 var allwings = ['feathered_black', 'feathered_white', 'feathered_brown', 'leather_black','leather_red','leather_green','leather_white','leather_blue','insect','gossamer']
-var allears = ['human','feathery','pointy','frilled','none','short_furry','short_reptilian','long_pointy_furry','long_pointy_reptilian','fins','long_round_furry','long_droopy_furry','long_round_reptilian','long_droopy_reptilian','wide_furry','avali',] # /Capitulize
+var allears = ['human','feathery','pointy','frilled','none','short_furry','short_reptilian','long_pointy_furry','long_pointy_reptilian','fins','long_round_furry','long_droopy_furry','long_round_reptilian','long_droopy_reptilian','wide_furry','avali',]
 var alleyecolors = ['blue', 'green', 'brown', 'hazel', 'black', 'gray', 'purple', 'yellow', 'amber', 'red', 'auburn']
 
 ###---Added by Expansion---### Kennels Expanded
@@ -1518,6 +1518,9 @@ func fertilize_egg(mother, father_id, father_unique):
 		elif father_unique == 'dog':
 			father.genealogy.dog = 100
 			father.race = 'Beastkin Wolf'
+		elif father_unique == 'hyena':
+			father.genealogy.hyena = 100
+			father.race = 'Gnoll'
 		elif father_unique == 'cow':
 			father.genealogy.cow = 100
 			father.race = 'Taurus'
@@ -1533,6 +1536,18 @@ func fertilize_egg(mother, father_id, father_unique):
 		elif father_unique == 'raccoon':
 			father.genealogy.raccoon = 100
 			father.race = 'Beastkin Tanuki'
+		elif father_unique == 'mouse':
+			father.genealogy.mouse = 100
+			father.race = 'Beastkin Mouse'
+		elif father_unique == 'squirrel':
+			father.genealogy.squirrel = 100
+			father.race = 'Beastkin Squirrel'
+		elif father_unique == 'otterr':
+			father.genealogy.otter = 100
+			father.race = 'Beastkin Otter'
+		elif father_unique == 'bird':
+			father.genealogy.bird = 100
+			father.race = 'Beastkin Bird'
 		else:
 			father.race = getracebygroup("starting")
 			constructor.set_genealogy(father)

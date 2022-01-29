@@ -1,5 +1,5 @@
-var scalecolor = 'none'
-var feathercolor = 'none'
+var scalecolor = ''
+var feathercolor = ''
 
 
 ###---Added by Expansion---### Modified by Deviate
@@ -445,11 +445,11 @@ func levelup():
 func getessence():
 	var essence
 	###---Added by Expansion---### Races Expanded
-	if findRace(['Demon', 'Arachna', 'Lamia']):
+	if findRace(['Demon', 'Arachna', 'Lamia','Gnoll']):
 		essence = 'taintedessenceing'
-	if findRace(['Fairy','Dark Elf','Dragonkin']):
+	if findRace(['Fairy','Dark Elf','Dragonkin','Kobold']):
 		essence = 'magicessenceing'
-	if findRace(['Dryad']):
+	if findRace(['Dryad','Lizardfolk']):
 		essence = 'natureessenceing'
 	if findRace(['Harpy', 'Centaur','Beastkin','Halfkin']):
 		essence = 'bestialessenceing'
@@ -475,7 +475,10 @@ func health_set(value):
 	###---Added by Expansion---### Crystal | Added Death Prevention
 	var text = ""
 	var color
-	stats.health_max = max(10, ((variables.basehealth + (stats.end_base+stats.end_mod)*variables.healthperend) + floor(level/2)*5) + stats.health_bonus)
+	if race.find('Ogre') >= 0: # Capitulize
+		stats.health_max = max(10, ((variables.ogrebasehealth + (stats.end_base+stats.end_mod)*variables.ogrehealthperend) + floor(level/2)*5) + stats.health_bonus)
+	else:
+		stats.health_max = max(10, ((variables.basehealth + (stats.end_base+stats.end_mod)*variables.healthperend) + floor(level/2)*5) + stats.health_bonus) # /Capitulize
 	stats.health_cur = clamp(floor(value), 0, stats.health_max)
 	if stats.health_cur <= 0:
 		if globals.state.thecrystal.preventsdeath == true:
@@ -768,6 +771,8 @@ func selfdictionary(text):
 	string = string.replace('$master', masternoun)
 	string = string.replace('[haircolor]', haircolor)
 	string = string.replace('[eyecolor]', eyecolor)
+	string = string.replace('[scalecolor]', scalecolor)
+	string = string.replace('[feathercolor]', feathercolor)
 	return string
 
 ###---Expansion End---###
@@ -1162,15 +1167,20 @@ var genealogy = {
 	dark_elf = 0,
 	tribal_elf = 0,
 	orc = 0,
+	ogre = 0,
+	giant = 0,
 	gnome = 0,
 	goblin = 0,
 	demon = 0,
+	kobold = 0,
 	dragonkin = 0,
+	lizardfolk = 0,
 	fairy = 0,
 	seraph = 0,
 	dryad = 0,
 	lamia = 0,
 	harpy = 0,
+	avali = 0,
 	arachna = 0,
 	nereid = 0,
 	scylla = 0,
@@ -1178,10 +1188,15 @@ var genealogy = {
 	bunny = 0,
 	dog = 0,
 	cow = 0,
+	hyena = 0,
 	cat = 0,
 	fox = 0,
 	horse = 0,
 	raccoon = 0,
+	mouse = 0,
+	squirrel = 0,
+	otter = 0,
+	bird = 0,
 }
 
 func get_birth_amount_name():

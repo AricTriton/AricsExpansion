@@ -35,7 +35,7 @@ func getsexfeatures(person):
 			temp.append('small')
 			temp.append('average')
 		person.titssize = getrandomfromarray(temp)
-		for i in ['Taurus','Demon','Seraph','Centaur','Orc']:
+		for i in ['Taurus','Demon','Seraph','Centaur','Orc','Gnoll']:
 			if person.race.find(i) >= 0 && rand_range(0,1) > .5:
 				if globals.titssizearray.back() != person.titssize:
 					person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)+1]
@@ -148,6 +148,13 @@ func getname(person):
 	var tempSex = person.sex.replace("futanari",'female').replace("dickgirl",'female')
 	var text = person.race.to_lower()+tempSex
 	if !globals.racefile.names.has(text):
-		text = 'human'+tempSex
+		if person.race in ['Dark Elf', 'Drow']:
+			text = 'elf'+person.sex.replace("futanari",'female').replace("dickgirl",'female')
+		elif person.race == 'Dryad':
+			text = 'dryadfemale'
+		elif person.race == 'Scylla':
+			text = 'nereid'+person.sex.replace("futanari",'female').replace("dickgirl",'female')
+		else:
+			text = 'human'+person.sex.replace("futanari",'female').replace("dickgirl",'female')
 	person.name = getrandomfromarray(globals.names[text])
 ###---End Expansion---###

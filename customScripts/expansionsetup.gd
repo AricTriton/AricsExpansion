@@ -1261,10 +1261,10 @@ func setRaceBonus_Ralph(person, increasestats):
 	person.stats.agi_mod = 0
 	person.stats.maf_mod = 0
 	person.stats.end_mod = 0
-	person.stats.str_max = globals.races[person.race.replace('Halfkin', 'Beastkin')].stats[globals.maxstatdict["sstr"]] # /Capitutlize - Actually allows you to edit max values of races with hybrids.
-	person.stats.agi_max = globals.races[person.race.replace('Halfkin', 'Beastkin')].stats[globals.maxstatdict["sagi"]] # /Capitulize
-	person.stats.maf_max = globals.races[person.race.replace('Halfkin', 'Beastkin')].stats[globals.maxstatdict["smaf"]] # /Capitulize
-	person.stats.end_max = globals.races[person.race.replace('Halfkin', 'Beastkin').replace('Halfkith', 'Insectkith')].stats[globals.maxstatdict["send"]] # /Capitulize
+	person.stats.str_max = globals.races[person.race.replace('Halfkin', 'Beastkin')].stats[globals.maxstatdict["sstr"]]
+	person.stats.agi_max = globals.races[person.race.replace('Halfkin', 'Beastkin')].stats[globals.maxstatdict["sagi"]]
+	person.stats.maf_max = globals.races[person.race.replace('Halfkin', 'Beastkin')].stats[globals.maxstatdict["smaf"]]
+	person.stats.end_max = globals.races[person.race.replace('Halfkin', 'Beastkin').replace('Halfkith', 'Insectkith')].stats[globals.maxstatdict["send"]]
 	#person.stats.str_base = 0	
 	#person.stats.agi_base = 0
 	#person.stats.maf_base = 0
@@ -3014,7 +3014,7 @@ func setRaceBonus_Ralph(person, increasestats):
 				bonus_magic += person.genealogy.lizardfolk/100
 				
 	#Mouse - Capitulize
-	if person.genealogy.mouse > 0: #
+	if person.genealogy.mouse > 0:
 		if person.genealogy.mouse >= 100:
 			bonus_magic += 2
 			bonus_agility += 2

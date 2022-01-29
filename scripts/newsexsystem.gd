@@ -1,9 +1,6 @@
 var analcategories = ['assfingering','rimjob','missionaryanal','doggyanal','lotusanal','revlotusanal','doubledildoass','inerttaila','analvibrator','enemaplug','insertinturnsass','cowgirlanal','reversecowgirlanal','doublepen','triplepen']
-var penetratecategories = ['missionary','missionaryanal','doggy','doggyanal','lotus','lotusanal','revlotus','revlotusanal','doubledildo','doubledildoass','inserttailv','inserttaila','tribadism','frottage','cowgirl','reversecowgirl','doublepen','triplepen']
-
-
+var penetratecategories = ['missionary','missionaryanal','doggy','doggyanal','lotus','lotusanal','revlotus','revlotusanal','doubledildo','doubledildoass','inserttailv','inserttaila','tribadism','frottage','cowgirl','reversecowgirl','doublepen','triplepen','deepthroat']
 var takercategories = ['cunnilingus','rimjob','handjob','titjob','tailjob','blowjob','footjob'] #ralphC - added footjob
-var penetratecategories = ['missionary','missionaryanal','doggy','doggyanal','lotus','lotusanal','revlotus','revlotusanal','doubledildo','doubledildoass','inserttailv','inserttaila','tribadism','frottage','deepthroat'] #ralphC - added deepthroat
 
 class member:
 	var name
@@ -140,13 +137,22 @@ class member:
 		lust = min(value, 1000)
 
 	func sens_set(value):
-		var change = value - sens
+		var change 
+		var isKobold = person.race.find('Kobold') >= 0 # Capitulize - Kobolds are pretty horny
+		if (isKobold):
+			change = (value - sens)*1.2
+		else:
+			change = value - sens
 		sens += change*sensmod
 		if sens >= 1000:
 			if ((lastaction.givers.has(self) && lastaction.scene.givertags.has('noorgasm')) || (lastaction.takers.has(self) && lastaction.scene.takertags.has('noorgasm'))):
 				return
-			sens = 100
-			sensmod -= sensmod*0.2
+			if(isKobold):
+				sens = 150
+				sensmod -= sensmod*0.15
+			else:
+				sens = 100
+				sensmod -= sensmod*0.2
 			orgasm()
 
 	func lube():

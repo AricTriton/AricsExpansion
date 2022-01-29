@@ -1331,12 +1331,12 @@ var races = {
 	},
 	Ogre = {
 		# Capitulize
-		description = "Ogres are like onions.",
+		description = "Ogres are a new arrival to our world, or rather the descendants of elves who fled to another plane during a prehistory menaced by dragons. Warped and twisted by this other world, they bear no resemblance to their progenitors. Nonetheless, after eons a small cult of Ogres has returned to reclaim their homeworld from the dragons only to find most of them in torpor. Ogres can vary heavily in appearance from massive and brutish to willowy and graceful. The most notable trait they all bear in common are their horns which are imbued with intensely concentrated mana. If an ogre's horns are removed or broken, it is substantially weakened and may never reach its full potential.",
 		details = "[color=aqua]Racial trait: Increased base health, better health gains per point of endurance.[/color]\n\n",
 		pricemod = 1.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]ogres[/color] is up.\n", "A nearby warlord is looking to replenish his infantry. Pricing for [color=aqua]ogres[/color] is up.\n"],
-		marketdown = ["An unexpected truce between warring factions has put a damper on trade in [color=aqua]ogres[/color]. Prices fall.\n"],
+		marketup = ["Demand for [color=aqua]ogres[/color] is up.\n", "A nearby warlord is looking to replenish his infantry. Pricing for [color=aqua]ogres[/color] is up.\n", "A new use is discovered for [color=aqua]ogre[/color] horns, demand rises greatly.\n", "Breeders have bought up a considerable number of [color=aqua]ogres[/color] for experimentation, and prices climb due to low supply.\n"],
+		marketdown = ["An unexpected truce between warring factions has put a damper on trade in [color=aqua]ogres[/color]. Prices fall.\n", “Rumors abound that an [color=aqua]ogre[/color] can draw on vague magical powers with their horns to unravel the magic within slave brands. Prices fall.\n",],
 		single = " ogre",
 		plural = " ogres",
 		singlepos = " ogres's",
@@ -1365,12 +1365,12 @@ var races = {
 	Giant = {
 		# Capitulize
 		bodyshape = ['giant'],
-		description = "Giants are big.",
+		description = "Giants typically appear human... from a distance. Beyond prodigious size, Giants exhibit strength to match their humongous proportions. Magi and scholars debate how giants with their normally proportioned humanoid frames can exist much less grow to adulthood without crushing themselves, much less achieve lifespans spanning millennia. Some researchers speculate that the secret lies in their hibernation. Record and myth suggest that an individual giant will hibernate several times during its life for hundreds of years at a time. Although they have only recently awakened once again, it appears clear that as a group, feeding and mating are key motivations.",
 		details = "[color=aqua]Racial trait: Consumes 3x as much food.[/color]\n\n",
 		pricemod = 3.5,
 		#ralph5
-		marketup = ["Demand for [color=aqua]giants[/color] is up.\n", "A nearby warlord is looking to replenish his infantry. Pricing for [color=aqua]giants[/color] is up.\n"],
-		marketdown = ["An unexpected truce between warring factions has put a damper on trade in [color=aqua]giants[/color]. Prices fall.\n"],
+		marketup = ["Demand for [color=aqua]giants[/color] is up.\n", "A nearby warlord is looking to recruit living siege engines. Pricing for [color=aqua]giants[/color] is up.\n", "An unknown pervert and spelunker has distributed a pamphlet promoting [color=aqua]giants[/color] as living mountains to be conquered… and fucked. Demand is up.\n", "Architects envision new works only possible with a construction crew including [color=aqua]giants[/color]. Demand skyrockets.\n"],
+		marketdown = ["The inevitable conclusion of a long siege has put a damper on trade in [color=aqua]giants[/color]. Prices fall.\n", "Rumors of an enslaved [color=aqua]giant[/color] accidentally swallowing its master result in a slide in prices.\n", "Claims that feeding, clothing, and equipping [color=aqua]giants[/color] far outweighs their benefits persist and demand falls.\n"],
 		single = " giant",
 		plural = " giants",
 		singlepos = " giant's",
@@ -1398,13 +1398,13 @@ var races = {
 	},
 	Lizardfolk = {
 		# Capitulize
-		description = "",
+		description = "While humanoid in general shape and proportion, Lizardfolk share much in common with their namesakes. Unlike mammalian and bird beast races, they are physically cold-blooded and are greatly affected by ambient temperatures. This has not prevented them from adapting and surviving in extreme environments from cold bogs to deserts, though it is unclear whether this adaptation is a matter of breeding or personal acclimation. Curiously, despite laying eggs as opposed to giving live birth, the females are indeed capable of and typically do breast feed their young.",
 		details = "[color=aqua]Racial trait: Naturally armored scales.[/color]\n\n[color=yellow]Stat potential: Strength - 5, Agility - 4, Magic - 3, Endurance - 5 [/color]\n\nBreeding Note:\n\n\n[color=yellow]Racial Stat Bonus:\nStrength++ \nPure Blood Bonus:\nMagic+\nOther Racial Characteristics:\nCourage+, [/color]\n[color=red]Elemental Modifiers\n100% Fire \nElemental Bonuses:\nFire (Agility+) [/color]\n[color=green]Nature Magic Saturation:\n50% \nNature Bonus:\nEndurance+ [/color]\n[color=purple]Mana Corruption:\n75% \nHigher Corruption:\nMagic+, Endurance- \nLower Corruption:\nMagic-, Endurance+, Demands less luxury [/color]\n[color=aqua]Breeding Quirks:\nFemales tend to be smaller and faster if not as strong \nPossible Mutations:\n [/color]",
 		pricemod = 2,
 		surname = names.reptiliansurname,
 		#ralph5
-		marketup = ["Demand for [color=aqua]lizardfolk[/color] is up.\n", "Word is that an arena boss from across the sea has started an reptillian league and has been looking to buy [color=aqua]lizardfolk[/color].\n"],
-		marketdown = ["Prices for [color=aqua]lizardfolk[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
+		marketup = ["Demand for [color=aqua]lizardfolk[/color] is up.\n", "Word is that an arena boss from across the sea has started a reptilian league and has been looking to buy [color=aqua]lizardfolk[/color].\n", "Carrying trained infant [color=aqua]lizardfolk[/color] as pets in handbags is in fashion at the capitol amongst young socialites. Breeders have drained the market in attempt to supply eggs at ridiculous prices.\n", "Enterprising slave traders have figured out that [color=aqua]lizardfolk[/color] require virtually no food or care if kept on ice when not in use, spurring demand in Frostford\n"],
+		marketdown = ["Prices for [color=aqua]lizardfolk[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n", "Prices fall as claims that [color=aqua]lizardfolk[/color] genitalia are completely incompatible with those of other races abound.\n", "The popularity of [color=aqua]lizardfolk[/color] plummets as rumors spread that they can cause food poisoning if allowed to work as cooks.\n",],
 		single = " lizard",
 		plural = " lizards",
 		singlepos = " lizard's",
@@ -1445,13 +1445,13 @@ var races = {
 	Kobold = {
 		# Capitulize
 		bodyshape = ['reptilianshortstack'],
-		description = "Kobolds are small hardworking reptilian people. Often emphasizing the extremes of personalities, their appearance as a monstrous race is quickly unfounded when they can demonstrate their understanding and intelligence. Kobolds form fiercly loyal bonds to those they consider friends, and have made themselves a staple amongst the humanoid races.",
+		description = "Kobolds are small hardworking reptilian people. Often emphasizing the extremes of personalities, people who perceive them as a monstrous race are quickly disabused when they demonstrate their understanding and intelligence. Kobolds form fiercely loyal bonds to those they consider friends, and have made themselves a staple amongst the humanoid races since the return of the ogres who brought them along as slaves. It is thought they descended from dragonkin captives of the elves who escaped our realm in a dragon war lost to myth and legend.",
 		details = "[color=aqua]Racial trait: Slightly more sensitive, orgasm more often.[/color]\n\n[color=yellow]Stat potential: Strength - 2, Agility - 6, Magic - 3, Endurance - 5 [/color]\n\nBreeding Note:\nKobolds are quite capable despite their miniscule and pathetic looking status. In addition, kobolds benefit from all forms of breeding.\n\n[color=yellow]Racial Stat Bonus:\nAgility+, Magic+ \nPure Blood Bonus:\nStrength+, Agility+\nOther Racial Characteristics:\nLewdness+, Confidence----, Height --- [/color]\n[color=red]Elemental Modifiers\n25% Fire \n25% Water \n25% Wind \n25% Earth \nElemental Bonuses:\nFire (Strength+) \nWater (Magic+) \nWind (Agility+) \nEarth (Endurance+) [/color]\n[color=green]Nature Magic Saturation:\n25% \nNature Bonus:\nFertility++ [/color]\n[color=purple]Mana Corruption:\n25% \nHigher Corruption:\nN/A \nLower Corruption:\nN/A \n, [/color]\n[color=aqua]Breeding Quirks:\nExtremely varied, has a little bit of everything. \nPossible Mutations:\nFurbold [/color]",
 		pricemod = 1.5,
 		surname = names.reptiliansurname,
 		#ralph5
-		marketup = ["Demand for [color=aqua]kobolds[/color] is up inexplicably.\n", "Words [color=aqua]kobolds[/color] is up.\n"],
-		marketdown = ["[color=aqua]Kobolds[/color] have become even less popular of late. Prices fall.\n", "Test. Demand for [color=aqua]kobolds[/color] falls.\n", "Prices for [color=aqua]kobolds[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
+		marketup = ["Demand for [color=aqua]kobolds[/color] is up inexplicably.\n", "Shortstack [color=aqua]kobolds[/color] are in particular demand after a popular massage parlor in the capitol has utilized them to some success.\n", "Shortstack [color=aqua]kobolds[/color] are in particular demand after a banquet hall in the capitol employs them as walking hors d'oeuvre carts with tablecloths concealing the little guys and gals.\n"],
+		marketdown = ["[color=aqua]Kobolds[/color] have become less popular of late. Prices fall.\n", "Demand for [color=aqua]kobolds[/color] falls.\n", "Shortstack [color=aqua]kobolds[/color] fall in demand after an embarrassing incident at the Mage Guild. Floating hors d'oeuvre carts were instead concealing the little guys and gals inside, and the higher ups were not pleased.\n"],
 		single = " kobold",
 		plural = " kobolds",
 		singlepos = " kobold's",
@@ -1465,8 +1465,8 @@ var races = {
 		uncivilized = false,
 		sebastian = true,
 		shade = {
-			male = "res://files/buttons/inventory/shades/Kobold_M.png",
-			female = "res://files/buttons/inventory/shades/Kobold_F.png"
+			male = "res://files/aric_expansion_images/shades/Kobold_M.png",
+			female = "res://files/aric_expansion_images/shades/Kobold_F.png"
 		},
 		eyecolor = ['amber', 'red', 'brown'],
 		eyeshape = ['slit', 'normal'],
@@ -1488,12 +1488,12 @@ var races = {
 	},
 	Avali = {
 		# Capitulize
-		description = "",
+		description = "The Avali’s origins are a total mystery.  First thought to be some new form of monster, the avian creatures quickly exhibited remarkable intelligence simultaneously with a relative ignorance of our world and its customs.  They are apparently unrelated to and distinct from birdkin in that their wings are attached to their arms somewhat more akin to harpies, they sport a telltale mane of feathers from their heads down their backs, and possess two sets of ears similar to some halfkin races.  Most strange of all their physical attributes are their unblinking trapezoidal eyes lacking the sclera of typical sentients.",
 		details = "[color=aqua]Racial trait: Nurse assignment is more effective.[/color]\n\n[color=yellow]Stat potential: Strength - 1, Agility - 8, Magic - 8, Endurance - 3 [/color]\n\nBreeding Note:\n\n\n[color=yellow]Racial Stat Bonus:\nAgility++, Magic Affinity++ \nPure Blood Bonus:\nAgility++, Magic Affinity++\nOther Racial Characteristics:\nWit++, [/color]\n[color=red]Elemental Modifiers\nN/A \nElemental Bonuses:\nN/A[/color]\n[color=green]Nature Magic Saturation:\n0% \nNature Bonus:\nN/A[/color]\n[color=purple]Mana Corruption:\n75% \nHigher Corruption:\nStrength+, Magic- \nLower Corruption:\nStrength-, Magic+ [/color]\n[color=aqua]Breeding Quirks:\nStrength+, Agility+ from breeding with predatory beast races /nFertility+ as a secondary race for egg-laying races \nPossible Mutations:\nGargoyle [/color]",
 		pricemod = 3.5,
 		#ralph5
 		marketup = ["Demand for [color=aqua]avalis[/color] is up.\n", "The popularity of a play featuring a dastardly human villain enslaving a cute transforming [color=aqua]avali[/color] princess to pull his wagon facinates the masses. Demand for [color=aqua]avalis[/color] increases.\n", "Word is that an arena boss from across the sea has started an aerial league and has been buying up [color=aqua]avalis[/color].\n"],
-		marketdown = ["Rumors abound that [color=aqua]avali[/color] are rife with disease. Demand decreases.\n"],
+		marketdown = ["Strange rumors are abound that [color=aqua]avali[/color] are from otherwordly and dangerous realms. Demand decreases.\n","Rumors claim that [color=aqua]avali’s[/color] eyes can steal one’s soul if stared into. Demand decreases.\n"],
 		single = " avali ",
 		plural = " avalis ",
 		singlepos = " avali's ",
@@ -1563,12 +1563,12 @@ var races = {
 	"Beastkin Squirrel": {
 		# Capitulize
 		bodyshape = ['furryshortstack'],
-		description = ".",
+		description = "Squirrelfolk are often thought of as a timid but playful race that steadfastly prepares for hard times. The stereotype is fairly accurate for the tight-knit communities of city-dwelling squirrelfolk; however those that dwell in the forests spend much of their lives in solitude until their hormones propel females in particular to become more adventurous. Like their namesake, they are dexterous and agile climbers, and they sport a bushy tail which they can use to their advantage in extreme temperatures. Unlike actual squirrels, their tails more often telegraph their emotions than serve any use in signaling other squirrelfolk.",
 		details = "[color=aqua]Racial trait: Can carry more.[/color]\n\n[color=yellow]Stat potential: Strength - 3, Agility - 5, Magic - 3, Endurance - 5 [/color]\n\nBreeding Note:\n  \n\n[color=yellow]Racial Stat Bonus:\nAgility+, Magic+ \nPure Blood Bonus:\n\n [/color]\n[color=red]Elemental Modifiers\n25% Earth \nElemental Bonuses:\n [/color]\n[color=green]Nature Magic Saturation:\n50% \nNature Bonus:\nFertility++ [/color]\n[color=purple]Mana Corruption:\n25% \nHigher Corruption:\nN/A \nLower Corruption:\nN/A \n, [/color]\n[color=aqua]Breeding Quirks:\n.\nPossible Mutations:\n [/color]",
 		pricemod = 1.75,
 		#ralph5
-		marketup = ["Demand for [color=aqua]squirrelkin[/color] are up inexplicably.\n", "Words [color=aqua]squirrelkin[/color] is up.\n"],
-		marketdown = ["[color=aqua]Squirrelkin[/color] have become even less popular of late. Prices fall.\n", "Test. Demand for [color=aqua]squirrelkin[/color] falls.\n", "Prices for [color=aqua]squirrelkin[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
+		marketup = ["Demand for [color=aqua]squirrelkin[/color] are up inexplicably.\n", "Words [color=aqua]squirrelkin[/color] is up.\n","[color=aqua]Squirrelkin[/color] surge in popularity as a well known gay duo of [color=aqua]squirrelkin[/color] puts on a racy cabaret show in the capitol and all of the widowed noblewomen in particular simply must own a pair.\n"],
+		marketdown = ["[color=aqua]Squirrelkin[/color] have become even less popular of late. Prices fall.\n", "Demand for [color=aqua]squirrelkin[/color] falls.\n", "Prices for [color=aqua]squirrelkin[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
 		single = " squirrelkin",
 		plural = " squirrelkin",
 		singlepos = " squirrel's",
@@ -1599,12 +1599,12 @@ var races = {
 	"Beastkin Otter": {
 		# Capitulize
 		bodyshape = ['bestial'],
-		description = ".",
+		description = "Otterfolk tend to be found near the sea, but are also found in towns and villages near rivers and lakes where they appear relaxed and playful when out-of-water where they may seem meek and unassuming. They possess well muscled tails and webbed digits ideal for swimming. Although contrary to common preconceptions, otterfolk are clever predatory hunters and trappers especially in the water. They can also become opportunistically dominating and sadistic toward other races if they perceive having a significant advantage and are unobserved by others.",
 		details = "[color=aqua]Racial trait: Relationship gains are improved.[/color]\n\n[color=yellow]Stat potential: Strength - 4, Agility - 4, Magic - 2, Endurance - 6 [/color]\n\nBreeding Note:\n  \n\n[color=yellow]Racial Stat Bonus:\nAgility+, Magic+ \nPure Blood Bonus:\n\n [/color]\n[color=red]Elemental Modifiers\n50% Water \nElemental Bonuses:\nFire (Strength+) \nWater (Magic+) \nWind (Agility+) \nEarth (Endurance+) [/color]\n[color=green]Nature Magic Saturation:\n50% \nNature Bonus:\nFertility++ [/color]\n[color=purple]Mana Corruption:\n25% \nHigher Corruption:\nN/A \nLower Corruption:\nN/A \n, [/color]\n[color=aqua]Breeding Quirks:\n.\nPossible Mutations:\n [/color]",
 		pricemod = 1.75,
 		#ralph5
-		marketup = ["Demand for [color=aqua]otterkin[/color] are up inexplicably.\n", "Words [color=aqua]otterkin[/color] is up.\n"],
-		marketdown = ["[color=aqua]Otterkin[/color] have become even less popular of late. Prices fall.\n", "Test. Demand for [color=aqua]otterkin[/color] falls.\n", "Prices for [color=aqua]otterkin[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
+		marketup = ["Demand for [color=aqua]otterkin[/color] are up inexplicably.\n", "Words [color=aqua]otterkin[/color] is up.\n","Pearls are in fashion in the capitol and demand for pearl divers has pushed prices for [color=aqua]otterkin[/color] way up.\n"],
+		marketdown = ["[color=aqua]Otterkin[/color] have become even less popular of late. Prices fall.\n", "Demand for [color=aqua]otterkin[/color] falls.\n", "Prices for [color=aqua]otterkin[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n", ["Prices for [color=aqua]otterkin[/color] sink as claims surface that their sexual fluids smell of rotten fish.\n"],
 		single = " otterkin",
 		plural = " otterkin",
 		singlepos = " otter's",
@@ -1635,11 +1635,11 @@ var races = {
 	"Beastkin Bird": {
 		# Capitulize
 		bodyshape = ['avian'],
-		description = ".",
+		description = "Birdkin are perhaps the most varied of the beastkin races. While they share some common attributes such as feathers, talons, wings, and egg-laying as well as beaks among full beastkin birds, there are as many varieties of birdkin as there are... well birds. Plumage varies widely from the beautiful fans of peacock birdkin down to short fluffy waterproof feathers of penguin types; however most do tend to be gifted aviators. Social tendencies are as varied as they are for humans depending on region, culture, and subtype.",
 		details = "[color=aqua]Racial trait: Benefits from the flying condition moreso than other races.[/color]\n\n[color=yellow]Stat potential: Strength - 2, Agility - 5, Magic - 3, Endurance - 6 [/color]\n\nBreeding Note:\n  \n\n[color=yellow]Racial Stat Bonus:\nAgility+, Magic+ \nPure Blood Bonus:\n\n [/color]\n[color=red]Elemental Modifiers\n50% Wind \nElemental Bonuses:\nFire (Strength+) \nWater (Magic+) \nWind (Agility+) \nEarth (Endurance+) [/color]\n[color=green]Nature Magic Saturation:\n50% \nNature Bonus:\nFertility++ [/color]\n[color=purple]Mana Corruption:\n25% \nHigher Corruption:\nN/A \nLower Corruption:\nN/A \n, [/color]\n[color=aqua]Breeding Quirks:\n.\nPossible Mutations:\n [/color]",
 		pricemod = 1.75,
 		#ralph5
-		marketup = ["Demand for [color=aqua]birdkin[/color] are up inexplicably.\n", "Words [color=aqua]birdkin[/color] is up.\n"],
+		marketup = ["Demand for [color=aqua]birdkin[/color] are up inexplicably.\n", "Word is that [color=aqua]birdkin[/color] prices are up.\n","[color=aqua]Birdkin[/color] tutors have become popular in the capitol and breeders buy up all they can find in hopes of hatching the most rare and popular towering breed with iconic yellow feathers.\n"],
 		marketdown = ["[color=aqua]Birdkin[/color] have become even less popular of late. Prices fall.\n", "Test. Demand for [color=aqua]birdkin[/color] falls.\n", "Prices for [color=aqua]birdkin[/color] fall as rumors that slave brands fail to prevent violence against their masters circulate.\n"],
 		single = " birdkin",
 		plural = " birdkin",
