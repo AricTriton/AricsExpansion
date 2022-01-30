@@ -1303,7 +1303,7 @@ func setRaceBonus_Ralph(person, increasestats):
 		person.stats.end_max -= globals.origins.traitlist["Frail"].end_max
 	#/ralph
 	
-	var racedict = ['human':'Human', 'gnome':'Gnome', 'elf':'Elf', 'tribal_elf':'Tribal Elf', 'dark_elf':'Dark Elf' ,'orc':'Orc', 'goblin':'Goblin', 'dragonkin':'Dragonkin', 'dryad':'Dryad', 'arachna':'Arachna', 'lamia':'Lamia', 'fairy':'Fairy', 'harpy':'Harpy', 'seraph':'Seraph', 'demon':'Demon', 'nereid':'Nereid', 'scylla':'Scylla', 'slime':'Slime', 'bunny':'Beastkin Bunny', 'dog':'Beastkin Dog', 'cow':'Taurus', 'cat':'Beastkin Cat', 'fox':'Beastkin Fox', 'horse':'Centaur', 'raccoon':'Beastkin Tanuki', 'hyena':'Gnoll', 'ogre':'Ogre', 'giant':'Giant', 'lizardfolk':'Lizardfolk', 'kobold':'Kobold', 'avali':'Avali', 'mouse':'Beastkin Mouse', 'squirrel':'Beastkin Squirrel', 'otter':'Beastkin Otter', 'bird':'Beastkin Bird']
+	var racedict = {'human':'Human', 'gnome':'Gnome', 'elf':'Elf', 'tribal_elf':'Tribal Elf', 'dark_elf':'Dark Elf', 'orc':'Orc', 'goblin':'Goblin', 'dragonkin':'Dragonkin', 'dryad':'Dryad', 'arachna':'Arachna', 'lamia':'Lamia', 'fairy':'Fairy', 'harpy':'Harpy', 'seraph':'Seraph', 'demon':'Demon', 'nereid':'Nereid', 'scylla':'Scylla', 'slime':'Slime', 'bunny':'Beastkin Bunny', 'dog':'Beastkin Wolf', 'cow':'Taurus', 'cat':'Beastkin Cat', 'fox':'Beastkin Fox', 'horse':'Centaur', 'raccoon':'Beastkin Tanuki', 'hyena':'Gnoll', 'ogre':'Ogre', 'giant':'Giant', 'lizardfolk':'Lizardfolk', 'kobold':'Kobold', 'avali':'Avali', 'mouse':'Beastkin Mouse', 'squirrel':'Beastkin Squirrel', 'otter':'Beastkin Otter', 'bird':'Beastkin Bird'}
 
 	#Count the person's races - used in Human >50% Hybrids bonus stat calcs
 	for race in person.genealogy:
@@ -1312,7 +1312,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			fire = (globals.races[racedict[race]].elementalmod.fire/100)/(person.genealogy[race]/100)
 			wind = (globals.races[racedict[race]].elementalmod.wind/100)/(person.genealogy[race]/100)
 			water = (globals.races[racedict[race]].elementalmod.water/100)/(person.genealogy[race]/100)
-			earth = (globals.races[racedict[race]].elementalmod.earth/(100)/(person.genealogy[race]/100)
+			earth = (globals.races[racedict[race]].elementalmod.earth/100)/(person.genealogy[race]/100)
 			nature = (globals.races[racedict[race]].elementalmod.nature/100)/(person.genealogy[race]/100)
 			corruption = (globals.races[racedict[race]].elementalmod.corruption/100)/(person.genealogy[race]/100)
 	
@@ -1899,7 +1899,7 @@ func setRaceBonus_Ralph(person, increasestats):
 				bonus_endurance += reptilian*2 + (0.5 - corruption)*4
 				bonus_beauty += person.genealogy.nereid/4 - corruption*10
 				bonus_courage -= person.genealogy.nereid/10 #Nereid avoid sailors and contact in general
-				onus_courage_racial -= person.genealogy.nereid/100
+				bonus_courage_racial -= person.genealogy.nereid/100
 				bonus_charm += person.genealogy.nereid/10
 				bonus_charm_racial += person.genealogy.nereid/100
 				if person.sex != 'male':
@@ -2156,24 +2156,7 @@ func setRaceBonus_Ralph(person, increasestats):
 				bonus_lewdness += 5
 				bonus_charm -= 5
 		elif person.genealogy.demon >= 50 && person.race == thisrace:
-			if person.genealogy.orc >= 40: #Ogre/Oni
-				hybridtype = 'Ogre'
-				bonus_strength += 1.5
-				bonus_endurance += 1.5
-				bonus_courage += 10
-				bonus_wit -= 10
-				bonus_penissize += 2
-				bonus_ballssize += 2
-				bonus_vagsize += 1.4
-				bonus_titssize += 1.4
-				bonus_height += 2
-				bonus_beauty -= 15
-				person.tail = 'none' #not reversible
-				if person.horns != null: 
-					bonus_horns = 'long_straight' #not reversible
-				else:
-					bonus_horns = 'short'
-			elif person.genealogy.bunny >= 40: #Succubus/Incubus
+			if person.genealogy.bunny >= 40: #Succubus/Incubus
 				if person.sex == 'male':
 					hybridtype = 'Incubus'
 					bonus_magic += 1.5
@@ -2871,8 +2854,8 @@ func setRaceBonus_Ralph(person, increasestats):
 		elif person.genealogy.ogre >= 50 && person.race == thisrace:
 			bonus_strength += person.genealogy.ogre/50
 			bonus_endurance += person.genealogy.ogre/50
-			bonus_wit += person.genealogy.ogre/10
-			bonus_wit_racial += person.genealogy.ogre/100
+			bonus_wit -= person.genealogy.ogre/10
+			bonus_wit_racial -= person.genealogy.ogre/100
 			bonus_beauty -= person.genealogy.ogre/10
 			if person.sex in ['male']:
 				bonus_penissize += person.genealogy.ogre/50
@@ -2884,8 +2867,8 @@ func setRaceBonus_Ralph(person, increasestats):
 		else:
 			bonus_strength += person.genealogy.ogre/50
 			bonus_endurance += person.genealogy.ogre/100
-			bonus_wit += person.genealogy.ogre/10
-			bonus_wit_racial += person.genealogy.ogre/50
+			bonus_wit -= person.genealogy.ogre/10
+			bonus_wit_racial -= person.genealogy.ogre/50
 			bonus_beauty -= person.genealogy.ogre/10
 			if person.sex in ['male']:
 				bonus_penissize += person.genealogy.ogre/50
@@ -3021,14 +3004,14 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_wit += 20
 			bonus_wit_racial += 2
 			bonus_courage -= 10
-			bonus_wit_racial -= 1
+			bonus_courage_racial -= 1
 			if person.sex in ['male', 'futanari']:
 				bonus_penissize -= 1
 		elif person.genealogy.mouse >= 50 && person.race in ['Beastkin Mouse', 'Halfkin Mouse']:
 			bonus_wit += person.genealogy.mouse/5
 			bonus_wit_racial += person.genealogy.mouse/50
 			bonus_courage -= person.genealogy.mouse/10
-			bonus_wit_racial -= person.genealogy.mouse/100
+			bonus_courage_racial -= person.genealogy.mouse/100
 			if person.sex in ['male', 'futanari']:
 				bonus_penissize -= person.genealogy.mouse/100
 			#Guardian Spirit
@@ -3046,7 +3029,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_wit += person.genealogy.mouse/5
 			bonus_wit_racial += person.genealogy.mouse/50
 			bonus_courage -= person.genealogy.mouse/10
-			bonus_wit_racial -= person.genealogy.mouse/100
+			bonus_courage_racial -= person.genealogy.mouse/100
 			bonus_penissize -= person.genealogy.mouse/100
 		else:
 			bonus_magic += person.genealogy.mouse/50
@@ -3054,7 +3037,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_wit += person.genealogy.mouse/5
 			bonus_wit_racial += person.genealogy.mouse/50
 			bonus_courage -= person.genealogy.mouse/10
-			bonus_wit_racial -= person.genealogy.mouse/100
+			bonus_courage_racial -= person.genealogy.mouse/100
 			bonus_penissize -= person.genealogy.mouse/100
 
 	#Squirrel - Capitulize, gotta set these up more

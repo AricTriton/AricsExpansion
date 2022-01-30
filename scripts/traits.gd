@@ -263,7 +263,7 @@ var traits = {
 		"effect": {
 			"code": "quick",
 			"agi_mod": 2,
-			"agi_max": 0
+			"agi_max": 0,
 			"stress_mod": 0.2
 		},
 		"tags": [

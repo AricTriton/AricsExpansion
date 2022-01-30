@@ -649,7 +649,6 @@ var enemypool = {
 		name = 'Warrior',
 		code = 'lizardfolkwarrior',
 		capturerace = [['Lizardfolk',100]],
-		icon = null,
 		faction = 'monster',
 		icon = load("res://files/aric_expansion_images/enemies/swamplizardm_enemy.png"),
 		special = null,

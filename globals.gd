@@ -1542,7 +1542,7 @@ func fertilize_egg(mother, father_id, father_unique):
 		elif father_unique == 'squirrel':
 			father.genealogy.squirrel = 100
 			father.race = 'Beastkin Squirrel'
-		elif father_unique == 'otterr':
+		elif father_unique == 'otter':
 			father.genealogy.otter = 100
 			father.race = 'Beastkin Otter'
 		elif father_unique == 'bird':

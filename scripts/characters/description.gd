@@ -408,8 +408,9 @@ var newpenisdescription = {
 var newdescriptions = {
 	bodyshape = {
 		humanoid = '$His body is quite [color=yellow]normal[/color]. ',
+		giant = "$His body resembles a human's, except that $he is [color=yellow]extremely large.[/color] ",
 		bestial = "$His body resembles a human's, except for some [color=yellow]bestial features[/color] in $his face and body structure. ",
-		reptilian ="$His body resembles a human's, except for [color=yellow]reptilian features[/color] in $his face and body structure. ", # /Capitulize
+		reptilian ="$His body resembles a human's, except for [color=yellow]reptilian features[/color] in $his face and body structure. ",
 		shortstack = '$His body is rather [color=yellow]petite[/color], about half the size of the average person. ',
 		reptilianshortstack = '$His body is rather [color=yellow]petite[/color], about half the size of the average person. $He has [color=yellow]reptilian features[/color] in $his face and body structure. ',
 		furryshortstack = '$His body is rather [color=yellow]petite[/color], about half the size of the average person. $He has [color=yellow]bestial features[/color] in $his face and body structure. ',
@@ -578,6 +579,8 @@ var newdescriptions = {
 		none = '',
 		cat = 'Below $his waist, you spot a slim [color=aqua]cat tail[/color] covered with fur. ',
 		fox = '$He has a large, fluffy [color=aqua]fox tail[/color]. ',
+		neko = 'Below $his waist, you spot a slim [color=aqua]cat tail that splits into two[/color] covered with fur. ',
+		hyena = '$He has a large, matted [color=aqua]hyena tail[/color]. ',
 		wolf = "Below $his waist there's a short, fluffy, [color=aqua]wolf tail[/color]. ",
 		bunny = '$He has a [color=aqua]small ball of fluff[/color] behind $his rear. ',
 		racoon = '$He has a plump, fluffy [color=aqua]raccoon tail[/color]. ',
