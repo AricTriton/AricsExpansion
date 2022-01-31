@@ -3006,7 +3006,7 @@ func _on_bountysell_pressed():
 	var bountycount = 0
 	var norewards = true #determines if alt text for no collections is to be used
 	var bountycrime = ""
-	var location = ''
+	var location = globals.state.location #ralphD
 	var array = []
 	var array_lowcrime = []
 	var array_midcrime = []
@@ -3132,6 +3132,7 @@ func _on_bountysell_pressed():
 	main.popup(str(text))
 	globals.state.backpack.stackables.rope = globals.state.backpack.stackables.get('rope', 0) + globals.state.calcRecoverRope(array.size()) #ralphA
 	globals.resources.gold += gold
+	globals.state.bountiescollected[location] += bountycount #ralphD	
 	reputationgain(repgaincount)
 	for i in array: #erase them all so they won't reappear, just like quicksell
 		globals.state.capturedgroup.erase(i)

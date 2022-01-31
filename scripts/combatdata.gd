@@ -2,6 +2,13 @@ extends Node
 
 
 var enemygrouppools = {
+	#ralphD
+	noenemyencountered = {
+		units = [['wolf',1,1]], awareness = -10, captured = null, special = 'noenemyencountered',
+		description = 'You should not see [color=aqua]this[/color].',
+		descriptionambush = '',
+	},
+	#/ralphD
 	treasurechest = {
 		units = [['wolf',1,1]], awareness = -10, captured = null, special = 'treasurechest',
 		description = 'You find a small [color=aqua]treasure chest[/color].',
