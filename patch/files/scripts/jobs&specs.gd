@@ -1226,6 +1226,21 @@ func storewimborn(person):
 	else:
 		supplySold = 0
 
+	var manaDiff = globals.state.manastock - globals.resources.mana
+	var toBuy = int(gold + globals.resources.gold)
+	var manaPrice = 5
+	if globals.state.manabuy && manaDiff > 0:
+		toBuy -= toBuy % manaPrice
+		toBuy /= manaPrice
+		toBuy = min(manaDiff,toBuy)
+		if gold > 0:
+			text += "Before buying mana $he would've returned with [color=yellow]" + str(gold) + "[/color] gold.\n"
+		if toBuy > 0:
+			text += "$He purchased [color=aqua]" + str(toBuy) + "[/color] mana, costing [color=yellow]" + str(toBuy * manaPrice) + "[/color] gold.\n"
+		gold -= toBuy * manaPrice
+		globals.resources.mana += toBuy
+
+
 	person.xp += xp + abs(supplySold) / 3
 	person.stress += rand_range(5,10)
 	if gold > 0:

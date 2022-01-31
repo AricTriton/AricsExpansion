@@ -177,7 +177,7 @@ func updatePerson(person):
 		if i != null && globals.state.unstackables.has(i):
 			var tempitem = globals.state.unstackables[i]
 			if tempitem.code in ['acchandcuffs']:
-				restrained == "cuffed"
+				restrained = "cuffed"
 	#Apply Restraints
 	person.restrained = restrained
 
@@ -1371,7 +1371,10 @@ func getMovement(person):
 			if titweight > 0:
 				person.movementreasons.append('[color=red]\nIs not naturally Hardy enough to support $his oversized Tits.[/color] ')
 			if weight < 3:
-				person.movementreasons.append('[color=red]\nMay be Swollen and not Strong enough to stand up under the weight.[/color] ')
+				if person.swollen > 0:
+					person.movementreasons.append('[color=red]\nMay be Swollen and not Strong enough to stand up under the weight.[/color] ')
+				else:
+					person.movementreasons.append('[color=red]\nIs not Strong enough to stand up under the weight of $his oversized Tits.[/color] ')
 			if person.restrained in ['cuffed']:
 				person.movementreasons.append('[color=red]\nIs currently restrained.[/color] ')
 			if person.energy-weight < 15:
