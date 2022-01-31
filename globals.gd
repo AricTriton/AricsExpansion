@@ -459,6 +459,7 @@ class progress:
 	var upcomingevents = []
 	###---Added by Expansion---### Towns Expanded
 	var reputation = {wimborn = 0, frostford = 0, gorn = 0, amberguard = 0, shaliq = 0, umbra = 0} setget reputation_set
+	var bountiescollected = {wimborn = 0, frostford = 0, gorn = 0, amberguard = 0, shaliq = 0, umbra = 0} #ralphD
 	###---End Expansion---###
 	var dailyeventcountdown = 0
 	var dailyeventprevious = 0
@@ -1287,7 +1288,7 @@ var backwardscompatibility = loadModFile("AricsExpansion", "customScripts/backwa
 var expansionsettings = loadModFile("AricsExpansion", "customScripts/expansionsettings.gd").new()
 var useRalphsTweaks = expansionsettings.use_ralphs_tweaks
 var useCapsTweaks = expansionsettings.use_caps_tweaks
-
+var expansiontravel = loadModFile("AricsExpansion", "customScripts/expansiontravel.gd").new() #ralphD
 
 ###---Added by Expansion---### General Arrays
 #Size Arrays

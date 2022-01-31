@@ -10,7 +10,7 @@ var database = {
 		code = 'wimbornoutskirts',
 		name = 'Wimborn Outskirts',
 		description = "The rural road leads across green plains and various settlements. Bright scenery puts you at peace. ",
-		enemies = [{value = 'peasant', weight = 2},{value = 'banditseasy', weight = 1},{value = 'thugseasy',weight = 3}],
+		enemies = [{value = 'peasant', weight = 2},{value = 'banditseasy', weight = 1},{value = 'thugseasy',weight = 3},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 5,
 		exits = ['wimborn','forest','prairie'],
@@ -26,7 +26,7 @@ var database = {
 		code = 'prairie',
 		name = 'Prairies',
 		description = "Long trading route goes through the wide prairies. Rarely you can spot mixed settlements and lone estates. ",
-		enemies = [{value = 'banditsmedium', weight = 20},{value = 'centaur1', weight = 2},{value = 'centaurattackers', weight = 3},{value = 'slaverseasy', weight = 10},{value = 'peasant', weight = 20},{value = 'banditseasy', weight = 30}], #ralphA
+		enemies = [{value = 'banditsmedium', weight = 20},{value = 'centaur1', weight = 2},{value = 'centaurattackers', weight = 3},{value = 'slaverseasy', weight = 10},{value = 'peasant', weight = 20},{value = 'banditseasy', weight = 30},{value = 'noenemyencountered', weight = 40}], #ralphD - added nonenemyencounters #ralphA
 		encounters = [],
 		length = 5,
 		exits = ['wimbornoutskirts','gornoutskirts','sea'],
@@ -42,7 +42,7 @@ var database = {
 		code = 'forest',
 		name = 'Ancient Forest',
 		description = "You stand deep within this ancient forest. Giant trees tower above you, reaching into the skies and casting deep shadows on the ground below. As the wind whispers past, you can hear the movement of small creature in the undergrowth and birds singing from their perches above.",
-		enemies = [{value = 'wolveswithperson', weight = 0.4},{value = 'fairyattackers', weight = 0.2},{value = 'banditseasy', weight = 3},{value = 'peasant', weight = 3},{value ='solobear', weight = 4},{value = 'wolveseasy', weight = 9},{value = 'treasurechest', weight = 1}], #ralphA
+		enemies = [{value = 'wolveswithperson', weight = 0.4},{value = 'fairyattackers', weight = 0.2},{value = 'banditseasy', weight = 3},{value = 'peasant', weight = 3},{value ='solobear', weight = 4},{value = 'wolveseasy', weight = 9},{value = 'treasurechest', weight = 1},{value = 'noenemyencountered', weight = 10}], #ralphD - added nonenemyencounters #ralphA
 		encounters = [['chloeforest','globals.state.sidequests.chloe in [0,1] && !globals.state.sidequests.cali in [17,20,21]',10]],
 		length = 5,
 		exits = ['shaliq', 'wimbornoutskirts', 'elvenforest'],
@@ -58,7 +58,7 @@ var database = {
 		code = 'elvenforest',
 		name = 'Elven Grove',
 		description = "This portion of the forest is located dangerously close to elven lands. They take poorly to intruders in their part of the woods so you should remain on your guard.",
-		enemies = [{value = 'wolveswithperson', weight = 4},{value = 'fairy', weight = 2},{value = 'solobear', weight = 6},{value = 'elfguards',weight = 6},{value = 'plantseasy', weight = 6},{value = 'wolveseasy', weight = 6},{value = 'blockedsection', weight = 1}],
+		enemies = [{value = 'wolveswithperson', weight = 4},{value = 'fairy', weight = 2},{value = 'solobear', weight = 6},{value = 'elfguards',weight = 6},{value = 'plantseasy', weight = 6},{value = 'wolveseasy', weight = 6},{value = 'blockedsection', weight = 1},{value = 'noenemyencountered', weight = 15}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 5,
 		exits = ['amberguard','forest'],
@@ -74,7 +74,7 @@ var database = {
 		code = 'amberguardforest',
 		name = 'Amber Road',
 		description = "Amber Road is a long way through seeming glade and various small settlements and hills. ",
-		enemies = [{value = 'solobear',weight = 1}, {value = 'wolveshard', weight = 3}, {value ='direwolveseasy', weight = 5}, {value = 'elfguards',weight = 3},],
+		enemies = [{value = 'solobear',weight = 1}, {value = 'wolveshard', weight = 3}, {value ='direwolveseasy', weight = 5}, {value = 'elfguards',weight = 3},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [['aynerisencounter','globals.state.sidequests.ayneris in [0,1,2]',7]],
 		length = 4,
 		exits = ['amberguard','witchhut','undercityentrance'],
@@ -90,7 +90,7 @@ var database = {
 		code = 'grove',
 		name = 'Far Eerie Woods',
 		description = "This portion of the forest is deeply shadowed, and strange sounds drift in and out of hearing. Something about the atmosphere keeps the normal forest creatures silent, lending an eerie, mystic feeling to the grove you stand within.",
-		enemies = [{value = 'plantswithperson',weight = 2},{value = 'arachnaweb',weight = 1},{value = 'dryad',weight = 2},{value = 'dryad2',weight = 2},{value = 'fairy', weight = 3},{value = 'wolveshard', weight = 6},{value = 'plantseasy',weight = 6}], #ralph4 #ralphA
+		enemies = [{value = 'plantswithperson',weight = 2},{value = 'arachnaweb',weight = 1},{value = 'dryad',weight = 2},{value = 'dryad2',weight = 2},{value = 'fairy', weight = 3},{value = 'wolveshard', weight = 6},{value = 'plantseasy',weight = 6},{value = 'noenemyencountered', weight = 8}], #ralphD - added nonenemyencounters #ralph4 #ralphA
 		encounters = [['chloegrove','globals.state.sidequests.chloe == 6 && !globals.state.sidequests.cali in [17,20,21]',25],['snailevent','globals.state.mansionupgrades.farmhatchery >= 1 && globals.state.snails < 10',10]],
 		length = 7,
 		exits = ['shaliq','marsh'],
@@ -106,7 +106,7 @@ var database = {
 		code = 'marsh',
 		name = 'Marsh',
 		description = "Dank bog lies at the border of the forest and swamps beyond. Noxious smells and a sinister aura prevail throughout. The landscape itself is hostile, with pitch-black pools of water mixed among the solid ground and you doubt that the creatures that live here are any more pleasant than the land they live in.",
-		enemies = [{value = 'banditcamp',weight = 1},{value = 'monstergirl', weight = 1}, {value = 'lizardfolkpatrol', weight = 2}, {value = 'oozesgroup', weight = 2}, {value = 'solospider', weight = 5},{value = 'treasurechest', weight = 1}],
+		enemies = [{value = 'banditcamp',weight = 1},{value = 'monstergirl', weight = 1}, {value = 'lizardfolkpatrol', weight = 2}, {value = 'oozesgroup', weight = 2}, {value = 'solospider', weight = 5},{value = 'treasurechest', weight = 1},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 6,
 		exits = ['frostfordoutskirts','grove'],
@@ -122,7 +122,7 @@ var database = {
 		code = 'mountains',
 		name = 'Mountains',
 		description = "You climb over small hills in search for any activity in these elevated grounds. The cloudy peak, home to the Seraphs, is barely visible far above you.", #ralphA
-		enemies = [{value = 'slaversmedium', weight = 3},{value = 'seraph1', weight = 0.25},{value = 'harpyattackers', weight = 0.5},{value = 'harpy', weight = 4},{value = 'banditsmedium', weight = 6}, {value = 'fewcougars', weight = 8}], #ralphA
+		enemies = [{value = 'slaversmedium', weight = 3},{value = 'seraph1', weight = 0.25},{value = 'harpyattackers', weight = 0.5},{value = 'harpy', weight = 4},{value = 'banditsmedium', weight = 6}, {value = 'fewcougars', weight = 8},{value = 'noenemyencountered', weight = 11}], #ralphD - added nonenemyencounters #ralphA
 		encounters = [],
 		length = 6,
 		exits = ['gornoutskirts','mountaincave'],
@@ -138,7 +138,7 @@ var database = {
 		code = 'mountaincave',
 		name = 'Mountain Caves',
 		description = "You step onto the damp cave floor. These underground systems serve as home to many various beasts and semisentient creatures.",
-		enemies = [{value = 'oozesgroup', weight = 20},{value = 'goblinattackers1', weight = 8},{value = 'goblinattackers2', weight = 1},{value = 'delffew', weight = 1},{value = 'delfattackers1', weight = 1},{value = 'delfattackers2', weight = 1},{value = 'delfvsgob1', weight = 1},{value = 'solospider', weight = 20},{value = 'goblingroup', weight = 40},{value = 'treasurechest', weight = 10}], #ralphA
+		enemies = [{value = 'oozesgroup', weight = 20},{value = 'goblinattackers1', weight = 8},{value = 'goblinattackers2', weight = 1},{value = 'delffew', weight = 1},{value = 'delfattackers1', weight = 1},{value = 'delfattackers2', weight = 1},{value = 'delfvsgob1', weight = 1},{value = 'solospider', weight = 20},{value = 'goblingroup', weight = 40},{value = 'treasurechest', weight = 10},{value = 'noenemyencountered', weight = 34}], #ralphD - added nonenemyencounters #ralphA
 		encounters = [],
 		length = 8,
 		exits = ['mountains'],
@@ -154,8 +154,7 @@ var database = {
 		code = 'sea',
 		name = 'Sea',
 		description = "You are at the beach of a Big Sea. Air smells of salt and you can spot some sea caves formed by plateau and incoming waves.",
-		#enemies = [{value = 'banditcamp', weight = 1},{value = 'monstergirl', weight = 3},{value = 'travelersgroup', weight = 5},{value = 'oozesgroup', weight = 5},{value = 'treasurechest', weight = 1}], #ralph4
-		enemies = [{value = 'banditcamp', weight = 1},{value = 'nereidgroup', weight = 1},{value = 'banditsmedium', weight = 2},{value = 'monstergirl', weight = 3},{value = 'travelersgroup', weight = 2},{value = 'oozesgroup', weight = 5},{value = 'treasurechest', weight = 1}], #ralph4
+		enemies = [{value = 'banditcamp', weight = 1},{value = 'nereidgroup', weight = 1},{value = 'banditsmedium', weight = 2},{value = 'monstergirl', weight = 3},{value = 'travelersgroup', weight = 2},{value = 'oozesgroup', weight = 5},{value = 'treasurechest', weight = 1},{value = 'noenemyencountered', weight = 8}], #ralphD - added nonenemyencounters #ralph4
 		encounters = [],
 		length = 5,
 		exits = ['prairie'],
@@ -171,7 +170,7 @@ var database = {
 		code = 'gornoutskirts',
 		name = 'Gorn Outskirts',
 		description = "The town's outskirts look bright and green. ",
-		enemies = [{value = 'slaverseasy', weight = 1},{value = 'peasant', weight = 1},{value = 'banditseasy', weight = 3},{value = 'thugseasy', weight = 3},{value = 'wolveseasy', weight = 5}],
+		enemies = [{value = 'slaverseasy', weight = 1},{value = 'peasant', weight = 1},{value = 'banditseasy', weight = 3},{value = 'thugseasy', weight = 3},{value = 'wolveseasy', weight = 5},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 5,
 		exits = ['gorn','prairie','mountains'],
@@ -187,7 +186,7 @@ var database = {
 		code = 'frostfordoutskirts',
 		name = 'Frostford Outskirts',
 		description = "Main road quickly branches off at thick boreal forest. Even though Frostford is considerably dense in population, its periphery is far less inhabitable due to harsh climate. You make your way through semi-utilized forest paths paying attention to the surroundings. ",
-		enemies = [{value = 'banditsmedium', weight = 2},{value = 'travelersgroup', weight = 1.5},{value = 'peasant', weight = 2},{value = 'thugseasy', weight = 2},{value = 'solobear', weight = 4}],
+		enemies = [{value = 'banditsmedium', weight = 2},{value = 'travelersgroup', weight = 1.5},{value = 'peasant', weight = 2},{value = 'thugseasy', weight = 2},{value = 'solobear', weight = 4},{value = 'noenemyencountered', weight = 10}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 5,
 		exits = ['frostford','marsh','frostfordclearing'],

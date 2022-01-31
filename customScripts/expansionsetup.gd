@@ -650,9 +650,6 @@ func setRaceBonus(person, increasestats):
 		if person.genealogy.orc >= 100:
 			bonus_strength += 3
 			bonus_courage += 10
-		if person.genealogy.orc >= 70:
-			bonus_strength += 2
-			bonus_courage += 10
 		elif person.genealogy.orc >= 70:
 			bonus_strength += 2
 			bonus_courage += 10
@@ -882,6 +879,7 @@ func setRaceBonus(person, increasestats):
 			bonus_strength += .4
 			bonus_magic += .2
 	
+	#Dryad
 	if person.genealogy.dryad > 0:
 		if person.genealogy.dryad >= 100:
 			bonus_strength += 2
