@@ -465,6 +465,8 @@ class progress:
 	var supplykeep = 10
 	var foodbuy = 200
 	var supplybuy = false
+	var manastock = 200
+	var manabuy = false
 	var tutorial = {basics = false, person = false, alchemy = false, jail = false, lab = false, farm = false, outside = false, combat = false, interactions = false}
 	var itemcounter = 0
 	var slavecounter = 0

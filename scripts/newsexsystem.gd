@@ -1523,6 +1523,7 @@ func checkaction(action):
 	var disabled = false
 	var hint_tooltip = ''
 	for k in givers:
+		related = false
 		if k.person == globals.player || k.person.unique in ['dog','horse']:
 			continue
 		if action.giverconsent != 'any' && k.effects.has('resist'):
