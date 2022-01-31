@@ -9,6 +9,7 @@ var use_ralphs_tweaks = false					# Set this to true if you want to use the sett
 var unique_trait_generation = false				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
 var consolidatebeastDNA = false					# Set this to true if you don't like npcs with a mix of Beastkin/Halfkin race%'s (no half cat half foxes, etc.) #ralphB
 var gratitude_for_all = false					# Set this to true so that babies aged up to Child or Teen have as much chance to spawn with the Grateful trait as ones aged up to Adult (Ralph sets this to False, but up to you) #ralphC
+var sillymode = true							# Set it to false if you don't abide, so far it only affects random travel event text #ralphD
 
 #---Debug Tools (True/False)
 var perfectinfo = false
