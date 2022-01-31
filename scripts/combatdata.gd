@@ -111,7 +111,7 @@ var enemygrouppools = {
 	},
 	lizardfolkpatrol = {
 		units = [['lizardfolkwarrior',2,4]], awareness = 15, captured = null, special = null,
-		description = "You spot a local [color=aqua]patrol of lizardfolk warriors[/color] surverying the marsh. They are very territorial, your transgression won't be happy with appreciated. ",
+		description = "You spot a local [color=aqua]patrol of lizardfolk warriors[/color] surverying the marsh. They are very territorial, your transgression won't be appreciated. ",
 		descriptionambush = 'You are attacked by a [color=aqua]small group of lizardfolk warriors[/color]. ',
 	},
 	fairy = {
