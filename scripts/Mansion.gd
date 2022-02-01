@@ -1575,6 +1575,40 @@ func nextdayevents():
 		return
 	startnewday()
 
+func _on_headgirlbehavior_item_selected( ID ):
+	var text = ''
+	if ID == 0:
+		globals.state.headgirlbehavior = 'none'
+		text += "Headgirl will not interfere with others' business. "
+	if ID == 1:
+		globals.state.headgirlbehavior = 'kind'
+		text += 'The Headgirl will focus on a kind approach and reduce the stress of others, trying to endorse acceptance of their master. '
+	if ID == 2:
+		globals.state.headgirlbehavior = 'strict'
+		text += "Headgirl will focus on putting other servants in line at the cost of their stress. "
+	var headgirl = null
+	for i in globals.slaves:
+		if i.work == 'headgirl':
+			headgirl = i
+	if headgirl == null:
+		text += "\nCurrently you have no headgirl assigned. "
+	else:
+		text += headgirl.dictionary("\n$name is your current headgirl. ")
+	get_node("mansionsettings/Panel/headgirldescript").set_bbcode(text)
+	get_node("mansionsettings/Panel/foodbuy").set_value(globals.state.foodbuy)
+	get_node("mansionsettings/Panel/manastock").set_value(globals.state.manastock)
+	get_node("mansionsettings/Panel/manastock/manabuy").set_pressed(globals.state.manabuy)
+	get_node("mansionsettings/Panel/supplykeep").set_value(globals.state.supplykeep)
+	get_node("mansionsettings/Panel/supplykeep/supplybuy").set_pressed(globals.state.supplybuy)
+
+func _on_manastock_value_changed(value):
+	globals.state.manastock = get_node("mansionsettings/Panel/manastock").get_value()
+
+
+func _on_manabuy_pressed():
+	globals.state.manabuy = get_node("mansionsettings/Panel/manastock/manabuy").is_pressed()
+
+
 #---Keeping to have the "X is following you" for pet groups
 func _on_mansion_pressed():
 	var text = ''
