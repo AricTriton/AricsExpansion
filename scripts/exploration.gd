@@ -1,4 +1,6 @@
 
+var travel = globals.expansiontravel #ralphD
+
 func enemyencounter():
 	var enc
 	var encmoveto
@@ -226,7 +228,16 @@ func buildenemies(enemyname = null):
 			buildslave(i,true)
 			###---End Expansion---###
 
-##############
+##############ralphD - space out combats through new noncombat enemyencounter
+func noenemyencountered():
+	var array = []
+	#mansion.maintext = "Your journey continues peacefully. \n"
+	#noenemyencounteredandthen(zone)
+	#print("Ralph Test: enemygroup: "+str(enemygroup))
+	mansion.maintext = travel.getzonetraveltext(currentzone,currentzone.length)
+	array.append({name = "Proceed through area", function = 'enemyleave'})
+	outside.buildbuttons(array, self)
+#/ralphD
 
 
 var treasuremisc = [['magicessenceing',7],['taintedessenceing',7],['natureessenceing',7],['bestialessenceing',7],['fluidsubstanceing',7],['gem',1],['claritypot',0.5],['regressionpot',1],['youthingpot',2],['maturingpot',2]]
