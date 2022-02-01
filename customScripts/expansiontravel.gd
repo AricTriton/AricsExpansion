@@ -12,8 +12,8 @@ func getzonetraveltext(zone,progress):
 	for i in party:
 		var j = globals.state.findslave(i)
 		if globals.player != j:
-			teammates.append_array([j])
-	var tempteammate = randomfromarray(teammates)
+			teammates.append(j)
+	var tempteammate = null if teammates.empty() else randomfromarray(teammates)
 
 	var corestats = ['sstr','sagi','smaf','send']
 	var playertitle = {"sstr":"The Bandit Crusher","sagi":"The Lightning Quick Bounty Hunter","smaf":"The Arcane Bandit Hunter","send":"The Unstoppable"}
@@ -51,109 +51,108 @@ func getzonetraveltext(zone,progress):
 	if rand_range(0,1) > 0.5:
 		for i in teammates:
 			if i.traits.has("Natural Beauty") && i.beauty < 70 && !i.origins in ["noble","rich"] && rand_range(0,1) > 0.3:
-				array.append_array(["You turn to face "+i.name+" and "+randomfromarray(["take agood look","end up staring","casually examine"])+".  You wonder how attractive "+i.name+" could have become if born into a better family."]) 
+				array.append("You turn to face "+i.name+" and "+randomfromarray(["take agood look","end up staring","casually examine"])+".  You wonder how attractive "+i.name+" could have become if born into a better family.") 
 			if (i.traits.has("Scarred") || i.traits.has("Blemished")) && rand_range(0,1) > 0.5:
-				array.append_array(["You turn to face "+i.name+" and "+randomfromarray(["get a close-up look at those scars","end up staring","try to look natural","feel a little disgusted"])+".  Maybe you should get "+i.name+" worked on in the lab."]) 
+				array.append("You turn to face "+i.name+" and "+randomfromarray(["get a close-up look at those scars","end up staring","try to look natural","feel a little disgusted"])+".  Maybe you should get "+i.name+" worked on in the lab.") 
 			if i.traits.has("Clumsy") && rand_range(0,1) > 0.3:
-				array.append_array([i.name+" "+randomfromarray(["trips and falls, picking up some fresh bruises.","manages to bump into you as you halt for a moment to survey the surroundings.","starts to drop some gear and only makes it worse by fumbling to catch it.","slips and nearly falls before grabbing onto you."])])
+				array.append(i.name+" "+randomfromarray(["trips and falls, picking up some fresh bruises.","manages to bump into you as you halt for a moment to survey the surroundings.","starts to drop some gear and only makes it worse by fumbling to catch it.","slips and nearly falls before grabbing onto you."]))
 			if i.traits.has("Quick") && i.sagi > player.sagi && rand_range(0,1) > 0.6:
-				array.append_array([randomfromarray(["You trip and start to fall","You take a wrong step","You start to lose your balance"])+", but "+i.name+" "+randomfromarray([" is there in a flash to steady you.","leaps into motion, saving you.","is quick to support you."])])	
+				array.append(randomfromarray(["You trip and start to fall","You take a wrong step","You start to lose your balance"])+", but "+i.name+" "+randomfromarray([" is there in a flash to steady you.","leaps into motion, saving you.","is quick to support you."]))	
 			if !i.traits.has("Mute") && !i.traits.has("Lisp") && !i.traits.has("Stutter") && i.brand != 'advanced':
 				if i.traits.has("Clingy") && rand_range(0,1) > 0.7:
 					if i.metrics.ownership > 6:
-						array.append_array([i.name+" "+randomfromarray(["gloms onto","rushes up next to","walks beside","catches up to"])+" you and expresses a heartfelt appreciation to being brought along."])
+						array.append(i.name+" "+randomfromarray(["gloms onto","rushes up next to","walks beside","catches up to"])+" you and expresses a heartfelt appreciation to being brought along.")
 				if i.traits.has("Foul Mouth") && rand_range(0,1) > 0.7:
 					if i.metrics.ownership > 6:
-						array.append_array([i.name+" trips randomly and begins to curse, stringing together a string of vile epithets that at various points would offend people of nearly any race, creed, or sex.  This goes on for several minutes and provides a good deal of entertainment to the party as "+i.name+" has become well known for their foul language and no one takes it too personally."])
+						array.append(i.name+" trips randomly and begins to curse, stringing together a string of vile epithets that at various points would offend people of nearly any race, creed, or sex.  This goes on for several minutes and provides a good deal of entertainment to the party as "+i.name+" has become well known for their foul language and no one takes it too personally.")
 					else:
-						array.append_array([i.name+" trips randomly and begins to curse, stringing together a string of vile epithets that at various points would offend people of nearly any race, creed, or sex.  A fight nearly breaks out and you threaten to gag "+i.name+"."])
+						array.append(i.name+" trips randomly and begins to curse, stringing together a string of vile epithets that at various points would offend people of nearly any race, creed, or sex.  A fight nearly breaks out and you threaten to gag "+i.name+".")
 			if i.traits.has("Prude") && rand_range(0,1) > 0.9:
 				if i.lewdness > 50:
-					array.append_array(["You sight a pair of animals mating and notice "+i.name+" pointedly looking away and blushing."])
+					array.append("You sight a pair of animals mating and notice "+i.name+" pointedly looking away and blushing.")
 				else:
-					array.append_array([i.name+" notices a pair of animals mating and pointedly looking away flustered."])
+					array.append(i.name+" notices a pair of animals mating and pointedly looking away flustered.")
 			if i.traits.has("Mute") && progress < 6 && rand_range(0,1) > 0.7:
-				array.append_array([i.name+" Tugs on you to get your attention and points out "+randomfromarray(['some potential trouble','a possible threat','what look like bandits','some wildlife','something unusual'])+" "+randomfromarray(['ahead','in the distance','before anyone else notices','further ahead','you did not expect'])+"."])
+				array.append(i.name+" Tugs on you to get your attention and points out "+randomfromarray(['some potential trouble','a possible threat','what look like bandits','some wildlife','something unusual'])+" "+randomfromarray(['ahead','in the distance','before anyone else notices','further ahead','you did not expect'])+".")
 	if rand_range(0,1) > 0.9:
 		var temp = randomfromarray(['petite','short','average','tall','towering'])
 		if globals.player.height != temp:
-			array.append_array(["You daydream about what life might be like if you were "+temp+" rather than "+globals.player.height+"."])
+			array.append("You daydream about what life might be like if you were "+temp+" rather than "+globals.player.height+".")
 		temp = randomfromarray(['male','female','futanari','dickgirl'])
 		if globals.player.sex != temp:
-			array.append_array(["You wonder about what life might be like if you were a "+temp+" rather than a "+globals.player.sex+"."])
+			array.append("You wonder about what life might be like if you were a "+temp+" rather than a "+globals.player.sex+".")
 	if rand_range(0,1) > 0.5:
 		if travelwhen() == "early":
 			if globals.state.sexactions == 0 && rand_range(0,1) > 0.5:
-				array.append_array(["You yawn and stretch as you walk.  It's still early, but spending the better part of the morning fucking has left you feeling sleepy."])
+				array.append("You yawn and stretch as you walk.  It's still early, but spending the better part of the morning fucking has left you feeling sleepy.")
 			elif rand_range(0,1) > 0.5:
-				array.append_array(["It's early yet.  With a little luck, this should be productive day."])
+				array.append("It's early yet.  With a little luck, this should be productive day.")
 			if gotsupplies:
 				var lowestenergy = 1
 				var energyratio = 1
-				var selected = ""
-				var temppronoun = "his"
+				var selected
 				for i in teammates: #who's most ready to camp (and eat)
-					energyratio = teammates[i].energy / teammates[i].energy_max
+					energyratio = i.energy / i.energy_max
 					if energyratio < lowestenergy && !i.traits.has("Mute") && !i.traits.has("Stutter") && !i.traits.has("Lisp") && i.brand != 'advanced':
-						selected = teammates[i].name
+						selected = i
 						lowestenergy = energyratio
-						if selected.sex != "male":
-							temppronoun = "her"
-				array.append_array(["Suddenly you hear a loud growling coming from right behind you and spin around, weapon ready.\n\nIt's just "+selected+" standing there sheepishly clutching "+temppronoun+" stomach.\n\n[color=yellow]Can we stop and eat? I'm really hungry.[/color] "])
+				if selected != null:
+					array.append(selected.dictionary("Suddenly you hear a loud growling coming from right behind you and spin around, weapon ready.\n\nIt's just $name standing there sheepishly clutching $his stomach.\n\n[color=yellow]Can we stop and eat? I'm really hungry.[/color] "))
 		elif travelwhen() == "afternoon":
-			if !tempteammate.traits.has("Mute") && !tempteammate.traits.has("Stutter") && !tempteammate.traits.has("Lisp") && tempteammate.brand != 'advanced' && rand_range(0,1) > 0.5:
-				array.append_array([tempteammate.name+" asks how much longer until you'll all return home for the day."])
+			if tempteammate != null && !tempteammate.traits.has("Mute") && !tempteammate.traits.has("Stutter") && !tempteammate.traits.has("Lisp") && tempteammate.brand != 'advanced' && rand_range(0,1) > 0.5:
+				array.append(tempteammate.name+" asks how much longer until you'll all return home for the day.")
 			elif globals.state.sexactions > 0:
-				array.append_array(["There's only so much daylight left and you've got people to fuck back at the mansion.  You wonder why you're still out here and pick up the pace."])
+				array.append("There's only so much daylight left and you've got people to fuck back at the mansion.  You wonder why you're still out here and pick up the pace.")
 		elif travelwhen() == "late":
-			if !tempteammate.traits.has("Mute") && !tempteammate.traits.has("Stutter") && !tempteammate.traits.has("Lisp") && tempteammate.brand != 'advanced' && rand_range(0,1) > 0.2:
-				array.append_array([tempteammate.name+" points toward the setting sun and asks how much longer you intend to stay out."])
+			if tempteammate != null && !tempteammate.traits.has("Mute") && !tempteammate.traits.has("Stutter") && !tempteammate.traits.has("Lisp") && tempteammate.brand != 'advanced' && rand_range(0,1) > 0.2:
+				array.append(tempteammate.name+" points toward the setting sun and asks how much longer you intend to stay out.")
 			elif globals.state.sexactions > 0:
-				array.append_array(["It'll be dark soon and you've got people to fuck back at the mansion.  You wonder why you're still out here and pick up the pace."])	
+				array.append("It'll be dark soon and you've got people to fuck back at the mansion.  You wonder why you're still out here and pick up the pace.")	
 	if zone.code == 'wimbornoutskirts':
 		if rand_range(0,1) > 0.5:
-			array.append_array([randomfromarray(["The road winds along flanked by "+travelcrops()+" fields being tended to by "+randomfromarray(["slaves","peasants","tenant farmers beholden to the guilds","commoners with just enough land to eke out a living"])+".","A "+randomfromarray(["gopher","rabbit","badger","large rodent","giant earthworm"])+" pokes its head up from the soil and seems to sniff the air before retreating into another hole to dig some more, after what you do not know.","Migrating "+randomfromarray(["birds","geese","ducks","gulls","wind squirrels","butterflies","hummingbirds"])+" fly overhead with as much organization as you've come to expect.","A "+randomfromarray(["bunch","mob","parcel","rangale","herd"])+" of deer hops over a farmers fence in twos and threes.","A lone gnarled oak tree casts shade over a crossroads and you take a moment to rest under its branches."])])
+			array.append(randomfromarray(["The road winds along flanked by "+travelcrops()+" fields being tended to by "+randomfromarray(["slaves","peasants","tenant farmers beholden to the guilds","commoners with just enough land to eke out a living"])+".","A "+randomfromarray(["gopher","rabbit","badger","large rodent","giant earthworm"])+" pokes its head up from the soil and seems to sniff the air before retreating into another hole to dig some more, after what you do not know.","Migrating "+randomfromarray(["birds","geese","ducks","gulls","wind squirrels","butterflies","hummingbirds"])+" fly overhead with as much organization as you've come to expect.","A "+randomfromarray(["bunch","mob","parcel","rangale","herd"])+" of deer hops over a farmers fence in twos and threes.","A lone gnarled oak tree casts shade over a crossroads and you take a moment to rest under its branches."]))
 		else:
-			array.append_array([randomfromarray(["You pass a caravan on it's way to town.  Trade between Wimborn and "+randomfromarray(["Gorn","Frostford","Amberguard","foreign nations","it's neighbors"])+" appears to be "+randomfromarray(["filling the guilds' coffers","profitable","good","lucrative"])+".","You look for a shortcut and end up crossing a pasture full of "+randomfromarray(["cattle","sheep","horses","livestock","oxen","donkeys","hucows of various races all branded as property of the mage guild."])+".","A nearby copse of trees grows larger to your vision.  You see the telltale woodsmoke of a chimney rising from it.  It's probably not worth investigating.  You continue on.","There's a Gazebo atop a hill in the distance.  Your party studiously ignores it.","There's a slaughterhouse here.  It's odd.  You'd have expected they'd locate it closer to town, but then the wind shifts and you have an idea why it's here.","You start to pass a few hovels crowded around a communal well then think again and stop for a drink."])])
+			array.append(randomfromarray(["You pass a caravan on it's way to town.  Trade between Wimborn and "+randomfromarray(["Gorn","Frostford","Amberguard","foreign nations","it's neighbors"])+" appears to be "+randomfromarray(["filling the guilds' coffers","profitable","good","lucrative"])+".","You look for a shortcut and end up crossing a pasture full of "+randomfromarray(["cattle","sheep","horses","livestock","oxen","donkeys","hucows of various races all branded as property of the mage guild."])+".","A nearby copse of trees grows larger to your vision.  You see the telltale woodsmoke of a chimney rising from it.  It's probably not worth investigating.  You continue on.","There's a Gazebo atop a hill in the distance.  Your party studiously ignores it.","There's a slaughterhouse here.  It's odd.  You'd have expected they'd locate it closer to town, but then the wind shifts and you have an idea why it's here.","You start to pass a few hovels crowded around a communal well then think again and stop for a drink."]))
 		if captives.size() > 5 && globals.state.reputation.wimborn <= -20:
-			array.append_array(["A large "+travelgroup()+" of " +travelcheerful()+" "+randomfromarray(['townsfolk','revelers','students','tradesmen'])+" returning to town sees you then they "+travelfearreaction()+" and pointedly averts their gaze after noticing your procession of captives shuffling along in their restraints."])
+			array.append("A large "+travelgroup()+" of " +travelcheerful()+" "+randomfromarray(['townsfolk','revelers','students','tradesmen'])+" returning to town sees you then they "+travelfearreaction()+" and pointedly averts their gaze after noticing your procession of captives shuffling along in their restraints.")
 		elif captives.size() > 5 && globals.state.reputation.wimborn > 50 && captivebaddiesratio > 69:
-			array.append_array(["A large "+travelgroup()+" of " +travelcheerful()+" "+randomfromarray(['townsfolk','revelers','students','tradesmen','guards'])+" returning to town cheers you and your party along after they see your "+travelcaptivedesc()+" captives shuffling along in their restraints."])
+			array.append("A large "+travelgroup()+" of " +travelcheerful()+" "+randomfromarray(['townsfolk','revelers','students','tradesmen','guards'])+" returning to town cheers you and your party along after they see your "+travelcaptivedesc()+" captives shuffling along in their restraints.")
 		if rand_range(0,1) > 0.9 && globals.expansionsettings.sillymode:
-			array.append_array(["You notice a "+travelcheerful()+" "+travelrandomperson()+" "+travelfucking()+" "+travelrandomadj()+" "+travelfucktarget()+" - in broad daylight.\n\n"+travellink()+"\n\nIt's clearly a "+travelreaction()+" moment for him and a "+travelreaction()+" moment for you."])
+			array.append("You notice a "+travelcheerful()+" "+travelrandomperson()+" "+travelfucking()+" "+travelrandomadj()+" "+travelfucktarget()+" - in broad daylight.\n\n"+travellink()+"\n\nIt's clearly a "+travelreaction()+" moment for him and a "+travelreaction()+" moment for you.")
 		if globals.state.reputation.wimborn >= -20:
 			if globals.state.mainquest >= 2 && globals.state.bountiescollected["wimborn"] <= 3:
-				array.append_array(["A man leading a group of Wimborn guards calls you over.\n\n[color=yellow]Hail "+globals.player.name+".  Ah, no we haven't met, but I know of you by reputation.\n\nListen, I understand you're a Mage and it's not my place to ask, but if you happen to come across bandits in your travels we could really use a hand rounding them up.\n\nWe can't do much to them if they don't already have bounties on their heads, but a lot of them do.  I know you can make good coin selling them through the Slavers' Guild depending on their value, but we can pay you a good bounty on a lot of them based purely on their crimes too.  You never know, sometimes a wimp thief is out here or in the wilds with a huge bounty just waiting to be collected.\n\nAll I'm sayin' really is: keep us in mind.  There aren't enough of us to put much of a dent in the banditry problem around here, and if you turn some over for justice under the law instead of making a quick sale to the slavers it couldn't hurt your reputation and most of the time we'll put some gold in your pockets too.[/color]"])
+				array.append("A man leading a group of Wimborn guards calls you over.\n\n[color=yellow]Hail "+globals.player.name+".  Ah, no we haven't met, but I know of you by reputation.\n\nListen, I understand you're a Mage and it's not my place to ask, but if you happen to come across bandits in your travels we could really use a hand rounding them up.\n\nWe can't do much to them if they don't already have bounties on their heads, but a lot of them do.  I know you can make good coin selling them through the Slavers' Guild depending on their value, but we can pay you a good bounty on a lot of them based purely on their crimes too.  You never know, sometimes a wimp thief is out here or in the wilds with a huge bounty just waiting to be collected.\n\nAll I'm sayin' really is: keep us in mind.  There aren't enough of us to put much of a dent in the banditry problem around here, and if you turn some over for justice under the law instead of making a quick sale to the slavers it couldn't hurt your reputation and most of the time we'll put some gold in your pockets too.[/color]")
 			elif globals.state.bountiescollected["wimborn"] > 50:
-				array.append_array(["A guard patrol salutes as you pass.  You hear a few of the men remarking on you and someone refers to you as "+str(player.name+" "+playertitle.playertopstat)+"."])
+				array.append("A guard patrol salutes as you pass.  You hear a few of the men remarking on you and someone refers to you as "+str(player.name+" "+playertitle.playertopstat)+".")
 			elif globals.state.bountiescollected["wimborn"] > 25:
-				array.append_array(["A guard captain waves as his patrol passes by.  He claps you on the shoulder and tells you to keep up the good work collecting those bounties."])
+				array.append("A guard captain waves as his patrol passes by.  He claps you on the shoulder and tells you to keep up the good work collecting those bounties.")
 			elif globals.state.bountiescollected["wimborn"] > 3:
-				array.append_array(["A squad of Wimborn guards passes by.\n\nThey call out to remind you that more bounties have been sworn out today on bandits in the area."])
+				array.append("A squad of Wimborn guards passes by.\n\nThey call out to remind you that more bounties have been sworn out today on bandits in the area.")
 		elif globals.state.reputation.wimborn <= -50:
-			array.append_array(["You pass a large and heavily guarded caravan on it's way to town.  The guards tighten grips on their weapons and eye your party warily."])
+			array.append("You pass a large and heavily guarded caravan on it's way to town.  The guards tighten grips on their weapons and eye your party warily.")
 		elif globals.state.reputation.wimborn <= -20:
-			if globals.state.mainquest >= 2 && globals.state.bountiescollected["wimborn"] <= 10 && teammates.size() != 0:
-				array.append_array(["A man leading a large group of the town guard halts your party.\n\n[color=yellow]"+player.name+", I know of you.  You're that Mage who's been abusing his guild privileges - no don't deny it.  As much as it pains me to admit it, there are more bandits out here than we can handle.  I hear you've made a pretty coin selling them off as slaves, but if you turn some over for justice under the law instead of making a quick sale to the slavers it might improve your reputation and, I expect more importantly to you, we'll put some gold in your pockets as well.[/color]"])
+			if globals.state.mainquest >= 2 && globals.state.bountiescollected["wimborn"] <= 10 && !teammates.empty():
+				array.append("A man leading a large group of the town guard halts your party.\n\n[color=yellow]"+player.name+", I know of you.  You're that Mage who's been abusing his guild privileges - no don't deny it.  As much as it pains me to admit it, there are more bandits out here than we can handle.  I hear you've made a pretty coin selling them off as slaves, but if you turn some over for justice under the law instead of making a quick sale to the slavers it might improve your reputation and, I expect more importantly to you, we'll put some gold in your pockets as well.[/color]")
 			else:
-				array.append_array(["You pass a large and heavily guarded caravan on it's way to town.  Bandits would have to be suicidal to attack this one."])
+				array.append("You pass a large and heavily guarded caravan on it's way to town.  Bandits would have to be suicidal to attack this one.")
 	elif zone.code == 'frostfordoutskirts':
 		if captives.size() > 5 && globals.state.reputation.frostford <= -20:
-			array.append_array(["You pass by a large "+travelcareful()+" "+travelgroup()+" of "+randomfromarray(['beastfolk','lumberers','trappers'])+" traveling the other way on the snowy path. They spot you and "+travelfearreaction()+" watching you with about as much trust as they have for the local wildlife after noticing the procession of captives you half drag through the snow behind you."])
+			array.append("You pass by a large "+travelcareful()+" "+travelgroup()+" of "+randomfromarray(['beastfolk','lumberers','trappers'])+" traveling the other way on the snowy path. They spot you and "+travelfearreaction()+" watching you with about as much trust as they have for the local wildlife after noticing the procession of captives you half drag through the snow behind you.")
 		elif captives.size() > 5 && globals.state.reputation.frostford > 50 && captivebaddiesratio > 69:
-			array.append_array(["A large "+travelcareful()+" "+travelgroup()+" of "+randomfromarray(['beastfolk','lumberers','trappers','guards'])+" approaches on the snowy path.  Someone in the "+travelgroup()+" recognizes you and speaks to the others.  By the time you pass them, they've become "+travelcheerful()+" and you receive words of encouragement and praise while your "+travelcaptivedesc()+" prisoners are "+travelmockery()+" and "+travelharassment()+" as they stumble through the snow."])
-		array.append_array(["It's hard to tell where the path is under all this snow.  Several times the road turns and you don't notice until it's clear you're feet are crunching down on uneven terrain and frozen vegetation."])
-		array.append_array([randomfromarray(teammates).name+" stumbles over a "+randomfromarray(['root','stone','log','frozen animal corpse','rock','branch'])+" hidden in the snow and "+travelcomplains()+" "+travelcomplainsadj()+" as you trudge on."])
+			array.append("A large "+travelcareful()+" "+travelgroup()+" of "+randomfromarray(['beastfolk','lumberers','trappers','guards'])+" approaches on the snowy path.  Someone in the "+travelgroup()+" recognizes you and speaks to the others.  By the time you pass them, they've become "+travelcheerful()+" and you receive words of encouragement and praise while your "+travelcaptivedesc()+" prisoners are "+travelmockery()+" and "+travelharassment()+" as they stumble through the snow.")
+		array.append("It's hard to tell where the path is under all this snow.  Several times the road turns and you don't notice until it's clear you're feet are crunching down on uneven terrain and frozen vegetation.")
+		if !teammates.empty():
+			array.append(randomfromarray(teammates).name+" stumbles over a "+randomfromarray(['root','stone','log','frozen animal corpse','rock','branch'])+" hidden in the snow and "+travelcomplains()+" "+travelcomplainsadj()+" as you trudge on.")
 	elif zone.code == 'gornoutskirts':
 		var temprace = randomfromarray(["Orc","Goblin"])
 		if player.race != temprace:
-			array.append_array(["A "+travelwarparty()+" of "+temprace+" "+travelmoves()+"s by.  Several of them sneer at you.\n\n[color=yellow]It's dangerous for a "+player.race+" out here.  "+randomfromarray(["Better run home before you get hurt.","No guild out here to help you.","These are our hunting grounds.  Don't forget that.","Go home to your "+player.race+" mama.","This is no place for your kind."])+"[/color]  They continue to jeer as they "+travelmoves()+" off through the wind and dust."])
+			array.append("A "+travelwarparty()+" of "+temprace+" "+travelmoves()+"s by.  Several of them sneer at you.\n\n[color=yellow]It's dangerous for a "+player.race+" out here.  "+randomfromarray(["Better run home before you get hurt.","No guild out here to help you.","These are our hunting grounds.  Don't forget that.","Go home to your "+player.race+" mama.","This is no place for your kind."])+"[/color]  They continue to jeer as they "+travelmoves()+" off through the wind and dust.")
 		else:
-			array.append_array(["A "+travelwarparty()+" of "+temprace+" "+travelmoves()+"s by.  Several of them stare at you in challenge, but they offer no objection to your passage."])
+			array.append("A "+travelwarparty()+" of "+temprace+" "+travelmoves()+"s by.  Several of them stare at you in challenge, but they offer no objection to your passage.")
 		if captives.size() > 5 && globals.state.reputation.gorn <= -20:
-			array.append_array(["You pass by a large "+travelcareful()+" "+travelgroup()+" of "+randomfromarray(['orcs','slave catchers','guards','slavers','tribal elves','goblins','travelers'])+" traveling the other way on the packed dirt road. They spot you and "+travelfearreaction()+" watching you with about as much trust as they have for the local wildlife after noticing the procession of captives you half drag through the snow behind you."])
+			array.append("You pass by a large "+travelcareful()+" "+travelgroup()+" of "+randomfromarray(['orcs','slave catchers','guards','slavers','tribal elves','goblins','travelers'])+" traveling the other way on the packed dirt road. They spot you and "+travelfearreaction()+" watching you with about as much trust as they have for the local wildlife after noticing the procession of captives you half drag through the snow behind you.")
 		elif captives.size() > 5 && globals.state.reputation.gorn > 50 && captivebaddiesratio > 69:
-			array.append_array(["A large "+travelcareful()+" "+travelgroup()+" of "+randomfromarray(['beastfolk','lumberers','trappers','guards'])+" approaches on the snowy path.  Someone in the "+travelgroup()+" recognizes you and speaks to the others.  By the time you pass them, they've become "+travelcheerful()+" and you receive words of encouragement and praise while your "+travelcaptivedesc()+" prisoners are "+travelmockery()+" and "+travelharassment()+" as they stumble through the snow."])
+			array.append("A large "+travelcareful()+" "+travelgroup()+" of "+randomfromarray(['beastfolk','lumberers','trappers','guards'])+" approaches on the snowy path.  Someone in the "+travelgroup()+" recognizes you and speaks to the others.  By the time you pass them, they've become "+travelcheerful()+" and you receive words of encouragement and praise while your "+travelcaptivedesc()+" prisoners are "+travelmockery()+" and "+travelharassment()+" as they stumble through the snow.")
 	elif zone.code == 'sea':
 		array.append_array(["You spot a large group of Nereids setting up some sort of "+randomfromarray(['encampment','fortification','supply depot','base','stockade','nets'])+" situated just off the beach so that it will remain submerged even at low tide, but you can't get close enough to tell more without being spotted.  You keep your distance.","You keep inland from the beach so as not to leave obvious tracks.","A "+randomfromarray(['trade ship','galleon','schooner','catamaran','yacht','carrack','clipper','brigantine','bark','xebec','slaving ship','fishing boat','naval ship of some type','a pirate ship'])+" can be seen far off the coast.","You pass various "+randomfromarray(['flotsam','jetsam','detritus','bleached and broken hulls','masses of kelp','scavenged sea monster corpses'])+" washed up on the beach."])
 	elif zone.code == 'prairie':
@@ -175,11 +174,11 @@ func getzonetraveltext(zone,progress):
 			if i.race in ['Elf','Dark Elf','Tribal Elf']:
 				canread = true
 		if canread:
-			array.append_array([randomfromarray(["There's writing on the wall here.  In some dialect of elvish, it reads: "+randomfromarray(["Abandon hope any who enter.","Turn around cousin on pain of death, we serve you no longer.","We tolerate no intruders.","No Trespassing","Do Not Trespass","Scenic Cavern Ahead","Don't Feed the Ooze","Disclaimer: This enclave of dark elves is not responsible for dismemberment or death of any party trespassing herein."])])])
+			array.append("There's writing on the wall here.  In some dialect of elvish, it reads: "+randomfromarray(["Abandon hope any who enter.","Turn around cousin on pain of death, we serve you no longer.","We tolerate no intruders.","No Trespassing","Do Not Trespass","Scenic Cavern Ahead","Don't Feed the Ooze","Disclaimer: This enclave of dark elves is not responsible for dismemberment or death of any party trespassing herein."]))
 		else:
-			array.append_array([randomfromarray(["There's writing on the wall here.  "+randomfromarray(["It's some dialect of elvish, but you cannot make it out","It's illegible to you, but an arrow pointing onward with an 'X' carved through it and skulls convey the meaning well enough."])])])
+			array.append("There's writing on the wall here.  "+randomfromarray(["It's some dialect of elvish, but you cannot make it out","It's illegible to you, but an arrow pointing onward with an 'X' carved through it and skulls convey the meaning well enough."]))
 	if array.size() == 0:
-		array.append_array([randomfromarray(["Your journey proceeds uneventfully","There's nothing much to see here.  Your party seems bored.","This part of the path seems like any other."])])
+		array.append(randomfromarray(["Your journey proceeds uneventfully","There's nothing much to see here.  Your party seems bored.","This part of the path seems like any other."]))
 	return randomfromarray(array)
 
 func getcya(zone): #this is a placeholder that does nothing at present

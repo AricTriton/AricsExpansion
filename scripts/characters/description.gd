@@ -99,19 +99,19 @@ func showFlaw():
 	if person.flawknown == false:
 		return ""
 	match person.mind.flaw:
-		lust:
+		'lust':
 			return "\n\nYou have discovered that $he is wrought with [color=red]Lust[/color] and hyperactive in $his sexuality.\n[color=green]Sexual Consent and Actions will be easier to initiate.[/color]\n[color=green]Luxury +5 if [color=aqua]Fucked[/color] that day.[/color]\n[color=red]Every day they aren't Fucked, Luxury Requirement +3[/color]"
-		pride:
+		'pride':
 			return "\n\nYou have discovered that $he is incredibly [color=red]Prideful[/color] and focused on $his own appearance.\n[color=green]If permitted [color=aqua]Cosmetics[/color], uses [color=aqua]+1 Supply[/color] for +5 Luxury (if possible). If permitted a [color=aqua]Personal Bath[/color], Luxury +2.[/color]\n[color=red]If not permitted [color=aqua]Cosmetics[/color], Luxury Requirement +5[/color]"
-		wrath:
+		'wrath':
 			return "\n\nYou have discovered that $he is filled with [color=red]Wrath[/color], is plagued with a short temper, and feels unsettled if $he isn't able to fight.\n[color=green]More likely to [color=aqua]Consent[/color] to [color=aqua]Fight Alongside You[/color] with the chance increasing based on their [color=aqua]Courage[/color].[/color]\n[color=green]If [color=aqua]Consent to Fight[/color] has been given, their Luxury will increase (or possibly decrease) by their [color=aqua]Days Owned[/color] minus their total [color=aqua]Combat Wins[/color][/color]"
-		greed:
+		'greed':
 			return "\n\nYou have discovered that $he is incredibly [color=red]Greedy[/color] and materialistic.\n[color=green]If permitted [color=aqua]Pocket Money[/color], uses [color=aqua]+5 Gold[/color] for +5 Luxury (if possible)[/color]\n[color=red]If not permitted [color=aqua]Pocket Money[/color], Luxury Requirement +5[/color]"
-		sloth:
+		'sloth':
 			return "\n\nYou have discovered that $he is very lazy and a complete [color=red]Sloth[/color]. $He is happiest when allowed not to do anything at all.\n[color=green]If permitted a [color=aqua]Personal Bath[/color], Luxury +2.[/color]\n[color=green]If ending the day with full [color=aqua]Energy[/color], Luxury +10. If ending the day with 25 percent or lower [color=aqua]Stress[/color], Luxury +5[/color]\n[color=red]If [color=aqua]Energy[/color] is below half or [color=aqua]Stress[/color] is above half (calculated separately), Luxury Requirement is increased by 10 Percent of the Difference of Max to Current.[/color]"
-		gluttony:
+		'gluttony':
 			return "\n\nYou have discovered that $he is very [color=red]Gluttonous[/color] and takes $his greatest pleasure in food and drinks.[/color]\n[color=green]Food and Drink Interactions will always give the best result on Dates.[/color]\n[color=green]If permitted [color=aqua]Better Food[/color], uses +3 Food for +5 Luxury (if possible)[/color]\n[color=red]If not permitted [color=aqua]Better Food[/color], Luxury Requirement +5[/color]"
-		envy:
+		'envy':
 			return "\n\nYou have discovered that $he is incredibly [color=red]Envious[/color] of others.[/color]\n[color=green]If they are considered the [color=aqua]Best Slave[/color] (per the standard formula of Level+DaysOwned+Sex+Wins), negates all Luxury Requirements. Otherwise, if they are of a higher [color=aqua]Grade[/color] than the [color=aqua]Best Slave[/color], Luxury +5.[/color]\n[color=red]If they are not the [color=aqua]Best Slave[/color], they compare their [color=aqua]Beds[/color], [color=aqua]Last Sex Days[/color], [color=aqua]Grade[/color], and [color=aqua]Stress Levels[/color] for a maximum of +20 Luxury Requirement.[/color]"
 
 ###---End Expansion---###

@@ -2,6 +2,8 @@
 var takercategories = ['cunnilingus','rimjob','handjob','titjob','tailjob','blowjob','footjob'] #ralphC - added footjob
 var penetratecategories = ['missionary','missionaryanal','doggy','doggyanal','lotus','lotusanal','revlotus','revlotusanal','doubledildo','doubledildoass','inserttailv','inserttaila','tribadism','frottage','deepthroat'] #ralphC - added deepthroat
 
+var succubuscounter = 0 #ralphC - count orgasms drained by succubi
+
 class member:
 	var name
 	var person
@@ -73,7 +75,6 @@ class member:
 	var vagTorn = false
 	var assTorn = false
 	var actionshad = {addtraits = [], removetraits = [], samesex = 0, samesexorgasms = 0, oppositesex = 0, oppositesexorgasms = 0, punishments = 0, group = 0, incest = 0, incestorgasms = 0}
-	var succubusdrain = 0 #ralphC
 	var succubusdraincount = 0 #ralphC
 	###---Expansion End---###
 	
@@ -151,13 +152,16 @@ class member:
 			lube = min(5+lewd/20,lube)
 
 	#ralphC
-	func succubus_spunked(): #increments the orgasm count credited to succubi (used after for loop through penis orgasm givers)
-		#print("Ralph Test: Getting ready to spunk any Succubi. " )
-		if succubusdrain > 0:
+	#increments the orgasm count credited to succubi
+	func succubus_spunked(groupOther):
+		var succubusdrain = false
+		for i in groupOther:
+			if i.person.race_display == "Succubus":
+				succubusdrain = true
+				i.person.mana_hunger -= variables.orgasmmana
+		if succubusdrain:
 			succubusdraincount += 1 #will be used to decrement orgasms for totalmana calc
-			variables.succubuscounter += 1
-			succubusdrain = 0 #reset for next checks
-			#print("Ralph Test: A Succubus gave an orgasm and got spunked. Succubusdraincount = " + str(succubusdraincount) + "\n")
+			sceneref.succubuscounter += 1
 	#/ralphC
 
 	func orgasm():
@@ -369,12 +373,7 @@ class member:
 						###---End Expansion---###
 					penistext = sceneref.decoder(penistext, [self], scene.takers)
 					#ralphC - if any of the TAKERS is a Succubus, count this orgasm so it can be deducted from totalmana calc
-					#print("Ralph Test: Checking for a Succubus TAKING a cumshot from a penis...")
-					for i in scene.takers:
-						if i.person.race_display == "Succubus":
-							succubusdrain += 1
-							i.person.mana_hunger -= variables.orgasmmana 
-					succubus_spunked()
+					succubus_spunked(scene.takers)
 					#/ralphC
 				#penis in taker slot
 				elif scene.takers.find(self) >= 0:
@@ -459,11 +458,7 @@ class member:
 						###---End Expansion---###
 					penistext = sceneref.decoder(penistext, scene.givers, [self])
 					#ralphC - if any of the GIVERS is a Succubus, count this orgasm so it can be deducted from totalmana calc
-					for i in scene.givers:
-						if i.person.race_display == "Succubus":
-							succubusdrain += 1
-							i.person.mana_hunger -= variables.orgasmmana
-					succubus_spunked()
+					succubus_spunked(scene.givers)
 					#/ralphC
 			#orgasm without penis, secondary ejaculation
 			else:
@@ -2293,9 +2288,9 @@ func endencounter():
 		totalmana += mana
 		person.metrics.manaearn += mana
 	
-	if variables.succubuscounter > 0: #ralphC
-		text += "\n[color=red]Succubi managed to siphon off mana from [/color]"+str(int(variables.succubuscounter))+" orgasms.\n" #ralphC
-	variables.succubuscounter = 0 #ralphC
+	if succubuscounter > 0: #ralphC
+		text += "\n[color=red]Succubi managed to siphon off mana from [/color]"+str(succubuscounter)+" orgasms.\n" #ralphC
+		succubuscounter = 0 #ralphC
 	text += "\n[color=green][center]---Rewards Earned---[/center][/color]"
 	text += "\nEarned Mana: [color=aqua]" + str(totalmana) + "[/color]"
 	text += rewardtext

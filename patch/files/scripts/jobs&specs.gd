@@ -1178,21 +1178,6 @@ func storewimborn(person):
 	else:
 		supplySold = 0
 
-	var manaDiff = globals.state.manastock - globals.resources.mana
-	var toBuy = int(gold + globals.resources.gold)
-	var manaPrice = 5
-	if globals.state.manabuy && manaDiff > 0:
-		toBuy -= toBuy % manaPrice
-		toBuy /= manaPrice
-		toBuy = min(manaDiff,toBuy)
-		if gold > 0:
-			text += "Before buying mana $he would've returned with [color=yellow]" + str(gold) + "[/color] gold.\n"
-		if toBuy > 0:
-			text += "$He purchased [color=aqua]" + str(toBuy) + "[/color] mana, costing [color=yellow]" + str(toBuy * manaPrice) + "[/color] gold.\n"
-		gold -= toBuy * manaPrice
-		globals.resources.mana += toBuy
-
-
 	person.xp += xp + abs(supplySold) / 3
 	person.stress += rand_range(5,10)
 	if gold > 0:
@@ -1274,7 +1259,6 @@ func whorewimborn(person):
 	var gold = 0
 	person.metrics.brothel += 1
 	var jobactions = ['vaginal','anal','oral','toys']
-	var sexactstoday = 0 #ralphC
 	if person.vagvirgin == true:
 		person.vagvirgin = false
 		#slave.pussy.first = 'brothel'
@@ -1297,7 +1281,7 @@ func whorewimborn(person):
 		text += "The owner of the brothel complained that $name does not have sufficient skill and didn't satisfy many customers. [color=red]$His salary was cut by half.[/color] \n"
 		gold = gold/2
 		#ralphC
-		sexactstoday = round(rand_range(1,3))
+		var sexactstoday = round(rand_range(1,3))
 		if person.race_display == "Succubus":
 			person.mana_hunger -= sexactstoday * variables.orgasmmana
 		person.metrics.sex += sexactstoday
@@ -1306,7 +1290,7 @@ func whorewimborn(person):
 	else:
 		#ralphC
 		person.metrics.randompartners += round(rand_range(2,4))
-		sexactstoday = round(rand_range(2,5))
+		var sexactstoday = round(rand_range(2,5))
 		if person.race_display == "Succubus":
 			var extrasexactstoday = 0
 			if person.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
@@ -1458,11 +1442,10 @@ func fucktoywimborn(person):
 		gold = gold*1.2
 	if person.mods.has("augmenttongue"):
 		gold = gold * 1.15
-	var sexactstoday = 0 #ralphC
 	if person.lewdness < 45:
 		text += "The owner of the brothel complained that $name does not have sufficient skill and didn't satisfy many customers. [color=red]$His salary was cut by half.[/color] \n"
 		#ralphC
-		sexactstoday += round(rand_range(2,4))
+		var sexactstoday = round(rand_range(2,4))
 		if person.race_display == "Succubus":
 			person.mana_hunger -= sexactstoday * variables.orgasmmana
 		person.metrics.sex += sexactstoday
@@ -1472,7 +1455,7 @@ func fucktoywimborn(person):
 	else:
 		#ralphC
 		person.metrics.randompartners += round(rand_range(3,6))
-		sexactstoday = round(rand_range(3,6))
+		var sexactstoday = round(rand_range(3,6))
 		if person.race_display == "Succubus":
 			var extrasexactstoday = 0
 			if person.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
@@ -1545,7 +1528,6 @@ func maid(person):
 func housepet(person):
 	var text = ""
 	var count = 0
-	var sexactstoday = 0 #ralphC
 	person.add_jobskill('pet', 1)
 	if globals.state.mansionupgrades.mansionkennels > 0:
 		text = "$name spent the day crawling around the mansion as a house's pet, playing with the house servants and kennel hounds.\n"
@@ -1569,7 +1551,7 @@ func housepet(person):
 			person.lewdness += 10
 			#ralphC - Say it 5 times fast: If you make a Succubus a housepet, how many housepets will a Succubus housepet pet?
 			if person.race_display == "Succubus":
-				sexactstoday = int(rand_range(1,6))
+				var sexactstoday = int(rand_range(1,6))
 				person.metrics.animalpartners += sexactstoday
 				var extrasexactstoday = 0
 				if person.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
@@ -1611,7 +1593,7 @@ func housepet(person):
 			person.cum.pussy += 5
 			#ralphC - Say it 5 times fast: If you make a Succubus a housepet, how many housepets will a Succubus housepet pet?
 			if person.race_display == "Succubus":
-				sexactstoday = int(rand_range(1,6))
+				var sexactstoday = int(rand_range(1,6))
 				person.metrics.animalpartners += sexactstoday
 				person.mana_hunger -= sexactstoday * variables.orgasmmana
 			else:
