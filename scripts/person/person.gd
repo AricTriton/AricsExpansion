@@ -1295,7 +1295,7 @@ func checkFlaw(type, countascheck = true):
 func revealFlaw(incomingtype = 'none'):
 	#use person.revealFlaw() to reveal their Flaw, use person.revealFlaw('type') to "guess" the flaw
 	if self.flawknown == true:
-		return "You already know $his Flaw."
+		return "\nYou already know $his Flaw."
 	
 	var allflaws = globals.expansion.flawarray
 	var text = ""
@@ -1307,12 +1307,14 @@ func revealFlaw(incomingtype = 'none'):
 	#Guess Modifier
 	var guess_bonus = 0
 	if type == self.mind.flaw:
-		guess_bonus = 50
+		guess_bonus = globals.player.smaf*10
 	type = self.mind.flaw
 	
 	if rand_range(0,100) <= (self.dailyevents.find(type) * 10) + guess_bonus:
 		self.flawknown = true
 		text = globals.expansion.flawdict[type]
+	else:
+		self.dailyevents.append(type)
 	return text
 
 #Whims -- default color for the slave list

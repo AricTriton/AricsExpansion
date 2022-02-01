@@ -318,6 +318,13 @@ func mindreadeffect():
 		text += "\nYou have raped $him before [color=red]"+str(person.npcexpanded.timesraped)+"[/color] times. "
 	if person.npcexpanded.timesreleased > 0:
 		text += "\nYou freed $him [color=aqua]"+str(person.npcexpanded.timesreleased)+"[/color] times. "
+	#Flaw Discovery (Add Resistance later?)
+	if person.flawknown == false:
+		var flawtext = person.revealFlaw(person.mind.flaw)
+		if flawtext == "":
+			text += "\n\nYou sense $him resisting your mental probing. It seems there is an internal weakness or [color=aqua]Flaw[/color] that $he is subconsciousnessly desparate to hide from you. You feel you may be able to break this resistance down if you continued to cast this on $him. You currently have a base [color=aqua]" + str((globals.player.smaf*10) + (person.dailyevents.find(person.mind.flaw)*10)) + " Percent[/color] to break this resistance."
+		else:
+			text += "\n" + flawtext
 	###---End Expansion---###
 	text = person.dictionary(text)
 	return text
