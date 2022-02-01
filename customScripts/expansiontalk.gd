@@ -12,6 +12,7 @@ var person
 #Liquid/Item: [color=aqua] [/color]
 #Sexual: [color=#FFD5CF] [/color]
 #Cum/Milk: [color=#E0D8C6] [/color]
+#Header: [color=#d1b970]
 
 #text += "\n[color=yellow]-" + str(responseExample(person)) + "[/color]"
 
@@ -554,8 +555,7 @@ func introStrip(person):
 func consentPartyAccept(person):
 	var text = ""
 	var choice = []
-	###---Add Flaws later
-
+	###---Add Flaws later	
 	if person.mood == 'playful':
 		choice.append("Yeah, sure! I'll travel alongside you, $master!")
 		choice.append("What do you think we'll find, $master?")
@@ -594,6 +594,39 @@ func consentPartyAccept(person):
 	choice.append("Yes, $master, I'll travel with you!")
 	choice.append("Yes, $master, I'll fight for you!")
 	text = globals.randomitemfromarray(choice)
+	#Flaws; Wrath
+	if person.checkFlaw('wrath'):
+		var wrath_eager = ["I can't wait to get out there and fuck some shit up!","I'm going to get to obliterate some fuckers, right?","You aren't going to fuck me over on gear, right?","Just be warned...you won't like me when I'm angry."]
+		for i in person.effects.values():
+			if i.code == 'captured':
+				wrath_eager.append("I can't believe I'm going to fight for the asshole who fucking captured me...but anything to get out of this shithole...")
+				wrath_eager.append("Fuck, anything to get out of this shithole sooner...")
+				wrath_eager.append("Just don't fuck me over or I swear we're going another round.")
+				wrath_eager.append("Even though you're the piece of shit who enslaved me in the first place.")
+		text += " " + globals.randomitemfromarray(wrath_eager)
+	#Stats
+	if person.health <= person.stats.health_max * .5:
+		text += "\nBy the way, you ARE planning on healing my wounds first, right? I'm no good to you dead, $master."
+	if person.energy <= person.stats.energy_max * .25:
+		text += "\nYou are going to let me catch my breath first, right $master? I'm exhausted."
+	return text
+
+func consentPartyReduceRebellion(person):
+	var text = ""
+	var choice = []
+	choice.append("Maybe this won't be as bad as I feared it would be.")
+	choice.append("Maybe I'll survive this after all.")
+	choice.append("I guess...this may not be that bad...")
+	choice.append("Fighting with this dick instead of against them? Huh...")
+	choice.append("Well, isn't this a surprising twist?")
+	choice.append("This...better not get me killed...")
+	if person.wits >= 50:
+		choice.append("Maybe I can work this to my advantage...")
+		choice.append("I can make this work...")
+	if person.charm >= 50:
+		choice.append("I can make them grow to love me...I know it.")
+		choice.append("Good job, me. Just keep smiling and this'll work out alright.")
+	text = globals.randomitemfromarray(choice)
 	return text
 
 func consentPartyRefuse(person):
@@ -631,6 +664,9 @@ func consentPartyRefuse(person):
 	choice.append("I'm not ready yet. Please respect that.")
 	choice.append("Maybe...one day. But not today.")
 	text = globals.randomitemfromarray(choice)
+	#Flaws; Wrath
+	if person.checkFlaw('wrath'):
+		text += " " + globals.randomitemfromarray(["*clears throat* FUCK YOU!","Yeah, get me out of here, put a sword in my hand, and let me SHOW YOU MY GRATITUDE!","I can't BELIEVE you'd ASK me that!","FUUUUUCK!","Fucking ASSHOLE. Why would I EVER risk my life for you?"])
 	return text
 
 func consentStudAccept(person):

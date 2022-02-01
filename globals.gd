@@ -661,6 +661,8 @@ class progress:
 	var thecrystal = {mode = 'light', research = 0, abilities = [], power = 0, lifeforce = 10, hunger = 0, preventsdeath = false}
 	#Milk Economy / globals.state.milkeconomy.currentvalue
 	var milkeconomy = {currentvalue = 1, futurevalue = 1}
+	#Best Slave - Used for Envy Flaw
+	var bestslave
 	###---Expansion End---###
 	
 	func quest_set(value):

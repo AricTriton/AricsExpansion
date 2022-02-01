@@ -87,13 +87,13 @@ var moodarray = ['sad','angry','scared','indifferent','obediant','horny','respec
 var demeanorarray = ['meek','shy','reserved','open','excitable']
 var flawarray = ['lust','envy','pride','wrath','greed','sloth','gluttony']
 var flawdict = {
-	lust = "\n[color=green]You have discovered that $he is wrought with Lust and hyper-sensitive to $his sexuality.[/color]\n[color=aqua]Sexual Consent and Actions will be easier to initiate.[/color]",
-	envy = "\n[color=green]You have discovered that $he is incredibly Envious of others.[/color]\n[color=red]Effects TBD[/color]",
-	pride = "\n[color=green]You have discovered that $he is incredibly Prideful.[/color]\n[color=red]Effects TBD[/color]",
-	wrath = "\n[color=green]You have discovered that $he is easily filled with Wrath and plagued with a short temper.[/color]\n[color=red]Effects TBD[/color]",
-	greed = "\n[color=green]You have discovered that $he is incredibly Greedy and materialistic.[/color]\n[color=red]Effects TBD[/color]",
-	sloth = "\n[color=green]You have discovered that $he is very lazy and a complete Sloth.[/color]\n[color=red]Effects TBD[/color]",
-	gluttony = "\n[color=green]You have discovered that $he is secretly Gluttonous and takes $his greatest pleasure in food and drinks.[/color]\n[color=aqua]Food and Drink Interactions will always give the best result.[/color]",
+	lust = "\n[color=lime]You have discovered that $he is wrought with [color=red]Lust[/color] and hyperactive in $his sexuality.[/color]\n[color=green]Sexual Consent and Actions will be easier to initiate.[/color]\n[color=green]Luxury +5 if [color=aqua]Fucked[/color] that day.[/color]\n[color=red]Every day they aren't Fucked, Luxury Requirement +3[/color]",
+	pride = "\n[color=lime]You have discovered that $he is incredibly [color=red]Prideful[/color] and focused on $his own appearance.[/color]\n[color=green]If permitted [color=aqua]Cosmetics[/color], uses [color=aqua]+1 Supply[/color] for +5 Luxury (if possible). If permitted a [color=aqua]Personal Bath[/color], Luxury +2.[/color]\n[color=red]If not permitted [color=aqua]Cosmetics[/color], Luxury Requirement +5[/color]",
+	wrath = "\n[color=lime]You have discovered that $he is filled with [color=red]Wrath[/color], is plagued with a short temper, and feels unsettled if $he isn't able to fight.[/color]\n[color=green]More likely to [color=aqua]Consent[/color] to [color=aqua]Fight Alongside You[/color] with the chance increasing based on their [color=aqua]Courage[/color].[/color]\n[color=green]If [color=aqua]Consent to Fight[/color] has been given, their Luxury will increase (or possibly decrease) by their [color=aqua]Days Owned[/color] minus their total [color=aqua]Combat Wins[/color][/color]",
+	greed = "\n[color=lime]You have discovered that $he is incredibly [color=red]Greedy[/color] and materialistic.[/color]\n[color=green]If permitted [color=aqua]Pocket Money[/color], uses [color=aqua]+5 Gold[/color] for +5 Luxury (if possible)[/color]\n[color=red]If not permitted [color=aqua]Pocket Money[/color], Luxury Requirement +5[/color]",
+	sloth = "\n[color=lime]You have discovered that $he is very lazy and a complete [color=red]Sloth[/color]. $He is happiest when allowed not to do anything at all.[/color]\n[color=green]If permitted a [color=aqua]Personal Bath[/color], Luxury +2.[/color]\n[color=green]If ending the day with full [color=aqua]Energy[/color], Luxury +10. If ending the day with 25 percent or lower [color=aqua]Stress[/color], Luxury +5[/color]\n[color=red]If [color=aqua]Energy[/color] is below half or [color=aqua]Stress[/color] is above half (calculated separately), Luxury Requirement is increased by 10 Percent of the Difference of Max to Current.[/color]",
+	gluttony = "\n[color=lime]You have discovered that $he is very [color=red]Gluttonous[/color] and takes $his greatest pleasure in food and drinks.[/color]\n[color=green]Food and Drink Interactions will always give the best result on Dates.[/color]\n[color=green]If permitted [color=aqua]Better Food[/color], uses +3 Food for +5 Luxury (if possible)[/color]\n[color=red]If not permitted [color=aqua]Better Food[/color], Luxury Requirement +5[/color]",
+	envy = "\n[color=lime]You have discovered that $he is incredibly [color=red]Envious[/color] of others.[/color]\n[color=green]If they are considered the [color=aqua]Best Slave[/color] (per the standard formula of Level+DaysOwned+Sex+Wins), negates all Luxury Requirements. Otherwise, if they are of a higher [color=aqua]Grade[/color] than the [color=aqua]Best Slave[/color], Luxury +5.[/color]\n[color=red]If they are not the [color=aqua]Best Slave[/color], they compare their [color=aqua]Beds[/color], [color=aqua]Last Sex Days[/color], [color=aqua]Grade[/color], and [color=aqua]Stress Levels[/color] for a maximum of +20 Luxury Requirement.[/color]",
 }
 
 var libidoarray = ['prudish','low','average','seductive','nympho']
@@ -2103,6 +2103,9 @@ func dailyUpdate(person):
 	###Night Phase###
 
 	dailyFetish(person)
+	#Flaw
+	if person.dailyevents.find(person.mind.flaw) >= 0:
+		text += person.revealFlaw()
 
 	#Check Milk Leak
 	if person.lactation == true && person.lactating.milkedtoday == false && person.lactating.milkstorage > 0:
@@ -3470,3 +3473,19 @@ func setTraitsperFetish(person):
 				person.dailytalk.append('hint_masochism')
 	elif globals.fetishopinion.find(person.fetish.masochism) <= 4 && person.traits.has('Masochist'):
 		person.trait_remove('Masochist')
+
+#---Sort Best Slaves || Used for Envy Flaws
+func getBestSlave():
+	var bestslavelist = []
+	for person in globals.slaves:
+		var score = person.metrics.ownership + person.metrics.sex*3 + person.metrics.win*2 + person.level*7
+        bestslavelist.append({person = person, score = score})
+	bestslavelist.sort_custom(self, 'sortbestslave')
+	return bestslavelist[0].person
+
+###---Ripped from Events.gd to Sort Slavelist
+func sortbestslave(first, second):
+	if first.score > second.score:
+		return true
+	else:
+		return false
