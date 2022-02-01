@@ -92,7 +92,7 @@ func getzonetraveltext(zone,progress):
 				var energyratio = 1
 				var selected
 				for i in teammates: #who's most ready to camp (and eat)
-					energyratio = i.energy / i.energy_max
+					energyratio = i.energy / i.stats.energy_max
 					if energyratio < lowestenergy && !i.traits.has("Mute") && !i.traits.has("Stutter") && !i.traits.has("Lisp") && i.brand != 'advanced':
 						selected = i
 						lowestenergy = energyratio
@@ -224,7 +224,7 @@ func getcya(zone): #this is a placeholder that does nothing at present
 func traveltimeofday():
 	var alreadycamped = (globals.state.restday == globals.resources.day)
 	var text = "morning"
-	if alreadycamped && globals.player.energy < globals.player.energy_max / 2:
+	if alreadycamped && globals.player.energy < globals.player.stats.energy_max / 2:
 		text = "evening"
 	elif alreadycamped:
 		text = "afternoon"
