@@ -103,7 +103,7 @@ var agepricemods = {
 ###---End Expansion---###
 
 
-var luxuryreqs = {"slave" : 0, poor = 5, commoner = 15,rich = 25, noble = 40}
+var luxuryreqs = {"slave" : 0, poor = 5, commoner = 15, rich = 25, noble = 40}
 
 #upgrades
 

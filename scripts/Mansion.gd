@@ -941,9 +941,11 @@ func _on_end_pressed():
 			else:
 				person.stress -= rand_range(5,10)
 
+			###---Added by Expansion---### Flaws; Lust
 			#sleep conditions
-			if person.lust < 25 || person.traits.has('Sex-crazed'):
+			if person.lust < 25 || person.traits.has('Sex-crazed') || person.checkFlaw('lust'):
 				person.lust += round(rand_range(3,6))
+			###---End Expansion---###
 			if person.sleep == 'communal' && globals.count_sleepers()['communal'] > globals.state.mansionupgrades.mansioncommunal:
 				person.stress += rand_range(5,15)
 				slavehealing -= 0.1

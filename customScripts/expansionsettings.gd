@@ -31,6 +31,8 @@ var ihavebloodygoodtaste = false
 #Unwanted Fetishes - Disables them from showing in the Fetish Talk menu
 var unwantedfetishes = []		#Copy/Paste any you don't want into the 'unwantedfetishes' array below: ['incest','lactation','drinkmilk','bemilked','milking','exhibitionism','drinkcum','wearcum','wearcumface','creampiemouth','creampiepussy','creampieass','pregnancy','oviposition','drinkpiss','wearpiss','pissing','otherspissing','bondage','dominance','submission','sadism','masochism']
 
+#Flaw Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations
+flaw_luxury_effects = true
 
 #---Person Expanded (True/False)
 #If set to true, Unique Slaves will join your party without having to ask for consent first
