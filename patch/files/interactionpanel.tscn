@@ -1,0 +1,677 @@
+[gd_scene load_steps=24 format=2]
+
+[ext_resource path="res://files/theme.tres" type="Theme" id=1]
+[ext_resource path="res://files/scripts/newsexsystem.gd" type="Script" id=2]
+[ext_resource path="res://files/buttons/menupanel.png" type="Texture" id=3]
+[ext_resource path="res://files/buttons/Panel.png" type="Texture" id=4]
+[ext_resource path="res://files/buttons/sexicons/sens3.png" type="Texture" id=5]
+[ext_resource path="res://files/buttons/sexicons/sens5.png" type="Texture" id=6]
+[ext_resource path="res://files/buttons/sexicons/female.png" type="Texture" id=7]
+[ext_resource path="res://files/images/maple/mapleportrait.png" type="Texture" id=8]
+[ext_resource path="res://files/buttons/sexicons/lust5.png" type="Texture" id=9]
+[ext_resource path="res://files/buttons/sexicons/rope.png" type="Texture" id=10]
+[ext_resource path="res://files/buttons/sexicons/sexcrazed.png" type="Texture" id=11]
+[ext_resource path="res://files/buttons/sexicons/drunk.png" type="Texture" id=12]
+[ext_resource path="res://files/buttons/sexicons/resist.png" type="Texture" id=13]
+[ext_resource path="res://files/buttons/sexicons/forced.png" type="Texture" id=14]
+[ext_resource path="res://files/images/maple/maple.png" type="Texture" id=15]
+[ext_resource path="res://files/buttons/sexicons/time.png" type="Texture" id=16]
+
+[sub_resource type="StyleBoxTexture" id=1]
+texture = ExtResource( 3 )
+region_rect = Rect2( 0, 0, 500, 500 )
+margin_left = 10.0
+margin_right = 10.0
+margin_top = 10.0
+margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id=2]
+texture = ExtResource( 4 )
+region_rect = Rect2( 0, 0, 50, 50 )
+margin_left = 15.0
+margin_right = 15.0
+margin_top = 10.0
+margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id=3]
+
+[sub_resource type="StyleBoxTexture" id=4]
+
+[sub_resource type="StyleBoxTexture" id=5]
+
+[sub_resource type="StyleBoxTexture" id=6]
+
+[sub_resource type="StyleBoxTexture" id=7]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -22.0
+margin_bottom = -129.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 7.0
+margin_top = 3.0
+margin_right = 25.0
+margin_bottom = 127.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="LogPanel" type="Panel" parent="Panel"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = -314.0
+margin_right = -14.0
+margin_bottom = -64.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/panel = SubResource( 1 )
+
+[node name="sceneeffects" type="RichTextLabel" parent="Panel"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 32.0
+margin_top = -299.0
+margin_right = -504.0
+margin_bottom = -76.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+bbcode_enabled = true
+meta_underlined = false
+scroll_following = true
+
+[node name="VSeparator" type="VSeparator" parent="Panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -501.0
+margin_top = -307.0
+margin_right = -486.0
+margin_bottom = -73.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="sceneeffects1" type="RichTextLabel" parent="Panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -486.0
+margin_top = -299.0
+margin_right = -32.0
+margin_bottom = -82.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+bbcode_enabled = true
+bbcode_text = "Text2"
+text = "Text2"
+
+[node name="GridContainer" type="ScrollContainer" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 511.0
+margin_top = 16.0
+margin_right = -439.0
+margin_bottom = -412.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="GridContainer" type="GridContainer" parent="Panel/GridContainer"]
+custom_constants/vseparation = -2
+custom_constants/hseparation = -2
+columns = 2
+
+[node name="Button" type="Button" parent="Panel/GridContainer/GridContainer"]
+visible = false
+margin_right = 200.0
+margin_bottom = 39.0
+rect_min_size = Vector2( 200, 20 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Caress"
+clip_text = true
+align = 0
+
+[node name="continue" type="Button" parent="Panel/GridContainer/GridContainer/Button"]
+visible = false
+margin_left = 160.0
+margin_right = 200.0
+margin_bottom = 39.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+toggle_mode = true
+text = "∞"
+
+[node name="Label" type="Label" parent="Panel/GridContainer/GridContainer/Button"]
+visible = false
+margin_left = 144.0
+margin_top = 11.0
+margin_right = 164.0
+margin_bottom = 33.0
+custom_colors/font_color = Color( 0.295026, 0.11673, 0.332031, 1 )
+text = "A"
+
+[node name="GridContainer2" type="ScrollContainer" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 454.0
+margin_top = 368.0
+margin_right = -435.0
+margin_bottom = -304.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="GridContainer" type="GridContainer" parent="Panel/GridContainer2"]
+custom_constants/vseparation = -2
+custom_constants/hseparation = -2
+columns = 3
+
+[node name="Button" type="Button" parent="Panel/GridContainer2/GridContainer"]
+visible = false
+margin_right = 150.0
+margin_bottom = 39.0
+rect_min_size = Vector2( 150, 20 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Caress"
+clip_text = true
+align = 0
+
+[node name="continue" type="Button" parent="Panel/GridContainer2/GridContainer/Button"]
+visible = false
+margin_left = 162.0
+margin_right = 202.0
+margin_bottom = 39.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+toggle_mode = true
+text = "∞"
+
+[node name="Label" type="Label" parent="Panel/GridContainer2/GridContainer/Button"]
+visible = false
+margin_left = 144.0
+margin_top = 11.0
+margin_right = 164.0
+margin_bottom = 33.0
+custom_colors/font_color = Color( 0.295026, 0.11673, 0.332031, 1 )
+text = "A"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -1344.0
+margin_top = 11.0
+margin_right = -919.0
+margin_bottom = 392.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/ScrollContainer"]
+size_flags_horizontal = 0
+size_flags_vertical = 0
+custom_constants/separation = -1
+
+[node name="Panel" type="Panel" parent="Panel/ScrollContainer/VBoxContainer"]
+visible = false
+margin_right = 425.0
+margin_bottom = 45.0
+rect_min_size = Vector2( 425, 45 )
+size_flags_horizontal = 0
+size_flags_vertical = 2
+custom_styles/panel = SubResource( 2 )
+
+[node name="arousal" type="TextureProgress" parent="Panel/ScrollContainer/VBoxContainer/Panel"]
+margin_left = 380.0
+margin_top = 2.0
+margin_right = 480.0
+margin_bottom = 102.0
+rect_scale = Vector2( 0.4, 0.4 )
+hint_tooltip = "Arousal"
+max_value = 1000.0
+value = 100.0
+texture_under = ExtResource( 5 )
+texture_progress = ExtResource( 6 )
+fill_mode = 3
+
+[node name="name" type="Button" parent="Panel/ScrollContainer/VBoxContainer/Panel"]
+margin_left = 59.0
+margin_top = 10.0
+margin_right = 142.0
+margin_bottom = 29.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_styles/hover = SubResource( 3 )
+custom_styles/pressed = SubResource( 4 )
+custom_styles/focus = SubResource( 5 )
+custom_styles/disabled = SubResource( 6 )
+custom_styles/normal = SubResource( 7 )
+custom_colors/font_color_disabled = Color( 1, 1, 1, 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 0.03125, 1, 0, 1 )
+custom_colors/font_color_pressed = Color( 0.171875, 1, 0, 1 )
+text = "Name"
+clip_text = true
+align = 0
+
+[node name="sex" type="TextureRect" parent="Panel/ScrollContainer/VBoxContainer/Panel"]
+margin_left = 146.0
+margin_top = 11.0
+margin_right = 168.0
+margin_bottom = 31.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 7 )
+expand = true
+stretch_mode = 6
+
+[node name="portrait" type="TextureRect" parent="Panel/ScrollContainer/VBoxContainer/Panel"]
+margin_left = 6.0
+margin_top = 5.0
+margin_right = 41.0
+margin_bottom = 40.0
+texture = ExtResource( 8 )
+expand = true
+stretch_mode = 7
+
+[node name="desire" type="TextureRect" parent="Panel/ScrollContainer/VBoxContainer/Panel"]
+visible = false
+margin_left = 341.0
+margin_top = 1.0
+margin_right = 381.0
+margin_bottom = 41.0
+rect_min_size = Vector2( 40, 40 )
+hint_tooltip = "lust"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 9 )
+expand = true
+stretch_mode = 6
+
+[node name="tied" type="TextureButton" parent="Panel/ScrollContainer/VBoxContainer/Panel"]
+visible = false
+margin_left = 248.0
+margin_top = 7.0
+margin_right = 278.0
+margin_bottom = 37.0
+hint_tooltip = "Tied"
+texture_normal = ExtResource( 10 )
+expand = true
+stretch_mode = 4
+
+[node name="sexcrazed" type="TextureRect" parent="Panel/ScrollContainer/VBoxContainer/Panel"]
+visible = false
+margin_left = 276.0
+margin_top = 7.0
+margin_right = 306.0
+margin_bottom = 37.0
+hint_tooltip = "Sex-crazed"
+mouse_filter = 0
+texture = ExtResource( 11 )
+expand = true
+stretch_mode = 5
+
+[node name="drunk" type="TextureRect" parent="Panel/ScrollContainer/VBoxContainer/Panel"]
+visible = false
+margin_left = 301.0
+margin_top = 7.0
+margin_right = 331.0
+margin_bottom = 37.0
+hint_tooltip = "Drunk"
+mouse_filter = 0
+texture = ExtResource( 12 )
+expand = true
+stretch_mode = 5
+
+[node name="resist" type="TextureRect" parent="Panel/ScrollContainer/VBoxContainer/Panel"]
+visible = false
+margin_left = 218.0
+margin_top = 7.0
+margin_right = 248.0
+margin_bottom = 37.0
+hint_tooltip = "Resists"
+mouse_filter = 0
+texture = ExtResource( 13 )
+expand = true
+
+[node name="forced" type="TextureRect" parent="Panel/ScrollContainer/VBoxContainer/Panel"]
+visible = false
+margin_left = 188.0
+margin_top = 7.0
+margin_right = 218.0
+margin_bottom = 37.0
+hint_tooltip = "Forced"
+mouse_filter = 0
+texture = ExtResource( 14 )
+expand = true
+
+[node name="HBoxContainer" type="VBoxContainer" parent="Panel"]
+margin_left = 469.0
+margin_top = 15.0
+margin_right = 509.0
+margin_bottom = 231.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="caress" type="Button" parent="Panel/HBoxContainer"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+hint_tooltip = "Petting"
+size_flags_horizontal = 0
+size_flags_vertical = 2
+toggle_mode = true
+text = "P"
+
+[node name="fucking" type="Button" parent="Panel/HBoxContainer"]
+margin_top = 44.0
+margin_right = 40.0
+margin_bottom = 84.0
+rect_min_size = Vector2( 40, 40 )
+hint_tooltip = "Penetration"
+size_flags_horizontal = 0
+size_flags_vertical = 2
+toggle_mode = true
+text = "F"
+
+[node name="tools" type="Button" parent="Panel/HBoxContainer"]
+margin_top = 88.0
+margin_right = 40.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 40, 40 )
+hint_tooltip = "Tools"
+size_flags_horizontal = 0
+size_flags_vertical = 2
+toggle_mode = true
+text = "T"
+
+[node name="SM" type="Button" parent="Panel/HBoxContainer"]
+margin_top = 132.0
+margin_right = 40.0
+margin_bottom = 172.0
+rect_min_size = Vector2( 40, 40 )
+hint_tooltip = "S&M"
+size_flags_horizontal = 0
+size_flags_vertical = 2
+toggle_mode = true
+text = "S"
+
+[node name="humiliation" type="Button" parent="Panel/HBoxContainer"]
+margin_top = 176.0
+margin_right = 40.0
+margin_bottom = 216.0
+rect_min_size = Vector2( 40, 40 )
+hint_tooltip = "Humiliation"
+size_flags_horizontal = 0
+size_flags_vertical = 2
+toggle_mode = true
+text = "H"
+
+[node name="other" type="Button" parent="Panel/HBoxContainer"]
+visible = false
+margin_top = 215.0
+margin_right = 100.0
+margin_bottom = 254.0
+rect_min_size = Vector2( 100, 0 )
+size_flags_horizontal = 0
+size_flags_vertical = 2
+toggle_mode = true
+text = "Other"
+
+[node name="stopbutton" type="Button" parent="Panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -183.0
+margin_top = -60.0
+margin_right = -18.0
+margin_bottom = -15.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Stop"
+
+[node name="passbutton" type="Button" parent="Panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -336.0
+margin_top = -60.0
+margin_right = -191.0
+margin_bottom = -15.0
+hint_tooltip = "Hotkey: F"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Pass"
+
+[node name="bodyimage" type="TextureRect" parent="Panel"]
+visible = false
+margin_left = 156.0
+margin_top = 21.0
+margin_right = 756.0
+margin_bottom = 621.0
+texture = ExtResource( 15 )
+expand = true
+stretch_mode = 6
+
+[node name="Panel" type="Panel" parent="Panel/bodyimage"]
+show_behind_parent = true
+margin_right = 604.0
+margin_bottom = 609.0
+
+[node name="blacklist" type="Button" parent="Panel"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 17.0
+margin_top = -59.0
+margin_right = 176.0
+margin_bottom = -20.0
+text = "Action visibility"
+
+[node name="aiallow" type="Button" parent="Panel"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 187.0
+margin_top = -59.0
+margin_right = 346.0
+margin_bottom = -20.0
+hint_tooltip = "When toggled, main character won't be selected for actions by other participants."
+toggle_mode = true
+text = "Only watch"
+
+[node name="givetakepanel" type="Panel" parent="Panel"]
+margin_left = 918.0
+margin_right = 1330.0
+margin_bottom = 397.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/givetakepanel"]
+margin_left = 16.0
+margin_top = 39.0
+margin_right = 386.0
+margin_bottom = 379.0
+scroll_horizontal_enabled = false
+
+[node name="VList" type="VBoxContainer" parent="Panel/givetakepanel/ScrollContainer"]
+margin_right = 380.0
+margin_bottom = 39.0
+rect_min_size = Vector2( 380, 39 )
+
+[node name="ControlLine" type="Control" parent="Panel/givetakepanel/ScrollContainer/VList"]
+visible = false
+margin_right = 380.0
+margin_bottom = 39.0
+rect_min_size = Vector2( 380, 39 )
+
+[node name="ButtonGiver" type="Button" parent="Panel/givetakepanel/ScrollContainer/VList/ControlLine"]
+margin_right = 180.0
+margin_bottom = 39.0
+toggle_mode = true
+text = "Name"
+
+[node name="ButtonReceiver" type="Button" parent="Panel/givetakepanel/ScrollContainer/VList/ControlLine"]
+margin_left = 200.0
+margin_right = 380.0
+margin_bottom = 39.0
+toggle_mode = true
+text = "Name"
+
+[node name="Label" type="Label" parent="Panel/givetakepanel"]
+margin_left = 61.0
+margin_top = 19.0
+margin_right = 159.0
+margin_bottom = 39.0
+text = "Actors"
+align = 1
+
+[node name="Label2" type="Label" parent="Panel/givetakepanel"]
+margin_left = 261.0
+margin_top = 19.0
+margin_right = 359.0
+margin_bottom = 39.0
+text = "Receivers"
+align = 1
+
+[node name="VSeparator" type="VSeparator" parent="Panel/givetakepanel"]
+margin_left = 205.0
+margin_top = 9.0
+margin_right = 209.0
+margin_bottom = 388.0
+
+[node name="TextureFrame" type="TextureRect" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -393.0
+margin_top = 69.0
+margin_right = -348.0
+margin_bottom = 107.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 16 )
+expand = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="TextureFrame"]
+margin_left = 39.0
+margin_top = 15.0
+margin_right = 79.0
+margin_bottom = 31.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "x20"
+
+[node name="Control" type="Control" parent="."]
+visible = false
+margin_left = -35.0
+margin_top = -15.0
+margin_right = 1390.0
+margin_bottom = 809.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="Panel" type="Panel" parent="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 266.0
+margin_top = 112.0
+margin_right = -259.0
+margin_bottom = -201.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control/Panel"]
+margin_left = 50.0
+margin_top = 33.0
+margin_right = 850.0
+margin_bottom = 414.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+bbcode_enabled = true
+
+[node name="finishbutton" type="Button" parent="Control/Panel"]
+margin_left = 381.0
+margin_top = 439.0
+margin_right = 534.0
+margin_bottom = 478.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Finish"
+
+[node name="blacklist" type="Panel" parent="."]
+visible = false
+margin_left = 420.0
+margin_top = 34.0
+margin_right = 881.0
+margin_bottom = 654.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="blacklist"]
+margin_left = 21.0
+margin_top = 77.0
+margin_right = 438.0
+margin_bottom = 543.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="blacklist/ScrollContainer"]
+
+[node name="CheckBox" type="CheckBox" parent="blacklist/ScrollContainer/VBoxContainer"]
+visible = false
+margin_right = 59.0
+margin_bottom = 20.0
+text = "test"
+
+[node name="closeblacklist" type="Button" parent="blacklist"]
+margin_left = 150.0
+margin_top = 566.0
+margin_right = 318.0
+margin_bottom = 605.0
+text = "Close"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="blacklist"]
+margin_left = 23.0
+margin_top = 23.0
+margin_right = 427.0
+margin_bottom = 70.0
+bbcode_enabled = true
+bbcode_text = "You can hide unwanted actions by unchecking them."
+text = "You can hide unwanted actions by unchecking them."
+
+[node name="PopupPanel" type="PopupPanel" parent="."]
+margin_left = 204.0
+margin_top = 64.0
+margin_right = 1277.0
+margin_bottom = 653.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PopupPanel"]
+margin_right = 897.0
+margin_bottom = 589.0
+
+[node name="debug" type="Button" parent="."]
+visible = false
+margin_left = 390.0
+margin_top = 680.0
+margin_right = 510.0
+margin_bottom = 719.0
+text = "Debug"
+
+[connection signal="meta_clicked" from="Panel/sceneeffects1" to="." method="_on_sceneeffects1_meta_clicked"]
+[connection signal="pressed" from="Panel/stopbutton" to="." method="_on_stopbutton_pressed"]
+[connection signal="pressed" from="Panel/passbutton" to="." method="_on_passbutton_pressed"]
+[connection signal="pressed" from="Panel/blacklist" to="." method="_on_blacklist_pressed"]
+[connection signal="pressed" from="Panel/aiallow" to="." method="_on_aiallow_pressed"]
+[connection signal="pressed" from="Control/Panel/finishbutton" to="." method="_on_finishbutton_pressed"]
+[connection signal="pressed" from="blacklist/closeblacklist" to="." method="_on_closeblacklist_pressed"]
+[connection signal="pressed" from="debug" to="." method="_on_debug_pressed"]

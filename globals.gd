@@ -154,6 +154,9 @@ func clearstate():
 		expansionsettings.applySpellManacostTweaks()
 	resources = resource.new()
 
+func newslave(race, age, sex, origins = 'slave', unique = null):
+	return constructor.newslave(race, age, sex, origins, unique)
+
 func slaves_set(person):
 	person.originstrue = person.origins
 	person.health = max(person.health, 5)
@@ -944,20 +947,19 @@ func impregnation(mother, father = null, unique = ''):
 				cumprod = ref[1]
 			else:
 				cumprod = father.pregexp.cumprod
-				
-				if father.lastsexday == globals.resources.day:
-					virility = rand_range(0.1,1)
-				else:
-					virility = rand_range(0.5,1.25)
-				
-				fertility += (father.preg.fertility + father.preg.bonus_fertility)
-				
-				if father.traits.has("Fertile"):
-					fertility *= 1.5
-				elif father.traits.has("Infertile"):
-					fertility *= 0.5
-				
 				penis_mod = fatherSizeMods.get(father.penis, .025)
+				
+			if father.lastsexday == globals.resources.day:
+				virility = rand_range(0.1,1) * father.pregexp.virility
+			else:
+				virility = rand_range(0.5,1.25) * father.pregexp.virility
+			
+			fertility += (father.preg.fertility + father.preg.bonus_fertility)
+			
+			if father.traits.has("Fertile"):
+				fertility *= 1.5
+			elif father.traits.has("Infertile"):
+				fertility *= 0.5
 		else:
 			father_id = '-1'
 			var ref = fatherRaceMods.get(unique)
@@ -1377,19 +1379,6 @@ func getVatMaxCapacity(type):
 		vatmax = 500
 	return vatmax
 
-###---Added by Expansion---### Pregnancy Expanded | Added by Deviate
-func get_person(id):
-	var person
-	
-	if id == globals.player.id:
-		person = globals.player
-		return person
-	else:
-		for i in globals.slaves:
-			if id == i.id:
-				person = i
-				return person
-
 func semen_volume(semen):
 	var rvar
 	var volume = semen * 10
@@ -1403,132 +1392,7 @@ func semen_volume(semen):
 	traceFile('Semen Volume')
 	return rvar
 
-###---Added by Expansion---### Pregnancy Expanded || Deviate Added / Aric Tweaked
-func ovulation_day(person):
-	var expansion = globals.expansion
-	var expansionsetup = globals.expansionsetup
-	
-	if person.preg.has_womb == false || person.race_type == 4:
-		return
-	
-	if person.preg.ovulation_type == 0 || person.preg.baby_type == '':
-		constructor.set_ovulation(person)
-	
-	if person.preg.is_preg == true:
-		person.preg.duration += 1
-	
-	else:
-		#Ovulation System Disable Check
-		if globals.expansionsettings.ovulationenabled == true:
-			#Type 1 = Live Births
-			if person.preg.ovulation_type == 1:
-				if person.preg.ovulation_stage == 0:
-					constructor.setRandomOvulationDay(person)
-				
-				if person.preg.ovulation_day >= round(expansionsettings.livebirthcycle):
-					person.preg.ovulation_stage = 1
-					person.preg.ovulation_day = 1
-				elif person.preg.ovulation_day >= round(expansionsettings.livebirthcycle * expansionsettings.fertileduringcycle):
-					person.preg.ovulation_stage = 2
-					person.preg.ovulation_day += 1
-				else:
-					person.preg.ovulation_day += 1
-			#Type 2 = Egg Layer
-			else:
-				if person.preg.ovulation_stage == 0:
-					constructor.setRandomOvulationDay(person)
-				
-				if person.preg.ovulation_day >= round(expansionsettings.eggcycle):
-					person.preg.ovulation_stage = 1
-					person.preg.ovulation_day = 1
-				elif person.preg.ovulation_day >= round(expansionsettings.eggcycle * expansionsettings.fertileduringcycle):
-					person.preg.ovulation_stage = 2
-					person.preg.ovulation_day += 1
-				else:
-					person.preg.ovulation_day += 1
-		else:
-			person.preg.ovulation_stage = 1
-			person.preg.ovulation_day = 1
-		
-	#Semen Cleanser
-	for i in person.preg.womb:
-		if i.day >= expansionsettings.semenlifespan:
-			person.preg.womb.erase(i)
-		else:
-			i.day += 1
-			if person.cum.pussy >= 1:
-				i.semen = i.semen * 1.2
-				person.cum.pussy -= 1
-		
-	if person.cum.pussy >= 1:
-		person.cum.pussy -= round(rand_range(1, person.cum.pussy*.5))
-	
-	traceFile('ovulation day')
-	return
 
-func fertilize_egg(mother, father_id, father_unique):
-	var expansion = globals.expansion
-	var expansionsetup = globals.expansionsetup
-	var father
-	var baby
-	
-	###Get/Build Father
-	if father_id != null && father_id != '-1' && !father_unique in ['','dog','horse']:
-		father = globals.state.findslave(father_id)
-		#If Father disappeared from the World
-		if father == null:
-			father = globals.newslave('randomany', 'adult', 'male')
-	else:
-		father = globals.newslave('randomany', 'adult', 'male')
-		father.id = '-1'
-		
-		if father_unique != null:
-			father.unique = father_unique
-		
-		constructor.clearGenealogies(father)
-		if father_unique == 'bunny':
-			father.genealogy.bunny = 100
-			father.race = 'Beastkin Bunny'
-		elif father_unique == 'dog':
-			father.genealogy.dog = 100
-			father.race = 'Beastkin Wolf'
-		elif father_unique == 'cow':
-			father.genealogy.cow = 100
-			father.race = 'Taurus'
-		elif father_unique == 'cat':
-			father.genealogy.cat = 100
-			father.race = 'Beastkin Cat'
-		elif father_unique == 'fox':
-			father.genealogy.fox = 100
-			father.race = 'Beastkin Fox'
-		elif father_unique == 'horse':
-			father.genealogy.horse = 100
-			father.race = 'Centaur'
-		elif father_unique == 'raccoon':
-			father.genealogy.raccoon = 100
-			father.race = 'Beastkin Tanuki'
-		else:
-			father.race = getracebygroup("starting")
-			constructor.set_genealogy(father)
-	
-	#Consent/Wanted Pregnancy Check
-	if father.id == player.id:
-		mother.pregexp.wantedpregnancy = mother.consentexp.pregnancy
-	else:
-		mother.pregexp.wantedpregnancy = mother.consentexp['breeder' if expansion.relatedCheck(mother,father) == "unrelated" else 'incestbreeder']
-
-	baby = constructor.newbaby(mother, father)
-
-	if baby.id != null:
-		baby.state == 'fetus'
-		mother.preg.is_preg = true
-		mother.preg.duration = 0
-		mother.preg.baby = -1
-		mother.preg.unborn_baby.append({id = baby.id})
-		mother.preg.ovulation_stage = 0
-		mother.preg.ovulation_day = 0
-	
-	traceFile('fertilize egg')
 
 func miscarriage(person):
 	var miscarried = false
@@ -1543,51 +1407,8 @@ func miscarriage(person):
 		person.preg.is_preg = false
 		person.preg.duration = 0
 		person.preg.baby = null
-	
-	traceFile('miscarriage')
+	#traceFile('miscarriage')
 
-func nightly_womb(person):
-	var can_get_preg = true
-	var race_breed_compatible
-	var reach_egg_chance
-	var fertilize_chance
-	var fertility = round(100 + (person.preg.fertility + person.preg.bonus_fertility) * person.pregexp.eggstr)
-	
-	if person.traits.has("Fertile"):
-		fertility *= 1.5
-	elif person.traits.has("Infertile"):
-		fertility *= 0.5
-	
-	ovulation_day(person)
-	
-	if person.preg.has_womb == false || person.preg.is_preg == true || fertility <= 0 || person.preg.ovulation_type == 0 || person.preg.ovulation_stage == 0 || person.preg.ovulation_stage == 2 || person.effects.has('contraceptive'):
-		return
-	
-	for i in person.preg.womb:
-		if can_get_preg == true:
-			if globals.state.spec == "Breeder":
-				reach_egg_chance = round(rand_range(1,75))
-				fertilize_chance = round(rand_range(1,75))
-			else:
-				reach_egg_chance = round(rand_range(1,100))
-				fertilize_chance = round(rand_range(1,100))
-
-			if (i.semen * i.virility) >= reach_egg_chance:
-				i.day -= 1
-				if fertility > fertilize_chance:
-					if person.preg.baby_type == 'birth':
-						if person.preg.unborn_baby.empty():
-							fertilize_egg(person,i.id,i.unique)
-						elif person.preg.unborn_baby.size() > 1 && round(rand_range(0,100)) >= 70:
-							can_get_preg = false
-							fertilize_egg(person,i.id,i.unique)
-					elif person.preg.unborn_baby.size() > 3:
-						can_get_preg = false
-						fertilize_egg(person,i.id,i.unique)
-					else:
-						fertilize_egg(person,i.id,i.unique)
-	traceFile('nightly womb')
-	return
 
 #Slime Conversion (Move to Expansion_slimebreeding after Split option)
 func slimeConversionCheck(mother, father):
@@ -1632,8 +1453,6 @@ func slimeConversionCheck(mother, father):
 	
 	if get_tree().get_current_scene().has_node("infotext") && globals.slaves.find(mother) >= 0 && mother.away.at != 'hidden':
 		get_tree().get_current_scene().infotext(text,'red')
-	
-	return
 
 ###---Added by Expansion---### General Usage
 #I can't remember if I added this or found it elsewhere. Sorry if I didn't!

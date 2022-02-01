@@ -375,7 +375,7 @@ func feareffect():
 	person.stress += max(5, 20-caster.smaf*3)
 	if person.effects.has('captured') == true:
 		text += "\n[color=green]$name becomes less rebellious towards you.[/color]"
-		person.effects.captured.duration -= 1+globals.player.smaf/globals.expansionsettings.reduce_rebellion_with_fear
+		person.effects.captured.duration -= floor(1+globals.player.smaf/globals.expansionsettings.reduce_rebellion_with_fear)
 	text = (person.dictionary(text))
 	return text
 

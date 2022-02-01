@@ -283,7 +283,14 @@ func enemydefeated():
 			baddie.npcexpanded.timesfought += 1
 			baddie.npcexpanded.timesescaped += 1
 			baddie.npcexpanded.citizen = false
-			var reencounterchance = globals.expansion.enemyreencounterchanceescape + round(rand_range(-globals.expansion.enemyreencountermodifier,globals.expansion.enemyreencountermodifier))
+			var reencounterchance = globals.expansion.enemyreencounterchanceescape + round(globals.expansion.enemyreencountermodifier * rand_range(-1,1))
+			for i in baddie.gear.values():
+				if i != null:
+					###---Added by Expansion---### Fix items flipping out on NPCs
+					if globals.state.unstackables.has(i):
+						globals.items.unequipitemraw(globals.state.unstackables[i],baddie)
+					else:
+						globals.items.unequipitemraw(enemygear[i],baddie)
 			globals.state.allnpcs = baddie
 			#globals.state.npclastlocation.append([currentzone.code, baddie.id, reencounterchance])
 			#Check is because the citizen will be altered elsewhere before and removed from above later
@@ -500,7 +507,7 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 				var baddie = defeated.units[i]
 				baddie.npcexpanded.timesreleased += 1
 				baddie.npcexpanded.lastevent = 'fought'
-				var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(rand_range(-globals.expansion.enemyreencountermodifier,globals.expansion.enemyreencountermodifier))
+				var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(globals.expansion.enemyreencountermodifier * rand_range(-1,1))
 				#globals.state.npclastlocation.append([currentzone.code, baddie.id, reencounterchance])
 				if baddie.npcexpanded.citizen == true:
 					reputation = round(rand_range(1,5)) + globals.originsarray.find(baddie.origins)
@@ -517,7 +524,7 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 				var baddie = defeated.units[i]
 				baddie.npcexpanded.timesreleased += 1
 				baddie.npcexpanded.lastevent = 'rescued'
-				var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(rand_range(-globals.expansion.enemyreencountermodifier,globals.expansion.enemyreencountermodifier))
+				var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(globals.expansion.enemyreencountermodifier * rand_range(-1,1))
 				#globals.state.npclastlocation.append([currentzone.code, baddie.id, reencounterchance])
 				if baddie.npcexpanded.citizen == true:
 					reputation = round(rand_range(1,5)) + globals.originsarray.find(baddie.origins)
@@ -657,7 +664,7 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 			baddie.npcexpanded.timesraped += 1
 			baddie.npcexpanded.lastevent = 'raped'
 			globals.player.lastsexday = globals.resources.day
-			var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(rand_range(-globals.expansion.enemyreencountermodifier,globals.expansion.enemyreencountermodifier))
+			var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(globals.expansion.enemyreencountermodifier * rand_range(-1,1))
 			if baddie.npcexpanded.citizen == true:
 				reputation = round(rand_range(1,5)) + globals.originsarray.find(baddie.origins)
 				status = 'citizen'

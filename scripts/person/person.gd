@@ -872,7 +872,7 @@ func countluxury():
 		else:
 			nosupply = true
 	###---Added by Expansion---### Flaws; Lust
-	if self.checkFlaw('lust') && person.lastsexday == globals.resources.day:
+	if self.checkFlaw('lust') && lastsexday == globals.resources.day:
 		templuxury += 5
 	elif self.checkFlaw('sloth'):
 		if self.energy == self.stats.energy_max:
@@ -900,8 +900,8 @@ func calculateluxury():
 			luxury += 5
 		elif self.checkFlaw('greed') && self.rules.pocketmoney == false:
 			luxury += 5
-		elif self.checkFlaw('lust') && person.lastsexday != globals.resources.day:
-			luxury += round(globals.resources.day - person.lastsexday)*3
+		elif self.checkFlaw('lust') && lastsexday != globals.resources.day:
+			luxury += round(globals.resources.day - lastsexday)*3
 		elif self.checkFlaw('sloth'):
 			if self.energy < self.stats.energy_max * .5:
 				luxury += round((self.stats.energy_max - self.energy)*.1)
@@ -1023,11 +1023,10 @@ func baddiedeath():
 		globals.slaves.erase(self)
 	if globals.state.relativesdata.has(id):
 		globals.state.relativesdata[id].state = 'dead'
-	elif globals.state.babylist.has(self):
+	if globals.state.babylist.has(self):
 		globals.state.babylist.erase(self)
 		globals.clearrelativesdata(self.id)
 	if globals.state.allnpcs.has(self):
-		globals.items.unequipall(self)
 		globals.state.allnpcs.erase(self)
 	for npcs in globals.state.npclastlocation:
 		if npcs[1] == self.id:
@@ -1293,7 +1292,7 @@ func checkFlaw(type, countascheck = true):
 	
 	return success
 
-func revealFlaw(incomingtype == 'none'):
+func revealFlaw(incomingtype = 'none'):
 	#use person.revealFlaw() to reveal their Flaw, use person.revealFlaw('type') to "guess" the flaw
 	if self.flawknown == true:
 		return "You already know $his Flaw."

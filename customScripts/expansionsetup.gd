@@ -5,7 +5,7 @@
 #---Core Expansion Setup Functions---#
 func expandGame():
 	#globals.expansionsetup.setIdentity(person)
-	if globals.state.expansionversion < globals.expansionsettings.modversion:
+	if float(globals.state.expansionversion) < float(globals.expansionsettings.modversion):
 		#v.05
 		#Set up Crystal
 		if !globals.state.mansionupgrades.has('dimensionalcrystal'):
@@ -189,7 +189,7 @@ func expandGame():
 	for person in globals.slaves + globals.state.allnpcs + globals.state.babylist:
 		if person.expanded == false:
 			globals.expansionsetup.expandPerson(person)
-		if person.expansionversion < globals.expansionsettings.modversion:
+		if float(person.expansionversion) < float(globals.expansionsettings.modversion):
 			globals.backwardscompatibility.backwardsCompatibility(person)
 		globals.expansion.updatePerson(person)
 	
@@ -197,14 +197,36 @@ func expandGame():
 		for person in globals.guildslaves[i]:
 			if person.expanded == false:
 				globals.expansionsetup.expandPerson(person)
-			if person.expansionversion < globals.expansionsettings.modversion:
+			if float(person.expansionversion) < float(globals.expansionsettings.modversion):
 				globals.backwardscompatibility.backwardsCompatibility(person)
 			globals.expansion.updatePerson(person)
 
-	#v1.5b
+	#v1.6a
 	if typeof(globals.resources.farmexpanded.worker_cycle) != TYPE_DICTIONARY || globals.resources.farmexpanded.worker_cycle.has('herder'):
 		globals.resources.farmexpanded.worker_cycle = {'farmhand':[], 'milkmaid':[], 'stud':[]}
 		globals.resources.farmexpanded.work_type = ''
+
+	#erase NPCs with duplicate ids to slaves
+	for i in globals.state.allnpcs.duplicate():
+		for j in globals.slaves:
+			if str(j.id) == str(i.id):
+				globals.state.allnpcs.erase(i)
+				break
+
+	#fix slaves with duplicate ids
+	var idx1 = globals.slaves.size() - 1
+	var idx2
+	while idx1 > 0:
+		idx2 = idx1 - 1
+		while idx2 >= 0:
+			if str(globals.slaves[idx1].id) == str(globals.slaves[idx2].id):
+				globals.slaves[idx1].id = str(globals.state.slavecounter)
+				globals.state.slavecounter += 1
+				break
+			idx2 -= 1
+		idx1 -= 1
+
+			
 
 func expandPerson(person):
 	var sexvag = int(round(person.metrics.vag/10))
@@ -1273,8 +1295,8 @@ func setRaceBonus_Ralph(person, increasestats):
 		person.stats.end_mod += 2
 	if person.traits.has('Frail'):
 		person.stats.end_mod -= 2
-	if person.unique == 'startslave':
-		globals.constructor.forceFullblooded(person) #may not be needed; haven't fully tested
+	#if person.unique == 'startslave':
+	#	globals.constructor.forceFullblooded(person) #may not be needed; haven't fully tested
 		#person.skillpoints += 10
 		#hybridtype = 'Imp'
 	#/ralph

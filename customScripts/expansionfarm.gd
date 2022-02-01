@@ -1223,7 +1223,7 @@ func mooCattle(cattle):
 		cattle.conf += round(rand_range(2,5))
 	elif rand_range(0,100) <= globals.expansionsettings.witlosschance:
 		var actionresult = clamp(round(cattle.wit*.1), 1, 10)
-		cattle.obed = actionresult
+		cattle.wit -= actionresult
 		text += "\n[color=aqua]$name[/color] was forced to moo like a cow any time $he needed to communicate all day. This seems to have made it slightly harder for $him to talk and $he even hesitates before talking now as though $he is trying to remember how to speak correctly. $He lost [color=red]" +str(actionresult)+" Wits[/color] today. "
 		if cattle.checkContentmentLoss('med') == true:
 			text += "$He seems to have realized that $he is having a harder time thinking and seems upset. $He lost [color=aqua]Contentment[/color]. "
@@ -1537,8 +1537,8 @@ func sellFluids(workersDict):
 		while merchantcounter > 0 && remainingSell > 0:
 			remainingSell -= round(rand_range(1, remainingSell))
 			merchantcounter -= 1
-		refVats[fluid].sell = remainingSell
 		var sellresult = refVats[fluid].sell - remainingSell
+		refVats[fluid].sell = remainingSell
 		var gold = round(sellresult * globals.itemdict['bottled'+fluid].cost * rand_range(.5,1.5))
 		text += "\nYour merchants were able to sell [color=green]" +str(sellresult)+ " bottles of "+fluid.capitalize()+" [/color] today for [color=green]" +str(gold)+ " gold[/color]. "
 		globals.resources.gold += gold
