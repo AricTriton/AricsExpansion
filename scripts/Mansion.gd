@@ -467,10 +467,10 @@ func _on_end_pressed():
 	text2.set_bbcode('')
 	count = 0
 
-	if globals.player.preg.duration >= 1:
-		globals.player.preg.duration += 1
-		if globals.player.preg.duration == floor(variables.pregduration/6):
-			text0.set_bbcode(text0.get_bbcode() + "[color=yellow]You feel morning sickness. It seems you are pregnant. [/color]\n")
+#	if globals.player.preg.duration >= 1:
+#		globals.player.preg.duration += 1
+#		if globals.player.preg.duration == floor(variables.pregduration/6):
+#			text0.set_bbcode(text0.get_bbcode() + "[color=yellow]You feel morning sickness. It seems you are pregnant. [/color]\n")
 
 	###---Added by Expansion---### Update Player, Towns, and People
 	var temptext
@@ -1360,9 +1360,9 @@ func _on_end_pressed():
 		text0.set_bbcode(text0.get_bbcode() + '[color=yellow]Some of your food reserves have spoiled.[/color]\n')
 
 	###---Added by Expansion---### Ovulation System
-	globals.nightly_womb(globals.player)
+	text0.set_bbcode(globals.expansion.nightly_womb(globals.player))
 	for i in globals.slaves:
-		globals.nightly_womb(i)
+		text0.set_bbcode(globals.expansion.nightly_womb(i))
 	###---End Expansion---###
 	
 	#####         Results
@@ -2776,12 +2776,14 @@ func farminspect(person):
 		nodeBreedingoption.set_text('Breeding Snails')
 		person.farmexpanded.breeding.status = 'snails'
 		nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_disabled(true)
+		nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_text("No Partner Specified")
 		nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_tooltip(person.dictionary("$name's womb is being used to breed snails currently."))
-		nodeFarmSlave.get_node("snailbreeding").set_pressed(person.farmexpanded.breeding.snails)
+		nodeFarmSlave.get_node("snailbreeding").set_disabled(false)
 	else:
 		nodeBreedingoption.set_disabled(false)
 		if person.farmexpanded.breeding.status == 'none':
 			nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_disabled(true)
+			nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_text("No Partner Specified")
 			nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_tooltip(person.dictionary('$name is not assigned to breed or be bred'))
 		else:
 			var partner
@@ -2797,7 +2799,10 @@ func farminspect(person):
 				nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_text(partner.name_long())
 				nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_tooltip('Click to unassign partner')
 
-		if globals.state.mansionupgrades.farmhatchery == 0:
+		if person.vagina == 'none':
+			nodeFarmSlave.get_node("snailbreeding").set_disabled(true)
+			nodeFarmSlave.get_node("snailbreeding").set_tooltip("No Vagina Present.")
+		elif globals.state.mansionupgrades.farmhatchery == 0:
 			nodeFarmSlave.get_node("snailbreeding").set_disabled(true)
 			nodeFarmSlave.get_node("snailbreeding").set_tooltip("You have to unlock Hatchery first.")
 		elif snailBreeders >= globals.state.snails:
@@ -2805,10 +2810,9 @@ func farminspect(person):
 			nodeFarmSlave.get_node("snailbreeding").set_tooltip("You don't have any free snails.")
 		else:
 			nodeFarmSlave.get_node("snailbreeding").set_disabled(false)
-			nodeFarmSlave.get_node("snailbreeding").set_pressed(person.farmexpanded.breeding.snails)
 			nodeFarmSlave.get_node("snailbreeding").set_tooltip(person.dictionary('Set $name to breed snails.'))
 
-
+	nodeFarmSlave.get_node("snailbreeding").set_pressed(person.farmexpanded.breeding.snails)
 	nodeFarmSlave.get_node("keeprestrained").set_pressed(person.farmexpanded.restrained)
 	nodeFarmSlave.get_node("usesedative").set_pressed(person.farmexpanded.usesedative)
 	nodeFarmSlave.get_node("giveaphrodisiac").set_pressed(person.farmexpanded.giveaphrodisiac)
@@ -3123,6 +3127,8 @@ func _on_extractpiss_pressed():
 
 func _on_breeding_option_selected( ID ):
 	selectedfarmslave.farmexpanded.breeding.status = globals.expansionfarm.breedingoptions[ID]
+	if ID == 0:
+		selectedfarmslave.unassignPartner()
 #Tried to get it to check consent first
 #	person.assignBreedingJob(breeding[ID])
 	farminspect(selectedfarmslave)

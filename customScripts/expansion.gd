@@ -205,9 +205,6 @@ func updatePerson(person):
 	elif person.npcexpanded.racialbonusesapplied == true && globals.expansionsettings.racialstatbonuses == false:
 		globals.expansionsetup.setRaceBonus(person, false)
 
-	if person.preg.baby_type == "":
-		globals.constructor.set_ovulation(person)
-
 	#Change Pic (if Preg or Naked)
 	updateBodyImage(person)
 	return text
@@ -1121,18 +1118,12 @@ func getChest(person):
 	return text
 
 func getGenitals(person):
-	var text = ""
+	var textPool = PoolStringArray()
 	if person.penis != "none":
-		if rand_range(0,1) >= .5:
-			text += str(person.penis) + " "
-		text += namePenis()
+		textPool.append((str(person.penis) + " " + namePenis()) if bool(randi() % 2) else namePenis())
 	if person.vagina != "none":
-		if person.penis != "none":
-			text += " and "
-		if rand_range(0,1) >= .5:
-			text += str(person.vagina) + " "
-		text += namePussy()
-	return text
+		textPool.append((str(person.vagina) + " " + namePussy()) if bool(randi() % 2) else namePussy())
+	return textPool.join(" and ")
 
 #---Descriptions---#
 
@@ -1154,22 +1145,22 @@ func getCumCoatedDescription(person,part):
 		if person.cum.face >= 10:
 			text += 'face is ' + globals.randomitemfromarray(['undiscernable underneath the ','completely coated in the ','unrecognizable in the ','concealed beneath ','hidden under ']) + "layers of "
 		elif person.cum.face > 5:
-			text += 'face is ' + globals.randomitemfromarray(['coated ','covered ','drenched ','dripping ','obviously marked  ','soaked ','utterly sprayed ']) + globals.randomitemfromarray(['with ','in '])
+			text += 'face is ' + globals.randomitemfromarray(['coated ','covered ','drenched ','dripping ','obviously marked ','soaked ','utterly sprayed ']) + globals.randomitemfromarray(['with ','in '])
 		elif person.cum.face > 3:
 			text += globals.randomitemfromarray(['face ','cheek ','chin ','nose ']) + ' is ' + globals.randomitemfromarray(['sprayed with ','coated in ','speckled with ','dripping in ','marked with ','stained with '])
 		else:
-			text += globals.randomitemfromarray(['face ','cheek ','chin ','nose ']) +  globals.randomitemfromarray(['streaked with ','dotted with ','speckled with '])
+			text += globals.randomitemfromarray(['face ','cheek ','chin ','nose ']) + globals.randomitemfromarray(['streaked with ','dotted with ','speckled with '])
 		text += '[color=#E0D8C6]' + nameCum() + '[/color].\n'
 	#Cum on Body
 	if person.cum.body > 0 && part == 'body':
 		text += "$His " + globals.randomitemfromarray(['','',' ' +str(person.race)+ ' ']) + str(getChest(person)) + ' are '
 		if person.exposed.chest == true:
 			if person.cum.body >= 10:
-				text +=  globals.randomitemfromarray(['undiscernable underneath the ','completely coated in the ','unrecognizable in the ','concealed beneath ','hidden under ']) + "layers of "
+				text += globals.randomitemfromarray(['undiscernable underneath the ','completely coated in the ','unrecognizable in the ','concealed beneath ','hidden under ']) + "layers of "
 			elif person.cum.body > 5:
-				text += globals.randomitemfromarray(['coated ','covered ','drenched ','dripping ','obviously marked  ','soaked ','utterly sprayed ']) + globals.randomitemfromarray(['with ','in '])
+				text += globals.randomitemfromarray(['coated ','covered ','drenched ','dripping ','obviously marked ','soaked ','utterly sprayed ']) + globals.randomitemfromarray(['with ','in '])
 			elif person.cum.body > 3:
-				text += globals.randomitemfromarray(['coated ','speckled ','dripping ','marked  ','sprayed ','stained ']) + globals.randomitemfromarray(['with ','in '])
+				text += globals.randomitemfromarray(['coated ','speckled ','dripping ','marked ','sprayed ','stained ']) + globals.randomitemfromarray(['with ','in '])
 			else:
 				text += globals.randomitemfromarray(['streaked with ','dotted with ','speckled with '])
 			text += '[color=#E0D8C6]' + nameCum() + '[/color].\n'
@@ -1273,45 +1264,36 @@ func getSwollen(person):
 	var vagcapacity = getCapacity(person, person.vagina)
 	var asscapacity = getCapacity(person, person.asshole)
 	var height = (globals.heightarrayexp.find(person.height)+1)*2
-	var babyswelling = 0
 	var swollen = 0
 	var number = 0
 	#Average Pregnancy is Swollen = (globals.heightarrayexp.find(person.height+1)*2
 
 	if globals.expansionsettings.swollenenabled == false:
 		person.swollen = 0
-		text = "[color=red]Swollen Settings Disabled[/color]"
-		return text
+		return "[color=red]Swollen Settings Disabled[/color]"
 
 	#Backwards Compatibility
 	if !person.pregexp.has('babysize'):
 		person.pregexp['babysize'] = 0
 
 	#Baby Swelling (Capped at Height)
-	babyswelling = round(clamp(person.pregexp.babysize, 0, height))
+	swollen += round(clamp(person.pregexp.babysize, 0, height))
 
 	#Pussy Swelling
 	if person.cum.pussy > vagcapacity:
 		#Trigger Overload
 		if person.cum.pussy > vagcapacity*1.25:
 			text += cumOverload(person, 'vagina')
-		swollen += 1
-		number = ((person.cum.pussy - vagcapacity)*.5)-1
-		while number > .5:
-			swollen += 1
-			number -= .5
+		number = (person.cum.pussy - vagcapacity)*.5-1
+		swollen += 1 + floor(number / .5)
 	#Ass Swelling
 	if person.cum.ass > asscapacity:
 		#Trigger Overload
 		if person.cum.ass > asscapacity * 1.5:
 			text += cumOverload(person, 'ass')
-		swollen += 1
-		number = ((person.cum.ass - asscapacity)*.5)-1
-		while number > .5:
-			swollen += 1
-			number -= .5
+		number = (person.cum.ass - asscapacity)*.5-1
+		swollen += 1 +floor(number / .5)
 
-	swollen = babyswelling + swollen
 	swollen = clamp(swollen,0,height*5)
 	person.swollen = swollen
 
@@ -1571,31 +1553,157 @@ func assOverload(person):
 ###---End Cum Inflation and Explosion Functions---###
 
 #---Category: Pregnancy---#
-func dailyPregnancy(person):
+###---Added by Expansion---### Pregnancy Expanded || Deviate Added / Aric Tweaked
+func ovulation_day(person):
+	var expansion = globals.expansion
+	var expansionsetup = globals.expansionsetup
+	
+	if person.preg.has_womb == false || person.race_type == 4:
+		return
+	
+	if person.preg.ovulation_type <= 0 || person.preg.baby_type == '':
+		globals.constructor.set_ovulation(person)
+	
+	if person.preg.is_preg == false:
+		if person.preg.ovulation_stage == 0:
+			globals.constructor.setRandomOvulationDay(person)
+		#Ovulation System Disable Check
+		if globals.expansionsettings.ovulationenabled == true:
+			#Type 1 = Live Births, Type 2 = Egg Layer
+			var maxCycle = globals.expansionsettings.livebirthcycle if person.preg.ovulation_type == 1 else globals.expansionsettings.eggcycle
+			if person.preg.ovulation_day >= maxCycle:
+				person.preg.ovulation_stage = 1
+				person.preg.ovulation_day = 1
+			else:
+				if person.preg.ovulation_day >= floor(maxCycle * globals.expansionsettings.fertileduringcycle):
+					person.preg.ovulation_stage = 2
+				person.preg.ovulation_day += 1
+		else:
+			person.preg.ovulation_stage = 1
+			person.preg.ovulation_day = 1
+		
+	#Semen Cleanser
+	for i in person.preg.womb.duplicate():
+		if i.day >= globals.expansionsettings.semenlifespan:
+			person.preg.womb.erase(i)
+		else:
+			i.day += 1
+			if person.cum.pussy >= 1:
+				i.semen = i.semen * 1.2
+				person.cum.pussy -= 1
+	
+	#globals.traceFile('ovulation day')
+
+func fertilize_egg(mother, father_id, father_unique):
+	var father
+	
+	###Get/Build Father
+	if father_id != null && father_id != '-1' && !father_unique in ['','dog','horse']:
+		father = globals.state.findslave(father_id)
+		#If Father disappeared from the World
+		if father == null:
+			father = globals.newslave('randomany', 'adult', 'male')
+	else:
+		father = globals.newslave('randomany', 'adult', 'male')
+		father.id = '-1'
+		
+		if father_unique != null:
+			father.unique = father_unique
+		
+		globals.constructor.clearGenealogies(father)
+		if father_unique == 'bunny':
+			father.genealogy.bunny = 100
+			father.race = 'Beastkin Bunny'
+		elif father_unique == 'dog':
+			father.genealogy.dog = 100
+			father.race = 'Beastkin Wolf'
+		elif father_unique == 'cow':
+			father.genealogy.cow = 100
+			father.race = 'Taurus'
+		elif father_unique == 'cat':
+			father.genealogy.cat = 100
+			father.race = 'Beastkin Cat'
+		elif father_unique == 'fox':
+			father.genealogy.fox = 100
+			father.race = 'Beastkin Fox'
+		elif father_unique == 'horse':
+			father.genealogy.horse = 100
+			father.race = 'Centaur'
+		elif father_unique == 'raccoon':
+			father.genealogy.raccoon = 100
+			father.race = 'Beastkin Tanuki'
+		else:
+			father.race = globals.getracebygroup("starting")
+			globals.constructor.set_genealogy(father)
+	
+	#Consent/Wanted Pregnancy Check
+	if father.id == globals.player.id:
+		mother.pregexp.wantedpregnancy = mother.consentexp.pregnancy
+	else:
+		mother.pregexp.wantedpregnancy = mother.consentexp['breeder' if relatedCheck(mother,father) == "unrelated" else 'incestbreeder']
+
+	var baby = globals.constructor.newbaby(mother, father)
+
+	if baby != null && baby.id != null:
+		baby.state == 'fetus'
+		mother.preg.is_preg = true
+		mother.preg.duration = 1
+		mother.preg.baby = -1
+		mother.preg.unborn_baby.append({id = baby.id})
+		mother.preg.ovulation_stage = 0
+		mother.preg.ovulation_day = -3
+	#globals.traceFile('fertilize egg')
+
+func nightly_womb(person):
 	var text = ""
-	var gestationspeed = 1
-	var morningsickness = false
-	var titsgrow = false
-	var number = 0
-	var gestation = 0
-	
-	if person == null || person.preg.duration <= 0:
+	if person.preg.duration > variables.pregduration:
+		#Childbirth still checked/called in End of Day
+		text = person.dictionary("[center][color=yellow]$name went into Labor![/color][/center]\n")
+
+	person.preg.fertility = clamp(person.preg.fertility + 10 * (person.health / person.stats.health_max - 0.6) + 10 * (0.6 - person.stress / person.stats.stress_max), -20, 50)
+
+	ovulation_day(person)
+	if person.preg.has_womb == false || person.preg.is_preg == true || person.preg.ovulation_type <= 0 || person.preg.ovulation_stage != 1 || person.effects.has('contraceptive'):
 		return text
+
+	var bonus = 1.25 if globals.state.spec == "Breeder" else 1
+	var fertility = round(5 + max(person.preg.fertility + person.preg.bonus_fertility, 0) * person.pregexp.eggstr)
+	if person.traits.has("Fertile"):
+		fertility *= 1.5
+	elif person.traits.has("Infertile"):
+		fertility *= 0.5
 	
-	gestation = variables.pregduration / person.preg.duration
-	
-	#Settings Variables
-	var chancemorningsickness = globals.expansionsettings.chancemorningsickness
-	var chancetitsgrow = globals.expansionsettings.chancetitsgrow
+	fertility *= bonus
+	var multiBabyLimitChance = 100 - globals.expansionsettings.multipleBabyChance
+	for i in person.preg.womb:
+		if bonus * i.semen * i.virility > rand_range(0,100):
+			i.day -= 1
+			if fertility > rand_range(0,100):
+				#if person.preg.baby_type == 'birth':
+				fertilize_egg(person,i.id,i.unique)
+				if rand_range(0,100) <= multiBabyLimitChance || person.preg.unborn_baby.size() > 3:
+					break
+	#globals.traceFile('nightly_womb')
+	return text
+
+
+func dailyPregnancy(person):
+	if person == null:
+		return ""
+
+	var text = ""
 
 	var pregdict = person.pregexp
 #	var swelling
-	if person.preg.duration > 0:
+	if person.preg.is_preg:
+		#Settings Variables
+		var chancemorningsickness = globals.expansionsettings.chancemorningsickness
+		var chancetitsgrow = globals.expansionsettings.chancetitsgrow
+
 		#Set Traits PENDING
-		#gestationspeed
+		var totalbabysize = 2*globals.heightarrayexp.find(person.height)+2
 
-		var totalbabysize = (globals.heightarrayexp.find(person.height)+1)*2
-
+		var gestationspeed = 1
 		#Set Race Bonus
 		if person.race.find('Goblin') >= 0:
 			gestationspeed += 1
@@ -1605,119 +1713,77 @@ func dailyPregnancy(person):
 
 		#Set Stats
 		pregdict.gestationspeed = gestationspeed
-		person.preg.duration += gestationspeed
+		person.preg.duration = min(person.preg.duration + gestationspeed, variables.pregduration + 1)
 
+		var gestation = min(float(person.preg.duration) / max(variables.pregduration, 1), 1.0)
 		#Set Size Factors (for Swelling)
-		if gestation > 0:
-			pregdict.babysize = totalbabysize / gestation
-		else:
-			if variables.pregduration <= 0:
-				gestation = 1
-			else:
-				gestation = variables.pregduration
-			pregdict.babysize = totalbabysize / gestation
+		pregdict.babysize = round(totalbabysize * pow(gestation, 2))
 
 		#Trimester Events
-		var trimester = getTrimester(person)
 		#First
-		if trimester == "first":
+		if person.preg.duration < floor(variables.pregduration/3):
 			#Chance to Start Lactating
 			if person.lactation == false:
-				if rand_range(0,variables.pregduration/6) + person.preg.duration >= variables.pregduration/3:
+				if person.preg.duration >= round(variables.pregduration* rand_range(1/6.0, 1/3.0)):
 					person.lactation = true
+					if !person.mind.secrets.has('currentpregnancy') && !person.knowledge.has('currentpregnancy'):
+						getSecret(person,'currentpregnancy')
 
-				getSwollen(person)
-				if person.swollen > globals.heightarrayexp.find(person.height)/2 && (!person.mind.secrets.has('currentpregnancy') && !person.knowledge.has('currentpregnancy')):
-					getSecret(person,'currentpregnancy')
-
-			#Set Wanted Pregnancy
-			if person.mind.secrets.has('currentpregnancy') || person.knowledge.has('currentpregnancy'):
-				setWantedPregnancy(person)
-			if person.pregexp.wantedpregnancy == true && !person.knowledge.has('currentpregnancywanted'):
-				person.dailytalk.append('wantpregnancy')
-			#Pregnancy Events
-			if rand_range(0,100) <= chancemorningsickness/3 + person.swollen:
-				morningsickness = true
-			if rand_range(0,100) <= (chancetitsgrow + person.swollen)/gestation:
-				titsgrow = true
 		#Second
-		elif trimester == "second":
-			#Start Lactating if Not
-			if person.lactation == false:
-				person.lactation = true
+		#elif person.preg.duration < floor(variables.pregduration/1.5):
+		#	person.lactation = true
+		#	#Realize Pregnant if haven't yet
+		#	if !person.mind.secrets.has('currentpregnancy') && !person.knowledge.has('currentpregnancy'):
+		#		getSecret(person,'currentpregnancy')
+	
+		#Second and Third
+		else:
+			person.lactation = true
 			#Realize Pregnant if haven't yet
 			if !person.mind.secrets.has('currentpregnancy') && !person.knowledge.has('currentpregnancy'):
 				getSecret(person,'currentpregnancy')
-	
-			#Set Wanted Pregnancy
-			if person.mind.secrets.has('currentpregnancy') || person.knowledge.has('currentpregnancy'):
-				setWantedPregnancy(person)
-			if person.pregexp.wantedpregnancy == true && !person.knowledge.has('currentpregnancywanted'):
-				person.dailytalk.append('wantpregnancy')
-			#Pregnancy Events
-			if rand_range(0,100) <= chancemorningsickness/2 + person.swollen:
-				morningsickness = true
-			if rand_range(0,100) <= (chancetitsgrow + person.swollen)/gestation:
-				titsgrow = true
-		#Third
-		elif trimester == "third":
-			#Start Lactating if Not
-			if person.lactation == false:
-				person.lactation = true
+			
+		#Set Wanted Pregnancy
+		if person.mind.secrets.has('currentpregnancy') || person.knowledge.has('currentpregnancy'):
+			setWantedPregnancy(person)
+		if person.pregexp.wantedpregnancy == true && !person.knowledge.has('currentpregnancywanted'):
+			person.dailytalk.append('wantpregnancy')
 
-			if !person.mind.secrets.has('currentpregnancy') && !person.knowledge.has('currentpregnancy'):
-				getSecret(person,'currentpregnancy')
-			
-			#Set Wanted Pregnancy
-			if person.mind.secrets.has('currentpregnancy') || person.knowledge.has('currentpregnancy'):
-				setWantedPregnancy(person)
-			if person.pregexp.wantedpregnancy == true && !person.knowledge.has('currentpregnancywanted'):
-				person.dailytalk.append('wantpregnancy')
-			#Pregnancy Events
-			
-			if person.preg.duration >= variables.pregduration:
-				#Childbirth still checked/called in End of Day
-				text += "[center][color=yellow]$name went into Labor![/color][/center]\n"
-			else:
-				if rand_range(0,100) <= chancemorningsickness + person.swollen:
-					morningsickness = true
-				if rand_range(0,100) <= (chancetitsgrow + person.swollen)/gestation:
-					titsgrow = true
-		#Events
-		if morningsickness == true:
-			number = round(rand_range(1,person.preg.duration*1.5))
+		#Pregnancy Events
+		#Morning sickness
+		if rand_range(0,100) <= chancemorningsickness * (1-gestation * .8):
+			var number = round(rand_range(1,person.preg.duration*1.5))
 			number = clamp(number, 0, 100)
 			person.energy -= number
 			text += "$name spent the morning puking $his guts out into a bucket. $He lost [color=red]"+str(number)+" Energy[/color]"
-			if globals.fetishopinion.find(person.fetish.pregnancy)-3 >= 3 || pregdict.wantedpregnancy == true:
-				person.lust += round(number/2)
-				text += ". $He is seems happy about the pregnancy, however, and you noticed a wet stain beneath $his "+str(getGenitals(person))+" when $he got up. $He gained [color=green]"+str(round(number/2))+" Lust[/color].\n"
+			number = round(number/2)
+			if globals.fetishopinion.find(person.fetish.pregnancy) >= 4 || pregdict.wantedpregnancy == true:
+				person.lust += number
+				text += ". $He is seems happy about the pregnancy, however, and you noticed a wet stain beneath $his "+str(getGenitals(person))+" when $he got up. $He gained [color=green]"+str(number)+" Lust[/color].\n"
 			else:
-				person.stress += round(number/2)
-				text += " and gained [color=red]"+str(round(number/2))+" Stress[/color].\n"
-		if titsgrow == true:
-			if globals.titssizearray.back() != person.titssize && person.lactating.hyperlactation == true || globals.titssizearray.find(person.titssize)-5 <= 0:
-				number = round(rand_range(1,person.preg.duration*1.5))
-				number = clamp(number, 0, 100)
-				if globals.titssizearray.back() != person.titssize:
-					text += "$name's "+str(getChest(person))+" started "+nameStretching()+"  due to $his pregnancy. They are now nice and "
-					person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)+1]
-					text += "[color=aqua]" +str(person.titssize)+".[/color] "
-					pregdict.titssizebonus += 1
-				if globals.fetishopinion.find(person.fetish.pregnancy)-3 >= 3 || pregdict.wantedpregnancy == true:
-					person.lust += number/2
-					text += "$He seemed to enjoy the new size of $his "+nameTits()+" immensely and got off on knowing what the pregnancy was doing to $him. $He gained [color=green]"+str(number/2)+" Lust[/color].\n"
+				person.stress += number
+				text += " and gained [color=red]"+str(number)+" Stress[/color].\n"
+		#Grow Tits
+		if rand_range(0,100) <= (chancetitsgrow * (1.0 - pregdict.get("titssizebonus",0)/3.0))*gestation:
+			if globals.titssizearray.back() != person.titssize && (person.lactating.hyperlactation == true || globals.titssizearray.find(person.titssize) <= 5):
+				text += "$name's "+str(getChest(person))+" started "+nameStretching()+" due to $his pregnancy. They are now nice and "
+				person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)+1]
+				text += "[color=aqua]" +str(person.titssize)+"[/color]. "
+				pregdict.titssizebonus = pregdict.get("titssizebonus",0) + 1
+
+				var number = round(rand_range(1,person.preg.duration*1.5))
+				number = clamp(number, 0, 100) / 2
+				if globals.fetishopinion.find(person.fetish.pregnancy) >= 4 || pregdict.wantedpregnancy == true:
+					person.lust += number
+					text += "$He seemed to enjoy the new size of $his "+nameTits()+" immensely and got off on knowing what the pregnancy was doing to $him. $He gained [color=green]"+str(number)+" Lust[/color].\n"
 				else:
-					person.stress = number/2
-					text += "$He seemed horrified by $his lack of control over $his own body as $he watched $his "+str(getChest(person))+" grow helplessly. $He gained [color=red]"+str(number/2)+" Stress[/color].\n"
+					person.stress = number
+					text += "$He seemed horrified by $his lack of control over $his own body as $he watched $his "+str(getChest(person))+" grow helplessly. $He gained [color=red]"+str(number)+" Stress[/color].\n"
 			else:
 				text += "$name's "+str(getChest(person))+" seemed to try to swell slightly but then shrunk back to the size it was before. You believe that $his "+str(getChest(person))+" is as large as it can get naturally. You may be able to expand it further by giving $him a [color=aqua]Hyperlactation Potion[/color].\n"
 	else:
-		#Tits Shrink
-		if !pregdict.has('titssizebonus'):
-			pregdict['titssizebonus'] = 0
 		#Shrink Tits
-		elif pregdict.titssizebonus > 0:
+		if pregdict.get("titssizebonus",0) > 0:
 			if globals.titssizearray.find(person.titssize) > 0:
 				text += "$name's "+nameStretched()+" "+str(getChest(person))+" are starting to shrink back after $his pregnancy. They are now only "
 				person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)-1]
@@ -2019,30 +2085,36 @@ func dailyUpdate(person):
 	#---Reclothe if Able and Unrestrained
 	if person.restrained == "none" && person != globals.player:
 		if person.rules.nudity == false:
-			if person.exposed.chest == true && person.exposed.chestforced == false && person.fetish.exhibitionism in ['dirty','taboo','none']:
-				text += "\n$name covered $his tits. "
-				person.exposed.chest = false
-			if person.exposed.genitals == true && person.exposed.genitalsforced == false && person.fetish.exhibitionism in ['dirty','taboo','none'] && person.rules.nudity == false:
-				text += "\n$name covered $his "
-				if person.penis != "none":
-					text += "penis"
+			if person.fetish.exhibitionism in ['dirty','taboo','none']:
+				if person.exposed.chest == true && person.exposed.chestforced == false:
+					text += "\n$name covered $his tits. "
+					person.exposed.chest = false
+				if person.exposed.genitals == true && person.exposed.genitalsforced == false:
+					text += "\n$name covered $his "
+					var poolGenitals = PoolStringArray()
+					if person.penis != "none":
+						poolGenitals.append("penis")
 					if person.vagina != "none":
-						text += " and "
-				if person.vagina != "none":
-					text += "vagina"
-				text += ". "
-				person.exposed.genitals = false
-			if person.exposed.ass == true && person.exposed.assforced == false && person.fetish.exhibitionism in ['dirty','taboo','none'] && person.rules.nudity == false:
-				text += "\n$name covered $his ass. "
-				person.exposed.ass = false
+						poolGenitals.append("vagina")
+					text += poolGenitals.join(" and ") + ". "
+					person.exposed.genitals = false
+				if person.exposed.ass == true && person.exposed.assforced == false:
+					text += "\n$name covered $his ass. "
+					person.exposed.ass = false
 		#Will try to Undress
-		elif person.rules.nudity == true && person.exposed.chest == false || person.rules.nudity == true && person.exposed.genitals == false || person.rules.nudity == true && person.exposed.ass == false:
-			if person.consentexp.nudity == false:
+		elif person.exposed.chest == false || person.exposed.genitals == false || person.exposed.ass == false:
+			if person.consentexp.nudity == true:
+				text += "\n[color=green]$name[/color] stripped " + nameNaked() + " " + globals.randomitemfromarray(['slowly','eagerly','quickly']) + " as per your rules."
+				person.dailyevents.append('followedrulenudity')
+				person.exposed.chest = true
+				person.exposed.genitals = true
+				person.exposed.ass = true
+			else:
 				var captured = 0
 				for i in person.effects.values():
 					if i.code == 'captured':
 						captured = i.duration/2
-				if (((person.obed-50) + (person.fear-50))) + person.loyal < 100*captured:
+				if (person.obed + person.fear - 100) + person.loyal < 100*captured:
 					text += "\n[color=red]$name refused to strip naked as you demanded and broke your rules.[/color]"
 					person.dailyevents.append('brokerulenudity')
 				else:
@@ -2052,10 +2124,11 @@ func dailyUpdate(person):
 					person.exposed.genitals = true
 					person.exposed.ass = true
 	elif person.restrained != "none" && person != globals.player:
-		if person.exposed.chest == true && person.fetish.exhibitionism in ['dirty','taboo','none'] && person.rules.nudity == false || person.exposed.genitals == true && person.fetish.exhibitionism in ['dirty','taboo','none'] && person.rules.nudity == false || person.exposed.ass == true && person.fetish.exhibitionism in ['dirty','taboo','none'] && person.rules.nudity == false:
-			text += "\n$name wanted to put back on $his clothing but couldn't due to $his restraints"
-		if person.rules.nudity == true && person.exposed.chest == true || person.rules.nudity == true && person.exposed.genitals == true || person.rules.nudity == true && person.exposed.ass == true:
-			text += "\n$name wanted to put back on $his clothing but couldn't due to $his restraints."
+		if person.exposed.chest == true || person.exposed.genitals == true || person.exposed.ass == true:
+			if person.fetish.exhibitionism in ['dirty','taboo','none']:
+				text += "\n$name wanted to put back on $his clothing but couldn't due to $his restraints"
+#			if person.rules.nudity == true:
+#				text += "\n$name wanted to put back on $his clothing but couldn't due to $his restraints."
 
 	#Chance to Add/Remove Lisp or Mute due to oversized Lips
 	if person.npcexpanded.temptraits.find('vocaltraitdelay') >= 0:
@@ -2744,7 +2817,7 @@ func dailyFetish(person):
 			if numDailyFetish + rand_range(0,2) >= idxFetishOpinion * 2:
 				person.fetish[i] = globals.fetishopinion[ idxFetishOpinion + 1]
 		#Chance to Lower Fetish (Changable Per Setting)
-		elif globals.expansionsettings.fetishescanlower == true && idxFetishOpinion > 3  && person.away.duration != 0:
+		elif globals.expansionsettings.fetishescanlower == true && idxFetishOpinion > 3 && person.away.duration != 0:
 			if rand_range(0,1) <= .1 && numDailyFetish < idxFetishOpinion/3:
 				person.fetish[i] = globals.fetishopinion[ idxFetishOpinion - 1]
 		while numDailyFetish > 0:
@@ -2798,9 +2871,7 @@ func dailyLactation(person):
 	#Setup and Time Tracking
 	if lact.duration == 0:
 		globals.expansionsetup.setLactation(person)
-		lact.duration = 1
-	else:
-		lact.duration += 1
+	lact.duration += 1
 
 	#Gain Lactation Fetish
 	if rand_range(0,100) <= person.lactating.duration*globals.expansionsettings.lactationacceptancemultiplier:
@@ -3213,7 +3284,7 @@ var typeToPath = {
 ###---Change Slave Images---###
 func updateBodyImage(person):
 	###---Added by Expansion---### Added by Deviate, updated by Ank
-	if dictUniqueImagePaths.has(person.unique):
+	if dictUniqueImagePaths.has(person.unique) && person.imageportait == globals.characters.characters[person.unique].get('imageportait',''):
 		var imagetype
 		if int(person.exposed.chest) + int(person.exposed.genitals) + int(person.exposed.ass) >= 2:
 			imagetype = IMAGE_NAKED
@@ -3259,7 +3330,7 @@ func updateSexualityImage(person):
 	
 	var refSexImg = person.sexuality_images
 	if person.knowledge.has('sexuality'):
-		refSexImg.base = 'base_' +  person.sex.trim_suffix('nari').replace('dickgirl','futa')
+		refSexImg.base = 'base_' + person.sex.trim_suffix('nari').replace('dickgirl','futa')
 		for sex in listSex:
 			var idx = listCompat.find(testSexualCompatibility(person, sex))
 			refSexImg[sex] = null if idx < 1 else (sex.trim_suffix('nari') + "_" + str(idx))
@@ -3482,7 +3553,7 @@ func getBestSlave():
 	var bestslavelist = []
 	for person in globals.slaves:
 		var score = person.metrics.ownership + person.metrics.sex*3 + person.metrics.win*2 + person.level*7
-        bestslavelist.append({person = person, score = score})
+		bestslavelist.append({person = person, score = score})
 	bestslavelist.sort_custom(self, 'sortbestslave')
 	return bestslavelist[0].person
 

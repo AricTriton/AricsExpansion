@@ -193,7 +193,7 @@ func buildmetrics():
 	if person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height) || person.swollen > 0 && globals.state.perfectinfo == true:
 		text += "\nSwollen Belly: [color=aqua]" + str(person.swollen) + "[/color]"
 	if person.flawknown == true:
-		text += "\n[color=#d1b970][center]Personality Flaw:[/color] [color=aqua]" + str(person.mind.flaw.capitalize()) + "[/color][/center]\n"
+		text += "\n[color=#d1b970][center]Personality Flaw:[/color] [color=aqua]" + person.mind.flaw.capitalize() + "[/color][/center]\n"
 	else:
 		text += "\n[color=#d1b970][center]Personality Flaw:[/color] [color=red]Unknown[/color][/center]\n"
 	text = "[color=#d1b970][center]Sexual achievments[/center][/color]\n"
@@ -231,25 +231,25 @@ func buildmetrics():
 		if person.consentexp.pregnancy == true:
 			text += " and they will carry your "
 			if person.race.find("Beastkin") >= 0:
-				text += str(globals.randomitemfromarray(['litter','pups','brood']))
+				text += globals.randomitemfromarray(['litter','pups','brood'])
 			else:
-				text += str(globals.randomitemfromarray(['children','kids','babies','offspring']))
+				text += globals.randomitemfromarray(['children','kids','babies','offspring'])
 	if person.consentexp.breeder == true || person.consentexp.stud == true:
 		if person.consent == true:
 			text += ", they will "
 		else:
 			text += "They will "
 		if person.consentexp.stud == true:
-			text += str(globals.randomitemfromarray(['knock up','impregnate','have offspring with']))
+			text += globals.randomitemfromarray(['knock up','impregnate','have offspring with'])
 		if person.consentexp.breeder == true:
 			if person.consentexp.stud == true:
 				text += " and have "
 			else:
 				text += " have "
 		if person.race.find("Beastkin") >= 0:
-			text += str(globals.randomitemfromarray(['a litter','pups','a brood'])) + " with "
+			text += globals.randomitemfromarray(['a litter','pups','a brood']) + " with "
 		else:
-			text += str(globals.randomitemfromarray(['children','kids','babies','offspring'])) + " with "
+			text += globals.randomitemfromarray(['children','kids','babies','offspring']) + " with "
 		text += " anyone you tell them to"
 	if person.consentexp.incest == true:
 		if person.consent == true || person.consentexp.breeder == true || person.consentexp.stud == true:
@@ -257,21 +257,26 @@ func buildmetrics():
 				text += ", and "
 			else:
 				text += ", "
-			text += "they will fuck " + str(globals.randomitemfromarray(['family','family members','kin','kinfolk','relatives']))
+			text += "they will fuck " + globals.randomitemfromarray(['family','family members','kin','kinfolk','relatives'])
 		else:
-			text += "They will fuck " + str(globals.randomitemfromarray(['family','family members','kin','kinfolk','relatives']))
+			text += "They will fuck " + globals.randomitemfromarray(['family','family members','kin','kinfolk','relatives'])
 		if person.consentexp.incestbreeder == true:
 			text += " and have their "
 			if person.race.find("Beastkin") >= 0:
-				text += str(globals.randomitemfromarray(['litter','pups','brood']))
+				text += globals.randomitemfromarray(['litter','pups','brood'])
 			else:
-				text += str(globals.randomitemfromarray(['children','kids','babies','offspring']))
+				text += globals.randomitemfromarray(['children','kids','babies','offspring'])
 	if person.consent == true || person.consentexp.breeder == true || person.consentexp.stud == true || person.consentexp.incest == true:
 		text += ".\n"
 	if person.consentexp.party == true:
 		text += "They will travel and fight alongside you.\n"
 	if person.consent == false && person.consentexp.breeder == false && person.consentexp.stud == false && person.consentexp.incest == false && person.consentexp.party == false:
 		text += "[center][color=red]None[/color][/center]\n"
+	var haveNurse = false
+	for person in globals.slaves:
+		if person.away.duration == 0 && person.work == 'nurse':
+			haveNurse = true
+			break
 	###---Added by Expansion---###
 	text += "\n[color=#d1b970][center]Pregnancy Factors[/center][/color]\n"
 	if person.knowledge.has('desiredoffspring') || globals.state.perfectinfo == true:
@@ -279,33 +284,34 @@ func buildmetrics():
 	if (person.knowledge.has('currentpregnancy') || globals.state.perfectinfo == true) &&  person.preg.has_womb == true && person.preg.is_preg == true:
 		text += "\n[color=#d1b970][center]Current Pregnancy[/center][/color]\n"
 		if person.preg.baby_type == 'birth':
-			text += "Current Trimester: " + str(globals.expansion.getTrimester(person)).capitalize() + "\n"
+			text += "Current Trimester: " + globals.expansion.getTrimester(person).capitalize() + "\n"
 		elif person.preg.duration >= floor(variables.pregduration/3):
 			text += "Laid " + textForCountNoun(person.metrics.sex, " egg") +"\n"
 		else:
 			text += "Has not laid eggs yet\n"
 		if globals.state.mansionupgrades.dimensionalcrystal >= 2 || globals.state.perfectinfo == true:
 			text += "Pregnancy Duration: " +str(person.preg.duration) + "\n"
-		if (jobdict.nurse != null || globals.state.perfectinfo == true) && !person.preg.unborn_baby.empty():
+		if (haveNurse || globals.state.perfectinfo == true) && !person.preg.unborn_baby.empty():
 			text += "Pregnant with " + person.get_birth_amount_name() + ".\n"
 		if person.knowledge.has('currentpregnancywanted') || globals.state.mansionupgrades.dimensionalcrystal >= 2 || globals.state.perfectinfo == true:
 			if person.pregexp.wantedpregnancy == true:
 				text += "\n[center][color=green]She wants this pregnancy, won't resist her bodily changes, and will not be as stressed by those changes.[/color][/center]\n\n"
 			else:
 				text += "\n[center][color=red]She doesn't want this pregnancy and will be more stressed as she resists the changes her body goes through.[/color][/center]\n\n"
-	elif (jobdict.nurse != null || globals.state.perfectinfo == true) && person.preg.has_womb == true &&  person.preg.is_preg == false:
-		if person.preg.ovulation_stage == 1:
-			text += "[color=green]Is Currently Ovulating[/color]\n"
-		elif person.preg.ovulation_stage == 2:
-			text += "[color=red]Is Not Currently Ovulating[/color]\n"
+	if haveNurse || globals.state.perfectinfo == true:
+		if person.preg.has_womb == true:
+			if person.preg.ovulation_stage == 1:
+				text += "[color=green]Is Currently Ovulating[/color]\n"
+			else:
+				text += "[color=red]Is Not Currently Ovulating[/color]\n"
 		if person.penis != "none":
 			text += "Virility: " + str(person.pregexp.virility) + "\n"
 		if person.preg.has_womb == true:
 			text += "Egg Strength: " + str(person.pregexp.eggstr) + "\n"
 		if int(person.cum.pussy) > 0:
-			text += "" + "Live " + str(globals.randomitemfromarray(['Cum','Semen','Jizz','Spunk'])) + " in " + str(globals.randomitemfromarray(['Pussy','Vagina','Cunt'])) + ": " + globals.semen_volume(person.cum.pussy) + "\n"
+			text += "Live " + globals.randomitemfromarray(['Cum','Semen','Jizz','Spunk']) + " in " + globals.randomitemfromarray(['Pussy','Vagina','Cunt']) + ": " + globals.semen_volume(person.cum.pussy) + "\n"
 		if int(person.get_wombsemen()) > 0:
-			text += "" + "Live " + str(globals.randomitemfromarray(['Cum','Semen','Jizz','Spunk'])) + " in Womb: " + globals.semen_volume(person.get_wombsemen()) + "\n"	
+			text += "Live " + globals.randomitemfromarray(['Cum','Semen','Jizz','Spunk']) + " in Womb: " + globals.semen_volume(person.get_wombsemen()) + "\n"	
 		if int(person.cum.pussy) > 0:
 			text += "Virility of Semen Inside: " + str(person.pregexp.latestvirility) + "\n"
 
@@ -314,7 +320,7 @@ func buildmetrics():
 		if person.lactating.daysunmilked > 0:
 			text += "[center][color=red]Hasn't been milked in " + textForCountNoun(person.lactating.daysunmilked, "[/color] day") +"[/center]\n"
 		if person.lactating.milkstorage - person.lactating.milkmax > 0:
-			text += "[center][color=red]" +str(globals.expansion.nameTits()).capitalize()+ " stretching due to [color=aqua]" + str(person.lactating.milkstorage - person.lactating.milkmax) + "oz[/color] pressure. They may gain size and cause stress and health damage.[/color]\n"
+			text += "[center][color=red]" +globals.expansion.nameTits().capitalize()+ " stretching due to [color=aqua]" + str(person.lactating.milkstorage - person.lactating.milkmax) + "oz[/color] pressure. They may gain size and cause stress and health damage.[/color]\n"
 		text += "Lactating for [color=aqua]" + textForCountNoun(person.lactating.duration, "[/color] day") +"\n"
 		text += "Produces [color=aqua]" + str(person.lactating.regen) + "[/color] milk daily\n"
 		text += "Milk Glands: [color=aqua]" + str(person.lactating.milkstorage) + "[/color] stored / [color=aqua]" + str(person.lactating.milkmax) + "[/color] before stretching\n"

@@ -8365,9 +8365,9 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
-bbcode_text = "Branding a person will put permanent spell on the person, preventing them from opposing the brander and ultimately making them a legitimate property. Operation requires 10 mana and 20 energy.
+bbcode_text = "Branding a person will put permanent spell on the person, preventing them from opposing the brander and ultimately making them a legitimate property. Operation requires 10 mana and 10 energy.
 "
-text = "Branding a person will put permanent spell on the person, preventing them from opposing the brander and ultimately making them a legitimate property. Operation requires 10 mana and 20 energy.
+text = "Branding a person will put permanent spell on the person, preventing them from opposing the brander and ultimately making them a legitimate property. Operation requires 10 mana and 10 energy.
 "
 
 [node name="enhbrandingtext" type="RichTextLabel" parent="MainScreen/slave_tab/stats/customization/brandpopup"]

@@ -22,8 +22,8 @@ func getrandomsex(person):
 	else:
 		person.sex = 'female'
 
-###---Added by Expansion---###
-func newslave(race, age, sex, origins = 'slave'):
+###---Added by Expansion---### add arg unique
+func newslave(race, age, sex, origins = 'slave', unique = null):
 	var temp
 	var temp2
 	var person = globals.person.new()
@@ -40,6 +40,7 @@ func newslave(race, age, sex, origins = 'slave'):
 		person.stats[i] = rand_range(35,65)
 	person.id = str(globals.state.slavecounter)
 	globals.state.slavecounter += 1
+	person.unique = unique ###---Added by Expansion---###
 	changerace(person, 'Human')
 	changerace(person)
 	person.work = 'rest'
@@ -95,6 +96,7 @@ func newslave(race, age, sex, origins = 'slave'):
 	###---End Expansion---###
 	
 	###---Added by Expansion---### Pregnancy Expanded
+	person.preg.fertility = rand_range(0,30)
 	set_ovulation(person)
 	###---End Expansion---###
 	globals.traceFile('newslave')
@@ -314,6 +316,7 @@ func newbaby(mother,father):
 #		globals.expansionsetup.setRaceBonus(person, true)
 	
 	#Ovulation
+	person.preg.baby_type == ''
 	set_ovulation(person)
 
 	if globals.state.perfectinfo == true && globals.state.mansionupgrades.dimensionalcrystal >= 3:
@@ -363,7 +366,7 @@ func set_genealogy(person):
 		person.race_type = 4
 	
 	#Set Primary Race
-	if person == globals.player || person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon):
+	if person.race.find('Halfkin') < 0 && (person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon)):
 		random_number = allot_percentage('purebreed')
 	elif person.race.find('Halfkin') >= 0 || rand_range(0,100) <= globals.expansionsettings.randommixedbreedchance:
 		random_number = allot_percentage('primary_mixed')
@@ -420,31 +423,19 @@ func set_genealogy(person):
 	if person.npcexpanded.mansionbred == false && globals.state.relativesdata.has(person.id):
 		var relativesdata = globals.state.relativesdata
 		var entry = relativesdata[person.id]
-		var entry2
-		var samedad = false
-		var samemom = false
 		var matched_sibling = false
-		if !entry.siblings.empty():
-			for i in entry.siblings:
-				entry2 = relativesdata[i]
-				for f in ['father']:
-					if int(entry[f]) == int(entry2[f]):
-						samedad = true
-				for m in ['mother']:
-					if int(entry[m]) == int(entry2[m]):
-						samemom = true
-				if samedad == true && samemom == true || samedad == false && samemom == true || samedad == true && samemom == false:
-					var tempPerson2 = globals.state.findslave(entry2.id)
-					if tempPerson2 == null:
-						continue
-					for shared_gene in tempPerson2.genealogy:
-						person.genealogy[shared_gene] = tempPerson2.genealogy[shared_gene]
-						matched_sibling = true
-						break
+		for i in entry.siblings + entry.halfsiblings:
+			var entry2 = relativesdata[i]
+			#if int(entry.father) == int(entry2.father) || int(entry.mother) == int(entry2.mother):
+			var tempPerson2 = globals.state.findslave(entry2.id)
+			if tempPerson2 == null:
+				continue
+			for shared_gene in tempPerson2.genealogy:
+				person.genealogy[shared_gene] = tempPerson2.genealogy[shared_gene]
+				matched_sibling = true
+				break
 	
 	globals.traceFile('setgenealogy')
-	
-	return
 
 #Added by Aric
 func allot_percentage(type):
@@ -625,7 +616,6 @@ func build_genealogy(person, mother, father):
 					person.genealogy[race] = 0
 	#/ralphB
 	globals.traceFile('build genealogy')
-	return
 
 #Tweaked by Aric
 func build_genealogy_equalize(person, percent):
@@ -731,7 +721,6 @@ func setRace(person,mother):
 		print('No Race Found for ' + str(person.full_name) + '. Assigned Human ')
 	
 	globals.traceFile('Constructor.pickRace Completed')
-	return
 
 func setRaceDisplay(person):
 	var text = ""
@@ -793,7 +782,6 @@ func setRaceDisplay(person):
 		text = 'A Total Mutt'
 	
 	person.race_display = text
-	return
 
 #Tweaked by Aric - Only used by newbaby now
 func set_race_secondary(person):
@@ -878,8 +866,6 @@ func set_race_secondary(person):
 		person.race_secondary = race_secondary
 	
 	globals.traceFile('set race secondary')
-	
-	return
 
 #Tweaked by Aric
 func setBabyType(person):
@@ -891,7 +877,6 @@ func setBabyType(person):
 		person.preg.baby_type = 'birth'
 	
 	globals.traceFile('setbabytype')
-	return
 
 #Tweaked by Aric
 func set_ovulation(person):
@@ -910,34 +895,26 @@ func set_ovulation(person):
 	
 	setRandomOvulationDay(person)
 	globals.traceFile('set ovulation finish')
-	return
 
 #Added by Aric
 func setRandomOvulationDay(person):
 	if person.preg.ovulation_type == 0:
 		set_ovulation(person)
 	
-	if person.preg.ovulation_stage == 0 || person.preg.ovulation_day == 0:
+	if person.preg.ovulation_stage == 0 :
 		if person.preg.ovulation_stage == 0:
 			person.preg.ovulation_stage = round(rand_range(1,2))
-	
-		if person.preg.ovulation_day == 0:
-			if person.preg.ovulation_type == 1:
-				if person.preg.ovulation_stage == 1:
-					person.preg.ovulation_day = round(rand_range(1, globals.expansionsettings.livebirthcycle * globals.expansionsettings.fertileduringcycle))
-				else:
-					person.preg.ovulation_day = round(rand_range(globals.expansionsettings.livebirthcycle * globals.expansionsettings.fertileduringcycle, globals.expansionsettings.livebirthcycle))
-			else:
-				if person.preg.ovulation_stage == 1:
-					person.preg.ovulation_day = round(rand_range(1, globals.expansionsettings.eggcycle * globals.expansionsettings.fertileduringcycle))
-				else:
-					person.preg.ovulation_day = round(rand_range(globals.expansionsettings.eggcycle * globals.expansionsettings.fertileduringcycle, globals.expansionsettings.eggcycle))
+		var maxCycle = globals.expansionsettings.livebirthcycle if person.preg.ovulation_type == 1 else globals.expansionsettings.eggcycle
+		person.preg.ovulation_day = randi() % int(maxCycle) + 1
+		if person.preg.ovulation_day < floor(maxCycle * globals.expansionsettings.fertileduringcycle):
+			person.preg.ovulation_stage = 1
+		else:
+			person.preg.ovulation_stage = 2
 	
 	globals.traceFile('set random ovulation day')
-	return
 
 func forceFullblooded(person):
-	if person == null:
+	if person == null || person.race.find("Halfkin") >= 0:
 		return
 	
 	var onlyrace = genealogy_decoder(person.race)
@@ -947,7 +924,6 @@ func forceFullblooded(person):
 			person.genealogy[race] = 100
 		elif person.genealogy[race] > 0:
 			person.genealogy[race] = 0
-	return
 
 
 #Depreciated - Pending Removal
@@ -1057,8 +1033,6 @@ func set_race_by_genealogy(person):
 	person.race = race
 	
 	globals.traceFile('set race by genealogy')
-	
-	return
 
 #Tweaked by Aric
 func set_race_display(person):
@@ -1142,6 +1116,4 @@ func set_race_display(person):
 		person.race_display = 'Mixed'
 	
 	globals.traceFile('setracedisplay')
-	
-	return
 ###---End Expansion---###

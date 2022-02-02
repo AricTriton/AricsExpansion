@@ -1811,7 +1811,7 @@ func talkconsent(mode=''):
 		if person.checkFetish('pregnancy'):
 			consent_chance += 25
 		#Result
-		if roll <= consentchance:
+		if roll <= consent_chance:
 			#Change Dialogue
 			text += str(expansion.getIntro(person)) + "[color=yellow]-"+person.quirk(talk.consentStudAccept(person))+"[/color]"
 			person.consentexp.stud = true
@@ -2231,7 +2231,7 @@ func cheatButton(mode = ''):
 	
 	#Impregnation
 	if mode == "impregnate":
-		globals.fertilize_egg(person, globals.player.id, globals.player.unique)
+		globals.expansion.fertilize_egg(person, globals.player.id, globals.player.unique)
 		text += "Egg Fertilized by Player. $name is now pregnant with " + str(person.preg.unborn_baby.size()) + " babies."
 	
 	#Gain Pregnancy Day

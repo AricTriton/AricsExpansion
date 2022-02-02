@@ -360,7 +360,7 @@ var characters = {
 		skillpoints = 4,
 		obed = 90,
 		lewdness = 20,
-		traits = ['Grateful', 'Influential', 'Pretty Voice'],
+		traits = ['Grateful', 'Influential', 'Pretty voice'],
 	},
 	Zoe = {
 		basics = ['Beastkin Wolf', 'teen', 'female', 'noble'],
@@ -389,7 +389,7 @@ var characters = {
 		level = 2,
 		maf_base = 2,
 		skillpoints = 2,
-		traits = ['Grateful', 'Mentor', 'Responsive', 'Pretty Voice'],
+		traits = ['Grateful', 'Mentor', 'Responsive', 'Pretty voice'],
 	},
 	Ayda = {
 		basics = ['Tribal Elf', 'adult', 'female', 'rich'],
@@ -611,16 +611,14 @@ func uniqueGenealogyFixer(_slave):
 		globals.expansionsetup.setRaceBonus(_slave, false)
 	var racegenes = globals.constructor.genealogy_decoder(_slave.race)
 	if _slave.race.find('Halfkin') >= 0:
+		for i in _slave.genealogy:
+			_slave.genealogy[i] = 0
 		_slave.genealogy[racegenes] = 70
 		_slave.genealogy.human = 30
-		for i in _slave.genealogy:
-			if !i in ['human',racegenes]:
-				_slave.genealogy[i] = 0
 	else:
-		_slave.genealogy[racegenes] = 100
 		for i in _slave.genealogy:
-			if !i in ['human',racegenes]:
-				_slave.genealogy[i] = 0
+			_slave.genealogy[i] = 0
+		_slave.genealogy[racegenes] = 100
 	if globals.expansionsettings.racialstatbonuses == true:
 		globals.expansionsetup.setRaceBonus(_slave, true)
 	globals.constructor.setRaceDisplay(_slave)

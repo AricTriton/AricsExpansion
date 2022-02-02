@@ -177,7 +177,7 @@ func _on_quickstart_pressed():
 	
 	slaveDefaults.age = globals.randomfromarray(ageArray)
 	slaveDefaults.sex = 'random'
-	startSlave = globals.newslave(slaveDefaults.race, slaveDefaults.age, slaveDefaults.sex, 'poor')	
+	startSlave = globals.newslave(slaveDefaults.race, slaveDefaults.age, slaveDefaults.sex, 'poor', 'startslave') ###---Added by Expansion---### new arg unique
 	player.imagefull = null
 	player.imageportait = playerPortraits[randi()%playerPortraits.size()]
 	startSlave.cleartraits()
@@ -218,6 +218,27 @@ func _stage5():
 			get_node("TextureFrame/newgame/stage5/age").select(get_node("TextureFrame/newgame/stage5/age").get_item_count()-1)
 
 	_update_stage5()
+
+func regenerateplayer():
+	var imageportait = player.imageportait
+	player = globals.newslave(player.race, player.age, player.sex, 'slave', 'player')###---Added by Expansion---### new arg unique
+	globals.player = player
+	player.cleartraits()
+	#player.unique = 'player'
+	player.imageportait = imageportait
+	player.imagefull = null
+	player.beautybase = variables.playerstartbeauty
+	playerBonusStatPoints = variables.playerbonusstatpoint
+	for i in ['str','agi','maf','end']:
+		player.stats[i+'_max'] = 4
+	_update_stage5()
+
+
+func regenerateslave():
+	var memory = startSlave.memory
+	startSlave = globals.newslave(startSlave.race, startSlave.age, startSlave.sex, 'poor', 'startslave') ###---Added by Expansion---### new arg unique
+	startSlave.memory = memory
+	startSlave.beautybase = variables.characterstartbeauty
 
 #QMod - Patch fix for women/futa to have womb == true
 func _on_sexconfirm_pressed():
@@ -631,19 +652,14 @@ func _on_slaveconfirm_pressed():
 	if slaveTrait != '':
 		startSlave.add_trait(slaveTrait)
 
-	#Assign start slave to global slave list
 	startSlave.unique = 'startslave'
-	###---Added by Expansion---### Ovulation Cycle/Genealogy
-	#Test Assign
-	globals.constructor.set_genealogy(startSlave)
-	globals.constructor.forceFullblooded(startSlave)
-	globals.constructor.setRaceDisplay(startSlave)
-	globals.constructor.set_ovulation(startSlave)
-	globals.expansionsetup.setRaceBonus(startSlave, true)
-	###---End Expansion---###
+
 	###---Added by Expansion---### Ank Bugfix v4
 	startSlave.health = 1000
 	###---End Expansion---###
+
+	globals.expansion.updatePerson(player)
+	#Assign start slave to global slave list
 	globals.slaves = startSlave #A bit deceptive as it assigns 'person' to 'array', works because of 'setget'
 
 
@@ -727,18 +743,9 @@ func _on_slaveconfirm_pressed():
 
 	###---Added by Expansion---### Reset resources
 
-
-	###---Added by Expansion---### Pregnancy Expanded | Ovulation Cycle/Genealogy
-	#Test Assign
-	globals.constructor.set_genealogy(player)
-	globals.constructor.forceFullblooded(player)
-	globals.constructor.setRaceDisplay(player)
-	globals.constructor.set_ovulation(player)
-	globals.expansion.updatePerson(player)
-	###---End Expansion---###
 	player.health = 1000
 	globals.player = player
-	###---Added by Expansion---### Ovulation Cycle/Genealogy
+	###---Added by Expansion---###
 	globals.expansion.updatePerson(globals.player)
 	###---End Expansion---###
 	globals.state.upcomingevents.append({code = 'ssinitiate', duration = 1})

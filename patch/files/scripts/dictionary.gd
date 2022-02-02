@@ -207,7 +207,7 @@ var loredict = {
 	},
 	aricracialbonuses = {
 		code = 'aricracialbonuses',
-		reqs = 'globals.expansionsettings.racialstatbonuses == true',
+		reqs = 'false && globals.expansionsettings.racialstatbonuses == true',
 		name = 'AricsExpansion: Racial Bonuses',
 		text = "[center]Understanding Racial Bonuses[/center]\n\n"
 	},
