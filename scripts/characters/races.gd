@@ -222,7 +222,7 @@ var races = {
 		highcorruptionbonus = "Strength+, Agility-, Beauty-",
 		lowcorruptionbonus = "Strength-, Agility+, Beauty+",
 		breedingquirk = "Elvish blood results in more attractive offspring.",
-		mutations = "Gnoll, Lizardman, Troll",
+		mutations = "Lizardman, Troll",
 		pricemod = 1.5,
 		#ralph5
 		marketup = ["Initial appraisal for [color=aqua]orcs[/color] is up as the carpenters guild increases the number of writs it will grant annually and carpenters put in large orders for hard ‘orkers.\n","Demand for [color=aqua]orcs[/color] is up.\n","A nearby warlord is looking to replenish his infantry. Pricing for [color=aqua]orcs[/color] is up.\n"],
@@ -250,6 +250,7 @@ var races = {
 		},
 	},
 	Gnome = {
+		surname = names.gnomesurname,
 		bodyshape = ['shortstack'],
 		description = "Though nowadays the gnome capital is open as a tourist spot, there are stories and documents stating that generations ago, they were once humans sealed within the city by demons, experimented on and mutated into the forms they have today.\n\nThough they are a stocky, physically weak race, they compensate for their shortcomings with outstanding intellect, holding a commanding lead as the world’s frontrunners in technology.",
 		details = "[color=aqua]Racial trait: studying at Library twice as effective. [/color]\n\n[color=yellow]Stat potential: Strength - {str_max}, Agility - {agi_max}, Magic - {maf_max}, Endurance - {end_max} [/color]",
@@ -297,6 +298,7 @@ var races = {
 		},
 	},
 	Goblin = {
+		surname = names.goblinsurname,
 		bodyshape = ['shortstack'],
 		description = "Goblins are a race of cave dwellers, loosely resembling short, green-skinned elves. They have existed for a very long time, but despite their prevalence rarely played any influential role. While often been considered nothing more than common monsters, they have surprising skill and understanding, putting them on par with many humanoid races in term of sentience.",
 		details = "[color=aqua]Racial trait: pregnancy progresses lot quicker. [/color]\n\n[color=yellow]Stat potential: Strength - {str_max}, Agility - {agi_max}, Magic - {maf_max}, Endurance - {end_max} [/color]",
@@ -437,6 +439,7 @@ var races = {
 		sebastian = true,
 		shade = {male = "res://files/buttons/inventory/shades/Seraph_M.png", female = "res://files/buttons/inventory/shades/Seraph_F.png"},
 		wings = ['feathered_black', 'feathered_white', 'feathered_brown'],
+		surname = '',
 		stats = {	
 			str_max = 4,	
 			agi_max = 5,	
@@ -486,7 +489,8 @@ var races = {
 		tail = ['demon'],
 		wings = ['leather_black', 'leather_red'],
 		horns = ['short', 'long_straight', 'curved'],
-		stats = {	
+		surname = '',
+		stats = {
 			str_max = 5,	
 			agi_max = 4,	
 			maf_max = 4,	
@@ -602,6 +606,7 @@ var races = {
 		},
 	},
 	Taurus = {
+		surname = names.taurussurname,
 		description = "Taurus are a purely artificial race, created on the orders of a group of noblemen looking for bodyguards. The experiment seems to have been an attempt at recreating the size and strength of orcs and beastkin in a more easily controlled package, but was ultimately considered only partially successful, as the new species had a tendency of taking too many bovine behavioral traits, becoming too passive, or in some cases, too aggressive.\n\nStill, they, especially the females, remain popular among certain individuals for their appearance and outstanding natural lactation.",
 		details = "[color=aqua]Racial trait: milking is more effective. [/color]\n\n[color=yellow]Stat potential: Strength - {str_max}, Agility - {agi_max}, Magic - {maf_max}, Endurance - {end_max} [/color]",
 		breedingnotes = "Research on Taurus is of course recent and they have been thoroughly studied. The only known mutation occurs when Taurus are bred to have both orcish and equine heritage, producing the hybrid commonly known as a Minotaur. Although pure Taurus are the most perfectly balanced pedigree, more aggressive or passive hybrids may also be produced by breeding with races of strong predator or prey origins.",
@@ -904,6 +909,7 @@ var races = {
 		tail = ['horse'],
 		ears = ['short_furry'],
 		legs = ['horse'],
+		surname = '',
 		stats = {	
 			str_max = 5,	
 			agi_max = 5,	
@@ -1614,6 +1620,7 @@ var races = {
 		banditrace = false,
 		uncivilized = false,
 		sebastian = true,
+		shade = {male = "res://files/buttons/inventory/shades/Human_M.png", female = "res://files/buttons/inventory/shades/Human_F.png"},
 		bodyshape = ['raptorshortstack'],
 		haircolor = ['white', 'green', 'purple', 'blue', 'blond', 'red', 'auburn'],
 		tail = ['avali'],
@@ -1671,6 +1678,7 @@ var races = {
 		banditrace = true,
 		uncivilized = false,
 		sebastian = true,
+		shade = {male = "res://files/buttons/inventory/shades/Human_M.png", female = "res://files/buttons/inventory/shades/Human_F.png"},
 		eyecolor = ['blue', 'green', 'amber', 'red', 'brown'],
 		eyeshape = ['normal'],
 		ears = ['wide_furry'],
@@ -1725,6 +1733,7 @@ var races = {
 		banditrace = true,
 		uncivilized = false,
 		sebastian = true,
+		shade = {male = "res://files/buttons/inventory/shades/Human_M.png", female = "res://files/buttons/inventory/shades/Human_F.png"},
 		eyecolor = ['blue', 'green', 'amber', 'red', 'brown'],
 		eyeshape = ['normal'],
 		ears = ['short_furry', 'long_pointy_furry'],
@@ -1779,6 +1788,7 @@ var races = {
 		banditrace = true,
 		uncivilized = false,
 		sebastian = true,
+		shade = {male = "res://files/buttons/inventory/shades/Human_M.png", female = "res://files/buttons/inventory/shades/Human_F.png"},
 		eyecolor = ['blue', 'green', 'amber', 'red', 'brown'],
 		eyeshape = ['normal'],
 		ears = ['short_furry'],
@@ -1833,6 +1843,7 @@ var races = {
 		banditrace = true,
 		uncivilized = false,
 		sebastian = true,
+		shade = {male = "res://files/buttons/inventory/shades/Human_M.png", female = "res://files/buttons/inventory/shades/Human_F.png"},
 		eyecolor = ['blue', 'green', 'amber', 'red', 'brown'],
 		eyeshape = ['slit'],
 		ears = ['feathery'],
