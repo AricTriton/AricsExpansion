@@ -322,9 +322,9 @@ func getMasterName(person):
 				names.append('Sis')
 		elif related == 'mother' || related == 'father':
 			if globals.player.sex == 'male':
-				names.append('Father')
+				names.append('Son')
 			elif globals.player.sex == 'female':
-				names.append('Mother')
+				names.append('Daughter')
 	###Negatives
 	if person.fear < 20 && person.obed < 30:
 		names.append('Asshole')
