@@ -210,7 +210,7 @@ func expandGame():
 		for j in item.effects:
 			var isPresent = false
 			for k in refEffect:
-				if j.effect == k.effect:
+				if j.effect == k.effect && j.get('id') == k.get('id')::
 					isPresent = true
 					break
 			if !isPresent:
