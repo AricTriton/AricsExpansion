@@ -226,7 +226,11 @@ func expandGame():
 			idx2 -= 1
 		idx1 -= 1
 
-			
+	#add weapon scaling attributes to all weapons
+	for weapon in globals.state.unstackables:
+		if weapon.type == 'weapon':
+			if !weapon.effects.has('effectscale'):
+				weapon.effects['effectscale'] = globals.itemdict[weapon.code].effect.effectscale
 
 func expandPerson(person):
 	var sexvag = int(round(person.metrics.vag/10))
