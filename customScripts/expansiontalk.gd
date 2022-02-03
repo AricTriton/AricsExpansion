@@ -625,7 +625,7 @@ func consentPartyReduceRebellion(person):
 	choice.append("Fighting with this dick instead of against them? Huh...")
 	choice.append("Well, isn't this a surprising twist?")
 	choice.append("This...better not get me killed...")
-	if person.wits >= 50:
+	if person.wit >= 50:
 		choice.append("Maybe I can work this to my advantage...")
 		choice.append("I can make this work...")
 	if person.charm >= 50:

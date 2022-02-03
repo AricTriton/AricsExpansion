@@ -1828,7 +1828,7 @@ func public_nudity_law(person, gold):
 			d100 = round(rand_range(0,100))
 			if d100 <= towndict.guardskill:
 				var fine = 50
-				text += "\n[color=aqua]$name[/color] was stopped by the local guards in [color=aqua]" + str(joblocation).capitalize() + "[/color]. [color=red]$He was informed that $he was breaking the local [/color][color=aqua]Public Nudity[/color][color=red] law and would receive a fine of [/color][color=yellow]50[/color][color=red] for public indecency.[/color] "
+				text += "\n[color=aqua]$name[/color] was stopped by the local guards in [color=aqua]" + str(joblocation).capitalize() + "[/color]. [color=red]$He was informed that $he was breaking the local [color=aqua]Public Nudity[/color] law and would receive a fine of [color=yellow]50[/color] for public indecency.[/color] "
 				if globals.expansionsettings.perfectinfo == true:
 					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Public Indecency Fine Chance[/color] of [color=aqua]" + str(towndict.guardskill) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color] || "
 				

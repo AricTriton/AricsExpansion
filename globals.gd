@@ -1233,7 +1233,14 @@ func load_game(text):
 	if str(state.expansionversion) != str(expansionsettings.modversion):
 		print("Mod Version v" + str(state.expansionversion) + ". Expanding game to latest Aric's Expansion version")
 		expansionsetup.expandGame()
+		print("Congratulations, your game is expanded. So, so expanded. Your door locked? Volume low? You hydrated? Party on!")
 	print("Aric's Expansion v" + str(expansionsettings.modversion))
+	if expansionsettings.use_ralphs_tweaks == true:
+		print("Ralph's Tweaks Enabled. Product hybridization complete.")
+	if expansionsettings.sillymode == true:
+		print("Silly Mode Enabled. Fourth wall successfully removed.")
+	if expansionsettings.enablecheatbutton == true:
+		print("Aric's Cheat Button Active. Access via Talk > Piece of Candy")
 	if expansionsettings.enablecheatbutton == true:
 		print("Aric's Cheat Button Active. Access via Talk > Piece of Candy")
 	if expansionsettings.perfectinfo == true:
