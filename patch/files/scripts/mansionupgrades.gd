@@ -15,7 +15,7 @@ var dict = {
 	farmhatchery = {
 		name = "Hatchery", 
 		code = 'farmhatchery',
-		description = "[color=red]Currently Unused[/color]\nProvides the farm with new equipment, allowing the use of slaves and snails for egg laying.", 
+		description = "Provides the farm with new equipment, allowing the use of slaves and snails for egg laying.\n\n[color=aqua]Required for Obtaining Snails[/color]", 
 		description2 = "[color=red]Currently Unused[/color]\nThe farm will gain Pumps with suction cups attached to hoses. Livestock will be pumped daily by the suction cups for milk, cum, or squirt.",
 		description3 = "[color=red]Currently Unused[/color]\nProvides the farm with Essence Extraction equipment. This will allow the Pumps to pump raw cum or squirt into the livestock to drain back essence based on their race. Can be deadly for unenergetic slaves.", 
 		levels = 3,
