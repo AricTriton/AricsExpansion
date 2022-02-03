@@ -2,17 +2,21 @@
 extends Node
 
 func randomfromarray(array):
-	return array[randi() % array.size()]
+	if array.size() > 0:
+		return array[randi() % array.size()]
+	else:
+		return []
 
 func getzonetraveltext(zone,progress):
 	var array = ["Your journey continues peacefully. "]
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
 	var teammates = []
-	for i in party:
-		var j = globals.state.findslave(i)
-		if globals.player != j:
-			teammates.append(j)
+	if party.size() > 0:
+		for i in party:
+			var j = globals.state.findslave(i)
+			if globals.player != j:
+				teammates.append(j)
 	var tempteammate = null if teammates.empty() else randomfromarray(teammates)
 
 	var corestats = ['sstr','sagi','smaf','send']
@@ -48,7 +52,11 @@ func getzonetraveltext(zone,progress):
 		#if !globals.state.backpack.stackables.has('bandage') && i.health < i.max_health/2:
 		#	text =
 		#	break
-	if rand_range(0,1) > 0.5:
+	if rand_range(0,1) > 0.9:
+		array.append_array(["A flock of crows pick at a well scavenged corpse nearby.  Upon examination of the nearly stripped bones and tattered remains of clothing, you figure this poor traveler was likely a poor sword for hire or vagabond.  It's unclear what killed him.  Whatever possessions he might have once had have long been looted or dragged away by vermin.  Unable to determine even their place of origin or likely destination, you decide to move on."])
+	if rand_range(0,1) > 0.975 && globals.expansionsettings.sillymode:
+		array.append_array(["You come across a feminine looking [color=yellow]dragonkin[/color] sitting at an easel and painting the scenery. You get close enough to see the name Rendrassa signed on the canvass before noticing that the painter has turned to look at you with an unnerving smile.  Filled with a strange terror, you quickly compliment the painting and hasten to leave."])
+	if rand_range(0,1) > 0.5 && party.size() > 0:
 		for i in teammates:
 			if i.traits.has("Natural Beauty") && i.beauty < 70 && !i.origins in ["noble","rich"] && rand_range(0,1) > 0.3:
 				array.append("You turn to face "+i.name+" and "+randomfromarray(["take agood look","end up staring","casually examine"])+".  You wonder how attractive "+i.name+" could have become if born into a better family.") 
@@ -118,9 +126,9 @@ func getzonetraveltext(zone,progress):
 		elif captives.size() > 5 && globals.state.reputation.wimborn > 50 && captivebaddiesratio > 69:
 			array.append("A large "+travelgroup()+" of " +travelcheerful()+" "+randomfromarray(['townsfolk','revelers','students','tradesmen','guards'])+" returning to town cheers you and your party along after they see your "+travelcaptivedesc()+" captives shuffling along in their restraints.")
 		if rand_range(0,1) > 0.9 && globals.expansionsettings.sillymode:
-			array.append("You notice a "+travelcheerful()+" "+travelrandomperson()+" "+travelfucking()+" "+travelrandomadj()+" "+travelfucktarget()+" - in broad daylight.\n\n"+travellink()+"\n\nIt's clearly a "+travelreaction()+" moment for him and a "+travelreaction()+" moment for you.")
+			array.append_array(["You notice a "+travelcheerful()+" "+travelrandomperson()+" "+travelfucking()+" "+travelrandomadj()+" "+travelfucktarget()+" - "+travelobserved()+".\n\n"+travellink()+"\n\nIt's clearly a "+travelreaction()+" moment for him and a "+travelreaction()+" moment for you."])
 		if globals.state.reputation.wimborn >= -20:
-			if globals.state.mainquest >= 2 && globals.state.bountiescollected["wimborn"] <= 3:
+			if globals.state.mainquest >= 2 && globals.state.bountiescollected["wimborn"] <= 3 && progress < 3:
 				array.append("A man leading a group of Wimborn guards calls you over.\n\n[color=yellow]Hail "+globals.player.name+".  Ah, no we haven't met, but I know of you by reputation.\n\nListen, I understand you're a Mage and it's not my place to ask, but if you happen to come across bandits in your travels we could really use a hand rounding them up.\n\nWe can't do much to them if they don't already have bounties on their heads, but a lot of them do.  I know you can make good coin selling them through the Slavers' Guild depending on their value, but we can pay you a good bounty on a lot of them based purely on their crimes too.  You never know, sometimes a wimp thief is out here or in the wilds with a huge bounty just waiting to be collected.\n\nAll I'm sayin' really is: keep us in mind.  There aren't enough of us to put much of a dent in the banditry problem around here, and if you turn some over for justice under the law instead of making a quick sale to the slavers it couldn't hurt your reputation and most of the time we'll put some gold in your pockets too.[/color]")
 			elif globals.state.bountiescollected["wimborn"] > 50:
 				array.append("A guard patrol salutes as you pass.  You hear a few of the men remarking on you and someone refers to you as "+str(player.name+" "+playertitle.playertopstat)+".")
@@ -166,7 +174,7 @@ func getzonetraveltext(zone,progress):
 	elif zone.code == 'marsh':
 		array.append_array(["Strange disembodied voices seem to whisper from all sides as your veer off the beaten path and you rush back to resume your trek.","Your party begins to stumble into "+randomfromarray(['a clearing devoid of any living things except mycelium.  The spores begin to itch in your throats ','a bog that seems to suck you down','a patch of quicksand','a heavily webbed section of trees','a stagnant pool heaped with the rotting carcasses and bones of wolves, bears, and even giant spiders'])+" and you carefully make your way back to the path."])
 	elif zone.code == 'mountains':
-		array.append_array(["Your party is uneasy.  This is an ideal setting for an ambush.","It would be unbearably hot if not for shade cast by the cliffs above.","Squaking, vile cursing, and flung feces rain down on your party.  You've distrubed an entire colony of savage harpies nestled between narrow outcrops above and race on, narrowly avoiding capture and presumably a life as breeding stock and/or death as harpy fodder.","The winged shadow of a "+travelmountainflyer()+" flits across your path. but when you look up you see nothing.","Pebbles and rocks cascade from a ledge above.  You feel like you're being watched, and urge the party forward."])
+		array.append_array(["As you travel along a rocky cliff, you notice an old prayer shrine.  It has several old animal bones and broken egg shells scattered around it as offerings.  The amount of large, shabby feathers scattered about the area leads you to conclude this is a [color=yellow]harpy[/color] shrine of some kind.  You figure it's best to move on without disturbing it.","Your party is uneasy.  This is an ideal setting for an ambush.","It would be unbearably hot if not for shade cast by the cliffs above.","Squaking, vile cursing, and flung feces rain down on your party.  You've distrubed an entire colony of savage harpies nestled between narrow outcrops above and race on, narrowly avoiding capture and presumably a life as breeding stock and/or death as harpy fodder.","The winged shadow of a "+travelmountainflyer()+" flits across your path. but when you look up you see nothing.","Pebbles and rocks cascade from a ledge above.  You feel like you're being watched, and urge the party forward."])
 	elif zone.code == 'mountaincave':
 		array.append_array(["You pass a pile of cracked bare bones.  The stench of ammonia is overwhelming.  An ooze has fed here recently.","Totems appear around a corner.  This must be goblin territory.","The walls are slick with condensation as the temperature drops inside the caves.","You think you hear voices and order the party to halt in silence, but hear only dripping and your own breathing."])
 		var canread = false
@@ -177,6 +185,8 @@ func getzonetraveltext(zone,progress):
 			array.append("There's writing on the wall here.  In some dialect of elvish, it reads: "+randomfromarray(["Abandon hope any who enter.","Turn around cousin on pain of death, we serve you no longer.","We tolerate no intruders.","No Trespassing","Do Not Trespass","Scenic Cavern Ahead","Don't Feed the Ooze","Disclaimer: This enclave of dark elves is not responsible for dismemberment or death of any party trespassing herein."]))
 		else:
 			array.append("There's writing on the wall here.  "+randomfromarray(["It's some dialect of elvish, but you cannot make it out","It's illegible to you, but an arrow pointing onward with an 'X' carved through it and skulls convey the meaning well enough."]))
+	elif zone.code == 'undercityruins':
+		array.append_array(["Your party turns a corner and comes face to face with a wall.  You turn around to backtrack and dozens of sightless eyes glisten in the darkness from alcoves you couldn't see on your way into this dead end.\n\nYou prepare for the end as one massive trogolodyte moves to the center of the tunnel ahead of the others, but before it can act a Kobold wearing some sort of jersey drops from the ceiling and bravely slaps the monstrosity on its nose as it falls before scurrying through the trog's legs and behind it.\n\nThe Kobold races down the hall screaming it's warcry, [color=yellow]Got your nose![/color].  The enraged trogolodytes forget all about your party and give chase, leaving you alone in relative safety.\n\nYou're relatively certain that the Kobold's jersey read: 'Capitualize'."])
 	if array.size() == 0:
 		array.append(randomfromarray(["Your journey proceeds uneventfully","There's nothing much to see here.  Your party seems bored.","This part of the path seems like any other."]))
 	return randomfromarray(array)
@@ -305,6 +315,10 @@ func travellink():
 	var array = ["It begins to rain, but you take no heed.","Your eyes meet.","You cheer him on.","You hurl insults at him."]
 	if globals.expansionsettings.sillymode:
 		array.append_array(["This is indeed a disturbing universe.","Your eyes meet.","Your eyes meet.","Your eyes meet.","He gives you the finger.","He invites you to join in.","He attempts to disengage in mid-nut, making an awful mess in the process.","You smile at one another knowingly.","You feel a kinship.","You consider if it'd make a better story in retrospect if you charged toward him.","You share the moment.","He calls out your name as he climaxes.","You realize you missed a sale this morning.","You ponder your life's choices up to this point.","You feel inspired to write a poem.","Just then a sinkhole opens beneath them.","Just then the Sarlac pit monster drags them down and belches loudly.","You thought your life was on the upswing. This is a new low.","Random text should never be entrusted to mod authors.","The end is nigh.","Why? Why is this happening?","You remember you have somewhere else to be.","You feel a sudden and irresistable urge to eat sausage.","You sprint away."])
+	return randomfromarray(array)
+
+func travelobserved():
+	var array = ["in broad daylight","without any concern for being observed","for all to see","without a hint of embarrassment","as if in a trance","without a trace of self-consciousness"]
 	return randomfromarray(array)
 
 func travelcrops():
