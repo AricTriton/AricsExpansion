@@ -747,9 +747,9 @@ func setRaceDisplay(person): #ralphD - reworked to fix bugs
 				racetiestobreak = []
 			#ralphD
 			elif person.genealogy[race] == primaryracepercent:
-				racetiestobreak.append_array([race])
+				racetiestobreak.append(race)
 				if !racetiestobreak.has(primaryrace) && primaryrace != "":
-					racetiestobreak.append_array([primaryrace])
+					racetiestobreak.append(primaryrace)
 			#/ralphD
 			primaryrace = race
 			primaryracepercent = person.genealogy[race]
