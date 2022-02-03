@@ -234,7 +234,7 @@ var database = {
 		code = 'undercityruins',
 		name = "Underground Ruins",
 		description = "Dilapidated ruined buildings line long winding pathways that were once streets. Their age is hard to estimate, they could be 50 years they could be 500 years old. The air is damp and oppressive, there is little to no sound except for each of your steps which seem to echo on forever. ",
-		enemies = [{value = 'spidergroup',weight = 5},{value = 'gembeetle', weight = 1}, {value = 'troglodytelarge', weight = 5}, {value = 'troglodytesmall', weight = 4}, {value = 'mutant', weight = 4},{value = 'treasurechest', weight = 1},{value = 'blockedsection', weight = 1}],
+		enemies = [{value = 'spidergroup',weight = 5},{value = 'gembeetle', weight = 1}, {value = 'troglodytelarge', weight = 5}, {value = 'troglodytesmall', weight = 4}, {value = 'mutant', weight = 4},{value = 'treasurechest', weight = 1},{value = 'blockedsection', weight = 1},{value = 'noenemyencountered', weight = 0.1}],
 		encounters = [],
 		length = 8,
 		exits = ['undercitytunnels','undercityhall','undercitylibrary'],

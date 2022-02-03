@@ -548,7 +548,48 @@ func setRaceBonus(person, increasestats):
 	if person == null:
 		print("Invalid Person for Setting Racial Bonus")
 		return
-	
+
+	#ralph4 - fix unique npc genealogies #ralphD - replicated code here to fix uniques even for players without the good taste to enable ralphs.  Revel in my benevolence plebs ;]
+	if person.unique != null:
+		if person.unique == 'Melissa':
+			cleargenes(person)
+			person.genealogy.human = 100
+		elif person.unique == 'Cali':
+			cleargenes(person)
+			person.genealogy.dog = 70
+			person.genealogy.human = 30
+		elif person.unique in ['Emily','Tisha']:
+			cleargenes(person)
+			person.genealogy.human = 84
+			person.genealogy.gnome = 2
+			person.genealogy.elf = 2
+			person.genealogy.fairy = 2
+			person.genealogy.bunny = 2
+			person.genealogy.raccoon = 2
+			person.genealogy.fox = 2
+			person.genealogy.cat = 2
+			person.genealogy.dog = 2
+		elif person.unique == 'Chloe':
+			cleargenes(person)
+			person.genealogy.gnome = 96
+			person.genealogy.fairy = 4
+		elif person.unique == 'Yris':
+			cleargenes(person)
+			person.genealogy.cat = 70
+			person.genealogy.human = 30
+		elif person.unique == 'Maple':
+			cleargenes(person)
+			person.genealogy.fairy = 100
+		elif person.unique == 'Ayneris':
+			cleargenes(person)
+			person.genealogy.elf = 100
+		elif person.unique == 'Ayda':	
+			cleargenes(person)
+			person.genealogy.tribal_elf = 100			
+		elif person.unique == 'Zoe':
+			cleargenes(person)
+			person.genealogy.dog = 100
+	#/ralph4 /ralphD		
 	###ANK'S FIX? This + Dictionary?
 #	for race in genealogy:
 #		if genealogy[race] > 0:
