@@ -297,7 +297,7 @@ func _on_talk_pressed(mode = 'talk'):
 	#---Number of Children---#
 	elif mode == 'general_slave_topics_numberofkids':
 		person.dailytalk.append('desiredoffspring')
-		if rand_range(0,100) <= (person.loyal*.5) + (person.obed*.25) + rand_range(0,25):
+		if rand_range(0,100) <= (person.loyal*.25) + (person.obed*.25) + (globals.fetishopinion.find(person.fetish.pregnancy) * 5) + rand_range(0,25):
 			person.knowledge.append('desiredoffspring')
 			text = str(expansion.getIntro(person)) + " $name thinks for a moment.\n[color=yellow]-"+ person.quirk('I think...about ' +str(person.pregexp.desiredoffspring)+ ' would be nice.')
 			buttons.append({text = str(globals.randomitemfromarray(['More is better','That is not enough','I would say to have more',"Isn't more better?"])), function = '_on_talk_pressed', args = 'general_slave_topics_morekids', tooltip = person.dictionary("Encourage $name to have more kids.")})
@@ -619,6 +619,8 @@ func eventPregnancyReveal(mode=''):
 		else:
 			text = str(expansion.getIntro(person)) + " $name lets out a small whimper.\n[color=yellow]-"+ person.quirk("Please, $master, no! I'm so scared about having this baby! Don't force me to keep having them!") + "[/color]"
 	if mode == 'lewd':
+		for fetup in ['creampiepussy','pregnancy']:
+			person.checkFetish(fetup, 2)
 		if expansion.getResponse(person,mode) == "positive":
 			text += " $name bites $his lower lip at your response.\n[color=yellow]-"+ person.quirk("I HAVE been really horny lately.") + "[/color]\n"
 		else:
@@ -698,6 +700,8 @@ func eventLactation(mode=''):
 		else:
 			text = str(expansion.getIntro(person)) + " $name lets out a small whimper.\n[color=yellow]-"+ person.quirk("Please, $master, anything but that! I've seen what that does to $child before and please no! They lose their minds, they start mooing! Please, $master!") + "[/color]"
 	if mode == 'lewd':
+		for fetup in ['drinkmilk','lactation','bemilked']:
+			person.checkFetish(fetup, 2)
 		if expansion.getResponse(person,mode) == "positive":
 			text += " $name bites $his lower lip at your response.\n[color=yellow]-"+ person.quirk("You...you're into it? I think I may be too!") + "[/color]\n"
 			text += "$He runs $his finger along $his erect nipple and brings back a droplet of milk to $his own lips, then licks it off."
@@ -753,6 +757,8 @@ func eventWantedPregnancy(mode=''):
 		else:
 			text = str(expansion.getIntro(person)) + " $name seems disheartened by your response.\n[color=yellow]-"+ person.quirk("Oh. I'm sorry for saying anything, $master. It...it won't happen again.") + "[/color]"
 	if mode == 'lewd':
+		for fetup in ['creampiepussy','pregnancy']:
+			person.checkFetish(fetup, 2)
 		if expansion.getResponse(person,mode) == "positive":
 			text += " $name bites $his lower lip at your response.\n[color=yellow]-"+ person.quirk("It really was, $master! I can't wait to do that again!") + "[/color]"
 		else:
@@ -800,6 +806,8 @@ func eventIncestConsentGiven(mode=''):
 		else:
 			text = str(expansion.getIntro(person)) + " $name seems disheartened by your response.\n[color=yellow]-"+ person.quirk("Oh. I see. Well, I mean...nevermind, I guess. Forget I said anything.") + "[/color]"
 	if mode == 'lewd':
+		for fetup in ['incest']:
+			person.checkFetish(fetup, 3)
 		if expansion.getResponse(person,mode) == "positive":
 			person.consentexp.incest = true
 			text += str(expansion.getIntro(person)) + " $name bites $his lower lip at your response.\n[color=yellow]-"+ person.quirk("You are right about that, $master! I can't wait to try it!") + "[/color]"
@@ -1599,7 +1607,7 @@ func eventDrainCum(mode = ''):
 		
 	if mode == 'pussycum':
 		if person.cum.pussy > 0:
-			text += str(globals.randomitemfromarray(reactions)) + str(globals.randomitemfromarray(cumdrips)) + str(globals.randomitemfromarray(landinglocations))
+			text += str(globals.randomitemfromarray(reactions)) + str(globals.randomitemfromarray(cumdrips)) + " " + str(globals.randomitemfromarray(landinglocations))
 			amount = clamp(round(rand_range(1,person.cum.pussy/2)),1,person.cum.pussy)
 			person.cum.pussy -= amount
 			puddle += amount
@@ -1737,10 +1745,10 @@ func talkconsent(mode=''):
 			text += "$He shows a troubled face and rejects your proposal. "
 			###---Added by Expansion---### Incest Check
 			if related != "unrelated" && person.consentexp.incest != true:
-				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " my " + str(related) + ". ")
+				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " my " + str(related) + ". [/color]")
 				person.dailyevents.append('incest')
 				if rand_range(0,5) + person.dailyevents.count('incest') >= 5:
-					text += "\nYou do see a flash of hesitation, however, and think that $he may be coming around to the idea of it. "
+					text += "\n\nYou do catch onto a flash of hesitation, however, and think that $he may be coming around to the idea of it. "
 					person.dailyevents.append('incest')
 			else:
 				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " you. ")
@@ -1753,7 +1761,7 @@ func talkconsent(mode=''):
 				person.consentexp.incest = true
 				if person.fetish.incest in ['taboo','dirty','unacceptable']:
 					person.fetish.incest = 'uncertain'
-				text += "\n$He " + str(globals.randomitemfromarray(['whispers','mumbles','quickly says','says','quietly says'])) + " " + person.quirk("\n[color=yellow]-I can not believe I want to " + globals.expansion.nameSex() + " my " + str(related) + ". ")
+				text += "\n$He " + str(globals.randomitemfromarray(['whispers','mumbles','quickly says','says','quietly says'])) + " " + person.quirk("\n[color=yellow]-I "+ str(globals.randomitemfromarray(["can't believe I'm ready to","am so ready to","didn't ever think that I would","can't wait to","never thought that I would"])) +" "+ globals.expansion.nameSex() + " my " + str(related) + ". ")
 				text += "\n\n[color=green]Unlocked Sexual and Incestuous actions with $name.[/color]"
 			else:
 				text += "\n\n[color=green]Unlocked sexual actions with $name.[/color]"
