@@ -1480,8 +1480,7 @@ func nextdayevents():
 		checkforevents = true
 		#ralphD - trying to stop my MC from being eternally fertilized 8P
 		player.cum.pussy = 0
-		if !player.preg.womb.empty():
-			player.preg.womb.clear()
+		player.preg.womb.clear()
 		#/ralphD
 		return
 	for i in globals.slaves:
@@ -1495,8 +1494,7 @@ func nextdayevents():
 			i.away.at = 'in labor'
 			childbirth_loop(i)
 			i.cum.pussy = 0 #ralphD - better help npcs keep from being eternally preggers from 1 f%$& too
-			if !i.preg.womb.empty():
-				i.preg.womb.clear()
+			i.preg.womb.clear()
 			checkforevents = true
 			return
 		###---End Expansion---###
@@ -2905,7 +2903,7 @@ func selectslavelist(prisoners = false, calledfunction = 'popup', targetnode = s
 ###---End Expansion---###
 
 func _on_farmadd_pressed():
-	selectslavelist(false, 'farmassignpanel')
+	selectslavelist(true, 'farmassignpanel')
 
 func farmassignpanel(person):
 	#Handles putting a selected slave into the farm
