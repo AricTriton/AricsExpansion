@@ -1761,6 +1761,8 @@ func talkconsent(mode=''):
 				text += "\n\n[color=green]After getting closer with $name, you felt like $he unlocked new potential. [/color]"
 				### Levelup Removed by Ank BugFix v4a
 			person.consent = true
+		if globals.expansionsettings.perfectinfo == true:
+			text += "\n\nDifficulty [color=aqua]" + str(200-difficulty) + "[/color] | Required [color=aqua] 100 [/color]"
 
 	if mode == "pregnancy":
 		person.dailytalk.append('consentpregnant')
