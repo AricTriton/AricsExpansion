@@ -729,6 +729,7 @@ func _on_end_pressed():
 					person.obed += person.loyal/5 - (person.cour+person.conf)/10
 					globals.resources.food -= consumption
 				else:
+					text0.set_bbcode(text0.get_bbcode()+person.dictionary('[color=red]There was not enough food for $name.[/color]\n')) 
 					person.stress += 20
 					person.health -= rand_range(person.stats.health_max/6,person.stats.health_max/4)
 					person.obed -= max(35 - person.loyal/3,10)
