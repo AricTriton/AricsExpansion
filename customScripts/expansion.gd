@@ -2180,8 +2180,11 @@ func dailyUpdate(person):
 
 	dailyFetish(person)
 	#Flaw
+	var flawtext = ""
 	if person.dailyevents.find(person.mind.flaw) >= 0:
-		text += person.revealFlaw()
+		flawtext += person.revealFlaw()
+	if flawtext != "":
+		text += "\n" + flawtext
 
 	#Check Milk Leak
 	if person.lactation == true && person.lactating.milkedtoday == false && person.lactating.milkstorage > 0:

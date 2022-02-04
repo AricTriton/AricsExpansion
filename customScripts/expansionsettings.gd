@@ -152,6 +152,9 @@ var livestockloseconsentchance = 20
 #FetishDifficulty is what Fetish*10 is multiplied by for the Chance of Success
 var fetishdifficulty = 2
 
+#Base Fetish Increase Chance
+var fetish_base_increase_chance = 20
+
 #Fetishes can Lower
 var fetishescanlower = false
 

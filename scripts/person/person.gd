@@ -400,7 +400,7 @@ func checkFetish(fetish, alternatemod = 0, increase = true, addevent = true):
 		clamper = clamp(opinionrank-2, 0.5, 3)
 	else:
 		clamper = alternatemod
-	if rand_range(0,100) <= 20 + ((opinionrank*10) * clamper):
+	if rand_range(0,100) <= globals.expansionsettings.fetish_base_increase_chance + ((opinionrank*10) * clamper):
 		success = true
 		if addevent == true:
 			self.dailyevents.append(fetish)
