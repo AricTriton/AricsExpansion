@@ -2085,7 +2085,7 @@ func dailyUpdate(person):
 	#---Reclothe if Able and Unrestrained
 	if person.restrained == "none" && person != globals.player:
 		if person.rules.nudity == false:
-			if person.fetish.exhibitionism in ['dirty','taboo','none']:
+			if person.fetish.exhibitionism in ['dirty','taboo','unacceptable','uncertain','none']:
 				if person.exposed.chest == true && person.exposed.chestforced == false:
 					text += "\n$name covered $his tits. "
 					person.exposed.chest = false
@@ -2125,7 +2125,7 @@ func dailyUpdate(person):
 					person.exposed.ass = true
 	elif person.restrained != "none" && person != globals.player:
 		if person.exposed.chest == true || person.exposed.genitals == true || person.exposed.ass == true:
-			if person.fetish.exhibitionism in ['dirty','taboo','none']:
+			if person.fetish.exhibitionism in ['dirty','taboo','unacceptable','uncertain','none']:
 				text += "\n$name wanted to put back on $his clothing but couldn't due to $his restraints"
 #			if person.rules.nudity == true:
 #				text += "\n$name wanted to put back on $his clothing but couldn't due to $his restraints."
