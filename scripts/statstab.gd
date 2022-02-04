@@ -1737,13 +1737,13 @@ func talkconsent(mode=''):
 			text += "$He shows a troubled face and rejects your proposal. "
 			###---Added by Expansion---### Incest Check
 			if related != "unrelated" && person.consentexp.incest != true:
-				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " my " + str(related) + ". ")
+				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " my " + str(related) + ". [/color]")
 				person.dailyevents.append('incest')
 				if rand_range(0,5) + person.dailyevents.count('incest') >= 5:
 					text += "\nYou do see a flash of hesitation, however, and think that $he may be coming around to the idea of it. "
 					person.dailyevents.append('incest')
 			else:
-				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " you. ")
+				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " you. [/color]")
 		else:
 			person.lust += 3
 			text += "$He gives you a meek nod.\n[color=yellow]-" + person.quirk("Okay...I will have sex with you. ") + "[/color]"
