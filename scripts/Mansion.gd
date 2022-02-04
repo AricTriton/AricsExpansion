@@ -1350,9 +1350,9 @@ func _on_end_pressed():
 		text0.set_bbcode(text0.get_bbcode() + '[color=yellow]Some of your food reserves have spoiled.[/color]\n')
 
 	###---Added by Expansion---### Ovulation System
-	text0.set_bbcode(globals.expansion.nightly_womb(globals.player))
+	text0.set_bbcode(text0.get_bbcode()+globals.expansion.nightly_womb(globals.player))
 	for i in globals.slaves:
-		text0.set_bbcode(globals.expansion.nightly_womb(i))
+		text0.set_bbcode(text0.get_bbcode()+globals.expansion.nightly_womb(i))
 	###---End Expansion---###
 	
 	#####         Results
