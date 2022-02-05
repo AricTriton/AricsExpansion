@@ -1699,11 +1699,11 @@ func talkconsent(mode=''):
 		#Chance & Roll
 		consent_chance = (person.metrics.ownership*5) + (person.obed*.25) + (person.loyal*.5) + (person.fear*.25)
 		roll = round(rand_range(0,100))
-		#Modifiers; Captured Effect, Wrath Flaw
+		#Modifiers; Captured Effect, Wrath Vice
 		for i in person.effects.values():
 			if i.code == 'captured':
 				consent_chance -= i.duration * 25
-		if person.checkFlaw('wrath'):
+		if person.checkVice('wrath'):
 			consent_chance += round(person.cour * .2)
 		#Result
 		if roll <= consent_chance:

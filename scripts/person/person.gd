@@ -165,12 +165,16 @@ var mind = {
 	secretslog = "",
 	status = "none",
 	demeanor = "none",
-	flaw = "none",
-	flawless = false,
+	flaw = "none",					#TBK - Remove Next Save-Incompatible Version
+	flawless = false,				#TBK - Remove Next Save-Incompatible Version
+	vice = "none",
+	vice_presented = false,
+	vice_known = false,
+	vice_removed = false,
 	treatment = [],
 	respect = 0,
 	humiliation = 0,
-	lewd = 0
+	lewd = 0,
 }
 
 #Instinct is the base desired, based on Race. These are the current "Needs"
@@ -379,7 +383,8 @@ var randomname = true #True: The Slave Randomizes the name / False: The Slave's 
 #Daily Events: Exhaustion (Forced Rest), Consents, Fetishes
 var dailyevents = [] #Tracks pending events like "Milk Leak", "Pissing", etc
 var dailytalk = [] #Tracks Once Per Day Topics
-var flawknown = false
+
+var flawknown = false			#TBK - Remove on Next Save Incompatible Version
 
 #Not Implimented Yet
 var daylog = {} #Tracks Events from the Day Before | So far: brokerule_name or followedrule_name
@@ -825,11 +830,6 @@ func countluxury():
 		globals.resources.food -= 5
 		foodspent += 5
 		templuxury += 5
-		###---Added by Expansion---### Flaws; Gluttony
-		if globals.expansionsettings.flaw_luxury_effects == true && self.checkFlaw('gluttony') && globals.resources.food >= 8:
-			foodspent += 3
-			templuxury += 5
-		###---End Expansion---###
 	if rules.personalbath == true:
 		if spec != 'housekeeper':
 			value = 2
@@ -838,10 +838,6 @@ func countluxury():
 		if globals.itemdict.supply.amount >= value:
 			templuxury += 5
 			globals.itemdict.supply.amount -= value
-			###---Added by Expansion---### Flaws; Sloth & Pride
-			if globals.expansionsettings.flaw_luxury_effects == true && (self.checkFlaw('sloth') || self.checkFlaw('pride')):
-				templuxury += 2
-			###---End Expansion---###
 		else:
 			#nosupply == true
 			nosupply = true
@@ -854,77 +850,123 @@ func countluxury():
 			templuxury += 10
 			goldspent += value
 			globals.resources.gold -= value
-		###---Added by Expansion---### Flaws; Greed
-		if globals.expansionsettings.flaw_luxury_effects == true && self.checkFlaw('greed') && globals.resources.gold >= 5:
-			templuxury += 5
-			goldspent += 5
-			globals.resources.gold -= 5
-		###---End Expansion---###
 	if rules.cosmetics == true:
 		if globals.itemdict.supply.amount > 1:
 			templuxury += 5
 			globals.itemdict.supply.amount -= 1
-			###---Added by Expansion---### Flaws; Pride
-			if globals.expansionsettings.flaw_luxury_effects == true && self.checkFlaw('pride') && globals.itemdict.supply.amount > 1:
-				globals.itemdict.supply.amount -= 1
-				templuxury += 5
-			###---End Expansion---###
 		else:
 			nosupply = true
-	###---Added by Expansion---### Flaws; Lust, Sloth, Wrath
-	if globals.expansionsettings.flaw_luxury_effects == true:
-		if self.checkFlaw('lust') && lastsexday == globals.resources.day:
-			templuxury += 5
-		elif self.checkFlaw('sloth'):
-			if self.energy == self.stats.energy_max:
-				templuxury += 10
-			if self.stress <= self.stats.stress_max:
-				templuxury += 5
-		elif self.checkFlaw('wrath') && self.consentexp.party:
-			templuxury += clamp(self.metrics.ownership - self.metrics.win, -40, 100)
-	###---End Expansion---###
-	var luxurydict = {luxury = templuxury, goldspent = goldspent, foodspent = foodspent, nosupply = nosupply}
-	return luxurydict
-
-func calculateluxury():
-	var luxury = variables.luxuryreqs[origins]
-	if traits.has("Ascetic"):
-		luxury = luxury/2
-	elif traits.has("Spoiled"):
-		luxury *= 2
 	
-	###---Added by Expansion---### Flaws
-	if globals.expansionsettings.flaw_luxury_effects == true:
-		if self.checkFlaw('pride') && self.rules.cosmetics == false:
-			luxury += 5
-		elif self.checkFlaw('gluttony') && self.rules.betterfood == false:
-			luxury += 5
-		elif self.checkFlaw('greed') && self.rules.pocketmoney == false:
-			luxury += 5
-		elif self.checkFlaw('lust') && lastsexday != globals.resources.day:
-			luxury += clamp(round(globals.resources.day - lastsexday)*3, 1, 40)
-		elif self.checkFlaw('sloth'):
-			if self.energy < self.stats.energy_max * .5:
-				luxury += round((self.stats.energy_max - self.energy)*.1)
-			if self.stress > self.stats.stress_max * .5:
-				luxury += round((self.stats.stress_max - self.stress)*.1)
-		elif self.checkFlaw('envy'):
-			var envytarget = globals.expansion.getBestSlave()
-			if envytarget == self:				
-				luxury = 0
+	###---Added by Expansion---### Vices
+	var vice_modifier = 0
+	var roll = round(rand_range(0,100))
+	var vice_satisfied = false
+	if globals.expansionsettings.vices_luxury_effects == true && (self.mind.vice_known == true || roll <= globals.expansionsettings.vices_undiscovered_trigger_chance):
+		#Lust
+		if self.checkVice('lust'):
+			var vice_lust_mod = clamp(5 + round(self.lewdness * .1), 5, 15)
+			if self.work in ['fucktoy','fucktoywimborn','escortwimborn','whorewimborn','ffprostitution']:
+				vice_satisfied = true
+				vice_lust_mod += 5
+			if lastsexday == globals.resources.day || vice_satisfied == true:
+				vice_modifier = clamp(vice_lust_mod - ((globals.resources.day - self.lastsexday)*2), 0, 20)
 			else:
+				vice_modifier = clamp(vice_lust_mod - ((globals.resources.day - self.lastsexday)*2), -20, 10)
+		#Sloth
+		elif self.checkVice('sloth'):
+			if self.work in ['rest','housepet']:
+				vice_satisfied = true
+				vice_modifier += 5
+			if rules.personalbath == true:
+				vice_modifier += 5
+			if self.energy == self.stats.energy_max:
+				vice_modifier += 10
+			elif self.energy <= self.stats.energy_max * .25:
+				vice_modifier -= 5
+			if self.stress <= self.stats.stress_max * .25:
+				vice_modifier += 5
+			elif self.stress > self.stats.stress_max * .75:
+				vice_modifier -= 5
+			if vice_satisfied == true:
+				vice_modifier = clamp(vice_modifier, 0, 20)
+		#Wrath
+		elif self.checkVice('wrath') && self.consentexp.party:
+			if self.metrics.win >= self.metrics.ownership || self.work in ['guardian','slavecatcher','trainer','trainee']:
+				vice_satisfied = true
+			if vice_satisfied == true:
+				vice_modifier = clamp(self.metrics.win - self.metrics.ownership, 0, 40)
+			else:
+				vice_modifier = clamp(self.metrics.win - self.metrics.ownership, -20, 20)
+		#Pride
+		if self.checkVice('pride'):
+			if self.work in ['headgirl','farmmanager','jailer']:
+				vice_satisfied = true
+				vice_modifier += 10
+			if self.rules.cosmetics == true && globals.itemdict.supply.amount >= 1:
+				globals.itemdict.supply.amount -= 1
+				vice_modifier += 5
+			elif self.rules.cosmetics == false && vice_satisfied == false:
+				vice_modifier -= 10
+			if rules.personalbath == true:
+				vice_modifier += 5
+			elif rules.personalbath == false && vice_satisfied == false:
+				vice_modifier -= 10
+		#Gluttony
+		elif self.checkVice('gluttony'):
+			if self.work == 'cooking':
+				vice_satisfied = true
+				vice_modifier += 10
+			if self.rules.betterfood == false && globals.resources.food >= 8:
+				foodspent += 3
+				vice_modifier += 10
+			elif vice_satisfied == false:
+				vice_modifier -= 10
+		#Greed
+		elif self.checkVice('greed'):
+			if self.work in ['storewimborn','milkmerchant']:
+				vice_satisfied = true
+				vice_modifier += 10
+			if self.rules.pocketmoney == true && globals.resources.gold >= 5:
+				globals.resources.gold -= 5
+				goldspent += 5
+				vice_modifier += 10
+			elif self.rules.pocketmoney == false && vice_satisfied == false:
+				vice_modifier -= 10
+		#Envy
+		elif self.checkVice('envy'):
+			var envytarget = globals.expansion.getBestSlave()
+			if envytarget == self:			
+				vice_satisfied = true
+				vice_modifier += 20
+			else:
+				if self.work in ['headgirl','farmmanager','jailer']:
+					vice_satisfied = true
+					vice_modifier += 5
 				if envytarget.sleep in ['personal','your'] && !self.sleep in ['personal','your']:
-					luxury += 5
-				if envytarget.lastsexday > self.lastsexday && self.consent == true:
-					luxury += 3
-				if envytarget.stress < self.stress:
-					luxury += 2
-				if globals.originsarrayexp.find(envytarget.origins) > globals.originsarrayexp.find(self.origins):
-					luxury += 10
+					vice_modifier -= 5
 				else:
-					luxury -= 5
+					vice_modifier += 5
+				if envytarget.lastsexday > self.lastsexday && self.consent == true:
+					vice_modifier -= 5
+				else:
+					vice_modifier += 5
+				if envytarget.stress < self.stress * .5:
+					vice_modifier -= 5
+				else:
+					vice_modifier += 5
+				if globals.originsarrayexp.find(envytarget.origins) > globals.originsarrayexp.find(self.origins):
+					vice_modifier -= 10
+				else:
+					vice_modifier += 5
+			if vice_satisfied == true:
+				vice_modifier = clamp(vice_modifier, 0, 20)
+		#Calculation
+		if vice_modifier != 0:
+			vice_modifier = clamp(vice_modifier, -20, 20)
+			templuxury += vice_modifier
+	var luxurydict = {luxury = templuxury, goldspent = goldspent, foodspent = foodspent, nosupply = nosupply, vice_modifier = vice_modifier}
 	###---End Expansion---###
-	return luxury
+	return luxurydict
 
 func calculateprice():
 	var price = 0
@@ -1409,29 +1451,29 @@ func updateClothing():
 
 #---Flaws
 #Flaw Checks/Reveals
-func checkFlaw(type, countascheck = true):
-	var allflaws = globals.expansion.flawarray
+func checkVice(type, countascheck = true):
+	var allvices = globals.expansion.vicearray
 	var success = false
-	if !allflaws.has(type):
-		print('Flaw type ' + type + ' does not exist to be Checked')
+	if !allvices.has(type):
+		print('Vice type ' + type + ' does not exist to be Checked')
 		return success
 	
-	if self.mind.flaw == type:
+	if self.mind.vice == type:
 		success = true
 		if countascheck == true:
 			self.dailyevents.append(type)
 	
 	return success
 
-func revealFlaw(incomingtype = 'none'):
-	#use person.revealFlaw() to reveal their Flaw, use person.revealFlaw('type') to "guess" the flaw
-	if self.flawknown == true:
-		return "\nYou already know $his Flaw."
+func revealVice(incomingtype = 'none'):
+	#use person.revealVice() to reveal their Vice, use person.revealVice('type') to "guess" the vice
+	if self.mind.vice_known == true:
+		return "\nYou already know $his [color=aqua]Vice[/color]."
 	
-	var allflaws = globals.expansion.flawarray
+	var allvices = globals.expansion.vicearray
 	var text = ""
 	var type = incomingtype
-	if type != 'none' && !allflaws.has(type):
+	if type != 'none' && !allvices.has(type):
 		print('Flaw type ' + type + ' does not exist to be Revealed')
 		return
 	
@@ -1442,8 +1484,8 @@ func revealFlaw(incomingtype = 'none'):
 	type = self.mind.flaw
 	
 	if rand_range(0,100) <= (self.dailyevents.find(type) * 10) + guess_bonus:
-		self.flawknown = true
-		text = globals.expansion.flawdict[type]
+		self.mind.vice_known = true
+		text = globals.expansion.vicedict[type]
 	else:
 		self.dailyevents.append(type)
 	return text

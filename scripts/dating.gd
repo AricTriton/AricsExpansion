@@ -543,8 +543,8 @@ func gift(person, counter):
 	var text = ''
 	text += "You present [name2] with a small decorative gift. "
 	
-	###---Added by Expansion---### Person Expanded | Greed Flaw and Spelling Fixes
-	if person.obed >= 75 || person.mind.flaw == 'greed':
+	###---Added by Expansion---### Person Expanded | Greed Vice and Spelling Fixes
+	if person.obed >= 75 || person.mind.vice == 'greed':
 		self.mood += 7
 		person.loyal += 4
 		text = text + "[he2] accepts your gift with a pleasant smile on [his2] face.  "
@@ -552,7 +552,9 @@ func gift(person, counter):
 		text = text + "[he2] takes your gift arrogantly, barely respecting your intentions. "
 		self.mood += 3
 	
-	text += globals.expansion.checkGreed(person)
+	###---Person Expanded; Vice - Greed
+	if person.mind.vice_known == true && person.checkVice('greed'):
+		text += "You know that [he2] is " + globals.randomitemfromarray(['greedy','obsessed with material possessions','pretty greedy']) + " and is very susceptible to gifts and money.\n[color=green]Gifts and Money will always give the best result.[/color]\n "
 	###---End Expansion---###
 	
 	globals.resources.gold -= 10
@@ -563,8 +565,8 @@ func sweets(person, counter):
 	var text = ''
 	text += "You purchase some candies for [name2] from a local vendor. "
 	
-	###---Added by Expansion---### Person Expanded | Gluttony Flaw and Spelling Fixes
-	if person.obed >= 55 || person.mind.flaw == 'gluttony':
+	###---Added by Expansion---### Person Expanded; Vice - Gluttony & Spelling Fixes
+	if person.obed >= 55 || person.mind.vice == 'gluttony':
 		self.mood += 6
 		person.loyal += 3
 		text = text + "[he2] joyfully accepts them and enjoys the sweet taste.  "
@@ -573,7 +575,9 @@ func sweets(person, counter):
 		text = text + "[he2] takes your gift arrogantly, barely respecting your intentions. "
 		self.mood += 3
 	
-	text += globals.expansion.checkGluttony(person)
+	###---Person Expanded; Vice - Gluttony
+	if person.mind.vice_known == true && person.checkVice('gluttony'):
+		text += "You know that [he2] is " + globals.randomitemfromarray(['a glutton','gluttonous','obsessed with food and drink','a foodie','obsessed with food']) + " and takes joy in food and drinks.\n[color=green]Food and Drink Interactions will always give the best result.[/color]\n "
 	###---Expansion End---###
 	
 	globals.resources.gold -= 5
@@ -584,8 +588,8 @@ func sweets(person, counter):
 func tea(person, counter):
 	var text = ''
 	text += "You serve tea for you and [name2]. While drinking, you both chat and get a bit closer.  "
-	###---Added by Expansion---### Person Expanded | Gluttony Flaw
-	if counter <= 3 || randf() >= 0.5 || person.mind.flaw == 'gluttony':
+	###---Added by Expansion---### Person Expanded | Gluttony Vice
+	if counter <= 3 || randf() >= 0.5 || person.mind.vice == 'gluttony':
 		self.mood += 5
 		self.stress -= rand_range(2,5)
 		text += "[name2] seems to be pleased with your generosity and enjoys your company. "
@@ -593,8 +597,9 @@ func tea(person, counter):
 	else:
 		self.mood += 1
 	
-	###---Added by Expansion---### Person Expanded | Gluttony Flaw
-	text += globals.expansion.checkGluttony(person)
+	###---Person Expanded; Vice - Gluttony
+	if person.mind.vice_known == true && person.checkVice('gluttony'):
+		text += "You know that [he2] is " + globals.randomitemfromarray(['a glutton','gluttonous','obsessed with food and drink','a foodie','obsessed with food']) + " and takes joy in food and drinks.\n[color=green]Food and Drink Interactions will always give the best result.[/color]\n "
 	###---Expansion End---###
 	
 	globals.itemdict.supply.amount -= 1
@@ -605,23 +610,26 @@ func wine(person, counter):
 	var text = ''
 	text += "You serve fresh wine for you and [name2]. "
 	
-	###---Added by Expansion---### Person Expanded | Gluttony Flaw
+	###---Added by Expansion---### Person Expanded | Gluttony Vice
 	var refusal = false
-	if person.mind.flaw != 'gluttony':
+	if person.mind.vice != 'gluttony':
 		if self.mood < 23 && person.obed < 80:
 			refusal = true
 			text += "[he2] refuses to drink with you. "
 		else:
 			refusal = false
 	if refusal == false:
-		text += globals.expansion.checkGluttony(person)
-		if counter < 3 || person.mind.flaw == 'gluttony':
+		if counter < 3 || person.mind.vice == 'gluttony':
 			text += "[he2] drinks with you and [his2] mood seems to improve."
 			self.mood += 4
 			self.stress -= rand_range(6,12)
 		else:
 			self.mood += 2
 			text += "[he2] keeps you company, but the wine does not seem to affect [him2] as heavily as before. "
+		###---Person Expanded; Vice - Gluttony
+		if person.mind.vice_known == true && person.checkVice('gluttony'):
+			text += "You know that [he2] is " + globals.randomitemfromarray(['a glutton','gluttonous','obsessed with food and drink','a foodie','obsessed with food']) + " and takes joy in food and drinks.\n[color=green]Food and Drink Interactions will always give the best result.[/color]\n "
+		###---Expansion End---###
 	###---Expansion End---###
 	if person.traits.has("Alcohol Intolerance"):
 		drunkness += 2

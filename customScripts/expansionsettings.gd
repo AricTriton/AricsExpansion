@@ -2,7 +2,7 @@
 
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
-var modversion = "1.6a"
+var modversion = "1.6b"
 
 #---Aric's and Game's Base Values potentially changed by Ralph's
 var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within ApplyTweaks as well as the Hybrid system.
@@ -48,8 +48,19 @@ var use_nickname_plus_first_name = false
 #Show Once Per Day Conversations Available Notifications in Inspect
 var show_onceperday_notification = true
 
-#Flaw Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations
-var flaw_luxury_effects = true
+#---Vices (Formerly Flaws)
+#Vices Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations when enabled.)
+#Turning this off disables the entire Vice system in regards to Luxury Penalties or Bonuses
+var vices_luxury_effects = true
+
+#Chance for Vices to trigger when not Discovered. Set to 0 to disable the system entirely
+var vices_undiscovered_trigger_chance = 10
+
+#Does the Vice has to present itself (via the EOD check above) before it can be discovered via Mind Reading?
+var vices_discovery_has_to_present_first = false
+
+#Base Chance added to Vice Discovery in Mind Reading if it presented itself in an End of Day before
+var vices_discovery_presentation_bonus = 20
 
 #---Genitals Expanded
 #Chance of Holes staying Stretched during Sex. Chance + (Elasticity*10)
@@ -452,7 +463,7 @@ func addConstantsSupport():
 		autoattackability = {descript = "Use abilities on auto attack, left to right. Hint: reorder/activate abilities in the character info menu when out.", object = self},
 		brutalcontent = {descript = "Content Filter, set this to false if you don't want to see extreme violent content, like executions", object = self},
 		ihavebloodygoodtaste = {descript = "Set this to true to include British themed descriptions", object = self},
-		flaw_luxury_effects = {descript = "Flaw Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations", object = self},
+		vices_luxury_effects = {descript = "Vice Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations", object = self},
 		uniqueslavesautopartyconsent = {descript = "If set to true, Unique Slaves will join your party without having to ask for consent first", object = self},
 		lipstraitbasechance = {descript = "Lip Size Increase Change (Chance is array-5*10, ie: plump and bigger give 10)", min = 0.0, max = 50.0, object = self},
 		playerattractionmodifier = {descript = "Base Bonus or Penalty for Attraction Checks for PCs", min = -100.0, max = 100.0, object = self},

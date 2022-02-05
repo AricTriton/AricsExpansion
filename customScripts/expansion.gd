@@ -87,8 +87,8 @@ var moodarray = ['sad','angry','scared','indifferent','obediant','horny','respec
 var demeanorarray = ['meek','shy','reserved','open','excitable']
 
 #Flaws
-var flawarray = ['lust','envy','pride','wrath','greed','sloth','gluttony']
-var flawdict = {
+var vicearray = ['lust','envy','pride','wrath','greed','sloth','gluttony']
+var vicedict = {
 	lust = "\n[color=lime]You have discovered that $he is wrought with [color=red]Lust[/color] and hyperactive in $his sexuality.[/color]\n[color=green]Sexual Consent and Actions will be easier to initiate.[/color]\n[color=green]Luxury +5 if [color=aqua]Fucked[/color] that day.[/color]\n[color=red]Every day they aren't Fucked, Luxury Requirement +3[/color]",
 	pride = "\n[color=lime]You have discovered that $he is incredibly [color=red]Prideful[/color] and focused on $his own appearance.[/color]\n[color=green]If permitted [color=aqua]Cosmetics[/color], uses [color=aqua]+1 Supply[/color] for +5 Luxury (if possible). If permitted a [color=aqua]Personal Bath[/color], Luxury +2.[/color]\n[color=red]If not permitted [color=aqua]Cosmetics[/color], Luxury Requirement +5[/color]",
 	wrath = "\n[color=lime]You have discovered that $he is filled with [color=red]Wrath[/color], is plagued with a short temper, and feels unsettled if $he isn't able to fight.[/color]\n[color=green]More likely to [color=aqua]Consent[/color] to [color=aqua]Fight Alongside You[/color] with the chance increasing based on their [color=aqua]Courage[/color].[/color]\n[color=green]If [color=aqua]Consent to Fight[/color] has been given, their Luxury will increase (or possibly decrease) by their [color=aqua]Days Owned[/color] minus their total [color=aqua]Combat Wins[/color][/color]",
@@ -96,6 +96,7 @@ var flawdict = {
 	sloth = "\n[color=lime]You have discovered that $he is very lazy and a complete [color=red]Sloth[/color]. $He is happiest when allowed not to do anything at all.[/color]\n[color=green]If permitted a [color=aqua]Personal Bath[/color], Luxury +2.[/color]\n[color=green]If ending the day with full [color=aqua]Energy[/color], Luxury +10. If ending the day with 25 percent or lower [color=aqua]Stress[/color], Luxury +5[/color]\n[color=red]If [color=aqua]Energy[/color] is below half or [color=aqua]Stress[/color] is above half (calculated separately), Luxury Requirement is increased by 10 Percent of the Difference of Max to Current.[/color]",
 	gluttony = "\n[color=lime]You have discovered that $he is very [color=red]Gluttonous[/color] and takes $his greatest pleasure in food and drinks.[/color]\n[color=green]Food and Drink Interactions will always give the best result on Dates.[/color]\n[color=green]If permitted [color=aqua]Better Food[/color], uses +3 Food for +5 Luxury (if possible)[/color]\n[color=red]If not permitted [color=aqua]Better Food[/color], Luxury Requirement +5[/color]",
 	envy = "\n[color=lime]You have discovered that $he is incredibly [color=red]Envious[/color] of others.[/color]\n[color=green]If they are considered the [color=aqua]Best Slave[/color] (per the standard formula of Level+DaysOwned+Sex+Wins), negates all Luxury Requirements. Otherwise, if they are of a higher [color=aqua]Grade[/color] than the [color=aqua]Best Slave[/color], Luxury +5.[/color]\n[color=red]If they are not the [color=aqua]Best Slave[/color], they compare their [color=aqua]Beds[/color], [color=aqua]Last Sex Days[/color], [color=aqua]Grade[/color], and [color=aqua]Stress Levels[/color] for a maximum of +20 Luxury Requirement.[/color]",
+	none = "\n$He is [color=aqua]Vice-less[/color]. $He doesn't seem to have any particular [color=aqua]Vice[/color] at at all.",
 }
 
 var libidoarray = ['prudish','low','average','seductive','nympho']
@@ -2136,12 +2137,6 @@ func dailyUpdate(person):
 	###Night Phase###
 
 	dailyFetish(person)
-	#Flaw
-	var flawtext = ""
-	if person.dailyevents.find(person.mind.flaw) >= 0:
-		flawtext += person.revealFlaw()
-	if flawtext != "":
-		text += "\n" + flawtext
 
 	#Check Milk Leak
 	if person.lactation == true && person.lactating.milkedtoday == false && person.lactating.milkstorage > 0:
@@ -3315,24 +3310,6 @@ func checkIncest(person):
 			if modifier == 0:
 				modifier += rand_range(-1,1)
 	return modifier
-
-func checkGluttony(person):
-	var text = ""
-	if person.mind.flaw == 'gluttony':
-		person.dailyevents.append('gluttony')
-		if rand_range(0,10) + person.dailyevents.find('gluttony') >= 10:
-			person.flawknown = true
-			text = "\n[color=green]You have discovered that [he2] is secretly " + globals.randomitemfromarray(['a glutton','gluttonous','obsessed with food and drink']) + " and takes joy in food and drinks.[/color]\n[color=aqua]Food and Drink Interactions will always give the best result.[/color]\n "
-	return text
-
-func checkGreed(person):
-	var text = ""
-	if person.mind.flaw == 'greed':
-		person.dailyevents.append('greed')
-		if rand_range(0,10) + person.dailyevents.find('greed') >= 10:
-			person.flawknown = true
-			text = "\n[color=green]You have discovered that [he2] is secretly " + globals.randomitemfromarray(['greedy','obsessed with material possessions','pretty greedy']) + " and is very susceptible to gifts and money.[/color]\n[color=aqua]Gifts and Money will always give the best result.[/color]\n "
-	return text
 
 func quickStrip(person):
 	person.exposed.chest = true
