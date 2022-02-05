@@ -1028,9 +1028,6 @@ func baddiedeath():
 		globals.clearrelativesdata(self.id)
 	if globals.state.allnpcs.has(self):
 		globals.state.allnpcs.erase(self)
-	for npcs in globals.state.npclastlocation:
-		if npcs[1] == self.id:
-			globals.state.npclastlocation.erase(npcs)
 	for npcs in globals.state.offscreennpcs:
 		if npcs[0] == self.id:
 			globals.state.offscreennpcs.erase(npcs)

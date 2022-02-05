@@ -292,13 +292,12 @@ func enemydefeated():
 					else:
 						globals.items.unequipitemraw(enemygear[i],baddie)
 			globals.state.allnpcs = baddie
-			#globals.state.npclastlocation.append([currentzone.code, baddie.id, reencounterchance])
 			#Check is because the citizen will be altered elsewhere before and removed from above later
 			if baddie.npcexpanded.citizen == true:
 				reputation += round(rand_range(1,5)) + globals.originsarray.find(baddie.origins)
 				status = 'citizen'
 			else:
-				reputation -= round(rand_range(1,5) + rand_range(-globals.originsarray.find(baddie.origins), globals.originsarray.find(baddie.origins)))
+				reputation -= round(rand_range(1,5) + globals.originsarray.find(baddie.origins)*rand_range(-1, 1))
 				status = 'criminal'
 			globals.state.offscreennpcs.append([baddie.id, currentzone.code, reencounterchance, 'escaping', reputation, status])
 			###---End Expansion---###
@@ -508,12 +507,11 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 				baddie.npcexpanded.timesreleased += 1
 				baddie.npcexpanded.lastevent = 'fought'
 				var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(globals.expansion.enemyreencountermodifier * rand_range(-1,1))
-				#globals.state.npclastlocation.append([currentzone.code, baddie.id, reencounterchance])
 				if baddie.npcexpanded.citizen == true:
 					reputation = round(rand_range(1,5)) + globals.originsarray.find(baddie.origins)
 					status = 'citizen'
 				else:
-					reputation = -round(rand_range(1,5) + rand_range(-globals.originsarray.find(baddie.origins), globals.originsarray.find(baddie.origins)))
+					reputation = -round(rand_range(1,5) + globals.originsarray.find(baddie.origins)*rand_range(-1, 1))
 					status = 'criminal'
 				globals.state.allnpcs = baddie
 				globals.state.offscreennpcs.append([baddie.id, currentzone.code, reencounterchance, 'defeated', reputation, status])
@@ -525,12 +523,11 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 				baddie.npcexpanded.timesreleased += 1
 				baddie.npcexpanded.lastevent = 'rescued'
 				var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(globals.expansion.enemyreencountermodifier * rand_range(-1,1))
-				#globals.state.npclastlocation.append([currentzone.code, baddie.id, reencounterchance])
 				if baddie.npcexpanded.citizen == true:
 					reputation = round(rand_range(1,5)) + globals.originsarray.find(baddie.origins)
 					status = 'citizen'
 				else:
-					reputation = -round(rand_range(1,5) + rand_range(-globals.originsarray.find(baddie.origins), globals.originsarray.find(baddie.origins)))
+					reputation = -round(rand_range(1,5) + globals.originsarray.find(baddie.origins)*rand_range(-1, 1))
 					status = 'criminal'
 				globals.state.allnpcs = baddie
 				globals.state.offscreennpcs.append([baddie.id, currentzone.code, reencounterchance, 'roaming', reputation, status])
@@ -669,11 +666,10 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 				reputation = round(rand_range(1,5)) + globals.originsarray.find(baddie.origins)
 				status = 'citizen'
 			else:
-				reputation = -round(rand_range(1,5) + rand_range(-globals.originsarray.find(baddie.origins), globals.originsarray.find(baddie.origins)))
+				reputation = -round(rand_range(1,5) + globals.originsarray.find(baddie.origins)*rand_range(-1, 1))
 				status = 'criminal'
 			globals.state.allnpcs = baddie
 			globals.state.offscreennpcs.append([baddie.id, currentzone.code, reencounterchance, 'raped', reputation, status])
-			#globals.state.npclastlocation.append([currentzone.code, baddie.id, reencounterchance])
 			###---End Expansion---###
 		
 		for i in globals.state.playergroup:

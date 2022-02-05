@@ -250,6 +250,7 @@ var characters = {
 	Tia = {
 		basics = ['Human', 'teen', 'female', 'commoner'],
 		name = 'Tia',
+		unique = 'Tia',
 		surname = '',
 		imageportait = 'res://files/aric_expansion_images/characters/tiaportrait.png',
 		beautybase = 75,
