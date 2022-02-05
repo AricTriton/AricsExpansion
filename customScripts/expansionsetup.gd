@@ -173,6 +173,10 @@ func expandGame():
 		if str(person.expansionversion) != str(globals.expansionsettings.modversion):
 			globals.backwardscompatibility.backwardsCompatibility(person)
 		globals.expansion.updatePerson(person)
+		if person.race == "Dragonkin" && person.scalecolor == '':
+			person.scalecolor = globals.randomfromarray(globals.races["Dragonkin"].scalecolor)
+		if person.race == "Harpy" && person.feathercolor == '':
+			person.feathercolor = globals.randomfromarray(globals.races["Harpy"].feathercolor)
 	for i in globals.guildslaves:
 		for person in globals.guildslaves[i]:
 			if person.expanded == false:
@@ -181,6 +185,11 @@ func expandGame():
 			if str(person.expansionversion) != str(globals.expansionsettings.modversion):
 				globals.backwardscompatibility.backwardsCompatibility(person)
 			globals.expansion.updatePerson(person)
+			if person.race == "Dragonkin" && person.scalecolor == '':
+				person.scalecolor = globals.randomfromarray(globals.races["Dragonkin"].scalecolor)
+			if person.race == "Harpy" && person.feathercolor == '':
+				person.feathercolor = globals.randomfromarray(globals.races["Harpy"].feathercolor)
+
 
 	#---BugFixing & Cleanup
 	#erase NPCs with duplicate ids to slaves
@@ -204,13 +213,13 @@ func expandGame():
 	
 	#v1.8 prolly
 	#add weapon scaling attributes to all weapons
-	for item in globals.state.unstackables:
+	for item in globals.state.unstackables.values():
 		var refEffect = globals.itemdict[item.code].effect
 		var newEffects = refEffect.duplicate(true)
 		for j in item.effects:
 			var isPresent = false
 			for k in refEffect:
-				if j.effect == k.effect && j.get('id') == k.get('id')::
+				if j.effect == k.effect && j.get('id') == k.get('id'):
 					isPresent = true
 					break
 			if !isPresent:

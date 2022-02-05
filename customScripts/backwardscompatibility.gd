@@ -155,31 +155,25 @@ func backwardsCompatibility(person):
 	
 	#Genealogy Changes
 	if !person.genealogy.has('ogre'):
-		person.genealogy['ogre') = 0
+		person.genealogy['ogre'] = 0
 	if !person.genealogy.has('giant'):
-		person.genealogy['giant') = 0
+		person.genealogy['giant'] = 0
 	if !person.genealogy.has('kobold'):
-		person.genealogy['kobold') = 0
+		person.genealogy['kobold'] = 0
 	if !person.genealogy.has('lizardfolk'):
-		person.genealogy['lizardfolk') = 0
+		person.genealogy['lizardfolk'] = 0
 	if !person.genealogy.has('avali'):
-		person.genealogy['avali') = 0
+		person.genealogy['avali'] = 0
 	if !person.genealogy.has('hyena'):
-		person.genealogy['hyena') = 0
+		person.genealogy['hyena'] = 0
 	if !person.genealogy.has('mouse'):
-		person.genealogy['mouse') = 0
+		person.genealogy['mouse'] = 0
 	if !person.genealogy.has('squirrel'):
-		person.genealogy['squirrel') = 0
+		person.genealogy['squirrel'] = 0
 	if !person.genealogy.has('otter'):
-		person.genealogy['otter') = 0
+		person.genealogy['otter'] = 0
 	if !person.genealogy.has('bird'):
-		person.genealogy['bird') = 0
-
-	#Description Changes
-	if !person.has('scalecolor'):
-		person.('scalecolor') = ''
-	if !person.has('feathercolor'):
-		person.('feathercolor') = ''
+		person.genealogy['bird'] = 0
 
 	#---Only Activate if Mandatory for Compatibility
 #	if person.expansionversion < globals.expansionsettings.modversion:
