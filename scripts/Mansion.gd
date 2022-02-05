@@ -729,6 +729,7 @@ func _on_end_pressed():
 					person.obed += person.loyal/5 - (person.cour+person.conf)/10
 					globals.resources.food -= consumption
 				else:
+					text0.set_bbcode(text0.get_bbcode()+person.dictionary('[color=red]There was not enough food for $name.[/color]\n')) 
 					person.stress += 20
 					person.health -= rand_range(person.stats.health_max/6,person.stats.health_max/4)
 					person.obed -= max(35 - person.loyal/3,10)
@@ -1350,9 +1351,9 @@ func _on_end_pressed():
 		text0.set_bbcode(text0.get_bbcode() + '[color=yellow]Some of your food reserves have spoiled.[/color]\n')
 
 	###---Added by Expansion---### Ovulation System
-	text0.set_bbcode(globals.expansion.nightly_womb(globals.player))
+	text0.set_bbcode(text0.get_bbcode()+globals.expansion.nightly_womb(globals.player))
 	for i in globals.slaves:
-		text0.set_bbcode(globals.expansion.nightly_womb(i))
+		text0.set_bbcode(text0.get_bbcode()+globals.expansion.nightly_womb(i))
 	###---End Expansion---###
 	
 	#####         Results

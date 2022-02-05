@@ -323,7 +323,10 @@ func enemydefeated():
 						enemyloot.unstackables.append(globals.state.unstackables[i])
 					else:
 						globals.items.unequipitemraw(enemygear[i],unit.capture)
-						if randf() * 100 <= variables.geardropchance:
+						var bonus = 0
+						if globals.state.spec == 'Hunter':
+							bonus+=20
+						if randf() * 100 <= variables.geardropchance + bonus:
 							enemyloot.unstackables.append(enemygear[i])
 					###---End Expansion---###
 		var rewards = unit.rewardpool
