@@ -644,7 +644,7 @@ func marketsattext():
 	var extrazero = ".0"
 	var racetext
 	var marketrate = 1
-	sattext = "\n\nA sign board lists current relative pricing by race:\n"
+	sattext = "\nA Sign Board lists current relative pricing by race.\n\n[color=#d1b970]'Current Racial Pricing'[/color]\n"
 	for i in globals.races:
 		marketrate = round(globals.state.racemarketsat[i]*100)/100
 		racetext = i.replace('Beastkin', '')
@@ -2608,12 +2608,13 @@ func brothelservices():
 		text += "\n\n[color=yellow]—Both girls are just 50 gold each for the next half-hour.[/color]"
 	else:
 		text += "\n\n[color=yellow]—She is just 50 gold for the next half-hour.[/color]"
+	text += "\nShe holds a parchment out towards you with the prices listed.\n\n[color=#d1b970]'Cost of Pleasure'[/color]\nDark Elf | -50 gold for +10 mana\nFairy | -50 gold for +25 energy"
 	var counter = 0
 	
 	mansion.maintext = text
-	var array = [{name = 'Choose the Dark Elf | -50 gold & +10 mana', function = 'brothelservicesmana'},{name = 'No thanks', function = 'brothel'}]
+	var array = [{name = 'Choose the sensual Dark Elf', function = 'brothelservicesmana'},{name = 'No thanks', function = 'brothel'}]
 	if globals.player.energy < 100:
-		array.insert(0,{name = 'Choose the perky Fairy | -50 gold & +25 energy', function = 'brothelservicesenergy'})
+		array.insert(0,{name = 'Choose the energetic Fairy', function = 'brothelservicesenergy'})
 	buildbuttons(array)
 
 func brothelservicesenergy():

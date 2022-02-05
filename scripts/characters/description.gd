@@ -90,7 +90,7 @@ func onceperdayConvos():
 			text += "\n[color=aqua]Encourage or Discourage the Number of Kids $He Wants[/color]"
 		#Crystal
 		if !person.dailytalk.has('crystalresearch') && globals.state.thecrystal.power <= person.smaf - 1:
-			text += "\n[color=aqua]Attempt to Research the Crystal[/color]: $His [color=aqua]Wit[/color] equates to $his chance of success to not accidentally make the [color=aqua]Crystal[/color] more [color=aqua]Powerful[/color] and harder to [color=aqua]Research[/color]."
+			text += "\n[color=aqua]Attempt to Research the Crystal[/color]\n     $His [color=aqua]Wit[/color] equates to $his chance of success to not accidentally make the [color=aqua]Crystal[/color] more [color=aqua]Powerful[/color] and harder to [color=aqua]Research[/color]."
 			if globals.state.thecrystal.mode == "dark":
 				text += "\n[color=red]Extreme Failure may result in $his being consumed by the [color=aqua]Crystal[/color] to sate its hunger.[/color]"
 		

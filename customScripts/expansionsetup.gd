@@ -49,10 +49,6 @@ func expandGame():
 				person.npcexpanded['reputation'] = round(rand_range(1,5))
 			else:
 				person.npcexpanded['reputation'] = round(rand_range(-1,-5))
-		#v1.6a
-		if typeof(globals.resources.farmexpanded.worker_cycle) != TYPE_DICTIONARY || globals.resources.farmexpanded.worker_cycle.has('herder'):
-			globals.resources.farmexpanded.worker_cycle = {'farmhand':[], 'milkmaid':[], 'stud':[]}
-			globals.resources.farmexpanded.work_type = ''
 # Unneeded?
 #		#NPCs Expanded
 #		if person.npcexpanded == null:
@@ -95,6 +91,10 @@ func expandGame():
 		globals.resources.farmexpanded['worker_cycle'] = []
 	if !globals.resources.farmexpanded.has('work_type'):
 		globals.resources.farmexpanded['work_type'] = ""
+	#v1.6a
+	if typeof(globals.resources.farmexpanded.worker_cycle) != TYPE_DICTIONARY || globals.resources.farmexpanded.worker_cycle.has('herder'):
+		globals.resources.farmexpanded.worker_cycle = {'farmhand':[], 'milkmaid':[], 'stud':[]}
+		globals.resources.farmexpanded.work_type = ''
 	#Commented Out as throws up errors
 #	if !globals.state.has('farmexpanded'):
 #		globals.state['farmexpanded'] = {aphrodisiacs = 0, production = "food", extraction='hand', totalcontainers = {bucket = -1, pail = -1, jug = -1, canister = -1}, autopump=false, restraints=[], zones = {sleeplocations = ['field'], worklocations = ['field'], furnishings = ['dirt']}, objects = []}
@@ -128,35 +128,28 @@ func expandGame():
 	#NPC Array Change
 	if !globals.state.npclastlocation.empty():
 		#offscreennpcs = [person.id, location.code, encounterchance, action, reputation, status]
-		for npcarray in globals.state.npclastlocation:
-			var newarray = []
+		for npcarray in globals.state.npclastlocation.duplicate():
 			var npc = globals.state.findnpc(npcarray[1])
 			if npc == null:
 				continue
 	
 			var id = npcarray[1]
-			newarray.append(id)
 			var location = npcarray[0]
-			newarray.append(location)
 			var encounterchance = npcarray[2]
-			newarray.append(encounterchance)
 			var action = npc.npcexpanded.dailyaction
 			if action == "":
 				action = "resting"
-			newarray.append(action)
 			var reputation = 0
 			var status = ""
 			if npc.npcexpanded.citizen == true:
 				reputation = round(rand_range(1,5)) + globals.originsarray.find(npc.origins)
 				status = 'citizen'
 			else:
-				reputation = -round(rand_range(1,5) + rand_range(-globals.originsarray.find(npc.origins), globals.originsarray.find(npc.origins)))
+				reputation = -round(rand_range(1,5) + globals.originsarray.find(npc.origins)*rand_range(-1, 1))
 				status = 'criminal'
-			newarray.append(action)
-			newarray.append(status)
+			globals.state.offscreennpcs.append([id,location,encounterchance,action,reputation,status])
 			globals.state.npclastlocation.erase(npcarray)
-			globals.state.offscreennpcs.append(newarray)
-	globals.state.npclastlocation.clear()
+		globals.state.npclastlocation.clear()
 	#Restoring Old Reputations
 	for npc in globals.state.offscreennpcs:
 		var person = globals.state.findnpc(npc[0])

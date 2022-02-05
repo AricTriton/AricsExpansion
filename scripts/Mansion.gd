@@ -737,6 +737,7 @@ func _on_end_pressed():
 					person.obed += person.loyal/5 - (person.cour+person.conf)/10
 					globals.resources.food -= consumption
 				else:
+					text0.set_bbcode(text0.get_bbcode()+person.dictionary('[color=red]There was not enough food for $name.[/color]\n')) 
 					person.stress += 20
 					person.health -= rand_range(person.stats.health_max/6,person.stats.health_max/4)
 					person.obed -= max(35 - person.loyal/3,10)
@@ -1360,9 +1361,9 @@ func _on_end_pressed():
 		text0.set_bbcode(text0.get_bbcode() + '[color=yellow]Some of your food reserves have spoiled.[/color]\n')
 
 	###---Added by Expansion---### Ovulation System
-	text0.set_bbcode(globals.expansion.nightly_womb(globals.player))
+	text0.set_bbcode(text0.get_bbcode()+globals.expansion.nightly_womb(globals.player))
 	for i in globals.slaves:
-		text0.set_bbcode(globals.expansion.nightly_womb(i))
+		text0.set_bbcode(text0.get_bbcode()+globals.expansion.nightly_womb(i))
 	###---End Expansion---###
 	
 	#####         Results
@@ -1490,8 +1491,7 @@ func nextdayevents():
 		checkforevents = true
 		#ralphD - trying to stop my MC from being eternally fertilized 8P
 		player.cum.pussy = 0
-		if !player.preg.womb.empty():
-			player.preg.womb.clear()
+		player.preg.womb.clear()
 		#/ralphD
 		return
 	for i in globals.slaves:
@@ -1505,8 +1505,7 @@ func nextdayevents():
 			i.away.at = 'in labor'
 			childbirth_loop(i)
 			i.cum.pussy = 0 #ralphD - better help npcs keep from being eternally preggers from 1 f%$& too
-			if !i.preg.womb.empty():
-				i.preg.womb.clear()
+			i.preg.womb.clear()
 			checkforevents = true
 			return
 		###---End Expansion---###
@@ -2996,7 +2995,7 @@ func selectslavelist(prisoners = false, calledfunction = 'popup', targetnode = s
 ###---End Expansion---###
 
 func _on_farmadd_pressed():
-	selectslavelist(false, 'farmassignpanel')
+	selectslavelist(true, 'farmassignpanel')
 
 func farmassignpanel(person):
 	#Handles putting a selected slave into the farm

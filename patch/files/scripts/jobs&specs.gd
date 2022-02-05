@@ -879,15 +879,7 @@ func cooking(person):
 	var gold = 0
 	var food = 0
 	person.xp += globals.slavecount() * globals.expansionsettings.food_experience
-	if globals.resources.food < 200:
-		var scaling = 20.0 / globals.itemdict.food.cost
-		var temp = min(globals.state.foodbuy, globals.resources.foodcaparray[globals.state.mansionupgrades.foodcapacity] - globals.resources.food)
-		if globals.resources.gold >= floor(temp/scaling):
-			text = '$name went to purchase groceries and brought back new food supplies.\n'
-			gold = -floor(temp/scaling)
-			food = temp
-		else:
-			text = '$name complained about the lack of food and no money to supply the kitchen on $his own.\n'
+	text += '$name spent $his time preparing meals for everyone.\n'
 	###---Added by Expansion---### Job Skills
 	var bonusfood = 0
 	person.add_jobskill('cook', 1)
@@ -896,10 +888,24 @@ func cooking(person):
 		bonusfood = round(rand_range(person.jobskills.cook*.1, person.jobskills.cook))
 		text += "$name had a flash of inspiration today and scraped together an impromptu meal with surprising ingredients. $He added [color=green]" + str(bonusfood) + " Food[/color] to the food supply with $his clever cooking. "
 		if globals.expansionsettings.perfectinfo == true:
-			text += "- " + str(chance) + "% Chance"
+			text += "- " + str(chance) + "% Chance "
 		food += bonusfood
 	###---End Expansion---###
-	text += '$name spent $his time preparing meals for everyone.\n'
+	var maxFood = min(globals.state.foodbuy,globals.resources.foodcaparray[globals.state.mansionupgrades.foodcapacity])
+	var foodDiff = int(maxFood - globals.resources.food - food)
+	var toBuy = int(gold + globals.resources.gold)
+	var foodPrice = globals.itemdict.food.cost
+	var foodCount = 20
+	if foodDiff > 0:
+		foodDiff -= foodDiff % foodCount
+		foodDiff /= foodCount
+		toBuy -= toBuy % foodPrice
+		toBuy /= foodPrice
+		toBuy = min(foodDiff,toBuy)
+		if toBuy > 0:
+			text += "$He purchased [color=aqua]" + str(toBuy * foodCount) + "[/color] food, costing [color=yellow]" + str(toBuy * foodPrice) + "[/color] gold.\n"
+			gold -= toBuy * foodPrice
+			food += toBuy * foodCount
 	text = person.dictionary(text)
 	var dict = {text = text, gold = gold, food = food}
 	return dict
@@ -1835,7 +1841,7 @@ func public_nudity_law(person, gold):
 				#Reduced due to Charm
 				d100 = round(rand_range(0,100))
 				if d100 <= person.charm:
-					text += "[color=aqua]$name[/color][color=red] managed to [color=aqua]Charm[/color] them down to only fining $him [color=yellow]25[/color] instead. "
+					text += "[color=aqua]$name[/color][color=red] managed to [color=aqua]Charm[/color] them down to only fining $him [color=yellow]25[/color] instead. [/color]"
 					fine = 25
 				if globals.expansionsettings.perfectinfo == true:
 					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Chance to Reduce Fine[/color] of [color=aqua]" + str(person.charm) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color] || "

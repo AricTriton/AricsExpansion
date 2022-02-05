@@ -1398,6 +1398,7 @@ var sexuality_images = {
 
 <AddTo 0>
 func _ready():
+	expansionsettings.addConstantsSupport()
 	constructor.fillSizeArrayDict()
 	if useRalphsTweaks:
 		expansionsettings.applyRalphsTweaks()

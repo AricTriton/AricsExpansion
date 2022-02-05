@@ -402,7 +402,7 @@ func checkFetish(fetish, alternatemod = 0, increase = true, addevent = true):
 		clamper = clamp(opinionrank-2, 0.5, 3)
 	else:
 		clamper = alternatemod
-	if rand_range(0,100) <= 20 + ((opinionrank*10) * clamper):
+	if rand_range(0,100) <= globals.expansionsettings.fetish_base_increase_chance + ((opinionrank*10) * clamper):
 		success = true
 		if addevent == true:
 			self.dailyevents.append(fetish)
@@ -910,16 +910,17 @@ func countluxury():
 			###---End Expansion---###
 		else:
 			nosupply = true
-	###---Added by Expansion---### Flaws; Lust
-	if self.checkFlaw('lust') && lastsexday == globals.resources.day:
-		templuxury += 5
-	elif self.checkFlaw('sloth'):
-		if self.energy == self.stats.energy_max:
-			templuxury += 10
-		if self.stress <= self.stats.stress_max:
+	###---Added by Expansion---### Flaws; Lust, Sloth, Wrath
+	if globals.expansionsettings.flaw_luxury_effects == true:
+		if self.checkFlaw('lust') && lastsexday == globals.resources.day:
 			templuxury += 5
-	elif self.checkFlaw('wrath') && self.consentexp.party:
-		templuxury += self.metrics.ownership - self.metrics.win
+		elif self.checkFlaw('sloth'):
+			if self.energy == self.stats.energy_max:
+				templuxury += 10
+			if self.stress <= self.stats.stress_max:
+				templuxury += 5
+		elif self.checkFlaw('wrath') && self.consentexp.party:
+			templuxury += clamp(self.metrics.ownership - self.metrics.win, -40, 100)
 	###---End Expansion---###
 	var luxurydict = {luxury = templuxury, goldspent = goldspent, foodspent = foodspent, nosupply = nosupply}
 	return luxurydict
@@ -940,7 +941,7 @@ func calculateluxury():
 		elif self.checkFlaw('greed') && self.rules.pocketmoney == false:
 			luxury += 5
 		elif self.checkFlaw('lust') && lastsexday != globals.resources.day:
-			luxury += round(globals.resources.day - lastsexday)*3
+			luxury += clamp(round(globals.resources.day - lastsexday)*3, 1, 40)
 		elif self.checkFlaw('sloth'):
 			if self.energy < self.stats.energy_max * .5:
 				luxury += round((self.stats.energy_max - self.energy)*.1)
@@ -1067,9 +1068,6 @@ func baddiedeath():
 		globals.clearrelativesdata(self.id)
 	if globals.state.allnpcs.has(self):
 		globals.state.allnpcs.erase(self)
-	for npcs in globals.state.npclastlocation:
-		if npcs[1] == self.id:
-			globals.state.npclastlocation.erase(npcs)
 	for npcs in globals.state.offscreennpcs:
 		if npcs[0] == self.id:
 			globals.state.offscreennpcs.erase(npcs)

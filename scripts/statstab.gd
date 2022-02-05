@@ -303,7 +303,7 @@ func _on_talk_pressed(mode = 'talk'):
 	#---Number of Children---#
 	elif mode == 'general_slave_topics_numberofkids':
 		person.dailytalk.append('desiredoffspring')
-		if rand_range(0,100) <= (person.loyal*.5) + (person.obed*.25) + rand_range(0,25):
+		if rand_range(0,100) <= (person.loyal*.25) + (person.obed*.25) + (globals.fetishopinion.find(person.fetish.pregnancy) * 5) + rand_range(0,25):
 			person.knowledge.append('desiredoffspring')
 			text = str(expansion.getIntro(person)) + " $name thinks for a moment.\n[color=yellow]-"+ person.quirk('I think...about ' +str(person.pregexp.desiredoffspring)+ ' would be nice.')
 			buttons.append({text = str(globals.randomitemfromarray(['More is better','That is not enough','I would say to have more',"Isn't more better?"])), function = '_on_talk_pressed', args = 'general_slave_topics_morekids', tooltip = person.dictionary("Encourage $name to have more kids.")})
@@ -625,6 +625,8 @@ func eventPregnancyReveal(mode=''):
 		else:
 			text = str(expansion.getIntro(person)) + " $name lets out a small whimper.\n[color=yellow]-"+ person.quirk("Please, $master, no! I'm so scared about having this baby! Don't force me to keep having them!") + "[/color]"
 	if mode == 'lewd':
+		for fetup in ['creampiepussy','pregnancy']:
+			person.checkFetish(fetup, 2)
 		if expansion.getResponse(person,mode) == "positive":
 			text += " $name bites $his lower lip at your response.\n[color=yellow]-"+ person.quirk("I HAVE been really horny lately.") + "[/color]\n"
 		else:
@@ -704,6 +706,8 @@ func eventLactation(mode=''):
 		else:
 			text = str(expansion.getIntro(person)) + " $name lets out a small whimper.\n[color=yellow]-"+ person.quirk("Please, $master, anything but that! I've seen what that does to $child before and please no! They lose their minds, they start mooing! Please, $master!") + "[/color]"
 	if mode == 'lewd':
+		for fetup in ['drinkmilk','lactation','bemilked']:
+			person.checkFetish(fetup, 2)
 		if expansion.getResponse(person,mode) == "positive":
 			text += " $name bites $his lower lip at your response.\n[color=yellow]-"+ person.quirk("You...you're into it? I think I may be too!") + "[/color]\n"
 			text += "$He runs $his finger along $his erect nipple and brings back a droplet of milk to $his own lips, then licks it off."
@@ -759,6 +763,8 @@ func eventWantedPregnancy(mode=''):
 		else:
 			text = str(expansion.getIntro(person)) + " $name seems disheartened by your response.\n[color=yellow]-"+ person.quirk("Oh. I'm sorry for saying anything, $master. It...it won't happen again.") + "[/color]"
 	if mode == 'lewd':
+		for fetup in ['creampiepussy','pregnancy']:
+			person.checkFetish(fetup, 2)
 		if expansion.getResponse(person,mode) == "positive":
 			text += " $name bites $his lower lip at your response.\n[color=yellow]-"+ person.quirk("It really was, $master! I can't wait to do that again!") + "[/color]"
 		else:
@@ -806,6 +812,8 @@ func eventIncestConsentGiven(mode=''):
 		else:
 			text = str(expansion.getIntro(person)) + " $name seems disheartened by your response.\n[color=yellow]-"+ person.quirk("Oh. I see. Well, I mean...nevermind, I guess. Forget I said anything.") + "[/color]"
 	if mode == 'lewd':
+		for fetup in ['incest']:
+			person.checkFetish(fetup, 3)
 		if expansion.getResponse(person,mode) == "positive":
 			person.consentexp.incest = true
 			text += str(expansion.getIntro(person)) + " $name bites $his lower lip at your response.\n[color=yellow]-"+ person.quirk("You are right about that, $master! I can't wait to try it!") + "[/color]"
@@ -1477,7 +1485,7 @@ func talkFetishEncourage(mode=''):
 	person.dailytalk.append('talk_change_fetish')
 	person.dailyevents.append(mode)
 	#Resistance Check
-	if person.checkFetish(mode):
+	if person.checkFetish(mode, 0, false):
 		person.setFetish(mode, fetishmod)
 		text = person.quirk("[color=yellow]-You make a good point...I guess that I can admit that " + fetishname + " is " + str(person.fetish[mode]) + ".[/color]")
 	else:
@@ -1511,7 +1519,7 @@ func talkFetishDiscourage(mode=''):
 	person.dailyevents.append(mode)
 	
 	#Resistance Check
-	if person.checkFetish(mode):
+	if person.checkFetish(mode, 0, false, false):
 		person.setFetish(mode, fetishmod)
 		text = person.quirk("[color=yellow]-You make a good point. I guess that I can admit that " + fetishname + " is " + str(person.fetish[mode]) + ".[/color]")
 	else:
@@ -1605,7 +1613,7 @@ func eventDrainCum(mode = ''):
 		
 	if mode == 'pussycum':
 		if person.cum.pussy > 0:
-			text += str(globals.randomitemfromarray(reactions)) + str(globals.randomitemfromarray(cumdrips)) + str(globals.randomitemfromarray(landinglocations))
+			text += str(globals.randomitemfromarray(reactions)) + str(globals.randomitemfromarray(cumdrips)) + " " + str(globals.randomitemfromarray(landinglocations))
 			amount = clamp(round(rand_range(1,person.cum.pussy/2)),1,person.cum.pussy)
 			person.cum.pussy -= amount
 			puddle += amount
@@ -1722,34 +1730,35 @@ func talkconsent(mode=''):
 		if globals.expansionsettings.perfectinfo == true:
 			text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]"
 
-	if mode == "sexual":
-		var difficulty =  person.loyal*2 + person.obed + person.lust
+	elif mode == "sexual":
+		var difficulty = 300 - (person.obed*3 + person.loyal*2 + person.lust)
+		if person.effects.has('captured'):
+			difficulty += 100
+		###---Sexuality
+		if globals.expansion.getSexualAttraction(person,globals.player) == true:
+			difficulty += rand_range(10,40)
+		else:
+			difficulty -= rand_range(10,40)
 		###---Family Matters; Incest Check
 		person.dailytalk.append('consent')
 		if related != "unrelated" && person.consentexp.incest == false:
 			person.dailytalk.append('consentincest')
 			var incest = (globals.fetishopinion.find(person.fetish.incest)-6) + round(person.dailyevents.count('incest')/4)
-			difficulty += incest*5
-		if person.effects.has('captured'): difficulty -= 80
-		###---Sexuality
-		if globals.expansion.getSexualAttraction(person,globals.player) == true:
-			difficulty += rand_range(5,20)
-		else:
-			difficulty -= rand_range(5,20)
-		###---End Expansion---###
+			difficulty -= incest*10
+		
 		if person.traits.has('Prude'):
-			difficulty -= 5
-		if difficulty <= 100:
+			difficulty += 50
+		if difficulty >= 0:
 			text += "$He shows a troubled face and rejects your proposal. "
 			###---Added by Expansion---### Incest Check
 			if related != "unrelated" && person.consentexp.incest != true:
-				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " my " + str(related) + ". ")
+				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " my " + str(related) + ". [/color]")
 				person.dailyevents.append('incest')
 				if rand_range(0,5) + person.dailyevents.count('incest') >= 5:
-					text += "\nYou do see a flash of hesitation, however, and think that $he may be coming around to the idea of it. "
+					text += "\n\nYou do catch onto a flash of hesitation, however, and think that $he may be coming around to the idea of it. "
 					person.dailyevents.append('incest')
 			else:
-				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " you. ")
+				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " you. [/color]")
 		else:
 			person.lust += 3
 			text += "$He gives you a meek nod.\n[color=yellow]-" + person.quirk("Okay...I will have sex with you. ") + "[/color]"
@@ -1759,7 +1768,7 @@ func talkconsent(mode=''):
 				person.consentexp.incest = true
 				if person.fetish.incest in ['taboo','dirty','unacceptable']:
 					person.fetish.incest = 'uncertain'
-				text += "\n$He " + str(globals.randomitemfromarray(['whispers','mumbles','quickly says','says','quietly says'])) + " " + person.quirk("\n[color=yellow]-I can not believe I want to " + globals.expansion.nameSex() + " my " + str(related) + ". ")
+				text += "\n$He " + str(globals.randomitemfromarray(['whispers','mumbles','quickly says','says','quietly says'])) + " " + person.quirk("\n[color=yellow]-I "+ str(globals.randomitemfromarray(["can't believe I'm ready to","am so ready to","didn't ever think that I would","can't wait to","never thought that I would"])) +" "+ globals.expansion.nameSex() + " my " + str(related) + ". ")
 				text += "\n\n[color=green]Unlocked Sexual and Incestuous actions with $name.[/color]"
 			else:
 				text += "\n\n[color=green]Unlocked sexual actions with $name.[/color]"
@@ -1767,8 +1776,10 @@ func talkconsent(mode=''):
 				text += "\n\n[color=green]After getting closer with $name, you felt like $he unlocked new potential. [/color]"
 				### Levelup Removed by Ank BugFix v4a
 			person.consent = true
+		if globals.expansionsettings.perfectinfo == true:
+			text += "\n\nDifficulty [color=aqua]" + str(200-difficulty) + "[/color] | Required [color=aqua] 100 [/color]"
 
-	if mode == "pregnancy":
+	elif mode == "pregnancy":
 		person.dailytalk.append('consentpregnant')
 		if person.consent == true:
 			#Chance & Roll
@@ -1802,7 +1813,7 @@ func talkconsent(mode=''):
 			expansion.updateMood(person,-1)
 			text += str(expansion.getIntro(person)) + "[color=yellow]-"+person.quirk("I haven't agreed to have sex with you, why do you think I'd have your baby? Shouldn't we talk about that first?")+"[/color]"
 
-	if mode == "stud":
+	elif mode == "stud":
 		person.dailytalk.append('consentstud')
 		#Chance & Roll
 		consent_chance = ((person.loyal*.2) + (person.lewdness*.3) + (person.lust*.3) + (person.instinct.reproduce*5)) - ((person.metrics.birth-person.pregexp.desiredoffspring)*5)
@@ -1822,7 +1833,7 @@ func talkconsent(mode=''):
 		if globals.expansionsettings.perfectinfo == true:
 			text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]"
 
-	if mode == "breeder":
+	elif mode == "breeder":
 		person.dailytalk.append('consentbreeder')
 		#Chance & Roll
 		consent_chance = ((person.loyal*.2) + (person.lewdness*.2) + (person.lust*.2) + (person.instinct.reproduce*10)) - ((person.metrics.birth-person.pregexp.desiredoffspring)*10)
@@ -1844,7 +1855,7 @@ func talkconsent(mode=''):
 		if globals.expansionsettings.perfectinfo == true:
 			text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]"
 
-	if mode == "incest":
+	elif mode == "incest":
 		person.dailytalk.append('consentincest')
 		#Auto-Success
 		if expansion.relatedCheck(person,globals.player) != "unrelated":
@@ -1866,7 +1877,7 @@ func talkconsent(mode=''):
 			if globals.expansionsettings.perfectinfo == true:
 				text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]"
 
-	if mode == "incestbreeder":
+	elif mode == "incestbreeder":
 		person.dailytalk.append('consentincestbreeder')
 		#Chance & Roll
 		consent_chance = ((person.loyal*.2) + (person.lewdness*.2) + (person.lust*.1) + person.instinct.reproduce + (globals.fetishopinion.find(person.fetish.incest)*10) + (person.dailyevents.find('incest')*5)) - (person.metrics.birth*10)
@@ -1882,7 +1893,7 @@ func talkconsent(mode=''):
 		if globals.expansionsettings.perfectinfo == true:
 			text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]"
 	
-	if mode == "livestock":
+	elif mode == "livestock":
 		person.dailytalk.append('consentlivestock')
 		if person.consentexp.breeder == true || person.consentexp.stud == true:
 			#Chance & Roll
@@ -1985,7 +1996,7 @@ func talkconsent(mode=''):
 		if globals.state.farm >= 3 && !person.dailytalk.has('consentlivestock') && person.consentexp.livestock == false:
 			buttons.append({text = person.dictionary("Would you willingly work in the Farm as livestock?"), function = 'talkconsent', args = 'livestock'})
 	
-	if mode != "intro":
+	else:
 		buttons.append({text = person.dictionary("While we are discussing Consent..."), function = 'talkconsent', args = 'intro'})
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 	###---Added by Expansion---### Naked Images for Uniques Fix

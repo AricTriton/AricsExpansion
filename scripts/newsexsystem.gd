@@ -1427,9 +1427,9 @@ func generaterequest(member):
 
 
 	rval = rval[randi()%rval.size()]
-
-	$Panel/sceneeffects.bbcode_text += ("[color=#f4adf4]Desire: " + member.person.dictionary(requests[rval]) + '[/color]\n')
-
+	###---Added by Expansion---### Centered/Set Alerted Text
+	$Panel/sceneeffects.bbcode_text += ("\n[center][color=#f4adf4]Desire! -  " + member.person.dictionary(requests[rval]) + '[/color][/center]\n')
+	###---End Expansion---###
 	member.request = rval
 
 func checkrequest(member):
