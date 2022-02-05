@@ -1308,10 +1308,12 @@ func updateClothing():
 			var roll = round(rand_range(0,100))
 			if roll <= chance:
 				text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. However, you ordered $him to stay "+ globals.expansion.nameNaked() +". $He followed your orders obediently. "
-				self.dailyevents.append('rule_nudity_obeyed')
+				if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
+					self.dailyevents.append('rule_nudity_obeyed')
 			else:
 				text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. You had ordered $him to stay "+ globals.expansion.nameNaked() +", but $he ignored your order.\n[color=green]Punishment Valid Reason added; Bonus Applied to Next Date[/color] "
-				self.dailyevents.append('rule_nudity_disobeyed')
+				if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
+					self.dailyevents.append('rule_nudity_disobeyed')
 				redress = true
 			if globals.expansionsettings.perfectinfo == true:
 				text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Chance [color=aqua]" + str(chance) + " [/color]. "+ globals.fastif(roll <= chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
@@ -1349,7 +1351,8 @@ func updateClothing():
 				text += "\n[color=aqua]$name[/color] wanted to strip " + globals.expansion.nameNaked() + " " + globals.randomitemfromarray(['','','slowly','quickly','eagerly','obediently']) + " as per your [color=aqua]rules[/color]. "
 				if self.checkFetish('exhibitionism', 1, false, false):
 					text += "$He likely would have done so "+ globals.randomitemfromarray(['','eagerly','excitedly']) +" anyways due to $his [color=green]"+ globals.randomitemfromarray(['exhibitionism','natural exhibitionism','exhibitionism fetish','love of being nude','enjoyment of others seeing $his naked body']) +"[/color]. "
-				self.dailyevents.append('rule_nudity_obeyed')
+				if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
+					self.dailyevents.append('rule_nudity_obeyed')
 				strip = true
 			else:
 				text += "\n[color=aqua]$name[/color] seemed to hesitate when considering stripping " + globals.expansion.nameNaked() + " as per your rules "+ globals.randomitemfromarray(['','as this is all new','as $he still feels awkward about it','as $he is unsure how $he feels about it']) +". "
@@ -1366,11 +1369,13 @@ func updateClothing():
 						self.consentexp.nudity = true
 					else:
 						text += "$He still seems hesitant about doing it in the future. $He may need to be more [color=green]"+ globals.randomitemfromarray(['exhibitionist','comfortable showing others $his body','into the exhibitionism fetish','of a nudist','into others seeing $his naked body']) +"[/color] to fully accept it. "
-					self.dailyevents.append('rule_nudity_obeyed')
+					if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
+						self.dailyevents.append('rule_nudity_obeyed')
 					strip = true
 				else:
 					text += "\n[color=red][color=aqua]$name[/color] refused to strip " + globals.expansion.nameNaked() + " per your orders. $He has broke your rules. $He seems to need a lesson in [color=aqua]Fear[/color], [color=aqua]Obedience[/color], or [color=aqua]Loyalty[/color]. [/color]\n[color=green]Punishment Valid Reason added; Bonus Applied to Next Date[/color] "
-					self.dailyevents.append('rule_nudity_disobeyed')
+					if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
+						self.dailyevents.append('rule_nudity_disobeyed')
 				if globals.expansionsettings.perfectinfo == true:
 					text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Chance [color=aqua]" + str(chance) + " [/color]. "+ globals.fastif(roll <= chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
 		elif self.fetish.exhibitionism == 'mindblowing':
