@@ -2018,7 +2018,7 @@ func dailyUpdate(person):
 			text += "\n$name had " +nameCum()+ " stuck to $his body. "
 		elif person.cum.body > 0:
 			text += "\n$name had " +nameCum()+ " stuck to $his body and cleaned it off. "
-			person.cum.face = 0
+			person.cum.body = 0
 
 	person.cum.face = max(0, person.cum.face - .5)
 	person.cum.body = max(0, person.cum.body - .5)
@@ -2085,7 +2085,7 @@ func dailyUpdate(person):
 	#---Reclothe if Able and Unrestrained
 	if person.restrained == "none" && person != globals.player:
 		if person.rules.nudity == false:
-			if person.fetish.exhibitionism in ['dirty','taboo','unacceptable','uncertain','none']:
+			if !person.fetish.exhibitionism in ['enjoyable','mindblowing']:
 				if person.exposed.chest == true && person.exposed.chestforced == false:
 					text += "\n$name covered $his tits. "
 					person.exposed.chest = false
@@ -2125,7 +2125,7 @@ func dailyUpdate(person):
 					person.exposed.ass = true
 	elif person.restrained != "none" && person != globals.player:
 		if person.exposed.chest == true || person.exposed.genitals == true || person.exposed.ass == true:
-			if person.fetish.exhibitionism in ['dirty','taboo','unacceptable','uncertain','none']:
+			if !person.fetish.exhibitionism in ['enjoyable','mindblowing']:
 				text += "\n$name wanted to put back on $his clothing but couldn't due to $his restraints"
 #			if person.rules.nudity == true:
 #				text += "\n$name wanted to put back on $his clothing but couldn't due to $his restraints."

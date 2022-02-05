@@ -1479,7 +1479,7 @@ func talkFetishEncourage(mode=''):
 	person.dailytalk.append('talk_change_fetish')
 	person.dailyevents.append(mode)
 	#Resistance Check
-	if person.checkFetish(mode):
+	if person.checkFetish(mode, 0, false):
 		person.setFetish(mode, fetishmod)
 		text = person.quirk("[color=yellow]-You make a good point...I guess that I can admit that " + fetishname + " is " + str(person.fetish[mode]) + ".[/color]")
 	else:
@@ -1513,7 +1513,7 @@ func talkFetishDiscourage(mode=''):
 	person.dailyevents.append(mode)
 	
 	#Resistance Check
-	if person.checkFetish(mode):
+	if person.checkFetish(mode, 0, false, false):
 		person.setFetish(mode, fetishmod)
 		text = person.quirk("[color=yellow]-You make a good point. I guess that I can admit that " + fetishname + " is " + str(person.fetish[mode]) + ".[/color]")
 	else:
@@ -1724,24 +1724,25 @@ func talkconsent(mode=''):
 		if globals.expansionsettings.perfectinfo == true:
 			text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]"
 
-	if mode == "sexual":
-		var difficulty =  person.loyal*2 + person.obed + person.lust
+	elif mode == "sexual":
+		var difficulty = 300 - (person.obed*3 + person.loyal*2 + person.lust)
+		if person.effects.has('captured'):
+			difficulty += 100
+		###---Sexuality
+		if globals.expansion.getSexualAttraction(person,globals.player) == true:
+			difficulty += rand_range(10,40)
+		else:
+			difficulty -= rand_range(10,40)
 		###---Family Matters; Incest Check
 		person.dailytalk.append('consent')
 		if related != "unrelated" && person.consentexp.incest == false:
 			person.dailytalk.append('consentincest')
 			var incest = (globals.fetishopinion.find(person.fetish.incest)-6) + round(person.dailyevents.count('incest')/4)
-			difficulty += incest*5
-		if person.effects.has('captured'): difficulty -= 80
-		###---Sexuality
-		if globals.expansion.getSexualAttraction(person,globals.player) == true:
-			difficulty += rand_range(5,20)
-		else:
-			difficulty -= rand_range(5,20)
-		###---End Expansion---###
+			difficulty -= incest*10
+		
 		if person.traits.has('Prude'):
-			difficulty -= 5
-		if difficulty <= 100:
+			difficulty += 50
+		if difficulty >= 0:
 			text += "$He shows a troubled face and rejects your proposal. "
 			###---Added by Expansion---### Incest Check
 			if related != "unrelated" && person.consentexp.incest != true:
@@ -1772,7 +1773,7 @@ func talkconsent(mode=''):
 		if globals.expansionsettings.perfectinfo == true:
 			text += "\n\nDifficulty [color=aqua]" + str(200-difficulty) + "[/color] | Required [color=aqua] 100 [/color]"
 
-	if mode == "pregnancy":
+	elif mode == "pregnancy":
 		person.dailytalk.append('consentpregnant')
 		if person.consent == true:
 			#Chance & Roll
@@ -1806,7 +1807,7 @@ func talkconsent(mode=''):
 			expansion.updateMood(person,-1)
 			text += str(expansion.getIntro(person)) + "[color=yellow]-"+person.quirk("I haven't agreed to have sex with you, why do you think I'd have your baby? Shouldn't we talk about that first?")+"[/color]"
 
-	if mode == "stud":
+	elif mode == "stud":
 		person.dailytalk.append('consentstud')
 		#Chance & Roll
 		consent_chance = ((person.loyal*.2) + (person.lewdness*.3) + (person.lust*.3) + (person.instinct.reproduce*5)) - ((person.metrics.birth-person.pregexp.desiredoffspring)*5)
@@ -1826,7 +1827,7 @@ func talkconsent(mode=''):
 		if globals.expansionsettings.perfectinfo == true:
 			text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]"
 
-	if mode == "breeder":
+	elif mode == "breeder":
 		person.dailytalk.append('consentbreeder')
 		#Chance & Roll
 		consent_chance = ((person.loyal*.2) + (person.lewdness*.2) + (person.lust*.2) + (person.instinct.reproduce*10)) - ((person.metrics.birth-person.pregexp.desiredoffspring)*10)
@@ -1848,7 +1849,7 @@ func talkconsent(mode=''):
 		if globals.expansionsettings.perfectinfo == true:
 			text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]"
 
-	if mode == "incest":
+	elif mode == "incest":
 		person.dailytalk.append('consentincest')
 		#Auto-Success
 		if expansion.relatedCheck(person,globals.player) != "unrelated":
@@ -1870,7 +1871,7 @@ func talkconsent(mode=''):
 			if globals.expansionsettings.perfectinfo == true:
 				text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]"
 
-	if mode == "incestbreeder":
+	elif mode == "incestbreeder":
 		person.dailytalk.append('consentincestbreeder')
 		#Chance & Roll
 		consent_chance = ((person.loyal*.2) + (person.lewdness*.2) + (person.lust*.1) + person.instinct.reproduce + (globals.fetishopinion.find(person.fetish.incest)*10) + (person.dailyevents.find('incest')*5)) - (person.metrics.birth*10)
@@ -1886,7 +1887,7 @@ func talkconsent(mode=''):
 		if globals.expansionsettings.perfectinfo == true:
 			text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]"
 	
-	if mode == "livestock":
+	elif mode == "livestock":
 		person.dailytalk.append('consentlivestock')
 		if person.consentexp.breeder == true || person.consentexp.stud == true:
 			#Chance & Roll
@@ -1989,7 +1990,7 @@ func talkconsent(mode=''):
 		if globals.state.farm >= 3 && !person.dailytalk.has('consentlivestock') && person.consentexp.livestock == false:
 			buttons.append({text = person.dictionary("Would you willingly work in the Farm as livestock?"), function = 'talkconsent', args = 'livestock'})
 	
-	if mode != "intro":
+	else:
 		buttons.append({text = person.dictionary("While we are discussing Consent..."), function = 'talkconsent', args = 'intro'})
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 	###---Added by Expansion---### Naked Images for Uniques Fix
