@@ -1752,7 +1752,7 @@ func talkconsent(mode=''):
 					text += "\n\nYou do catch onto a flash of hesitation, however, and think that $he may be coming around to the idea of it. "
 					person.dailyevents.append('incest')
 			else:
-				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " you. ")
+				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " you. [/color]")
 		else:
 			person.lust += 3
 			text += "$He gives you a meek nod.\n[color=yellow]-" + person.quirk("Okay...I will have sex with you. ") + "[/color]"
@@ -1770,6 +1770,8 @@ func talkconsent(mode=''):
 				text += "\n\n[color=green]After getting closer with $name, you felt like $he unlocked new potential. [/color]"
 				### Levelup Removed by Ank BugFix v4a
 			person.consent = true
+		if globals.expansionsettings.perfectinfo == true:
+			text += "\n\nDifficulty [color=aqua]" + str(200-difficulty) + "[/color] | Required [color=aqua] 100 [/color]"
 
 	elif mode == "pregnancy":
 		person.dailytalk.append('consentpregnant')
