@@ -452,6 +452,32 @@ func showsexswitch(text, mode):
 		text += calculateresults()
 	$sexswitch/RichTextLabel.bbcode_text = text
 
+func praise(person, counter):
+	var text = ''
+	text += "You praise [name2] for [his2] recent behavior. "
+	
+	###---Added by Expansion---### Valid Praise Bonus
+	if person.dailyevents.has('rule_nudity_obeyed'):
+		text += "\nYou explain your happiness at [his2] obedience in following your [color=aqua]Nudity[/color] order. [name2] seems to accept that this praise is for a valid reason.\n[color=red]Praise Valid Reason removed[/color]; [color=green]3 Turns Gained[/color] "
+		turns_set(turns + 3)
+		while person.dailyevents.find('rule_nudity_obeyed'):
+			person.dailyevents.remove('rule_nudity_obeyed')
+	###---End Expansion---###
+	
+	if person.obed >= 85 && counter < 2:
+		self.mood += 3
+		self.stress -= rand_range(5,10)
+		text = text + "[he2] listens to your praise with joy evident on [his2] face.  "
+	elif person.obed >= 85:
+		text = text + "[he2] takes your words respectfully but without great joy. You’ve probably overpraised [him2] lately. "
+		
+	else:
+		text = text + "[he2] takes your praise arrogantly, gaining joy from it. "
+		self.mood += 3
+		person.loyal -= rand_range(1,2)
+	
+	return text
+
 func punishaddedeffect():
 	var text = ''
 	self.stress += 8
@@ -483,7 +509,7 @@ func punishaddedeffect():
 					i.lust += 2
 	###---Added by Expansion---### Valid Punishment Bonus
 	if person.dailyevents.has('rule_nudity_disobeyed'):
-		text += "\nYou explain that [his2] punishment is due to [his2] refusal to follow your [color=aqua]Nudity[/color] order. [name2] seems to understand that this punishment is for a valid reason.\n[color=red]Punishment Validity Removed[/color]; [color=green]3 Turns Gained[/color] "
+		text += "\nYou explain that [his2] punishment is due to [his2] refusal to follow your [color=aqua]Nudity[/color] order. [name2] seems to understand that this punishment is for a valid reason.\n[color=red]Punishment Valid Reason removed[/color]; [color=green]3 Turns Gained[/color] "
 		turns_set(turns + 3)
 		while person.dailyevents.find('rule_nudity_disobeyed'):
 			person.dailyevents.remove('rule_nudity_disobeyed')

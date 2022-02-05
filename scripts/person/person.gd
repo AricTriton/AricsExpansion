@@ -1286,8 +1286,8 @@ func updateClothing():
 	var exposed_parts = []
 	var amnude = false
 	for part in ['chest','genitals','ass']:
-		if self.exposed.part == true:
-			exposed_parts.append(part)
+		if self.exposed[part] == true:
+			exposed_parts.append([part])
 	if exposed_parts.size() > 1:
 		amnude = true
 	
@@ -1295,7 +1295,7 @@ func updateClothing():
 	if amnude == true:
 		var redress = false
 		#Naked - Do They Need/Want to Dress? Can They?
-		if self.rules.nudity == false & !self.fetish.exhibitionism in ['enjoyable','mindblowing']:
+		if self.rules.nudity == false && !self.fetish.exhibitionism in ['enjoyable','mindblowing']:
 			text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. You hadn't ordered $him to stay "+ globals.expansion.nameNaked() +" so $he proceeded. "
 			redress = true
 		elif self.rules.nudity == true && globals.fetishopinion.find(self.fetish.exhibitionism) <= 2:
@@ -1314,7 +1314,7 @@ func updateClothing():
 				self.dailyevents.append('rule_nudity_disobeyed')
 				redress = true
 			if globals.expansionsettings.perfectinfo == true:
-				text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Chance [color=aqua]" + str(chance) + " [/color]. "+ globals.fastif(roll <= chance, '[color=green]Success[/color], [color=red]Failure[/color]) +" "
+				text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Chance [color=aqua]" + str(chance) + " [/color]. "+ globals.fastif(roll <= chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
 		#Redress
 		if redress == true:
 			text += "\n"
@@ -1372,7 +1372,7 @@ func updateClothing():
 					text += "\n[color=red][color=aqua]$name[/color] refused to strip " + globals.expansion.nameNaked() + " per your orders. $He has broke your rules. $He seems to need a lesson in [color=aqua]Fear[/color], [color=aqua]Obedience[/color], or [color=aqua]Loyalty[/color]. [/color]\n[color=green]Punishment Valid Reason added; Bonus Applied to Next Date[/color] "
 					self.dailyevents.append('rule_nudity_disobeyed')
 				if globals.expansionsettings.perfectinfo == true:
-					text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Chance [color=aqua]" + str(chance) + " [/color]. "+ globals.fastif(roll <= chance, '[color=green]Success[/color], [color=red]Failure[/color]) +" "
+					text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Chance [color=aqua]" + str(chance) + " [/color]. "+ globals.fastif(roll <= chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
 		elif self.fetish.exhibitionism == 'mindblowing':
 			strip = true
 			text += "\n[color=aqua]$name[/color] "+ globals.randomitemfromarray(['','','eagerly','excitedly','happily']) +" tried to strip "+ globals.expansion.nameNaked() +"  due to $his [color=aqua]"+ globals.randomitemfromarray(['exhibitionism','natural exhibitionism','exhibitionism fetish','love of being nude','enjoyment of others seeing $his naked body']) +"[/color]. "
@@ -1385,7 +1385,7 @@ func updateClothing():
 				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['','','','desparately','frustratedly','angrily','grumpily','sarcastically']) +" tried to "+ globals.randomitemfromarray(['strip','undress','get naked','get nude','strip $himself']) +", but $he was unable to due to $his [color=red]restraints[/color]. "
 				globals.expansion.updateMood(self, -1)
 				return text
-			if self.exposed.chest == false::
+			if self.exposed.chest == false:
 				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['took off','stripped','removed','stripped off','pulled off','slipped out of']) +" $his tunic, revealing $his "+ globals.expansion.getChest(self) +". "
 				self.exposed.chest = true
 			if self.exposed.genitals == false || self.exposed.ass == true:
