@@ -143,7 +143,11 @@ func rebuild_slave_list():
 			elif catIdx == 2:
 				if person.sleep != 'farm':
 					continue
-
+			
+			###---Added by Expansion---### Person Expanded; Strip/Redress
+			person.updateClothing()
+			###---End Expansion---###
+			
 			if nodeIndex < personList.get_children().size() - (3 - catIdx):
 				if personList.get_children()[nodeIndex].has_meta('id') && personList.get_children()[nodeIndex].get_meta('id') == person.id:
 					updateSlaveListNode(personList.get_children()[nodeIndex], person, categoryButtons[catIdx].pressed)

@@ -28,18 +28,19 @@ var ihavebloodygoodtaste = false
 #Unwanted Fetishes - Disables them from showing in the Fetish Talk menu
 var unwantedfetishes = []		#Copy/Paste any you don't want into the 'unwantedfetishes' array below: ['incest','lactation','drinkmilk','bemilked','milking','exhibitionism','drinkcum','wearcum','wearcumface','creampiemouth','creampiepussy','creampieass','pregnancy','oviposition','drinkpiss','wearpiss','pissing','otherspissing','bondage','dominance','submission','sadism','masochism']
 
-#Flaw Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations
-var flaw_luxury_effects = true
+#------Player Specific Info
+#Base Bonus or Penalty for Attraction Checks for PCs
+var playerattractionmodifier = 20
 
-#---Person Expanded (True/False)
+#Set to True for the Player to follow Slave's Clothing Dress/Redress System
+var player_treats_clothing_like_slave = false
+
+#------Person Expanded (True/False)
 #If set to true, Unique Slaves will join your party without having to ask for consent first
 var uniqueslavesautopartyconsent = false
 
 #Lip Size Increase Change (Chance is array-5*10, ie: plump and bigger give 10)
 var lipstraitbasechance = 20
-
-#Base Bonus or Penalty for Attraction Checks for PCs
-var playerattractionmodifier = 20
 
 #Default to Nickname + First Name (Function from MinorTweaks, Renamed for Clarity)
 var use_nickname_plus_first_name = false
@@ -47,6 +48,8 @@ var use_nickname_plus_first_name = false
 #Show Once Per Day Conversations Available Notifications in Inspect
 var show_onceperday_notification = true
 
+#Flaw Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations
+var flaw_luxury_effects = true
 
 #---Genitals Expanded
 #Chance of Holes staying Stretched during Sex. Chance + (Elasticity*10)
@@ -91,7 +94,7 @@ var crystallifeforcerestorechance = 80
 var crystal_shatter_chance = 80
 
 
-#---Pregnancy Expanded
+#------Pregnancy Expanded
 #Set to False to disable Swollen Settings (Pregnancy and Cum Inflation)
 var swollenenabled = true
 var wantedpregnancychance = 50
@@ -103,7 +106,7 @@ var chancemorningsickness = 30
 var chancetitsgrow = 35
 
 
-#---Lactation Expanded
+#------Lactation Expanded
 var lactationstops = false
 var leakcauseslactationchance = 50
 
@@ -111,7 +114,7 @@ var leakcauseslactationchance = 50
 var lactationstressenabled = true
 
 
-#---Farm Expanded
+#------Farm Expanded
 #Livestock Consent Base Chance (+ 50% loyalty, 25% obediance, + various factors)
 var baselivestockconsentchance = 10
 var foodconvertchance = 70

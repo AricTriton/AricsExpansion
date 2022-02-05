@@ -1275,6 +1275,134 @@ func get_wombsemen():
 	
 	return semen
 
+#---Clothing
+func updateClothing():
+	var text = ""
+	#Player Check
+	if self == globals.player && globals.expansionsettings.player_treats_clothing_like_slave == false:
+		return text
+	
+	#Determine Clothing Status
+	var exposed_parts = []
+	var amnude = false
+	for part in ['chest','genitals','ass']:
+		if self.exposed.part == true:
+			exposed_parts.append(part)
+	if exposed_parts.size() > 1:
+		amnude = true
+	
+	#Determine if they should Strip or Dress
+	if amnude == true:
+		var redress = false
+		#Naked - Do They Need/Want to Dress? Can They?
+		if self.rules.nudity == false & !self.fetish.exhibitionism in ['enjoyable','mindblowing']:
+			text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. You hadn't ordered $him to stay "+ globals.expansion.nameNaked() +" so $he proceeded. "
+			redress = true
+		elif self.rules.nudity == true && globals.fetishopinion.find(self.fetish.exhibitionism) <= 2:
+			#Chance to Rebel
+			var captured = 0
+			for i in self.effects.values():
+				if i.code == 'captured':
+					captured = i.duration/2
+			var chance = round(self.metric.own + ((self.loyal + self.obed + self.fear)/3) - (captured * 10))
+			var roll = round(rand_range(0,100))
+			if roll <= chance:
+				text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. However, you ordered $him to stay "+ globals.expansion.nameNaked() +". $He followed your orders obediently. "
+				self.dailyevents.append('rule_nudity_obeyed')
+			else:
+				text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. You had ordered $him to stay "+ globals.expansion.nameNaked() +", but $he ignored your order.\n[color=green]Punishment Valid Reason added; Bonus Applied to Next Date[/color] "
+				self.dailyevents.append('rule_nudity_disobeyed')
+				redress = true
+			if globals.expansionsettings.perfectinfo == true:
+				text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Chance [color=aqua]" + str(chance) + " [/color]. "+ globals.fastif(roll <= chance, '[color=green]Success[/color], [color=red]Failure[/color]) +" "
+		#Redress
+		if redress == true:
+			text += "\n"
+			#Attempt Failed due to Restraints
+			if self.restrained != "none":
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['','','','desparately ','frustratedly ','angrily ','grumpily ']) +"tried to "+ globals.randomitemfromarray(['dress','clothe $himself','get dressed','redress','put $his clothes back on']) +", but $he was unable to due to $his [color=red]restraints[/color]. "
+				globals.expansion.updateMood(self, -1)
+				return text
+			if self.exposed.chestforced == false || self.exposed.genitalsforced == false || self.exposed.assforced == false:
+				text += "[color=aqua]$name[/color] looked at the shredded scraps that used to be $his clothing. These shredded pieces of cloth won't allow $him any privacy or the option to cover $himself in those areas. "
+			if self.exposed.chest == true && self.exposed.chestforced == false:
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['put back on','slipped into','put on']) +" $his tunic, obscuring $his "+ globals.expansion.getChest(self) +". "
+				self.exposed.chest = false
+			if self.exposed.genitals == true && self.exposed.genitalsforced == false || self.exposed.ass == true && self.exposed.assforced == false:
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['put back on','slipped into','put on']) +" $his pants, obscuring $his "
+				if self.exposed.genitals == true:
+					text += globals.expansion.getGenitals(self)
+				if self.exposed.ass == true:
+					if self.exposed.genitals == true:
+						text += " and " 
+					text += globals.expansion.nameAss()
+				self.exposed.genitals = false
+				self.exposed.ass = false
+				text += ". "
+		
+	else:
+		var strip = false
+		#Dressed - Do They Need/Want to Strip?
+		if self.rules.nudity == true:
+			#Consent
+			if self.consentexp.nudity == true || self.fetish.exhibitionism in ['enjoyable','mindblowing']:
+				text += "\n[color=aqua]$name[/color] wanted to strip " + globals.expansion.nameNaked() + " " + globals.randomitemfromarray(['','','slowly','quickly','eagerly','obediently']) + " as per your [color=aqua]rules[/color]. "
+				if self.checkFetish('exhibitionism', 1, false, false):
+					text += "$He likely would have done so "+ globals.randomitemfromarray(['','eagerly','excitedly']) +" anyways due to $his [color=green]"+ globals.randomitemfromarray(['exhibitionism','natural exhibitionism','exhibitionism fetish','love of being nude','enjoyment of others seeing $his naked body']) +"[/color]. "
+				self.dailyevents.append('rule_nudity_obeyed')
+				strip = true
+			else:
+				text += "\n[color=aqua]$name[/color] seemed to hesitate when considering stripping " + globals.expansion.nameNaked() + " as per your rules "+ globals.randomitemfromarray(['','as this is all new','as $he still feels awkward about it','as $he is unsure how $he feels about it']) +". "
+				var captured = 0
+				for i in self.effects.values():
+					if i.code == 'captured':
+						captured = i.duration/2
+				var chance = round(self.metric.own + ((self.loyal + self.obed + self.fear)/3) - (captured * 10))
+				var roll = round(rand_range(0,100))
+				if roll <= chance:
+					text += "$He decided that $he did want to strip " + globals.expansion.nameNaked() + " " + globals.randomitemfromarray(['','','slowly','quickly','eagerly','obediently','for you']) + " as per your rules. "
+					if self.fetish.exhibitionism in ['enjoyable','mindblowing'] || self.checkFetish('exhibitionism', 1, false, false):
+						text += "$His [color=green]"+ globals.randomitemfromarray(['exhibitionism','natural exhibitionism','exhibitionism fetish','love of being nude','enjoyment of others seeing $his naked body']) +"[/color] shone through and $he chose not hesistate to strip for you in the future. "
+						self.consentexp.nudity = true
+					else:
+						text += "$He still seems hesitant about doing it in the future. $He may need to be more [color=green]"+ globals.randomitemfromarray(['exhibitionist','comfortable showing others $his body','into the exhibitionism fetish','of a nudist','into others seeing $his naked body']) +"[/color] to fully accept it. "
+					self.dailyevents.append('rule_nudity_obeyed')
+					strip = true
+				else:
+					text += "\n[color=red][color=aqua]$name[/color] refused to strip " + globals.expansion.nameNaked() + " per your orders. $He has broke your rules. $He seems to need a lesson in [color=aqua]Fear[/color], [color=aqua]Obedience[/color], or [color=aqua]Loyalty[/color]. [/color]\n[color=green]Punishment Valid Reason added; Bonus Applied to Next Date[/color] "
+					self.dailyevents.append('rule_nudity_disobeyed')
+				if globals.expansionsettings.perfectinfo == true:
+					text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Chance [color=aqua]" + str(chance) + " [/color]. "+ globals.fastif(roll <= chance, '[color=green]Success[/color], [color=red]Failure[/color]) +" "
+		elif self.fetish.exhibitionism == 'mindblowing':
+			strip = true
+			text += "\n[color=aqua]$name[/color] "+ globals.randomitemfromarray(['','','eagerly','excitedly','happily']) +" tried to strip "+ globals.expansion.nameNaked() +"  due to $his [color=aqua]"+ globals.randomitemfromarray(['exhibitionism','natural exhibitionism','exhibitionism fetish','love of being nude','enjoyment of others seeing $his naked body']) +"[/color]. "
+			
+		#Strip
+		if strip == true:
+			text += "\n"
+			#Attempt Failed due to Restraints
+			if self.restrained != "none":
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['','','','desparately','frustratedly','angrily','grumpily','sarcastically']) +" tried to "+ globals.randomitemfromarray(['strip','undress','get naked','get nude','strip $himself']) +", but $he was unable to due to $his [color=red]restraints[/color]. "
+				globals.expansion.updateMood(self, -1)
+				return text
+			if self.exposed.chest == false::
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['took off','stripped','removed','stripped off','pulled off','slipped out of']) +" $his tunic, revealing $his "+ globals.expansion.getChest(self) +". "
+				self.exposed.chest = true
+			if self.exposed.genitals == false || self.exposed.ass == true:
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['took off','stripped','removed','stripped off','pulled off','slipped out of']) +" $his pants, revealing $his "
+				if self.exposed.genitals == false:
+					text += globals.expansion.getGenitals(self)
+				if self.exposed.ass == true:
+					if self.exposed.genitals == false:
+						text += " and " 
+					text += globals.expansion.nameAss()
+				self.exposed.genitals = true
+				self.exposed.ass = true
+				text += ". "
+				
+	return text
+
+#---Flaws
 #Flaw Checks/Reveals
 func checkFlaw(type, countascheck = true):
 	var allflaws = globals.expansion.flawarray

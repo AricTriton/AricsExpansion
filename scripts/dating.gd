@@ -481,6 +481,14 @@ func punishaddedeffect():
 				i.stress += 3
 				if actionhistory.back() in ['woodenhorse','flagellate']:
 					i.lust += 2
+	###---Added by Expansion---### Valid Punishment Bonus
+	if person.dailyevents.has('rule_nudity_disobeyed'):
+		text += "\nYou explain that [his2] punishment is due to [his2] refusal to follow your [color=aqua]Nudity[/color] order. [name2] seems to understand that this punishment is for a valid reason.\n[color=red]Punishment Validity Removed[/color]; [color=green]3 Turns Gained[/color] "
+		turns_set(turns + 3)
+		while person.dailyevents.find('rule_nudity_disobeyed'):
+			person.dailyevents.remove('rule_nudity_disobeyed')
+	###---End Expansion---###
+	
 	return text
 
 func teach(person, counter):

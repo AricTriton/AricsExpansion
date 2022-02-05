@@ -85,6 +85,8 @@ var elasticitytrait = ['Rigid Elasticity','Elasticity 1','Elasticity 2','Elastic
 var moodarray = ['sad','angry','scared','indifferent','obediant','horny','respectful','happy','playful']
 #var moodarray = ['sad','sad','sad','neutral','neutral','neutral','happy','happy','happy'] #Explicit Moods (Forced by Events): Crying, Angry, Horny
 var demeanorarray = ['meek','shy','reserved','open','excitable']
+
+#Flaws
 var flawarray = ['lust','envy','pride','wrath','greed','sloth','gluttony']
 var flawdict = {
 	lust = "\n[color=lime]You have discovered that $he is wrought with [color=red]Lust[/color] and hyperactive in $his sexuality.[/color]\n[color=green]Sexual Consent and Actions will be easier to initiate.[/color]\n[color=green]Luxury +5 if [color=aqua]Fucked[/color] that day.[/color]\n[color=red]Every day they aren't Fucked, Luxury Requirement +3[/color]",
@@ -2078,57 +2080,12 @@ func dailyUpdate(person):
 	person.cum.pussy = max(0, person.cum.pussy - .2)
 
 	#Consent Changes: Will Change to Giving Consent in Dialogue Only
-	if person.consentexp.incest == false && person.fetish.incest in ['mindblowing','enjoyable','acceptable']:
+	if person.consentexp.incest == false && person.fetish.incest in ['mindblowing','enjoyable']:
 		text += "\n$name seems to be talking differently about $his thoughts on [color=aqua]Incest[/color]. $He doesn't seem to mind it anymore."
 		person.consentexp.incest = true
 
-	#---Reclothe if Able and Unrestrained
-	if person.restrained == "none" && person != globals.player:
-		if person.rules.nudity == false:
-			if !person.fetish.exhibitionism in ['enjoyable','mindblowing']:
-				if person.exposed.chest == true && person.exposed.chestforced == false:
-					text += "\n$name covered $his tits. "
-					person.exposed.chest = false
-				if person.exposed.genitals == true && person.exposed.genitalsforced == false:
-					text += "\n$name covered $his "
-					var poolGenitals = PoolStringArray()
-					if person.penis != "none":
-						poolGenitals.append("penis")
-					if person.vagina != "none":
-						poolGenitals.append("vagina")
-					text += poolGenitals.join(" and ") + ". "
-					person.exposed.genitals = false
-				if person.exposed.ass == true && person.exposed.assforced == false:
-					text += "\n$name covered $his ass. "
-					person.exposed.ass = false
-		#Will try to Undress
-		elif person.exposed.chest == false || person.exposed.genitals == false || person.exposed.ass == false:
-			if person.consentexp.nudity == true:
-				text += "\n[color=green]$name[/color] stripped " + nameNaked() + " " + globals.randomitemfromarray(['slowly','eagerly','quickly']) + " as per your rules."
-				person.dailyevents.append('followedrulenudity')
-				person.exposed.chest = true
-				person.exposed.genitals = true
-				person.exposed.ass = true
-			else:
-				var captured = 0
-				for i in person.effects.values():
-					if i.code == 'captured':
-						captured = i.duration/2
-				if (person.obed + person.fear - 100) + person.loyal < 100*captured:
-					text += "\n[color=red]$name refused to strip naked as you demanded and broke your rules.[/color]"
-					person.dailyevents.append('brokerulenudity')
-				else:
-					text += "\n[color=green]$name[/color] stripped " + nameNaked() + " " + globals.randomitemfromarray(['slowly','eagerly','quickly']) + " as per your rules."
-					person.dailyevents.append('followedrulenudity')
-					person.exposed.chest = true
-					person.exposed.genitals = true
-					person.exposed.ass = true
-	elif person.restrained != "none" && person != globals.player:
-		if person.exposed.chest == true || person.exposed.genitals == true || person.exposed.ass == true:
-			if !person.fetish.exhibitionism in ['enjoyable','mindblowing']:
-				text += "\n$name wanted to put back on $his clothing but couldn't due to $his restraints"
-#			if person.rules.nudity == true:
-#				text += "\n$name wanted to put back on $his clothing but couldn't due to $his restraints."
+	#---Clothing Status
+	text += person.updateClothing()
 
 	#Chance to Add/Remove Lisp or Mute due to oversized Lips
 	if person.npcexpanded.temptraits.find('vocaltraitdelay') >= 0:
@@ -3239,9 +3196,13 @@ var dictUniqueImagePaths = {
 	},
 	'Tia': {
 		IMAGE_DEFAULT: {
+			LOW_STRESS: 'res://files/aric_expansion_images/characters/tiaclothed.png',
+			MID_STRESS: 'res://files/aric_expansion_images/characters/tiaclothed.png',
 			HIGH_STRESS: 'res://files/aric_expansion_images/characters/tiaclothed.png',
 		},
 		IMAGE_NAKED: {
+			LOW_STRESS: 'res://files/aric_expansion_images/characters/tianaked.png',
+			MID_STRESS: 'res://files/aric_expansion_images/characters/tianaked.png',
 			HIGH_STRESS: 'res://files/aric_expansion_images/characters/tianaked.png',
 		},
 	},
