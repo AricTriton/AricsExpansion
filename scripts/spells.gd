@@ -338,6 +338,12 @@ func mindreadeffect():
 				text += "\n\nYou sense $him resisting your mental probing. It seems there is an internal weakness or [color=aqua]Vice[/color] that $he is subconsciousnessly desparate to hide from you. You feel you may be able to break this resistance down if you continued to cast this on $him. You currently have a [color=aqua]" + str(vice_discoverychance) + " Percent[/color] to break this resistance."
 			else:
 				text += "\n" + vice_text
+	else:
+		text += "\n$His [color=aqua]Vice[/color] is [color=aqua]"+ str(person.mind.vice.capitalize()) +"[/color]"
+	#Luxury
+	var luxurydict = person.countluxury(false)
+	var luxuryreq = str(person.calculateluxury())
+	text += "\n\nCurrent Luxury: "+[color=aqua]"+ str(luxurydict.luxury) +"[/color]"  |  Current Luxury Requirement: [color=red]"+ luxuryreq +"[/color]"
 	###---End Expansion---###
 	text = person.dictionary(text)
 	return text

@@ -816,7 +816,8 @@ func dictionary(text):
 		idx = string.find('$stutter')
 	return string
 
-func countluxury():
+###---Added by Expansion---### Added Actually_Run to allow checking without affecting
+func countluxury(actually_run = true):
 	var templuxury = luxury
 	var goldspent = 0
 	var foodspent = 0
@@ -827,7 +828,8 @@ func countluxury():
 	elif sleep == 'your':
 		templuxury += 5+(5*globals.state.mansionupgrades.mansionluxury)
 	if rules.betterfood == true && globals.resources.food >= 5:
-		globals.resources.food -= 5
+		if actually_run == true:
+			globals.resources.food -= 5
 		foodspent += 5
 		templuxury += 5
 	if rules.personalbath == true:
@@ -837,7 +839,8 @@ func countluxury():
 			value = 1
 		if globals.itemdict.supply.amount >= value:
 			templuxury += 5
-			globals.itemdict.supply.amount -= value
+			if actually_run == true:
+				globals.itemdict.supply.amount -= value
 		else:
 			#nosupply == true
 			nosupply = true
@@ -849,19 +852,21 @@ func countluxury():
 		if globals.resources.gold >= value:
 			templuxury += 10
 			goldspent += value
-			globals.resources.gold -= value
+			if actually_run == true:
+				globals.resources.gold -= value
 	if rules.cosmetics == true:
 		if globals.itemdict.supply.amount > 1:
 			templuxury += 5
-			globals.itemdict.supply.amount -= 1
+			if actually_run == true:
+				globals.itemdict.supply.amount -= 1
 		else:
 			nosupply = true
 	
 	###---Added by Expansion---### Vices
-	var vice_modifier = 0
 	var roll = round(rand_range(0,100))
-	var vice_satisfied = false
 	if globals.expansionsettings.vices_luxury_effects == true && (self.mind.vice_known == true || roll <= globals.expansionsettings.vices_undiscovered_trigger_chance):
+		var vice_modifier = 0
+		var vice_satisfied = false
 		#Lust
 		if self.checkVice('lust'):
 			var vice_lust_mod = clamp(5 + round(self.lewdness * .1), 5, 15)
@@ -903,7 +908,8 @@ func countluxury():
 				vice_satisfied = true
 				vice_modifier += 10
 			if self.rules.cosmetics == true && globals.itemdict.supply.amount >= 1:
-				globals.itemdict.supply.amount -= 1
+				if actually_run == true:
+					globals.itemdict.supply.amount -= 1
 				vice_modifier += 5
 			elif self.rules.cosmetics == false && vice_satisfied == false:
 				vice_modifier -= 10
@@ -918,6 +924,8 @@ func countluxury():
 				vice_modifier += 10
 			if self.rules.betterfood == false && globals.resources.food >= 8:
 				foodspent += 3
+				if actually_run == true:
+					globals.resources.food -= 3
 				vice_modifier += 10
 			elif vice_satisfied == false:
 				vice_modifier -= 10
@@ -927,7 +935,8 @@ func countluxury():
 				vice_satisfied = true
 				vice_modifier += 10
 			if self.rules.pocketmoney == true && globals.resources.gold >= 5:
-				globals.resources.gold -= 5
+				if actually_run == true:
+					globals.resources.gold -= 5
 				goldspent += 5
 				vice_modifier += 10
 			elif self.rules.pocketmoney == false && vice_satisfied == false:
@@ -1449,8 +1458,8 @@ func updateClothing():
 				
 	return text
 
-#---Flaws
-#Flaw Checks/Reveals
+#---Vice (Formerly Flaw)
+#Vice Checks/Reveals
 func checkVice(type, countascheck = true):
 	var allvices = globals.expansion.vicearray
 	var success = false
@@ -1474,16 +1483,17 @@ func revealVice(incomingtype = 'none'):
 	var text = ""
 	var type = incomingtype
 	if type != 'none' && !allvices.has(type):
-		print('Flaw type ' + type + ' does not exist to be Revealed')
+		print('Vice type ' + type + ' does not exist to be Revealed')
 		return
 	
-	#Guess Modifier
-	var guess_bonus = 0
-	if type == self.mind.flaw:
-		guess_bonus = globals.player.smaf*10
-	type = self.mind.flaw
+	#Modifier
+	var chance = (globals.player.smaf*10) + (person.dailyevents.count(person.mind.vice)*10)
+	if person.mind.vice_presented == true:
+		chance += globals.expansionsettings.vices_discovery_presentation_bonus
 	
-	if rand_range(0,100) <= (self.dailyevents.find(type) * 10) + guess_bonus:
+	type = self.mind.vice
+	
+	if rand_range(0,100) <= chance:
 		self.mind.vice_known = true
 		text = globals.expansion.vicedict[type]
 	else:
