@@ -1487,8 +1487,8 @@ func revealVice(incomingtype = 'none'):
 		return
 	
 	#Modifier
-	var chance = (globals.player.smaf*10) + (person.dailyevents.count(person.mind.vice)*10)
-	if person.mind.vice_presented == true:
+	var chance = (globals.player.smaf*10) + (self.dailyevents.count(self.mind.vice)*10)
+	if self.mind.vice_presented == true:
 		chance += globals.expansionsettings.vices_discovery_presentation_bonus
 	
 	type = self.mind.vice
