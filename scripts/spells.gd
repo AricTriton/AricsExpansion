@@ -339,11 +339,11 @@ func mindreadeffect():
 			else:
 				text += "\n" + vice_text
 	else:
-		text += "\n$His [color=aqua]Vice[/color] is [color=aqua]"+ str(person.mind.vice.capitalize()) +"[/color]"
+		text += "\n\n[center][color=#d1b970]Vice[/color][/center]\n$His [color=aqua]Vice[/color] is [color=aqua]"+ str(person.mind.vice.capitalize()) +"[/color]"
 	#Luxury
 	var luxurydict = person.countluxury(false)
 	var luxuryreq = str(person.calculateluxury())
-	text += "\n\nCurrent Luxury: "+[color=aqua]"+ str(luxurydict.luxury) +"[/color]"  |  Current Luxury Requirement: [color=red]"+ luxuryreq +"[/color]"
+	text += "\n\n[center][color=#d1b970]Luxury[/color][/center]\nCurrent Luxury: [color=aqua]"+ str(luxurydict.luxury) +"[/color]  |  Current Luxury Requirement: [color=red]"+ luxuryreq +"[/color]"
 	###---End Expansion---###
 	text = person.dictionary(text)
 	return text
