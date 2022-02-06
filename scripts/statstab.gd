@@ -573,6 +573,8 @@ func _on_slaverename_pressed():
 	elif pending_slave_rename == "nickname":
 		person.nickname = get_node("slaverename/LineEdit").get_text()
 		pending_slave_rename = ""
+	if globals.state.relativesdata.has(person.id):
+		globals.state.relativesdata[person.id].name = person.name_long()
 	get_tree().get_current_scene().close_dialogue()
 	get_tree().get_current_scene().popup(person.dictionary(text))
 

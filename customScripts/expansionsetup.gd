@@ -166,6 +166,8 @@ func expandGame():
 		if str(person.expansionversion) != str(globals.expansionsettings.modversion):
 			globals.backwardscompatibility.backwardsCompatibility(person)
 		globals.expansion.updatePerson(person)
+		if globals.state.relativesdata.has(person.id):
+			globals.state.relativesdata[person.id].name = person.name_long()
 	for i in globals.guildslaves:
 		for person in globals.guildslaves[i]:
 			if person.expanded == false:
@@ -174,6 +176,8 @@ func expandGame():
 			if str(person.expansionversion) != str(globals.expansionsettings.modversion):
 				globals.backwardscompatibility.backwardsCompatibility(person)
 			globals.expansion.updatePerson(person)
+			if globals.state.relativesdata.has(person.id):
+				globals.state.relativesdata[person.id].name = person.name_long()
 
 	#---BugFixing & Cleanup
 	#erase NPCs with duplicate ids to slaves
