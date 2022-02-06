@@ -1411,7 +1411,7 @@ func updateClothing():
 				for i in self.effects.values():
 					if i.code == 'captured':
 						captured = i.duration/2
-				var chance = round(self.metric.own + ((self.loyal + self.obed + self.fear)/3) - (captured * 10))
+				var chance = round(self.metric.own + ((self.loyal + self.obed + self.fear)/2) - (captured * 10))
 				var roll = round(rand_range(0,100))
 				if roll <= chance:
 					text += "$He decided that $he did want to strip " + globals.expansion.nameNaked() + " " + globals.randomitemfromarray(['','','slowly','quickly','eagerly','obediently','for you']) + " as per your rules. "
