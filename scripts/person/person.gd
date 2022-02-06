@@ -864,9 +864,9 @@ func countluxury(actually_run = true):
 	
 	###---Added by Expansion---### Vices
 	var roll = round(rand_range(0,100))
+	var vice_modifier = 0
+	var vice_satisfied = false
 	if globals.expansionsettings.vices_luxury_effects == true && (self.mind.vice_known == true || roll <= globals.expansionsettings.vices_undiscovered_trigger_chance):
-		var vice_modifier = 0
-		var vice_satisfied = false
 		#Lust
 		if self.checkVice('lust'):
 			var vice_lust_mod = clamp(5 + round(self.lewdness * .1), 5, 15)
