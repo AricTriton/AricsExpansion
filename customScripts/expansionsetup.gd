@@ -5,137 +5,59 @@
 #---Core Expansion Setup Functions---#
 func expandGame():
 	#globals.expansionsetup.setIdentity(person)
-	if globals.state.expansionversion < globals.expansionsettings.modversion:
-		#v.05
-		#Set up Crystal
-		if !globals.state.mansionupgrades.has('dimensionalcrystal'):
-			globals.state.mansionupgrades['dimensionalcrystal'] = 0
-		
-		#Nursery to Crystal Conversion
-		if globals.state.mansionupgrades.mansionnursery > 1:
-			if globals.state.mansionupgrades.mansionnursery == 3:
-				globals.state.mansionupgrades.dimensionalcrystal == 2
-				globals.state.mansionupgrades.mansionnursery == 1
-			else:
-				globals.state.mansionupgrades.dimensionalcrystal == 1
-				globals.state.mansionupgrades.mansionnursery == 1
-		
-		#Crystal to Abilities Conversion
-		if globals.state.mansionupgrades.dimensionalcrystal >= 1:
-			globals.state.thecrystal.abilities.append('pregnancyspeed')
-		
-		#Sex Expanded
-		for person in globals.slaves:
-			if person.sexexpanded == null:
-				person.sexexpanded = {pliability = 0,elasticity = 0}
-	#v.06
-		#Person Expansions
-		for person in globals.slaves + globals.state.allnpcs:
-			if person == null:
-				continue
-#			#NPCs Expanded
-#			if person.npcexpanded == null:
-#				person.npcexpanded = {mansionbred = false,citizen = true,timesmet = 0,timesfought = 0,timesrescued = 0,timesraped = 0}
-#			
-#			#Farm Expanded
-#			if person.farmexpanded == null:
-#				person.farmexpanded = {production = 'default',extraction='default',autopump=false,restraints='free',sleeplocation='default',worklocation='default',bedding='dirt',objects = []}
-#			
-			#Pregnancy Expanded
-			for i in ['gestationspeed','babysize','titssizebonus','incestbaby']:
-				if !person.pregexp.has(i):
-					if i in ['babysize','titssizebonus']:
-						person.pregexp[i] = 0
-					elif i == 'gestationspeed':
-						person.pregexp[i] = 1
-					elif i == 'incestbaby':
-						person.pregexp[i] = false
-
-			#Lactating Expanded
-			for i in ['milkedtoday','daysunmilked','milkmax','milkstorage','titssizebonus','pressure','leaking']:
-				if !person.lactating.has(i):
-					if i == 'milkedtoday':
-						person.lactating[i] = false
-					else:
-						person.lactating[i] = 0
-			
-			#Mind Expanded
-			for i in ['identity','id','ego','thoughts','secrets','secretslog','status','treatment']:
-				if !person.mind.has(i):
-					if i in ['identity','secretslog','status','demeanor']:
-						person.mind[i] = ""
-					elif i in ['id','ego']:
-						person.mind[i] = ['self']
-					elif i in ['thoughts','secrets','treatment']:
-						person.mind[i] = []
-		
-		#Town Expansion Addition
-		for towns in ['wimborn','frostford','gorn','amberguard']:
-			if !globals.state.townsexpanded[towns].has('dailyreport'):
-				globals.state.townsexpanded[towns]['dailyreport'] = {shopping = 0, crimeattempted = 0, crimeprevented = 0, crimesucceeded = 0}
-	#v.07
-		#NPC Array Change
-		if !globals.state.npclastlocation.empty():
-			#offscreennpcs = [person.id, location.code, encounterchance, action, reputation, status]
-			for npcarray in globals.state.npclastlocation:
-				var newarray = []
-				var npc = globals.state.findnpc(npcarray[1])
-				if npc == null:
-					continue
-		
-				var id = npcarray[1]
-				newarray.append(id)
-				var location = npcarray[0]
-				newarray.append(location)
-				var encounterchance = npcarray[2]
-				newarray.append(encounterchance)
-				var action = npc.npcexpanded.dailyaction
-				if action == "":
-					action = "resting"
-				newarray.append(action)
-				var reputation = 0
-				var status = ""
-				if npc.npcexpanded.citizen == true:
-					reputation = round(rand_range(1,5)) + globals.originsarray.find(npc.origins)
-					status = 'citizen'
-				else:
-					reputation = -round(rand_range(1,5) + rand_range(-globals.originsarray.find(npc.origins), globals.originsarray.find(npc.origins)))
-					status = 'criminal'
-				newarray.append(action)
-				newarray.append(status)
-				globals.state.npclastlocation.erase(npcarray)
-				globals.state.offscreennpcs.append(newarray)
-		globals.state.npclastlocation.clear()
 	
-	#v.07.1
-		for town in globals.expansion.citiesarray:
-			if !globals.state.townsexpanded[town].dailyreport.has('text'):
-				globals.state.townsexpanded[town].dailyreport['text'] = ""
-		
-		#Permanent NPC Reputations
-		for person in globals.slaves + globals.state.allnpcs:
-			if person == null:
-				continue
-			if !person.npcexpanded.has('reputation'):
-				if person.npcexpanded.citizen == true:
-					person.npcexpanded['reputation'] = round(rand_range(1,5))
-				else:
-					person.npcexpanded['reputation'] = round(rand_range(-1,-5))
-		
-		#Restoring old reputations
-		for npc in globals.state.offscreennpcs:
-			var person = globals.state.findnpc(npc[0])
-			person.npcexpanded.reputation = npc[4]
-	
-	#v.0.81
+	#---Person Expanded
 	for person in globals.slaves + globals.state.allnpcs:
 		if person == null:
 			continue
+		#Origins Fix
 		if person.origins == 'atypical':
 			person.origins = 'commoner'
-	
-	#v.9
-	
+		#Sex Expanded
+		if person.sexexpanded == null:
+			person.sexexpanded = {pliability = 0,elasticity = 0}
+		#Pregnancy Expanded
+		for i in ['gestationspeed','babysize','titssizebonus','incestbaby']:
+			if !person.pregexp.has(i):
+				if i in ['babysize','titssizebonus']:
+					person.pregexp[i] = 0
+				elif i == 'gestationspeed':
+					person.pregexp[i] = 1
+				elif i == 'incestbaby':
+					person.pregexp[i] = false
+		
+		#Lactating Expanded
+		for i in ['milkedtoday','daysunmilked','milkmax','milkstorage','titssizebonus','pressure','leaking']:
+			if !person.lactating.has(i):
+				if i == 'milkedtoday':
+					person.lactating[i] = false
+				else:
+					person.lactating[i] = 0
+		
+		#Mind Expanded
+		for i in ['identity','id','ego','thoughts','secrets','secretslog','status','treatment']:
+			if !person.mind.has(i):
+				if i in ['identity','secretslog','status','demeanor']:
+					person.mind[i] = ""
+				elif i in ['id','ego']:
+					person.mind[i] = ['self']
+				elif i in ['thoughts','secrets','treatment']:
+					person.mind[i] = []
+		#Permanent NPC Reputations
+		if !person.npcexpanded.has('reputation'):
+			if person.npcexpanded.citizen == true:
+				person.npcexpanded['reputation'] = round(rand_range(1,5))
+			else:
+				person.npcexpanded['reputation'] = round(rand_range(-1,-5))
+# Unneeded?
+#		#NPCs Expanded
+#		if person.npcexpanded == null:
+#			person.npcexpanded = {mansionbred = false,citizen = true,timesmet = 0,timesfought = 0,timesrescued = 0,timesraped = 0}		
+#		#Farm Expanded
+#		if person.farmexpanded == null:
+#			person.farmexpanded = {production = 'default',extraction='default',autopump=false,restraints='free',sleeplocation='default',worklocation='default',bedding='dirt',objects = []}
+
+	#---Mansion Expanded	
 	#New Mansion Upgrades
 	if !globals.state.mansionupgrades.has('dimensionalcrystal'):
 		globals.state.mansionupgrades['dimensionalcrystal'] = 0
@@ -151,17 +73,49 @@ func expandGame():
 		globals.state.mansionupgrades['vatpiss'] = 0
 	if !globals.state.mansionupgrades.has('bottler'):
 		globals.state.mansionupgrades['bottler'] = 0
+	#Nursery to Crystal Conversion
+	if globals.state.mansionupgrades.mansionnursery > 1:
+		if globals.state.mansionupgrades.mansionnursery == 3:
+			globals.state.mansionupgrades.dimensionalcrystal == 2
+			globals.state.mansionupgrades.mansionnursery == 1
+		else:
+			globals.state.mansionupgrades.dimensionalcrystal == 1
+			globals.state.mansionupgrades.mansionnursery == 1
+	#Crystal to Abilities Conversion
+	if globals.state.mansionupgrades.dimensionalcrystal >= 1:
+		globals.state.thecrystal.abilities.append('pregnancyspeed')
 	
+	#---Farm Expanded
+	#Resources
+	if !globals.resources.farmexpanded.has('worker_cycle'):
+		globals.resources.farmexpanded['worker_cycle'] = []
+	if !globals.resources.farmexpanded.has('work_type'):
+		globals.resources.farmexpanded['work_type'] = ""
+	#v1.6a
+	if typeof(globals.resources.farmexpanded.worker_cycle) != TYPE_DICTIONARY || globals.resources.farmexpanded.worker_cycle.has('herder'):
+		globals.resources.farmexpanded.worker_cycle = {'farmhand':[], 'milkmaid':[], 'stud':[]}
+		globals.resources.farmexpanded.work_type = ''
 	#Commented Out as throws up errors
 #	if !globals.state.has('farmexpanded'):
-#	globals.state['farmexpanded'] = {aphrodisiacs = 0, production = "food", extraction='hand', totalcontainers = {bucket = -1, pail = -1, jug = -1, canister = -1}, autopump=false, restraints=[], zones = {sleeplocations = ['field'], worklocations = ['field'], furnishings = ['dirt']}, objects = []}
-	
+#		globals.state['farmexpanded'] = {aphrodisiacs = 0, production = "food", extraction='hand', totalcontainers = {bucket = -1, pail = -1, jug = -1, canister = -1}, autopump=false, restraints=[], zones = {sleeplocations = ['field'], worklocations = ['field'], furnishings = ['dirt']}, objects = []}
 #	if !globals.state.farmexpanded.has('totalcontainers'):
 #		globals.state.farmexpanded['totalcontainers'] = {bucket = -1, pail = -1, jug = -1, canister = -1}
 #	if !globals.state.farmexpanded.has('aphrodisiacs'):
 #		globals.state.farmexpanded['aphrodisiacs'] = 0
 	
-	#Towns Expanded
+	#---Towns Expanded
+	#Reputations
+	if !globals.state.reputation.has('shaliq'):
+		globals.state.reputation['shaliq'] = 0
+	if !globals.state.reputation.has('umbra'):
+		globals.state.reputation['umbra'] = 0
+	#Town Expansion
+	for towns in ['wimborn','frostford','gorn','amberguard']:
+		if !globals.state.townsexpanded[towns].has('dailyreport'):
+			globals.state.townsexpanded[towns]['dailyreport'] = {shopping = 0, crimeattempted = 0, crimeprevented = 0, crimesucceeded = 0}
+	for town in globals.expansion.citiesarray:
+		if !globals.state.townsexpanded[town].dailyreport.has('text'):
+			globals.state.townsexpanded[town].dailyreport['text'] = ""
 	for town in globals.expandedtowns:
 		if !globals.state.townsexpanded[town].has('milkinterest'):
 			globals.state.townsexpanded[town]['milkinterest'] = 5
@@ -170,18 +124,37 @@ func expandGame():
 		if !globals.state.townsexpanded[town].has('laws'):
 			globals.state.townsexpanded[town]['laws'] = {public_nudity = false,}
 	
-	#Reputations
-	if !globals.state.reputation.has('shaliq'):
-		globals.state.reputation['shaliq'] = 0
-	if !globals.state.reputation.has('umbra'):
-		globals.state.reputation['umbra'] = 0
+	#---Fixing Old Issues; Possibly Unneeded
+	#NPC Array Change
+	if !globals.state.npclastlocation.empty():
+		#offscreennpcs = [person.id, location.code, encounterchance, action, reputation, status]
+		for npcarray in globals.state.npclastlocation.duplicate():
+			var npc = globals.state.findnpc(npcarray[1])
+			if npc == null:
+				continue
 	
-	#Resources
-	if !globals.resources.farmexpanded.has('worker_cycle'):
-		globals.resources.farmexpanded['worker_cycle'] = []
-	if !globals.resources.farmexpanded.has('work_type'):
-		globals.resources.farmexpanded['work_type'] = ""
-		
+			var id = npcarray[1]
+			var location = npcarray[0]
+			var encounterchance = npcarray[2]
+			var action = npc.npcexpanded.dailyaction
+			if action == "":
+				action = "resting"
+			var reputation = 0
+			var status = ""
+			if npc.npcexpanded.citizen == true:
+				reputation = round(rand_range(1,5)) + globals.originsarray.find(npc.origins)
+				status = 'citizen'
+			else:
+				reputation = -round(rand_range(1,5) + globals.originsarray.find(npc.origins)*rand_range(-1, 1))
+				status = 'criminal'
+			globals.state.offscreennpcs.append([id,location,encounterchance,action,reputation,status])
+			globals.state.npclastlocation.erase(npcarray)
+		globals.state.npclastlocation.clear()
+	#Restoring Old Reputations
+	for npc in globals.state.offscreennpcs:
+		var person = globals.state.findnpc(npc[0])
+		person.npcexpanded.reputation = npc[4]
+	
 	#End Update
 	globals.state.expansionversion = globals.expansionsettings.modversion
 	
@@ -189,24 +162,46 @@ func expandGame():
 	for person in globals.slaves + globals.state.allnpcs + globals.state.babylist:
 		if person.expanded == false:
 			globals.expansionsetup.expandPerson(person)
-		if person.expansionversion < globals.expansionsettings.modversion:
+#		if float(person.expansionversion) < float(globals.expansionsettings.modversion): #Old Method#
+		if str(person.expansionversion) != str(globals.expansionsettings.modversion):
 			globals.backwardscompatibility.backwardsCompatibility(person)
 		globals.expansion.updatePerson(person)
-	
 	for i in globals.guildslaves:
 		for person in globals.guildslaves[i]:
 			if person.expanded == false:
 				globals.expansionsetup.expandPerson(person)
-			if person.expansionversion < globals.expansionsettings.modversion:
+#			if float(person.expansionversion) < float(globals.expansionsettings.modversion):
+			if str(person.expansionversion) != str(globals.expansionsettings.modversion):
 				globals.backwardscompatibility.backwardsCompatibility(person)
 			globals.expansion.updatePerson(person)
+
+	#---BugFixing & Cleanup
+	#erase NPCs with duplicate ids to slaves
+	for i in globals.state.allnpcs.duplicate():
+		for j in globals.slaves:
+			if str(j.id) == str(i.id):
+				globals.state.allnpcs.erase(i)
+				break
+	#fix slaves with duplicate ids
+	var idx1 = globals.slaves.size() - 1
+	var idx2
+	while idx1 > 0:
+		idx2 = idx1 - 1
+		while idx2 >= 0:
+			if str(globals.slaves[idx1].id) == str(globals.slaves[idx2].id):
+				globals.slaves[idx1].id = str(globals.state.slavecounter)
+				globals.state.slavecounter += 1
+				break
+			idx2 -= 1
+		idx1 -= 1
+
 
 func expandPerson(person):
 	var sexvag = int(round(person.metrics.vag/10))
 	var sexass = int(round(person.metrics.anal/10))
 	var modifier = 0
 	if person.vagina == 'normal' && person.vagvirgin == false:
-		person.vagina = globals.vagsizearray[rand_range(0,globals.vagsizearray.size()-2)]
+		person.vagina = globals.vagsizearray[randi() % (globals.vagsizearray.size()-2)]
 		while sexvag > 0:
 			if rand_range(0,1) < .1:
 				person.vagina = globals.vagsizearray[globals.vagsizearray.find(person.vagina)+1]
@@ -214,38 +209,40 @@ func expandPerson(person):
 	if person.vagina != "none" && person.lubrication == -1:
 		setLubrication(person)
 	if person.asshole == 'normal':
-		person.asshole = globals.assholesizearray[rand_range(0,globals.assholesizearray.size()-2)]
+		person.asshole = globals.assholesizearray[randi() % (globals.assholesizearray.size()-2)]
 		while sexass > 0:
 			if rand_range(0,1) < .1:
 				person.asshole = globals.assholesizearray[globals.assholesizearray.find(person.asshole)+1]
 			sexass -= 1
 	if person.lips == 'none':
 		#Add Racial Increases Later
-		person.lips = globals.lipssizearray[rand_range(0,globals.lipssizearray.size()-3)]
+		person.lips = globals.lipssizearray[randi() % (globals.lipssizearray.size()-3)]
 		if rand_range(0,1) < .25:
 			person.lips = globals.lipssizearray[globals.lipssizearray.find(person.lips)+1]
 	#Non-Player Checks
-	if person != globals.player:
+	if true: # this condition is never false:   if person != globals.player:
 		var origins = str(person.origins)
 		#Dignity will change in future update
 		var persondignitymin = globals.expansion.dignitymin[origins]
 		var persondignitymax = globals.expansion.dignitymax[origins]
 		person.dignity = round(rand_range(persondignitymin,persondignitymax))
-		#---Readd when Flaws/Personalities are Readded
-		setFlaw(person)
+		setVice(person)
 		setDemeanor(person)
 		setSexuality(person)
 		setDesiredOffspring(person)
+		#---Readd when Vices/Personalities are Readded
 		#getPersonality(person)
 		
 		#Check Relation Data and Add if Non-Existant
 		if !globals.state.relativesdata.has(person.id):
 			globals.createrelativesdata(person)
 	#Sets Sexuality for Existing Players/Starting Slave
+	# this condition cannot be true when creating a new progress, only when loading a non-expanded progress, the day count is useless
 	elif person == globals.player && globals.resources.day >= 1 || person.unique == 'startslave' && globals.resources.day >= 1:
-		person.sexuality = str(globals.randomitemfromarray(['straight','mostlystraight','rarelygay']))
-	elif person == globals.player:
-		person.sexuality = 'mostlystraight'
+		person.sexuality = globals.randomitemfromarray(['straight','mostlystraight','rarelygay'])
+	# this condition is almost never checked but never true when checked
+	#elif person == globals.player:
+	#	person.sexuality = 'mostlystraight'
 	setExpansionTraits(person)
 	if person.lactation == true:
 		setLactation(person)
@@ -258,14 +255,15 @@ func expandPerson(person):
 	
 	#Sets Id/Ego for Everyone
 	#setIdentity(person) Currently Crashing Game
+	
 	person.expanded = true
 	globals.expansion.updatePerson(person)
 
 #"Set" functions are intended to run Once per person for the initial setup
-func setFlaw(person):
-	var temparray = globals.expansion.flawarray.duplicate()
-	if person.mind.flaw == 'none' && person.mind.flawless == false:
-		person.mind.flaw = str(globals.randomitemfromarray(temparray))
+func setVice(person):
+	var temparray = globals.expansion.vicearray.duplicate()
+	if person.mind.vice == 'none' && person.mind.vice_removed == false:
+		person.mind.vice = str(globals.randomitemfromarray(temparray))
 
 func setDemeanor(person):
 	#Changing into Personality/Identity in Future Update
@@ -287,13 +285,13 @@ func setDemeanor(person):
 
 func setSexuality(person):
 	if person.traits.has('Homosexual'):
-		person.sexuality = str(globals.randomitemfromarray(['rarelystraight','mostlygay','gay']))
+		person.sexuality = globals.randomitemfromarray(['rarelystraight','mostlygay','gay'])
 		person.trait_remove('Homosexual')
 	elif person.traits.has('Bisexual'):
-		person.sexuality = str(globals.randomitemfromarray(['rarelygay','bi','rarelystraight']))
+		person.sexuality = globals.randomitemfromarray(['rarelygay','bi','rarelystraight'])
 		person.trait_remove('Bisexual')
 	else:
-		person.sexuality = str(globals.randomitemfromarray(globals.kinseyscale))
+		person.sexuality = globals.randomitemfromarray(globals.kinseyscale)
 
 func setDesiredOffspring(person):
 	#Maximum of 10 + Siblings
@@ -358,19 +356,19 @@ func setExpansionTraits(person):
 		for i in person.traitstorage:
 			var trait = globals.origins.trait(i)
 			if trait.tags.has('fertility-trait') && trait.tags.has('virilitytrait'):
-				person.add_trait(trait)
+				person.add_trait(i)
 				person.traitstorage.erase(trait)
 				hasvirility = true
 			if trait.tags.has('fertility-trait') && trait.tags.has('eggstrtrait'):
-				person.add_trait(trait)
+				person.add_trait(i)
 				person.traitstorage.erase(trait)
 				haseggstr = true
 			if trait.tags.has('pliabilitytrait'):
-				person.add_trait(trait)
+				person.add_trait(i)
 				person.traitstorage.erase(trait)
 				haspliability == true
 			if trait.tags.has('elasticitytrait'):
-				person.add_trait(trait)
+				person.add_trait(i)
 				person.traitstorage.erase(trait)
 				haselasticity = true
 		if hasvirility == false:
@@ -456,11 +454,11 @@ func setLactation(person):
 		for i in person.traitstorage:
 			var trait = globals.origins.trait(i)
 			if trait.tags.has('lactation-trait') && trait.tags.has('regentrait'):
-				person.add_trait(trait)
+				person.add_trait(i)
 				person.traitstorage.erase(trait)
 				hasregentrait = true
 			if trait.tags.has('lactation-trait') && trait.tags.has('storagetrait'):
-				person.add_trait(trait)
+				person.add_trait(i)
 				person.traitstorage.erase(trait)
 				hasstoragetrait = true
 		if hasregentrait == false:
@@ -519,7 +517,48 @@ func setRaceBonus(person, increasestats):
 	if person == null:
 		print("Invalid Person for Setting Racial Bonus")
 		return
-	
+
+	#ralph4 - fix unique npc genealogies #ralphD - replicated code here to fix uniques even for players without the good taste to enable ralphs.  Revel in my benevolence plebs ;]
+	if person.unique != null:
+		if person.unique == 'Melissa':
+			cleargenes(person)
+			person.genealogy.human = 100
+		elif person.unique == 'Cali':
+			cleargenes(person)
+			person.genealogy.dog = 70
+			person.genealogy.human = 30
+		elif person.unique in ['Emily','Tisha']:
+			cleargenes(person)
+			person.genealogy.human = 84
+			person.genealogy.gnome = 2
+			person.genealogy.elf = 2
+			person.genealogy.fairy = 2
+			person.genealogy.bunny = 2
+			person.genealogy.raccoon = 2
+			person.genealogy.fox = 2
+			person.genealogy.cat = 2
+			person.genealogy.dog = 2
+		elif person.unique == 'Chloe':
+			cleargenes(person)
+			person.genealogy.gnome = 96
+			person.genealogy.fairy = 4
+		elif person.unique == 'Yris':
+			cleargenes(person)
+			person.genealogy.cat = 70
+			person.genealogy.human = 30
+		elif person.unique == 'Maple':
+			cleargenes(person)
+			person.genealogy.fairy = 100
+		elif person.unique == 'Ayneris':
+			cleargenes(person)
+			person.genealogy.elf = 100
+		elif person.unique == 'Ayda':	
+			cleargenes(person)
+			person.genealogy.tribal_elf = 100			
+		elif person.unique == 'Zoe':
+			cleargenes(person)
+			person.genealogy.dog = 100
+	#/ralph4 /ralphD		
 	###ANK'S FIX? This + Dictionary?
 #	for race in genealogy:
 #		if genealogy[race] > 0:
@@ -642,9 +681,6 @@ func setRaceBonus(person, increasestats):
 	if person.genealogy.orc > 0:
 		if person.genealogy.orc >= 100:
 			bonus_strength += 3
-			bonus_courage += 10
-		if person.genealogy.orc >= 70:
-			bonus_strength += 2
 			bonus_courage += 10
 		elif person.genealogy.orc >= 70:
 			bonus_strength += 2
@@ -875,6 +911,7 @@ func setRaceBonus(person, increasestats):
 			bonus_strength += .4
 			bonus_magic += .2
 	
+	#Dryad
 	if person.genealogy.dryad > 0:
 		if person.genealogy.dryad >= 100:
 			bonus_strength += 2
@@ -1250,7 +1287,7 @@ func setRaceBonus_Ralph(person, increasestats):
 	person.stats.charm_racial = 0
 	#for i in person.traits: #added to reapply traits (eg. 'Robust' endurance bonus was removed by the above)
 	#	
-	#	person.remove_trait(trait)
+	#	person.trait_remove(trait)
 	#	person.add_trait(trait)
 	if person.traits.has('Weak'):
 		person.stats.str_mod -= 2
@@ -1268,8 +1305,8 @@ func setRaceBonus_Ralph(person, increasestats):
 		person.stats.end_mod += 2
 	if person.traits.has('Frail'):
 		person.stats.end_mod -= 2
-	if person.unique == 'startslave':
-		globals.constructor.forceFullblooded(person) #may not be needed; haven't fully tested
+	#if person.unique == 'startslave':
+	#	globals.constructor.forceFullblooded(person) #may not be needed; haven't fully tested
 		#person.skillpoints += 10
 		#hybridtype = 'Imp'
 	#/ralph
@@ -1843,7 +1880,7 @@ func setRaceBonus_Ralph(person, increasestats):
 				bonus_pliability += 1
 				person.tail = 'none' #not reversible as applied
 				if person.traits.has('Natural Beauty'):
-					person.remove_trait('Natural Beauty') #not reversible
+					person.trait_remove('Natural Beauty') #not reversible
 				person.add_trait('Blemished') #not reversible
 				person.mods['augmenttongue'] = 'augmenttongue' #not reversible as applied				
 				if person.sex == 'male':
@@ -1911,7 +1948,7 @@ func setRaceBonus_Ralph(person, increasestats):
 				bonus_skincov = 'plants'
 				person.add_trait('Small Eater') #not reversible
 				if person.traits.has('Spoiled'):
-					person.remove_trait('Spoiled') #not reversible
+					person.trait_remove('Spoiled') #not reversible
 				else:
 					person.add_trait('Ascetic') #not reversible
 				if person.genealogy.dryad % 2 != 0 && person.skin in ['pale', 'fair', 'olive', 'tan', 'brown', 'dark', 'none']:
@@ -1920,7 +1957,7 @@ func setRaceBonus_Ralph(person, increasestats):
 				hybridtype = 'Tentacle'
 				bonus_endurance += 1.5
 				if person.traits.has('Natural Beauty'):
-					person.remove_trait('Natural Beauty') #not reversible
+					person.trait_remove('Natural Beauty') #not reversible
 				person.add_trait('Sex-crazed') #not reversible
 				person.add_trait('Blemished') #not reversible
 				bonus_lewdness += 25
@@ -2104,12 +2141,12 @@ func setRaceBonus_Ralph(person, increasestats):
 						bonus_tail = 'demon'
 					if person.sex != 'male':
 						if person.traits.has('Clever'):
-							person.remove_trait('Clever') #not reversible
+							person.trait_remove('Clever') #not reversible
 						person.add_trait('Ditzy') #not reversible
 						bonus_beauty -= 30
 					else:
 						if person.traits.has('Prude'):
-							person.remove_trait('Prude') #not reversible
+							person.trait_remove('Prude') #not reversible
 						person.add_trait('Pervert') #not reversible
 		else:
 			bonus_magic += person.genealogy.seraph/50
@@ -2233,7 +2270,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_magic += 1
 			bonus_courage += 10
 			if person.traits.has('Ascetic'):
-				person.remove_trait('Ascetic')
+				person.trait_remove('Ascetic')
 			else:
 				person.add_trait('Spoiled')
 			if person.sex in ['male']:
@@ -2264,7 +2301,7 @@ func setRaceBonus_Ralph(person, increasestats):
 					bonus_agility += 0.5
 					bonus_magic -= 2
 					if person.traits.has('Responsive'):
-						person.remove_trait('Responsive')
+						person.trait_remove('Responsive')
 					else:
 						person.add_trait('Magic Deaf')
 					if person.skin == 'red':
@@ -2301,7 +2338,7 @@ func setRaceBonus_Ralph(person, increasestats):
 					bonus_strength -= 1
 					bonus_agility += 1
 				if corruption >= 0.75 && person.traits.has('Ascetic'):
-					person.remove_trait('Ascetic')
+					person.trait_remove('Ascetic')
 				elif corruption >= 0.75:
 					person.add_trait('Spoiled')					
 		else:

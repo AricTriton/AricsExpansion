@@ -1,5 +1,14 @@
 
 
+#ralphC
+func succubuscheck(npc,minorgasms,maxorgasms):
+	var succubusfed = false
+	if npc != null && npc.race_display == "Succubus":
+		npc.mana_hunger -= variables.orgasmmana * randi()%(max(maxorgasms-1,1)+minorgasms)
+		succubusfed = true
+	return succubusfed
+#/ralphC
+
 func play(stage = 0):
 	var tempbuttons
 	showntext = eventstext[currentevent][stage]
@@ -20,11 +29,12 @@ func play(stage = 0):
 		person.lust = -rand_range(5,10)
 		person.lewdness += rand_range(3,5)
 		person.lastsexday = globals.resources.day
-		globals.resources.mana += rand_range(2,3)
-		###---Added by Expansion---### Races Expanded
-		if person.race.find("Dark Elf") >= 0:
-		###---Expansion End---###
-			globals.resources.mana += 1
+		if !succubuscheck(person,1,1): #ralphC - also indented below
+			globals.resources.mana += rand_range(2,3)
+			###---Added by Expansion---### Races Expanded
+			if person.race.find("Dark Elf") >= 0:
+			###---Expansion End---###
+				globals.resources.mana += 1
 	elif stage == 4:
 		person.loyal += -rand_range(5,10)
 		person.obed += -rand_range(15,25)
@@ -51,11 +61,12 @@ func spendtime(stage = 0):
 	elif stage == 3:
 		person.lastsexday = globals.resources.day
 		person.lust = -rand_range(15,25)
-		globals.resources.mana += rand_range(3,5)
-		###---Added by Expansion---### Races Expanded
-		if person.race.find("Dark Elf") >= 0:
-		###---Expansion End---###
-			globals.resources.mana += 1
+		if !succubuscheck(person,1,2): #ralphC - also indented below
+			globals.resources.mana += rand_range(3,5)
+			###---Added by Expansion---### Races Expanded
+			if person.race.find("Dark Elf") >= 0:
+			###---Expansion End---###
+				globals.resources.mana += 1
 	elif stage == 4:
 		person.loyal += -rand_range(5,10)
 		person.obed += -rand_range(15,25)
@@ -74,11 +85,12 @@ func horny(stage = 0):
 		person.lust = -rand_range(15,25)
 		person.loyal += rand_range(5,10)
 		person.stress += -rand_range(15,25)
-		globals.resources.mana += rand_range(3,5)
-		###---Added by Expansion---### Races Expanded
-		if person.race.find("Dark Elf") >= 0:
-		###---Expansion End---###
-			globals.resources.mana += 1
+		if !succubuscheck(person,1,2): #ralphC - also indented below
+			globals.resources.mana += rand_range(3,5)
+			###---Added by Expansion---### Races Expanded
+			if person.race.find("Dark Elf") >= 0:
+			###---Expansion End---###
+				globals.resources.mana += 1
 	elif stage == 2:
 		person.obed += rand_range(20,35)
 		person.lust = rand_range(15,25)
@@ -87,6 +99,32 @@ func horny(stage = 0):
 		person.loyal += -rand_range(5,10)
 	if stage != 0 && stage != 3:
 		globals.player.energy -= 25
+	buttons = tempbuttons
+	showevent()
+
+func strangerdisrespect(stage = 0):
+	var tempbuttons
+	showntext = eventstext[currentevent][stage]
+	if stage == 0:
+		tempbuttons = [["Let him use $name for a day",2], ["Reject", 3]]
+		if globals.resources.gold >= 100:
+			tempbuttons.insert(0, ['Compensate', 1])
+	if stage == 1:
+		globals.resources.gold -= 100
+		person.loyal += rand_range(10,20)
+	elif stage == 2:
+		person.away.duration = 1
+		person.away.at = 'stranger'
+		person.lastsexday = globals.resources.day
+		person.loyal -= rand_range(10,15)
+		person.obed -= rand_range(15,25)
+		person.lewdness += rand_range(3,6)
+		if succubuscheck(person,2,6): #ralphC 
+			 person.lust = person.lust / 2  #ralphC
+	elif stage == 3:
+		globals.state.reputation.wimborn -= rand_range(3,5)
+		person.obed += rand_range(10,20)
+		person.stress += rand_range(15,30)
 	buttons = tempbuttons
 	showevent()
 
@@ -117,11 +155,12 @@ func gift(stage = 0):
 			person.lust = rand_range(10,15)
 			person.sexuals.affection += round(rand_range(1,3))
 			globals.resources.gold -= 50
-			globals.resources.mana += rand_range(3,6)
-			###---Added by Expansion---### Races Expanded
-			if person.race.find("Dark Elf") >= 0:
-			###---Expansion End---###
-				globals.resources.mana += 1
+			if !succubuscheck(person,1,2): #ralphC - also indented below
+				globals.resources.mana += rand_range(3,6)
+				###---Added by Expansion---### Races Expanded
+				if person.race.find("Dark Elf") >= 0:
+				###---Expansion End---###
+					globals.resources.mana += 1
 			globals.player.energy -= 25
 	buttons = tempbuttons
 	showevent()
@@ -141,11 +180,12 @@ func teenagersflirt(stage = 0):
 		person.metrics.sex += 1
 		person.lastsexday = globals.resources.day
 		if (person.metrics.vag > 0 || person.metrics.anal > 0) && person.traits.has("Monogamous") == false:
-			globals.resources.mana += rand_range(5,10)
-			###---Added by Expansion---### Races Expanded
-			if person.race.find("Dark Elf") >= 0:
-			###---Expansion End---###
-				globals.resources.mana += 2
+			if !succubuscheck(person,3,6): #ralphC - also indented below
+				globals.resources.mana += rand_range(5,10)
+				###---Added by Expansion---### Races Expanded
+				if person.race.find("Dark Elf") >= 0:
+				###---Expansion End---###
+					globals.resources.mana += 2
 			person.loyal += -rand_range(5,10)
 			showntext += "Getting caught up in the action, $name gets on all fours and lets one of the boys take $him from behind. "
 			
@@ -159,11 +199,12 @@ func teenagersflirt(stage = 0):
 			person.loyal += -rand_range(10,20)
 			person.obed += -rand_range(30,50)
 		showntext += "After short time the boys shower the $child in semen. Satisfied with your hospitality, they leave happy. "
-		globals.resources.mana += rand_range(3,6)
-		###---Added by Expansion---### Races Expanded
-		if person.race.find("Dark Elf") >= 0:
-		###---Expansion End---###
-			globals.resources.mana += 1
+		if !succubuscheck(person,2,4): #ralphC - also indented below
+			globals.resources.mana += rand_range(3,6)
+			###---Added by Expansion---### Races Expanded
+			if person.race.find("Dark Elf") >= 0:
+			###---Expansion End---###
+				globals.resources.mana += 1
 	elif stage == 3:
 		pass
 	buttons = tempbuttons
@@ -184,12 +225,13 @@ func fickleevent(stage = 0):
 		globals.impregnation(person)
 		person.lust = -rand_range(10,20)
 		globals.player.energy -= 25
-		globals.resources.mana += rand_range(4,10)
-		person.lastsexday = globals.resources.day
-		###---Added by Expansion---### Races Expanded
-		if person.race.find("Dark Elf") >= 0:
-		###---Expansion End---###
-			globals.resources.mana += 2
+		person.lastsexday = globals.resources.day #ralphC - moved from below
+		if !succubuscheck(person,0,0): #ralphC - also indented below
+			globals.resources.mana += rand_range(4,10)
+			###---Added by Expansion---### Races Expanded
+			if person.race.find("Dark Elf") >= 0:
+			###---Expansion End---###
+				globals.resources.mana += 2
 	elif stage == 3:
 		person.lastsexday = globals.resources.day
 		person.lust = -rand_range(10,20)
@@ -200,6 +242,8 @@ func fickleevent(stage = 0):
 
 func pervertevent(stage = 0):
 	var tempbuttons
+	var temp = false #ralphC - just so succubus check function doesn't produce any error messages for unused return boolean
+	var peniscount = 0 #ralphC
 	if stage == 0:
 		slave2 = findfreeslave()
 		tempbuttons = [["Interrupt them (-25 energy)",1],["Escalate the situtation (-25 energy)",2], ["Ignore", 3]]
@@ -216,11 +260,33 @@ func pervertevent(stage = 0):
 		slave2.obed += -rand_range(10,30)
 		slave2.lust = -rand_range(10,15)
 		globals.player.energy -= 25
-		globals.resources.mana += rand_range(5,10)
-		###---Added by Expansion---### Races Expanded
-		if person.race.find("Dark Elf") >= 0:
-		###---Expansion End---###
-			globals.resources.mana += 2
+		#ralphC
+		if person.race_display == 'Succubus' && slave2.race_display == 'Succubus': #ralphC - also indented below
+			globals.resources.mana += 0
+			if globals.player.penis != "none":
+				temp = succubuscheck(person,1,1)
+				temp = succubuscheck(slave2,1,1)
+		elif slave2.race_display == 'Succubus':
+			if globals.player.penis != "none":
+				peniscount += 1
+			if person.penis != "none":
+				peniscount += 1
+			temp = succubuscheck(slave2,peniscount,peniscount)
+			globals.resources.mana += (2 - peniscount) * variables.orgasmmana
+		elif person.race_display == 'Succubus':
+			if globals.player.penis != "none":
+				peniscount += 1
+			if slave2.penis != "none":
+				peniscount += 1
+			temp = succubuscheck(person,peniscount,peniscount)
+			globals.resources.mana += (2 - peniscount) * variables.orgasmmana
+		else: #ralphC note - else original code for mana gain
+			globals.resources.mana += rand_range(5,10)
+			###---Added by Expansion---### Races Expanded
+			if person.race.find("Dark Elf") >= 0:
+			###---Expansion End---###
+				globals.resources.mana += 2
+		#/ralphC
 	buttons = tempbuttons
 	showntext = eventstext[currentevent][stage]
 	

@@ -1,4 +1,4 @@
-var id = 0
+
 
 ###---Added by Expansion---### Modified by Deviate
 #var preg = {fertility = 0, has_womb = true, duration = 0, baby = null}
@@ -10,6 +10,8 @@ var id = 0
 # preg.womb variable is array of cum in womb
 # preg.baby variable is not used, only populated with dummy value when pregnant to not break other mods which might look at it
 var preg = {fertility = 0, bonus_fertility = 0, has_womb = true, is_preg = false, duration = 0, baby = null, baby_type = '',  ovulation_type = 0, ovulation_stage = 0, ovulation_day = 0, womb = [], offspring_count = 0, unborn_baby = [],}
+var manafeedpolicy = 99999 #ralphC - mana resource value set for each npc below which mana eaters do not get fed (only relevant for mana eaters; ie. Succubus, Golem)
+var mana_hunger = 0 #ralphC - only used for Succubus and future mana eating races/hybrids
 ###---End Expansion---###
 
 
@@ -76,6 +78,39 @@ var stats = {
 	loyal_min = 0,
 }
 
+func add_trait(trait, remove = false):
+	var traitEntry = globals.origins.trait(trait)
+	if traitEntry == null:
+		globals.printErrorCode("adding non-existant trait " + str(trait))
+		return false
+	for i in get_traits():
+		if i.name == traitEntry.name || traitEntry.name in i.conflict:
+			return false
+	traits.append(traitEntry.name)
+	if globals.get_tree().get_current_scene().has_node("infotext") && globals.slaves.has(self) && away.at != 'hidden':
+		var text = self.dictionary("$name acquired new trait: " + traitEntry.name)
+		globals.get_tree().get_current_scene().infotext(text, 'yellow')
+	if !traitEntry.effect.empty():
+		add_effect(traitEntry.effect)
+	
+	###---Added by Expansion---### Sort Traits Alphabetically
+	traits.sort()
+	###---End Expansion---###
+	
+	return true
+
+func trait_remove(trait):
+	trait = globals.origins.trait(trait)
+	if traits.find(trait.name) < 0:
+		return
+	traits.erase(trait.name)
+	if trait['effect'].empty() != true:
+		add_effect(trait['effect'], true)
+	
+	if globals.get_tree().get_current_scene().has_node("infotext") && globals.slaves.find(self) >= 0 && away.at != 'hidden':
+		var text = self.dictionary("$name lost trait: " + trait.name)
+		globals.get_tree().get_current_scene().infotext(text,'yellow')
+
 
 ###---Added by Expansion---###
 #Expanded: False for Never Touched, True for Touched | ExpandedVersion: Updates Already Expanded People
@@ -114,7 +149,7 @@ var npcexpanded = {
 #var dietexpanded = {dailyneed = 0, nourishment = {food = 100, milk = 30, cum = 15, piss = 0, blood = 0}, hunger = 0}
 #OLD BELOW Daily: Diet
 
-var diet = {base = 1,type = "food",hunger = 0,dailyneed = 0,nourishment = {food = 100,milk = 30,cum = 15,piss = 0,blood = 0,},}
+var diet = {base = 10, type = "food", hunger = 0, dailyneed = 0, nourishment = {food = 100, milk = 30, cum = 15, piss = 0, blood = 0,},}
 
 #Mind is the "AI" that can be altered for Dialogue
 #Identity: The way they currently think/act | Id: Natural Instincts | Ego: Conscious/Intentional Identity
@@ -130,12 +165,16 @@ var mind = {
 	secretslog = "",
 	status = "none",
 	demeanor = "none",
-	flaw = "none",
-	flawless = false,
+	flaw = "none",					#TBK - Remove Next Save-Incompatible Version
+	flawless = false,				#TBK - Remove Next Save-Incompatible Version
+	vice = "none",
+	vice_presented = false,
+	vice_known = false,
+	vice_removed = false,
 	treatment = [],
 	respect = 0,
 	humiliation = 0,
-	lewd = 0
+	lewd = 0,
 }
 
 #Instinct is the base desired, based on Race. These are the current "Needs"
@@ -228,6 +267,7 @@ var exposed = {
 	assforced = false,
 	ass = false,
 }
+
 #Tracks Cum Storage
 var cum = {face = 0, mouth = 0, body = 0, pussy = 0, ass = 0}
 
@@ -299,16 +339,15 @@ func add_jobskill(job, value = 1):
 	if rand_range(0,100) <= self.wit && self.jobskills[job] + value*2 <= 100:
 		self.jobskills[job] += value*2
 		text += self.dictionary("$name increased $his " + str(job).capitalize() + " Skill by " + str(value*2) + ". ")
-	elif self.jobskills[job] + value <= 100:
+	elif self.jobskills[job] + value < 100:
 		self.jobskills[job] += value
 		text += self.dictionary("$name increased $his " + str(job).capitalize() + " Skill by " + str(value) + ". ")
-	elif self.jobskills[job] + value > 100 && self.npcexpanded.onlyonce.find(job + 'skillmaxed') < 0:
+	elif self.jobskills[job] + value >= 100 && self.npcexpanded.onlyonce.find(job + 'skillmaxed') < 0:
+		self.jobskills[job] = 100
 		self.npcexpanded.onlyonce.append(job + 'skillmaxed')
 		text += self.dictionary("$name's " + str(job).capitalize() + " Skill is at Maximum. ")
 	if globals.get_tree().get_current_scene().has_node("infotext") && globals.slaves.find(self) >= 0 && away.at != 'hidden':
 		globals.get_tree().get_current_scene().infotext(text,'green')
-	
-	return
 
 #Category: Farm Expanded
 var farmexpanded = {
@@ -344,13 +383,14 @@ var randomname = true #True: The Slave Randomizes the name / False: The Slave's 
 #Daily Events: Exhaustion (Forced Rest), Consents, Fetishes
 var dailyevents = [] #Tracks pending events like "Milk Leak", "Pissing", etc
 var dailytalk = [] #Tracks Once Per Day Topics
-var flawknown = false
+
+var flawknown = false			#TBK - Remove on Next Save Incompatible Version
 
 #Not Implimented Yet
 var daylog = {} #Tracks Events from the Day Before | So far: brokerule_name or followedrule_name
 
 #---Sex Expanded | Fetish Content
-func checkFetish(fetish, alternatemod = 0, increase = true):
+func checkFetish(fetish, alternatemod = 0, increase = true, addevent = true):
 	#Checks and Updates Fetishes | alternatemod needs to be a Number between .1-3
 	var success = false
 	var clamper = 0
@@ -365,9 +405,10 @@ func checkFetish(fetish, alternatemod = 0, increase = true):
 		clamper = clamp(opinionrank-2, 0.5, 3)
 	else:
 		clamper = alternatemod
-	if rand_range(0,100) <= 20 + ((opinionrank*10) * clamper):
+	if rand_range(0,100) <= globals.expansionsettings.fetish_base_increase_chance + ((opinionrank*10) * clamper):
 		success = true
-		self.dailyevents.append(fetish)
+		if addevent == true:
+			self.dailyevents.append(fetish)
 	
 	#Fetish Increase Check
 	if increase == true:
@@ -521,28 +562,28 @@ func loyal_set(value):
 ###---Added by Expansion---### Modified by Deviate - Allow current stat up to max stat
 func cour_set(value):
 	if stats.cour_max > 100:
-		stats.cour_base = clamp(value, 0, stats.cour_max)
+		stats.cour_base = clamp(value - stats.cour_racial, 0, stats.cour_max)
 	else:
-		stats.cour_base = clamp(value, 0, min(stats.cour_max, originvalue[origins]))
+		stats.cour_base = clamp(value - stats.cour_racial, 0, min(stats.cour_max, originvalue[origins]))
 
 func conf_set(value):
 	var bonus = max(0, stats.conf_max - originvalue['noble'])
 	if stats.conf_max > 100:
-		stats.conf_base = clamp(value, 0, stats.conf_max)
+		stats.conf_base = clamp(value - stats.conf_racial, 0, stats.conf_max)
 	else:
-		stats.conf_base = clamp(value, 0, min(stats.conf_max, originvalue[origins] + bonus))
+		stats.conf_base = clamp(value - stats.conf_racial, 0, min(stats.conf_max, originvalue[origins] + bonus))
 
 func wit_set(value):
 	if stats.wit_max > 100:
-		stats.wit_base = clamp(value, 0, stats.wit_max)
+		stats.wit_base = clamp(value - stats.wit_racial, 0, stats.wit_max)
 	else:
-		stats.wit_base = clamp(value, 0, min(stats.wit_max, originvalue[origins]))
+		stats.wit_base = clamp(value - stats.wit_racial, 0, min(stats.wit_max, originvalue[origins]))
 
 func charm_set(value):
 	if stats.charm_max > 100:
-		stats.charm_base = clamp(value, 0, stats.charm_max)
+		stats.charm_base = clamp(value - stats.charm_racial, 0, stats.charm_max)
 	else:
-		stats.charm_base = clamp(value, 0, min(stats.charm_max, originvalue[origins]))
+		stats.charm_base = clamp(value - stats.charm_racial, 0, min(stats.charm_max, originvalue[origins]))
 ###---End Expansion---###
 
 
@@ -605,37 +646,37 @@ func quirk(text):
 	#replaceRand(string, 'target', 'new', 50, 1)
 	#---Phrase Additions
 	if traits.has('Foul Mouth'):
-		string = replaceRand(string, '. ', '.'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCursing(' '))])), 50, 2)
-		string = replaceRand(string, '! ', '!'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCursing(' '))])), 50, 1)
-		string = replaceRand(string, ', ', ','+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCursing(' '))])), 50, 3)
-		string = replaceRand(string, '? ', '?'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCursing(' '))])), 50, 2)
+		string = replaceRand(string, '. ', '.'+globals.expansiontalk.quirkCursing(' '), 50, 2)
+		string = replaceRand(string, '! ', '!'+globals.expansiontalk.quirkCursing(' '), 50, 1)
+		string = replaceRand(string, ', ', ','+globals.expansiontalk.quirkCursing(' '), 50, 3)
+		string = replaceRand(string, '? ', '?'+globals.expansiontalk.quirkCursing(' '), 50, 2)
 	if traits.has('Ditzy'):
-		string = replaceRand(string, '. ', '.'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkDitzy(' '))])), 50, 2)
-		string = replaceRand(string, '! ', '!'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkDitzy(' '))])), 50, 2)
-		string = replaceRand(string, ', ', ','+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkDitzy(' '))])), 50, 1)
-		string = replaceRand(string, '? ', '?'+str(globals.randomitemfromarray([str(globals.expansiontalk.quirkDitzy(' '))])), 50, 1)
+		string = replaceRand(string, '. ', '.'+globals.expansiontalk.quirkDitzy(' '), 50, 2)
+		string = replaceRand(string, '! ', '!'+globals.expansiontalk.quirkDitzy(' '), 50, 2)
+		string = replaceRand(string, ', ', ','+globals.expansiontalk.quirkDitzy(' '), 50, 1)
+		string = replaceRand(string, '? ', '?'+globals.expansiontalk.quirkDitzy(' '), 50, 1)
 	if race.find('Cat') > 0:
-		string = replaceRand(string, ' ', str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCat(self,' '))])), 50, 2)
+		string = replaceRand(string, ' ', globals.expansiontalk.quirkCat(self,' '), 50, 2)
 	if race.find('Dog') > 0:
-		string = replaceRand(string, ' ', str(globals.randomitemfromarray([str(globals.expansiontalk.quirkDog(self,' '))])), 50, 2)
+		string = replaceRand(string, ' ', globals.expansiontalk.quirkDog(self,' '), 50, 2)
 	if mood == "crying":
-		string = replaceRand(string, ' ', str(globals.randomitemfromarray([str(globals.expansiontalk.quirkCrying(self,' '))])), 50, 2)
+		string = replaceRand(string, ' ', globals.expansiontalk.quirkCrying(self,' '), 50, 2)
 	#---Letter Replacers
 	if race.find('Lamia') > 0:
-		string = replaceRand(string, 's', str(globals.randomitemfromarray(['s','ss','sss','ssss','sssss'])), 50, 1)
+		string = replaceRand(string, 's', globals.randomitemfromarray(['s','ss','sss','ssss','sssss']), 50, 1)
 	if race.find('Arachna') > 0:
-		string = replaceRand(string, 's', str(globals.randomitemfromarray(['s','ss','sss','ssss','sssss'])), 50, 2)
+		string = replaceRand(string, 's', globals.randomitemfromarray(['s','ss','sss','ssss','sssss']), 50, 2)
 	if race.find('Taurus') > 0:
-		string = replaceRand(string, 'mo', str(globals.randomitemfromarray(['mo','moo','mooo','moooo'])), 50, 1)
+		string = replaceRand(string, 'mo', globals.randomitemfromarray(['mo','moo','mooo','moooo']), 50, 1)
 	if traits.has('Lisp'):
 		string = replaceRand(string, 's', 'th', 100, 0)
 	if traits.has('Stutter') || mood == "scared" || mood == "crying":
-		string = replaceRand(string, 'st', str(globals.randomitemfromarray(['st-st','s-st-st','s-st'])), 50, 1)
-		string = replaceRand(string, 'rr', str(globals.randomitemfromarray(['rr-r','rr-rr','rr-r-r'])), 25, 1)
-		string = replaceRand(string, 'g',str(globals.randomitemfromarray(['g-g','gg-g','gg-gg-g'])), 50, 1)
-		string = replaceRand(string, 'k',str(globals.randomitemfromarray(['k-k','kk-k','kk-kk-k'])), 75, 1)
-		string = replaceRand(string, 'ch',str(globals.randomitemfromarray(['ch-ch','c-ch','ch-c-ch'])), 75, 1)
-		string = replaceRand(string, 'b',str(globals.randomitemfromarray(['bb-b','b-b','bb-bb-b'])), 25, 1)
+		string = replaceRand(string, 'st', globals.randomitemfromarray(['st-st','s-st-st','s-st']), 50, 1)
+		string = replaceRand(string, 'rr', globals.randomitemfromarray(['rr-r','rr-rr','rr-r-r']), 25, 1)
+		string = replaceRand(string, 'g', globals.randomitemfromarray(['g-g','gg-g','gg-gg-g']), 50, 1)
+		string = replaceRand(string, 'k', globals.randomitemfromarray(['k-k','kk-k','kk-kk-k']), 75, 1)
+		string = replaceRand(string, 'ch', globals.randomitemfromarray(['ch-ch','c-ch','ch-c-ch']), 75, 1)
+		string = replaceRand(string, 'b', globals.randomitemfromarray(['bb-b','b-b','bb-bb-b']), 25, 1)
 	#---Casual Additions || rand_range(0,100) < obed
 	if mind.identity == 'proper' || rand_range(0,1) > .5:
 		string = string.replace('$Thanks','Thank you')
@@ -646,9 +687,9 @@ func quirk(text):
 	#---Text Replacers
 	#Cancel All Text for Mute && (obed+loyal)*.5 >= 50
 	if rules.silence == true:
-		string = str(globals.randomitemfromarray(['...','...','...','...um...can I talk?','...I am not supposed to talk...','*cough*','*clears throat*','*shrugs at you*','*gestures that $he is not allowed to speak*']))
+		string = globals.randomitemfromarray(['...','...','...','...um...can I talk?','...I am not supposed to talk...','*cough*','*clears throat*','*shrugs at you*','*gestures that $he is not allowed to speak*'])
 	if traits.has('Mute'):
-		string = str(globals.randomitemfromarray(['...','...','...']))
+		string = '...'
 
 	return string
 
@@ -765,20 +806,18 @@ func dictionary(text):
 		string = string.replace('$parent', 'mother')
 		string = string.replace('$sir', "Ma'am")
 	string = string.replace('$race', race.to_lower())
-	###---Added by Expansion---### Just to remove the error on load
-	if globals.player != null:
-		string = string.replace('$playername', globals.player.name_short())
-	###---End Expansion---###
+	string = string.replace('$playername', globals.player.name_short())
 	string = string.replace('$master', getMasterNoun())
 	string = string.replace('[haircolor]', haircolor)
 	string = string.replace('[eyecolor]', eyecolor)
 	var idx = string.find('$stutter') # "$stutter$master" may produce "M-Master"
 	while idx >= 0:
-		string = string.left(idx) + string.substring(idx + 8, randi() % 2 + 1) + "-" + string.right(idx + 8)
+		string = string.left(idx) + string.substr(idx + 8, randi() % 2 + 1) + "-" + string.right(idx + 8)
 		idx = string.find('$stutter')
 	return string
 
-func countluxury():
+###---Added by Expansion---### Added Actually_Run to allow checking without affecting
+func countluxury(actually_run = true):
 	var templuxury = luxury
 	var goldspent = 0
 	var foodspent = 0
@@ -789,14 +828,10 @@ func countluxury():
 	elif sleep == 'your':
 		templuxury += 5+(5*globals.state.mansionupgrades.mansionluxury)
 	if rules.betterfood == true && globals.resources.food >= 5:
-		globals.resources.food -= 5
+		if actually_run == true:
+			globals.resources.food -= 5
 		foodspent += 5
 		templuxury += 5
-		###---Added by Expansion---###
-		if mind.flaw == 'gluttony':
-			templuxury += 5
-			dailyevents.append('gluttony')
-		###---End Expansion---###
 	if rules.personalbath == true:
 		if spec != 'housekeeper':
 			value = 2
@@ -804,12 +839,8 @@ func countluxury():
 			value = 1
 		if globals.itemdict.supply.amount >= value:
 			templuxury += 5
-			globals.itemdict.supply.amount -= value
-			###---Added by Expansion---###
-			if mind.flaw == 'pride':
-				templuxury += 5
-				dailyevents.append('pride')
-			###---End Expansion---###
+			if actually_run == true:
+				globals.itemdict.supply.amount -= value
 		else:
 			#nosupply == true
 			nosupply = true
@@ -821,27 +852,130 @@ func countluxury():
 		if globals.resources.gold >= value:
 			templuxury += 10
 			goldspent += value
-			globals.resources.gold -= value
-		###---Added by Expansion---###
-		if mind.flaw == 'greed':
-			templuxury += 5
-			dailyevents.append('greed')
-		###---End Expansion---###
+			if actually_run == true:
+				globals.resources.gold -= value
 	if rules.cosmetics == true:
 		if globals.itemdict.supply.amount > 1:
 			templuxury += 5
-			globals.itemdict.supply.amount -= 1
-			###---Added by Expansion---###
-			if mind.flaw == 'pride':
-				templuxury += 5
-				dailyevents.append('pride')
-			###---End Expansion---###
+			if actually_run == true:
+				globals.itemdict.supply.amount -= 1
 		else:
 			nosupply = true
-
-	var luxurydict = {luxury = templuxury, goldspent = goldspent, foodspent = foodspent, nosupply = nosupply}
+	
+	###---Added by Expansion---### Vices
+	var roll = round(rand_range(0,100))
+	var vice_modifier = 0
+	var vice_satisfied = false
+	if globals.expansionsettings.vices_luxury_effects == true && (self.mind.vice_known == true || roll <= globals.expansionsettings.vices_undiscovered_trigger_chance):
+		#Lust
+		if self.checkVice('lust'):
+			var vice_lust_mod = clamp(5 + round(self.lewdness * .1), 5, 15)
+			if self.work in ['fucktoy','fucktoywimborn','escortwimborn','whorewimborn','ffprostitution']:
+				vice_satisfied = true
+				vice_lust_mod += 5
+			if lastsexday == globals.resources.day || vice_satisfied == true:
+				vice_modifier = clamp(vice_lust_mod - ((globals.resources.day - self.lastsexday)*2), 0, 20)
+			else:
+				vice_modifier = clamp(vice_lust_mod - ((globals.resources.day - self.lastsexday)*2), -20, 10)
+		#Sloth
+		elif self.checkVice('sloth'):
+			if self.work in ['rest','housepet']:
+				vice_satisfied = true
+				vice_modifier += 5
+			if rules.personalbath == true:
+				vice_modifier += 5
+			if self.energy == self.stats.energy_max:
+				vice_modifier += 10
+			elif self.energy <= self.stats.energy_max * .25:
+				vice_modifier -= 5
+			if self.stress <= self.stats.stress_max * .25:
+				vice_modifier += 5
+			elif self.stress > self.stats.stress_max * .75:
+				vice_modifier -= 5
+			if vice_satisfied == true:
+				vice_modifier = clamp(vice_modifier, 0, 20)
+		#Wrath
+		elif self.checkVice('wrath') && self.consentexp.party:
+			if self.metrics.win >= self.metrics.ownership || self.work in ['guardian','slavecatcher','trainer','trainee']:
+				vice_satisfied = true
+			if vice_satisfied == true:
+				vice_modifier = clamp(self.metrics.win - self.metrics.ownership, 0, 40)
+			else:
+				vice_modifier = clamp(self.metrics.win - self.metrics.ownership, -20, 20)
+		#Pride
+		if self.checkVice('pride'):
+			if self.work in ['headgirl','farmmanager','jailer']:
+				vice_satisfied = true
+				vice_modifier += 10
+			if self.rules.cosmetics == true && globals.itemdict.supply.amount >= 1:
+				if actually_run == true:
+					globals.itemdict.supply.amount -= 1
+				vice_modifier += 5
+			elif self.rules.cosmetics == false && vice_satisfied == false:
+				vice_modifier -= 10
+			if rules.personalbath == true:
+				vice_modifier += 5
+			elif rules.personalbath == false && vice_satisfied == false:
+				vice_modifier -= 10
+		#Gluttony
+		elif self.checkVice('gluttony'):
+			if self.work == 'cooking':
+				vice_satisfied = true
+				vice_modifier += 10
+			if self.rules.betterfood == false && globals.resources.food >= 8:
+				foodspent += 3
+				if actually_run == true:
+					globals.resources.food -= 3
+				vice_modifier += 10
+			elif vice_satisfied == false:
+				vice_modifier -= 10
+		#Greed
+		elif self.checkVice('greed'):
+			if self.work in ['storewimborn','milkmerchant']:
+				vice_satisfied = true
+				vice_modifier += 10
+			if self.rules.pocketmoney == true && globals.resources.gold >= 5:
+				if actually_run == true:
+					globals.resources.gold -= 5
+				goldspent += 5
+				vice_modifier += 10
+			elif self.rules.pocketmoney == false && vice_satisfied == false:
+				vice_modifier -= 10
+		#Envy
+		elif self.checkVice('envy'):
+			var envytarget = globals.expansion.getBestSlave()
+			if envytarget == self:			
+				vice_satisfied = true
+				vice_modifier += 20
+			else:
+				if self.work in ['headgirl','farmmanager','jailer']:
+					vice_satisfied = true
+					vice_modifier += 5
+				if envytarget.sleep in ['personal','your'] && !self.sleep in ['personal','your']:
+					vice_modifier -= 5
+				else:
+					vice_modifier += 5
+				if envytarget.lastsexday > self.lastsexday && self.consent == true:
+					vice_modifier -= 5
+				else:
+					vice_modifier += 5
+				if envytarget.stress < self.stress * .5:
+					vice_modifier -= 5
+				else:
+					vice_modifier += 5
+				if globals.originsarrayexp.find(envytarget.origins) > globals.originsarrayexp.find(self.origins):
+					vice_modifier -= 10
+				else:
+					vice_modifier += 5
+			if vice_satisfied == true:
+				vice_modifier = clamp(vice_modifier, 0, 20)
+		#Calculation
+		if vice_modifier != 0:
+			vice_modifier = clamp(vice_modifier, -20, 20)
+			templuxury += vice_modifier
+	var luxurydict = {luxury = templuxury, goldspent = goldspent, foodspent = foodspent, nosupply = nosupply, vice_modifier = vice_modifier}
+	###---End Expansion---###
 	return luxurydict
-
 
 func calculateprice():
 	var price = 0
@@ -853,6 +987,10 @@ func calculateprice():
 		bonus += variables.pricebonusvirgin
 	if sex == 'futanari':
 		bonus += variables.pricebonusfuta
+	###---Added by Expansion---### centerflag982 - added dickgirl bonus
+	if sex == 'dickgirl':
+		bonus += variables.pricebonusdickgirl
+	###---End Expansion---###
 	for i in get_traits():
 		if i.tags.has('detrimental'):
 			bonus += variables.pricebonusbadtrait
@@ -937,15 +1075,11 @@ func baddiedeath():
 		globals.slaves.erase(self)
 	if globals.state.relativesdata.has(id):
 		globals.state.relativesdata[id].state = 'dead'
-	elif globals.state.babylist.has(self):
+	if globals.state.babylist.has(self):
 		globals.state.babylist.erase(self)
 		globals.clearrelativesdata(self.id)
 	if globals.state.allnpcs.has(self):
-		globals.items.unequipall(self)
 		globals.state.allnpcs.erase(self)
-	for npcs in globals.state.npclastlocation:
-		if npcs[1] == self.id:
-			globals.state.npclastlocation.erase(npcs)
 	for npcs in globals.state.offscreennpcs:
 		if npcs[0] == self.id:
 			globals.state.offscreennpcs.erase(npcs)
@@ -955,6 +1089,19 @@ func baddiedeath():
 func abortion():
 	while !preg.unborn_baby.empty():
 		globals.miscarriage(self)
+###---End Expansion---###
+
+###---Added by Expansion---### centerflag982 - allows dickgirls to be identified
+func checksex():
+	if penis != 'none':
+		if vagina != 'none':
+			sex = 'futanari'
+		elif globals.rules.dickgirl && titssize != 'masculine' && titssize != 'flat':
+			sex = 'dickgirl'
+		else:
+			sex = 'male'
+	else:
+		sex = 'female'
 ###---End Expansion---###
 
 ###---Added by Expansion---### SetGet
@@ -1033,7 +1180,7 @@ func assignBreedingPartner(partnerid):
 	var text = ""
 	var success = true
 	var partner = globals.state.findslave(partnerid)
-	if partner == null || partnerid == str(-1):
+	if partner == null || partnerid == '-1':
 		text = "Invalid Partner"
 		success = false
 #	#Invalid Breeder Type Check
@@ -1053,19 +1200,16 @@ func assignBreedingPartner(partnerid):
 		farmexpanded.breeding.partner = partnerid
 		partner.unassignPartner()
 		partner.farmexpanded.breeding.partner = self.id
-		text += dictionary("[color=aqua]$name[/color] is now partnered to breed with [color=aqua]" + str(partner.name) + "[/color]. They will continue to breed together until they are given further orders.\n")	
+		text = "[color=aqua]"+name_short()+"[/color] is now partnered to breed with [color=aqua]" + str(partner.name) + "[/color]. They will continue to breed together until they are given further orders.\n"	
 	return text
 
 func unassignPartner():
 	#Unassigned the Old Partner and clears that slot
-	if farmexpanded.breeding.partner != str(-1):
+	if farmexpanded.breeding.partner != '-1':
 		var partner = globals.state.findslave(farmexpanded.breeding.partner)
-		if partner == null:
-			farmexpanded.breeding.partner = str(-1)
-			return
-		else:
-			farmexpanded.breeding.partner = str(-1)
-			partner.farmexpanded.breeding.partner = str(-1)
+		if partner != null && partner.farmexpanded.breeding.partner == self.id:
+			partner.farmexpanded.breeding.partner = '-1'
+		farmexpanded.breeding.partner = '-1'
 ###---End Expansion---###
 
 ###---Added by Expansion---### Deviate New Code
@@ -1105,31 +1249,29 @@ var genealogy = {
 }
 
 func get_birth_amount_name():
-	var rvar
-	if preg.unborn_baby.size() == 1:
-		rvar = 'one baby'
-	elif preg.unborn_baby.size() == 2:
-		rvar = 'twins'
-	elif preg.unborn_baby.size() == 3:
-		rvar = 'triplets'
-	elif preg.unborn_baby.size() == 4:
-		rvar = 'quadruplets'
-	elif preg.unborn_baby.size() == 5:
-		rvar = 'quintuplets '
-	elif preg.unborn_baby.size() == 6:
-		rvar = 'sextuplets'
-	elif preg.unborn_baby.size() == 7:
-		rvar = 'septuplets'
-	elif preg.unborn_baby.size() == 8:
-		rvar = 'octuplets'
-	elif preg.unborn_baby.size() == 9:
-		rvar = 'nonuplets'
-	elif preg.unborn_baby.size() >= 10:
-		rvar = 'litter'
-	else:
-		rvar = ''
-	
-	return rvar
+	match int(clamp(preg.unborn_baby.size(),0,10)):
+		1:
+			return 'one baby'
+		2:
+			return 'twins'
+		3:
+			return 'triplets'
+		4:
+			return 'quadruplets'
+		5:
+			return 'quintuplets '
+		6:
+			return 'sextuplets'
+		7:
+			return 'septuplets'
+		8:
+			return 'octuplets'
+		9:
+			return 'nonuplets'
+		10:
+			return 'litter'
+		0:
+			return ''
 
 func get_race_display():
 	var rvar = ''
@@ -1184,30 +1326,181 @@ func get_wombsemen():
 	
 	return semen
 
-#Flaw Checks/Reveals
-func checkFlaw(type):
-	var allflaws = globals.expansion.flawarray
+#---Clothing
+func updateClothing():
+	var text = ""
+	#Player Check
+	if self == globals.player && globals.expansionsettings.player_treats_clothing_like_slave == false:
+		return text
+	
+	#Determine Clothing Status
+	var exposed_parts = []
+	var amnude = false
+	for part in ['chest','genitals','ass']:
+		if self.exposed[part] == true:
+			exposed_parts.append([part])
+	if exposed_parts.size() > 1:
+		amnude = true
+	
+	#Determine if they should Strip or Dress
+	if amnude == true:
+		var redress = false
+		#Naked - Do They Need/Want to Dress? Can They?
+		if self.rules.nudity == false && !self.fetish.exhibitionism in ['enjoyable','mindblowing']:
+			text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. You hadn't ordered $him to stay "+ globals.expansion.nameNaked() +" so $he proceeded. "
+			redress = true
+		elif self.rules.nudity == true && globals.fetishopinion.find(self.fetish.exhibitionism) <= 2:
+			#Chance to Rebel
+			var captured = 0
+			for i in self.effects.values():
+				if i.code == 'captured':
+					captured = i.duration/2
+			var chance = round(self.metric.own + ((self.loyal + self.obed + self.fear)/3) - (captured * 10))
+			var roll = round(rand_range(0,100))
+			if roll <= chance:
+				text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. However, you ordered $him to stay "+ globals.expansion.nameNaked() +". $He followed your orders obediently. "
+				if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
+					self.dailyevents.append('rule_nudity_obeyed')
+			else:
+				text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. You had ordered $him to stay "+ globals.expansion.nameNaked() +", but $he ignored your order.\n[color=green]Punishment Valid Reason added; Bonus Applied to Next Date[/color] "
+				if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
+					self.dailyevents.append('rule_nudity_disobeyed')
+				redress = true
+			if globals.expansionsettings.perfectinfo == true:
+				text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Chance [color=aqua]" + str(chance) + " [/color]. "+ globals.fastif(roll <= chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
+		#Redress
+		if redress == true:
+			text += "\n"
+			#Attempt Failed due to Restraints
+			if self.restrained != "none":
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['','','','desparately ','frustratedly ','angrily ','grumpily ']) +"tried to "+ globals.randomitemfromarray(['dress','clothe $himself','get dressed','redress','put $his clothes back on']) +", but $he was unable to due to $his [color=red]restraints[/color]. "
+				globals.expansion.updateMood(self, -1)
+				return text
+			if self.exposed.chestforced == false || self.exposed.genitalsforced == false || self.exposed.assforced == false:
+				text += "[color=aqua]$name[/color] looked at the shredded scraps that used to be $his clothing. These shredded pieces of cloth won't allow $him any privacy or the option to cover $himself in those areas. "
+			if self.exposed.chest == true && self.exposed.chestforced == false:
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['put back on','slipped into','put on']) +" $his tunic, obscuring $his "+ globals.expansion.getChest(self) +". "
+				self.exposed.chest = false
+			if self.exposed.genitals == true && self.exposed.genitalsforced == false || self.exposed.ass == true && self.exposed.assforced == false:
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['put back on','slipped into','put on']) +" $his pants, obscuring $his "
+				if self.exposed.genitals == true:
+					text += globals.expansion.getGenitals(self)
+				if self.exposed.ass == true:
+					if self.exposed.genitals == true:
+						text += " and " 
+					text += globals.expansion.nameAss()
+				self.exposed.genitals = false
+				self.exposed.ass = false
+				text += ". "
+		
+	else:
+		var strip = false
+		#Dressed - Do They Need/Want to Strip?
+		if self.rules.nudity == true:
+			#Consent
+			if self.consentexp.nudity == true || self.fetish.exhibitionism in ['enjoyable','mindblowing']:
+				text += "\n[color=aqua]$name[/color] wanted to strip " + globals.expansion.nameNaked() + " " + globals.randomitemfromarray(['','','slowly','quickly','eagerly','obediently']) + " as per your [color=aqua]rules[/color]. "
+				if self.checkFetish('exhibitionism', 1, false, false):
+					text += "$He likely would have done so "+ globals.randomitemfromarray(['','eagerly','excitedly']) +" anyways due to $his [color=green]"+ globals.randomitemfromarray(['exhibitionism','natural exhibitionism','exhibitionism fetish','love of being nude','enjoyment of others seeing $his naked body']) +"[/color]. "
+				if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
+					self.dailyevents.append('rule_nudity_obeyed')
+				strip = true
+			else:
+				text += "\n[color=aqua]$name[/color] seemed to hesitate when considering stripping " + globals.expansion.nameNaked() + " as per your rules "+ globals.randomitemfromarray(['','as this is all new','as $he still feels awkward about it','as $he is unsure how $he feels about it']) +". "
+				var captured = 0
+				for i in self.effects.values():
+					if i.code == 'captured':
+						captured = i.duration/2
+				var chance = round(self.metric.own + ((self.loyal + self.obed + self.fear)/2) - (captured * 10))
+				var roll = round(rand_range(0,100))
+				if roll <= chance:
+					text += "$He decided that $he did want to strip " + globals.expansion.nameNaked() + " " + globals.randomitemfromarray(['','','slowly','quickly','eagerly','obediently','for you']) + " as per your rules. "
+					if self.fetish.exhibitionism in ['enjoyable','mindblowing'] || self.checkFetish('exhibitionism', 1, false, false):
+						text += "$His [color=green]"+ globals.randomitemfromarray(['exhibitionism','natural exhibitionism','exhibitionism fetish','love of being nude','enjoyment of others seeing $his naked body']) +"[/color] shone through and $he chose not hesistate to strip for you in the future. "
+						self.consentexp.nudity = true
+					else:
+						text += "$He still seems hesitant about doing it in the future. $He may need to be more [color=green]"+ globals.randomitemfromarray(['exhibitionist','comfortable showing others $his body','into the exhibitionism fetish','of a nudist','into others seeing $his naked body']) +"[/color] to fully accept it. "
+					if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
+						self.dailyevents.append('rule_nudity_obeyed')
+					strip = true
+				else:
+					text += "\n[color=red][color=aqua]$name[/color] refused to strip " + globals.expansion.nameNaked() + " per your orders. $He has broke your rules. $He seems to need a lesson in [color=aqua]Fear[/color], [color=aqua]Obedience[/color], or [color=aqua]Loyalty[/color]. [/color]\n[color=green]Punishment Valid Reason added; Bonus Applied to Next Date[/color] "
+					if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
+						self.dailyevents.append('rule_nudity_disobeyed')
+				if globals.expansionsettings.perfectinfo == true:
+					text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Chance [color=aqua]" + str(chance) + " [/color]. "+ globals.fastif(roll <= chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
+		elif self.fetish.exhibitionism == 'mindblowing':
+			strip = true
+			text += "\n[color=aqua]$name[/color] "+ globals.randomitemfromarray(['','','eagerly','excitedly','happily']) +" tried to strip "+ globals.expansion.nameNaked() +"  due to $his [color=aqua]"+ globals.randomitemfromarray(['exhibitionism','natural exhibitionism','exhibitionism fetish','love of being nude','enjoyment of others seeing $his naked body']) +"[/color]. "
+			
+		#Strip
+		if strip == true:
+			text += "\n"
+			#Attempt Failed due to Restraints
+			if self.restrained != "none":
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['','','','desparately','frustratedly','angrily','grumpily','sarcastically']) +" tried to "+ globals.randomitemfromarray(['strip','undress','get naked','get nude','strip $himself']) +", but $he was unable to due to $his [color=red]restraints[/color]. "
+				globals.expansion.updateMood(self, -1)
+				return text
+			if self.exposed.chest == false:
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['took off','stripped','removed','stripped off','pulled off','slipped out of']) +" $his tunic, revealing $his "+ globals.expansion.getChest(self) +". "
+				self.exposed.chest = true
+			if self.exposed.genitals == false || self.exposed.ass == true:
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['took off','stripped','removed','stripped off','pulled off','slipped out of']) +" $his pants, revealing $his "
+				if self.exposed.genitals == false:
+					text += globals.expansion.getGenitals(self)
+				if self.exposed.ass == true:
+					if self.exposed.genitals == false:
+						text += " and " 
+					text += globals.expansion.nameAss()
+				self.exposed.genitals = true
+				self.exposed.ass = true
+				text += ". "
+				
+	return text
+
+#---Vice (Formerly Flaw)
+#Vice Checks/Reveals
+func checkVice(type, countascheck = true):
+	var allvices = globals.expansion.vicearray
 	var success = false
-	if !allflaws.has(type):
-		print('Flaw type ' + type + ' does not exist to be Checked')
+	if !allvices.has(type):
+		print('Vice type ' + type + ' does not exist to be Checked')
 		return success
 	
-	if self.mind.flaw == type:
-		self.dailyevents.append(type)
+	if self.mind.vice == type:
 		success = true
+		if countascheck == true:
+			self.dailyevents.append(type)
 	
 	return success
 
-func revealFlaw(type):
-	var allflaws = globals.expansion.flawarray
+func revealVice(incomingtype = 'none'):
+	#use person.revealVice() to reveal their Vice, use person.revealVice('type') to "guess" the vice
+	if self.mind.vice_known == true:
+		return "\nYou already know $his [color=aqua]Vice[/color]."
+	
+	var allvices = globals.expansion.vicearray
 	var text = ""
-	if !allflaws.has(type):
-		print('Flaw type ' + type + ' does not exist to be Revealed')
+	var type = incomingtype
+	if type != 'none' && !allvices.has(type):
+		print('Vice type ' + type + ' does not exist to be Revealed')
 		return
 	
-	if self.flawknown == false && rand_range(0,100) <= self.dailyevents.find(type) * 10:
-		self.flawknown = true
-		text = globals.expansion.flawdict[type]
+	#Modifier
+	var chance = (globals.player.smaf*10) + (self.dailyevents.count(self.mind.vice)*10)
+	if self.mind.vice_presented == true:
+		chance += globals.expansionsettings.vices_discovery_presentation_bonus
+	
+	type = self.mind.vice
+	
+	if rand_range(0,100) <= chance:
+		self.mind.vice_known = true
+		text = globals.expansion.vicedict[type]
+	else:
+		self.dailyevents.append(type)
 	return text
+
+#Whims -- default color for the slave list
+var namecolor = 'white'
 
 ###---End of Expansion---###

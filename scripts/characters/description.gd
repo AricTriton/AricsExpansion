@@ -4,8 +4,8 @@ func getslavedescription(tempperson, mode = 'default'):
 	person = tempperson
 	###---Added by Expansion---###
 	globals.expansion.updatePerson(person)
+	var text = basics() + features() + genitals() + mods() + tattoo() + piercing() + showVice() + onceperdayConvos()
 	###---Expansion End---###
-	var text = basics() + features() + genitals() + mods() + tattoo() + piercing() + onceperdayConvos()
 	if person.customdesc != '':
 		text += '\n\n' + person.customdesc
 	if person == globals.player:
@@ -79,7 +79,7 @@ func onceperdayConvos():
 		#Sexuality
 		if !person.dailytalk.has('talksexuality') and !person.knowledge.has('sexuality'):
 			text += "\n[color=aqua]Ask about $His Sexuality[/color]"
-		if !person.dailytalk.has('talkfetishes'):
+		if !person.dailytalk.has('talk_new_fetish') || !person.dailytalk.has('talk_change_fetish'):
 			text += "\n[color=aqua]Learn, Encourage, or Discourage $His Fetishes[/color]"
 		#The Number of Children
 		if !person.knowledge.has('desiredoffspring') && !person.dailytalk.has('desiredoffspring'):
@@ -88,11 +88,33 @@ func onceperdayConvos():
 			text += "\n[color=aqua]Encourage or Discourage the Number of Kids $He Wants[/color]"
 		#Crystal
 		if !person.dailytalk.has('crystalresearch') && globals.state.thecrystal.power <= person.smaf - 1:
-			text += "\n[color=aqua]Attempt to Research the Crystal[/color]: $His [color=aqua]Wit[/color] equates to $his chance of success to not accidentally make the [color=aqua]Crystal[/color] more [color=aqua]Powerful[/color] and harder to [color=aqua]Research[/color]."
+			text += "\n[color=aqua]Attempt to Research the Crystal[/color]\n     $His [color=aqua]Wit[/color] equates to $his chance of success to not accidentally make the [color=aqua]Crystal[/color] more [color=aqua]Powerful[/color] and harder to [color=aqua]Research[/color]."
 			if globals.state.thecrystal.mode == "dark":
 				text += "\n[color=red]Extreme Failure may result in $his being consumed by the [color=aqua]Crystal[/color] to sate its hunger.[/color]"
 		
 	return text
+
+func showVice():
+	var text = ""
+	if person.mind.vice_known == false:
+		return ""
+	match person.mind.vice:
+		'lust':
+			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is wrought with [color=red]Lust[/color] and hyperactive in $his sexuality.\n[color=green]Sexual Consent and Actions will be easier to initiate.[/color]\n[color=green]Luxury +5[/color] if [color=aqua]Fucked[/color] that day.\n[color=red]Every day they aren't Fucked, Luxury Requirement +3[/color]"
+		'pride':
+			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is incredibly [color=red]Prideful[/color] and focused on $his own appearance.\n[If permitted [color=aqua]Cosmetics[/color], uses [color=red]+1 Supply[/color] for [color=green]+5 Luxury[/color] (if possible). If permitted a [color=aqua]Personal Bath[/color], [color=green]Luxury +2.[/color]\n[color=red]If not permitted [color=aqua]Cosmetics[/color], Luxury Requirement +5[/color]"
+		'wrath':
+			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is filled with [color=red]Wrath[/color], is plagued with a short temper, and feels unsettled if $he isn't able to fight.\n[color=green]More likely to [color=aqua]Consent[/color] to [color=aqua]Fight Alongside You[/color] with the chance increasing based on their [color=aqua]Courage[/color].[/color]\nIf [color=aqua]Consent to Fight[/color] has been given, their [color=aqua]Luxury[/color] will [color=green]increase[/color] (or possibly [color=red]decrease[/color]) by their [color=aqua]Days Owned[/color] minus their total [color=aqua]Combat Wins[/color]."
+		'greed':
+			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is incredibly [color=red]Greedy[/color] and materialistic.\nIf permitted [color=aqua]Pocket Money[/color], uses [color=aqua]+5 Gold[/color] for [color=green]+5 Luxury[/color] (if possible).\n[color=red]If not permitted [color=aqua]Pocket Money[/color], Luxury Requirement +5[/color]"
+		'sloth':
+			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is very lazy and a complete [color=red]Sloth[/color]. $He is happiest when allowed not to do anything at all.\nIf permitted a [color=aqua]Personal Bath[/color], [color=green]+2 Luxury[/color].\nIf ending the day with [color=aqua]full Energy[/color], [color=green]+10 Luxury[/color] . If ending the day with [color=aqua]25 percent or lower Stress[/color], [color=green]+5 Luxury[/color].\n[color=red]If [color=aqua]Energy[/color] is below half or [color=aqua]Stress[/color] is above half (calculated separately), Luxury Requirement is increased by 10 Percent of the Difference of Max to Current.[/color]"
+		'gluttony':
+			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is very [color=red]Gluttonous[/color] and takes $his greatest pleasure in food and drinks.\n[color=green]Food and Drink Interactions will always give the best result on Dates.[/color]\nIf permitted [color=aqua]Better Food[/color], uses [color=red]+3 Food[/color]  for [color=green]+5 Luxury[/color] (if possible)\n[color=red]If not permitted [color=aqua]Better Food[/color], Luxury Requirement +5[/color]"
+		'envy':
+			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is incredibly [color=red]Envious[/color] of others.\nIf they are considered the [color=aqua]Best Slave[/color] (per the standard formula of Level+DaysOwned+Sex+Wins), [color=green]negates all Luxury Requirements[/color]. Otherwise, if they are of a higher [color=aqua]Grade[/color] than the [color=aqua]Best Slave[/color], [color=green]Luxury +5[/color].\n[color=red]If they are not the [color=aqua]Best Slave[/color], they compare their [color=aqua]Beds[/color], [color=aqua]Last Sex Days[/color], [color=aqua]Grade[/color], and [color=aqua]Stress Levels[/color] for a maximum of +20 Luxury Requirement.[/color]"
+		'none':
+			return ""
 
 ###---End Expansion---###
 
@@ -134,9 +156,9 @@ func genitals():
 			if person.lactation == true:
 				text += "\nYour nipples are incredibly hard and occassionally sput streams of milk when you move or breathe heavily. [color=green]You are obviously lactating.[/color]"
 		else:
-			text += '\n$He is wearing a [color=red]shirt[/color] at the moment, obscuring the details of $his ' + str(globals.expansion.getChest(person)) + ' from your ' + str(globals.randomitemfromarray(['eyes','gaze','inspection'])) + '.'
+			text += '\n$He is wearing a [color=red]shirt[/color] at the moment, obscuring the details of $his ' + str(globals.expansion.getChest(person)) + ' from your ' + globals.randomitemfromarray(['eyes','gaze','inspection']) + '.'
 			if person.lactation == true:
-				text += "\n$His clothes have large " + str(globals.randomitemfromarray(['wet','gloopy','moist','damp','dark'])) + " spots soaking $his " + str(globals.expansion.getChest(person)) + ", trailing down towards $his stomach. [color=green]$He is obviously lactating.[/color]"
+				text += "\n$His clothes have large " + globals.randomitemfromarray(['wet','gloopy','moist','damp','dark']) + " spots soaking $his " + str(globals.expansion.getChest(person)) + ", trailing down towards $his stomach. [color=green]$He is obviously lactating.[/color]"
 		text += lowergenitals() + " " 
 		###---Expansion End---###
 	else:
@@ -153,11 +175,11 @@ func lowergenitals():
 		if person.vagina != 'none':
 			text += "\n\n[color=#d1b970]Vagina:[/color]\n"
 			if person.vagvirgin == true:
-				text += ' $He spreads $his legs open to show you $his tight, [color=green]virgin ' + str(globals.expansion.namePussy()) + '[/color]. '
+				text += ' $He spreads $his legs open to show you $his tight, [color=green]virgin ' + globals.expansion.namePussy() + '[/color]. '
 			else:
 				text += ' $He spreads $his legs open to show you ' + getdescription('vagina')
 			if person.cum.pussy > 0:
-				text += " As $his legs are spread open, you notice a little [color=aqua]" +str(globals.expansion.nameCum())+"[/color] slip out of $his [color=aqua]" + str(globals.expansion.namePussy()) + "[/color]. "
+				text += " As $his legs are spread open, you notice a little [color=aqua]" +globals.expansion.nameCum()+"[/color] slip out of $his [color=aqua]" + globals.expansion.namePussy() + "[/color]. "
 			if person.cum.pussy > vagcapacity:
 				text += "" + globals.expansion.vagOverload(person) + "\n"
 		if person.penis != 'none':
@@ -168,11 +190,11 @@ func lowergenitals():
 		if person.balls != 'none':
 			text += "\n[color=#d1b970]Balls:[/color]\n"
 			text += getdescription('balls')
-			text += "$He produces [color=aqua]" + str(person.pregexp.cumprod) + "oz[/color] of [color=aqua]" +str(globals.expansion.nameCum())+ "[/color] per ejaculation. "
+			text += "$He produces [color=aqua]" + str(person.pregexp.cumprod) + "oz[/color] of [color=aqua]" +globals.expansion.nameCum()+ "[/color] per ejaculation. "
 	elif person != globals.player:
-		text += ' $His crotch is [color=red]clothed[/color] and [color=red]covered[/color] at the moment, obscuring the details of $his ' + str(globals.expansion.getGenitals(person)) + ' from your ' + str(globals.randomitemfromarray(['eyes','gaze','inspection'])) + '.'
+		text += ' $His crotch is [color=red]clothed[/color] and [color=red]covered[/color] at the moment, obscuring the details of $his ' + str(globals.expansion.getGenitals(person)) + ' from your ' + globals.randomitemfromarray(['eyes','gaze','inspection']) + '.'
 		if person.cum.pussy > vagcapacity:
-			text += "\nYou " + str(globals.randomitemfromarray(['spot','notice','glance at','see'])) + " a mass of " + str(globals.randomitemfromarray(['wet','gloopy','moist','damp','dark'])) + " spots seeping from $his crotch and sticking to $his " + str(globals.randomitemfromarray(['crotch','thighs','clothing',str(globals.expansion.namePussy())])) + ". " + str(globals.randomitemfromarray(['Did $he piss $himself?','How much is oozing out of $him?','Can $he still feel it pouring out?','Is that why $he is flushed?','Interesting...']))
+			text += "\nYou " + globals.randomitemfromarray(['spot','notice','glance at','see']) + " a mass of " + globals.randomitemfromarray(['wet','gloopy','moist','damp','dark']) + " spots seeping from $his crotch and sticking to $his " + globals.randomitemfromarray(['crotch','thighs','clothing',globals.expansion.namePussy()]) + ". " + globals.randomitemfromarray(['Did $he piss $himself?','How much is oozing out of $him?','Can $he still feel it pouring out?','Is that why $he is flushed?','Interesting...'])
 	if person == globals.player:
 		if person.vagina != 'none':
 			text += "\n[color=#d1b970]Vagina:[/color]\n"
@@ -185,26 +207,26 @@ func lowergenitals():
 		if person.balls != 'none':
 			text += "\n[color=#d1b970]Balls:[/color]\n"
 			text += getdescription('balls')
-			text += "You know that you produce [color=aqua]" + str(globals.player.pregexp.cumprod) + "oz[/color] of [color=aqua]" +str(globals.expansion.nameCum())+ "[/color] per ejaculation. "
+			text += "You know that you produce [color=aqua]" + str(globals.player.pregexp.cumprod) + "oz[/color] of [color=aqua]" +globals.expansion.nameCum()+ "[/color] per ejaculation. "
 	if person.vagina == 'none' && person.penis == 'none' && person.balls == 'none':
 		text += " For some reason, $his crotch has no visible genitals. "
 	if person.asshole != 'none':
 		text += "\n[color=#d1b970]Asshole:[/color]\n"
 		if person.exposed.ass == true && person != globals.player:
 			if person.assvirgin == true:
-				text += 'When requested, $he turns around and bends over when requested to show off $his tight, [color=green]virgin ' + str(globals.expansion.nameAsshole()) + '[/color]. '
+				text += 'When requested, $he turns around and bends over when requested to show off $his tight, [color=green]virgin ' + globals.expansion.nameAsshole() + '[/color]. '
 			else:
 				text += 'When requested, $he turns around and bends over when requested to show off ' + getdescription('asshole')
 			if person.cum.ass > 0:
-				text += " As $his legs are spread open, you see a little [color=aqua]" +str(globals.expansion.nameCum())+"[/color] slip out of $his [color=aqua]" + str(globals.expansion.nameAsshole()) + "[/color]. "
+				text += " As $his legs are spread open, you see a little [color=aqua]" +globals.expansion.nameCum()+"[/color] slip out of $his [color=aqua]" + globals.expansion.nameAsshole() + "[/color]. "
 			if person.cum.ass > asscapacity:
 				text += "" + globals.expansion.assOverload(person) + "\n"
 		elif person != globals.player:
-			text += '$His ' + str(globals.expansion.nameAsshole()) + ' is [color=red]clothed[/color] and [color=red]covered[/color] at the moment, obscuring the details of $his ' + str(globals.expansion.nameAsshole()) + ' from your ' + str(globals.randomitemfromarray(['eyes','gaze','inspection'])) + '.'
+			text += '$His ' + globals.expansion.nameAsshole() + ' is [color=red]clothed[/color] and [color=red]covered[/color] at the moment, obscuring the details of $his ' + globals.expansion.nameAsshole() + ' from your ' + globals.randomitemfromarray(['eyes','gaze','inspection']) + '.'
 		elif person == globals.player:
-			text += ' All your life, you have had an ' + str(globals.expansion.nameAsshole()) + ' following you around. It is ' + getdescription('asshole')
+			text += ' All your life, you have had an ' + globals.expansion.nameAsshole() + ' following you around. It is ' + getdescription('asshole')
 		if person.cum.ass > asscapacity:
-			text += "\nYou " + str(globals.randomitemfromarray(['spot','notice','glance at','see'])) + " a mass of " + str(globals.randomitemfromarray(['wet','gloopy','moist','damp','dark'])) + " spots seeping from $his " + str(globals.expansion.nameAsshole()) + " and sticking to $his " + str(globals.randomitemfromarray(['ass','thighs','clothing',str(globals.expansion.nameAsshole())])) + ". " + str(globals.randomitemfromarray(['Is it still coming out?','How much is oozing out of $him?','Can $he still feel it pouring out?','Is that why $he is flushed?','Interesting...']))
+			text += "\nYou " + globals.randomitemfromarray(['spot','notice','glance at','see']) + " a mass of " + globals.randomitemfromarray(['wet','gloopy','moist','damp','dark']) + " spots seeping from $his " + globals.expansion.nameAsshole() + " and sticking to $his " + globals.randomitemfromarray(['ass','thighs','clothing',globals.expansion.nameAsshole()]) + ". " + globals.randomitemfromarray(['Is it still coming out?','How much is oozing out of $him?','Can $he still feel it pouring out?','Is that why $he is flushed?','Interesting...'])
 	text += globals.expansion.getSwollenDescription(person,false)
 	###---Expansion End---###
 	return text
@@ -234,7 +256,7 @@ func getdescription(value):
 	if newdescriptions.has(value) && newdescriptions[value].has(person[value]):
 		text = newdescriptions[value][person[value]]
 		text = text.split('|',true)
-		text = text[rand_range(0,text.size())]
+		text = text[randi() % text.size()]
 	elif newdescriptions.has(value) && newdescriptions[value].has('default'):
 		text = newdescriptions[value].default
 	else:
@@ -309,62 +331,58 @@ func getBabyDescription(person):
 	return text
 
 ###---Added by Expansion---###
-func randomitemfromarray(source):
-	if source.size() > 0:
-		#source[randi() % source.size()] Old
-		return source[rand_range(0,source.size())]
+func randomitemfromarray(array):
+	if array.empty():
+		print("ERROR: randomitemfromarray() empty")
+		return null
+	else:
+		return array[randi() % array.size()]
 
 func nameTits():
-	var text = str(randomitemfromarray(['boobs','breasts','tits','boobs','breasts','tits','udders']))
-	return text
+	return randomitemfromarray(['boobs','breasts','tits','boobs','breasts','tits','udders'])
 
 func namePenis():
-	var text = str(randomitemfromarray(['penis','cock','member','dick','penis','cock','member','dick']))
-	return text
+	return randomitemfromarray(['penis','cock','member','dick','penis','cock','member','dick'])
 
 func nameBalls():
-	var text = str(randomitemfromarray(['balls','balls','nuts','nutsack','testicles','ballsack']))
-	return text
+	return randomitemfromarray(['balls','balls','nuts','nutsack','testicles','ballsack'])
 
 func namePussy():
-	var text = str(randomitemfromarray(['pussy','pussy','twat','cunt','cunt','vagina']))
-	return text
+	return randomitemfromarray(['pussy','pussy','twat','cunt','cunt','vagina'])
 
 func nameAsshole():
-	var text = str(randomitemfromarray(['butt','bum','bumhole','asshole','ass','butthole','anus','sphincter']))
-	return text
+	return randomitemfromarray(['butt','bum','bumhole','asshole','ass','butthole','anus','sphincter'])
 
 func nameAss():
-	var text = str(randomitemfromarray(['ass','ass','butt','rump','behind','ass cheeks']))
-	return text
+	return randomitemfromarray(['ass','ass','butt','rump','behind','ass cheeks'])
 ###---End Expansion---###
 
 ###---Added by Expansion---###
 var newpenisdescription = {
-	human_micro = '$His [color=yellow]' +str(namePenis())+'[/color] is so ' + str(randomitemfromarray(['incredibly miniscule','microscopic','miniature'])) + ' that it is pitiable.',
-	human_tiny = '$He has a ' + str(randomitemfromarray(['extremely small','tiny','itty bitty'])) + '  [color=yellow]' +str(namePenis())+'[/color] dangling below $his groin.',
-	human_small = 'Below $his waist dangles a [color=yellow]tiny humanish '+str(namePenis())+'[/color], small enough that it could be called cute. ',
-	human_average ='$He has an [color=yellow]ordinary humanish ' +str(namePenis())+'[/color] below $his waist, more than enough to make most men proud. ',
-	human_large = 'A [color=yellow]huge humanish ' +str(namePenis())+'[/color] swings heavily from $his groin, big enough to give even the most veteran whore pause. ',
-	human_massive ='$He has a thick ' + str(randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big'])) + '  [color=yellow]' +str(namePenis())+'[/color] dangling below his groin that would destroy the average ' + namePussy() + '.',
-	canine_micro = '$His slender, canine [color=yellow]' +str(namePenis())+'[/color] is so ' + str(randomitemfromarray(['incredibly miniscule','microscopic','miniature'])) + ' that you can barely see the knot at all.',
-	canine_tiny = '$He has a thin, ' + str(randomitemfromarray(['extremely small','tiny','itty bitty'])) + '  canine [color=yellow]' +str(namePenis())+'[/color] dangling barely noticably below $his groin.',
-	canine_small = 'A slender, pointed [color=yellow]canine ' +str(namePenis())+'[/color] hangs below $his waist, so small that its knot is barely noticeable. ',
-	canine_average = '$He has a knobby, red, [color=yellow]canine ' +str(namePenis())+'[/color] of respectable size below $his waist, which wouldn’t look out of place on a large dog. ',
-	canine_large = 'Growing from $his crotch is a [color=yellow]massive canine ' +str(namePenis())+'[/color], red-skinned and sporting a thick knot near the base. ',
-	canine_massive = '$He has a slender, ' + str(randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big'])) + ' canine [color=yellow]' +str(namePenis())+'[/color] dangling below his groin that would destroy the average ' + namePussy() + '. The knot alone would make the average girl look pregnant.',
-	feline_micro = '$His slender, feline [color=yellow]' +str(namePenis())+'[/color] is so ' + str(randomitemfromarray(['incredibly miniscule','microscopic','miniature'])) + ' that you can barely see the barbs at all.',
-	feline_tiny = '$He has a thin, ' + str(randomitemfromarray(['extremely small','tiny','itty bitty'])) + ' feline [color=yellow]' +str(namePenis())+'[/color] dangling barely noticably below $his groin. It is covered in tiny barbs.',
-	feline_small = 'A [color=yellow]tiny feline ' +str(namePenis())+'[/color] dangles below $his waist, so small you can barely see the barbs. ',
-	feline_average = '$He has a barbed [color=yellow]cat ' +str(namePenis())+'[/color] growing from $his crotch, big enough to rival an average human. ',
-	feline_large = 'There is a frighteningly [color=yellow]large feline ' +str(namePenis())+'[/color] hanging between $his thighs, its sizable barbs making it somewhat intimidating. ',
-	feline_massive = '$He has a sleek, ' + str(randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big'])) + ' feline [color=yellow]' +str(namePenis())+'[/color] dangling below his groin that would destroy the average ' + namePussy() + '. The barbs would be excruciatingly painful to the unprepared.',
-	equine_micro = '$His slender, equine [color=yellow]' +str(namePenis())+'[/color] is so ' + str(randomitemfromarray(['incredibly miniscule','microscopic','miniature'])) + ' that you could reasonably believe $he is a woman and it is $his clit.',
-	equine_tiny = '$He has a thin, ' + str(randomitemfromarray(['extremely small','tiny','itty bitty'])) + ' equine [color=yellow]' +str(namePenis())+'[/color] dangling barely noticably below $his groin. It is spotted a variety of colors.',
-	equine_small = 'Below $his waist hangs a [color=yellow]smallish equine ' +str(namePenis())+'[/color], which is still respectable compared to the average man. ',
-	equine_average= 'A [color=yellow]sizable equine ' +str(namePenis())+'[/color] grows from $his nethers, which, while small on a horse, is still thicker and heavier than the average human tool. ',
-	equine_large = 'A [color=yellow]massive equine ' +str(namePenis())+'[/color] hangs heavily below $his waist, its mottled texture not quite matching the rest of $his skin. ',
-	equine_massive ='$He has a club-like, ' + str(randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big'])) + ' equine [color=yellow]' +str(namePenis())+'[/color] dangling below $his groin that would destroy the average ' + namePussy() + '. The lumps in the middle could break someone in two.',
+	human_micro = '$His [color=yellow]' +namePenis()+'[/color] is so ' + randomitemfromarray(['incredibly miniscule','microscopic','miniature']) + ' that it is pitiable.',
+	human_tiny = '$He has a ' + randomitemfromarray(['extremely small','tiny','itty bitty']) + ' [color=yellow]' +namePenis()+'[/color] dangling below $his groin.',
+	human_small = 'Below $his waist dangles a [color=yellow]tiny humanish '+namePenis()+'[/color], small enough that it could be called cute. ',
+	human_average ='$He has an [color=yellow]ordinary humanish ' +namePenis()+'[/color] below $his waist, more than enough to make most men proud. ',
+	human_large = 'A [color=yellow]huge humanish ' +namePenis()+'[/color] swings heavily from $his groin, big enough to give even the most veteran whore pause. ',
+	human_massive ='$He has a thick ' + randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big']) + ' [color=yellow]' +namePenis()+'[/color] dangling below his groin that would destroy the average ' + namePussy() + '.',
+	canine_micro = '$His slender, canine [color=yellow]' +namePenis()+'[/color] is so ' + randomitemfromarray(['incredibly miniscule','microscopic','miniature']) + ' that you can barely see the knot at all.',
+	canine_tiny = '$He has a thin, ' + randomitemfromarray(['extremely small','tiny','itty bitty']) + ' canine [color=yellow]' +namePenis()+'[/color] dangling barely noticably below $his groin.',
+	canine_small = 'A slender, pointed [color=yellow]canine ' +namePenis()+'[/color] hangs below $his waist, so small that its knot is barely noticeable. ',
+	canine_average = '$He has a knobby, red, [color=yellow]canine ' +namePenis()+'[/color] of respectable size below $his waist, which wouldn’t look out of place on a large dog. ',
+	canine_large = 'Growing from $his crotch is a [color=yellow]massive canine ' +namePenis()+'[/color], red-skinned and sporting a thick knot near the base. ',
+	canine_massive = '$He has a slender, ' + randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big']) + ' canine [color=yellow]' +namePenis()+'[/color] dangling below his groin that would destroy the average ' + namePussy() + '. The knot alone would make the average girl look pregnant.',
+	feline_micro = '$His slender, feline [color=yellow]' +namePenis()+'[/color] is so ' + randomitemfromarray(['incredibly miniscule','microscopic','miniature']) + ' that you can barely see the barbs at all.',
+	feline_tiny = '$He has a thin, ' + randomitemfromarray(['extremely small','tiny','itty bitty']) + ' feline [color=yellow]' +namePenis()+'[/color] dangling barely noticably below $his groin. It is covered in tiny barbs.',
+	feline_small = 'A [color=yellow]tiny feline ' +namePenis()+'[/color] dangles below $his waist, so small you can barely see the barbs. ',
+	feline_average = '$He has a barbed [color=yellow]cat ' +namePenis()+'[/color] growing from $his crotch, big enough to rival an average human. ',
+	feline_large = 'There is a frighteningly [color=yellow]large feline ' +namePenis()+'[/color] hanging between $his thighs, its sizable barbs making it somewhat intimidating. ',
+	feline_massive = '$He has a sleek, ' + randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big']) + ' feline [color=yellow]' +namePenis()+'[/color] dangling below his groin that would destroy the average ' + namePussy() + '. The barbs would be excruciatingly painful to the unprepared.',
+	equine_micro = '$His slender, equine [color=yellow]' +namePenis()+'[/color] is so ' + randomitemfromarray(['incredibly miniscule','microscopic','miniature']) + ' that you could reasonably believe $he is a woman and it is $his clit.',
+	equine_tiny = '$He has a thin, ' + randomitemfromarray(['extremely small','tiny','itty bitty']) + ' equine [color=yellow]' +namePenis()+'[/color] dangling barely noticably below $his groin. It is spotted a variety of colors.',
+	equine_small = 'Below $his waist hangs a [color=yellow]smallish equine ' +namePenis()+'[/color], which is still respectable compared to the average man. ',
+	equine_average= 'A [color=yellow]sizable equine ' +namePenis()+'[/color] grows from $his nethers, which, while small on a horse, is still thicker and heavier than the average human tool. ',
+	equine_large = 'A [color=yellow]massive equine ' +namePenis()+'[/color] hangs heavily below $his waist, its mottled texture not quite matching the rest of $his skin. ',
+	equine_massive ='$He has a club-like, ' + randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big']) + ' equine [color=yellow]' +namePenis()+'[/color] dangling below $his groin that would destroy the average ' + namePussy() + '. The lumps in the middle could break someone in two.',
 }
 ###---Expansion End---###
 
@@ -383,9 +401,9 @@ var newdescriptions = {
 		halfsquid = 'The lower portion of $his body consists of a [color=yellow]number of tentacular appendages[/color], similar to those of an octopus. ',
 	},
 	age = {
-		child = '$He looks like a [color=aqua]' + str(randomitemfromarray(['','child','kid','young'])) + ' $sex [/color] that has barely hit puberty. ',
-		teen = "$He's a young-looking [color=aqua]" + str(randomitemfromarray(['','teen','young-adult','teenaged'])) + " $sex[/color]. ",
-		adult = "$He's a fully-grown [color=aqua]" + str(randomitemfromarray(['adult','specimen of a ',''])) + " $sex[/color]. ",
+		child = '$He looks like a [color=aqua]' + randomitemfromarray(['','child','kid','young']) + ' $sex [/color] that has barely hit puberty. ',
+		teen = "$He's a young-looking [color=aqua]" + randomitemfromarray(['','teen','young-adult','teenaged']) + " $sex[/color]. ",
+		adult = "$He's a fully-grown [color=aqua]" + randomitemfromarray(['adult','specimen of a ','']) + " $sex[/color]. ",
 	},
 	beauty = {
 		ugly = '$He is rather [color=yellow]unsavory[/color] to look at. ',
@@ -397,15 +415,15 @@ var newdescriptions = {
 	},
 	lips = {
 		masculine = '$He has thin, narrow [color=aqua]lips[/color] on his face that look rough and [color=aqua]manly[/color]. ',
-		thin = '$His [color=aqua]lips[/color] are [color=aqua]' + str(randomitemfromarray(['tiny','thin','narrow'])) + '[/color] and ' + str(randomitemfromarray(['unremarkable','unassuming','unattractive'])) + '. ',
-		small = '$His [color=aqua]lips[/color] are [color=aqua]'+ str(randomitemfromarray(['small','little','smaller than average'])) + '[/color]. ',
-		average = '$He has [color=aqua]lips[/color] that are [color=aqua]' + str(randomitemfromarray(['nice','very average','average','normal'])) + '[/color]. ',
-		big = '$His [color=aqua]lips[/color] are [color=aqua]' + str(randomitemfromarray(['very nice','big','slightly bigger than average'])) + '[/color]. ',
-		huge = '$His [color=aqua]' + str(randomitemfromarray(['huge','very big','large','slightly plump'])) + '[/color] [color=aqua]lips[/color] are prominent on $his face. ',
-		plump = '$His [color=aqua]' + str(randomitemfromarray(['plump','plush','protruding','swollen'])) + '[/color] [color=aqua]lips[/color] draw the eye just by glancing at $him. ',
-		massive = '$He has a pair of [color=aqua]lips[/color] that are [color=aqua]' + str(randomitemfromarray(['massive','awe-inspiring','incredibly puffed-up'])) + '[/color] to the point that a speech impediment is inevitable. ',
-		monstrous = '$His [color=aqua]' + str(randomitemfromarray(['monstrous','almost immobile','almost unusable','incredibly swollen'])) + '[/color] [color=aqua]lips[/color] are so large that $he almost is unable to speak as parting them seems strenuous. ',
-		facepussy = '$His [color=aqua]' + str(randomitemfromarray(['unnaturaly','immobile','unusable','throbbing'])) + '[/color] [color=aqua]lips[/color] are so large $he is unable to speak any longer. $He no longer has working lips, rather a flushed, moist face-pussy. ',
+		thin = '$His [color=aqua]lips[/color] are [color=aqua]' + randomitemfromarray(['tiny','thin','narrow']) + '[/color] and ' + randomitemfromarray(['unremarkable','unassuming','unattractive']) + '. ',
+		small = '$His [color=aqua]lips[/color] are [color=aqua]'+ randomitemfromarray(['small','little','smaller than average']) + '[/color]. ',
+		average = '$He has [color=aqua]lips[/color] that are [color=aqua]' + randomitemfromarray(['nice','very average','average','normal']) + '[/color]. ',
+		big = '$His [color=aqua]lips[/color] are [color=aqua]' + randomitemfromarray(['very nice','big','slightly bigger than average']) + '[/color]. ',
+		huge = '$His [color=aqua]' + randomitemfromarray(['huge','very big','large','slightly plump']) + '[/color] [color=aqua]lips[/color] are prominent on $his face. ',
+		plump = '$His [color=aqua]' + randomitemfromarray(['plump','plush','protruding','swollen']) + '[/color] [color=aqua]lips[/color] draw the eye just by glancing at $him. ',
+		massive = '$He has a pair of [color=aqua]lips[/color] that are [color=aqua]' + randomitemfromarray(['massive','awe-inspiring','incredibly puffed-up']) + '[/color] to the point that a speech impediment is inevitable. ',
+		monstrous = '$His [color=aqua]' + randomitemfromarray(['monstrous','almost immobile','almost unusable','incredibly swollen']) + '[/color] [color=aqua]lips[/color] are so large that $he almost is unable to speak as parting them seems strenuous. ',
+		facepussy = '$His [color=aqua]' + randomitemfromarray(['unnaturaly','immobile','unusable','throbbing']) + '[/color] [color=aqua]lips[/color] are so large $he is unable to speak any longer. $He no longer has working lips, rather a flushed, moist face-pussy. ',
 	},
 	hairlength = {
 		ear = '$His [color=aqua][haircolor][/color] hair is cut [color=aqua]short[/color]. ',
@@ -437,7 +455,7 @@ var newdescriptions = {
 		black = 'Instead of whites, the sclera of $his eyes are entirely [color=aqua]black[/color]. ',
 		red = 'Instead of whites, the sclera of $his eyes are entirely [color=aqua]red[/color]. ',
 		glowing = '$His eyes glow with some luminous power. ',
-		default = '$He has no discernable pupils or irises. ', #this is intended for tiefling subspecies and  will be wrong if new colors are added (check expansionsetup.gd)
+		default = '$He has no discernable pupils or irises. ', #this is intended for tiefling subspecies and will be wrong if new colors are added (check expansionsetup.gd)
 		#default = 'Instead of whites, the sclera of $his eyes are entirely [color=aqua][eyesclera][/color]. ', #displays "[eyesclera]" instead of the color
 	},
 	#/ralph2
@@ -525,60 +543,60 @@ var newdescriptions = {
 		mouse = 'Below $his waist, you spot a slim [color=aqua]mouse tail[/color] covered in a fine thin layer of fuzz. '
 	},
 	height = {
-		tiny = '$His stature is [color=aqua]' + str(randomitemfromarray(['extremely small','tiny','itty bitty'])) + '[/color], barely half the size of a normal person. ',
-		petite = '$His stature is quite [color=aqua]' + str(randomitemfromarray(['thin and small','petite','little'])) + '[/color]. ',
-		short = '$His height is quite [color=aqua]' + str(randomitemfromarray(['short','small','slight'])) + '[/color]. ',
-		average = '$He is of [color=aqua]' + str(randomitemfromarray(['average','normal'])) + '[/color] height. ',
-		tall = '$He is quite [color=aqua]' + str(randomitemfromarray(['tall','large','big'])) + '[/color] compared to the average members of $his race. ',
-		towering = '$He is unusually tall, [color=aqua]' + str(randomitemfromarray(['towering','looming'])) + '[/color] over others. ',
+		tiny = '$His stature is [color=aqua]' + randomitemfromarray(['extremely small','tiny','itty bitty']) + '[/color], barely half the size of a normal person. ',
+		petite = '$His stature is quite [color=aqua]' + randomitemfromarray(['thin and small','petite','little']) + '[/color]. ',
+		short = '$His height is quite [color=aqua]' + randomitemfromarray(['short','small','slight']) + '[/color]. ',
+		average = '$He is of [color=aqua]' + randomitemfromarray(['average','normal']) + '[/color] height. ',
+		tall = '$He is quite [color=aqua]' + randomitemfromarray(['tall','large','big']) + '[/color] compared to the average members of $his race. ',
+		towering = '$He is unusually tall, [color=aqua]' + randomitemfromarray(['towering','looming']) + '[/color] over others. ',
 	},
 	titssize = {
-		masculine = '$His [color=yellow]chest[/color] is of definitive [color=yellow]' + str(randomitemfromarray(['masculine','manly'])) + '[/color] shape. ',
-		flat = '$His [color=yellow]chest[/color] is barely visible and [color=yellow]' + str(randomitemfromarray(['flat','nearly nonexistant'])) + '[/color]. ',
-		small = '$He has [color=yellow]' + str(randomitemfromarray(['small','tiny','miniscule','perky'])) + '[/color], round [color=yellow]' + str(nameTits()) + '[/color]. ',
-		average= '$His nice, [color=yellow]' + str(randomitemfromarray(['average','nice','perky','decent'])) + '[/color] [color=yellow]' + str(nameTits()) + '[/color] are firm and inviting. ',
-		big = '$His [color=yellow]' + str(randomitemfromarray(['big','sizable','large'])) + '[/color] [color=yellow]' + str(nameTits()) + '[/color] are pleasantly soft, but still have a nice spring to them. ',
-		huge = '$His [color=yellow]' + str(nameTits()) + '[/color] are [color=yellow]' + str(randomitemfromarray(['huge','well developed','enviable','really big'])) + '[/color]. ',
-		incredible = '$His [color=yellow]' + str(randomitemfromarray(['voluptuous','rather huge','incredible'])) + '[/color] [color=yellow]'+ str(nameTits()) + '[/color] are mind-blowingly big. ',
-		massive = '$His [color=yellow]' + str(randomitemfromarray(['massive','inhuman','watermelon-sized'])) + '[/color] [color=yellow]'+ str(nameTits()) + '[/color] are almost too large for $him to function normally. ',
-		gigantic = '$His [color=yellow]' + str(randomitemfromarray(['gigantic','unbelievable','chest encompassing'])) + '[/color] [color=yellow]'+ str(nameTits()) + '[/color] are so large that they impedes $his daily life. ',
-		monstrous = '$His [color=yellow]' + str(randomitemfromarray(['monstrous','insanely heavy','pregnant belly sized'])) + '[/color] [color=yellow]'+ str(nameTits()) + ' [/color] are so big that $he can barely walk and has to crawl. ',
-		immobilizing = '$His [color=yellow]' + str(randomitemfromarray(['unbelievable','rather huge','incredible'])) + '[/color] [color=yellow]'+ str(nameTits()) + '[/color] are mind-blowingly big. ',
+		masculine = '$His [color=yellow]chest[/color] is of definitive [color=yellow]' + randomitemfromarray(['masculine','manly']) + '[/color] shape. ',
+		flat = '$His [color=yellow]chest[/color] is barely visible and [color=yellow]' + randomitemfromarray(['flat','nearly nonexistant']) + '[/color]. ',
+		small = '$He has [color=yellow]' + randomitemfromarray(['small','tiny','miniscule','perky']) + '[/color], round [color=yellow]' + nameTits() + '[/color]. ',
+		average= '$His nice, [color=yellow]' + randomitemfromarray(['average','nice','perky','decent']) + '[/color] [color=yellow]' + nameTits() + '[/color] are firm and inviting. ',
+		big = '$His [color=yellow]' + randomitemfromarray(['big','sizable','large']) + '[/color] [color=yellow]' + nameTits() + '[/color] are pleasantly soft, but still have a nice spring to them. ',
+		huge = '$His [color=yellow]' + nameTits() + '[/color] are [color=yellow]' + randomitemfromarray(['huge','well developed','enviable','really big']) + '[/color]. ',
+		incredible = '$His [color=yellow]' + randomitemfromarray(['voluptuous','rather huge','incredible']) + '[/color] [color=yellow]'+ nameTits() + '[/color] are mind-blowingly big. ',
+		massive = '$His [color=yellow]' + randomitemfromarray(['massive','inhuman','watermelon-sized']) + '[/color] [color=yellow]'+ nameTits() + '[/color] are almost too large for $him to function normally. ',
+		gigantic = '$His [color=yellow]' + randomitemfromarray(['gigantic','unbelievable','chest encompassing']) + '[/color] [color=yellow]'+ nameTits() + '[/color] are so large that they impedes $his daily life. ',
+		monstrous = '$His [color=yellow]' + randomitemfromarray(['monstrous','insanely heavy','pregnant belly sized']) + '[/color] [color=yellow]'+ nameTits() + ' [/color] are so big that $he can barely walk and has to crawl. ',
+		immobilizing = '$His [color=yellow]' + randomitemfromarray(['unbelievable','rather huge','incredible']) + '[/color] [color=yellow]'+ nameTits() + '[/color] are mind-blowingly big. ',
 	},
 	asssize = {#ass strings
-		flat = '$His [color=aqua]' + str(nameAss()) + '[/color] is skinny and [color=aqua]flat[/color]. ',
-		small = '$He has a [color=aqua]small[/color], firm [color=aqua]' + str(nameAss()) + '[/color]. ',
-		average= '$He has a nice, [color=aqua]pert[/color] [color=aqua]' + str(nameAss()) + '[/color] you could bounce a coin off. ',
-		big = '$He has a pleasantly [color=aqua]plump[/color], heart-shaped [color=aqua]' + str(nameAss()) + '[/color] that jiggles enticingly with each step. ',
-		huge = '$He has a [color=aqua]huge[/color], attention-grabbing [color=aqua]' + str(nameAss()) + '[/color]. ',
-		masculine = '$His [color=aqua]' + str(nameAss()) + '[/color] definitively has a [color=aqua]masculine[/color] shape. ',
+		flat = '$His [color=aqua]' + nameAss() + '[/color] is skinny and [color=aqua]flat[/color]. ',
+		small = '$He has a [color=aqua]small[/color], firm [color=aqua]' + nameAss() + '[/color]. ',
+		average= '$He has a nice, [color=aqua]pert[/color] [color=aqua]' + nameAss() + '[/color] you could bounce a coin off. ',
+		big = '$He has a pleasantly [color=aqua]plump[/color], heart-shaped [color=aqua]' + nameAss() + '[/color] that jiggles enticingly with each step. ',
+		huge = '$He has a [color=aqua]huge[/color], attention-grabbing [color=aqua]' + nameAss() + '[/color]. ',
+		masculine = '$His [color=aqua]' + nameAss() + '[/color] definitively has a [color=aqua]masculine[/color] shape. ',
 	},
 	balls = {
-		micro = '$His [color=yellow]' + str(nameBalls()) + '[/color] are so [color=yellow]' + str(randomitemfromarray(['microscopic','tiny','little','miniscule'])) + '[/color] that it is almost non-existant. ',
-		tiny = '$He has some [color=yellow]' + str(randomitemfromarray(['tiny','little','very small'])) + '[/color] [color=yellow]' + str(nameBalls()) + '[/color] dangling between $his legs. ',
-		small = '$He has a pair of [color=yellow]tiny[/color] [color=yellow]' + str(nameBalls()) + '[/color]. ',
-		average = '$He has an  [color=yellow]average-sized[/color] [color=yellow]' + str(nameBalls()) + '[/color]. ',
-		large = '$He has a [color=yellow]huge[/color] pair of [color=yellow]' + str(nameBalls()) + '[/color] weighing $him down. ',
-		massive = '$He has some [color=yellow]' + str(randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big'])) + '[/color] [color=yellow]' + str(nameBalls()) + '[/color] dangling between $his legs. ',
+		micro = '$His [color=yellow]' + nameBalls() + '[/color] are so [color=yellow]' + randomitemfromarray(['microscopic','tiny','little','miniscule']) + '[/color] that it is almost non-existant. ',
+		tiny = '$He has some [color=yellow]' + randomitemfromarray(['tiny','little','very small']) + '[/color] [color=yellow]' + nameBalls() + '[/color] dangling between $his legs. ',
+		small = '$He has a pair of [color=yellow]tiny[/color] [color=yellow]' + nameBalls() + '[/color]. ',
+		average = '$He has an [color=yellow]average-sized[/color] [color=yellow]' + nameBalls() + '[/color]. ',
+		large = '$He has a [color=yellow]huge[/color] pair of [color=yellow]' + nameBalls() + '[/color] weighing $him down. ',
+		massive = '$He has some [color=yellow]' + randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big']) + '[/color] [color=yellow]' + nameBalls() + '[/color] dangling between $his legs. ',
 	},
 	###---Added by Expansion---### Sizes Expanded
 	vagina = {
-		impenetrable = 'an [color=yellow]impenetrable[/color] [color=yellow]' + str(namePussy()) + '[/color] that looks like it would rip even trying to fit a finger inside.',
-		tiny = 'a [color=yellow]tiny[/color] [color=yellow]' + str(namePussy()) + '[/color] that would very snugly squeeze a finger put inside of it. ',
-		tight = '$his [color=yellow]tight[/color], little [color=yellow]' + str(namePussy()) + '[/color] that almost looks like it is still virginal. ',
-		average = '$his pink, completely [color=yellow]average[/color] [color=yellow]' + str(namePussy()) + '[/color]. ',
-		loose = 'an unfortunately [color=red]loose[/color] [color=yellow]' + str(namePussy()) + '[/color] that looks like it has seen some use. ',
-		gaping = '$his [color=red]gaping[/color] [color=yellow]' + str(namePussy()) + '[/color], so spread open that you can almost see $his cervix. ',
-		normal = '$his currently [color=red]undefined[/color] [color=yellow]' + str(namePussy()) + '[/color]. \nYou are sure you will understand it better tomorrow. ',
+		impenetrable = 'an [color=yellow]impenetrable[/color] [color=yellow]' + namePussy() + '[/color] that looks like it would rip even trying to fit a finger inside.',
+		tiny = 'a [color=yellow]tiny[/color] [color=yellow]' + namePussy() + '[/color] that would very snugly squeeze a finger put inside of it. ',
+		tight = '$his [color=yellow]tight[/color], little [color=yellow]' + namePussy() + '[/color] that almost looks like it is still virginal. ',
+		average = '$his pink, completely [color=yellow]average[/color] [color=yellow]' + namePussy() + '[/color]. ',
+		loose = 'an unfortunately [color=red]loose[/color] [color=yellow]' + namePussy() + '[/color] that looks like it has seen some use. ',
+		gaping = '$his [color=red]gaping[/color] [color=yellow]' + namePussy() + '[/color], so spread open that you can almost see $his cervix. ',
+		normal = '$his currently [color=red]undefined[/color] [color=yellow]' + namePussy() + '[/color]. \nYou are sure you will understand it better tomorrow. ',
 	},
 	asshole = {
-		impenetrable = 'an [color=yellow]impenetrable[/color] [color=yellow]' + str(nameAsshole()) + '[/color] that looks like it would rip even trying to fit a finger inside.',
-		tiny = 'a [color=yellow]tiny[/color] [color=yellow]' + str(nameAsshole()) + '[/color] so small that it was hard to even find it between $his cheeks. ',
-		tight = '$his [color=yellow]tight[/color] little [color=yellow]' + str(nameAsshole()) + '[/color] that looks like it has never been used for sex or anything else. ',
-		average = '$his completely [color=yellow]average[/color] [color=yellow]' + str(nameAsshole()) + '[/color] ',
-		loose = 'a surprisingly [color=yellow]loose[/color] [color=yellow]' + str(nameAsshole()) + '[/color] that looks like it has seen some use. ',
-		gaping = '$his massive, [color=yellow]gaping[/color] [color=yellow]' + str(nameAsshole()) + '[/color] that is so wide it looks like the side walls of his asshole make a red flower. ',
-		normal = '$his currently [color=yellow]undefined[/color] [color=yellow]' + str(nameAsshole()) + '[/color]. \nYou are sure you will understand it better tomorrow. ',
+		impenetrable = 'an [color=yellow]impenetrable[/color] [color=yellow]' + nameAsshole() + '[/color] that looks like it would rip even trying to fit a finger inside.',
+		tiny = 'a [color=yellow]tiny[/color] [color=yellow]' + nameAsshole() + '[/color] so small that it was hard to even find it between $his cheeks. ',
+		tight = '$his [color=yellow]tight[/color] little [color=yellow]' + nameAsshole() + '[/color] that looks like it has never been used for sex or anything else. ',
+		average = '$his completely [color=yellow]average[/color] [color=yellow]' + nameAsshole() + '[/color] ',
+		loose = 'a surprisingly [color=yellow]loose[/color] [color=yellow]' + nameAsshole() + '[/color] that looks like it has seen some use. ',
+		gaping = '$his massive, [color=yellow]gaping[/color] [color=yellow]' + nameAsshole() + '[/color] that is so wide it looks like the side walls of his asshole make a red flower. ',
+		normal = '$his currently [color=yellow]undefined[/color] [color=yellow]' + nameAsshole() + '[/color]. \nYou are sure you will understand it better tomorrow. ',
 	},
 ###---End Expansion---###
 }

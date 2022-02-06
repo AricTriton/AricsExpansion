@@ -8,7 +8,7 @@ var jobdict = {
 		code = 'rest',
 		name = "Rest",
 		type = 'basic',
-		description = "$name will rest for today",
+		description = "$name will rest for today.\n[color=aqua]Enjoyed by Slothful slaves[/color]",
 		workline = "$name will be taking a rest for today.",
 		reqs = 'true',
 		unlockreqs = 'true',
@@ -99,7 +99,7 @@ var jobdict = {
 		code = 'whorewimborn',
 		name = "W - Prostitution",
 		type = 'sexual',
-		description = "$name will be assigned to the town's brothel as a common whore.\n\n[color=yellow]Efficiency grows with Charm, Endurance, Beauty and basic sexual actions. \n\nRequires unlocked sex actions for sufficient performance.[/color]",
+		description = "$name will be assigned to the town's brothel as a common whore.\n\n[color=yellow]Efficiency grows with Charm, Endurance, Beauty and basic sexual actions. \n\nRequires unlocked sex actions for sufficient performance.[/color]\n[color=aqua]Enjoyed by Lustful slaves[/color]",
 		workline = "$name will whore $himself at the brothel.",
 		reqs = "true",
 		unlockreqs = 'globals.state.sidequests.brothel >= 2',
@@ -112,7 +112,7 @@ var jobdict = {
 		code = 'escortwimborn',
 		name = "W - Escort",
 		type = 'sexual',
-		description = "$name will be assigned to the town's brothel as a high class whore for rich men. \n\n[color=yellow]Requires grade of a [color=aqua]Commoner[/color] or higher. \n\nEfficiency grows with Charm, Confidence, Beauty and your reputation. [/color]",
+		description = "$name will be assigned to the town's brothel as a high class whore for rich men. \n\n[color=yellow]Requires grade of a [color=aqua]Commoner[/color] or higher. \n\nEfficiency grows with Charm, Confidence, Beauty and your reputation. [/color]\n[color=aqua]Enjoyed by Lustful slaves[/color]",
 		workline = "$name will be earning money as an escort for rich people.",
 		reqs = "globals.originsarray.find(globals.currentslave.origins) >= 2",
 		unlockreqs = 'globals.state.sidequests.brothel >= 2',
@@ -125,7 +125,7 @@ var jobdict = {
 		code = 'fucktoywimborn',
 		name = "W - Exotic Whore",
 		type = 'sexual',
-		description = "$name will be used by the most deviant men in the brothel. \n\n[color=yellow]Efficiency grows with Courage, Endurance, Beauty, and advanced sex actions. \n\nRequires unlocked advanced sex actions for sufficient performance. [/color]",
+		description = "$name will be used by the most deviant men in the brothel. \n\n[color=yellow]Efficiency grows with Courage, Endurance, Beauty, and advanced sex actions. \n\nRequires unlocked advanced sex actions for sufficient performance. [/color]\n[color=aqua]Enjoyed by Lustful slaves[/color]",
 		workline = "$name will be earning money by offering $his body for all sorts of deviant plays.",
 		reqs = "true",
 		unlockreqs = 'globals.state.sidequests.brothel >= 2',
@@ -138,7 +138,7 @@ var jobdict = {
 		code = 'fucktoy',
 		name = "U - Fucktoy",
 		type = 'sexual',
-		description = "$name will be subjugated and abused by all sorts of criminals in Umbra without $his consent. \n\n[color=yellow]Builds obedience in exchange for mental degeneration. Income is based on your negative reputation. [/color]",
+		description = "$name will be subjugated and abused by all sorts of criminals in Umbra without $his consent. \n\n[color=yellow]Builds obedience in exchange for mental degeneration. Income is based on your negative reputation. [/color]\n[color=aqua]Enjoyed by Lustful slaves[/color]",
 		workline = "$name will be subjugated and abused by all sorts of criminals in Umbra without $his consent. ",
 		reqs = "true",
 		unlockreqs = 'globals.state.portals.umbra.enabled == true',
@@ -203,7 +203,7 @@ var jobdict = {
 		code = 'ffprostitution',
 		name = "F - Prostitution",
 		type = 'sexual',
-		description = "$name will be serving lone customers with $his body at Frostford. \n\n[color=yellow]\n\nEfficiency grows with Charm and beauty.[/color]",
+		description = "$name will be serving lone customers with $his body at Frostford. \n\n[color=yellow]\n\nEfficiency grows with Charm and beauty.[/color]\n[color=aqua]Enjoyed by Lustful slaves[/color]",
 		workline = "$name will be serving lone customers with $his body in the streets of Frostford.",
 		reqs = "globals.currentslave.tags.find('nosex') < 0",
 		unlockreqs = 'true',
@@ -216,7 +216,7 @@ var jobdict = {
 		code = 'guardian',
 		name = "G - Guardian",
 		type = 'social',
-		description = "$name will be patrolling streets with Gorn's city guard. \n\n[color=yellow]Requires grade of [color=aqua]Poor[/color] or higher. \n\nEfficiency grows with Strength, Courage.[/color]",
+		description = "$name will be patrolling streets with Gorn's city guard. \n\n[color=yellow]Requires grade of [color=aqua]Poor[/color] or higher. \n\nEfficiency grows with Strength, Courage.[/color]\n[color=aqua]Enjoyed by Wrathful slaves[/color]",
 		workline = "$name will be patrolling streets with Gorn's city guard.",
 		reqs = "globals.originsarray.find(globals.currentslave.origins) >= 1 && globals.currentslave.traits.has('Mute') == false",
 		unlockreqs = 'true',
@@ -242,7 +242,7 @@ var jobdict = {
 		code = 'slavecatcher',
 		name = "G - Slave Catcher",
 		type = 'social',
-		description = "$name will be joining slaver parties and help catching and transporting slaves. \n\n[color=yellow]Requires grade of [color=aqua]Poor[/color] or higher. \n\nEfficiency grows with Agility, Strength and Courage.[/color]",
+		description = "$name will be joining slaver parties and help catching and transporting slaves. \n\n[color=yellow]Requires grade of [color=aqua]Poor[/color] or higher. \n\nEfficiency grows with Agility, Strength and Courage.[/color]\n[color=aqua]Enjoyed by Wrathful slaves[/color]",
 		workline = "$name will be joining slaver parties and help catching and transporting slaves around Gorn.",
 		reqs = "globals.originsarray.find(globals.currentslave.origins) >= 1",
 		unlockreqs = 'true',
@@ -255,7 +255,7 @@ var jobdict = {
 		code = 'headgirl',
 		name = "Headgirl",
 		type = 'social',
-		description = "$name will watch over other servants, improving their behavior.\n\nEfficiency grows with Charm(Patronage) or Confidence(Strict).\n\n[color=yellow]Requires grade of [color=aqua]Rich[/color] or higher. [/color]",
+		description = "$name will watch over other servants, improving their behavior.\n\nEfficiency grows with Charm(Patronage) or Confidence(Strict).\n\n[color=yellow]Requires grade of [color=aqua]Rich[/color] or higher. [/color]\n[color=aqua]Enjoyed by Prideful slaves[/color]",
 		workline = "$name will be directing and managing other residents.",
 		reqs = "globals.originsarray.find(globals.currentslave.origins) >= 3 && globals.currentslave.traits.has('Mute') == false ",
 		unlockreqs = 'globals.slaves.size() >= 8',
@@ -268,7 +268,7 @@ var jobdict = {
 		code = 'jailer',
 		name = "Jailer",
 		type = 'social',
-		description = "$name will be feeding and watching over your prisoners.\n\nEfficiency grows with Confidence, Charm, and Wit.\n\n[color=yellow]Requires grade of [color=aqua]Poor[/color] or higher. [/color]",
+		description = "$name will be feeding and watching over your prisoners.\n\nEfficiency grows with Confidence, Charm, and Wit.\n\n[color=yellow]Requires grade of [color=aqua]Poor[/color] or higher. [/color]\n[color=aqua]Enjoyed by Prideful slaves[/color]",
 		workline = "$name will be managing prisoners.",
 		reqs = 'globals.originsarray.find(globals.currentslave.origins) >= 1',
 		unlockreqs = 'true',
@@ -281,7 +281,7 @@ var jobdict = {
 		code = 'farmmanager',
 		name = "Farm Manager",
 		type = 'basic',
-		description = "$name will be managing your farm and slaves assigned to it.\n\nEfficiency grows with Confidence and Wit. Stress gained by slaves can be reduced by Charm.\n\n[color=yellow]Requires grade of [color=aqua]Commoner[/color] or higher. [/color]",
+		description = "$name will be managing your farm and slaves assigned to it.\n\nEfficiency grows with Confidence and Wit. Stress gained by slaves can be reduced by Charm.\n\n[color=yellow]Requires grade of [color=aqua]Commoner[/color] or higher. [/color]\n[color=aqua]Enjoyed by Prideful slaves[/color]",
 		workline = "$name will be looking over your farm and collect its income.",
 		reqs = 'globals.originsarray.find(globals.currentslave.origins) >= 2',
 		unlockreqs = 'globals.state.farm >= 3',
@@ -359,7 +359,7 @@ var jobdict = {
 		code = 'housepet',
 		name = "Housepet",
 		type = 'basic',
-		description = "$name will remain at the mansion as a playful housepet, reducing the stress of residents.\n\n[color=yellow]Energy determines effectiveness.[/color]",
+		description = "$name will remain at the mansion as a playful housepet, reducing the stress of residents.\n\n[color=yellow]Energy determines effectiveness.[/color]\n[color=aqua]Enjoyed by Slothful slaves[/color]",
 		workline = "$name will be housepet around the mansion.",
 		reqs = 'true',
 		unlockreqs = "globals.currentslave.brand == 'advanced'",
@@ -372,7 +372,7 @@ var jobdict = {
 		code = 'trainer',
 		name = "Trainer",
 		type = 'basic',
-		description = "$name will work in the Training Grounds as a Trainer. $He will give XP to Trainees of lower level than $himself with a chance of granting Learning Points as well. $He can teach a number of slaves equal to twice $his level.\n\n[color=yellow]Requires grade of [color=aqua]Commoner[/color] or higher. Requires [color=aqua]Level 3[/color] or higher. Requires that $he has [color=aqua]Won 5 Battles[/color] or more.\n\nResults improve with [color=aqua]Wit[/color] and [color=aqua]Confidence[/color]. Only affects [color=aqua]Trainees[/color] of a [color=aqua]Lower level[/color] who have [color=aqua]won less total battles[/color].[/color]",
+		description = "$name will work in the Training Grounds as a Trainer. $He will give XP to Trainees of lower level than $himself with a chance of granting Learning Points as well. $He can teach a number of slaves equal to twice $his level.\n\n[color=yellow]Requires grade of [color=aqua]Commoner[/color] or higher. Requires [color=aqua]Level 3[/color] or higher. Requires that $he has [color=aqua]Won 5 Battles[/color] or more.\n\nResults improve with [color=aqua]Wit[/color] and [color=aqua]Confidence[/color]. Only affects [color=aqua]Trainees[/color] of a [color=aqua]Lower level[/color] who have [color=aqua]won less total battles[/color].[/color]\n[color=aqua]Enjoyed by Wrathful slaves[/color]",
 		workline = "$name will be teach slaves of a lower level in the Training Grounds.",
 		reqs = 'globals.originsarray.find(globals.currentslave.origins) >= 2 && globals.currentslave.level >= 3 && globals.currentslave.metrics.win >= 5',
 		unlockreqs = "globals.state.mansionupgrades.traininggrounds > 0",
@@ -385,7 +385,7 @@ var jobdict = {
 		code = 'trainee',
 		name = "Trainee",
 		type = 'basic',
-		description = "$name will train in the Training Grounds. $He will gain XP if $he is a lower level than the Trainer and has won less total battles than the Trainer.\n\n[color=yellow]Requires a Trainer of higher level who has won more battles than $he has.\nResults improve with [color=aqua]Wit[/color] and [color=aqua]Courage[/color].\n\n[color=aqua]XP Gain[/color] is equal to (Trainer Level - Trainee Level) * (1 + the number of Training Ground upgrades). The chance of gaining [color=aqua]Learning Points[/color] equal to the [color=aqua]difference in their total battles won[/color] (15 Max per Day) is equal to the (Trainers Wit & Confidence/2) + (Trainees Wit & Courage/2) + (10*Training Ground Upgrades/2)[/color]",
+		description = "$name will train in the Training Grounds. $He will gain XP if $he is a lower level than the Trainer and has won less total battles than the Trainer.\n\n[color=yellow]Requires a Trainer of higher level who has won more battles than $he has.\nResults improve with [color=aqua]Wit[/color] and [color=aqua]Courage[/color].\n\n[color=aqua]XP Gain[/color] is equal to (Trainer Level - Trainee Level) * (1 + the number of Training Ground upgrades). The chance of gaining [color=aqua]Learning Points[/color] equal to the [color=aqua]difference in their total battles won[/color] (15 Max per Day) is equal to the (Trainers Wit & Confidence/2) + (Trainees Wit & Courage/2) + (10*Training Ground Upgrades/2)[/color]\n[color=aqua]Enjoyed by Wrathful slaves[/color]",
 		workline = "$name will be studying under the Trainer in the Training Grounds.",
 		reqs = 'true',
 		unlockreqs = "globals.state.mansionupgrades.traininggrounds > 0",
@@ -515,12 +515,18 @@ var leveluprequests = {
 	},
 	vacation = {
 		reqs = 'true',
-		speech = "you should provide $name with [color=aqua]3 free days[/color] to furtherly unlock $his potential.",
+		speech = "you should provide $name with [color=aqua]2 free days[/color] to furtherly unlock $his potential.",
 		descript = '$name needs a [color=aqua]vacation[/color] to advance $his level. ',
 		execfunc = 'vacationshort'
 	},
+	vacationlong = {
+		reqs = 'true',
+		speech = "you should provide $name with [color=aqua]3 free days[/color] to furtherly unlock $his potential.",
+		descript = '$name needs a [color=aqua]vacation[/color] to advance $his level. ',
+		execfunc = 'vacationlong'
+	},
 	relationship = {
-		reqs = "person.consent == false && person.tags.find('nosex') < 0",
+		reqs = "person.obed >= 70 && person.consent == false && person.tags.find('nosex') < 0",
 		speech = "you should unlock [color=aqua]intimacy[/color] with $name to unlock $his potential.",
 		descript = "$name needs to have [color=aqua]intimacy unlocked[/color] to advance $his level. ",
 		execfunc = 'startrelationship'
@@ -532,13 +538,13 @@ var leveluprequests = {
 		execfunc = 'wincombat'
 	},
 	improvegrade = {
-		reqs = 'globals.originsarray.find(person.origins) <= 3',
+		reqs = 'globals.originsarray.find(person.origins) < min(4, floor(person.level/2.0))',
 		speech = "you should raise $name's [color=aqua]grade[/color] to unlock $his potential.",
 		descript = "$name needs to [color=aqua]raise $his grade[/color] to advance $his level. ",
 		execfunc = 'raisegrade'
 	},
 	specialization = {
-		reqs = 'person.spec == null && person.level >= 4',
+		reqs = 'person.spec == null && person.level >= 5',
 		speech = "you should let $name's [color=aqua]learn a specialization[/color] to unlock $his potential.",
 		descript = "$name needs to [color=aqua]learn a specialization[/color] to advance $his level. ",
 		execfunc = 'getspec'
@@ -548,13 +554,15 @@ var leveluprequests = {
 
 var requestsbylevel = {
 	easy = ['weakitem', 'ingreditem', 'vacation', 'relationship', 'wincombat', 'improvegrade'],
-	medium = ['multitem','specialization','gearitem','improvegrade'],
+	medium = ['multitem','vacationlong', 'specialization', 'relationship', 'gearitem', 'improvegrade'],
 }
 
 
-var weakitemslist = ['aphrodisiac','hairdye', 'hairgrowthpot', 'stimulantpot', 'deterrentpot', 'beautypot']
+var weakitemslist1 = ['aphrodisiac','hairdye', 'beautypot']
+var weakitemslist2 = ['aphrodisiac','hairdye', 'hairgrowthpot', 'stimulantpot', 'deterrentpot', 'beautypot']
 var gearitemslist = ['clothsundress','clothmaid','clothkimono','clothmiko','clothbutler','underwearlacy','underwearboxers','armorleather','armorchain','weapondagger','weaponsword','accslavecollar','acchandcuffs']
 var ingredlist = ['bestialessenceing', 'natureessenceing','taintedessenceing','magicessenceing','fluidsubstanceing']
+var succubusgonewild = 0.75 #ralphC - lower == easier to trigger extreme hunger whoring events for Succubi
 
 func vacation(person):
 	person.away.duration = int(person.levelupreqs.value)
@@ -587,11 +595,20 @@ func gearlevelup(person):
 
 func vacationshort(person):
 	var text = person.dictionary(leveluprequests.vacation.speech)
-	person.levelupreqs = {code = 'vacation', value = '3', speech = leveluprequests.vacation.speech, descript = person.dictionary(leveluprequests.vacation.descript), button = person.dictionary('Send $name on vacation'), effect = 'vacation', activate = 'fromtalk'}
+	person.levelupreqs = {code = 'vacation', value = '2', speech = leveluprequests.vacation.speech, descript = person.dictionary(leveluprequests.vacation.descript), button = person.dictionary('Send $name on vacation'), effect = 'vacation', activate = 'fromtalk'}
+	return text
+
+func vacationlong(person):
+	var text = person.dictionary(leveluprequests.vacation.speech)
+	person.levelupreqs = {code = 'vacation', value = '3', speech = leveluprequests.vacationlong.speech, descript = person.dictionary(leveluprequests.vacationlong.descript), button = person.dictionary('Send $name on vacation'), effect = 'vacation', activate = 'fromtalk'}
 	return text
 
 func weakitem(person):
-	var item = globals.itemdict[globals.randomfromarray(weakitemslist)]
+	var item
+	if globals.state.mainquest < 7:
+		item = globals.itemdict[globals.randomfromarray(weakitemslist1)]
+	else:
+		item = globals.itemdict[globals.randomfromarray(weakitemslist2)]
 	var text = person.dictionary(leveluprequests.weakitem.speech)
 	text = text.replace('$item', item.name)
 	var descript = person.dictionary(leveluprequests.weakitem.descript).replace('$item', item.name)
@@ -612,7 +629,7 @@ func multitem(person):
 		array.remove(randi() % array.size())
 	for i in array:
 		item = globals.itemdict[i]
-		itemnumber = round(rand_range(1,3))
+		itemnumber = clamp(randi() % 4 + int(person.level / 2) - 2 , 1, 5)
 		itemtext += item.name + ': ' + str(itemnumber) + ", "
 		array2.append({item.code : itemnumber})
 		
@@ -665,7 +682,7 @@ func ingreditem(person):
 	while ingnumber >= 1:
 		ingnumber -= 1
 		item = globals.randomfromarray(itemarray)
-		finalitems[item] = round(rand_range(ingrange[0], ingrange[1]))
+		finalitems[item] = clamp(randi() % ingrange[1] + person.level - 1 , ingrange[0], ingrange[1])
 	for i in finalitems:
 		item = globals.itemdict[i]
 		temptext += item.name + ": " + str(finalitems[i]) + ", "
@@ -692,7 +709,7 @@ func raisegrade(person):
 
 func getrequest(person):
 	var array = []
-	if person.level in [1,2]:
+	if person.level <= 3:
 		for i in requestsbylevel.easy:
 			if globals.evaluate(leveluprequests[i].reqs) == true:
 				array.append(leveluprequests[i])
@@ -814,14 +831,7 @@ func cooking(person):
 	var gold = 0
 	var food = 0
 	person.xp += globals.slavecount() * globals.expansionsettings.food_experience
-	if globals.resources.food < 200:
-		var scaling = 20.0 / globals.itemdict.food.cost
-		if globals.resources.gold >= floor(globals.state.foodbuy/scaling):
-			text = '$name went to purchase groceries and brought back new food supplies.\n'
-			gold = -floor(globals.state.foodbuy/scaling)
-			food = globals.state.foodbuy
-		else:
-			text = '$name complained about the lack of food and no money to supply the kitchen on $his own.\n'
+	text += '$name spent $his time preparing meals for everyone.\n'
 	###---Added by Expansion---### Job Skills
 	var bonusfood = 0
 	person.add_jobskill('cook', 1)
@@ -830,10 +840,24 @@ func cooking(person):
 		bonusfood = round(rand_range(person.jobskills.cook*.1, person.jobskills.cook))
 		text += "$name had a flash of inspiration today and scraped together an impromptu meal with surprising ingredients. $He added [color=green]" + str(bonusfood) + " Food[/color] to the food supply with $his clever cooking. "
 		if globals.expansionsettings.perfectinfo == true:
-			text += "- " + str(chance) + "% Chance"
+			text += "- " + str(chance) + "% Chance "
 		food += bonusfood
 	###---End Expansion---###
-	text += '$name spent $his time preparing meals for everyone.\n'
+	var maxFood = min(globals.state.foodbuy,globals.resources.foodcaparray[globals.state.mansionupgrades.foodcapacity])
+	var foodDiff = int(maxFood - globals.resources.food - food)
+	var toBuy = int(gold + globals.resources.gold)
+	var foodPrice = globals.itemdict.food.cost
+	var foodCount = 20
+	if foodDiff > 0:
+		foodDiff -= foodDiff % foodCount
+		foodDiff /= foodCount
+		toBuy -= toBuy % foodPrice
+		toBuy /= foodPrice
+		toBuy = min(foodDiff,toBuy)
+		if toBuy > 0:
+			text += "$He purchased [color=aqua]" + str(toBuy * foodCount) + "[/color] food, costing [color=yellow]" + str(toBuy * foodPrice) + "[/color] gold.\n"
+			gold -= toBuy * foodPrice
+			food += toBuy * foodCount
 	text = person.dictionary(text)
 	var dict = {text = text, gold = gold, food = food}
 	return dict
@@ -865,7 +889,7 @@ func ffprostitution(person):
 	if person.vagvirgin == true:
 		person.vagvirgin = false
 		#slave.pussy.first = 'brothel'
-		person.health -= 5
+		person.health = max(person.health - 5, 1)
 		person.stress += 15
 		text += "$His virginity was taken by one of the customers.\n"
 	person.lust -= rand_range(15,25)
@@ -880,8 +904,30 @@ func ffprostitution(person):
 		gold = gold*1.2
 	if person.mods.has("augmenttongue"):
 		gold = gold * 1.15
-	person.metrics.randompartners += round(rand_range(2,4))
-	person.metrics.sex += round(rand_range(2,5))
+	#ralphC
+	person.metrics.randompartners += round(rand_range(2,5))
+	var sexactstoday = round(rand_range(2,5))
+	if person.race_display == "Succubus":
+		var extrasexactstoday = 0
+		if person.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+			extrasexactstoday += round(rand_range(1,sexactstoday*2+1))
+		elif person.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+			extrasexactstoday += round(rand_range(1,sexactstoday+1))
+		var manameal = (sexactstoday + extrasexactstoday) * variables.orgasmmana
+		person.mana_hunger -= manameal
+		if extrasexactstoday >= sexactstoday * succubusgonewild:
+			text += "$name fucked $his [color=yellow]" +str(sexactstoday)+ "[/color] clients into unconsciousness and beyond in $his mad hunger for cum instead of moving on to others and [color=red]was berated by $his employer[/color].\n"
+			gold = gold * 0.7
+		elif extrasexactstoday > 0:
+			text += "$He greedily milked $his customers to blow [color=red]" + str(extrasexactstoday) + "[/color] additional unsolicited cumshots to sate $his hunger.\n"
+		text += "$He drained [color=green]" + str(manameal) + "[/color] total mana from $his customers.\n"
+		sexactstoday += extrasexactstoday
+	person.metrics.sex += sexactstoday
+	#/ralphC
+	if person.lewdness < 50:
+		person.lewdness = min(person.lewdness + rand_range(3,5), 50)
+	else:
+		person.lewdness += rand_range(0,1)
 	if person.race.find('Bunny') >= 0 || person.spec in ['geisha','nympho']:
 		person.stress += 12 - min(counter*4, 10)
 	else:
@@ -953,7 +999,7 @@ func research(person):
 		person.health -= person.health/3
 	if rand_range(0,100) < 30:
 		array = ['conf','cour','wit','charm']
-		person[array[rand_range(0,array.size())]] -= rand_range(15,25)
+		person[globals.randomfromarray(array)] -= rand_range(15,25)
 		text += "[color=#ff4949]$name's mental health has been damaged. [/color]"
 	if rand_range(0,100) < 20 && person.send >= 1:
 		person.send -= 1
@@ -965,7 +1011,7 @@ func research(person):
 	if rand_range(35,50) > person.health && rand_range(0,100) < 15:
 		person.health -= 200
 		dead = true
-		text = "[color=#ff4949]Due to life-threatening experiments $name has deceased.[/color]"
+		text = "[color=#ff4949]Due to life-threatening experiments $name has deceased.[/color]\n"
 	var dict = {text = person.dictionary(text), gold = gold, dead = dead}
 	return dict
 
@@ -978,7 +1024,7 @@ func fucktoy(person):
 	if person.vagvirgin == true:
 		person.vagvirgin = false
 		#slave.pussy.first = 'brothel'
-		person.health -= 5
+		person.health = max(person.health - 5, 1)
 		person.stress += 10
 		person.loyal += rand_range(-2,-4)
 		text += "$His virginity was taken by one of the customers.\n"
@@ -992,8 +1038,29 @@ func fucktoy(person):
 	gold += rand_range(5,10)
 	if person.traits.has('Sex-crazed'):
 		person.stress -= counter*3
-	person.metrics.sex += round(rand_range(3,6))
-	person.metrics.randompartners += round(rand_range(2,5))
+	if person.lewdness < 50:
+		person.lewdness = min(person.lewdness + rand_range(1,4), 50)
+	else:
+		person.lewdness += rand_range(0,1)
+	#ralphC
+	person.metrics.randompartners += round(rand_range(3,6))
+	var sexactstoday = round(rand_range(3,6))
+	if person.race_display == "Succubus":
+		var extrasexactstoday = 0
+		if person.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+			extrasexactstoday += round(rand_range(1,sexactstoday*2+1))
+		elif person.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+			extrasexactstoday += round(rand_range(1,sexactstoday+1))
+		var manameal = (sexactstoday + extrasexactstoday) * variables.orgasmmana
+		person.mana_hunger -= manameal
+		if extrasexactstoday >= sexactstoday * succubusgonewild:
+			text += "Under the influence of a "+str(person.race_display)+" in heat, $name's " +str(sexactstoday)+ " clients each poured multiple loads into $him.\n"
+		elif extrasexactstoday > 0:
+			text += "$He greedily milked $his customers cocks for [color=green]" + str(extrasexactstoday) + "[/color] additional cumshots to sate $his hunger.\n"
+		text += "$He drained [color=green]" + str(manameal) + "[/color] total mana from $his customers.\n"
+		sexactstoday += extrasexactstoday
+	person.metrics.sex += sexactstoday
+	#/ralphC
 	if person.mods.has("augmenttongue"):
 		gold = gold * 1.15
 	###---Added by Expansion---###
@@ -1117,6 +1184,21 @@ func storewimborn(person):
 	else:
 		supplySold = 0
 
+	var manaDiff = globals.state.manastock - globals.resources.mana
+	var toBuy = int(gold + globals.resources.gold)
+	var manaPrice = 5
+	if globals.state.manabuy && manaDiff > 0:
+		toBuy -= toBuy % manaPrice
+		toBuy /= manaPrice
+		toBuy = min(manaDiff,toBuy)
+		if gold > 0:
+			text += "Before buying mana $he would've returned with [color=yellow]" + str(gold) + "[/color] gold.\n"
+		if toBuy > 0:
+			text += "$He purchased [color=aqua]" + str(toBuy) + "[/color] mana, costing [color=yellow]" + str(toBuy * manaPrice) + "[/color] gold.\n"
+		gold -= toBuy * manaPrice
+		globals.resources.mana += toBuy
+
+
 	person.xp += xp + abs(supplySold) / 3
 	person.stress += rand_range(5,10)
 	if gold > 0:
@@ -1201,7 +1283,7 @@ func whorewimborn(person):
 	if person.vagvirgin == true:
 		person.vagvirgin = false
 		#slave.pussy.first = 'brothel'
-		person.health -= 5
+		person.health = max(person.health - 5, 1)
 		person.stress += 15
 		text += "$His virginity was taken by one of the customers.\n"
 	person.lust -= rand_range(15,25)
@@ -1219,11 +1301,38 @@ func whorewimborn(person):
 	if person.lewdness < 15:
 		text += "The owner of the brothel complained that $name does not have sufficient skill and didn't satisfy many customers. [color=red]$His salary was cut by half.[/color] \n"
 		gold = gold/2
-		person.metrics.sex += round(rand_range(1,3))
+		#ralphC
+		var sexactstoday = round(rand_range(1,3))
+		if person.race_display == "Succubus":
+			person.mana_hunger -= sexactstoday * variables.orgasmmana
+		person.metrics.sex += sexactstoday
+		#/ralphC
 		person.metrics.randompartners += round(rand_range(1,2))
 	else:
+		#ralphC
 		person.metrics.randompartners += round(rand_range(2,4))
-		person.metrics.sex += round(rand_range(2,5))
+		var sexactstoday = round(rand_range(2,5))
+		if person.race_display == "Succubus":
+			var extrasexactstoday = 0
+			if person.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+				extrasexactstoday += round(rand_range(1,sexactstoday*2+1))
+			elif person.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+				extrasexactstoday += round(rand_range(1,sexactstoday+1))
+			var manameal = (sexactstoday + extrasexactstoday) * variables.orgasmmana
+			person.mana_hunger -= manameal
+			if extrasexactstoday >= sexactstoday * succubusgonewild:
+				text += "$name fucked $his [color=yellow]" +str(sexactstoday)+ "[/color] clients into unconsciousness and beyond in $his mad hunger for cum instead of moving on to others and was [color=red]berated by $his employer[/color].\n"
+				gold = gold * 0.7
+			elif extrasexactstoday > 0:
+				text += "$He greedily milked $his customers to blow [color=red]" + str(extrasexactstoday) + "[/color] additional unsolicited cumshots to sate $his hunger.\n"
+			text += "$He drained [color=green]" + str(manameal) + "[/color] total mana from $his customers.\n"
+			sexactstoday += extrasexactstoday
+		person.metrics.sex += sexactstoday
+		#/ralphC
+	if person.lewdness < 50:
+		person.lewdness = min(person.lewdness + rand_range(3,5), 50)
+	else:
+		person.lewdness += rand_range(0,1)
 	if person.race.find('Bunny') >= 0 || person.spec in ['geisha','nympho']:
 		person.stress += 12 - min(counter*4, 10)
 	else:
@@ -1257,7 +1366,7 @@ func escortwimborn(person):
 	var gold
 	if person.vagvirgin == true:
 		person.vagvirgin = false
-		person.health -= 5
+		person.health = max(person.health - 5, 1)
 		if person.race.find('Bunny') >= 0:
 			person.stress += 7
 		else:
@@ -1270,6 +1379,10 @@ func escortwimborn(person):
 		person.stress += 20 - person.lewdness/10
 	person.lust -= rand_range(10,20)
 	person.lastsexday = globals.resources.day
+	if person.lewdness < 50:
+		person.lewdness = min(person.lewdness + rand_range(3,5), 50)
+	else:
+		person.lewdness += rand_range(0,1)
 	if rand_range(1,10) > 7:
 		globals.impregnation(person)
 	gold = rand_range(15,35) + person.conf/3 + person.beauty/3 + max(5, person.charm/1.8 + min(globals.state.reputation.wimborn,60))
@@ -1299,8 +1412,26 @@ func escortwimborn(person):
 	###---End Expansion---###
 	gold = round(gold)
 	person.xp += gold/6
+	#ralphC
 	person.metrics.randompartners += round(rand_range(1,2))
-	person.metrics.sex += round(rand_range(1,2))
+	var sexactstoday = round(rand_range(1,2))
+	if person.race_display == "Succubus":
+		var extrasexactstoday = 0
+		if person.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+			extrasexactstoday += round(rand_range(1,sexactstoday*2+1))
+		elif person.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+			extrasexactstoday += round(rand_range(1,sexactstoday+1))
+		var manameal = (sexactstoday + extrasexactstoday) * variables.orgasmmana
+		person.mana_hunger -= manameal
+		if extrasexactstoday >= sexactstoday * succubusgonewild:
+			text += "Under the influence of a "+str(person.race_display)+" in heat, $name's client abandoned his plans and took $him a shocking [color=green]"+ str(extrasexactstoday + sexactstoday) +"[/color]. times\n"
+		elif extrasexactstoday > 0:
+			text += "$His client cut their date short and hastily took $him home. $name used him to sate $his hunger, coaxing out a grand total of [color=green]" + str(extrasexactstoday + sexactstoday) + "[/color]. ejaculations.\n"
+		text += "$He drained [color=green]" + str(manameal) + "[/color] total mana.\n"
+		gold += extrasexactstoday * 5
+		sexactstoday += extrasexactstoday
+	person.metrics.sex += sexactstoday
+	#/ralphC
 	text += "By the end of the day $he earned [color=yellow]"+ str(gold) + "[/color] gold.\n"
 	
 	var dict = {text = text, gold = gold}
@@ -1315,7 +1446,7 @@ func fucktoywimborn(person):
 	if person.vagvirgin == true:
 		person.vagvirgin = false
 		#slave.pussy.first = 'brothel'
-		person.health -= 5
+		person.health = max(person.health - 5, 1)
 		person.stress += 10
 		person.loyal += rand_range(-2,-4)
 		text += "$His virginity was taken by one of the customers.\n"
@@ -1334,14 +1465,38 @@ func fucktoywimborn(person):
 		gold = gold * 1.15
 	if person.lewdness < 45:
 		text += "The owner of the brothel complained that $name does not have sufficient skill and didn't satisfy many customers. [color=red]$His salary was cut by half.[/color] \n"
-		person.metrics.sex += round(rand_range(2,4))
+		#ralphC
+		var sexactstoday = round(rand_range(2,4))
+		if person.race_display == "Succubus":
+			person.mana_hunger -= sexactstoday * variables.orgasmmana
+		person.metrics.sex += sexactstoday
+		#/ralphC
 		gold = gold/2
 		person.metrics.randompartners += round(rand_range(1,4))
 	else:
-		
-		person.metrics.sex += round(rand_range(3,6))
-		person.metrics.randompartners += round(rand_range(2,5))
-	
+		#ralphC
+		person.metrics.randompartners += round(rand_range(3,6))
+		var sexactstoday = round(rand_range(3,6))
+		if person.race_display == "Succubus":
+			var extrasexactstoday = 0
+			if person.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+				extrasexactstoday += round(rand_range(1,sexactstoday*2+1))
+			elif person.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+				extrasexactstoday += round(rand_range(1,sexactstoday+1))
+			var manameal = (sexactstoday + extrasexactstoday) * variables.orgasmmana
+			person.mana_hunger -= manameal
+			if extrasexactstoday >= sexactstoday * succubusgonewild:
+				text += "Under the influence of a "+str(person.race_display)+" in heat, $name's " +str(sexactstoday)+ " clients each poured multiple loads into $him.\n"
+			elif extrasexactstoday > 0:
+				text += "$He greedily milked $his customers cocks for [color=yellow]" + str(extrasexactstoday) + "[/color] additional cumshots to sate $his hunger.\n"
+			text += "$He drained [color=green]" + str(manameal) + "[/color] total mana from $his customers.\n"
+			sexactstoday += extrasexactstoday
+		person.metrics.sex += sexactstoday
+		#/ralphC	
+	if person.lewdness < 50:
+		person.lewdness = min(person.lewdness + rand_range(3,5), 50)
+	else:
+		person.lewdness += rand_range(0,1)
 	
 	if person.race.find('Bunny') >= 0 || person.spec == 'nympho':
 		person.stress += 25 - min(counter*4, 20)
@@ -1415,9 +1570,27 @@ func housepet(person):
 			person.charm -= 1
 			person.asser -= 5
 			person.lewdness += 10
-			person.metrics.animalpartners += 1
-			person.cum.pussy += 5
-			globals.resources.mana += int(rand_range(1,6))
+			#ralphC - Say it 5 times fast: If you make a Succubus a housepet, how many housepets will a Succubus housepet pet?
+			if person.race_display == "Succubus":
+				var sexactstoday = int(rand_range(1,6))
+				person.metrics.animalpartners += sexactstoday
+				var extrasexactstoday = 0
+				if person.mana_hunger > (variables.succubushungerlevel[1] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+					extrasexactstoday += round(rand_range(1,sexactstoday*2+1))
+				elif person.mana_hunger > (variables.succubushungerlevel[0] * variables.basemanafoodconsumption * variables.succubusagemod[person.age]):
+					extrasexactstoday += round(rand_range(1,sexactstoday+1))
+				var manameal = (sexactstoday + extrasexactstoday) * variables.orgasmmana / 2
+				person.mana_hunger -= manameal
+				if extrasexactstoday > 0:
+					text += "$name presented to nearly every hound in the kennel and spent the day being pumped full of dog cum while being dragged around by knotted cock and absorbed [color=green]"+str(manameal)+"[/color] mana (less than $he would have gotten from sentient partners).\n"
+				else: 
+					text += "$name behaved like a bitch in heat and enticed one of the kennel hounds to mount and fuck her.\n"
+				person.cum.pussy += 5 * sexactstoday
+			else:
+				globals.resources.mana += int(rand_range(1,6))
+				person.metrics.animalpartners += 1
+				person.cum.pussy += 5
+			#/ralphC
 			if person.race.find('Wolf') >= 0:
 				globals.impregnation(person, null, 'dog')
 			text += "\n"
@@ -1439,7 +1612,14 @@ func housepet(person):
 			person.lewdness += 5
 			person.metrics.animalpartners += 1
 			person.cum.pussy += 5
-			globals.resources.mana += int(rand_range(1,6))
+			#ralphC - Say it 5 times fast: If you make a Succubus a housepet, how many housepets will a Succubus housepet pet?
+			if person.race_display == "Succubus":
+				var sexactstoday = int(rand_range(1,6))
+				person.metrics.animalpartners += sexactstoday
+				person.mana_hunger -= sexactstoday * variables.orgasmmana
+			else:
+				globals.resources.mana += int(rand_range(1,6)) #ralphC
+			#/ralphC
 			if person.race.find('Wolf') >= 0:
 				globals.impregnation(person, null, 'dog')
 			text += "\n"
@@ -1578,7 +1758,7 @@ func public_nudity_law(person, gold):
 		#Bonus/Penalty due to Wages
 		if d100 <= person.beauty:
 			goldmod = round(gold * (person.charm *.01))
-			text += "$His naked body [color=lime]attracted[/color] others. He ended up earning an extra [color=yellow]" + str(goldmod) + " Gold[/color] due to $his [color=aqua]nudity[/color], [color=aqua]beauty[/color], and [color=aqua]charm[/color]. "
+			text += "$His naked body [color=lime]attracted[/color] others. $He ended up earning an extra [color=yellow]" + str(goldmod) + " Gold[/color] due to $his [color=aqua]nudity[/color], [color=aqua]beauty[/color], and [color=aqua]charm[/color]. "
 			if towndict.laws.public_nudity == false:
 				towndict.nudity += round(rand_range(1,3))
 				text += "You suspect this made some citizens appreciate public nudity. You've gained some local support towards accepting a law legalizing it, increasing the chances of a proposed law passing. "
@@ -1586,7 +1766,7 @@ func public_nudity_law(person, gold):
 					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Updated Chance of Law Passing[/color] = [color=aqua]" + str(towndict.nudity) + "[/color] || "
 		elif d100 >= person.beauty + 50:
 			goldmod = -1 * round(gold * ((100 - person.charm) *.01))
-			text += "$His naked body [color=red]disgusted[/color] others. He ended up losing [color=yellow]" + str(goldmod) + " Gold[/color] due to $his [color=aqua]nudity[/color], [color=aqua]beauty[/color], and [color=aqua]charm[/color]. "
+			text += "$His naked body [color=red]disgusted[/color] others. $He ended up losing [color=yellow]" + str(goldmod) + " Gold[/color] due to $his [color=aqua]nudity[/color], [color=aqua]beauty[/color], and [color=aqua]charm[/color]. "
 			if towndict.laws.public_nudity == false:
 				towndict.nudity -= round(rand_range(1,3))
 				text += "You suspect this made some citizens hate public nudity. You've lost some local support towards accepting a law legalizing it, decreasing the chances of a proposed law passing. "
@@ -1609,7 +1789,7 @@ func public_nudity_law(person, gold):
 				#Reduced due to Charm
 				d100 = round(rand_range(0,100))
 				if d100 <= person.charm:
-					text += "[color=aqua]$name[/color][color=red] managed to [color=aqua]Charm[/color] them down to only fining $him [color=yellow]25[/color] instead. "
+					text += "[color=aqua]$name[/color][color=red] managed to [color=aqua]Charm[/color] them down to only fining $him [color=yellow]25[/color] instead. [/color]"
 					fine = 25
 				if globals.expansionsettings.perfectinfo == true:
 					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Chance to Reduce Fine[/color] of [color=aqua]" + str(person.charm) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color] || "

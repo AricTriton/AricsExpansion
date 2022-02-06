@@ -1,4 +1,33 @@
 
+var rules = {
+	futa = true,
+	futaballs = false,
+	furry = true,
+	furrynipples = true,
+	dickgirl = false, # centerflag982 - added dickgirl
+	male_chance = 15,
+	futa_chance = 10,
+	dickgirl_chance = 5, # centerflag982 - added dickgirl
+	children = false,
+	noadults = false,
+	slaverguildallraces = false,
+	fontsize = 18,
+	musicvol = 24,
+	soundvol = 24,
+	receiving = true,
+	fullscreen = false,
+	oldresize = true,
+	fadinganimation = true,
+	permadeath = false,
+	autoattack = true,
+	showfullbody = true,
+	enddayalise = 1,
+	spritesindialogues = true,
+	instantcombatanimation = false,
+	randomcustomportraits = true,
+	thumbnails = false,
+}
+
 ###---Added by Expansion---### Hucow Specialization
 var specarray = ['geisha','ranger','executor','bodyguard','assassin','housekeeper','trapper','nympho','merchant','tamer','hucow']
 ###---End Expansion---###
@@ -28,6 +57,13 @@ var specimages = {
 	hucow = load("res://files/aric_expansion_images/specialization_icons/cow_icon.png"),
 }
 ###---End Expansion---###
+
+var sexicon = {
+	female = load("res://files/buttons/sexicons/female.png"),
+	male = load("res://files/buttons/sexicons/male.png"),
+	futanari = load("res://files/buttons/sexicons/futa.png"),
+	dickgirl = load("res://files/buttons/sexicons/dickgirl.png"), # centerflag982 - added dickgirl icon
+}
 
 func loadsettings():
 	var file = File.new()
@@ -116,7 +152,10 @@ func clearstate():
 	if useRalphsTweaks:
 		expansionsettings.applyItemMarketCostTweaks()
 		expansionsettings.applySpellManacostTweaks()
-	resources.reset()
+	resources = resource.new()
+
+func newslave(race, age, sex, origins = 'slave', unique = null):
+	return constructor.newslave(race, age, sex, origins, unique)
 
 func slaves_set(person):
 	person.originstrue = person.origins
@@ -145,7 +184,7 @@ class resource:
 	var day = 1 setget day_set
 	var gold = 0 setget gold_set
 	var mana = 0 setget mana_set
-	var energy = 0 setget energy_set
+	var energy = 100 setget energy_set
 	var food = 0 setget food_set
 	var upgradepoints = 0 setget upgradepoints_set
 	var panel
@@ -185,7 +224,7 @@ class resource:
 			upgrademax = 10,
 		},
 		bottler = {level = 0, totalproduced = 0},
-		worker_cycle = [],
+		worker_cycle = {'farmhand':[], 'milkmaid':[], 'stud':[]},
 		work_type = "",
 	}
 	###---Expansion End---### 
@@ -196,19 +235,6 @@ class resource:
 		for i in array:
 			#self[i] += 0
 			set(i, get(i))
-	
-	func reset():
-		day = 1
-		gold = 0
-		mana = 0
-		energy = 0
-		food = 0
-		###---Added by Expansion---### Farm Expanded
-		milk = 0
-		semen = 0
-		lube = 0
-		piss = 0
-		###---Expansion End---###
 	
 	func gold_set(value):
 		value = round(value)
@@ -433,6 +459,7 @@ class progress:
 	var upcomingevents = []
 	###---Added by Expansion---### Towns Expanded
 	var reputation = {wimborn = 0, frostford = 0, gorn = 0, amberguard = 0, shaliq = 0, umbra = 0} setget reputation_set
+	var bountiescollected = {wimborn = 0, frostford = 0, gorn = 0, amberguard = 0, shaliq = 0, umbra = 0} #ralphD
 	###---End Expansion---###
 	var dailyeventcountdown = 0
 	var dailyeventprevious = 0
@@ -441,6 +468,8 @@ class progress:
 	var supplykeep = 10
 	var foodbuy = 200
 	var supplybuy = false
+	var manastock = 200
+	var manabuy = false
 	var tutorial = {basics = false, person = false, alchemy = false, jail = false, lab = false, farm = false, outside = false, combat = false, interactions = false}
 	var itemcounter = 0
 	var slavecounter = 0
@@ -637,6 +666,8 @@ class progress:
 	var thecrystal = {mode = 'light', research = 0, abilities = [], power = 0, lifeforce = 10, hunger = 0, preventsdeath = false}
 	#Milk Economy / globals.state.milkeconomy.currentvalue
 	var milkeconomy = {currentvalue = 1, futurevalue = 1}
+	#Best Slave - Used for Envy Flaw
+	var bestslave
 	###---Expansion End---###
 	
 	func quest_set(value):
@@ -701,24 +732,15 @@ class progress:
 		return rval
 	
 	func findslave(id):
-		var rval
+		id = str(id)
 		###---Added by Expansion---### Category: NPCs Expanded | Search Baddies if not in Slaves
-		var foundslave = false
-		if str(globals.player.id) == str(id):
+		if str(globals.player.id) == id:
 			return globals.player
-		for i in range(0, globals.slaves.size()):
-			if str(globals.slaves[i].id) == str(id):
-				rval = globals.slaves[i]
-				foundslave = true
-		if foundslave == false:
-			rval = findnpc(id)
+		for person in globals.slaves:
+			if str(person.id) == id:
+				return person
+		return findnpc(id)
 		###---End Expansion---###
-		if str(globals.player.id) == str(id):
-			return globals.player
-		for i in range(0, globals.slaves.size()):
-			if str(globals.slaves[i].id) == str(id):
-				rval = globals.slaves[i]
-		return rval
 
 	###---Added by Expansion---### Category: Better NPCs
 	func npcs_set(refperson):
@@ -744,23 +766,13 @@ class progress:
 		globals.state.allnpcs.append(person)
 	
 	func findnpc(newid):
-		var rval
-		var foundslave = false
-		if !allnpcs.empty():
-			for npc in allnpcs:
-				if npc.id != null:
-					if str(npc.id) == str(newid):
-						rval = npc
-						foundslave = true
-			#How findslave does it
-#			for i in range(0, globals.state.allnpcs.size()):
-#				if str(globals.state.allnpcs[i].id) == str(id):
-#					rval = globals.state.allnpcs[i]
-#					foundslave = true
-#		if foundslave == false:
-#			rval = findslave(newid)
-		return rval
+		newid = str(newid)
+		for npc in allnpcs:
+			if str(npc.id) == newid:
+				return npc
+		return null
 	###---End Expansion---###
+
 	func backpack_set(value):
 		backpack = value
 		checkbackpack()
@@ -935,20 +947,19 @@ func impregnation(mother, father = null, unique = ''):
 				cumprod = ref[1]
 			else:
 				cumprod = father.pregexp.cumprod
-				
-				if father.lastsexday == globals.resources.day:
-					virility = rand_range(0.1,1)
-				else:
-					virility = rand_range(0.5,1.25)
-				
-				fertility += (father.preg.fertility + father.preg.bonus_fertility)
-				
-				if father.traits.has("Fertile"):
-					fertility *= 1.5
-				elif father.traits.has("Infertile"):
-					fertility *= 0.5
-				
 				penis_mod = fatherSizeMods.get(father.penis, .025)
+				
+			if father.lastsexday == globals.resources.day:
+				virility = rand_range(0.1,1) * father.pregexp.virility
+			else:
+				virility = rand_range(0.5,1.25) * father.pregexp.virility
+			
+			fertility += (father.preg.fertility + father.preg.bonus_fertility)
+			
+			if father.traits.has("Fertile"):
+				fertility *= 1.5
+			elif father.traits.has("Infertile"):
+				fertility *= 0.5
 		else:
 			father_id = '-1'
 			var ref = fatherRaceMods.get(unique)
@@ -1011,7 +1022,8 @@ func slavetooltip(person):
 		node.get_node("name").set('custom_colors/font_color', Color(1,1,0))
 		node.get_node("name").text = globals.state.defaultmasternoun + " " + node.get_node("name").text
 	else:
-		node.get_node("name").set('custom_colors/font_color', Color(1,1,1))
+		#Whims -- added custom colors
+		node.get_node("name").set('custom_colors/font_color', ColorN(person.namecolor))
 	if person != globals.player:
 		node.get_node("spec").set_texture(specimages[str(person.spec)])
 	node.get_node("grade").set_texture(gradeimages[person.origins])
@@ -1022,7 +1034,7 @@ func slavetooltip(person):
 	###---Added by Expansion---### Movement Icons
 	node.get_node("movement").set_texture(movementimages[str(expansion.getMovementIcon(person))])
 	node.get_node("movement").visible = true
-	if person.preg.duration > 0 && person.knowledge.has('pregnancy'):
+	if person.preg.duration > 0 && person.knowledge.has('currentpregnancy'):
 		node.get_node("pregnancy").visible = true
 	else:
 		node.get_node("pregnancy").visible = false
@@ -1196,7 +1208,6 @@ func load_game(text):
 	for i in currentline.allnpcs:
 		if typeof(i) == TYPE_STRING:
 			continue
-		newslave = person.new()
 		if i['@path'].find('.gdc'):
 			i['@path'] = i['@path'].replace('.gdc', '.gd')
 		newslave = dict2inst(i)
@@ -1206,7 +1217,14 @@ func load_game(text):
 	if str(state.expansionversion) != str(expansionsettings.modversion):
 		print("Mod Version v" + str(state.expansionversion) + ". Expanding game to latest Aric's Expansion version")
 		expansionsetup.expandGame()
+		print("Congratulations, your game is expanded. So, so expanded. Your door locked? Volume low? You hydrated? Party on!")
 	print("Aric's Expansion v" + str(expansionsettings.modversion))
+	if expansionsettings.use_ralphs_tweaks == true:
+		print("Ralph's Tweaks Enabled. Product hybridization complete.")
+	if expansionsettings.sillymode == true:
+		print("Silly Mode Enabled. Fourth wall successfully removed.")
+	if expansionsettings.enablecheatbutton == true:
+		print("Aric's Cheat Button Active. Access via Talk > Piece of Candy")
 	if expansionsettings.enablecheatbutton == true:
 		print("Aric's Cheat Button Active. Access via Talk > Piece of Candy")
 	if expansionsettings.perfectinfo == true:
@@ -1242,6 +1260,8 @@ func load_game(text):
 	for person in personList:
 		if person.imageportait == null: # try to add portrait if slave doesn't have one
 			constructor.randomportrait(person)
+		if typeof(person.sex) != TYPE_STRING || person.sex.empty():
+			person.checksex()
 
 
 ###---Added by Expansion---### Only to load from Mods folder
@@ -1252,6 +1272,7 @@ var expansiontalk = loadModFile("AricsExpansion", "customScripts/expansiontalk.g
 var backwardscompatibility = loadModFile("AricsExpansion", "customScripts/backwardscompatibility.gd").new()
 var expansionsettings = loadModFile("AricsExpansion", "customScripts/expansionsettings.gd").new()
 var useRalphsTweaks = expansionsettings.use_ralphs_tweaks
+var expansiontravel = loadModFile("AricsExpansion", "customScripts/expansiontravel.gd").new() #ralphD
 
 ###---Added by Expansion---### General Arrays
 #Size Arrays
@@ -1346,8 +1367,10 @@ var sexuality_images = {
 	futa_3 = load("res://files/aric_expansion_images/sexuality_icons/futa_3.png"),
 }
 
-<AddTo -1>
+<AddTo 0>
 func _ready():
+	expansionsettings.addConstantsSupport()
+	constructor.fillSizeArrayDict()
 	if useRalphsTweaks:
 		expansionsettings.applyTweaks()
 
@@ -1364,19 +1387,6 @@ func getVatMaxCapacity(type):
 		vatmax = 500
 	return vatmax
 
-###---Added by Expansion---### Pregnancy Expanded | Added by Deviate
-func get_person(id):
-	var person
-	
-	if id == globals.player.id:
-		person = globals.player
-		return person
-	else:
-		for i in globals.slaves:
-			if id == i.id:
-				person = i
-				return person
-
 func semen_volume(semen):
 	var rvar
 	var volume = semen * 10
@@ -1390,195 +1400,23 @@ func semen_volume(semen):
 	traceFile('Semen Volume')
 	return rvar
 
-###---Added by Expansion---### Pregnancy Expanded || Deviate Added / Aric Tweaked
-func ovulation_day(person):
-	var expansion = globals.expansion
-	var expansionsetup = globals.expansionsetup
-	
-	if person.preg.has_womb == false || person.race_type == 4:
-		return
-	
-	if person.preg.ovulation_type == 0 || person.preg.baby_type == '':
-		constructor.set_ovulation(person)
-	
-	if person.preg.is_preg == true:
-		person.preg.duration += 1
-	
-	else:
-		#Ovulation System Disable Check
-		if globals.expansionsettings.ovulationenabled == true:
-			#Type 1 = Live Births
-			if person.preg.ovulation_type == 1:
-				if person.preg.ovulation_stage == 0:
-					constructor.setRandomOvulationDay(person)
-				
-				if person.preg.ovulation_day >= round(expansionsettings.livebirthcycle):
-					person.preg.ovulation_stage = 1
-					person.preg.ovulation_day = 1
-				elif person.preg.ovulation_day >= round(expansionsettings.livebirthcycle * expansionsettings.fertileduringcycle):
-					person.preg.ovulation_stage = 2
-					person.preg.ovulation_day += 1
-				else:
-					person.preg.ovulation_day += 1
-			#Type 2 = Egg Layer
-			else:
-				if person.preg.ovulation_stage == 0:
-					constructor.setRandomOvulationDay(person)
-				
-				if person.preg.ovulation_day >= round(expansionsettings.eggcycle):
-					person.preg.ovulation_stage = 1
-					person.preg.ovulation_day = 1
-				elif person.preg.ovulation_day >= round(expansionsettings.eggcycle * expansionsettings.fertileduringcycle):
-					person.preg.ovulation_stage = 2
-					person.preg.ovulation_day += 1
-				else:
-					person.preg.ovulation_day += 1
-		else:
-			person.preg.ovulation_stage = 1
-			person.preg.ovulation_day = 1
-		
-	#Semen Cleanser
-	for i in person.preg.womb:
-		if i.day >= expansionsettings.semenlifespan:
-			person.preg.womb.erase(i)
-		else:
-			i.day += 1
-			if person.cum.pussy >= 1:
-				i.semen = i.semen * 1.2
-				person.cum.pussy -= 1
-		
-	if person.cum.pussy >= 1:
-		person.cum.pussy -= round(rand_range(1, person.cum.pussy*.5))
-	
-	traceFile('ovulation day')
-	return
 
-func fertilize_egg(mother, father_id, father_unique):
-	var expansion = globals.expansion
-	var expansionsetup = globals.expansionsetup
-	var father
-	var baby
-	
-	###Get/Build Father
-	if father_id != null && father_id != '-1' && !father_unique in ['','dog','horse']:
-		father = globals.state.findslave(father_id)
-		#If Father disappeared from the World
-		if father == null:
-			father = globals.newslave(randomitemfromarray(globals.allracesarray), 'adult', 'male')
-	else:
-		father = globals.newslave('randomany', 'adult', 'male')
-		father.id = '-1'
-		
-		if father_unique != null:
-			father.unique = father_unique
-		
-		constructor.clearGenealogies(father)
-		if father_unique == 'bunny':
-			father.genealogy.bunny = 100
-			father.race = 'Beastkin Bunny'
-		elif father_unique == 'dog':
-			father.genealogy.dog = 100
-			father.race = 'Beastkin Wolf'
-		elif father_unique == 'cow':
-			father.genealogy.cow = 100
-			father.race = 'Taurus'
-		elif father_unique == 'cat':
-			father.genealogy.cat = 100
-			father.race = 'Beastkin Cat'
-		elif father_unique == 'fox':
-			father.genealogy.fox = 100
-			father.race = 'Beastkin Fox'
-		elif father_unique == 'horse':
-			father.genealogy.horse = 100
-			father.race = 'Centaur'
-		elif father_unique == 'raccoon':
-			father.genealogy.raccoon = 100
-			father.race = 'Beastkin Tanuki'
-		else:
-			father.race = getracebygroup("starting")
-			constructor.set_genealogy(father)
-	
-	#Consent/Wanted Pregnancy Check
-	if father.id == player.id:
-		mother.pregexp.wantedpregnancy = mother.consentexp.pregnancy
-	else:
-		mother.pregexp.wantedpregnancy = mother.consentexp['breeder' if expansion.relatedCheck(mother,father) == "unrelated" else 'incestbreeder']
-
-	baby = constructor.newbaby(mother, father)
-
-	if baby.id != null:
-		baby.state == 'fetus'
-		mother.preg.is_preg = true
-		mother.preg.duration = 0
-		mother.preg.baby = -1
-		mother.preg.unborn_baby.append({id = baby.id})
-		mother.preg.ovulation_stage = 0
-		mother.preg.ovulation_day = 0
-	
-	traceFile('fertilize egg')
-	return
 
 func miscarriage(person):
-	var baby
 	var miscarried = false
 	for i in person.preg.unborn_baby:
 		if miscarried == false:
-			baby = globals.state.findslave(i.id)
+			globals.state.findbaby(i.id).death()
 			person.preg.unborn_baby.erase(i)
-#			person.preg.baby_count -= 1
-			baby.state = 'dead'
+			#baby.state = 'dead'
 			miscarried = true
 		
 	if person.preg.unborn_baby.empty():
 		person.preg.is_preg = false
 		person.preg.duration = 0
 		person.preg.baby = null
-	
-	traceFile('miscarriage')
-	return
+	#traceFile('miscarriage')
 
-func nightly_womb(person):
-	var can_get_preg = true
-	var race_breed_compatible
-	var reach_egg_chance
-	var fertilize_chance
-	var fertility = round(100 + (person.preg.fertility + person.preg.bonus_fertility) * person.pregexp.eggstr)
-	
-	if person.traits.has("Fertile"):
-		fertility *= 1.5
-	elif person.traits.has("Infertile"):
-		fertility *= 0.5
-	
-	ovulation_day(person)
-	
-	if person.preg.has_womb == false || person.preg.is_preg == true || fertility <= 0 || person.preg.ovulation_type == 0 || person.preg.ovulation_stage == 0 || person.preg.ovulation_stage == 2 || person.effects.has('contraceptive'):
-		return
-	
-	for i in person.preg.womb:
-		if can_get_preg == true:
-			if globals.state.spec == "Breeder":
-				reach_egg_chance = round(rand_range(1,75))
-				fertilize_chance = round(rand_range(1,75))
-			else:
-				reach_egg_chance = round(rand_range(1,100))
-				fertilize_chance = round(rand_range(1,100))
-
-			if (i.semen * i.virility) >= reach_egg_chance:
-				i.day -= 1
-				if fertility > fertilize_chance:
-					if person.preg.baby_type == 'birth':
-						if person.preg.unborn_baby.empty():
-							fertilize_egg(person,i.id,i.unique)
-						elif person.preg.unborn_baby.size() > 1 && round(rand_range(0,100)) >= 70:
-							can_get_preg = false
-							fertilize_egg(person,i.id,i.unique)
-					elif person.preg.unborn_baby.size() > 3:
-						can_get_preg = false
-						fertilize_egg(person,i.id,i.unique)
-					else:
-						fertilize_egg(person,i.id,i.unique)
-	traceFile('nightly womb')
-	return
 
 #Slime Conversion (Move to Expansion_slimebreeding after Split option)
 func slimeConversionCheck(mother, father):
@@ -1623,15 +1461,47 @@ func slimeConversionCheck(mother, father):
 	
 	if get_tree().get_current_scene().has_node("infotext") && globals.slaves.find(mother) >= 0 && mother.away.at != 'hidden':
 		get_tree().get_current_scene().infotext(text,'red')
-	
-	return
 
 ###---Added by Expansion---### General Usage
 #I can't remember if I added this or found it elsewhere. Sorry if I didn't!
-func randomitemfromarray(source):
-	if source.size() > 0:
-		#source[randi() % source.size()] Old
-		return source[round(rand_range(0,source.size()-1))]
+func randomitemfromarray(array):
+	if array.empty():
+		print("ERROR: randomitemfromarray() empty")
+		return null
+	else:
+		return array[randi() % array.size()]
+
+func randomfromarray(array):
+	if array.empty():
+		print("ERROR: randomfromarray() empty")
+		return null
+	else:
+		return array[randi() % array.size()]
 
 func getfromarray(array, index):
 	return array[ clamp(index, 0, array.size()-1) ]
+
+# selects an item matching the given value in the given option button node
+# useMetaData can be an array or a boolean
+#	array - find value in array to determine index
+#	true - find value in node item metadata
+#	false - find value in node item text
+# returns true if an item matching value is found and selected, else false
+func selectForOptionButton(value, node, useMetadata = false):
+	if typeof(useMetadata) == TYPE_ARRAY:
+		var temp = useMetadata.find(value)
+		if temp >= 0 && temp < node.get_item_count():
+			node.select(temp)
+			return true
+	elif useMetadata:
+		for i in range(node.get_item_count()):
+			if node.get_item_(i) == value:
+				node.select(i)
+				return true
+	else:
+		for i in range(node.get_item_count()):
+			if node.get_item_text(i) == value:
+				node.select(i)
+				return true
+	node.select(0)
+	return false

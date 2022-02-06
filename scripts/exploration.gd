@@ -1,4 +1,6 @@
 
+var travel = globals.expansiontravel #ralphD
+
 func enemyencounter():
 	var enc
 	var encmoveto
@@ -226,7 +228,16 @@ func buildenemies(enemyname = null):
 			buildslave(i,true)
 			###---End Expansion---###
 
-##############
+##############ralphD - space out combats through new noncombat enemyencounter
+func noenemyencountered():
+	var array = []
+	#mansion.maintext = "Your journey continues peacefully. \n"
+	#noenemyencounteredandthen(zone)
+	#print("Ralph Test: enemygroup: "+str(enemygroup))
+	mansion.maintext = travel.getzonetraveltext(currentzone,currentzone.length)
+	array.append({name = "Proceed through area", function = 'enemyleave'})
+	outside.buildbuttons(array, self)
+#/ralphD
 
 
 var treasuremisc = [['magicessenceing',7],['taintedessenceing',7],['natureessenceing',7],['bestialessenceing',7],['fluidsubstanceing',7],['gem',1],['claritypot',0.5],['regressionpot',1],['youthingpot',2],['maturingpot',2]]
@@ -272,15 +283,21 @@ func enemydefeated():
 			baddie.npcexpanded.timesfought += 1
 			baddie.npcexpanded.timesescaped += 1
 			baddie.npcexpanded.citizen = false
-			var reencounterchance = globals.expansion.enemyreencounterchanceescape + round(rand_range(-globals.expansion.enemyreencountermodifier,globals.expansion.enemyreencountermodifier))
+			var reencounterchance = globals.expansion.enemyreencounterchanceescape + round(globals.expansion.enemyreencountermodifier * rand_range(-1,1))
+			for i in baddie.gear.values():
+				if i != null:
+					###---Added by Expansion---### Fix items flipping out on NPCs
+					if globals.state.unstackables.has(i):
+						globals.items.unequipitemraw(globals.state.unstackables[i],baddie)
+					else:
+						globals.items.unequipitemraw(enemygear[i],baddie)
 			globals.state.allnpcs = baddie
-			#globals.state.npclastlocation.append([currentzone.code, baddie.id, reencounterchance])
 			#Check is because the citizen will be altered elsewhere before and removed from above later
 			if baddie.npcexpanded.citizen == true:
 				reputation += round(rand_range(1,5)) + globals.originsarray.find(baddie.origins)
 				status = 'citizen'
 			else:
-				reputation -= round(rand_range(1,5) + rand_range(-globals.originsarray.find(baddie.origins), globals.originsarray.find(baddie.origins)))
+				reputation -= round(rand_range(1,5) + globals.originsarray.find(baddie.origins)*rand_range(-1, 1))
 				status = 'criminal'
 			globals.state.offscreennpcs.append([baddie.id, currentzone.code, reencounterchance, 'escaping', reputation, status])
 			###---End Expansion---###
@@ -306,7 +323,10 @@ func enemydefeated():
 						enemyloot.unstackables.append(globals.state.unstackables[i])
 					else:
 						globals.items.unequipitemraw(enemygear[i],unit.capture)
-						if randf() * 100 <= variables.geardropchance:
+						var bonus = 0
+						if globals.state.spec == 'Hunter':
+							bonus+=20
+						if randf() * 100 <= variables.geardropchance + bonus:
 							enemyloot.unstackables.append(enemygear[i])
 					###---End Expansion---###
 		var rewards = unit.rewardpool
@@ -489,13 +509,12 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 				var baddie = defeated.units[i]
 				baddie.npcexpanded.timesreleased += 1
 				baddie.npcexpanded.lastevent = 'fought'
-				var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(rand_range(-globals.expansion.enemyreencountermodifier,globals.expansion.enemyreencountermodifier))
-				#globals.state.npclastlocation.append([currentzone.code, baddie.id, reencounterchance])
+				var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(globals.expansion.enemyreencountermodifier * rand_range(-1,1))
 				if baddie.npcexpanded.citizen == true:
 					reputation = round(rand_range(1,5)) + globals.originsarray.find(baddie.origins)
 					status = 'citizen'
 				else:
-					reputation = -round(rand_range(1,5) + rand_range(-globals.originsarray.find(baddie.origins), globals.originsarray.find(baddie.origins)))
+					reputation = -round(rand_range(1,5) + globals.originsarray.find(baddie.origins)*rand_range(-1, 1))
 					status = 'criminal'
 				globals.state.allnpcs = baddie
 				globals.state.offscreennpcs.append([baddie.id, currentzone.code, reencounterchance, 'defeated', reputation, status])
@@ -506,13 +525,12 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 				var baddie = defeated.units[i]
 				baddie.npcexpanded.timesreleased += 1
 				baddie.npcexpanded.lastevent = 'rescued'
-				var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(rand_range(-globals.expansion.enemyreencountermodifier,globals.expansion.enemyreencountermodifier))
-				#globals.state.npclastlocation.append([currentzone.code, baddie.id, reencounterchance])
+				var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(globals.expansion.enemyreencountermodifier * rand_range(-1,1))
 				if baddie.npcexpanded.citizen == true:
 					reputation = round(rand_range(1,5)) + globals.originsarray.find(baddie.origins)
 					status = 'citizen'
 				else:
-					reputation = -round(rand_range(1,5) + rand_range(-globals.originsarray.find(baddie.origins), globals.originsarray.find(baddie.origins)))
+					reputation = -round(rand_range(1,5) + globals.originsarray.find(baddie.origins)*rand_range(-1, 1))
 					status = 'criminal'
 				globals.state.allnpcs = baddie
 				globals.state.offscreennpcs.append([baddie.id, currentzone.code, reencounterchance, 'roaming', reputation, status])
@@ -646,16 +664,15 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 			baddie.npcexpanded.timesraped += 1
 			baddie.npcexpanded.lastevent = 'raped'
 			globals.player.lastsexday = globals.resources.day
-			var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(rand_range(-globals.expansion.enemyreencountermodifier,globals.expansion.enemyreencountermodifier))
+			var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(globals.expansion.enemyreencountermodifier * rand_range(-1,1))
 			if baddie.npcexpanded.citizen == true:
 				reputation = round(rand_range(1,5)) + globals.originsarray.find(baddie.origins)
 				status = 'citizen'
 			else:
-				reputation = -round(rand_range(1,5) + rand_range(-globals.originsarray.find(baddie.origins), globals.originsarray.find(baddie.origins)))
+				reputation = -round(rand_range(1,5) + globals.originsarray.find(baddie.origins)*rand_range(-1, 1))
 				status = 'criminal'
 			globals.state.allnpcs = baddie
 			globals.state.offscreennpcs.append([baddie.id, currentzone.code, reencounterchance, 'raped', reputation, status])
-			#globals.state.npclastlocation.append([currentzone.code, baddie.id, reencounterchance])
 			###---End Expansion---###
 		
 		for i in globals.state.playergroup:
@@ -669,7 +686,7 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 				else:
 					text += person.dictionary('\n$name watches your deeds with some interest despite $himself. After a few minutes, you see $his hand moving inside of $his pants as $he watches. \n')
 					person.lust = rand_range(15,25)
-			elif person.lust >= 50 || person.lust >= 40 && person.lewdness >= 40 || person.traits.has('Sex-Crazed') || person.traits.has('Perverted'):
+			elif person.lust >= 50 || person.lust >= 40 && person.lewdness >= 40 || person.traits.has('Sex-Crazed') || person.traits.has('Pervert'):
 					person.asser += rand_range(6,12)
 					person.lastsexday = globals.resources.day
 					person.lust -= rand_range(5,15)
@@ -806,7 +823,7 @@ func townhall_enter(town):
 	var text = "You enter the town hall of [color=aqua]" + str(town).capitalize() + "[/color]. You see a few desks set up for members of the council, receptionists, and local town guard liasons. You know that your reputation here is [color=aqua]" + str(round(globals.state.reputation[town])) + "[/color]. You take a moment to decide what you would like to accomplish here."
 	
 	
-	buttons.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = 'wimborn', textcolor = 'green', tooltip = 'Hear news from yesterday'})
+	buttons.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = town, textcolor = 'green', tooltip = 'Hear news from yesterday'})
 	if !globals.state.townsexpanded[town].townhall.fines.empty():
 		buttons.append({name = "Pay a Fine",function = 'townhall_fines', args = town})
 	
@@ -848,7 +865,7 @@ func townhall_law_change(town):
 	var text = "You approach a receptionist and request that they consider voting on a potential law change. She gives you a form to submit the appeal. She informs you that making this request will cost you [color=aqua]" + str(globals.state.townsexpanded[town].townhall.law_change_cost) + " Reputation[/color] whether it passes or fails as you stake your reputation on it. "
 	
 	#Nudity Law
-	text += "\n\n[center]Laws[/color]\n\nPublic Nudity - "
+	text += "\n\n[center][color=#d1b970]Laws[/color][/center]\n\nPublic Nudity - "
 	if globals.state.townsexpanded[town].laws.public_nudity == false && !globals.state.townsexpanded[town].currentevents.has('vote_public_nudity'):
 		text += "[color=aqua]Illegal[/color] || Current Public Support to Legalize [color=aqua]" + str(globals.state.townsexpanded[town].nudity) + "[/color] "
 		buttons.append({name = "Legalize Public Nudity", function = 'townhall_legalize_public_nudity', args = town})
@@ -878,7 +895,7 @@ func townhall_fines(town):
 	var text = "You approach the Town Guard desk and explain that you are interested in seeing the fines accrued under your estate. The officer brings forth the records of the fines. You will have to pay them in order of oldest to newest, but with a high enough reputation may be able to have some waived at a cost to that reputation."
 	
 	var currenttown =  globals.state.townsexpanded[town]
-	buttons.append({name = "From Date = " + str(currenttown.townhall.fines[0][0]) + "; Gold Cost = " + str(currenttown.townhall.fines[0][1]), function = 'townhall_pay_fine_gold', args = town})
+	buttons.append({name = "From Date = " + str(currenttown.townhall.fines.front()[0]) + "; Gold Cost = " + str(currenttown.townhall.fines.front()[1]), function = 'townhall_pay_fine_gold', args = town})
 	if globals.state.reputation[town] >= 0:
 		buttons.append({name = "Use Your Reputation to Waive 1 Fine", function = 'townhall_pay_fine_rep', args = town})
 		
@@ -893,8 +910,8 @@ func townhall_pay_fine_gold(town):
 	var text = "You state that you are ready to pay your oldest fine. The guard extends their hand patiently. You hand over the pouch of gold and watch as they shred the fine and purge it from their records."
 	
 	var currenttown =  globals.state.townsexpanded[town]
-	globals.resources.gold -= int(currenttown.townhall.fines[0][1])
-	currenttown.townhall.fines.erase([0])
+	globals.resources.gold -= currenttown.townhall.fines.front()[1]
+	currenttown.townhall.fines.pop_front()
 
 	if !globals.state.townsexpanded[town].townhall.fines.empty():
 		buttons.append({name = "Pay another Fine", function = 'townhall_fines', args = town})
@@ -910,8 +927,8 @@ func townhall_pay_fine_rep(town):
 	var text = "You ask if they know who you are and what you've done for this time. The guard nods slowly with growing confusion. You ask if while keeping in mind all of that good that there's anything they can do about this fine. The guard looks exasperated but nods and shreds it. You've lost some reputation with the town but your oldest fine is waived."
 	
 	var currenttown =  globals.state.townsexpanded[town]
-	globals.state.reputation[town] -= round(int(currenttown.townhall.fines[0][1])/15)
-	currenttown.townhall.fines.erase([0])
+	globals.state.reputation[town] -= floor(currenttown.townhall.fines.front()[1]/15)
+	currenttown.townhall.fines.pop_front()
 	
 	if !globals.state.townsexpanded[town].townhall.fines.empty():
 		buttons.append({name = "Pay another Fine", function = 'townhall_fines', args = town})
@@ -1008,7 +1025,7 @@ func amberguard():
 func shuriyaslaveselect(stage):
 	###---Added by Expansion---### Races Expanded
 	if stage == 1:
-		main.selectslavelist(true, 'shuriyaelfselect', self, 'person.findRace(["Elf"])')
+		main.selectslavelist(true, 'shuriyaelfselect', self, 'person.findRace(["Elf"]) && !person.findRace(["Dark Elf"]) && !person.findRace(["Tribal Elf"])')
 	else:
 		main.selectslavelist(true, 'shuriyadrowselect', self, 'person.findRace(["Dark Elf"])')
 	###---End Expansion---###

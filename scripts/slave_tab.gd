@@ -1,5 +1,20 @@
 
-#var showfullbody = true
+func buyattributepoint():
+	#ralphA - added "if globals.useRalphsTweaks:" section and adjusted tabs for original code 
+	if globals.useRalphsTweaks: #ralphA - closes attribute point to upgrade point conversion unless npcs are Loyalty 50 (no using recent additions for quick upgrade points)
+		if person.loyal >=50 && person.skillpoints >= variables.attributepointsperupgradepoint:
+			person.skillpoints -= variables.attributepointsperupgradepoint
+			globals.resources.upgradepoints += 1
+		else:
+			get_tree().get_root().get_node("Mansion").infotext("Not enough attribute points or loyalty", 'red')
+	else:
+		if person.skillpoints >= variables.attributepointsperupgradepoint:
+			person.skillpoints -= variables.attributepointsperupgradepoint
+			globals.resources.upgradepoints += 1
+		else:
+			get_tree().get_root().get_node("Mansion").infotext("Not enough attribute points", 'red')
+	#/ralphA
+	upgradecostupdate()
 
 func slavetabopen():
 	var label
@@ -82,7 +97,21 @@ func slavetabopen():
 		if hairstyleBtn.get_item_text(i) == person.hairstyle:
 			hairstyleBtn.select(i)
 			break
-	###---Added by Expansion---### Removed in current version for some reason?
+	###---Added by Expansion---###
+	#Strip Toggle
+	if int(person.exposed.chest) + int(person.exposed.genitals) + int(person.exposed.ass) >= 2:
+		$stats/customization/ae_strip_toggle.set_pressed(true)
+	else:
+		$stats/customization/ae_strip_toggle.set_pressed(false)
+	
+	#Whims -- new colors for the slave list
+	get_tree().get_current_scene().get_node("MainScreen/slave_tab/stats/customization/namecolor").clear()
+	var namecolor = person.namecolor
+	for i in namecolors:
+		get_tree().get_current_scene().get_node("MainScreen/slave_tab/stats/customization/namecolor").add_item(i)
+		if namecolor == i:
+			get_tree().get_current_scene().get_node("MainScreen/slave_tab/stats/customization/namecolor").select(get_tree().get_current_scene().get_node("MainScreen/slave_tab/stats/customization/namecolor").get_item_count()-1)
+	#Removed in New Version for some reason?
 #	$stats/customization/hairstyle.set_text(person.hairstyle)
 	###---End Expansion---###
 	updatestats()
@@ -163,10 +192,10 @@ func buildmetrics():
 	#Check if Specific Info/Unlock for Specific Info or Generic (Description)
 	if person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height) || person.swollen > 0 && globals.state.perfectinfo == true:
 		text += "\nSwollen Belly: [color=aqua]" + str(person.swollen) + "[/color]"
-	if person.flawknown == true:
-		text += "\n[color=#d1b970][center]Personality Flaw:[/color] [color=aqua]" + str(person.mind.flaw.capitalize()) + "[/color][/center]\n"
+	if person.mind.vice_known == true:
+		text += "\n[color=#d1b970][center]Vice:[/color] [color=aqua]" + person.mind.vice.capitalize() + "[/color][/center]\n"
 	else:
-		text += "\n[color=#d1b970][center]Personality Flaw:[/color] [color=red]Unknown[/color][/center]\n"
+		text += "\n[color=#d1b970][center]Vice:[/color] [color=red]Unknown[/color][/center]\n"
 	text = "[color=#d1b970][center]Sexual achievments[/center][/color]\n"
 	text += "Had intimacy: " + textForCountNoun(person.metrics.sex, " time") +"\n"
 	text += "Fucked by strangers: " + textForCountNoun(person.metrics.randompartners, " time") +"\n"
@@ -202,25 +231,25 @@ func buildmetrics():
 		if person.consentexp.pregnancy == true:
 			text += " and they will carry your "
 			if person.race.find("Beastkin") >= 0:
-				text += str(globals.randomitemfromarray(['litter','pups','brood']))
+				text += globals.randomitemfromarray(['litter','pups','brood'])
 			else:
-				text += str(globals.randomitemfromarray(['children','kids','babies','offspring']))
+				text += globals.randomitemfromarray(['children','kids','babies','offspring'])
 	if person.consentexp.breeder == true || person.consentexp.stud == true:
 		if person.consent == true:
 			text += ", they will "
 		else:
 			text += "They will "
 		if person.consentexp.stud == true:
-			text += str(globals.randomitemfromarray(['knock up','impregnate','have offspring with']))
+			text += globals.randomitemfromarray(['knock up','impregnate','have offspring with'])
 		if person.consentexp.breeder == true:
 			if person.consentexp.stud == true:
 				text += " and have "
 			else:
 				text += " have "
 		if person.race.find("Beastkin") >= 0:
-			text += str(globals.randomitemfromarray(['a litter','pups','a brood'])) + " with "
+			text += globals.randomitemfromarray(['a litter','pups','a brood']) + " with "
 		else:
-			text += str(globals.randomitemfromarray(['children','kids','babies','offspring'])) + " with "
+			text += globals.randomitemfromarray(['children','kids','babies','offspring']) + " with "
 		text += " anyone you tell them to"
 	if person.consentexp.incest == true:
 		if person.consent == true || person.consentexp.breeder == true || person.consentexp.stud == true:
@@ -228,21 +257,26 @@ func buildmetrics():
 				text += ", and "
 			else:
 				text += ", "
-			text += "they will fuck " + str(globals.randomitemfromarray(['family','family members','kin','kinfolk','relatives']))
+			text += "they will fuck " + globals.randomitemfromarray(['family','family members','kin','kinfolk','relatives'])
 		else:
-			text += "They will fuck " + str(globals.randomitemfromarray(['family','family members','kin','kinfolk','relatives']))
+			text += "They will fuck " + globals.randomitemfromarray(['family','family members','kin','kinfolk','relatives'])
 		if person.consentexp.incestbreeder == true:
 			text += " and have their "
 			if person.race.find("Beastkin") >= 0:
-				text += str(globals.randomitemfromarray(['litter','pups','brood']))
+				text += globals.randomitemfromarray(['litter','pups','brood'])
 			else:
-				text += str(globals.randomitemfromarray(['children','kids','babies','offspring']))
+				text += globals.randomitemfromarray(['children','kids','babies','offspring'])
 	if person.consent == true || person.consentexp.breeder == true || person.consentexp.stud == true || person.consentexp.incest == true:
 		text += ".\n"
 	if person.consentexp.party == true:
 		text += "They will travel and fight alongside you.\n"
 	if person.consent == false && person.consentexp.breeder == false && person.consentexp.stud == false && person.consentexp.incest == false && person.consentexp.party == false:
 		text += "[center][color=red]None[/color][/center]\n"
+	var haveNurse = false
+	for person in globals.slaves:
+		if person.away.duration == 0 && person.work == 'nurse':
+			haveNurse = true
+			break
 	###---Added by Expansion---###
 	text += "\n[color=#d1b970][center]Pregnancy Factors[/center][/color]\n"
 	if person.knowledge.has('desiredoffspring') || globals.state.perfectinfo == true:
@@ -250,33 +284,34 @@ func buildmetrics():
 	if (person.knowledge.has('currentpregnancy') || globals.state.perfectinfo == true) &&  person.preg.has_womb == true && person.preg.is_preg == true:
 		text += "\n[color=#d1b970][center]Current Pregnancy[/center][/color]\n"
 		if person.preg.baby_type == 'birth':
-			text += "Current Trimester: " + str(globals.expansion.getTrimester(person)).capitalize() + "\n"
+			text += "Current Trimester: " + globals.expansion.getTrimester(person).capitalize() + "\n"
 		elif person.preg.duration >= floor(variables.pregduration/3):
 			text += "Laid " + textForCountNoun(person.metrics.sex, " egg") +"\n"
 		else:
 			text += "Has not laid eggs yet\n"
 		if globals.state.mansionupgrades.dimensionalcrystal >= 2 || globals.state.perfectinfo == true:
 			text += "Pregnancy Duration: " +str(person.preg.duration) + "\n"
-		if (jobdict.nurse != null || globals.state.perfectinfo == true) && !person.preg.unborn_baby.empty():
+		if (haveNurse || globals.state.perfectinfo == true) && !person.preg.unborn_baby.empty():
 			text += "Pregnant with " + person.get_birth_amount_name() + ".\n"
 		if person.knowledge.has('currentpregnancywanted') || globals.state.mansionupgrades.dimensionalcrystal >= 2 || globals.state.perfectinfo == true:
 			if person.pregexp.wantedpregnancy == true:
 				text += "\n[center][color=green]She wants this pregnancy, won't resist her bodily changes, and will not be as stressed by those changes.[/color][/center]\n\n"
 			else:
 				text += "\n[center][color=red]She doesn't want this pregnancy and will be more stressed as she resists the changes her body goes through.[/color][/center]\n\n"
-	elif (jobdict.nurse != null || globals.state.perfectinfo == true) && person.preg.has_womb == true &&  person.preg.is_preg == false:
-		if person.preg.ovulation_stage == 1:
-			text += "[color=green]Is Currently Ovulating[/color]\n"
-		elif person.preg.ovulation_stage == 2:
-			text += "[color=red]Is Not Currently Ovulating[/color]\n"
+	if haveNurse || globals.state.perfectinfo == true:
+		if person.preg.has_womb == true:
+			if person.preg.ovulation_stage == 1:
+				text += "[color=green]Is Currently Ovulating[/color]\n"
+			else:
+				text += "[color=red]Is Not Currently Ovulating[/color]\n"
 		if person.penis != "none":
 			text += "Virility: " + str(person.pregexp.virility) + "\n"
 		if person.preg.has_womb == true:
 			text += "Egg Strength: " + str(person.pregexp.eggstr) + "\n"
 		if int(person.cum.pussy) > 0:
-			text += "" + "Live " + str(globals.randomitemfromarray(['Cum','Semen','Jizz','Spunk'])) + " in " + str(globals.randomitemfromarray(['Pussy','Vagina','Cunt'])) + ": " + globals.semen_volume(person.cum.pussy) + "\n"
+			text += "Live " + globals.randomitemfromarray(['Cum','Semen','Jizz','Spunk']) + " in " + globals.randomitemfromarray(['Pussy','Vagina','Cunt']) + ": " + globals.semen_volume(person.cum.pussy) + "\n"
 		if int(person.get_wombsemen()) > 0:
-			text += "" + "Live " + str(globals.randomitemfromarray(['Cum','Semen','Jizz','Spunk'])) + " in Womb: " + globals.semen_volume(person.get_wombsemen()) + "\n"	
+			text += "Live " + globals.randomitemfromarray(['Cum','Semen','Jizz','Spunk']) + " in Womb: " + globals.semen_volume(person.get_wombsemen()) + "\n"	
 		if int(person.cum.pussy) > 0:
 			text += "Virility of Semen Inside: " + str(person.pregexp.latestvirility) + "\n"
 
@@ -285,7 +320,7 @@ func buildmetrics():
 		if person.lactating.daysunmilked > 0:
 			text += "[center][color=red]Hasn't been milked in " + textForCountNoun(person.lactating.daysunmilked, "[/color] day") +"[/center]\n"
 		if person.lactating.milkstorage - person.lactating.milkmax > 0:
-			text += "[center][color=red]" +str(globals.expansion.nameTits()).capitalize()+ " stretching due to [color=aqua]" + str(person.lactating.milkstorage - person.lactating.milkmax) + "oz[/color] pressure. They may gain size and cause stress and health damage.[/color]\n"
+			text += "[center][color=red]" +globals.expansion.nameTits().capitalize()+ " stretching due to [color=aqua]" + str(person.lactating.milkstorage - person.lactating.milkmax) + "oz[/color] pressure. They may gain size and cause stress and health damage.[/color]\n"
 		text += "Lactating for [color=aqua]" + textForCountNoun(person.lactating.duration, "[/color] day") +"\n"
 		text += "Produces [color=aqua]" + str(person.lactating.regen) + "[/color] milk daily\n"
 		text += "Milk Glands: [color=aqua]" + str(person.lactating.milkstorage) + "[/color] stored / [color=aqua]" + str(person.lactating.milkmax) + "[/color] before stretching\n"
@@ -310,6 +345,7 @@ func buildmetrics():
 		###---End Expansion---###
 
 	$stats/statisticpanel/relations/RichTextLabel.bbcode_text = text
+		
 
 func relationword(value):
 	var text = 'neutral'
@@ -332,6 +368,8 @@ func relationword(value):
 	return text
 
 ##############Regulation screen
+
+
 
 ###---Added by Expansion---### Deviate / Kennel Sleep Location
 func regulationdescription():
@@ -371,7 +409,6 @@ func regulationdescription():
 		text = text + 'At the night $he will be sleeping with the hounds in the [color=purple]kennel[/color].\n'
 	###---End Expansion---###
 	return find_node('regulationdescript').set_bbcode(person.dictionary(text))
-###---End Expansion---###
 
 
 ###########Brand popup window
@@ -424,6 +461,8 @@ func _on_confirm_pressed():
 		###---End Expansion---###
 	slavetabopen()
 
+##############Sleep
+
 ###---Added by Expansion---### Added by Deviate
 var sleepdict = {
 	'communal': 0,
@@ -442,8 +481,6 @@ func sleeprooms():
 	###---Added by Expansion---### Added by Deviate
 	$stats/sleep.set_item_disabled(4, globals.state.mansionupgrades.mansionkennels == 0)
 	###---End Expansion---###
-###---End Expansion---###
-							 
 
 ###---Added by Expansion---### Family Expanded
 func _on_relativesbutton_pressed():
@@ -479,25 +516,12 @@ func _on_relativesbutton_pressed():
 	###---End Expansion---###
 	
 	###---Added by Expansion---### Family Expanded
-	var halfsiblings_banner = false
-	if entry.siblings.size() > 0:
-		var tempperson
+	var halfsiblings = []
+	if !entry.siblings.empty():
 		text += '\n[center]Full-Blooded Siblings[/center]\n'
 		for i in entry.siblings:
-			var samedad = false
-			var samemom = false
 			entry2 = relativesdata[i]
-			for f in ['father']:
-				if int(entry[f]) == int(entry2[f]):
-					samedad = true
-				else:
-					samedad = false
-			for m in ['mother']:
-				if int(entry[m]) == int(entry2[m]):
-					samemom = true
-				else:
-					samemom = false
-			if samedad == true && samemom == true:
+			if int(entry.father) == int(entry2.father) && int(entry.mother) == int(entry2.mother):
 				if entry2.state == 'fetus':
 					continue
 				if entry2.sex == 'male':
@@ -507,45 +531,13 @@ func _on_relativesbutton_pressed():
 				if entry2.state == 'free':
 					text += "[color=aqua]Free[/color] "
 				text += getentrytext(entry2) + "\n"
-		
-		for i in entry.siblings:
-			var samedad = false
-			var samemom = false
-			entry2 = relativesdata[i]
-			for f in ['father']:
-				if int(entry[f]) <= 0:
-					samedad = false
-				elif int(entry[f]) == int(entry2[f]):
-					samedad = true
-				else:
-					samedad = false
-			for m in ['mother']:
-				if int(entry[m]) <= 0:
-					samemom = false
-				elif int(entry[m]) == int(entry2[m]):
-					samemom = true
-				else:
-					samemom = false
-			if samedad == false && samemom == true || samedad == true && samemom == false:
-				if halfsiblings_banner == false:
-					text += '\n[center]Half-Siblings[/center]\n'
-					halfsiblings_banner = true
-				if entry2.state == 'fetus':
-					continue
-				if entry2.sex == 'male':
-					text += "Half-Brother: "
-				else:
-					text += "Half-Sister: "
-				if entry2.state == 'free':
-					text += "[color=aqua]Free[/color] "
-				text += getentrytext(entry2) + "\n"
+			else:
+				halfsiblings.append(i)
 	
-	
-	if !entry.halfsiblings.empty():
-		if halfsiblings_banner == false:
-			text += '\n[center]Half-Siblings[/center]\n'
-			halfsiblings_banner = true
-		for i in entry.halfsiblings:
+	halfsiblings.append_array(entry.halfsiblings)
+	if !halfsiblings.empty():
+		text += '\n[center]Half-Siblings[/center]\n'
+		for i in halfsiblings:
 			entry2 = relativesdata[i]
 			if entry2.state == 'fetus':
 				continue
@@ -553,6 +545,8 @@ func _on_relativesbutton_pressed():
 				text += "Half-Brother: " 
 			else:
 				text += "Half-Sister: "
+			if entry2.state == 'free':
+				text += "[color=aqua]Free[/color] "
 			text += getentrytext(entry2) + "\n"
 	###---End Expansion---###
 	
@@ -568,7 +562,6 @@ func _on_relativesbutton_pressed():
 				text += "Daughter: "
 			text += getentrytext(entry2) + "\n"
 	$stats/customization/relativespanel/relativestext.bbcode_text = text
-###---End Expansion---###
 
 ###---Added by Expansion---### Renamed Slaves don't Rename | Ank BugFix v4a
 func getentrytext(entry):
@@ -587,7 +580,6 @@ func getentrytext(entry):
 		text += " - Status Unknown"
 	text += ", " + entry.race
 	return text
-###---End Expansion---###
 
 func _on_piercing_pressed():
 	$stats/customization/piercingpanel.popup()
@@ -698,6 +690,7 @@ func updatestats():
 	$stats/statspanel/sexuality_base.set_texture(sexuality_images[str(person.sexuality_images.base)])
 	###---End Expansion---###
 
+
 ###---Added by Expansion---### New Images and Icons
 #---Movement Images
 var movementimages = globals.movementimages
@@ -716,17 +709,9 @@ func _on_movement_mouse_entered():
 		text = "[center][color=red]Error[/color][/center]\n$name is somehow moving in an unnatural way. While interesting, you may want to report this to Aric on the itch.io forums or Discord. "
 	
 	#Give Reason for Crawling/Immobilized
-	var first = true
-	if !person.movementreasons.empty():
-		for i in person.movementreasons:
-			if first == true:
-				text += "\n\nReason for Movement: " + str(i)
-				first = false
-			else:
-				text += "\n" + str(i)
+	text += "\n\nReason for Movement: " + PoolStringArray(person.movementreasons).join("\n")
 	
-	text = person.dictionary(text)
-	globals.showtooltip(text)
+	globals.showtooltip( person.dictionary(text))
 
 func _on_movement_mouse_exited():
 	globals.hidetooltip()
@@ -760,5 +745,18 @@ func _on_sexuality_mouse_entered():
 func _on_sexuality_mouse_exited():
 	globals.hidetooltip()
 
-###---End Expansion---###
+###---Added by Expansion---###
+#---Strip Toggle
+func _on_strip_toggle_pressed():
+	person.exposed.chest = $stats/customization/ae_strip_toggle.pressed
+	person.exposed.genitals = $stats/customization/ae_strip_toggle.pressed
+	person.exposed.ass = $stats/customization/ae_strip_toggle.pressed
+	slavetabopen()
 
+#---Whim's Name Coloration
+var namecolors = ['blue', 'brown', 'cyan', 'fuchsia', 'gold', 'gray', 'green', 'orange', 'purple', 'red', 'salmon', 'sienna', 'tan', 'violet', 'white', 'yellow']
+
+func _on_namecolor_item_selected(id):
+	person.namecolor = namecolors[id]
+	get_tree().get_current_scene().rebuild_slave_list()
+###---End Expansion---###

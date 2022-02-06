@@ -77,6 +77,69 @@ func mountainwin(stage = 0):
 		
 	globals.main.dialogue(state, self, text, buttons, sprite)
 
+func finalemelissa(stage = 0):
+	var text = ''
+	var state = false
+	var buttons = []
+	var slavelist = []
+	var image = 'finale'
+	for i in globals.slaves:
+		var score = i.metrics.ownership + i.metrics.sex*3 + i.metrics.win*2 + i.level*7
+		slavelist.append({person = i, score = score})
+	slavelist.sort_custom(self, 'bestslave')
+	if globals.slaves.size() == 0:
+		stage = 5
+	if stage == 0:
+		finaleperson = slavelist[0].person
+		text = finaleperson.dictionary(textnode.MainQuestFinaleGoodHadeDefeat)
+		buttons.append({text = "Let Hade go", function = 'finalemelissa', args = 1})
+		buttons.append({text = finaleperson.dictionary("Let $name die"), function = 'finalemelissa', args = 2})
+	elif stage == 1:
+		text = finaleperson.dictionary(textnode.MainQuestFinaleGoodReleaseHade)
+		buttons.append({text = "Continue", function = 'finalemelissa', args = 3})
+		globals.state.decisions.append("haderelease")
+	elif stage == 2:
+		text = finaleperson.dictionary(textnode.MainQuestFinaleGoodTakeHade)
+		globals.main.sound('stab')
+		image = 'finale2'
+		buttons.append({text = "Subdue Melissa", function = 'finalemelissa', args = 4})
+		globals.state.decisions.append("hadekeep")
+		globals.main.music_set('stop')
+		###---Added by Expansion---### Crystal Immortality | Added by Pallington
+		if globals.state.thecrystal.preventsdeath == true:
+			globals.state.thecrystal.lifeforce -= 1
+			finaleperson.stats.health_cur = 15
+			finaleperson.away.duration = 3
+			finaleperson.away.at = 'rest'
+			finaleperson.work = 'rest'
+			globals.state.playergroup.erase(finaleperson.id)
+		else:				
+			finaleperson.removefrommansion()
+		###---End Expansion---###
+	elif stage == 3:
+		text = finaleperson.dictionary(textnode.MainQuestFinaleGoodReleaseHade2)
+		globals.main.closescene()
+		var sprite = [["melissaworried", 'pos1', 'opac']]
+		buttons.append({text = finaleperson.dictionary("Rush to $name"), function = 'ending'})
+		globals.main.dialogue(state, self, text, buttons, sprite)
+		return
+	elif stage == 4:
+		text = finaleperson.dictionary("You subdue and capture Melissa, but $name is above saving... ")
+		globals.main.closescene()
+		var sprite = [["melissaworried", 'pos1', 'opac'], ['hadeneutral','pos2','opac']]
+		buttons.append({text = "...", function = 'ending'})
+		globals.main.dialogue(state, self, text, buttons, sprite)
+		return
+	elif stage == 5:
+		text = "With Hade's defeat you secure this victory..."
+		globals.main.closescene()
+		globals.state.decisions.append("melissanoslave")
+		var sprite = [['hadeneutral','pos1','opac']]
+		buttons.append({text = "...", function = 'ending'})
+		globals.main.dialogue(state, self, text, buttons, sprite)
+		return
+	globals.main.scene(self, image, text, buttons)
+
 func chloeforest(stage = 0):
 	var text = ''
 	var state = false
@@ -143,3 +206,224 @@ func chloeforest(stage = 0):
 		yield(globals.main, 'animfinished')
 		buttons.append({text = 'Leave',function = 'chloevillage',args = 0})
 	globals.main.dialogue(state,self,text,buttons,sprite)
+
+func sspotion(stage = 0):
+	if globals.state.mansionupgrades.mansionalchemy == 0: #check every 3 days if alchemy room has been purchased
+		globals.state.upcomingevents.append({code = 'sspotion', duration = 3})
+		return
+	
+	var state = false
+	var text
+	var buttons = []
+	var sprites = []
+	var startslave
+	for i in globals.slaves:
+		if i.unique == 'startslave':
+			startslave = i
+	if startslave == null:
+		return
+	
+	var textdict 
+	
+	if startslave.imagefull != null:
+		if stage == 0:
+			sprites = [[startslave.imagefull,'pos1','opac']]
+		else:
+			sprites = [[startslave.imagefull,'pos1']]
+	globals.state.sidequests.startslave = 3
+	
+	match stage:
+		0:
+			if startslave.sex in ['male','dickgirl']:
+				text = ssnode.sspotionmale
+			else:
+				text = ssnode.sspotionfemale
+			state = false
+			buttons.append({text = 'Help out', function = 'sspotion', args = 1})
+			buttons.append({text = 'Scold', function = 'sspotion', args = 2})
+			buttons.append({text = 'Pass Towel and Leave', function = 'sspotion', args = 3})
+		1:
+			startslave.loyal += 10
+			globals.state.decisions.append("sspotionfair")
+			buttons.append({text = 'Continue', function = 'sspotionaftermatch', args = 0})
+			if startslave.sex in ['male','dickgirl']:
+				text = ssnode.sspotionfairmale 
+			else:
+				text = ssnode.sspotionfairfemale 
+		2:
+			startslave.obed += 25
+			globals.state.decisions.append("sspotionstrict")
+			if startslave.sex in ['male','dickgirl']:
+				text = ssnode.sspotionstrictmale
+			else:
+				text = ssnode.sspotionstrictfemale
+			buttons.append({text = 'Continue', function = 'sspotionaftermatch', args = 0})
+		3:
+			var yandere = false
+			buttons.append({text = 'Continue', function = 'sspotionaftermatch', args = 0})
+			globals.state.decisions.append("sspotionweak")
+			if globals.state.decisions.has('ssweak') && globals.state.decisions.has("ssmassageweak"):
+				yandere = true
+			if yandere == false:
+				text = ssnode.sspotionleave
+			else:
+				globals.state.decisions.append('ssyandere')
+				if startslave.sex in ['male','dickgirl']:
+					text = ssnode.sspotionleaveyanderemale
+				else:
+					text = ssnode.sspotionleaveyanderefemale
+	
+	globals.main.dialogue(state, self, startslave.dictionary(text), buttons, sprites)
+
+func sspotionaftermatch(stage = 0):
+	var state = true
+	var text
+	var buttons = []
+	var sprites = []
+	var startslave
+	for i in globals.slaves:
+		if i.unique == 'startslave':
+			startslave = i
+	if startslave == null:
+		return
+	
+	if startslave.imagefull != null:
+		sprites = [[startslave.imagefull,'pos1','opac']]
+	
+	globals.main.animationfade(1.5)
+	yield(globals.main, 'animfinished')
+	
+	var yandere = false
+	if globals.state.decisions.has('ssyandere'):
+		yandere = true
+	
+	if yandere == true:
+		if startslave.sex in ['male','dickgirl']:
+			text = ssnode.sspotioncontyanderem
+		else:
+			text = ssnode.sspotioncontyanderef
+	else:
+		var weak = 0
+		var strict = 0
+		var fair = 0
+		
+		var weakdict = ['ssweak','ssmassageweak','sspotionweak']
+		var fairdict = ['ssfair','ssmassagefair','sspotionfair']
+		var strictdict = ['ssstrict','ssmassagestrict','sspotionstrict']
+		
+		
+		for i in globals.state.decisions:
+			if weakdict.has(i):
+				weak += 1
+			if fairdict.has(i):
+				fair += 1
+			if strictdict.has(i):
+				strict += 1
+		
+		var character
+		
+		if weak >= 2:
+			character = 'dominant'
+		elif strict >= 2:
+			character = 'submissive'
+		
+		if character == 'dominant':
+			startslave.add_trait('Dominant')
+			if startslave.sex in ['male','dickgirl']:
+				text = ssnode.sspotioncontdomm
+			else:
+				text = ssnode.sspotioncontdomf
+		elif character == 'submissive':
+			startslave.add_trait('Submissive')
+			if startslave.sex in ['male','dickgirl']:
+				text = ssnode.sspotioncontsubm
+			else:
+				text = ssnode.sspotioncontsubf
+		else:
+			if startslave.sex in ['male','dickgirl']:
+				text = ssnode.sspotioncontnormm
+			else:
+				text = ssnode.sspotioncontnormf
+	
+	globals.state.upcomingevents.append({code = 'sssexscene', duration = 5})
+	
+	globals.main.dialogue(state, self, startslave.dictionary(text), buttons, sprites)
+
+func sssexscene(stage = 0):
+	var state = true
+	var text
+	var buttons = []
+	var sprites = []
+	var startslave
+	for i in globals.slaves:
+		if i.unique == 'startslave':
+			startslave = i
+	if startslave == null:
+		return
+	if startslave.imagefull != null:
+		if stage == 0:
+			sprites = [[startslave.imagefull,'pos1','opac']]
+		else:
+			sprites = [[startslave.imagefull,'pos1']]
+	match stage:
+		0:
+			state = false
+			text = ssnode.ssfinale
+			buttons.append({text = 'Check in', function = 'sssexscene', args = 1})
+			buttons.append({text = 'Ignore', function = 'sssexscene', args = 2})
+		1:
+			var playersex = globals.player.sex
+			var slavesex = startslave.sex
+			if playersex in ['futanari','dickgirl']:
+				playersex = 'male'
+			if slavesex == 'futanari':
+				slavesex = 'female'
+			elif slavesex == 'dickgirl':
+				slavesex = 'male'
+			
+			var textvar = slavesex[0] + playersex[0] #Selecting scene category
+			
+			var category # Selecting relationship category
+			if startslave.traits.has("Dominant"):
+				category = 'dom'
+			elif startslave.traits.has("Submissive"):
+				category = 'sub'
+			elif globals.state.decisions.has("ssyandere"):
+				category = 'yandere'
+			else:
+				category = 'neutral'
+			
+			var sexdict = {
+				dom = {
+					fm = ssnode.sssexdomfm,
+					mm = ssnode.sssexdommm,
+					ff = ssnode.sssexdomff,
+					mf = ssnode.sssexdommf,
+					},
+				sub = {
+					fm = ssnode.sssexsubfm,
+					mm = ssnode.sssexsubmm,
+					ff = ssnode.sssexsubff,
+					mf = ssnode.sssexsubmf,
+					},
+				yandere = {
+					fm = ssnode.sssexyanfm,
+					mm = ssnode.sssexyanmm,
+					ff = ssnode.sssexyanff,
+					mf = ssnode.sssexyanmf,
+					},
+				neutral = {
+					fm = ssnode.sssexneufm,
+					mm = ssnode.sssexneumm,
+					ff = ssnode.sssexneuff,
+					mf = ssnode.sssexneumf,
+					},
+			}
+			text = sexdict[category][textvar]
+			startslave.add_trait("Grateful")
+			startslave.loyal += 25
+			startslave.obed += 20
+		2:
+			text = ssnode.sssexignore
+	
+	globals.main.dialogue(state, self, startslave.dictionary(text), buttons, sprites)

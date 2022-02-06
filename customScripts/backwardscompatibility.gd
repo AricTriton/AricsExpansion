@@ -153,6 +153,21 @@ func backwardsCompatibility(person):
 		if person.traits.has(i):
 			person.trait_remove(i)
 	
+	#Flaws to Vices
+	if !person.mind.has('vice'):
+		person.mind['vice'] = "none"
+	if !person.mind.has('vice_known'):	
+		person.mind['vice_known'] = false
+	if !person.mind.has('vice_presented'):
+		person.mind['vice_presented'] = false
+	if !person.mind.has('vice_removed'):
+		person.mind['vice_removed'] = false
+		
+	if person.mind.flaw != 'none':
+		person.mind.vice = person.mind.flaw
+		person.mind.vice_removed = person.mind.flawless
+		person.mind.vice_known = person.flawknown
+	
 	#---Only Activate if Mandatory for Compatibility
 #	if person.expansionversion < globals.expansionsettings.modversion:
 #		babyTermination(person)

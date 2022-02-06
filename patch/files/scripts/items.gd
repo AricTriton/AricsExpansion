@@ -1743,25 +1743,25 @@ func maturingpot():
 		else:
 			text = person.dictionary('You hand an Elixir of Maturity to $name, and tell $him to drink it. After a few moments, $his body begins to change. $He looks down in bewilderment, then checks out $his new, more mature-looking self in a nearby mirror. ')
 		if rand_range(1,10) > 5 && person.height != 'tiny' && person.height != 'towering':
-			person.height = globals.heightarray[globals.heightarray.find(person.height)+1]
+			person.height = globals.heightarrayexp[globals.heightarrayexp.find(person.height)+1]
 			text = text + "$name has become taller. "
 		if rand_range(1,10) > 5 && person.hairlength != 'hips':
 				person.hairlength = globals.hairlengtharray[globals.hairlengtharray.find(person.hairlength)+1]
 				text = text + "$name's hair has grown longer. "
 		if person.sex != 'male':
 			if rand_range(1,10) > 5 && person.asssize != 'huge':
-				person.asssize = globals.sizearray[globals.sizearray.find(person.asssize)+1]
+				person.asssize = globals.asssizearray[globals.asssizearray.find(person.asssize)+1]
 				text = text + "$name's butt has grown bigger. "
-			if rand_range(1,10) > 5 && person.titssize != 'huge':
-				person.titssize = globals.sizearray[globals.sizearray.find(person.titssize)+1]
+			if rand_range(1,10) > 5 && person.titssize != 'immobilizing':
+				person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)+1]
 				text = text + "$name's tits have grown bigger. "
 		if person.penis != 'none':
-			if rand_range(1,10) > 5 && person.penis != 'big':
-				person.penis = globals.genitaliaarray[globals.genitaliaarray.find(person.penis)+1]
+			if rand_range(1,10) > 5 && person.penis != 'massive':
+				person.penis = globals.penissizearray[globals.penissizearray.find(person.penis)+1]
 				text = text + "$name's cock has grown bigger. "
 		if person.balls != 'none':
-			if rand_range(1,10) > 5 && person.balls != 'big':
-				person.balls = globals.genitaliaarray[globals.genitaliaarray.find(person.balls)+1]
+			if rand_range(1,10) > 5 && person.balls != 'massive':
+				person.balls = globals.penissizearray[globals.penissizearray.find(person.balls)+1]
 				text = text + "$name's balls have grown bigger. "
 	else:
 		text = 'Elixir of Maturity had no visible effect on $name. '
@@ -1779,22 +1779,22 @@ func youthingpot():
 		else:
 			text = person.dictionary('You hand an Elixir of Youth over to $name and tell $him to drink it. After a few moments, $his body begins to change. $He looks down in bewilderment, then checks out $his new, younger-looking self in a nearby mirror. ')
 		if rand_range(1,10) > 5 && person.height != 'tiny' && person.height != 'petite':
-			person.height = globals.heightarray[globals.heightarray.find(person.height)-1]
+			person.height = globals.heightarrayexp[globals.heightarrayexp.find(person.height)-1]
 			text = text + "$name has become shorter. "
 		if person.sex != 'male':
 			if rand_range(1,10) > 5 && person.asssize != 'flat':
-				person.asssize = globals.sizearray[globals.sizearray.find(person.asssize)-1]
+				person.asssize = globals.asssizearray[globals.asssizearray.find(person.asssize)-1]
 				text = text + "$name's butt shrinks in size. "
-			if rand_range(1,10) > 5 && person.titssize != 'flat':
-				person.titssize = globals.sizearray[globals.sizearray.find(person.titssize)-1]
+			if rand_range(1,10) > 5 && person.titssize != 'flat' && !(person.sex == 'dickgirl' && person.titssize == 'small'):
+				person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)-1]
 				text = text + "$name's tits shrink in size. "
 		if person.penis != 'none':
-			if rand_range(1,10) > 5 && person.penis != 'small':
-				person.penis = globals.genitaliaarray[globals.genitaliaarray.find(person.penis)-1]
+			if rand_range(1,10) > 5 && person.penis != 'micro':
+				person.penis = globals.penissizearray[globals.penissizearray.find(person.penis)-1]
 				text = text + "$name's cock shrinks in size. "
 		if person.balls != 'none':
-			if rand_range(1,10) > 5 && person.balls != 'small':
-				person.balls = globals.genitaliaarray[globals.genitaliaarray.find(person.balls)-1]
+			if rand_range(1,10) > 5 && person.balls != 'micro':
+				person.balls = globals.penissizearray[globals.penissizearray.find(person.balls)-1]
 				text = text + "$name's balls shrink in size. "
 	else:
 		text = 'Elixir of Youth had no visible effect on $name. '
@@ -1814,6 +1814,14 @@ func amnesiapoteffect():
 	if person.loyal < 50 && person.memory != 'clear':
 		text = text + person.dictionary("$He grows closer to you, having no one else $he can rely on. ")
 		person.loyal += rand_range(15,25) - person.conf/10
+	###---Added by Expansion---### Vice Removal
+	if person.mind.vice != "none":
+		if person.mind.vice_known == true:
+			text += person.dictionary("\n$His mental regression seems to have removed $his [color=aqua]"+ str(person.mind.vice.capitalize()) +" Vice[/color] as well. ")
+		person.mind.vice = "none"
+		person.mind.vice_removed = true
+		person.mind.vice_known = true
+	###---End Expansion---###
 	for i in person.relations:
 		person.relations[i] = 0
 		if i == globals.player.id:
@@ -2044,7 +2052,7 @@ func sexchangepoteffect():
 			text = person.dictionary("$name's clitoris morphs into a fully functional penis with a pair of testicles forming beneath it. ")
 			person.sex = 'male'
 			person.dailyevents.append('sex_changed_potion')
-		'futanari':
+		'futanari','dickgirl':
 			text = person.dictionary("The potion's magic fills $name with toxicity but there is no visible effect on $his body. ")
 	#Abnormal Sex
 	if text == "":

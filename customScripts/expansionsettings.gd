@@ -2,19 +2,23 @@
 
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
-var modversion = 1.5
+var modversion = "1.6b"
 
 #---Aric's and Game's Base Values potentially changed by Ralph's
 var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within ApplyTweaks as well as the Hybrid system.
 var unique_trait_generation = false				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
-
+var consolidatebeastDNA = false					# Set this to true if you don't like npcs with a mix of Beastkin/Halfkin race%'s (no half cat half foxes, etc.) #ralphB
+var gratitude_for_all = false					# Set this to true so that babies aged up to Child or Teen have as much chance to spawn with the Grateful trait as ones aged up to Adult (Ralph sets this to False, but up to you) #ralphC
+var sillymode = true							# Set it to false if you don't abide, so far it only affects random travel event text #ralphD
 
 #---Debug Tools (True/False)
 var perfectinfo = false
 var enablecheatbutton = false
 
+#-- Use abilities on auto attack, left to right. Hint: reorder/activate abilities in the character info menu when out.
+var autoattackability = false
 
-#---Content Filter | Partially Enabled (True/False)
+#---Content Filters | Partially Enabled (Set to true/false)
 var brutalcontent = true
 var messycontent = true
 
@@ -24,16 +28,19 @@ var ihavebloodygoodtaste = false
 #Unwanted Fetishes - Disables them from showing in the Fetish Talk menu
 var unwantedfetishes = []		#Copy/Paste any you don't want into the 'unwantedfetishes' array below: ['incest','lactation','drinkmilk','bemilked','milking','exhibitionism','drinkcum','wearcum','wearcumface','creampiemouth','creampiepussy','creampieass','pregnancy','oviposition','drinkpiss','wearpiss','pissing','otherspissing','bondage','dominance','submission','sadism','masochism']
 
+#------Player Specific Info
+#Base Bonus or Penalty for Attraction Checks for PCs
+var playerattractionmodifier = 20
 
-#---Person Expanded (True/False)
+#Set to True for the Player to follow Slave's Clothing Dress/Redress System
+var player_treats_clothing_like_slave = false
+
+#------Person Expanded (True/False)
 #If set to true, Unique Slaves will join your party without having to ask for consent first
 var uniqueslavesautopartyconsent = false
 
 #Lip Size Increase Change (Chance is array-5*10, ie: plump and bigger give 10)
 var lipstraitbasechance = 20
-
-#Base Bonus or Penalty for Attraction Checks for PCs
-var playerattractionmodifier = 20
 
 #Default to Nickname + First Name (Function from MinorTweaks, Renamed for Clarity)
 var use_nickname_plus_first_name = false
@@ -41,6 +48,19 @@ var use_nickname_plus_first_name = false
 #Show Once Per Day Conversations Available Notifications in Inspect
 var show_onceperday_notification = true
 
+#---Vices (Formerly Flaws)
+#Vices Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations when enabled.)
+#Turning this off disables the entire Vice system in regards to Luxury Penalties or Bonuses
+var vices_luxury_effects = true
+
+#Chance for Vices to trigger when not Discovered. Set to 0 to disable the system entirely
+var vices_undiscovered_trigger_chance = 10
+
+#Does the Vice has to present itself (via the EOD check above) before it can be discovered via Mind Reading?
+var vices_discovery_has_to_present_first = false
+
+#Base Chance added to Vice Discovery in Mind Reading if it presented itself in an End of Day before
+var vices_discovery_presentation_bonus = 20
 
 #---Genitals Expanded
 #Chance of Holes staying Stretched during Sex. Chance + (Elasticity*10)
@@ -85,7 +105,7 @@ var crystallifeforcerestorechance = 80
 var crystal_shatter_chance = 80
 
 
-#---Pregnancy Expanded
+#------Pregnancy Expanded
 #Set to False to disable Swollen Settings (Pregnancy and Cum Inflation)
 var swollenenabled = true
 var wantedpregnancychance = 50
@@ -97,7 +117,7 @@ var chancemorningsickness = 30
 var chancetitsgrow = 35
 
 
-#---Lactation Expanded
+#------Lactation Expanded
 var lactationstops = false
 var leakcauseslactationchance = 50
 
@@ -105,7 +125,7 @@ var leakcauseslactationchance = 50
 var lactationstressenabled = true
 
 
-#---Farm Expanded
+#------Farm Expanded
 #Livestock Consent Base Chance (+ 50% loyalty, 25% obediance, + various factors)
 var baselivestockconsentchance = 10
 var foodconvertchance = 70
@@ -146,6 +166,9 @@ var livestockloseconsentchance = 20
 #FetishDifficulty is what Fetish*10 is multiplied by for the Chance of Success
 var fetishdifficulty = 2
 
+#Base Fetish Increase Chance
+var fetish_base_increase_chance = 20
+
 #Fetishes can Lower
 var fetishescanlower = false
 
@@ -161,8 +184,9 @@ var sedativewitlosschance = 75
 
 #---Towns Expanded
 #The Base Chance that local town guards will have arrested/killed escaped enemies to clear room in the array
-var minimum_npcs_to_detain = 20
+var minimum_npcs_to_detain = 50
 var townguardefficiency = 15
+
 #Laws: Public Nudity Bonus and Penalty
 var enable_public_nudity_system = true
 
@@ -186,21 +210,15 @@ var secondarybeastracialchance = 25
 
 #Ovulation Chances
 var ovulationenabled = true
+var multipleBabyChance = 25 # chance to add another baby to pregnancy
 
 #These Cycles are dependant on the Birth Type
 var livebirthcycle = 14
 var eggcycle = 14
 
-#Percentage of the time unfertile
+#Percentage of the time fertile
 var fertileduringcycle = 0.6
 var semenlifespan = 5
-
-#Deviate's Ovulation Cycle Below - Unused?
-var ovulationtype1stage1 = 8
-var ovulationtype1stage2 = 15
-var ovulationtype2stage1 = 12
-var ovulationtype2stage2 = 15
-
 
 #--- Ralph's Tweaks
 #Mage Specialization Manacost Reduction
@@ -245,7 +263,7 @@ var magic_hobby_maf_max = 2						# Ralph's - 2, The value responsible for how mu
 #Sell Slave Prices
 var mansion_bred_and_breeder = 2				# Ralph's - 1.5, The multiplicative value that modifies the price.
 var calculate_price_bonus_divide = 1			# Ralph's - 2, The divider value that modifies the bonus value that multiplies the price when calculating.
-var quicksell_slave_pressed = 2					# Ralph's - 1.11, The divider value that affects the sellprice of a slave when quicksell is pressed.
+var quicksell_slave_pressed = 0.5				# Ralph's - 0.9, The multiplier value that affects the sellprice of a slave when quicksell is pressed. (Ralph tweaked so you only get docked 10% when you quicksell vs 50% deduction in vanilla) #ralphC
 
 #Capture Changes
 var times_rescued_multiplier = 0				# Ralph's - 10, The multiplicative value that is used with how many times an npc has been rescued when determining whether they will join you willingly after saving them from bandits.
@@ -349,7 +367,7 @@ func applyConstructorTweaks():
 
 # Apply Combat Data Tweaks here
 func applyCombatDataTweaks():
-	globals.combatdata.enemygrouppools.monstergirl = 15	# Original - -10
+	globals.combatdata.enemygrouppools.monstergirl.awareness = 15	# Original - -10
 
 # Apply Race Tweaks here.
 func applyRaceTweaks():
@@ -438,3 +456,71 @@ func applyRaceTweaks():
 	
 	#Beastkin Tanuki
 	globals.races["Beastkin Tanuki"].stats = {str_max = 3, agi_max = 3, maf_max = 5, end_max = 3}
+
+
+func addConstantsSupport():
+	variables.list["Aric's Expansion Mod"] = {
+		autoattackability = {descript = "Use abilities on auto attack, left to right. Hint: reorder/activate abilities in the character info menu when out.", object = self},
+		brutalcontent = {descript = "Content Filter, set this to false if you don't want to see extreme violent content, like executions", object = self},
+		ihavebloodygoodtaste = {descript = "Set this to true to include British themed descriptions", object = self},
+		vices_luxury_effects = {descript = "Vice Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations", object = self},
+		uniqueslavesautopartyconsent = {descript = "If set to true, Unique Slaves will join your party without having to ask for consent first", object = self},
+		lipstraitbasechance = {descript = "Lip Size Increase Change (Chance is array-5*10, ie: plump and bigger give 10)", min = 0.0, max = 50.0, object = self},
+		playerattractionmodifier = {descript = "Base Bonus or Penalty for Attraction Checks for PCs", min = -100.0, max = 100.0, object = self},
+		use_nickname_plus_first_name = {descript = "Default to Nickname + First Name (Function from MinorTweaks, Renamed for Clarity)", object = self},
+		show_onceperday_notification = {descript = "Show Once Per Day Conversations Available Notifications in Inspect", object = self},
+		lactationstops = {descript = "Set this to true if you want lactation to stop after a while", object = self},
+		leakcauseslactationchance = {descript = "Chance that the Leak spell causes lactation", min = 0.0, max = 100.0, object = self},
+		lactationstressenabled = {descript = "Set this to true if you want lactation to cause stress", object = self},
+		enable_public_nudity_system = {descript = "Laws: Public Nudity Bonus and Penalty", object = self},
+		randomexecutions = {descript = "NPC Town Guard Execution Chance", min = 0.0, max = 100.0, object = self},
+		racialstatbonuses = {descript = "Set this to false to remove racial stat bonuses from new or existing persons", object = self},
+		show_facilities_details_in_mansion = {descript = "Set this to false to hide the new facilities on the mansion info panel", object = self},
+		perfectinfo = {descript = "Debug Tool, set this to true to expose calculations and data that may sometimes be hidden", object = self},
+		enablecheatbutton = {descript = "Debug Tool, set this to true to enable a mod specific cheat menu.", object = self},
+	}
+	variables.list["AE Mod - Sexual"] = {
+		stretchchancevagina = {descript = "Chance of Holes staying Stretched during Sex. Chance + (Elasticity*10)", min = 0.0, max = 100.0, object = self},
+		stretchchanceanus = {descript = "Chance of Holes staying Stretched during Sex. Chance + (Elasticity*10)", min = 0.0, max = 100.0, object = self},
+		tornvagautorecovery = {descript = "These chances (times the person's elasticity 1-5) occur during sex. 0-20 Max", min = 0.0, max = 100.0, object = self},
+		tornassautorecovery = {descript = "These chances (times the person's elasticity 1-5) occur during sex. 0-20 Max", min = 0.0, max = 100.0, object = self},
+		vaginaltightenchance = {descript = "The Tighten Chances are multiplied by their Age (inversely), ie: Adults=*1, Teens=*2", min = 0.0, max = 100.0, object = self},
+		analtightenchance = {descript = "The Tighten Chances are multiplied by their Age (inversely), ie: Adults=*1, Teens=*2", min = 0.0, max = 100.0, object = self},
+		vaginalwetnesstraitchance = {descript = "Chance of gaining Vaginal Wetness trait", min = 0.0, max = 100.0, object = self},
+		baseholecapacity = {descript = "The average capacity that the hole's size adds or subtracts from", min = 0.0, max = 100.0, object = self},
+		player_sexuality_shift = {descript = "Can the Player's sexuality shift (from what is picked at Character Creation)?", object = self},
+		fetishdifficulty = {descript = "FetishDifficulty is what Fetish*10 is multiplied by for the Chance of Success", min = 0.1, max = 10.0, object = self},
+		fetishescanlower = {descript = "Fetishes can Lower", object = self},
+		lactationacceptancemultiplier = {descript = "Fetish Acceptance Multipliers", min = 0.1, max = 10.0, object = self},
+		beingmilkedacceptancemultiplier = {descript = "Fetish Acceptance Multipliers", min = 0.1, max = 10.0, object = self},
+	}
+	variables.list["AE Mod - Pregnancy"] = {
+		ovulationenabled = {descript = "Set this to false if you want pregnancy to be possible every day", object = self},
+		multipleBabyChance = {descript = "chance to add another baby to pregnancy", min = 0.0, max = 100.0, object = self},
+		livebirthcycle = {descript = "Duration in days of live birth ovulation cycle", min = 1.0, max = 100.0, object = self},
+		eggcycle = {descript = "Duration in days of egg laying ovulation cycle", min = 1.0, max = 100.0, object = self},
+		fertileduringcycle = {descript = "Percentage of the ovulation cycle the person is fertile", min = 0.0, max = 1.0, object = self},
+		semenlifespan = {descript = "The base number of days semen exists in the womb", min = 1.0, max = 100.0, object = self},
+		wantedpregnancychance = {descript = "", min = 0.0, max = 100.0, object = self},
+		chancemorningsickness = {descript = "Max chance to puke during pregnancy, peaks at start", min = 0.0, max = 100.0, object = self},
+		chancetitsgrow = {descript = "Max chance for tits to increase in size during pregnancy, peaks towards end", min = 0.0, max = 100.0, object = self},
+	}
+	variables.list["AE Mod - Farm"] = {
+		baselivestockconsentchance = {descript = "Livestock Consent Base Chance (+ 50% loyalty, 25% obediance, + various factors)", min = 0.0, max = 100.0, object = self},
+		chancetokillsnail = {descript = "", min = 0.0, max = 100.0, object = self},
+		snailegglaborbadresult = {descript = "", object = self},
+		snailegglabordetails = {descript = "Set this to false if you don't wamt to see the details", object = self},
+		livestockautoconsentchance = {descript = "", min = 0.0, max = 100.0, object = self},
+		livestockcanloseconsent = {descript = "", min = 0.0, max = 100.0, object = self},
+		livestockloseconsentchance = {descript = "", min = 0.0, max = 100.0, object = self},
+	}
+	variables.list["AE Mod - Ralph's Tweaks"]  = {
+		use_ralphs_tweaks = {descript = "Set this to true if you want to use the settings within ApplyTweaks as well as the Hybrid system.", object = self},
+		unique_trait_generation = {descript = "Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.", object = self},
+		consolidatebeastDNA = {descript = "Set this to true if you don't like npcs with a mix of Beastkin/Halfkin race%'s (no half cat half foxes, etc.)", object = self},
+		gratitude_for_all = {descript = "Set this to true so that babies aged up to Child or Teen have as much chance to spawn with the Grateful trait as ones aged up to Adult (Ralph sets this to False, but up to you)", object = self},
+		sillymode = {descript = "Set it to false if you don't abide, so far it only affects random travel event text", object = self},
+
+		basemanafoodconsumption = {descript = "The average capacity that the hole's size adds or subtracts from", min = 0.0, max = 100.0},
+		orgasmmana = {descript = "The average capacity that the hole's size adds or subtracts from", min = 1.0, max = 100.0},
+	}

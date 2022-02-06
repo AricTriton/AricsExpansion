@@ -8,9 +8,22 @@ var magic_races_array = ['Slime']
 var races_beastfree_darkelf_free = ['Human','Elf','Dark Elf','Orc','Gnome','Goblin','Demon','Dragonkin','Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla','Slime']
 var genealogies = ['human','gnome','elf','tribal_elf','dark_elf','orc','goblin','dragonkin','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime','bunny','dog','cow','cat','fox','horse','raccoon']
 var genealogies_beastfree = ['human','gnome','elf','tribal_elf','dark_elf','orc','goblin','dragonkin','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime',]
+var genealogies_beastkin_only = ['bunny','dog','cat','fox','raccoon'] #ralphB - for breeding race consolidation - needs to include all races to be consolidated
 ###---End Expansion---###
 
-func newslave(race, age, sex, origins = 'slave'):
+###---Added by Expansion---### centerflag982 - dickgirls can generate in world
+func getrandomsex(person):
+	if globals.rules.male_chance > 0 && rand_range(0, 100) < globals.rules.male_chance:
+		person.sex = 'male'
+	elif rand_range(0, 100) < globals.rules.futa_chance && globals.rules.futa == true:
+		person.sex = 'futanari'
+	elif rand_range(0, 100) < globals.rules.dickgirl_chance && globals.rules.dickgirl == true:
+		person.sex = 'dickgirl'
+	else:
+		person.sex = 'female'
+
+###---Added by Expansion---### add arg unique
+func newslave(race, age, sex, origins = 'slave', unique = null):
 	var temp
 	var temp2
 	var person = globals.person.new()
@@ -27,6 +40,7 @@ func newslave(race, age, sex, origins = 'slave'):
 		person.stats[i] = rand_range(35,65)
 	person.id = str(globals.state.slavecounter)
 	globals.state.slavecounter += 1
+	person.unique = unique ###---Added by Expansion---###
 	changerace(person, 'Human')
 	changerace(person)
 	person.work = 'rest'
@@ -34,7 +48,7 @@ func newslave(race, age, sex, origins = 'slave'):
 	person.sexuals.actions.kiss = 0
 	person.sexuals.actions.massage = 0
 	globals.assets.getsexfeatures(person)
-	if person.race.find('Halfkin') >= 0 || (person.race.find('Beastkin') >= 0 && globals.rules.furry == false):
+	if person.race.find('Halfkin') >= 0 || (person.race.find('Beastkin') >= 0 && globals.rules.furry == false): #ralphD note - gets overridden for new babies
 		person.race = person.race.replace('Beastkin', 'Halfkin')
 		person.bodyshape = 'humanoid'
 		person.skincov = 'none'
@@ -82,6 +96,7 @@ func newslave(race, age, sex, origins = 'slave'):
 	###---End Expansion---###
 	
 	###---Added by Expansion---### Pregnancy Expanded
+	person.preg.fertility = rand_range(0,30)
 	set_ovulation(person)
 	###---End Expansion---###
 	globals.traceFile('newslave')
@@ -111,67 +126,74 @@ func changerace(person, race = null):
 			if person.get(i) != null:
 				person[i] = races[personrace][i]
 
-func randomportrait(person):
-	var array = []
-	var racenames = person.race.split(" ")
-	###---Added by Expansion---### Ank Bugfix v4
-	var extensions = ["png","jpg","webp"]
-	for i in globals.dir_contents(globals.setfolders.portraits):
-		if !i.get_extension() in extensions:
-			continue
-	###---End Expansion---###
-		for k in racenames:
-			if i.findn(k) >= 0:
-				array.append(i)
-				continue
-	if array.size() > 0:
-		person.imageportait = array[randi()%array.size()]
+# Numbers are the portion children get from their mother, father's portion will be 1 - mother's
+# if one parent doesn't have a body part it will be fully based on the other parent, if neither has it should be set to smallest
+var sizeDict = {
+	"female":{"vagina":1,"tits":1,"asshole":1,"lips":1,"ass":1},
+	"male":{"penis":0,"balls":0,"tits":0,"asshole":0,"lips":0,"ass":0},
+	"futanari":{"vagina":0.5,"penis":0.5,"tits":0.5,"asshole":0.5,"lips":0.5,"ass":0.5},
+	"dickgirl":{"penis":0.5,"balls":0.5,"tits":1,"asshole":1,"lips":1,"ass":1},
+}
+var sizeArrayDict
+var sizeStringDict = {"tits":"titssize","ass":"asssize"}
+
+#refs to globals.gd cannot be made until after init
+func fillSizeArrayDict():
+	sizeArrayDict = {
+		"vagina": globals.vagsizearray, "tits": globals.titssizearray, "penis": globals.penissizearray, "balls": globals.penissizearray,
+		"asshole": globals.assholesizearray, "lips": globals.lipssizearray, "ass": globals.asssizearray
+	}
+
+func setSizes(person,mother,father):
+	#The key needs to not exist to not be added
+	if globals.rules.futaballs:
+		sizeDict.futanari.balls = 0.5
+	else:
+		sizeDict.futanari.erase("balls")
+	for part in sizeDict[person.sex]:
+		var motherModifier = 0
+		var fatherModifier = 0
+		var type = sizeStringDict.get(part,part)
+		var sizeArray = sizeArrayDict[part]
+		var randomMod = round(rand_range(-3 if part == "vagina" else -1,1))
+
+		if part == "tits":
+			motherModifier -= mother.pregexp.titssizebonus
+			fatherModifier -= father.pregexp.titssizebonus
+
+		var base
+		if mother[type] == "none":
+			base = sizeArray.find(father[type]) + fatherModifier
+		elif father[type] == "none":
+			base = sizeArray.find(mother[type]) + motherModifier
+		else:
+			var value = sizeDict[person.sex][part]
+			base = (sizeArray.find(mother[type]) + motherModifier)*value + (sizeArray.find(father[type]) + fatherModifier)*(1.0-value)
+		person[type] = sizeArray[clamp(round(base + randomMod), 0, sizeArray.size()-1)]
+		#prints(part,value,person[type],sizeArray.find(person[type]),randomMod,sizeArray.find(mother[type]),sizeArray.find(father[type]))
+	return person
 
 ###---Added by Expansion---### Added by Deviate - Hybrid Races
-func newbaby(mother,father):
-	var person = globals.newslave(mother.race, 'child', 'random', mother.origins)
-	var body_array = ['skin','tail','ears','wings','horns','arms','legs','bodyshape','haircolor','eyecolor','eyeshape','eyesclera']
-	var tacklearray = ['penis']
-	var temp
+var body_array = ['skin','tail','ears','wings','horns','arms','legs','bodyshape','haircolor','eyecolor','eyeshape','eyesclera']
+var racebound_body_array = ['ears','arms','legs','bodyshape'] #ralphD
+var listMaxStats = ['str_max','agi_max','maf_max','end_max']
 
-	#Prep
-	person.race = ''
-	person.age = ''
-	person.sex = ''
+func newbaby(mother,father):
+	var person = globals.newslave(mother.race, 'child' if globals.rules.children else 'teen', 'random', mother.origins)
+	person.cleartraits()
+	#var tacklearray = ['penis']
+	#var temp
 
 	#General
 	person.state = 'fetus'
 	person.surname = mother.surname
-	
-	#Sex
-	#if globals.rules.male_chance > 0 && rand_range(0, 100) < globals.rules.male_chance:
-	#	person.sex = 'male'
-	#elif rand_range(0, 100) < globals.rules.futa_chance && globals.rules.futa == true:
-	#	person.sex = 'futanari'
-	#else:
-	#	person.sex = 'female'
 
-	#Age
-	if globals.rules.children == true:
-		person.age = 'child'
-	else: 
-		person.age = 'teen'
-
-	#Body
-	for i in body_array:
-		if person.sex == 'female':
-			if rand_range(0,10) > 3:
-				person[i] = mother[i]
-			else:
-				person[i] = father[i]
-		else:
-			if rand_range(0,10) > 3:
-				person[i] = father[i]
-			else:
-				person[i] = mother[i]
-	
-	#Male Genitals
-	if person.sex == 'male' || (person.sex == 'futanari' && globals.rules.futaballs == true):
+	#Body #ralphD - moved lower in function to fix a bug overriding body part assignments
+		
+	setSizes(person,mother,father)
+	""" #Male Genitals
+	###---Added by Expansion---### centerflag982 - added dickgirl check				
+	if person.sex == 'male' || person.sex == 'dickgirl' || (person.sex == 'futanari' && globals.rules.futaballs == true):
 		tacklearray.append('balls')
 		
 		if person.sex != 'futanari':
@@ -185,7 +207,7 @@ func newbaby(mother,father):
 
 		temp = globals.titssizearray.find(father.titssize)-father.pregexp.titssizebonus+round(rand_range(-1,1))
 		person.titssize = globals.titssizearray[temp]
-
+	###---End Expansion---###
 	#Female Genitals
 	if person.sex in ['female','futanari']:
 		temp = globals.vagsizearray.find(mother.vagina)+round(rand_range(-3,1))
@@ -207,49 +229,24 @@ func newbaby(mother,father):
 	#Ass
 	temp = round(globals.asssizearray.find(mother.asssize)+globals.asssizearray.find(father.asssize)*.5)+round(rand_range(-1,1))
 	temp = clamp(temp, 0, globals.asssizearray.size()-1)
-	person.asssize = globals.asssizearray[temp]
+	person.asssize = globals.asssizearray[temp] """
 
 	#Dimensional Crystal
 	if globals.state.mansionupgrades.dimensionalcrystal >= 2:
-		var str_max
-		var agi_max
-		var maf_max
-		var end_max
-		if father.stats.str_max >= mother.stats.str_max && father != null:
-			str_max = father.stats.str_max
-		else:
-			str_max = mother.stats.str_max
-		if father.stats.agi_max >= mother.stats.agi_max && father != null:
-			agi_max = father.stats.agi_max
-		else:
-			agi_max = mother.stats.agi_max
-		if father.stats.maf_max >= mother.stats.maf_max && father != null:
-			maf_max = father.stats.maf_max
-		else:
-			maf_max = mother.stats.maf_max
-		if father.stats.end_max >= mother.stats.end_max && father != null:
-			end_max = father.stats.end_max
-		else:
-			end_max = mother.stats.end_max
-		if person.stats.str_max < str_max:
-			person.stats.str_max += round((str_max-person.stats.str_max)*.6)
-		if person.stats.agi_max < agi_max:
-			person.stats.agi_max += round((agi_max-person.stats.agi_max)*.6)
-		if person.stats.maf_max < maf_max:
-			person.stats.maf_max += round((maf_max-person.stats.maf_max)*.6)
-		if person.stats.end_max < end_max:
-			person.stats.end_max += round((end_max-person.stats.end_max)*.6)
+		var pStats = person.stats
+		var temp
+		for i in listMaxStats:
+			temp = max(father.stats[i], mother.stats[i])
+			if pStats[i] < temp:
+				pStats[i] += round((temp - pStats[i]) *.6)
 
 	#Bodyshape
 	if person.race.find('Halfkin')>=0 && mother.race.find('Beastkin') >= 0 && father.race.find('Beastkin') < 0:
 		person.bodyshape = 'humanoid'
-	if father.beautybase > mother.beautybase:
-		person.beautybase = father.beautybase + rand_range(-2,5)
-	else:
-		person.beautybase = mother.beautybase + rand_range(-2,5)
-	person.cleartraits()
+	person.beautybase = max(father.beautybase, mother.beautybase) + rand_range(-2,5)
 
 	var traitpool = father.traits + mother.traits
+	var excluded = []
 	for i in traitpool:
 		if rand_range(0,100) > variables.traitinheritchance:
 			continue
@@ -259,7 +256,7 @@ func newbaby(mother,father):
 				continue
 			#Increase if Same
 			for expansiontraits in globals.expansion.subtraitlines:
-				if trait.tags.has(expansiontraits):
+				if trait.tags.has(expansiontraits) && !excluded.has(expansiontraits):
 					var traitline = globals.expansion[expansiontraits]
 					var matchrank = -1
 					var newtraitrank
@@ -267,26 +264,19 @@ func newbaby(mother,father):
 						if i == ii && traitpool.count(i) == 1:
 							continue
 						var trait2 = globals.origins.trait(ii)
-						if trait2 != null && trait2.tags.has(traitline):
+						if trait2 != null && trait2.tags.has(expansiontraits):
 							matchrank = traitline.find(ii)
 					if matchrank >= 0:
-						if matchrank > traitline.find(i):
-							if rand_range(0,100) <= 50:
-								newtraitrank = round( rand_range( traitline.find(i), matchrank)) + 1
-							else:
-								newtraitrank = round( rand_range( traitline.find(i), matchrank))
-						elif matchrank > traitline.find(i):
-							if rand_range(0,100) <= 50:
-								newtraitrank = round( rand_range( matchrank, traitline.find(i))) + 1
-							else:
-								newtraitrank = round( rand_range( matchrank, traitline.find(i)))
+						if matchrank != traitline.find(i):
+							newtraitrank = round( rand_range( traitline.find(i), matchrank)) + randi() % 2
 						else:
-							newtraitrank = round( rand_range( matchrank+1, matchrank+2))
+							newtraitrank = round( matchrank + rand_range(1,2))
 					else:
 						newtraitrank = round( traitline.find(i) + rand_range(-1,1))
 					var newtraitname = traitline[ clamp(newtraitrank, 0, traitline.size()-1) ]
 					var newtrait = globals.origins.trait(newtraitname)
 					if newtrait != null:
+						excluded.append(expansiontraits)
 						if newtrait.tags.has('lactation-trait'):
 							person.traitstorage.append(newtraitname)
 						else:
@@ -312,14 +302,45 @@ func newbaby(mother,father):
 	
 	#Genealogy
 	build_genealogy(person, mother, father)
-	setRace(person)
+	#setRace(person,mother) #ralphD - moved call to inside setRaceDisplay() as is it was being overridden and partially duplicated
 	setRaceDisplay(person)
 	set_race_secondary(person)
 	
 #	if globals.expansionsettings.racialstatbonuses == true:
 #		globals.expansionsetup.setRaceBonus(person, true)
+
+	#Body #ralphD - moved from higher in the function b/c body part assignments based on parents were overridden in setRaceDisplay() as called a few line up from here
+	if globals.expansionsettings.use_ralphs_tweaks == false: #ralphD - centerflag982's system for base Aric's
+		for i in body_array:
+			###---Added by Expansion---### centerflag982 - dickgirls take after their mothers
+			if person.sex == 'female' || person.sex == 'dickgirl':
+				person[i] = mother[i] if rand_range(0,10) < 7 else father[i]
+			###---End Expansion---###
+			else:
+				person[i] = father[i] if rand_range(0,10) < 7 else mother[i]
+	else: #ralphD - ralph's system for ralphs (more random inheritance mostly; placeholder before hybrid system revamp)
+		for i in body_array:
+			if mother.race == father.race:
+				person[i] = mother[i] if rand_range(0,10) < 5 else father[i]
+			elif i in racebound_body_array: #&& !globals.races[person.race].i.empty(): #ralphD - not working
+				print("Ralph's found "+str(person.name)+" has racebound feature: "+str(i))
+				#print("Ralph's found racebound feature: "+str(i)+".  Race version is: "+str(globals.races[person.race][i])+"    Mother's: "+str(mother[i])+"  Father's: "+str(father[i]))
+				#print("Ralph TTTEEEST:  globals.races[person.race][i]: "+str(globals.races[person.race][i]))
+				if person.race == mother.race:
+					person[i] = mother[i]
+				elif person.race == father.race:
+					person[i] = father[i]
+				elif rand_range(0,1) > 0.5:
+					person[i] = mother[i]
+				else:
+					person[i] = father[i]
+			else:
+				person[i] = mother[i] if rand_range(0,10) < 5 else father[i]
+	#/ralphD	
+
 	
 	#Ovulation
+	person.preg.baby_type == ''
 	set_ovulation(person)
 
 	if globals.state.perfectinfo == true && globals.state.mansionupgrades.dimensionalcrystal >= 3:
@@ -369,7 +390,7 @@ func set_genealogy(person):
 		person.race_type = 4
 	
 	#Set Primary Race
-	if person == globals.player || person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon):
+	if person.race.find('Halfkin') < 0 && (person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon)):
 		random_number = allot_percentage('purebreed')
 	elif person.race.find('Halfkin') >= 0 || rand_range(0,100) <= globals.expansionsettings.randommixedbreedchance:
 		random_number = allot_percentage('primary_mixed')
@@ -426,31 +447,19 @@ func set_genealogy(person):
 	if person.npcexpanded.mansionbred == false && globals.state.relativesdata.has(person.id):
 		var relativesdata = globals.state.relativesdata
 		var entry = relativesdata[person.id]
-		var entry2
-		var samedad = false
-		var samemom = false
 		var matched_sibling = false
-		if !entry.siblings.empty():
-			for i in entry.siblings:
-				entry2 = relativesdata[i]
-				for f in ['father']:
-					if int(entry[f]) == int(entry2[f]):
-						samedad = true
-				for m in ['mother']:
-					if int(entry[m]) == int(entry2[m]):
-						samemom = true
-				if samedad == true && samemom == true || samedad == false && samemom == true || samedad == true && samemom == false:
-					var tempPerson2 = globals.state.findslave(entry2.id)
-					if tempPerson2 == null:
-						continue
-					for shared_gene in tempPerson2.genealogy:
-						person.genealogy[shared_gene] = tempPerson2.genealogy[shared_gene]
-						matched_sibling = true
-						break
+		for i in entry.siblings + entry.halfsiblings:
+			var entry2 = relativesdata[i]
+			#if int(entry.father) == int(entry2.father) || int(entry.mother) == int(entry2.mother):
+			var tempPerson2 = globals.state.findslave(entry2.id)
+			if tempPerson2 == null:
+				continue
+			for shared_gene in tempPerson2.genealogy:
+				person.genealogy[shared_gene] = tempPerson2.genealogy[shared_gene]
+				matched_sibling = true
+				break
 	
 	globals.traceFile('setgenealogy')
-	
-	return
 
 #Added by Aric
 func allot_percentage(type):
@@ -595,8 +604,30 @@ func build_genealogy(person, mother, father):
 	while percent != 100:
 		percent = build_genealogy_equalize(person, percent)
 	#/ralph9
+	#ralphB - optional consolidation of beastkin/halfkin races on breeding (offspring will have only one beastkin/halfkin type race with total % that would have been split b/n different beastkin/halfkin races)
+	if globals.useRalphsTweaks && globals.expansionsettings.consolidatebeastDNA:
+		var total_beastkin_race_percent = 0
+		var babys_beastkin_races = []
+		var selected_race = "human"
+		var highest_beastkin_race_percent = 0
+		for race in genealogies:
+			if race in genealogies_beastkin_only:
+				babys_beastkin_races.append(race)
+				total_beastkin_race_percent += person.genealogy[race]
+				if person.genealogy[race] > highest_beastkin_race_percent:
+					selected_race = race
+					highest_beastkin_race_percent = person.genealogy[race]
+		if babys_beastkin_races.size() > 1:
+			for race in babys_beastkin_races:
+				if person.genealogy[race] > rand_range(0,total_beastkin_race_percent):
+					selected_race = race
+			for race in babys_beastkin_races:
+				if race == selected_race:
+					person.genealogy[race] = total_beastkin_race_percent
+				else:
+					person.genealogy[race] = 0
+	#/ralphB
 	globals.traceFile('build genealogy')
-	return
 
 #Tweaked by Aric
 func build_genealogy_equalize(person, percent):
@@ -633,15 +664,17 @@ func build_genealogy_equalize(person, percent):
 	
 	return lpercent
 
-func setRace(person):
-	var currentrace = ""
-	var highestpercent = 0
+func setRace(person,raceselected,highestpercent): #ralphD - consolidated to function within setRaceDisplay()
+	var currentrace = raceselected #ralphD
+	#var highestpercent = 0 #ralphD
 	
-	#Pick Highest Genetics
-	for race in genealogies:
-		if person.genealogy[race] >= highestpercent:
-			currentrace = race
-			highestpercent = person.genealogy[race]
+	#Pick Highest Genetics #ralphD - note this was being overridden in setRaceDisplay() and is now redundant
+	#for race in genealogies:
+	#	if person.genealogy[race] > highestpercent:
+	#		currentrace = race
+	#		highestpercent = person.genealogy[race]
+	#	elif person.genealogy[race] == highestpercent && mother.race == race:
+	#		currentrace = race
 	
 	#Assign Race Type/Race
 	var caprace = currentrace.capitalize()
@@ -661,11 +694,13 @@ func setRace(person):
 		person.race = caprace
 	elif currentrace in animal_races_array:
 		person.race_type = 3
-		if person.genealogy.horse >= highestpercent: #ralph3 - should fix instances of <50% Centaur dominant hybrids being born as 'Halfkin ' only for race
+		#if person.genealogy.horse >= highestpercent: #ralph3 - should fix instances of <50% Centaur dominant hybrids being born as 'Halfkin ' only for race
 		#if person.genealogy.horse >= 50:
+		if currentrace == "horse":
 			person.race = 'Centaur'
-		elif person.genealogy.cow >= highestpercent: #ralph3 - should fix instances of <50% Centaur dominant hybrids being born as 'Halfkin ' only for race
+		#elif person.genealogy.cow >= highestpercent: #ralph3 - should fix instances of <50% Centaur dominant hybrids being born as 'Halfkin ' only for race
 		#elif person.genealogy.cow >= 50:
+		elif currentrace == "cow":
 			person.race = 'Taurus'
 		else:
 			#Beastkin/Halfkin Decoder
@@ -691,22 +726,31 @@ func setRace(person):
 		print('No Race Found for ' + str(person.full_name) + '. Assigned Human ')
 	
 	globals.traceFile('Constructor.pickRace Completed')
-	return
 
-func setRaceDisplay(person):
+func setRaceDisplay(person): #ralphD - reworked to fix bugs
 	var text = ""
 	var primaryrace = ""
 	var primaryracepercent = 0
 	var secondaryrace = ""
 	var secondaryracepercent = 0
+	var racetiestobreak = [] #ralphD
 	
 	#Sort Races
 	for race in genealogies:
 		if person.genealogy[race] > 0 && person.genealogy[race] >= primaryracepercent:
 			#Push Primary to Secondary if Greater
-			if primaryracepercent > secondaryracepercent:
+			if person.genealogy[race] > primaryracepercent:
 				secondaryrace = primaryrace
 				secondaryracepercent = primaryracepercent
+				primaryrace = race
+				primaryracepercent = person.genealogy[race]
+				racetiestobreak = []
+			#ralphD
+			elif person.genealogy[race] == primaryracepercent:
+				racetiestobreak.append(race)
+				if !racetiestobreak.has(primaryrace) && primaryrace != "":
+					racetiestobreak.append(primaryrace)
+			#/ralphD
 			primaryrace = race
 			primaryracepercent = person.genealogy[race]
 		elif person.genealogy[race] > 0 && person.genealogy[race] >= secondaryracepercent:
@@ -720,6 +764,16 @@ func setRaceDisplay(person):
 		primaryracepercent = secondaryracepercent
 		secondaryrace = resortrace
 		secondaryracepercent = resortpercent
+
+	#Randomize Ties (eg. 50/50 or even 25/25/25/25 race hybrids)  #ralphD
+	if racetiestobreak.size() > 1:
+		primaryrace = globals.randomfromarray(racetiestobreak)
+		racetiestobreak.erase(primaryrace)
+		secondaryrace = globals.randomfromarray(racetiestobreak)
+		secondaryracepercent = primaryracepercent
+	
+	setRace(person,primaryrace,primaryracepercent)
+	#/ralphD
 	
 	#Decode Races
 	primaryrace = decodeGenealogytoRace(primaryrace)
@@ -753,7 +807,6 @@ func setRaceDisplay(person):
 		text = 'A Total Mutt'
 	
 	person.race_display = text
-	return
 
 #Tweaked by Aric - Only used by newbaby now
 func set_race_secondary(person):
@@ -818,8 +871,6 @@ func set_race_secondary(person):
 		person.race_secondary = race_secondary
 	
 	globals.traceFile('set race secondary')
-	
-	return
 
 #Tweaked by Aric
 func setBabyType(person):
@@ -831,7 +882,6 @@ func setBabyType(person):
 		person.preg.baby_type = 'birth'
 	
 	globals.traceFile('setbabytype')
-	return
 
 #Tweaked by Aric
 func set_ovulation(person):
@@ -850,34 +900,26 @@ func set_ovulation(person):
 	
 	setRandomOvulationDay(person)
 	globals.traceFile('set ovulation finish')
-	return
 
 #Added by Aric
 func setRandomOvulationDay(person):
 	if person.preg.ovulation_type == 0:
 		set_ovulation(person)
 	
-	if person.preg.ovulation_stage == 0 || person.preg.ovulation_day == 0:
+	if person.preg.ovulation_stage == 0 :
 		if person.preg.ovulation_stage == 0:
 			person.preg.ovulation_stage = round(rand_range(1,2))
-	
-		if person.preg.ovulation_day == 0:
-			if person.preg.ovulation_type == 1:
-				if person.preg.ovulation_stage == 1:
-					person.preg.ovulation_day = round(rand_range(1, globals.expansionsettings.livebirthcycle * globals.expansionsettings.fertileduringcycle))
-				else:
-					person.preg.ovulation_day = round(rand_range(globals.expansionsettings.livebirthcycle * globals.expansionsettings.fertileduringcycle, globals.expansionsettings.livebirthcycle))
-			else:
-				if person.preg.ovulation_stage == 1:
-					person.preg.ovulation_day = round(rand_range(1, globals.expansionsettings.eggcycle * globals.expansionsettings.fertileduringcycle))
-				else:
-					person.preg.ovulation_day = round(rand_range(globals.expansionsettings.eggcycle * globals.expansionsettings.fertileduringcycle, globals.expansionsettings.eggcycle))
+		var maxCycle = globals.expansionsettings.livebirthcycle if person.preg.ovulation_type == 1 else globals.expansionsettings.eggcycle
+		person.preg.ovulation_day = randi() % int(maxCycle) + 1
+		if person.preg.ovulation_day < floor(maxCycle * globals.expansionsettings.fertileduringcycle):
+			person.preg.ovulation_stage = 1
+		else:
+			person.preg.ovulation_stage = 2
 	
 	globals.traceFile('set random ovulation day')
-	return
 
 func forceFullblooded(person):
-	if person == null:
+	if person == null || person.race.find("Halfkin") >= 0:
 		return
 	
 	var onlyrace = genealogy_decoder(person.race)
@@ -887,7 +929,6 @@ func forceFullblooded(person):
 			person.genealogy[race] = 100
 		elif person.genealogy[race] > 0:
 			person.genealogy[race] = 0
-	return
 
 
 #Depreciated - Pending Removal
@@ -970,8 +1011,6 @@ func set_race_by_genealogy(person):
 	person.race = race
 	
 	globals.traceFile('set race by genealogy')
-	
-	return
 
 #Tweaked by Aric
 func set_race_display(person):
@@ -1035,6 +1074,4 @@ func set_race_display(person):
 		person.race_display = 'Mixed'
 	
 	globals.traceFile('setracedisplay')
-	
-	return
 ###---End Expansion---###

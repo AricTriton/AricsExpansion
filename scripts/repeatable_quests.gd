@@ -1,3 +1,13 @@
+static func randsex():
+	if globals.rules.male_chance > 0 && rand_range(0, 100) < globals.rules.male_chance:
+		return 'male'
+	elif rand_range(0, 100) < globals.rules.futa_chance && globals.rules.futa == true:
+		return 'futanari'
+	elif rand_range(0, 100) < globals.rules.dickgirl_chance && globals.rules.dickgirl == true:
+		return 'dickgirl'
+	else:
+		return 'female'
+
 static func randanyeyecolor():
 	var text = globals.alleyecolors
 	return text[randi()%text.size()]
@@ -305,7 +315,7 @@ func questarray():
 			questreq = true,
 			shortdescription = "Fresh Calamari",
 			description = 'A wealthy widow has requested a sentient tentacle monster for undisclosed purposes.\n\nBreeding Instructions: At least half Scylla and with as much mana corruption as can be managed. ',
-			reqs = [['obed','gte',80]], #['lewdness', 'gte', 20], ['race_display', 'eq', 'Tentacle'],['sex', 'neq', 'female']],
+			reqs = [['obed','gte',80], ['lewdness', 'gte', 20], ['race_display', 'eq', 'Tentacle'],['sex', 'neq', 'female']],
 			reqstemp = [],
 			reqsfunc = [],
 			time = round(rand_range(20,35)),

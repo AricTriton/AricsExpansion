@@ -342,16 +342,16 @@ func frenchkiss(person, counter):
 		text += "[he2] closes eyes and passionately accepts your kiss. "
 		if str(related) != 'unrelated':
 			text += "[he2] " + str(globals.randomitemfromarray(['whispers','mumbles','quickly says','says','quietly says'])) + " " + person.quirk("\n[color=yellow]-I can not believe I am ready to start " + globals.expansion.nameKissing() + " my " + str(related) + ". ")
-		if !person.traits.has("Bisexual") && !person.traits.has("Homosexual") && person.sex == globals.player.sex:
-			self.mood += 1
-			person.lust += 1
-		else:
+		if globals.expansion.getSexualAttraction(person,globals.player):
 			self.mood += 3
 			person.lust += 3
+		else:
+			self.mood += 1
+			person.lust += 1
 	else:
 		self.mood -= 4
 		text += "[he2] abruptly stops you, showing [his2] disinterest. "
-		if incest != 0:
+		if related != 'unrelated':
 			text += "[he2] looks at you shocked. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " start " + globals.expansion.nameKissing() + " my " + str(related) + ". ")
 	###---End Expansion---###
 	return text
@@ -452,6 +452,32 @@ func showsexswitch(text, mode):
 		text += calculateresults()
 	$sexswitch/RichTextLabel.bbcode_text = text
 
+func praise(person, counter):
+	var text = ''
+	text += "You praise [name2] for [his2] recent behavior. "
+	
+	###---Added by Expansion---### Valid Praise Bonus
+	if person.dailyevents.has('rule_nudity_obeyed'):
+		text += "\nYou explain your happiness at [his2] obedience in following your [color=aqua]Nudity[/color] order. [name2] seems to accept that this praise is for a valid reason.\n[color=red]Praise Valid Reason removed[/color]; [color=green]3 Turns Gained[/color] "
+		turns_set(turns + 3)
+		while person.dailyevents.find('rule_nudity_obeyed'):
+			person.dailyevents.remove('rule_nudity_obeyed')
+	###---End Expansion---###
+	
+	if person.obed >= 85 && counter < 2:
+		self.mood += 3
+		self.stress -= rand_range(5,10)
+		text = text + "[he2] listens to your praise with joy evident on [his2] face.  "
+	elif person.obed >= 85:
+		text = text + "[he2] takes your words respectfully but without great joy. You’ve probably overpraised [him2] lately. "
+		
+	else:
+		text = text + "[he2] takes your praise arrogantly, gaining joy from it. "
+		self.mood += 3
+		person.loyal -= rand_range(1,2)
+	
+	return text
+
 func punishaddedeffect():
 	var text = ''
 	self.stress += 8
@@ -481,6 +507,14 @@ func punishaddedeffect():
 				i.stress += 3
 				if actionhistory.back() in ['woodenhorse','flagellate']:
 					i.lust += 2
+	###---Added by Expansion---### Valid Punishment Bonus
+	if person.dailyevents.has('rule_nudity_disobeyed'):
+		text += "\nYou explain that [his2] punishment is due to [his2] refusal to follow your [color=aqua]Nudity[/color] order. [name2] seems to understand that this punishment is for a valid reason.\n[color=red]Punishment Valid Reason removed[/color]; [color=green]3 Turns Gained[/color] "
+		turns_set(turns + 3)
+		while person.dailyevents.find('rule_nudity_disobeyed'):
+			person.dailyevents.remove('rule_nudity_disobeyed')
+	###---End Expansion---###
+	
 	return text
 
 func teach(person, counter):
@@ -509,8 +543,8 @@ func gift(person, counter):
 	var text = ''
 	text += "You present [name2] with a small decorative gift. "
 	
-	###---Added by Expansion---### Person Expanded | Greed Flaw and Spelling Fixes
-	if person.obed >= 75 || person.mind.flaw == 'greed':
+	###---Added by Expansion---### Person Expanded | Greed Vice and Spelling Fixes
+	if person.obed >= 75 || person.mind.vice == 'greed':
 		self.mood += 7
 		person.loyal += 4
 		text = text + "[he2] accepts your gift with a pleasant smile on [his2] face.  "
@@ -518,7 +552,9 @@ func gift(person, counter):
 		text = text + "[he2] takes your gift arrogantly, barely respecting your intentions. "
 		self.mood += 3
 	
-	text += globals.expansion.checkGreed(person)
+	###---Person Expanded; Vice - Greed
+	if person.mind.vice_known == true && person.checkVice('greed'):
+		text += "You know that [he2] is " + globals.randomitemfromarray(['greedy','obsessed with material possessions','pretty greedy']) + " and is very susceptible to gifts and money.\n[color=green]Gifts and Money will always give the best result.[/color]\n "
 	###---End Expansion---###
 	
 	globals.resources.gold -= 10
@@ -529,8 +565,8 @@ func sweets(person, counter):
 	var text = ''
 	text += "You purchase some candies for [name2] from a local vendor. "
 	
-	###---Added by Expansion---### Person Expanded | Gluttony Flaw and Spelling Fixes
-	if person.obed >= 55 || person.mind.flaw == 'gluttony':
+	###---Added by Expansion---### Person Expanded; Vice - Gluttony & Spelling Fixes
+	if person.obed >= 55 || person.mind.vice == 'gluttony':
 		self.mood += 6
 		person.loyal += 3
 		text = text + "[he2] joyfully accepts them and enjoys the sweet taste.  "
@@ -539,7 +575,9 @@ func sweets(person, counter):
 		text = text + "[he2] takes your gift arrogantly, barely respecting your intentions. "
 		self.mood += 3
 	
-	text += globals.expansion.checkGluttony(person)
+	###---Person Expanded; Vice - Gluttony
+	if person.mind.vice_known == true && person.checkVice('gluttony'):
+		text += "You know that [he2] is " + globals.randomitemfromarray(['a glutton','gluttonous','obsessed with food and drink','a foodie','obsessed with food']) + " and takes joy in food and drinks.\n[color=green]Food and Drink Interactions will always give the best result.[/color]\n "
 	###---Expansion End---###
 	
 	globals.resources.gold -= 5
@@ -550,8 +588,8 @@ func sweets(person, counter):
 func tea(person, counter):
 	var text = ''
 	text += "You serve tea for you and [name2]. While drinking, you both chat and get a bit closer.  "
-	###---Added by Expansion---### Person Expanded | Gluttony Flaw
-	if counter <= 3 || randf() >= 0.5 || person.mind.flaw == 'gluttony':
+	###---Added by Expansion---### Person Expanded | Gluttony Vice
+	if counter <= 3 || randf() >= 0.5 || person.mind.vice == 'gluttony':
 		self.mood += 5
 		self.stress -= rand_range(2,5)
 		text += "[name2] seems to be pleased with your generosity and enjoys your company. "
@@ -559,8 +597,9 @@ func tea(person, counter):
 	else:
 		self.mood += 1
 	
-	###---Added by Expansion---### Person Expanded | Gluttony Flaw
-	text += globals.expansion.checkGluttony(person)
+	###---Person Expanded; Vice - Gluttony
+	if person.mind.vice_known == true && person.checkVice('gluttony'):
+		text += "You know that [he2] is " + globals.randomitemfromarray(['a glutton','gluttonous','obsessed with food and drink','a foodie','obsessed with food']) + " and takes joy in food and drinks.\n[color=green]Food and Drink Interactions will always give the best result.[/color]\n "
 	###---Expansion End---###
 	
 	globals.itemdict.supply.amount -= 1
@@ -571,23 +610,26 @@ func wine(person, counter):
 	var text = ''
 	text += "You serve fresh wine for you and [name2]. "
 	
-	###---Added by Expansion---### Person Expanded | Gluttony Flaw
+	###---Added by Expansion---### Person Expanded | Gluttony Vice
 	var refusal = false
-	if person.mind.flaw != 'gluttony':
+	if person.mind.vice != 'gluttony':
 		if self.mood < 23 && person.obed < 80:
 			refusal = true
 			text += "[he2] refuses to drink with you. "
 		else:
 			refusal = false
 	if refusal == false:
-		text += globals.expansion.checkGluttony(person)
-		if counter < 3 || person.mind.flaw == 'gluttony':
+		if counter < 3 || person.mind.vice == 'gluttony':
 			text += "[he2] drinks with you and [his2] mood seems to improve."
 			self.mood += 4
 			self.stress -= rand_range(6,12)
 		else:
 			self.mood += 2
 			text += "[he2] keeps you company, but the wine does not seem to affect [him2] as heavily as before. "
+		###---Person Expanded; Vice - Gluttony
+		if person.mind.vice_known == true && person.checkVice('gluttony'):
+			text += "You know that [he2] is " + globals.randomitemfromarray(['a glutton','gluttonous','obsessed with food and drink','a foodie','obsessed with food']) + " and takes joy in food and drinks.\n[color=green]Food and Drink Interactions will always give the best result.[/color]\n "
+		###---Expansion End---###
 	###---Expansion End---###
 	if person.traits.has("Alcohol Intolerance"):
 		drunkness += 2

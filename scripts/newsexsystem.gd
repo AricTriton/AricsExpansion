@@ -1,4 +1,9 @@
 
+var takercategories = ['cunnilingus','rimjob','handjob','titjob','tailjob','blowjob','footjob'] #ralphC - added footjob
+var penetratecategories = ['missionary','missionaryanal','doggy','doggyanal','lotus','lotusanal','revlotus','revlotusanal','doubledildo','doubledildoass','inserttailv','inserttaila','tribadism','frottage','deepthroat'] #ralphC - added deepthroat
+
+var succubuscounter = 0 #ralphC - count orgasms drained by succubi
+
 class member:
 	var name
 	var person
@@ -70,6 +75,7 @@ class member:
 	var vagTorn = false
 	var assTorn = false
 	var actionshad = {addtraits = [], removetraits = [], samesex = 0, samesexorgasms = 0, oppositesex = 0, oppositesexorgasms = 0, punishments = 0, group = 0, incest = 0, incestorgasms = 0}
+	var succubusdraincount = 0 #ralphC
 	###---Expansion End---###
 	
 	func _init(source, fileref, isAnimal = false):
@@ -118,6 +124,15 @@ class member:
 					isHandCuffed = true
 					break
 
+	###---Added by Expansion---###
+	# calculates the amount of sexualityshift that will be gained by scaling down the total shift from an action
+	# groupSize should not include the person shifting sexuality in the count
+	func calcShift(tempShift, groupSize):
+		groupSize = float(max(groupSize, 1))
+		return tempShift/groupSize * min(0.9 + 0.1*groupSize, 2.0)
+
+	###---End of Expansion---###
+
 	func lust_set(value):
 		lust = min(value, 1000)
 
@@ -136,19 +151,26 @@ class member:
 			lube = lube + (sens/200)
 			lube = min(5+lewd/20,lube)
 
+	#ralphC
+	#increments the orgasm count credited to succubi
+	func succubus_spunked(groupOther):
+		var succubusdrain = false
+		for i in groupOther:
+			if i.person.race_display == "Succubus":
+				succubusdrain = true
+				i.person.mana_hunger -= variables.orgasmmana
+		if succubusdrain:
+			succubusdraincount += 1 #will be used to decrement orgasms for totalmana calc
+			sceneref.succubuscounter += 1
+	#/ralphC
+
 	func orgasm():
 		var text = ''
 		orgasm = true
-		if person.sexexp.orgasms.has(lastaction.scene.code):
-			person.sexexp.orgasms[lastaction.scene.code] += 1
-		else:
-			person.sexexp.orgasms[lastaction.scene.code] = 1
+		person.sexexp.orgasms[lastaction.scene.code] = person.sexexp.orgasms.get(lastaction.scene.code,0) + 1
 		for k in lastaction.givers + lastaction.takers:
 			if self != k:
-				if person.sexexp.orgasmpartners.has(k.person.id):
-					person.sexexp.orgasmpartners[k.person.id] += 1
-				else:
-					person.sexexp.orgasmpartners[k.person.id] = 1
+				person.sexexp.orgasmpartners[k.person.id] = person.sexexp.orgasmpartners.get(k.person.id,0) + 1
 
 		var scene
 		var temptext = ''
@@ -166,96 +188,42 @@ class member:
 			person.loyal += rand_range(1,2)
 		
 		###---Added by Expansion---### Sexuality Scale and Incest/Family Matters
-		var relative
-		if lastaction.takers.has(self) && lastaction.takers != null:
-			for i in lastaction.givers:
-				if i != self:
-					#Sexuality Shift
-					if person.sex == i.person.sex:
-						sexualityshift += .25
-					elif person.sex != i.person.sex:
-						if i.person.sex == 'futanari':
-							if globals.expansionsettings.futasexualityshift == 'bi':
-								if globals.kinseyscale.find(person.sexuality) < 3:
-									sexualityshift += .25
-								else:
-									sexualityshift -= .25
-							elif globals.expansionsettings.futasexualityshift == 'male':
-								if person.sex in ['male','futanari']:
-									sexualityshift += .25
-								else:
-									sexualityshift -= .25
-							else:
-								if person.sex in ['female','futanari']:
-									sexualityshift += .25
-								else:
-									sexualityshift -= .25
-						else:
-							sexualityshift -= .25
-					#Old Method
-#					if person.sex == i.person.sex || person.sex in ['male','futa'] && i.person.sex in ['male','futa'] || person.sex in ['female','futa'] && i.person.sex in ['female','futa']:
-#						sexualityshift += .5
-#					elif person.sex != i.person.sex || person.sex in ['male','futa'] && i.person.sex in ['female','futa'] || person.sex in ['female','futa'] && i.person.sex in ['male','futa']:
-#						sexualityshift -= .5
-				if i != self && person != globals.player:
-					#Incest
-					if globals.state.relativesdata.has(i.person.id) && globals.state.relativesdata.has(person.id):
-						if str(globals.expansion.relatedCheck(person, i.person)) != "unrelated":
-							relative = str(globals.expansion.relatedCheck(person, i.person))
-							continue
-			if relative != 'unrelated' && relative != null && person != globals.player:
+		var relative = 'unrelated'
+		var groupOther = lastaction.givers if lastaction.takers.has(self) else lastaction.takers
+		var tempShift = 0
+		for i in groupOther:
+			#Sexuality Shift
+			tempShift += 1 if sceneref.ispairsamesex(person, i.person) else -1
+			if person != globals.player:
+				#Incest
+				if globals.state.relativesdata.has(i.person.id) && globals.state.relativesdata.has(person.id):
+					var temp = globals.expansion.relatedCheck(person, i.person)
+					if temp != "unrelated":
+						relative = temp
+		if lastaction.takers.has(self):
+			sexualityshift += calcShift(.25 * tempShift, groupOther.size())
+			if relative != 'unrelated':
 				actionshad.incestorgasms += 1
 				if person.checkFetish('incest'):
 					text += "[name2] starts to {^go faster:go harder:move faster:pant:pant heavily} as [his2] impending orgasm approaches. "
-					text += "[color=yellow]" + person.quirk(person.dictionary("-Oh " + str(relative) + ", I'm...I'm... "))
-					text += str(globals.randomitemfromarray(["Fuuuuuck!","Oh...oh! I'm cumming!!!","Fuck! I'm cuuuuuummming!","No, no, nooo-NGH","NNNGH!","MMM!","Cu-cu-CUMMING!"])) + "[/color]\n"
+					text += "[color=yellow]" + person.quirk("-Oh " + relative + ", I'm...I'm... ")
 				else:
 					text += "[name2] starts to {^panic:hyperventilate:resist:slow down} as [his2] impending orgasm approaches, but it is too late. "
-					text += "[color=yellow]" + person.quirk(person.dictionary("-This is wrong! My " + str(relative) + " isn't supposed to be able to make me cum! "))
-					text += str(globals.randomitemfromarray(["Fuuuuuck!","Oh...oh! I'm cumming!!!","Fuck! I'm cuuuuuummming!","No, no, nooo-NGH","NNNGH!","MMM!","Cu-cu-CUMMING!"])) + "[/color]\n"
-			text = sceneref.decoder(text, [self], lastaction.takers)
-		elif lastaction.givers.has(self) && lastaction.givers != null:
-			for i in lastaction.takers:
-				if i != self:
-					#Sexuality Shift
-					if person.sex == i.person.sex:
-						sexualityshift += .15
-					elif person.sex != i.person.sex:
-						if i.person.sex == 'futanari':
-							if globals.expansionsettings.futasexualityshift == 'bi':
-								if globals.kinseyscale.find(person.sexuality) < 3:
-									sexualityshift += .15
-								else:
-									sexualityshift -= .15
-							elif globals.expansionsettings.futasexualityshift == 'male':
-								if person.sex in ['male','futanari']:
-									sexualityshift += .15
-								else:
-									sexualityshift -= .15
-							else:
-								if person.sex in ['female','futanari']:
-									sexualityshift += .15
-								else:
-									sexualityshift -= .15
-						else:
-							sexualityshift -= .15
-				if i != self && person != globals.player:
-					#Incest
-					if globals.state.relativesdata.has(i.person.id) && globals.state.relativesdata.has(person.id):
-						if str(globals.expansion.relatedCheck(person, i.person)) != "unrelated":
-							relative = str(globals.expansion.relatedCheck(person, i.person))
-							continue
-			if relative != 'unrelated' && relative != null && person != globals.player:
+					text += "[color=yellow]" + person.quirk("-This is wrong! My " + relative + " isn't supposed to be able to make me cum! ")
+				text += globals.randomfromarray(["Fuuuuuck!","Oh...oh! I'm cumming!!!","Fuck! I'm cuuuuuummming!","No, no, nooo-NGH","NNNGH!","MMM!","Cu-cu-CUMMING!"]) + "[/color]\n"
+			text = sceneref.decoder(text, groupOther, [self])
+		else:
+			sexualityshift += calcShift(.15 * tempShift, groupOther.size())
+			if relative != 'unrelated':
 				actionshad.incestorgasms += 1
 				if person.checkFetish('incest'):
 					text += "[name1] starts to {^go faster:go harder:move faster:pant:pant heavily} as [his1] impending orgasm approaches. "
-					text += "[color=yellow]" + person.quirk(person.dictionary("-Oh " + str(relative) + ", I'm...I'm... "))
-					text += str(globals.randomitemfromarray(["Fuuuuuck!","Oh...oh! I'm cumming!!!","Fuck! I'm cuuuuuummming!","No, no, nooo-NGH","NNNGH!","MMM!","Cu-cu-CUMMING!"])) + "[/color]\n"
+					text += "[color=yellow]" + person.quirk("-Oh " + relative + ", I'm...I'm... ")
 				else:
 					text += "[name1] starts to {^panic:hyperventilate:resist:slow down} as [his1] impending orgasm approaches, but it is too late. "
-					text += "[color=yellow]" + person.quirk(person.dictionary("-This is wrong! My " + str(relative) + " isn't supposed to be able to make me cum! "))
-					text += str(globals.randomitemfromarray(["Fuuuuuck!","Oh...oh! I'm cumming!!!","Fuck! I'm cuuuuuummming!","No, no, nooo-NGH","NNNGH!","MMM!","Cu-cu-CUMMING!"])) + "[/color]\n"
-			text = sceneref.decoder(text, lastaction.givers, [self])
+					text += "[color=yellow]" + person.quirk("-This is wrong! My " + relative + " isn't supposed to be able to make me cum! ")
+				text += globals.randomfromarray(["Fuuuuuck!","Oh...oh! I'm cumming!!!","Fuck! I'm cuuuuuummming!","No, no, nooo-NGH","NNNGH!","MMM!","Cu-cu-CUMMING!"]) + "[/color]\n"
+			text = sceneref.decoder(text, [self], groupOther)
 		###---Expansion End---###
 		
 		#anus in use, find scene
@@ -377,13 +345,16 @@ class member:
 								for i in scene.takers:
 									###---Added by Expansion---### Cum Tracking
 									i.person.cum.pussy += person.pregexp.cumprod
+									i.person.checkFetish('creampiepussy')
 									###---End Expansion---###
 									if sceneref.impregnationcheck(i.person, person) == true:
 										globals.impregnation(i.person, person)
+										i.person.checkFetish('pregnancy')
 							###---Added by Expansion---### Cum Tracking
-							if scene.scene.takerpart == 'anus':
+							elif scene.scene.takerpart == 'anus':
 								for i in scene.takers:
 									i.person.cum.ass += person.pregexp.cumprod
+									i.person.checkFetish('creampieass')
 							###---End Expansion---###
 						penistext += " {^semen:seed:cum} {^pours:shoots:pumps:sprays} into [names2] " + temptext + " as [he1] ejaculate[s/1]."
 					elif scene.scene.takerpart == 'nipples':
@@ -391,14 +362,19 @@ class member:
 						###---Added by Expansion---### Cum Tracking
 						for i in scene.takers:
 							i.person.cum.body += person.pregexp.cumprod
+							i.person.checkFetish('wearcum')
 						###---End Expansion---###
 					elif scene.scene.takerpart == 'penis':
 						penistext += " {^semen:seed:cum} {^pours:shoots:sprays}, covering [names2] [penis2]. "
 						###---Added by Expansion---### Cum Tracking
 						for i in scene.takers:
 							i.person.cum.body += person.pregexp.cumprod
+							i.person.checkFetish('wearcum')
 						###---End Expansion---###
 					penistext = sceneref.decoder(penistext, [self], scene.takers)
+					#ralphC - if any of the TAKERS is a Succubus, count this orgasm so it can be deducted from totalmana calc
+					succubus_spunked(scene.takers)
+					#/ralphC
 				#penis in taker slot
 				elif scene.takers.find(self) >= 0:
 					if randf() < 0.4:
@@ -410,13 +386,16 @@ class member:
 						###---Added by Expansion---### Cum Tracking
 						for i in scene.givers:
 							i.person.cum.face += round(person.pregexp.cumprod*.5)
+							i.person.checkFetish('wearcumface')
 							i.person.cum.body += round(person.pregexp.cumprod*.75)
+							i.person.checkFetish('wearcum')
 						###---End Expansion---###
 					elif scene.scene.code == 'tailjob':
 						penistext += " {^sticky:white:hot} {^semen:seed:cum} {^sprays onto:shoots all over:covers} [names1] tail[/s1] as [he2] ejaculate[s/2]."
 						###---Added by Expansion---### Cum Tracking
 						for i in scene.givers:
 							i.person.cum.body += person.pregexp.cumprod
+							i.person.checkFetish('wearcum')
 						###---End Expansion---###
 					elif scene.scene.giverpart == '':
 						penistext += " {^semen:seed:cum} {^pours onto:shoots onto:falls to} the {^ground:floor} as [he2] ejaculate[s/2]."
@@ -425,6 +404,7 @@ class member:
 						###---Added by Expansion---### Cum Tracking
 						for i in scene.givers:
 							i.person.cum.body += person.pregexp.cumprod
+							i.person.checkFetish('wearcum')
 						###---End Expansion---###
 					elif ['anus','vagina','mouth'].has(scene.scene.giverpart):
 						temptext = scene.scene.giverpart.replace('anus', '[anus1]').replace('vagina','[pussy1]')
@@ -433,46 +413,53 @@ class member:
 							for i in scene.givers:
 								###---Added by Expansion---### Cum Tracking
 								i.person.cum.pussy += person.pregexp.cumprod
+								i.person.checkFetish('creampiepussy')
 								###---End Expansion---###
 								if sceneref.impregnationcheck(i.person, person) == true:
 									globals.impregnation(i.person, person)
 						###---Added by Expansion---### Sex Expanded
-						if scene.scene.giverpart == 'anus':
-								for i in scene.givers:
-									i.person.cum.ass += person.pregexp.cumprod
-						if scene.scene.giverpart == 'mouth':
-								for i in scene.givers:
-									i.person.cum.mouth += person.pregexp.cumprod
-									if !i.person.sexuals.actions.has('blowjob'):
-										i.person.sexuals.actions['blowjob'] = 0
-									if i.person.sexuals.actions['blowjob'] < i.person.cum.mouth:
-										penistext += "So much "+globals.expansion.nameCum()+" {^pours:shoots:pumps:sprays} into [names1] mouth as [he1] can't handle the pressure in [his1] inside. "
-										if rand_range(0,1) >= .5 || i.person.checkFetish('drinkcum') == true:
-											penistext += "[name1] tries to keep [his1] mouth closed, but [his1] cheeks bulge out to [his1] full capacity. [names1] eyes go wide with panic as "+globals.expansion.nameCum()+" begins to {^jet:spray:stream:gush:trickle} out of [his1] nose and down [his1] face.\n "
-											i.person.cum.mouth += person.pregexp.cumprod
-											i.person.cum.face += round(person.pregexp.cumprod*.25)
-										else:
-											penistext += "[name1] tries to keep [his1] mouth closed, but [he1] starts to gag as the "+globals.expansion.nameCum()+" floods [his1] helpless throat. [name1] struggles to pull [his1] head off of [names2] [penis2] and spends a moment gagging and wretching horribly from the torrent.\n "
-											i.person.cum.mouth += round(person.pregexp.cumprod*.25)+1
-											i.person.cum.face += round(person.pregexp.cumprod*.75)
+						elif scene.scene.giverpart == 'anus':
+							for i in scene.givers:
+								i.person.cum.ass += person.pregexp.cumprod
+								i.person.checkFetish('creampieass')
+						elif scene.scene.giverpart == 'mouth':
+							for i in scene.givers:
+								#i.person.cum.mouth += person.pregexp.cumprod
+								i.person.checkFetish('creampiemouth')
+								if !i.person.sexuals.actions.has('blowjob'):
+									i.person.sexuals.actions['blowjob'] = 0
+								if i.person.sexuals.actions['blowjob'] < i.person.cum.mouth:
+									penistext += "So much "+globals.expansion.nameCum()+" {^pours:shoots:pumps:sprays} into [names1] mouth as [he1] can't handle the pressure in [his1] inside. "
+									i.person.checkFetish('wearcumface')
+									if i.person.checkFetish('drinkcum') == true || rand_range(0,1) >= .5:
+										penistext += "[name1] tries to keep [his1] mouth closed, but [his1] cheeks bulge out to [his1] full capacity. [names1] eyes go wide with panic as "+globals.expansion.nameCum()+" begins to {^jet:spray:stream:gush:trickle} out of [his1] nose and down [his1] face.\n "
+										i.person.cum.mouth += person.pregexp.cumprod
+										i.person.cum.face += round(person.pregexp.cumprod*.25)
 									else:
-										penistext += "[name1] stays skillfully on [names2] [penis2] until it finishes flooding [his1] mouth with "+globals.expansion.nameCum()+". [name1] then opens [his1] mouth to show off the "+globals.expansion.nameCum()+" inside and "
-										if i.person.checkFetish('drinkcum') == true:
-											penistext += "happily {^gulps:slurps:sucks:drinks:guzzles} every drop of it. "
-											i.person.cum.mouth += round(person.pregexp.cumprod*.25)+1
-											#Add CumDrink
-										elif i.person.checkFetish('wearcumface') == true:
-											penistext += "lets it {^drool:drain:slip:drinks:guzzles} out of [his1] mouth all over [his1] lips and chin. "
-											i.person.cum.mouth += round(person.pregexp.cumprod*.25)+1
-											i.person.cum.face += round(person.pregexp.cumprod*.75)
-										elif i.person.checkFetish('wearcum') == true:
-											penistext += "lets it {^drool:drain:slip:drinks:guzzles} out of [his1] mouth all over [his1] "+globals.expansion.getChest(i.person)+" and "+globals.expansion.nameBelly()+". "
-											i.person.cum.mouth += round(person.pregexp.cumprod*.25)+1
-											i.person.cum.body += round(person.pregexp.cumprod*.75)
-										else:
-											penistext += " spits it on the ground. "
+										penistext += "[name1] tries to keep [his1] mouth closed, but [he1] starts to gag as the "+globals.expansion.nameCum()+" floods [his1] helpless throat. [name1] struggles to pull [his1] head off of [names2] [penis2] and spends a moment gagging and wretching horribly from the torrent.\n "
+										i.person.cum.mouth += round(person.pregexp.cumprod*.25)+1
+										i.person.cum.face += round(person.pregexp.cumprod*.75)
+								else:
+									penistext += "[name1] stays skillfully on [names2] [penis2] until it finishes flooding [his1] mouth with "+globals.expansion.nameCum()+". [name1] then opens [his1] mouth to show off the "+globals.expansion.nameCum()+" inside and "
+									if i.person.checkFetish('drinkcum') == true:
+										penistext += "happily {^gulps:slurps:sucks:drinks:guzzles} every drop of it. "
+										i.person.cum.mouth += round(person.pregexp.cumprod*.25)+1
+										#Add CumDrink
+									elif i.person.checkFetish('wearcumface') == true:
+										penistext += "lets it {^drool:drain:slip:drinks:guzzles} out of [his1] mouth all over [his1] lips and chin. "
+										i.person.cum.mouth += round(person.pregexp.cumprod*.25)+1
+										i.person.cum.face += round(person.pregexp.cumprod*.75)
+									elif i.person.checkFetish('wearcum') == true:
+										penistext += "lets it {^drool:drain:slip:drinks:guzzles} out of [his1] mouth all over [his1] "+globals.expansion.getChest(i.person)+" and "+globals.expansion.nameBelly()+". "
+										i.person.cum.mouth += round(person.pregexp.cumprod*.25)+1
+										i.person.cum.body += round(person.pregexp.cumprod*.75)
+									else:
+										penistext += " spits it on the ground. "
 						###---End Expansion---###
 					penistext = sceneref.decoder(penistext, scene.givers, [self])
+					#ralphC - if any of the GIVERS is a Succubus, count this orgasm so it can be deducted from totalmana calc
+					succubus_spunked(scene.givers)
+					#/ralphC
 			#orgasm without penis, secondary ejaculation
 			else:
 				if randf() < 0.4:
@@ -500,9 +487,20 @@ class member:
 			text += sceneref.decoder(temptext, [], [self])
 
 
-		if lastaction.scene.code in sceneref.punishcategories && lastaction.takers.has(self):
-			if randf() >= 0.85 || person.effects.has("entranced"):
-				actionshad.addtraits.append("Masochist")
+		if lastaction.scene.code in sceneref.punishcategories:
+			if lastaction.takers.has(self):
+				person.dailyevents.append('masochism')
+				if randf() >= 0.85 || person.effects.has("entranced"):
+					actionshad.addtraits.append("Masochist")
+			else:
+				person.dailyevents.append('sadism')
+
+		if lastaction.scene.get('takertags') != null && lastaction.scene.takertags.has('shame'):
+			if lastaction.takers.has(self):
+				person.dailyevents.append('submission')
+			else:
+				person.dailyevents.append('dominance')
+
 	#	if member.lastaction.scene.code in punishcategories && member.lastaction.givers.has(member) && member.person.asser >= 60:
 	#		if randf() >= 0.85 || member.person.effects.has("entranced"):
 	#			member.actionshad.addtraits.append("Dominant")
@@ -515,7 +513,7 @@ class member:
 			actionshad.oppositesexorgasms += 1
 
 		###---Added by Expansion---### Incest Orgasm Aftermath
-		if lastaction.takers.has(self) && lastaction.takers != null && person != globals.player:
+		if lastaction.takers.has(self) && person != globals.player:
 			for i in lastaction.givers:
 				if i != self:
 					if globals.state.relativesdata.has(i.person.id) && globals.state.relativesdata.has(person.id):
@@ -537,7 +535,7 @@ class member:
 					tempfetish = person.fetish.incest
 				text += "\n[color=yellow]" + person.quirk("-My [color=aqua]" + str(relative) + "[/color] made me cum! That is so " +str(tempfetish)+ "![/color]\n")
 			text = sceneref.decoder(text, [self], lastaction.takers)
-		elif lastaction.givers.has(self) && lastaction.givers != null && person != globals.player:
+		elif lastaction.givers.has(self) && person != globals.player:
 			for i in lastaction.takers:
 				if i != self && self != globals.player:
 					if globals.state.relativesdata.has(i.person.id) && globals.state.relativesdata.has(person.id):
@@ -574,10 +572,7 @@ class member:
 		lastaction = scenedict
 		
 		if scenedict.scene.code in globals.punishcategories:
-			if scenedict.givers.has(self):
-				person.asser += rand_range(1,2)
-			else:
-				person.asser -= rand_range(1,2)
+			person.asser += rand_range(1,2) if scenedict.givers.has(self) else rand_range(-1,-2)
 		
 		if acceptance == 'good':
 			values.sens *= rand_range(1.1,1.4)
@@ -661,273 +656,255 @@ class member:
 				actionshad.group += 1
 		
 		###---Added by Expansion---### Various Sex Action Checks and Text
+		var tempShift = 0
 		for i in scenedict.takers + scenedict.givers:
+			if i == self:
+				continue
 			var text = ''
-			if i != self:
-				#Checks Attraction, SexMatch
-				#Match Sexuality (to account for Futas)
-				var sexmatch = false
-				#Sexuality Shift
-				if person.sex == i.person.sex:
-					sexmatch = true
-				elif person.sex != i.person.sex:
-					if i.person.sex == 'futanari':
-						if globals.expansionsettings.futasexualityshift == 'bi':
-							sexmatch = globals.kinseyscale.find(person.sexuality) < 3
-						elif globals.expansionsettings.futasexualityshift == 'male':
-							sexmatch = person.sex in ['male','futanari']
-						else:
-							sexmatch = person.sex in ['female','futanari']
-					else:
-						sexmatch = false
-				#Max of 110 Currently. Add "Size Queen/Etc" for Fetishes/Likes in the Future, then Sens/Lust multipliers as well
+			#Checks Attraction, SexMatch
+			#Max of 110 Currently. Add "Size Queen/Etc" for Fetishes/Likes in the Future, then Sens/Lust multipliers as well
 #				text += "[color=aqua]Sexuality Check:[/color] "
-				if globals.expansion.getSexualAttraction(person,i.person) == true:
-					if sexmatch == true:
-						sexualityshift += rand_range(.1,.15)
-					else:
-						sexualityshift -= rand_range(.1,.15)
-					values.sens *= rand_range(.95,1.05)
-					values.lust *= rand_range(.95,1.05)
-				else:
-					if sexmatch == true:
-						sexualityshift += rand_range(.05,.5)
-					else:
-						sexualityshift -= rand_range(.05,.5)
-					values.sens *= rand_range(.4,.6)
-					values.lust *= rand_range(.4,.6)
-				#---End Sexuality Check
+			if globals.expansion.getSexualAttraction(person,i.person) == true:
+				tempShift += rand_range(.1,.15) if sceneref.ispairsamesex(person, i.person) else -rand_range(.1,.15)
+				values.sens *= rand_range(.95,1.05)
+				values.lust *= rand_range(.95,1.05)
+			else:
+				tempShift += rand_range(.05,.5) if sceneref.ispairsamesex(person, i.person) else -rand_range(.05,.5)
+				values.sens *= rand_range(.4,.6)
+				values.lust *= rand_range(.4,.6)
+			#---End Sexuality Check
 
-				#Incest Check
-				if globals.expansion.relatedCheck(person, i.person) != 'unrelated' && person != globals.player:
-					var relation = globals.expansion.relatedCheck(person, i.person)
-					self.actionshad.incest += 1
-					#Below is Temporary
-					var compare = ((globals.fetishopinion.find(person.fetish.incest)-3)*100) + ((i.person.beauty-40)*3) + (((person.lewdness*.5) + (person.lust*.5))*3)
-					text += " "
+			#Incest Check
+			var relation = globals.expansion.relatedCheck(person, i.person)
+			if relation != 'unrelated' && person != globals.player:
+				self.actionshad.incest += 1
+				#Below is Temporary
+				var compare = (globals.fetishopinion.find(person.fetish.incest)-3)*100 + (i.person.beauty-40)*3 + (person.lewdness + person.lust)*1.5
+				text += " "
 #					var compare = int((500+abs(person.relations[i.person.id]))/globals.fetishopinion.find(person.fetish.incest))
-					if compare >= 500:
-						values.sens *= rand_range(1.2,1.5)
-						values.lust *= rand_range(1.2,1.5)
-						globals.addrelations(person, i.person, rand_range(5,10))
+				if compare >= 500:
+					values.sens *= rand_range(1.2,1.5)
+					values.lust *= rand_range(1.2,1.5)
+					globals.addrelations(person, i.person, rand_range(5,10))
 #						if scenedict.givers.find(self) >= 0:
 #							text += "[color=green]{^[name2] [doesn't] even mind:[name2] may even love:[name1] [is1] into it despite the fact} that [name1] [is2] [his2] [relation]."
 #						else:
 #							text += "[color=green]{^[name1] doesn't even mind:[name1] may even love:[name2] [is2] into it despite the fact} that [name2] [is1] [his1] [relation]."
-					elif compare >= 250:
-						values.sens *= rand_range(1.1,1.4)
-						values.lust *= rand_range(1.1,1.4)
-						globals.addrelations(person, i.person, rand_range(4,8))
+				elif compare >= 250:
+					values.sens *= rand_range(1.1,1.4)
+					values.lust *= rand_range(1.1,1.4)
+					globals.addrelations(person, i.person, rand_range(4,8))
 #						if scenedict.givers.find(self) >= 0:
 #							text += "[color=green]{^[name1] [seems] to enjoy:[name1] really likes:[name1] [is1] into the fact} that [name2] [is2] [his2] [relation]."
 #						else:
 #							text += "[color=green]]{^[name2] seems to enjoy:[name2] really likes:[name2] [is2] into the fact:[name2] really likes} that [name1] [is1] [his1] [relation]."
-					elif compare >= 0:
-						values.sens *= rand_range(0.9,1.2)
-						values.lust *= rand_range(0.9,1.2)
-						person.stress += rand_range(0,3)
-						globals.addrelations(person, i.person, rand_range(2,4))
+				elif compare >= 0:
+					values.sens *= rand_range(0.9,1.2)
+					values.lust *= rand_range(0.9,1.2)
+					person.stress += rand_range(0,3)
+					globals.addrelations(person, i.person, rand_range(2,4))
 #						if scenedict.givers.find(self) >= 0:
 #							text += "[color=green]{^[name1] may even enjoy:[name1] may even like:[name1] [doesn't] seem to mind:[name1] might be okay with the fact} that [name2] [is2] [his1] [relation]."
 #						else:
 #							text += "[color=green]{^[name2] may even enjoy:[name2] may even like:[name2] doesn't seem to mind:[name2] might be okay with the fact} that [name1] [is1] [his2] [relation]."
-					elif compare >= -250:
-						values.sens *= rand_range(0.6,1.1)
-						values.lust *= rand_range(0.6,1.1)
-						person.stress += rand_range(2,3)
-						globals.addrelations(person, i.person, -rand_range(3,5))
+				elif compare >= -250:
+					values.sens *= rand_range(0.6,1.1)
+					values.lust *= rand_range(0.6,1.1)
+					person.stress += rand_range(2,3)
+					globals.addrelations(person, i.person, -rand_range(3,5))
 #						if scenedict.givers.find(self) >= 0:
 #							text += "[color=green]{^[name1] doesn't seem to enjoy:[name1] doesn't like like:[name1] [is1] disgusted by the fact:[name1] [is] really uncomfortable with the fact that:If only [name1] could ignore the fact} that [name2] [is2] [his1] [relation]."
 #						else:
 #							text += "[color=green]{^[name2] doesn't seem to enjoy:[name2] doesn't like like:[name2] [is2] disgusted by the fact:[name2] is really uncomfortable with the fact that:If only [name2] could ignore the fact} that [name1] [is1] [his2] [relation]."
-					else:
-						values.sens *= rand_range(0.6,1.1)
-						values.lust *= rand_range(0.4,1.1)
-						person.stress += rand_range(2,5)
-						globals.addrelations(person, i.person, -rand_range(5,10))
+				else:
+					values.sens *= rand_range(0.6,1.1)
+					values.lust *= rand_range(0.4,1.1)
+					person.stress += rand_range(2,5)
+					globals.addrelations(person, i.person, -rand_range(5,10))
 #						if scenedict.givers.find(self) >= 0:
 #							text += "[color=green]{^[name1] can't enjoy it because:[name1] [is1] revolted by the situation and [himself1] as:[name1] [is] completely disgusted as:[name1] [is] entirely uncomfortable because:[name1] can't get over the fact that:[name1] [is1] revolted because} [name2] [is2] [his1] [relation]."
 #						else:
 #							text += "[color=green]{^[name2] can't enjoy it because:[name2] [is2] revolted by the situation and [himself2] as:[name2] is completely disgusted as:[name2] is entirely uncomfortable because:[name2] can't get over the fact that:[name2] [is2] revolted because} [name1] [is1] [his2] [relation]."
-					#End Incest Check
+				#End Incest Check
 
-					text = text.replace('[relation]',relation)
+				text = text.replace('[relation]',relation)
 #			sceneref.get_node("Panel/sceneeffects").bbcode_text += sceneref.decoder(text, scenedict.givers, scenedict.takers) + '\n'
 
-			if i != self:
-				var number = 0
-				var difference = 0
-				var display = 0
-				var clamper = 0
-				#Mouth Effects
-				if scenedict.scene.code in ['blowjob','spitroast','spitroastass','deepthroat']:
-					number = 1+((globals.lipssizearray.find(i.person.lips)-3)*.1)
-					values.sens *= number
-					values.lust *= number
-					if scenedict.givers.has(self) && scenedict.givers.size() <= 1:
-						globals.addrelations(person, i.person, round(rand_range(number,number*2)))
-						if globals.lipssizearray.find(i.person.lips)-3 > 0:
-							text += "\n[color=green][name1] {^[is1] enjoying:[is1] loving:[is1] relishing:loves} [names2] " +str(i.person.lips)+ " lips.[/color] "
-				#Tit Size Effects
-				if scenedict.scene.code in ['titjob','fondletits']:
-					number = 1+((globals.titssizearray.find(i.person.titssize)-3)*.1)+globals.fastif(i.person.titsextradeveloped == true, i.person.titsextra*.1, 0)
-					values.sens *= number
-					values.lust *= number
+			var number = 0
+			var difference = 0
+			var display = 0
+			var clamper = 0
+			#Mouth Effects
+			if scenedict.scene.code in ['blowjob','spitroast','spitroastass','deepthroat']:
+				number = 1+((globals.lipssizearray.find(i.person.lips)-3)*.1)
+				values.sens *= number
+				values.lust *= number
+				if scenedict.givers.has(self) && scenedict.givers.size() <= 1:
 					globals.addrelations(person, i.person, round(rand_range(number,number*2)))
-					if scenedict.givers.has(self) && (globals.titssizearray.find(i.person.titssize)-3) > 0 && scenedict.givers.size() <= 1:
-						text += "\n[color=green][name1] {^[is1] enjoying:[is1] loving:[is1] relishing:loves} [names2] " +str(i.person.titssize)+ " {^udders:boobies:breasts:boobs:tits} {^: and they are driving [him1] wild:and [he1] can't stop playing with them}.[/color] "
+					if globals.lipssizearray.find(i.person.lips)-3 > 0:
+						text += "\n[color=green][name1] {^[is1] enjoying:[is1] loving:[is1] relishing:loves} [names2] " +str(i.person.lips)+ " lips.[/color] "
+			#Tit Size Effects
+			elif scenedict.scene.code in ['titjob','fondletits']:
+				number = 1+((globals.titssizearray.find(i.person.titssize)-3)*.1)+globals.fastif(i.person.titsextradeveloped == true, i.person.titsextra*.1, 0)
+				values.sens *= number
+				values.lust *= number
+				globals.addrelations(person, i.person, round(rand_range(number,number*2)))
+				if scenedict.givers.has(self) && (globals.titssizearray.find(i.person.titssize)-3) > 0 && scenedict.givers.size() <= 1:
+					text += "\n[color=green][name1] {^[is1] enjoying:[is1] loving:[is1] relishing:loves} [names2] " +str(i.person.titssize)+ " {^udders:boobies:breasts:boobs:tits} {^: and they are driving [him1] wild:and [he1] can't stop playing with them}.[/color] "
 
-				#Penis in Pussy Effects
-				if scenedict.scene.code in ['missionary','doggy','lotus','revlotus','spitroast','insertinturns']:
-					if scenedict.givers.has(self) && scenedict.takers.has(i):
-						var temppenissize = globals.penissizearray.find(person.penis) if person.penis != null else 4 # handle strapon with default size
-						difference = temppenissize - globals.vagsizearray.find(i.vaginasize)
-						number = 1+(difference*.1)
-						values.sens *= number
-						values.lust *= number
-						if difference > 0 && scenedict.givers.size() <= 1:
-							text += "\n[color=green][name1] {^[is1] enjoying:[is1] loving:[is1] relishing:loves} the feeling of [his1] [penis1] stretching [his2] [pussy2].[/color]"
-						elif difference < 0 && scenedict.givers.size() <= 1:
-							text += "\n[color=green][name1] {^can barely feel:can't feel:can't fill} [names2] [pussy2] with [his1] [penis1].[/color]"
-						#Display
-						if globals.state.perfectinfo == true:
-							display = difference*10
-							if display > 0 && scenedict.givers.size() <= 1:
-								text += " [color=aqua]Arousal increased by " + str(display) + "%[/color]"
-							elif display < 0 && scenedict.givers.size() <= 1:
-								text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
-					elif scenedict.takers.has(self) && scenedict.givers.has(i):
-						var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != null else 4 # handle strapon with default size
-						difference = temppenissize - globals.vagsizearray.find(vaginasize)
-						number = 1+(difference*.1)
-						values.sens *= number
-						values.lust *= number
-						if difference > 0:
-							if vagTorn == true:
-								values.sens = values.sens*.75
-								values.lust = values.lust*.75
-								if scenedict.takers.size() <= 1:
-									text += "\n[color=red][names2] [pussy2] is {^stretched out:sore:aching:raw:hurting} and [his2] pleasure has lessened.[/color] "
-							elif scenedict.takers.size() <= 1:
-								text += "\n[color=green][names2] {^[is2] enjoying:[is2] loving:[is2] relishing:loves} the feeling of [names1] [penis1] stretching [his2] [pussy2].[/color] "
-						elif difference < 0:
-							text += "\n[color=red][names2] [pussy2] can barely feel [names1] undersized [penis1].[/color] "
-						#Stretching
-						if difference >= 5 + rand_range(-5,0) + person.sexexpanded.pliability:
-							if globals.vagsizearray.back() != vaginasize:
-								clamper = globals.vagsizearray.find(vaginasize)+1
-								clamper = clamp(clamper,0,globals.vagsizearray.size()-1)
-								vaginasize = globals.vagsizearray[clamper]
-								if scenedict.takers.size() <= 1:
-									text += "[color=green][name2] {^moans:gasps:spasms:twitches:bites [his2] lip} as [his2] [pussy2] [is2] {^stretched:gaped:spread apart:forced to stretch} by [names1] [penis1].[/color] "
-								var stretch = globals.vagsizearray.find(vaginasize) - globals.vagsizearray.find(person.vagina)
-								if person.sexexpanded.pliability - stretch + rand_range(0,2) < 0:
-									if vagTorn == false:
-										vagTorn = true
-										person.dailyevents.append('vagTorn')
-										globals.addrelations(person, i.person, -round(rand_range(difference*5,difference*10)))
-										if scenedict.givers.size() <= 1:
-											text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [pussy2] suddenly {^rips:tears:breaks:starts bleeding}, sending waves of pain through [his2] body.[/color] "
-										person.stress += round(rand_range(difference,temppenissize))
-									else:
-										if scenedict.takers.size() <= 1:
-											text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [pussy2] {^rips:tears:breaks} even further, causing [him2] excruciating pain.[/color] "
-										person.stress += round(rand_range(difference*2,temppenissize*2))
-						#Display
-						if globals.state.perfectinfo == true:
-							display = difference*10
-							if display > 0 && vagTorn == false:
-								text += " [color=aqua]Arousal increased by " + str(display) + "%[/color]"
-							elif display < 0:
-								text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
+			#Penis in Pussy Effects
+			elif scenedict.scene.code in ['missionary','doggy','lotus','revlotus','spitroast','insertinturns']:
+				if scenedict.givers.has(self) && scenedict.takers.has(i):
+					var temppenissize = globals.penissizearray.find(person.penis) if person.penis != null else 4 # handle strapon with default size
+					difference = temppenissize - globals.vagsizearray.find(i.vaginasize)
+					number = 1+(difference*.1)
+					values.sens *= number
+					values.lust *= number
+					if difference > 0 && scenedict.givers.size() <= 1:
+						text += "\n[color=green][name1] {^[is1] enjoying:[is1] loving:[is1] relishing:loves} the feeling of [his1] [penis1] stretching [his2] [pussy2].[/color]"
+					elif difference < 0 && scenedict.givers.size() <= 1:
+						text += "\n[color=green][name1] {^can barely feel:can't feel:can't fill} [names2] [pussy2] with [his1] [penis1].[/color]"
+					#Display
+					if globals.state.perfectinfo == true:
+						display = difference*10
+						if display > 0 && scenedict.givers.size() <= 1:
+							text += " [color=aqua]Arousal increased by " + str(display) + "%[/color]"
+						elif display < 0 && scenedict.givers.size() <= 1:
+							text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
+				elif scenedict.takers.has(self) && scenedict.givers.has(i):
+					var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != null else 4 # handle strapon with default size
+					difference = temppenissize - globals.vagsizearray.find(vaginasize)
+					number = 1+(difference*.1)
+					values.sens *= number
+					values.lust *= number
+					if difference > 0:
+						if vagTorn == true:
+							values.sens = values.sens*.75
+							values.lust = values.lust*.75
+							if scenedict.takers.size() <= 1:
+								text += "\n[color=red][names2] [pussy2] is {^stretched out:sore:aching:raw:hurting} and [his2] pleasure has lessened.[/color] "
+						elif scenedict.takers.size() <= 1:
+							text += "\n[color=green][names2] {^[is2] enjoying:[is2] loving:[is2] relishing:loves} the feeling of [names1] [penis1] stretching [his2] [pussy2].[/color] "
+					elif difference < 0:
+						text += "\n[color=red][names2] [pussy2] can barely feel [names1] undersized [penis1].[/color] "
+					#Stretching
+					if difference >= 5 + rand_range(-5,0) + person.sexexpanded.pliability:
+						if globals.vagsizearray.back() != vaginasize:
+							clamper = globals.vagsizearray.find(vaginasize)+1
+							clamper = clamp(clamper,0,globals.vagsizearray.size()-1)
+							vaginasize = globals.vagsizearray[clamper]
+							if scenedict.takers.size() <= 1:
+								text += "[color=green][name2] {^moans:gasps:spasms:twitches:bites [his2] lip} as [his2] [pussy2] [is2] {^stretched:gaped:spread apart:forced to stretch} by [names1] [penis1].[/color] "
+							var stretch = globals.vagsizearray.find(vaginasize) - globals.vagsizearray.find(person.vagina)
+							if person.sexexpanded.pliability - stretch + rand_range(0,2) < 0:
+								if vagTorn == false:
+									vagTorn = true
+									person.dailyevents.append('vagTorn')
+									globals.addrelations(person, i.person, -round(rand_range(difference*5,difference*10)))
+									if scenedict.givers.size() <= 1:
+										text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [pussy2] suddenly {^rips:tears:breaks:starts bleeding}, sending waves of pain through [his2] body.[/color] "
+									person.stress += round(rand_range(difference,temppenissize))
+								else:
+									if scenedict.takers.size() <= 1:
+										text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [pussy2] {^rips:tears:breaks} even further, causing [him2] excruciating pain.[/color] "
+									person.stress += round(rand_range(difference*2,temppenissize*2))
+					#Display
+					if globals.state.perfectinfo == true:
+						display = difference*10
+						if display > 0 && vagTorn == false:
+							text += " [color=aqua]Arousal increased by " + str(display) + "%[/color]"
+						elif display < 0:
+							text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
 
-				#Penis in Asshole Effects
-				if scenedict.scene.code in ['missionaryanal', 'doggyanal','lotusanal','revlotusanal','spitroastass','insertinturnsass']:
-					if scenedict.givers.has(self) && scenedict.takers.has(i):
-						var temppenissize = globals.penissizearray.find(person.penis) if person.penis != null else 4 # handle strapon with default size
-						difference = temppenissize - globals.assholesizearray.find(i.assholesize)
-						number = 1+(difference*.1)
-						values.sens *= number
-						values.lust *= number
-						if difference > 0 && scenedict.givers.size() <= 1:
-							text += "\n[color=green][name1] {^[is1] enjoying:[is1] loving:[is1] relishing:loves} the feeling of [his1] [penis1] stretching [his2] [anus2].[/color] "
-						elif difference < 0 && scenedict.givers.size() <= 1:
-							text += "\n[color=green][name1] {^can barely feel:can't feel:can't fill} [names2] [anus2] with [his1] [penis1].[/color] "
-						#Display
-						if globals.state.perfectinfo == true:
-							display = difference*10
-							if display > 0 && scenedict.givers.size() <= 1:
-								text += " [color=aqua]Arousal increased by " + str(display) + "%[/color]"
-							elif display < 0 && scenedict.givers.size() <= 1:
-								text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
-					elif scenedict.takers.has(self) && scenedict.givers.has(i):
-						var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != null else 4 # handle strapon with default size
-						difference = temppenissize - globals.assholesizearray.find(assholesize)
-						number = 1+(difference*.1)
-						values.sens *= number
-						values.lust *= number
-						if difference > 0 && scenedict.takers.size() <= 1:
-							if assTorn == true:
-								values.sens = values.sens*.75
-								values.lust = values.lust*.75
-								text += "\n[color=red][names2] [anus2] is {^stretched out:sore:aching:raw:hurting} and [his2] pleasure has lessened.[/color]\n "
-						elif difference < 0 && scenedict.takers.size() <= 1:
-							text += "\n[color=red][names2] [anus2] can barely feel [names1] undersized [penis1].[/color] "
-						#Stretching
-						if difference >= 5 + rand_range(-5,0) + person.sexexpanded.pliability:
-							if globals.assholesizearray.back() != assholesize:
-								clamper = globals.assholesizearray.find(assholesize)+1
-								clamper = clamp(clamper,0,globals.assholesizearray.size()-1)
-								assholesize = globals.assholesizearray[clamper]
-								if scenedict.takers.size() <= 1:
-									text += "\n[color=green][name2] {^starts:begins} {^moaning:gasping:spasming} as [his2] [anus2] [is2] {^stretched:gaped:spread apart:forced to stretch} by [names1] [penis1].[/color] "
-								var stretch = globals.assholesizearray.find(assholesize) - globals.assholesizearray.find(assholesize)
-								if person.sexexpanded.pliability - stretch + rand_range(0,2) < 0:
-									if assTorn == false:
-										assTorn = true
-										person.dailyevents.append('assTorn')
-										globals.addrelations(person, i.person, -round(rand_range(difference*5,difference*10)))
-										if scenedict.takers.size() <= 1:
-											text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [anus2] suddenly {^rips:tears:breaks:starts bleeding}, sending waves of pain through [his2] body.[/color]"
-										person.stress += round(rand_range(difference,temppenissize))
-									else:
-										if scenedict.takers.size() <= 1:
-											text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [anus2] {^rips:tears:breaks} even further, causing [him2] excruciating pain.[/color] "
-										person.stress += round(rand_range(difference*2,temppenissize*2))
-						#Display
-						if globals.state.perfectinfo == true:
-							display = difference*10
-							if display > 0 && scenedict.takers.size() <= 1:
-								text += " [color=aqua]Arousal increased by " + str(display) + "%[/color]"
-							elif display < 0 && scenedict.takers.size() <= 1:
-								text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
-					
-				#Milking during Sex
-				if scenedict.scene.code in ['milker','sucknipples']:
-					#Add Milk Bottle Production
-					if scenedict.takers.has(self):
-						if person.lactation == true:
-							if person.lactating.milkstorage > 0 || person.lactating.pressure > 0:
-								number = round(rand_range(person.lactating.milkstorage*.1,person.lactating.milkstorage))
-								person.lactating.milkedtoday = true
-								person.lactating.daysunmilked = 0
-								person.dailyevents.append('lactation')
-								if number > 0:
-									if globals.fetishopinion.find(person.fetish.lactation) > 3:
-										values.lust *= 1+(number*.1)
-									else:
-										person.stress = round(person.stress+(number*.1))
-									values.sens *= 1+(number*.1)
+			#Penis in Asshole Effects
+			elif scenedict.scene.code in ['missionaryanal', 'doggyanal','lotusanal','revlotusanal','spitroastass','insertinturnsass']:
+				if scenedict.givers.has(self) && scenedict.takers.has(i):
+					var temppenissize = globals.penissizearray.find(person.penis) if person.penis != null else 4 # handle strapon with default size
+					difference = temppenissize - globals.assholesizearray.find(i.assholesize)
+					number = 1+(difference*.1)
+					values.sens *= number
+					values.lust *= number
+					if difference > 0 && scenedict.givers.size() <= 1:
+						text += "\n[color=green][name1] {^[is1] enjoying:[is1] loving:[is1] relishing:loves} the feeling of [his1] [penis1] stretching [his2] [anus2].[/color] "
+					elif difference < 0 && scenedict.givers.size() <= 1:
+						text += "\n[color=green][name1] {^can barely feel:can't feel:can't fill} [names2] [anus2] with [his1] [penis1].[/color] "
+					#Display
+					if globals.state.perfectinfo == true:
+						display = difference*10
+						if display > 0 && scenedict.givers.size() <= 1:
+							text += " [color=aqua]Arousal increased by " + str(display) + "%[/color]"
+						elif display < 0 && scenedict.givers.size() <= 1:
+							text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
+				elif scenedict.takers.has(self) && scenedict.givers.has(i):
+					var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != null else 4 # handle strapon with default size
+					difference = temppenissize - globals.assholesizearray.find(assholesize)
+					number = 1+(difference*.1)
+					values.sens *= number
+					values.lust *= number
+					if difference > 0 && scenedict.takers.size() <= 1:
+						if assTorn == true:
+							values.sens = values.sens*.75
+							values.lust = values.lust*.75
+							text += "\n[color=red][names2] [anus2] is {^stretched out:sore:aching:raw:hurting} and [his2] pleasure has lessened.[/color]\n "
+					elif difference < 0 && scenedict.takers.size() <= 1:
+						text += "\n[color=red][names2] [anus2] can barely feel [names1] undersized [penis1].[/color] "
+					#Stretching
+					if difference >= 5 + rand_range(-5,0) + person.sexexpanded.pliability:
+						if globals.assholesizearray.back() != assholesize:
+							clamper = globals.assholesizearray.find(assholesize)+1
+							clamper = clamp(clamper,0,globals.assholesizearray.size()-1)
+							assholesize = globals.assholesizearray[clamper]
+							if scenedict.takers.size() <= 1:
+								text += "\n[color=green][name2] {^starts:begins} {^moaning:gasping:spasming} as [his2] [anus2] [is2] {^stretched:gaped:spread apart:forced to stretch} by [names1] [penis1].[/color] "
+							var stretch = globals.assholesizearray.find(assholesize) - globals.assholesizearray.find(assholesize)
+							if person.sexexpanded.pliability - stretch + rand_range(0,2) < 0:
+								if assTorn == false:
+									assTorn = true
+									person.dailyevents.append('assTorn')
+									globals.addrelations(person, i.person, -round(rand_range(difference*5,difference*10)))
+									if scenedict.takers.size() <= 1:
+										text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [anus2] suddenly {^rips:tears:breaks:starts bleeding}, sending waves of pain through [his2] body.[/color]"
+									person.stress += round(rand_range(difference,temppenissize))
+								else:
+									if scenedict.takers.size() <= 1:
+										text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [anus2] {^rips:tears:breaks} even further, causing [him2] excruciating pain.[/color] "
+									person.stress += round(rand_range(difference*2,temppenissize*2))
+					#Display
+					if globals.state.perfectinfo == true:
+						display = difference*10
+						if display > 0 && scenedict.takers.size() <= 1:
+							text += " [color=aqua]Arousal increased by " + str(display) + "%[/color]"
+						elif display < 0 && scenedict.takers.size() <= 1:
+							text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
+				
+			#Milking during Sex
+			elif scenedict.scene.code in ['milker','sucknipples']:
+				#Add Milk Bottle Production
+				if scenedict.takers.has(self):
+					if person.lactation == true:
+						if person.lactating.milkstorage > 0 || person.lactating.pressure > 0:
+							number = round(rand_range(person.lactating.milkstorage*.1,person.lactating.milkstorage))
+							person.lactating.milkedtoday = true
+							person.lactating.daysunmilked = 0
+							person.dailyevents.append('lactation')
+							if number > 0:
+								if globals.fetishopinion.find(person.fetish.lactation) > 3:
 									values.lust *= 1+(number*.1)
-									globals.addrelations(person, i.person, round(rand_range(number,number*2)))
-								if person.lactating.pressure > 0:
-									number += person.lactating.pressure
-								person.lactating.milkstorage -= number
-							text += "\n[color=green]{^[name2] moaned as:[name2] enjoyed} {^[his2]} {^boobs:tits:udders:breasts} lactated "+str(number)+" milk while {^being sucked:being pumped:being milked:being fucked}.[/color]"
+								else:
+									person.stress = round(person.stress+(number*.1))
+								values.sens *= 1+(number*.1)
+								values.lust *= 1+(number*.1)
+								globals.addrelations(person, i.person, round(rand_range(number,number*2)))
+							if person.lactating.pressure > 0:
+								number += person.lactating.pressure
+							person.lactating.milkstorage -= number
+						text += "\n[color=green]{^[name2] moaned as:[name2] enjoyed} {^[his2]} {^boobs:tits:udders:breasts} lactated "+str(number)+" milk while {^being sucked:being pumped:being milked:being fucked}.[/color]"
 
 			text = globals.fastif(person==globals.player, text.replace("[doesn't]","don't"), text.replace("[doesn't]","doesn't"))
 			text = globals.fastif(person==globals.player, text.replace("[seems]","seem"), text.replace("[seems]","seems"))
-#			sceneref.get_node("Panel/sceneeffects").bbcode_text += sceneref.decoder(text, scenedict.givers, scenedict.takers)
+			sceneref.get_node("Panel/sceneeffects").bbcode_text += sceneref.decoder(text, scenedict.givers, scenedict.takers)
+
+		sexualityshift += calcShift(tempShift, scenedict.takers.size() + scenedict.givers.size() - 1)
 		###---Expansion End---###
 		
 		self.lewd += values.lewd
@@ -1187,28 +1164,24 @@ func rebuildparticipantslist():
 		for k in takers:
 			#Giver Attraction
 			if globals.expansion.getSexualAttraction(i.person,k.person) == true:
-				text += '\n[color=yellow]' + i.name + '[/color] is attracted to ' + '[color=aqua]' + k.name + '[/color] and will enjoy interactions with ' + k.person.dictionary(' $him.')
+				text += '\n[color=yellow]' + i.name + '[/color] is attracted to [color=aqua]' + k.name + '[/color] and will enjoy interactions with ' + k.person.dictionary(' $him.')
 			else:
 				text += '\n[color=yellow]' + i.name + "[/color] is [color=red]not[/color] attracted to " + '[color=aqua]' + k.name + "[/color] and will not enjoy interactions with " + k.person.dictionary(' $him.')
 			#Giver Incest
 			var related = str(globals.expansion.relatedCheck(i.person, k.person))
-			if related == 'unrelated':
-				continue
-			elif related != 'unrelated':
+			if related != 'unrelated':
 				if i.person != globals.player:
-					text += '\n[color=yellow]' + i.name + i.person.dictionary('[/color] feels that being with $his [color=aqua]') + str(related) + '[/color], [color=aqua]' + k.name + '[/color], would be ' + str(i.person.fetish.incest) + '.'
+					text += '\n[color=yellow]' + i.name + i.person.dictionary('[/color] feels that being with $his [color=aqua]') + related + '[/color], [color=aqua]' + k.name + '[/color], would be ' + str(i.person.fetish.incest) + '.'
 			#Taker Attraction
 			if globals.expansion.getSexualAttraction(k.person,i.person) == true:
-				text += '\n[color=aqua]' + k.name + '[/color] is attracted to ' + '[color=aqua]' + i.name + '[/color] and will enjoy interactions with ' + i.person.dictionary(' $him.')
+				text += '\n[color=aqua]' + k.name + '[/color] is attracted to [color=aqua]' + i.name + '[/color] and will enjoy interactions with ' + i.person.dictionary(' $him.')
 			else:
 				text += '\n[color=aqua]' + k.name + "[/color] is [color=red]not[/color] attracted to " + '[color=aqua]' + i.name + "[/color] and will not enjoy interactions with " + i.person.dictionary(' $him.')
 			#Taker Incest
 			related = str(globals.expansion.relatedCheck(k.person, i.person))
-			if related == 'unrelated':
-				continue
-			elif related != 'unrelated':
+			if related != 'unrelated':
 				if k.person != globals.player:
-					text += '\n[color=aqua]' + k.name + k.person.dictionary('[/color] feels that being with $his [color=aqua]') + str(related) + '[/color], [color=aqua]' + i.name + '[/color], would be ' + str(k.person.fetish.incest) + '.'
+					text += '\n[color=aqua]' + k.name + k.person.dictionary('[/color] feels that being with $his [color=aqua]') + related + '[/color], [color=aqua]' + i.name + '[/color], would be ' + str(k.person.fetish.incest) + '.'
 		#---Wear and Tear
 		if i.vagTorn == true:
 			text += i.person.dictionary("\n[color=red]$name's [color=aqua]pussy[/color] has been stretched beyond it's limit. Penetration Arousal Gains Reduced[/color]")
@@ -1273,170 +1246,156 @@ func generaterequest(member):
 #		rval.append(i)
 
 	###---Added by Expansion---### Fetishes
-	var difference = 0
-	var checkmod = 0
+	var refFetish = member.person.fetish
+	var checkmod
 	
 	#Creampie Mouth | Cum Drinking
-	if member.person.cum.mouth == 0:
-		if member.person.checkFetish('creampiemouth',checkmod, false):
-			checkmod = globals.fetishopinion.find(member.person.fetish.creampiemouth)-3
-			difference = checkmod
-			while difference > 0:
+	if member.person.cum.mouth > 0:
+		rval.erase('cuminmouth')
+	else:
+		checkmod = globals.fetishopinion.find(refFetish.creampiemouth)-3
+		if member.person.checkFetish('creampiemouth', checkmod, false, false):
+			while checkmod > 0:
 				rval.append('cuminmouth')
-				difference -= 1
-		elif member.person.checkFetish('drinkcum',checkmod, false):
-			checkmod = globals.fetishopinion.find(member.person.fetish.drinkcum)-3
-			difference = checkmod
-			while difference > 0:
+				checkmod -= 1
+		checkmod = globals.fetishopinion.find(refFetish.drinkcum)-3
+		if member.person.checkFetish('drinkcum', checkmod, false, false):
+			while checkmod > 0:
 				rval.append('cuminmouth')
-				difference -= 1
+				checkmod -= 1
 	
 	#Creampie Pussy | Pregnancy
-	if member.person.vagina != "none" && member.person.cum.pussy == 0:
-		if member.person.checkFetish('creampiepussy',checkmod, false):
-			checkmod = globals.fetishopinion.find(member.person.fetish.creampiepussy)-3
-			difference = checkmod
-			while difference > 0:
+	if member.person.vagina == "none" || member.person.vagvirgin == true || member.person.cum.pussy > 0:
+		rval.erase('cuminpussy')
+	else:
+		checkmod = globals.fetishopinion.find(refFetish.creampiepussy)-3
+		if member.person.checkFetish('creampiepussy',checkmod, false, false):
+			while checkmod > 0:
 				rval.append('cuminpussy')
-				difference -= 1
-		elif member.person.checkFetish('pregnancy',checkmod, false):
-			checkmod = globals.fetishopinion.find(member.person.fetish.pregnancy)-3
-			difference = checkmod
-			while difference > 0:
+				checkmod -= 1
+		checkmod = globals.fetishopinion.find(refFetish.pregnancy)-3
+		if member.person.checkFetish('pregnancy',checkmod, false, false):
+			while checkmod > 0:
 				rval.append('cuminpussy')
-				difference -= 1
+				checkmod -= 1
 	
 	#Creampie Ass
-	if member.person.cum.ass == 0:
-		if member.person.checkFetish('creampieass', 0, false):
-			checkmod = globals.fetishopinion.find(member.person.fetish.creampieass)-3
-			difference = checkmod
-			while difference > 0:
+	if member.person.assvirgin == true || member.person.cum.ass > 0:
+		rval.erase('cuminass')
+	else:
+		checkmod = globals.fetishopinion.find(refFetish.creampieass)-3
+		if member.person.checkFetish('creampieass', checkmod, false, false):
+			while checkmod > 0:
 				rval.append('cuminass')
-				difference -= 1
+				checkmod -= 1
 
 	#Cum on Face
-	if member.person.cum.face == 0:
-		if member.person.checkFetish('wearcum', 0, false):
-			checkmod = globals.fetishopinion.find(member.person.fetish.wearcum)-3
-			difference = checkmod
-			while difference > 0:
+	if member.person.cum.face > 0:
+		rval.erase('cumonface')
+	else:
+		checkmod = globals.fetishopinion.find(refFetish.wearcumface)-3
+		if member.person.checkFetish('wearcumface', checkmod, false, false):
+			while checkmod > 0:
 				rval.append('cumonface')
-				difference -= 1
+				checkmod -= 1
+
+	#Cum on Body
+	if member.person.cum.body > 0:
+		rval.erase('cumonbody')
+	else:
+		checkmod = globals.fetishopinion.find(refFetish.wearcum)-3
+		if member.person.checkFetish('wearcum', checkmod, false, false):
+			while checkmod > 0:
+				rval.append('cumonbody')
+				checkmod -= 1
 
 	#Trait Additions
-	if member.person.traits.has('Enjoys Anal'):
+	if member.person.assvirgin == true:
+		rval.erase('anal')
+	elif member.person.traits.has('Enjoys Anal'):
 		rval.append('anal')
 	
+	var checkmod2
 	#Dominance
-	if member.person.checkFetish('dominance', 0, false):
-		checkmod = globals.fetishopinion.find(member.person.fetish.dominance)-3
-		difference = checkmod
-		while difference > 0:
-			rval.append('humiliateother')
-			difference -= 1
-	else:
+	checkmod = globals.fetishopinion.find(refFetish.dominance)-3
+	checkmod2 = globals.fetishopinion.find(refFetish.submission)-3
+	if checkmod >= checkmod2:
 		if member.person.traits.has('Dominant'):
+			rval.erase('humiliate')
 			rval.append('humiliateother')
-	
+		elif checkmod > checkmod2:
+			rval.erase('humiliate')
+		if member.person.checkFetish('dominance', checkmod, false, false):
+			var temp = checkmod # still need checkmod for submission checks
+			while temp > 0:
+				rval.append('humiliateother')
+				temp -= 1
+
 	#Submission
-	
-	if member.person.checkFetish('submission', 0, false):
-		checkmod = globals.fetishopinion.find(member.person.fetish.submission)-3
-		difference = checkmod
-		while difference > 0:
-			rval.append('humiliate')
-			difference -= 1
-	else:
+	if checkmod <= checkmod2:
 		if member.person.traits.has('Submissive'):
+			rval.erase('humiliateother')
 			rval.append('humiliate')
+		elif checkmod < checkmod2:
+			rval.erase('humiliateother')
+		if member.person.checkFetish('submission', checkmod2, false, false):
+			while checkmod2 > 0:
+				rval.append('humiliate')
+				checkmod2 -= 1
+
 	
 	#Sadism
-	if member.person.checkFetish('sadism', 0, false):
-		checkmod = globals.fetishopinion.find(member.person.fetish.sadism)-3
-		difference = checkmod
-		while difference > 0:
+	checkmod = globals.fetishopinion.find(refFetish.sadism)-3
+	checkmod2 = globals.fetishopinion.find(refFetish.masochism)-3
+	if checkmod >= checkmod2:
+		if member.person.traits.has('Likes it rough'):
+			if member.person.traits.has('Sadist'):
+				rval.append('punishother')
+		elif member.person.traits.has('Sadist'):
+			rval.erase('punish')
 			rval.append('punishother')
-			difference -= 1
-	else:
-		if member.person.traits.has('Sadist'):
-			rval.append('punishother')
+		elif checkmod > checkmod2:
+			rval.erase('punish')
+		if member.person.checkFetish('sadism', checkmod, false, false):
+			var temp = checkmod
+			while temp > 0:
+				rval.append('punishother')
+				temp -= 1
 	
 	#Masochism
-	if member.person.checkFetish('masochism', 0, false):
-		checkmod = globals.fetishopinion.find(member.person.fetish.masochism)-3
-		difference = checkmod
-		while difference > 0:
+	if checkmod <= checkmod2:
+		if member.person.traits.has('Masochist'):
+			rval.erase('punishother')
 			rval.append('punish')
-			difference -= 1
-	else:
-		if member.person.traits.has('Likes it rough') || member.person.traits.has('Masochist'):
-			rval.append('punish')
+		elif checkmod < checkmod2:
+			rval.erase('punishother')
+		if member.person.checkFetish('masochism', checkmod2, false, false):
+			while checkmod2 > 0:
+				rval.append('punish')
+				checkmod2 -= 1
 
-	#High Chance to Request to Stop if Forced
-	if member.person.consent == false && !member.person.traits.has('Likes it rough'):
-		difference = round(rand_range(1,5))
-		while difference > 0:
-			rval.append('stop')
-			difference -= 1
-	
-	#Stop requests for existing cum in locations
-	for i in ['face','body']:
-		if member.person.cum[i] > 0:
-			while rval.count('cumon'+str([i])) > 0:
-				rval.erase('cumon'+str([i]))
-	for i in ['mouth','pussy','ass']:
-		if member.person.cum[i] > 0:
-			while rval.count('cumin'+str([i])) > 0:
-				rval.erase('cumin'+str([i]))
-		if member.person.vagina == 'none' && str(i) == 'pussy':
-			while rval.count('pussy') > 0:
-				rval.erase('pussy')
+
+	#This function requires consent, so 'stop' is not relevant
+	rval.erase('stop')
 
 	#Vanilla with Additions
-	if member.person.vagvirgin == true || member.person.consent == false:
-		while rval.count('fuck') > 0:
-			rval.erase('fuck')
-		while rval.count('cuminpussy') > 0:
-			rval.erase('cuminpussy')
-	if member.person.assvirgin == true || member.person.consent == false:
-		while rval.count('anal') > 0:
-			rval.erase('anal')
-		while rval.count('cuminass') > 0:
-			rval.erase('cuminass')
+	if member.person.vagvirgin == true:
+		rval.erase('fuck')
+	if member.person.assvirgin == true:
+		rval.erase('anal')
 	if member.person.penis == 'none':
-		while rval.count('penis') > 0:
-			rval.erase('penis')
-	if member.person.penis == 'none' && member.strapon == null:
-		while rval.count('fuckgive') > 0:
+		rval.erase('penis')
+		if member.strapon == null:
 			rval.erase('fuckgive')
-	#Dom/Sub Switch
-	if member.person.traits.has('Dominant') || globals.fetishopinion.find(member.person.fetish.dominance) > globals.fetishopinion.find(member.person.fetish.submission):
-		while rval.count('humiliate') > 0:
-			rval.erase('humiliate')
-	if member.person.traits.has('Submissive') || globals.fetishopinion.find(member.person.fetish.dominance) < globals.fetishopinion.find(member.person.fetish.submission):
-		while rval.count('humiliateother') > 0:
-			rval.erase('humiliateother')
-	if member.person.traits.has('Sadist') || globals.fetishopinion.find(member.person.fetish.sadism) > globals.fetishopinion.find(member.person.fetish.masochism):
-		rval.erase('punish')
-	if !member.person.traits.has('Likes it rough'):
-		rval.erase('punish')
-	if member.person.traits.has('Masochist') || globals.fetishopinion.find(member.person.fetish.sadism) < globals.fetishopinion.find(member.person.fetish.masochism):
-		while rval.count('punishother') > 0:
-			rval.erase('punishother')
 	if member.person.traits.has('Monogamous') || participants.size() == 2 || (!member.person.traits.has('Fickle') && member.lewd < 50):
 		rval.erase('group')
-	#Remove Stops
-	if member.person.consent == false:
-		while rval.count('stop') > 0:
-			rval.erase('stop')
 	###---End Expansion---###
 
 
 	rval = rval[randi()%rval.size()]
-
-	$Panel/sceneeffects.bbcode_text += ("[color=#f4adf4]Desire: " + member.person.dictionary(requests[rval]) + '[/color]\n')
-
+	###---Added by Expansion---### Centered/Set Alerted Text
+	$Panel/sceneeffects.bbcode_text += ("\n[center][color=#f4adf4]Desire! -  " + member.person.dictionary(requests[rval]) + '[/color][/center]\n')
+	###---End Expansion---###
 	member.request = rval
 
 func checkrequest(member):
@@ -1473,38 +1432,60 @@ func checkrequest(member):
 		'punish':
 			if lastaction.takers.has(member) && lastaction.scene.get('takertags') != null && lastaction.scene.takertags.has('punish'):
 				conditionsatisfied = true
+				for i in range(2):
+					member.person.dailyevents.append('masochism')
 		'humiliate':
 			if lastaction.takers.has(member) && lastaction.scene.get('takertags') != null && lastaction.scene.takertags.has('shame'):
 				conditionsatisfied = true
+				for i in range(2):
+					member.person.dailyevents.append('submission')
 		'group':
 			if (lastaction.givers.has(member) && lastaction.takers.size() > 1) || (lastaction.takers.has(member) && lastaction.givers.size() > 1):
 				conditionsatisfied = true
 
 		###---Added by Expansion---### Fetishes
 		'stop':
-			if !lastaction.takers.has(member) && !lastaction.givers.has(member):
-				conditionsatisfied = true
+			#normal reward does not seem appropriate, maybe add something else
+			return false
+			#if !lastaction.takers.has(member) && !lastaction.givers.has(member):
+			#	conditionsatisfied = true
 		'cumonface':
 			if member.person.cum.face > 0:
 				conditionsatisfied = true
+				for i in range(2):
+					member.person.dailyevents.append('wearcumface')
 		'cuminmouth':
 			if member.person.cum.mouth > 0:
 				conditionsatisfied = true
+				for i in range(2):
+					member.person.dailyevents.append('creampiemouth')
+					member.person.dailyevents.append('drinkcum')
 		'cumonbody':
 			if member.person.cum.body > 0:
 				conditionsatisfied = true
+				for i in range(2):
+					member.person.dailyevents.append('wearcum')
 		'cuminpussy':
 			if member.person.cum.pussy > 0:
 				conditionsatisfied = true
+				for i in range(2):
+					member.person.dailyevents.append('creampiepussy')
+				member.person.dailyevents.append('pregnancy')
 		'cuminass':
 			if member.person.cum.ass > 0:
 				conditionsatisfied = true
+				for i in range(2):
+					member.person.dailyevents.append('creampieass')
 		'punishother':
 			if lastaction.givers.has(member) && lastaction.scene.get('takertags') != null && lastaction.scene.takertags.has('punish'):
 				conditionsatisfied = true
+				for i in range(2):
+					member.person.dailyevents.append('sadism')
 		'humiliateother':
 			if lastaction.givers.has(member) && lastaction.scene.get('takertags') != null && lastaction.scene.takertags.has('shame'):
 				conditionsatisfied = true
+				for i in range(2):
+					member.person.dailyevents.append('dominance')
 		###---End Expansion---###
 
 	if conditionsatisfied == true:
@@ -1537,6 +1518,7 @@ func checkaction(action):
 	var disabled = false
 	var hint_tooltip = ''
 	for k in givers:
+		related = false
 		if k.person == globals.player || k.person.unique in ['dog','horse']:
 			continue
 		if action.giverconsent != 'any' && k.effects.has('resist'):
@@ -1600,24 +1582,16 @@ func startscene(scenescript, cont = false, pretext = ''):
 			i.actionshad.samesex += 1
 		else:
 			i.actionshad.oppositesex += 1
-		if i.person.sexexp.actions.has(scenescript.code):
-			i.person.sexexp.actions[scenescript.code] += 1
-		else:
-			i.person.sexexp.actions[scenescript.code] = 1
+		var refXp = i.person.sexexp
+		refXp.actions[scenescript.code] = refXp.actions.get(scenescript.code,0) + 1
 		for k in givers + takers:
 			if k != i:
-				if i.person.sexexp.partners.has(k.person.id):
-					i.person.sexexp.partners[k.person.id] += 1
-				else:
-					i.person.sexexp.partners[k.person.id] = 1
+				refXp.partners[k.person.id] = refXp.partners.get(k.person.id,0) + 1
 	
 	for i in participants:
 		i.orgasm = false
 		if !givers.has(i) && !takers.has(i):
-			if i.person.sexexp.seenactions.has(scenescript.code):
-				i.person.sexexp.seenactions[scenescript.code] += 1
-			else:
-				i.person.sexexp.seenactions[scenescript.code] = 1
+			i.person.sexexp.seenactions[scenescript.code] = i.person.sexexp.seenactions.get(scenescript.code,0) + 1
 	
 	
 	#temporary support for scenes converted to centralized output and those not
@@ -1808,7 +1782,16 @@ func startscene(scenescript, cont = false, pretext = ''):
 	var temparray = []
 	
 	for i in participants:
-		if i.person == globals.player || i.person.unique in ['dog','horse'] || i.effects.has('forced') || i.effects.has('resist'):
+		#High Chance to Request to Stop if Forced
+		if i.effects.has('forced'):
+			if i.request == 'stop':
+				if !i.effects.has('resist'):
+					i.request = null
+			elif i.effects.has('resist') && !i.person.traits.has('Likes it rough') && randf() < 0.66:
+				$Panel/sceneeffects.bbcode_text += ("[color=#f4adf4]Desire: " + i.person.dictionary(requests.stop) + '[/color]\n')
+				i.request = 'stop'
+			continue
+		elif i.person == globals.player || i.person.unique in ['dog','horse'] || i.effects.has('resist'):
 			continue
 		temparray.append(i)
 	
@@ -1952,6 +1935,35 @@ func impregnationcheck(person1, person2):
 	return valid
 ###---End of Expansion---###
 
+###---Added by Expansion---###
+# returns true if person1 feels that person2 is the same sex; this subjectiveness can be relevant when person2 is futanari or dickgirl
+func ispairsamesex(person1, person2):
+	var sex1 = person1.sex
+	var sex2 = person2.sex
+	if sex1 == 'futanari' || sex1 == 'dickgirl':
+		if globals.expansionsettings.futasexualityshift == 'bi':
+			return globals.kinseyscale.find(person1.sexuality) < 3
+		sex1 = globals.expansionsettings.futasexualityshift
+	if sex2 == 'futanari' || sex2 == 'dickgirl':
+		if globals.expansionsettings.futasexualityshift == 'bi':
+			return globals.kinseyscale.find(person1.sexuality) < 3
+		return sex1 == globals.expansionsettings.futasexualityshift
+	return sex1 == sex2
+###---End of Expansion---###
+
+func isencountersamesex(givers, takers, actor = null):
+	var groupOther
+	if givers.has(actor):
+		groupOther = takers
+	elif takers.has(actor):
+		groupOther = givers
+	else:
+		return false
+	var score = 0
+	for i in groupOther:
+		score += 1 if ispairsamesex(actor.person, i.person) else -1
+	return score > 0
+
 func endencounter():
 	var mana = 0
 	var totalmana = 0
@@ -1966,7 +1978,12 @@ func endencounter():
 			continue
 		i.person.lewdness = i.lewd
 		if i.orgasms > 0:
-			i.person.lust = 0
+			#ralphC
+			if i.person.race_display == 'Succubus':
+				i.person.lust = round(i.person.lust * 0.75) #ralphC - Succubus orgasms don't give enough relief to prevent going sex-crazed if too hungery
+			else:
+				i.person.lust = 0 
+			#/ralphC
 		else:
 			i.person.lust = i.sens/10
 		i.person.lastsexday = globals.resources.day
@@ -1974,44 +1991,45 @@ func endencounter():
 		###---Added by Expansion---### Incest, Tearing, and Swollen tracking
 		#Orgasm Variable Text
 		var position = ""
-		if i.person != globals.player && !(i.person.unique in ['dog','horse']):
-			text += i.person.dictionary("\n$name ")
+		if i.person == globals.player:
+			text += "You had [color=aqua]" + str(i.orgasms) + "[/color] orgasms."
+		else: # !(i.person.unique in ['dog','horse']):
+			text += "\n$name "
 			if i.orgasms >= 1 + i.person.send + i.person.sstr:
 				position = "ground"
-				text += str(globals.randomitemfromarray(['lies','is curled up','is in the fetal position','tries to move but falls back'])) + i.person.dictionary(" on the ") + str(globals.randomitemfromarray(['floor ','ground ','fluid-soaked floor ','fluid-soaked ground ','stained floor ','stained ground '])) + str(globals.randomitemfromarray(['twitching','spasming','moaning','motionless']))
-			elif i.orgasms >= 1 + round(i.person.send*.5):
+				text += globals.randomfromarray(['lies','is curled up','is in the fetal position','tries to move but falls back']) + " on the " + globals.randomfromarray(['floor ','ground ','fluid-soaked floor ','fluid-soaked ground ','stained floor ','stained ground ']) + globals.randomfromarray(['twitching ','spasming ','moaning ','motionless '])
+			elif i.orgasms >= 1 + round(i.person.send * .5):
 				position = "knees"
-				text += i.person.dictionary(str(globals.randomitemfromarray(['manages to get on $his hands and knees','is on $his knees','manages to squat','weakly stands up']))) + i.person.dictionary(" from the ") + str(globals.randomitemfromarray(['floor ','ground ','fluid-soaked floor ','fluid-soaked ground ','stained floor ','stained ground ']))
+				text += globals.randomfromarray(['manages to get on $his hands and knees','is on $his knees','manages to squat','weakly stands up']) + " from the " + globals.randomfromarray(['floor ','ground ','fluid-soaked floor ','fluid-soaked ground ','stained floor ','stained ground '])
 			elif i.orgasms == 0:
 				position = "standing"
-				text += i.person.dictionary(str(globals.randomitemfromarray(['angrily stands up','seems upset as $he stands','frustratedly pushes $himself up','grumpily stands up']))) + i.person.dictionary(" from the ") + str(globals.randomitemfromarray(['floor ','ground ']))
+				text += globals.randomfromarray(['angrily stands up','seems upset as $he stands','frustratedly pushes $himself up','grumpily stands up']) + " from the " + globals.randomfromarray(['floor ','ground '])
 			else:
 				position = "standing"
-				text += i.person.dictionary(str(globals.randomitemfromarray(['stands up','slowly stands','pushes $himself up','stands up']))) + i.person.dictionary(" from the ") + str(globals.randomitemfromarray(['floor ','ground ','fluid-soaked floor ','fluid-soaked ground ','stained floor ','stained ground ']))
-			text += i.person.dictionary(" after having had [color=aqua]") + str(i.orgasms) + "[/color] orgasms."
-		elif i.person == globals.player:
-			text += i.person.dictionary("You had [color=aqua]") + str(i.orgasms) + "[/color] orgasms."
+				text += globals.randomfromarray(['stands up','slowly stands','pushes $himself up','stands up']) + " from the " + globals.randomfromarray(['floor ','ground ','fluid-soaked floor ','fluid-soaked ground ','stained floor ','stained ground '])
+			text += "after having had [color=aqua]" + str(i.orgasms) + "[/color] orgasms."
+
 
 		#Cum Drip Text
 		if i.person.cum.mouth > 0:
-			text += i.person.dictionary("\n$name ")
-			text += "has " + str(globals.randomitemfromarray(['semen','cum','jizz','spunk'])) + i.person.dictionary(" in $his mouth. $He ")
+			text += i.person.dictionary("\n$name has ")
+			text += globals.randomitemfromarray(['semen','cum','jizz','spunk']) + " in $his mouth. $He "
 			if i.person.mind.demeanor in ['open','excitable'] || i.person.mind.demeanor == "reserved" && rand_range(0,1) > .5:
-				text += str(globals.randomitemfromarray(['looks you in the eye ','stares up at you ','looks at you ']))
+				text += globals.randomitemfromarray(['looks you in the eye ','stares up at you ','looks at you '])
 			else:
-				text += str(globals.randomitemfromarray(['glances down ','looks down meekly ','looks to the side ']))
+				text += globals.randomitemfromarray(['glances down ','looks down meekly ','looks to the side '])
 			if globals.fetishopinion.find(i.person.fetish.drinkcum)-4 >= 0 || rand_range(0,1) > .5:
-				text += str(globals.randomitemfromarray(['and swallows.','and gulps it down.','and smiles, then swallows it all.']))
+				text += globals.randomitemfromarray(['and swallows.','and gulps it down.','and smiles, then swallows it all.'])
 			elif globals.fetishopinion.find(i.person.fetish.wearcum)-4 >= 0 || globals.fetishopinion.find(i.person.fetish.wearcumface)-4 >= 0 || rand_range(0,1) > .5:
-				text += i.person.dictionary(str(globals.randomitemfromarray(['and lets it drain out onto $his chin and body.','and pushes it out with $his tongue onto $his own cheeks and chest.','and opens $his mouth, drooling it onto $his chin and chest.'])))
+				text += globals.randomitemfromarray(['and lets it drain out onto $his chin and body.','and pushes it out with $his tongue onto $his own cheeks and chest.','and opens $his mouth, drooling it onto $his chin and chest.'])
 				i.person.cum.face += round(i.person.cum.mouth/2)
 				i.person.cum.body += round(i.person.cum.mouth/2)
 			else:
-				text += str(globals.randomitemfromarray(['and spits it onto the ground.','and spits it out.','and gags, spitting it out.','tries to swallow but gags, then spits it out.']))
+				text += globals.randomitemfromarray(['and spits it onto the ground.','and spits it out.','and gags, spitting it out.','tries to swallow but gags, then spits it out.'])
 			i.person.cum.mouth = 0
 			text += " "
 		if i.person.cum.face > 0 || i.person.cum.body > 0:
-			text += i.person.dictionary("$name is splattered with ") + str(globals.expansion.nameCum()) + i.person.dictionary(" all over $his ")
+			text += "$name is splattered with " + str(globals.expansion.nameCum()) + " all over $his "
 			if i.person.cum.face > 0:
 				text += "face"
 				if i.person.cum.body > 0:
@@ -2021,25 +2039,25 @@ func endencounter():
 			text += ". "
 
 		if i.person.cum.pussy > 5 - globals.vagsizearray.find(i.person.vagina) || i.person.cum.ass > 5 - globals.assholesizearray.find(i.person.asshole):
-			text += i.person.dictionary("\nAs $he ")
+			text += "\nAs $he "
 			if position == "ground":
-				text += str(globals.randomitemfromarray(['lies','spasms','twitches','squirms'])) + " on the " + str(globals.randomitemfromarray(['floor','ground','fluid-soaked floor','fluid-soaked ground','stained floor','stained ground']))
+				text += globals.randomitemfromarray(['lies','spasms','twitches','squirms']) + " on the " + globals.randomitemfromarray(['floor','ground','fluid-soaked floor','fluid-soaked ground','stained floor','stained ground'])
 			else:
-				text += str(globals.randomitemfromarray(['moves','shifts','adjusts']))
-			text += i.person.dictionary(" $his ")
+				text += globals.randomitemfromarray(['moves','shifts','adjusts'])
+			text += " $his "
 			if i.person.cum.pussy > 0:
-				text += str(globals.randomitemfromarray(['','twitching ','soaked ','spasming ','quivering ',str(i.person.vagina)])) + str(globals.expansion.namePussy())
+				text += globals.randomitemfromarray(['','twitching ','soaked ','spasming ','quivering ',str(i.person.vagina)]) + ' ' + globals.expansion.namePussy()
 				if i.person.cum.ass > 0:
 					text += " and "
-			if i.person.cum.ass:
+			if i.person.cum.ass > 0:
 				if i.person.cum.pussy == 0:
-					text += str(globals.randomitemfromarray(['','twitching ','soaked ','spasming ','quivering ',str(i.person.asshole)]))
-				text += str(globals.expansion.nameAsshole())
-			text += str(globals.randomitemfromarray([' squirts out ',' oozes out ',' drools ',' drains ',' spurts out ']))
+					text += globals.randomitemfromarray(['','twitching ','soaked ','spasming ','quivering ',str(i.person.asshole)])
+				text += globals.expansion.nameAsshole()
+			text += globals.randomitemfromarray([' squirts out ',' oozes out ',' drools ',' drains ',' spurts out '])
 			if i.person.cum.pussy >= globals.expansion.getCapacity(i.person, i.person.vagina) || i.person.cum.ass == globals.expansion.getCapacity(i.person, i.person.asshole):
-				text += str(globals.randomitemfromarray(['a shit-ton','a crazy amount','a ton','a lot']))
+				text += globals.randomitemfromarray(['a shit-ton','a crazy amount','a ton','a lot'])
 			else:
-				text += str(globals.randomitemfromarray(['a glob','a trickle','a bit','a little']))
+				text += globals.randomitemfromarray(['a glob','a trickle','a bit','a little'])
 			#Lose Cum, Dirty House
 			var cumloss = clamp(round(rand_range(i.person.cum.pussy*.25,i.person.cum.pussy*.75)), 0, i.person.cum.pussy)
 			i.person.cum.pussy -= cumloss
@@ -2051,7 +2069,7 @@ func endencounter():
 			i.person.cum.ass -= cumloss
 			if cumloss > 0:
 				globals.state.condition = -(round(cumloss*.5))
-			text += " of " + str(globals.expansion.nameCum()) + "."
+			text += " of " + globals.expansion.nameCum() + "."
 #		text += "\n"
 
 		#Stretching and Wear&Tear Text
@@ -2072,17 +2090,17 @@ func endencounter():
 				difference -= 1
 		#Wear and Tear
 		if i.person.vagina != 'none' && (stretched == true && i.vagTorn == true):
-			text += i.person.dictionary("\n$name " + str(globals.randomitemfromarray(['rubs','holds','sticks a finger in','looks at','strokes'])) + " $his " + str(globals.expansion.namePussy()))
+			text += "\n$name " + globals.randomitemfromarray(['rubs','holds','sticks a finger in','looks at','strokes']) + " $his " + globals.expansion.namePussy()
 			if i.vagTorn == true:
-				text += " and " + str(globals.randomitemfromarray(['cries','moans','sobs','gasps','shrieks','whimpers','tears up','looks horrified','looks pissed'])) + ". "
+				text += " and " + globals.randomitemfromarray(['cries','moans','sobs','gasps','shrieks','whimpers','tears up','looks horrified','looks pissed']) + ". "
 			else:
 				text += ". "
-			text += i.person.dictionary("[color=red]$His ") + str(globals.expansion.namePussy())
+			text += "[color=red]$His " + globals.expansion.namePussy()
 			if sizeup >= 3:
-				text +=  " was " + str(globals.randomitemfromarray(['horribly','badly','really','terribly'])) + " stretched out "
+				text +=  " was " + globals.randomitemfromarray(['horribly','badly','really','terribly']) + " stretched out "
 			else:
-				text +=  " was stretched out " + str(globals.randomitemfromarray(['slightly','a little','somewhat','during sex']))
-			text += i.person.dictionary(" and is now only " + str(i.person.vagina))
+				text +=  " was stretched out " + globals.randomitemfromarray(['slightly','a little','somewhat','during sex'])
+			text += " and is now only " + str(i.person.vagina)
 			if i.vagTorn == true:
 				text += ", broken, and sore.[/color]"
 			else:
@@ -2103,17 +2121,17 @@ func endencounter():
 				difference -= 1
 		#Wear and Tear
 		if i.assTorn == true && stretched == true:
-			text += i.person.dictionary("\n$name " + str(globals.randomitemfromarray(['rubs','holds','sticks a finger in','looks at','strokes'])) + " $his " + str(globals.expansion.nameAsshole()))
+			text += "\n$name " + globals.randomitemfromarray(['rubs','holds','sticks a finger in','looks at','strokes']) + " $his " + globals.expansion.nameAsshole()
 			if i.assTorn == true:
-				text += " and " + str(globals.randomitemfromarray(['cries','moans','sobs','gasps','shrieks','whimpers','tears up','looks horrified','looks pissed'])) + ". "
+				text += " and " + globals.randomitemfromarray(['cries','moans','sobs','gasps','shrieks','whimpers','tears up','looks horrified','looks pissed']) + ". "
 			else:
 				text += ". "
-			text += i.person.dictionary("[color=red]$His ") + str(globals.expansion.nameAsshole())
+			text += "[color=red]$His " + globals.expansion.nameAsshole()
 			if sizeup >= 3:
-				text +=  " was " + str(globals.randomitemfromarray(['horribly','badly','really','terribly'])) + " stretched out "
+				text +=  " was " + globals.randomitemfromarray(['horribly','badly','really','terribly']) + " stretched out "
 			else:
-				text +=  " was stretched out " + str(globals.randomitemfromarray(['slightly','a little','somewhat','during sex']))
-			text += i.person.dictionary(" and is now only " + str(i.person.asshole))
+				text +=  " was stretched out " + globals.randomitemfromarray(['slightly','a little','somewhat','during sex'])
+			text += " and is now only " + str(i.person.asshole)
 			if i.assTorn == true:
 				text += ", broken, and sore.[/color]"
 			else:
@@ -2121,22 +2139,22 @@ func endencounter():
 
 		#Incest Text
 		if i.actionshad.incestorgasms > 0 && i.person != globals.player:
-			text += "\n[color=aqua]" + str(i.actionshad.incestorgasms) + "[/color] of " + i.person.dictionary("$name's orgasms were due to incest. ")
-			if i.actionshad.incestorgasms + i.person.dailyevents.count('incest') + rand_range(0,10) >= 5*(0-(globals.fetishopinion.find(i.person.fetish.incest)-6)):
+			text += "\n[color=aqua]" + str(i.actionshad.incestorgasms) + "[/color] of $name's orgasms were due to incest. "
+			if i.actionshad.incestorgasms + i.person.dailyevents.count('incest') + rand_range(0,10) >= 5*(6-globals.fetishopinion.find(i.person.fetish.incest)):
 				if i.person.fetish.incest != 'mindblowing':
 					i.person.fetish.incest = globals.fetishopinion[globals.fetishopinion.find(i.person.fetish.incest)+1]
-					text += i.person.dictionary("\n$name approaches you and speaks softly, as though sharing a secret with you.")
-					text += i.person.quirk("[color=yellow]\n-I enjoyed this more than I thought I would. I don't think incest is necessarily " + str(globals.fetishopinion[globals.fetishopinion.find(i.person.fetish.incest)-1]) + " anymore. It is actually " + str(globals.fetishopinion[globals.fetishopinion.find(i.person.fetish.incest)]) + ".[/color]")
-			elif i.actionshad.incestorgasms + i.person.dailyevents.count('incest') + rand_range(0,10) <= 5*(0-(globals.fetishopinion.find(i.person.fetish.incest)-6)):
+					text += "\n$name approaches you and speaks softly, as though sharing a secret with you."
+					text += i.person.quirk("[color=yellow]\n-I enjoyed this more than I thought I would. I don't think incest is necessarily " + globals.fetishopinion[globals.fetishopinion.find(i.person.fetish.incest)-1] + " anymore. It is actually " + str(i.person.fetish.incest) + ".[/color]")
+			elif i.actionshad.incestorgasms + i.person.dailyevents.count('incest') + rand_range(0,10) <= 5*(6-globals.fetishopinion.find(i.person.fetish.incest)):
 				if i.person.fetish.incest != globals.fetishopinion[0]:
 					i.person.fetish.incest = globals.fetishopinion[globals.fetishopinion.find(i.person.fetish.incest)-1]
-					text += i.person.dictionary("$name approaches you and looks fairly upset.")
-					text += i.person.quirk("[color=yellow]\n-Today was completely inappropriate. Incest isn't " + str(globals.fetishopinion[globals.fetishopinion.find(i.person.fetish.incest)+1]) + ". It is actually really " + str(globals.fetishopinion[globals.fetishopinion.find(i.person.fetish.incest)]) + ".[/color]")
+					text += "$name approaches you and looks fairly upset."
+					text += i.person.quirk("[color=yellow]\n-Today was completely inappropriate. Incest isn't " + globals.fetishopinion[globals.fetishopinion.find(i.person.fetish.incest)+1] + ". It is actually really " + str(i.person.fetish.incest) + ".[/color]")
 
 			if globals.fetishopinion.find(i.person.fetish.incest) >= 4 && i.person.consentexp.incest == false:
 				if i.person.loyal + (25*globals.fetishopinion.find(i.person.fetish.incest)) >= 100:
-					text += i.person.dictionary("\n$name smiles mischieviously.")
-					text += i.person.quirk("[color=yellow]\n-You know...I don't mind if you ever want me to do that again...[/color]") + i.person.dictionary("\n[color=green]You now have $name's consent[/color] for incestuous actions.")
+					text += "\n$name smiles mischieviously."
+					text += i.person.quirk("[color=yellow]\n-You know...I don't mind if you ever want me to do that again...[/color]") + "\n[color=green]You now have $name's consent[/color] for incestuous actions."
 					i.person.consentexp.incest = true
 #		text += "" + str(globals.expansion.swollenCalc(i.person))
 
@@ -2158,9 +2176,10 @@ func endencounter():
 				for traitcheck in ["Masochist","Deviant","Pervert","Submissive","Sex-crazed","Likes it rough"]:
 					if i.person.traits.has(traitcheck):
 						switchshift = false
+						break
 				if switchshift == true:
 					shift *= -1
-					text += i.person.quirk(i.person.dictionary("\n[color=yellow]-I can't believe that you actually raped me! I feel so violated! You " + str(globals.player.sex) + "s are disgusting.[/color]"))
+					text += i.person.quirk("\n[color=yellow]-I can't believe that you actually raped me! I feel so violated! You " + str(globals.player.sex) + "s are disgusting.[/color]")
 			if shift > 0:
 				if globals.kinseyscale.find(i.person.sexuality) + shift > globals.kinseyscale.size():
 					i.person.sexuality = 'gay'
@@ -2169,8 +2188,8 @@ func endencounter():
 					index = globals.kinseyscale.find(i.person.sexuality)+shift
 					i.person.sexuality = globals.getfromarray(globals.kinseyscale,index)
 				if shift > 0:
-					text += i.person.dictionary("\n\n$name looks around the area that you "+str(globals.randomitemfromarray(['fucked','had sex in','got nasty','did the deed','pounded it out','knocked boots']))+" in and seems to think for a moment.")
-					text += i.person.quirk(i.person.dictionary("\n[color=yellow]-I "+str(globals.randomitemfromarray(['feel','think that I am','can tell that I am','am so much','definitely am','feel much']))+" more attracted to " +str(i.person.sex)+"s now after this experience. I feel " +str(globals.expansion.getSexuality(i.person))+" now.[/color]"))
+					text += "\n\n$name looks around the area that you "+globals.randomitemfromarray(['fucked','had sex in','got nasty','did the deed','pounded it out','knocked boots'])+" in and seems to think for a moment."
+					text += i.person.quirk("\n[color=yellow]-I "+globals.randomitemfromarray(['feel','think that I am','can tell that I am','am so much','definitely am','feel much'])+" more attracted to " +str(i.person.sex)+"s now after this experience. I feel " +globals.expansion.getSexuality(i.person)+" now.[/color]")
 			else:
 				if globals.kinseyscale.find(i.person.sexuality) + shift < 0:
 					i.person.sexuality = 'straight'
@@ -2179,13 +2198,20 @@ func endencounter():
 					index = globals.kinseyscale.find(i.person.sexuality)+shift
 					i.person.sexuality = globals.getfromarray(globals.kinseyscale,index)
 				var sexname = 'none'
-				if i.person.sex in ['male','futanari']:
+				if i.person.sex in ['futanari','dickgirl']:
+					if globals.expansionsettings.futasexualityshift == 'bi':
+						sexname = i.person.sex
+					elif globals.expansionsettings.futasexualityshift == 'male':
+						sexname = 'female'
+					else:
+						sexname = 'male'
+				elif i.person.sex == 'male':
 					sexname = 'female'
-				elif i.person.sex in ['female','futanari']:
+				elif i.person.sex == 'female':
 					sexname = 'male'
 				if shift < 0:
-					text += i.person.dictionary("\n\n$name looks around the area that you " +str(globals.randomitemfromarray(['fucked','had sex in','got nasty','did the deed','pounded it out','knocked boots']))+" in and seems to think for a moment.")
-					text += i.person.quirk(i.person.dictionary("\n[color=yellow]-I "+str(globals.randomitemfromarray(['feel','think that I am','can tell that I am','am so much','definitely am','feel much']))+" more attracted to " +str(sexname)+"s now after this experience. I feel " +str(globals.expansion.getSexuality(i.person))+" now.[/color]"))
+					text += "\n\n$name looks around the area that you " +globals.randomitemfromarray(['fucked','had sex in','got nasty','did the deed','pounded it out','knocked boots'])+" in and seems to think for a moment."
+					text += i.person.quirk("\n[color=yellow]-I "+globals.randomitemfromarray(['feel','think that I am','can tell that I am','am so much','definitely am','feel much'])+" more attracted to " +sexname+"s now after this experience. I feel " +globals.expansion.getSexuality(i.person)+" now.[/color]")
 		elif i.person == globals.player && globals.expansionsettings.player_sexuality_shift == true && shift != 0:
 			if shift > 0:
 				if globals.kinseyscale.find(i.person.sexuality) + shift > globals.kinseyscale.size():
@@ -2196,7 +2222,7 @@ func endencounter():
 					i.person.sexuality = globals.getfromarray(globals.kinseyscale,index)
 					
 				if shift > 0:
-					text += "\nYou feel more attracted to " +str(i.person.sex)+ "s after this experience. You now feel [color=aqua]" +str(globals.expansion.getSexuality(i.person))+"[/color]."
+					text += "\nYou feel more attracted to " +str(i.person.sex)+ "s after this experience. You now feel [color=aqua]" +globals.expansion.getSexuality(i.person)+"[/color]."
 			else:
 				if globals.kinseyscale.find(i.person.sexuality) + shift < 0:
 					i.person.sexuality = 'straight'
@@ -2206,11 +2232,18 @@ func endencounter():
 					i.person.sexuality = globals.getfromarray(globals.kinseyscale,index)
 				if shift < 0:
 					var sexname = 'none'
-					if i.person.sex in ['male','futanari']:
+					if i.person.sex in ['futanari','dickgirl']:
+						if globals.expansionsettings.futasexualityshift == 'bi':
+							sexname = i.person.sex
+						elif globals.expansionsettings.futasexualityshift == 'male':
+							sexname = 'female'
+						else:
+							sexname = 'male'
+					elif i.person.sex == 'male':
 						sexname = 'female'
-					elif i.person.sex in ['female','futanari']:
+					elif i.person.sex == 'female':
 						sexname = 'male'
-					text += "\nYou feel more attracted to " +str(sexname)+ "s after this experience. You now feel [color=aqua]" +str(globals.expansion.getSexuality(i.person))+"[/color]."
+					text += "\nYou feel more attracted to " +sexname+ "s after this experience. You now feel [color=aqua]" +globals.expansion.getSexuality(i.person)+"[/color]."
 		###---End Expansion---###
 
 		if i.actionshad.group*0.01 > randf():
@@ -2221,10 +2254,10 @@ func endencounter():
 			var essence = i.person.getessence()
 			if essence != null && i.person.smaf*20 > rand_range(0,100):
 				###---Added by Expansion---### Ease of Reading
-				rewardtext += "\nIngredient Gained from [color=aqua]" + i.person.dictionary("$name") + "[/color]: [color=yellow]" + globals.itemdict[essence].name + "[/color]"
+				rewardtext += "\nIngredient Gained from [color=aqua]"+i.name+"[/color]: [color=yellow]" + globals.itemdict[essence].name + "[/color]"
 				###---End Expansion---###
 				globals.itemdict[essence].amount += 1
-			mana += i.orgasms*3 + rand_range(1,2)
+			mana += (i.orgasms - i.succubusdraincount) * variables.orgasmmana + rand_range(1,2) #ralphC - replaced 3 with variables.orgasmmana and deducted succubusdraincount
 		else:
 			mana += i.sens/500
 		###---Added by Expansion---### Hybrid Support
@@ -2240,10 +2273,15 @@ func endencounter():
 			###---Added by Expansion---### Removed , added \n
 			text += "\n[color=aqua]Desires fullfiled: " + str(i.requestsdone) + '[/color]'
 			###---End Expansion---###
+		if i.person.race_display == "Succubus": #ralphC - Succubus orgasms don't produce mana
+			mana = 0  #ralphC
+		###---Added by Expansion---### Person Expanded; Strip/Redress
+		text += i.person.updateClothing()
+		###---End Expansion---###
 		mana = round(mana)
 		manaDict[i.person] = mana
 		totalmana += mana
-		text += "\n"
+		text = i.person.dictionary(text + "\n")
 
 	###---Added by Expansion---### Colored Mana / Reward Text Ease of Reading
 	var manaScaling = 1.0 - 0.9 * totalmana / (500.0 + totalmana)
@@ -2253,6 +2291,9 @@ func endencounter():
 		totalmana += mana
 		person.metrics.manaearn += mana
 	
+	if succubuscounter > 0: #ralphC
+		text += "\n[color=red]Succubi managed to siphon off mana from [/color]"+str(succubuscounter)+" orgasms.\n" #ralphC
+		succubuscounter = 0 #ralphC
 	text += "\n[color=green][center]---Rewards Earned---[/center][/color]"
 	text += "\nEarned Mana: [color=aqua]" + str(totalmana) + "[/color]"
 	text += rewardtext
