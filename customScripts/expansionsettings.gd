@@ -2,15 +2,15 @@
 
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
-var modversion = "1.6b"
+var modversion = "1.6a"
 
 #---Aric's and Game's Base Values potentially changed by Ralph's
 var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within ApplyTweaks as well as the Hybrid system.
 var unique_trait_generation = false				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
 var consolidatebeastDNA = false					# Set this to true if you don't like npcs with a mix of Beastkin/Halfkin race%'s (no half cat half foxes, etc.) #ralphB
 var gratitude_for_all = false					# Set this to true so that babies aged up to Child or Teen have as much chance to spawn with the Grateful trait as ones aged up to Adult (Ralph sets this to False, but up to you) #ralphC
-var sillymode = true							# Set it to false if you don't abide, so far it only affects random travel event text #ralphD
-var enable_all_player_races = false				# Set to true to allow all races for player & startslave on new game; This is a cheat especially for a Ralphs playthrough - Ralph recommends setting this to true only if you are in true love with starting as an uncommon race and cannot cheat on that race with any other - true love people, this is serious. Ralph has spoken. #ralphE
+var sillymode = true						# Set it to false if you don't abide, so far it only affects random travel event text #ralphD
+var enable_all_player_races = true				# Set to true to allow all races for player & startslave on new game; This is a cheat especially for a Ralphs playthrough - Ralph recommends setting this to true only if you are in true love with starting as an uncommon race and cannot cheat on that race with any other - true love people, this is serious. Ralph has spoken. #ralphE
 
 #---Debug Tools (True/False)
 var perfectinfo = false
@@ -18,6 +18,13 @@ var enablecheatbutton = false
 
 #-- Use abilities on auto attack, left to right. Hint: reorder/activate abilities in the character info menu when out.
 var autoattackability = false
+
+#---New Game Options
+#Control MC and Starting Slave Purebred vs Hybrid
+var player_secondaryrace = 'human' 					#In New Game -> Customized Start, control whether your MC is purebred or a hybrid.  Set to 'elf' or any other race as listed in genealogies to get a hybrid of your selected race and 'elf' or any other race set here. As of Aric's v1.7 genealogies = ['human','gnome','elf','tribal_elf','dark_elf','orc','goblin','dragonkin','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime','bunny','dog','cow','cat','fox','horse','raccoon'] #ralphE
+var player_secondaryracepercent = 0					#Set this between 0 and 50. Example: start New Game -> select Customized Start, select Demon for your race, set player_secondaryrace = 'taurus' and player_secondaryracepercent = 25 -> your MC will be a hybrid of 75% Demon and 25% Taurus. #ralphE
+var startslave_secondaryrace = 'human' 				#Same as above, but for the Starting Slave #ralphE
+var startslave_secondaryracepercent = 0				#Same as above, but for the Starting Slave #ralphE
 
 #---Content Filters | Partially Enabled (Set to true/false)
 var brutalcontent = true
@@ -29,25 +36,18 @@ var ihavebloodygoodtaste = false
 #Unwanted Fetishes - Disables them from showing in the Fetish Talk menu
 var unwantedfetishes = []		#Copy/Paste any you don't want into the 'unwantedfetishes' array below: ['incest','lactation','drinkmilk','bemilked','milking','exhibitionism','drinkcum','wearcum','wearcumface','creampiemouth','creampiepussy','creampieass','pregnancy','oviposition','drinkpiss','wearpiss','pissing','otherspissing','bondage','dominance','submission','sadism','masochism']
 
-#------Player Specific Info
-#Base Bonus or Penalty for Attraction Checks for PCs
-var playerattractionmodifier = 20
+#Flaw Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations
+var flaw_luxury_effects = true
 
-#Set to True for the Player to follow Slave's Clothing Dress/Redress System
-var player_treats_clothing_like_slave = false
-
-#Control MC and Starting Slave Purebred vs Hybrid
-var player_secondaryrace = 'human' 					#In New Game -> Customized Start, control whether your MC is purebred or a hybrid.  Set to 'elf' or any other race as listed in genealogies to get a hybrid of your selected race and 'elf' or any other race set here. As of Aric's v1.7 genealogies = ['human','gnome','elf','tribal_elf','dark_elf','orc','goblin','dragonkin','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime','bunny','dog','cow','cat','fox','horse','raccoon'] #ralphE
-var player_secondaryracepercent = 0					#Set this between 0 and 50. Example: start New Game -> select Customized Start, select Demon for your race, set player_secondaryrace = 'taurus' and player_secondaryracepercent = 25 -> your MC will be a hybrid of 75% Demon and 25% Taurus. #ralphE
-var startslave_secondaryrace = 'human' 				#Same as above, but for the Starting Slave #ralphE
-var startslave_secondaryracepercent = 0				#Same as above, but for the Starting Slave #ralphE
-
-#------Person Expanded (True/False)
+#---Person Expanded (True/False)
 #If set to true, Unique Slaves will join your party without having to ask for consent first
 var uniqueslavesautopartyconsent = false
 
 #Lip Size Increase Change (Chance is array-5*10, ie: plump and bigger give 10)
 var lipstraitbasechance = 20
+
+#Base Bonus or Penalty for Attraction Checks for PCs
+var playerattractionmodifier = 20
 
 #Default to Nickname + First Name (Function from MinorTweaks, Renamed for Clarity)
 var use_nickname_plus_first_name = false
@@ -55,19 +55,6 @@ var use_nickname_plus_first_name = false
 #Show Once Per Day Conversations Available Notifications in Inspect
 var show_onceperday_notification = true
 
-#---Vices (Formerly Flaws)
-#Vices Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations when enabled.)
-#Turning this off disables the entire Vice system in regards to Luxury Penalties or Bonuses
-var vices_luxury_effects = true
-
-#Chance for Vices to trigger when not Discovered. Set to 0 to disable the system entirely
-var vices_undiscovered_trigger_chance = 10
-
-#Does the Vice has to present itself (via the EOD check above) before it can be discovered via Mind Reading?
-var vices_discovery_has_to_present_first = false
-
-#Base Chance added to Vice Discovery in Mind Reading if it presented itself in an End of Day before
-var vices_discovery_presentation_bonus = 20
 
 #---Genitals Expanded
 #Chance of Holes staying Stretched during Sex. Chance + (Elasticity*10)
@@ -112,7 +99,7 @@ var crystallifeforcerestorechance = 80
 var crystal_shatter_chance = 80
 
 
-#------Pregnancy Expanded
+#---Pregnancy Expanded
 #Set to False to disable Swollen Settings (Pregnancy and Cum Inflation)
 var swollenenabled = true
 var wantedpregnancychance = 50
@@ -124,7 +111,7 @@ var chancemorningsickness = 30
 var chancetitsgrow = 35
 
 
-#------Lactation Expanded
+#---Lactation Expanded
 var lactationstops = false
 var leakcauseslactationchance = 50
 
@@ -132,7 +119,7 @@ var leakcauseslactationchance = 50
 var lactationstressenabled = true
 
 
-#------Farm Expanded
+#---Farm Expanded
 #Livestock Consent Base Chance (+ 50% loyalty, 25% obediance, + various factors)
 var baselivestockconsentchance = 10
 var foodconvertchance = 70
@@ -172,9 +159,6 @@ var livestockloseconsentchance = 20
 #---Fetishes
 #FetishDifficulty is what Fetish*10 is multiplied by for the Chance of Success
 var fetishdifficulty = 2
-
-#Base Fetish Increase Chance
-var fetish_base_increase_chance = 20
 
 #Fetishes can Lower
 var fetishescanlower = false
@@ -265,7 +249,7 @@ var func_hunt_tweaks = [2,5,10,1.3,1.25,30,40,7]
 												# and how much experience is gained by dividing the amount of food gained total.
 
 #Start Slave Hobby Changes
-var magic_hobby_maf_max = 2						# Ralph's - 1, The value responsible for how much the maximum magic affinity a starter slave with the magic hobby has. #ralphE
+var magic_hobby_maf_max = 2						# Ralph's - 1, The value responsible for how much the maximum magic affinity a starter slave with the magic hobby has. #ralphE affinity a starter slave with the magic hobby has.
 
 #Sell Slave Prices
 var mansion_bred_and_breeder = 2				# Ralph's - 1.5, The multiplicative value that modifies the price.
@@ -475,7 +459,7 @@ func addConstantsSupport():
 		autoattackability = {descript = "Use abilities on auto attack, left to right. Hint: reorder/activate abilities in the character info menu when out.", object = self},
 		brutalcontent = {descript = "Content Filter, set this to false if you don't want to see extreme violent content, like executions", object = self},
 		ihavebloodygoodtaste = {descript = "Set this to true to include British themed descriptions", object = self},
-		vices_luxury_effects = {descript = "Vice Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations", object = self},
+		flaw_luxury_effects = {descript = "Flaw Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations", object = self},
 		uniqueslavesautopartyconsent = {descript = "If set to true, Unique Slaves will join your party without having to ask for consent first", object = self},
 		lipstraitbasechance = {descript = "Lip Size Increase Change (Chance is array-5*10, ie: plump and bigger give 10)", min = 0.0, max = 50.0, object = self},
 		playerattractionmodifier = {descript = "Base Bonus or Penalty for Attraction Checks for PCs", min = -100.0, max = 100.0, object = self},
