@@ -413,6 +413,11 @@ func set_genealogy(person):
 		genealogy = globals.expansionsettings.startslave_secondaryrace
 		person.genealogy[genealogy] += globals.expansionsettings.startslave_secondaryracepercent
 		remaining_percent = 0
+	elif person.unique in ['player','startslave'] && globals.rules.furry && person.race.find('Halfkin') >= 0:
+		genealogy = genealogy_decoder(person.race)
+		person.genealogy[genealogy] = 69
+		person.genealogy['human'] = 31
+		remaining_percent = 0
 	else: #ralphE - note - below code is unchanged except for indents
 		random_number = clamp(random_number, 30, remaining_percent)
 		remaining_percent -= random_number
@@ -438,7 +443,6 @@ func set_genealogy(person):
 		else:
 			person.race_secondary = 'Full Blooded'
 	#/ralphE
-	
 	#Fill in Remaining Percentages
 	while remaining_percent > 0:
 		#Set Minor Races
@@ -722,10 +726,10 @@ func setRace(person,raceselected,highestpercent): #ralphD - consolidated to func
 			person.race = 'Taurus'
 		else:
 			#Beastkin/Halfkin Decoder
-			if highestpercent < 70 || globals.rules.furry == false: #ralphE - changed so that with furries disabled, you get Halfkin instead of Beastkin
-				caprace = 'Halfkin ' #ralphE
+			if highestpercent >= 70 && globals.rules.furry: #ralphE - changed so that with furries disabled, you get Halfkin instead of Beastkin
+				caprace = 'Beastkin '
 			else:
-				caprace = 'Beastkin ' #ralphE
+				caprace = 'Halfkin '
 			#Race Decoder
 			if currentrace == 'bunny':
 				caprace += 'Bunny'
