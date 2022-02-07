@@ -1400,10 +1400,17 @@ func manageVats(workersDict):
 			if sort in ['sell','refine']:
 				text += "\n[color=aqua]" + str(refVats[fluid].new) + " bottles[/color] of [color=aqua]" + fluid.capitalize() + "[/color] were added to the [color=aqua]" + sort + "[/color] queue today. "
 				sort = 'bottle2' + sort
+			elif sort == 'vat':
+				var waste = refVats[fluid][sort] + refVats[fluid].new - globals.getVatMaxCapacity('vat'+fluid)
+				if waste > 0:
+					refVats[fluid].new -= waste
+					text += "\n[color=aqua]" + str(refVats[fluid].new) + "[/color] units of [color=aqua]" + fluid.capitalize() + "[/color] were added to the [color=aqua]vat[/color] stockpile today. The vat was full and [color=red]" + str(refVats[fluid].new) + "[/color] units of [color=aqua]" + fluid.capitalize() + "[/color] had to be disposed."
+				else:
+					text += "\n[color=aqua]" + str(refVats[fluid].new) + "[/color] units of [color=aqua]" + fluid.capitalize() + "[/color] were added to the [color=aqua]" + sort + "[/color] stockpile today."
 			else:
 				text += "\n[color=aqua]" + str(refVats[fluid].new) + "[/color] units of [color=aqua]" + fluid.capitalize() + "[/color] were added to the [color=aqua]" + sort + "[/color] stockpile today."
-		refVats[fluid][sort] += refVats[fluid].new
-		refVats[fluid].new = 0
+			refVats[fluid][sort] += refVats[fluid].new
+			refVats[fluid].new = 0
 
 	#Bottling
 	text += "[color=#d1b970][center]\n\n-----Bottler Production-----[/center][/color]"
@@ -1707,6 +1714,8 @@ func setFate(person, type):
 
 
 func chooseworker(type, workers):
+	if workers.empty():
+		return null
 	var variable = -999
 	var currentperson = null
 	

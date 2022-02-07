@@ -98,6 +98,8 @@ func create(name):
 		###---Added by Expansion---### Unique Genealogy Fixer
 		uniqueGenealogyFixer(person)
 		###---End Expansion---###
+		if globals.state.relativesdata.has(person.id):
+			globals.state.relativesdata[person.id].name = person.name_long()
 		return person
 	else:
 		globals.printErrorCode("Gallery character not found: " + name)

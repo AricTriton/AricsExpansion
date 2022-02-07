@@ -3191,13 +3191,9 @@ var dictUniqueImagePaths = {
 	},
 	'Tia': {
 		IMAGE_DEFAULT: {
-			LOW_STRESS: 'res://files/aric_expansion_images/characters/tiaclothed.png',
-			MID_STRESS: 'res://files/aric_expansion_images/characters/tiaclothed.png',
 			HIGH_STRESS: 'res://files/aric_expansion_images/characters/tiaclothed.png',
 		},
 		IMAGE_NAKED: {
-			LOW_STRESS: 'res://files/aric_expansion_images/characters/tianaked.png',
-			MID_STRESS: 'res://files/aric_expansion_images/characters/tianaked.png',
 			HIGH_STRESS: 'res://files/aric_expansion_images/characters/tianaked.png',
 		},
 	},
