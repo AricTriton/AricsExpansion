@@ -389,31 +389,17 @@ func set_genealogy(person):
 	elif person.race in magic_races_array:
 		person.race_type = 4
 	
-<<<<<<< HEAD
 	#Set Primary Race #ralphE
 	if (globals.expansionsettings.player_secondaryracepercent == 0 && person.unique == 'player') || (globals.expansionsettings.startslave_secondaryracepercent == 0 && person.unique == 'startslave'):
-||||||| 6b6e609
-	#Set Primary Race
-	if person.race.find('Halfkin') < 0 && (person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon)):
-=======
-	#Set Primary Race
-	if (globals.rules.furry == false || person.race.find('Halfkin') < 0) && (person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon)):
->>>>>>> 5cb8f1aa053f0ef38c33dfb052becb40abcc234e
 		random_number = allot_percentage('purebreed')
-<<<<<<< HEAD
-	elif (globals.rules.furry == false || person.race.find('Halfkin') < 0) && (person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon)):
 	#/ralphE
+	elif (globals.rules.furry == false || person.race.find('Halfkin') < 0) && (person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon)):
 		random_number = allot_percentage('purebreed')
-	elif (globals.rules.furry == true && person.race.find('Halfkin') >= 0) || rand_range(0,100) <= globals.expansionsettings.randommixedbreedchance:
-||||||| 6b6e609
 	elif person.race.find('Halfkin') >= 0 || rand_range(0,100) <= globals.expansionsettings.randommixedbreedchance:
-=======
-	elif (globals.rules.furry == true && person.race.find('Halfkin') >= 0) || rand_range(0,100) <= globals.expansionsettings.randommixedbreedchance:
->>>>>>> 5cb8f1aa053f0ef38c33dfb052becb40abcc234e
 		random_number = allot_percentage('primary_mixed')
 	else:
 		random_number = allot_percentage('primary')
-
+	
 	#ralphE
 	if person.unique == 'player' && globals.expansionsettings.player_secondaryracepercent <= 50 && globals.expansionsettings.player_secondaryracepercent > 0 && globals.expansionsettings.player_secondaryrace in globals.expansion.genealogies:
 		genealogy = genealogy_decoder(person.race)
