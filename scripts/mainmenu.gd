@@ -121,6 +121,7 @@ func regenerateplayer():
 func regenerateslave():
 	var memory = startSlave.memory
 	startSlave = globals.newslave(startSlave.race, startSlave.age, startSlave.sex, 'poor', 'startslave') ###---Added by Expansion---### new arg unique
+	startSlave.unique = 'startslave' #ralphE - needed for my quickfix to allow startslave hybrid race to be set
 	startSlave.memory = memory
 	startSlave.beautybase = variables.characterstartbeauty
 

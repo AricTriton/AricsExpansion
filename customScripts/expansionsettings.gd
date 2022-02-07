@@ -10,6 +10,7 @@ var unique_trait_generation = false				# Set this to true if you want a 1 in 5 c
 var consolidatebeastDNA = false					# Set this to true if you don't like npcs with a mix of Beastkin/Halfkin race%'s (no half cat half foxes, etc.) #ralphB
 var gratitude_for_all = false					# Set this to true so that babies aged up to Child or Teen have as much chance to spawn with the Grateful trait as ones aged up to Adult (Ralph sets this to False, but up to you) #ralphC
 var sillymode = true							# Set it to false if you don't abide, so far it only affects random travel event text #ralphD
+var enable_all_player_races = false				# Set to true to allow all races for player & startslave on new game; This is a cheat especially for a Ralphs playthrough - Ralph recommends setting this to true only if you are in true love with starting as an uncommon race and cannot cheat on that race with any other - true love people, this is serious. Ralph has spoken. #ralphE
 
 #---Debug Tools (True/False)
 var perfectinfo = false
@@ -17,6 +18,13 @@ var enablecheatbutton = false
 
 #-- Use abilities on auto attack, left to right. Hint: reorder/activate abilities in the character info menu when out.
 var autoattackability = false
+
+#-- New Game Options
+#Control MC and Starting Slave Purebred vs Hybrid
+var player_secondaryrace = 'human' 					#In New Game -> Customized Start, control whether your MC is purebred or a hybrid.  Set to 'elf' or any other race as listed in genealogies to get a hybrid of your selected race and 'elf' or any other race set here. As of Aric's v1.7 genealogies = ['human','gnome','elf','tribal_elf','dark_elf','orc','goblin','dragonkin','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime','bunny','dog','cow','cat','fox','horse','raccoon'] #ralphE
+var player_secondaryracepercent = 0					#Set this between 0 and 50. Example: start New Game -> select Customized Start, select Demon for your race, set player_secondaryrace = 'taurus' and player_secondaryracepercent = 25 -> your MC will be a hybrid of 75% Demon and 25% Taurus. #ralphE
+var startslave_secondaryrace = 'human' 				#Same as above, but for the Starting Slave #ralphE
+var startslave_secondaryracepercent = 0				#Same as above, but for the Starting Slave #ralphE
 
 #---Content Filters | Partially Enabled (Set to true/false)
 var brutalcontent = true
@@ -258,7 +266,7 @@ var func_hunt_tweaks = [2,5,10,1.3,1.25,30,40,7]
 												# and how much experience is gained by dividing the amount of food gained total.
 
 #Start Slave Hobby Changes
-var magic_hobby_maf_max = 2						# Ralph's - 2, The value responsible for how much the maximum magic affinity a starter slave with the magic hobby has.
+var magic_hobby_maf_max = 2						# Ralph's - 1, The value responsible for how much the maximum magic affinity a starter slave with the magic hobby has. #ralphE
 
 #Sell Slave Prices
 var mansion_bred_and_breeder = 2				# Ralph's - 1.5, The multiplicative value that modifies the price.
@@ -457,6 +465,11 @@ func applyRaceTweaks():
 	#Beastkin Tanuki
 	globals.races["Beastkin Tanuki"].stats = {str_max = 3, agi_max = 3, maf_max = 5, end_max = 3}
 
+# Re-Enable Races here if enable_all_player_races == true. #ralphE
+func enableallplayerraces():
+	for i in globals.races:
+		globals.races[i].startingrace = true
+#/ralphE
 
 func addConstantsSupport():
 	variables.list["Aric's Expansion Mod"] = {
