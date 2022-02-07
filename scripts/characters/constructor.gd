@@ -390,9 +390,9 @@ func set_genealogy(person):
 		person.race_type = 4
 	
 	#Set Primary Race
-	if person.race.find('Halfkin') < 0 && (person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon)):
+	if (globals.rules.furry == false || person.race.find('Halfkin') < 0) && (person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon)):
 		random_number = allot_percentage('purebreed')
-	elif person.race.find('Halfkin') >= 0 || rand_range(0,100) <= globals.expansionsettings.randommixedbreedchance:
+	elif (globals.rules.furry == true && person.race.find('Halfkin') >= 0) || rand_range(0,100) <= globals.expansionsettings.randommixedbreedchance:
 		random_number = allot_percentage('primary_mixed')
 	else:
 		random_number = allot_percentage('primary')
