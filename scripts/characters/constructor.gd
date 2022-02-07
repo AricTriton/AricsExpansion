@@ -392,14 +392,14 @@ func set_genealogy(person):
 	#Set Primary Race #ralphE
 	if (globals.expansionsettings.player_secondaryracepercent == 0 && person.unique == 'player') || (globals.expansionsettings.startslave_secondaryracepercent == 0 && person.unique == 'startslave'):
 		random_number = allot_percentage('purebreed')
-	elif person.race.find('Halfkin') < 0 && (person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon)): #ralphE - changed to elif only
+	elif (globals.rules.furry == false || person.race.find('Halfkin') < 0) && (person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon)):
 	#/ralphE
 		random_number = allot_percentage('purebreed')
-	elif person.race.find('Halfkin') >= 0 || rand_range(0,100) <= globals.expansionsettings.randommixedbreedchance:
+	elif (globals.rules.furry == true && person.race.find('Halfkin') >= 0) || rand_range(0,100) <= globals.expansionsettings.randommixedbreedchance:
 		random_number = allot_percentage('primary_mixed')
 	else:
 		random_number = allot_percentage('primary')
-	
+
 	#ralphE
 	if person.unique == 'player' && globals.expansionsettings.player_secondaryracepercent <= 50 && globals.expansionsettings.player_secondaryracepercent > 0 && globals.expansionsettings.player_secondaryrace in globals.expansion.genealogies:
 		genealogy = genealogy_decoder(person.race)
@@ -722,10 +722,10 @@ func setRace(person,raceselected,highestpercent): #ralphD - consolidated to func
 			person.race = 'Taurus'
 		else:
 			#Beastkin/Halfkin Decoder
-			if highestpercent >= 70:
-				caprace = 'Beastkin '
+			if highestpercent < 70 || globals.rules.furry == false: #ralphE - changed so that with furries disabled, you get Halfkin instead of Beastkin
+				caprace = 'Halfkin ' #ralphE
 			else:
-				caprace = 'Halfkin '
+				caprace = 'Beastkin ' #ralphE
 			#Race Decoder
 			if currentrace == 'bunny':
 				caprace += 'Bunny'
