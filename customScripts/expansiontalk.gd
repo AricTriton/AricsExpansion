@@ -471,13 +471,13 @@ func buttonTextSloth(person):
 
 #---Intros---#
 #2-3 each for: ['sad','angry','scared','indifferent','obediant','horny','respectful','happy','playful']
-#2-3 each for: Flaws
+#2-3 each for: Vices
 #That gives between 4-6 choices per person
 
 func introGeneral(person):
 	var text = ""
 	var choice = []
-	###---Add Flaws later
+	###---Add Vices later
 
 	if person.mood == 'playful':
 		choice.append("Well if it isn't my favorite $master!")
@@ -560,7 +560,7 @@ func introStrip(person):
 func consentPartyAccept(person):
 	var text = ""
 	var choice = []
-	###---Add Flaws later	
+	###---Add Vices later	
 	if person.mood == 'playful':
 		choice.append("Yeah, sure! I'll travel alongside you, $master!")
 		choice.append("What do you think we'll find, $master?")
@@ -599,8 +599,8 @@ func consentPartyAccept(person):
 	choice.append("Yes, $master, I'll travel with you!")
 	choice.append("Yes, $master, I'll fight for you!")
 	text = globals.randomitemfromarray(choice)
-	#Flaws; Wrath
-	if person.checkFlaw('wrath'):
+	#Vices; Wrath
+	if person.checkVice('wrath'):
 		var wrath_eager = ["I can't wait to get out there and fuck some shit up!","I'm going to get to obliterate some fuckers, right?","You aren't going to fuck me over on gear, right?","Just be warned...you won't like me when I'm angry."]
 		for i in person.effects.values():
 			if i.code == 'captured':
@@ -669,15 +669,15 @@ func consentPartyRefuse(person):
 	choice.append("I'm not ready yet. Please respect that.")
 	choice.append("Maybe... one day. But not today.")
 	text = globals.randomitemfromarray(choice)
-	#Flaws; Wrath
-	if person.checkFlaw('wrath'):
+	#Vices; Wrath
+	if person.checkVice('wrath'):
 		text += " " + globals.randomitemfromarray(["*clears throat* FUCK YOU!","Yeah, get me out of here, put a sword in my hand, and let me SHOW YOU MY GRATITUDE!","I can't BELIEVE you'd ASK me that!","FUUUUUCK!","Fucking ASSHOLE. Why would I EVER risk my life for you?"])
 	return text
 
 func consentStudAccept(person):
 	var text = ""
 	var choice = []
-	###---Add Flaws later
+	###---Add Vices later
 
 	if person.mood == 'playful':
 		choice.append("Yeah, sure! I can't wait to stick it in one of your girls, $master!")
@@ -722,7 +722,7 @@ func consentStudAccept(person):
 func consentBreederAccept(person):
 	var text = ""
 	var choice = []
-	###---Add Flaws later
+	###---Add Vices later
 
 	if person.mood == 'playful':
 		choice.append("Yeah, sure! I can't wait to "+str(globals.expansion.nameBeBred())+" for you, $master!")

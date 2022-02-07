@@ -167,12 +167,16 @@ var mind = {
 	secretslog = "",
 	status = "none",
 	demeanor = "none",
-	flaw = "none",
-	flawless = false,
+	flaw = "none",					#TBK - Remove Next Save-Incompatible Version
+	flawless = false,				#TBK - Remove Next Save-Incompatible Version
+	vice = "none",
+	vice_presented = false,
+	vice_known = false,
+	vice_removed = false,
 	treatment = [],
 	respect = 0,
 	humiliation = 0,
-	lewd = 0
+	lewd = 0,
 }
 
 #Instinct is the base desired, based on Race. These are the current "Needs"
@@ -381,7 +385,8 @@ var randomname = true #True: The Slave Randomizes the name / False: The Slave's 
 #Daily Events: Exhaustion (Forced Rest), Consents, Fetishes
 var dailyevents = [] #Tracks pending events like "Milk Leak", "Pissing", etc
 var dailytalk = [] #Tracks Once Per Day Topics
-var flawknown = false
+
+var flawknown = false			#TBK - Remove on Next Save Incompatible Version
 
 #Not Implimented Yet
 var daylog = {} #Tracks Events from the Day Before | So far: brokerule_name or followedrule_name
@@ -850,7 +855,8 @@ func dictionaryplayer(text):
 	string = string.replace('$race', race.to_lower())
 	return string
 
-func countluxury():
+###---Added by Expansion---### Added Actually_Run to allow checking without affecting
+func countluxury(actually_run = true):
 	var templuxury = luxury
 	var goldspent = 0
 	var foodspent = 0
@@ -861,14 +867,10 @@ func countluxury():
 	elif sleep == 'your':
 		templuxury += 5+(5*globals.state.mansionupgrades.mansionluxury)
 	if rules.betterfood == true && globals.resources.food >= 5:
-		globals.resources.food -= 5
+		if actually_run == true:
+			globals.resources.food -= 5
 		foodspent += 5
 		templuxury += 5
-		###---Added by Expansion---### Flaws; Gluttony
-		if globals.expansionsettings.flaw_luxury_effects == true && self.checkFlaw('gluttony') && globals.resources.food >= 8:
-			foodspent += 3
-			templuxury += 5
-		###---End Expansion---###
 	if rules.personalbath == true:
 		if spec != 'housekeeper':
 			value = 2
@@ -876,11 +878,8 @@ func countluxury():
 			value = 1
 		if globals.itemdict.supply.amount >= value:
 			templuxury += 5
-			globals.itemdict.supply.amount -= value
-			###---Added by Expansion---### Flaws; Sloth & Pride
-			if globals.expansionsettings.flaw_luxury_effects == true && (self.checkFlaw('sloth') || self.checkFlaw('pride')):
-				templuxury += 2
-			###---End Expansion---###
+			if actually_run == true:
+				globals.itemdict.supply.amount -= value
 		else:
 			#nosupply == true
 			nosupply = true
@@ -892,78 +891,130 @@ func countluxury():
 		if globals.resources.gold >= value:
 			templuxury += 10
 			goldspent += value
-			globals.resources.gold -= value
-		###---Added by Expansion---### Flaws; Greed
-		if globals.expansionsettings.flaw_luxury_effects == true && self.checkFlaw('greed') && globals.resources.gold >= 5:
-			templuxury += 5
-			goldspent += 5
-			globals.resources.gold -= 5
-		###---End Expansion---###
+			if actually_run == true:
+				globals.resources.gold -= value
 	if rules.cosmetics == true:
 		if globals.itemdict.supply.amount > 1:
 			templuxury += 5
-			globals.itemdict.supply.amount -= 1
-			###---Added by Expansion---### Flaws; Pride
-			if globals.expansionsettings.flaw_luxury_effects == true && self.checkFlaw('pride') && globals.itemdict.supply.amount > 1:
+			if actually_run == true:
 				globals.itemdict.supply.amount -= 1
-				templuxury += 5
-			###---End Expansion---###
 		else:
 			nosupply = true
-	###---Added by Expansion---### Flaws; Lust, Sloth, Wrath
-	if globals.expansionsettings.flaw_luxury_effects == true:
-		if self.checkFlaw('lust') && lastsexday == globals.resources.day:
-			templuxury += 5
-		elif self.checkFlaw('sloth'):
-			if self.energy == self.stats.energy_max:
-				templuxury += 10
-			if self.stress <= self.stats.stress_max:
-				templuxury += 5
-		elif self.checkFlaw('wrath') && self.consentexp.party:
-			templuxury += clamp(self.metrics.ownership - self.metrics.win, -40, 100)
-	###---End Expansion---###
-	var luxurydict = {luxury = templuxury, goldspent = goldspent, foodspent = foodspent, nosupply = nosupply}
-	return luxurydict
-
-func calculateluxury():
-	var luxury = variables.luxuryreqs[origins]
-	if traits.has("Ascetic"):
-		luxury = luxury/2
-	elif traits.has("Spoiled"):
-		luxury *= 2
 	
-	###---Added by Expansion---### Flaws
-	if globals.expansionsettings.flaw_luxury_effects == true:
-		if self.checkFlaw('pride') && self.rules.cosmetics == false:
-			luxury += 5
-		elif self.checkFlaw('gluttony') && self.rules.betterfood == false:
-			luxury += 5
-		elif self.checkFlaw('greed') && self.rules.pocketmoney == false:
-			luxury += 5
-		elif self.checkFlaw('lust') && lastsexday != globals.resources.day:
-			luxury += clamp(round(globals.resources.day - lastsexday)*3, 1, 40)
-		elif self.checkFlaw('sloth'):
-			if self.energy < self.stats.energy_max * .5:
-				luxury += round((self.stats.energy_max - self.energy)*.1)
-			if self.stress > self.stats.stress_max * .5:
-				luxury += round((self.stats.stress_max - self.stress)*.1)
-		elif self.checkFlaw('envy'):
-			var envytarget = globals.expansion.getBestSlave()
-			if envytarget == self:				
-				luxury = 0
+	###---Added by Expansion---### Vices
+	var roll = round(rand_range(0,100))
+	var vice_modifier = 0
+	var vice_satisfied = false
+	if globals.expansionsettings.vices_luxury_effects == true && (self.mind.vice_known == true || roll <= globals.expansionsettings.vices_undiscovered_trigger_chance):
+		#Lust
+		if self.checkVice('lust'):
+			var vice_lust_mod = clamp(5 + round(self.lewdness * .1), 5, 15)
+			if self.work in ['fucktoy','fucktoywimborn','escortwimborn','whorewimborn','ffprostitution']:
+				vice_satisfied = true
+				vice_lust_mod += 5
+			if lastsexday == globals.resources.day || vice_satisfied == true:
+				vice_modifier = clamp(vice_lust_mod - ((globals.resources.day - self.lastsexday)*2), 0, 20)
 			else:
+				vice_modifier = clamp(vice_lust_mod - ((globals.resources.day - self.lastsexday)*2), -20, 10)
+		#Sloth
+		elif self.checkVice('sloth'):
+			if self.work in ['rest','housepet']:
+				vice_satisfied = true
+				vice_modifier += 5
+			if rules.personalbath == true:
+				vice_modifier += 5
+			if self.energy == self.stats.energy_max:
+				vice_modifier += 10
+			elif self.energy <= self.stats.energy_max * .25:
+				vice_modifier -= 5
+			if self.stress <= self.stats.stress_max * .25:
+				vice_modifier += 5
+			elif self.stress > self.stats.stress_max * .75:
+				vice_modifier -= 5
+			if vice_satisfied == true:
+				vice_modifier = clamp(vice_modifier, 0, 20)
+		#Wrath
+		elif self.checkVice('wrath') && self.consentexp.party:
+			if self.metrics.win >= self.metrics.ownership || self.work in ['guardian','slavecatcher','trainer','trainee']:
+				vice_satisfied = true
+			if vice_satisfied == true:
+				vice_modifier = clamp(self.metrics.win - self.metrics.ownership, 0, 40)
+			else:
+				vice_modifier = clamp(self.metrics.win - self.metrics.ownership, -20, 20)
+		#Pride
+		if self.checkVice('pride'):
+			if self.work in ['headgirl','farmmanager','jailer']:
+				vice_satisfied = true
+				vice_modifier += 10
+			if self.rules.cosmetics == true && globals.itemdict.supply.amount >= 1:
+				if actually_run == true:
+					globals.itemdict.supply.amount -= 1
+				vice_modifier += 5
+			elif self.rules.cosmetics == false && vice_satisfied == false:
+				vice_modifier -= 10
+			if rules.personalbath == true:
+				vice_modifier += 5
+			elif rules.personalbath == false && vice_satisfied == false:
+				vice_modifier -= 10
+		#Gluttony
+		elif self.checkVice('gluttony'):
+			if self.work == 'cooking':
+				vice_satisfied = true
+				vice_modifier += 10
+			if self.rules.betterfood == false && globals.resources.food >= 8:
+				foodspent += 3
+				if actually_run == true:
+					globals.resources.food -= 3
+				vice_modifier += 10
+			elif vice_satisfied == false:
+				vice_modifier -= 10
+		#Greed
+		elif self.checkVice('greed'):
+			if self.work in ['storewimborn','milkmerchant']:
+				vice_satisfied = true
+				vice_modifier += 10
+			if self.rules.pocketmoney == true && globals.resources.gold >= 5:
+				if actually_run == true:
+					globals.resources.gold -= 5
+				goldspent += 5
+				vice_modifier += 10
+			elif self.rules.pocketmoney == false && vice_satisfied == false:
+				vice_modifier -= 10
+		#Envy
+		elif self.checkVice('envy'):
+			var envytarget = globals.expansion.getBestSlave()
+			if envytarget == self:			
+				vice_satisfied = true
+				vice_modifier += 20
+			else:
+				if self.work in ['headgirl','farmmanager','jailer']:
+					vice_satisfied = true
+					vice_modifier += 5
 				if envytarget.sleep in ['personal','your'] && !self.sleep in ['personal','your']:
-					luxury += 5
-				if envytarget.lastsexday > self.lastsexday && self.consent == true:
-					luxury += 3
-				if envytarget.stress < self.stress:
-					luxury += 2
-				if globals.originsarrayexp.find(envytarget.origins) > globals.originsarrayexp.find(self.origins):
-					luxury += 10
+					vice_modifier -= 5
 				else:
-					luxury -= 5
+					vice_modifier += 5
+				if envytarget.lastsexday > self.lastsexday && self.consent == true:
+					vice_modifier -= 5
+				else:
+					vice_modifier += 5
+				if envytarget.stress < self.stress * .5:
+					vice_modifier -= 5
+				else:
+					vice_modifier += 5
+				if globals.originsarrayexp.find(envytarget.origins) > globals.originsarrayexp.find(self.origins):
+					vice_modifier -= 10
+				else:
+					vice_modifier += 5
+			if vice_satisfied == true:
+				vice_modifier = clamp(vice_modifier, 0, 20)
+		#Calculation
+		if vice_modifier != 0:
+			vice_modifier = clamp(vice_modifier, -20, 20)
+			templuxury += vice_modifier
+	var luxurydict = {luxury = templuxury, goldspent = goldspent, foodspent = foodspent, nosupply = nosupply, vice_modifier = vice_modifier}
 	###---End Expansion---###
-	return luxury
+	return luxurydict
 
 func calculateprice():
 	var price = 0
@@ -1324,42 +1375,176 @@ func get_wombsemen():
 	
 	return semen
 
-#Flaw Checks/Reveals
-func checkFlaw(type, countascheck = true):
-	var allflaws = globals.expansion.flawarray
+#---Clothing
+func updateClothing():
+	var text = ""
+	#Player Check
+	if self == globals.player && globals.expansionsettings.player_treats_clothing_like_slave == false:
+		return text
+	
+	#Determine Clothing Status
+	var exposed_parts = []
+	var amnude = false
+	for part in ['chest','genitals','ass']:
+		if self.exposed[part] == true:
+			exposed_parts.append([part])
+	if exposed_parts.size() > 1:
+		amnude = true
+	
+	#Determine if they should Strip or Dress
+	if amnude == true:
+		var redress = false
+		#Naked - Do They Need/Want to Dress? Can They?
+		if self.rules.nudity == false && !self.fetish.exhibitionism in ['enjoyable','mindblowing']:
+			text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. You hadn't ordered $him to stay "+ globals.expansion.nameNaked() +" so $he proceeded. "
+			redress = true
+		elif self.rules.nudity == true && globals.fetishopinion.find(self.fetish.exhibitionism) <= 2:
+			#Chance to Rebel
+			var captured = 0
+			for i in self.effects.values():
+				if i.code == 'captured':
+					captured = i.duration/2
+			var chance = round(self.metric.own + ((self.loyal + self.obed + self.fear)/3) - (captured * 10))
+			var roll = round(rand_range(0,100))
+			if roll <= chance:
+				text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. However, you ordered $him to stay "+ globals.expansion.nameNaked() +". $He followed your orders obediently. "
+				if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
+					self.dailyevents.append('rule_nudity_obeyed')
+			else:
+				text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. You had ordered $him to stay "+ globals.expansion.nameNaked() +", but $he ignored your order.\n[color=green]Punishment Valid Reason added; Bonus Applied to Next Date[/color] "
+				if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
+					self.dailyevents.append('rule_nudity_disobeyed')
+				redress = true
+			if globals.expansionsettings.perfectinfo == true:
+				text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Chance [color=aqua]" + str(chance) + " [/color]. "+ globals.fastif(roll <= chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
+		#Redress
+		if redress == true:
+			text += "\n"
+			#Attempt Failed due to Restraints
+			if self.restrained != "none":
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['','','','desparately ','frustratedly ','angrily ','grumpily ']) +"tried to "+ globals.randomitemfromarray(['dress','clothe $himself','get dressed','redress','put $his clothes back on']) +", but $he was unable to due to $his [color=red]restraints[/color]. "
+				globals.expansion.updateMood(self, -1)
+				return text
+			if self.exposed.chestforced == false || self.exposed.genitalsforced == false || self.exposed.assforced == false:
+				text += "[color=aqua]$name[/color] looked at the shredded scraps that used to be $his clothing. These shredded pieces of cloth won't allow $him any privacy or the option to cover $himself in those areas. "
+			if self.exposed.chest == true && self.exposed.chestforced == false:
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['put back on','slipped into','put on']) +" $his tunic, obscuring $his "+ globals.expansion.getChest(self) +". "
+				self.exposed.chest = false
+			if self.exposed.genitals == true && self.exposed.genitalsforced == false || self.exposed.ass == true && self.exposed.assforced == false:
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['put back on','slipped into','put on']) +" $his pants, obscuring $his "
+				if self.exposed.genitals == true:
+					text += globals.expansion.getGenitals(self)
+				if self.exposed.ass == true:
+					if self.exposed.genitals == true:
+						text += " and " 
+					text += globals.expansion.nameAss()
+				self.exposed.genitals = false
+				self.exposed.ass = false
+				text += ". "
+		
+	else:
+		var strip = false
+		#Dressed - Do They Need/Want to Strip?
+		if self.rules.nudity == true:
+			#Consent
+			if self.consentexp.nudity == true || self.fetish.exhibitionism in ['enjoyable','mindblowing']:
+				text += "\n[color=aqua]$name[/color] wanted to strip " + globals.expansion.nameNaked() + " " + globals.randomitemfromarray(['','','slowly','quickly','eagerly','obediently']) + " as per your [color=aqua]rules[/color]. "
+				if self.checkFetish('exhibitionism', 1, false, false):
+					text += "$He likely would have done so "+ globals.randomitemfromarray(['','eagerly','excitedly']) +" anyways due to $his [color=green]"+ globals.randomitemfromarray(['exhibitionism','natural exhibitionism','exhibitionism fetish','love of being nude','enjoyment of others seeing $his naked body']) +"[/color]. "
+				if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
+					self.dailyevents.append('rule_nudity_obeyed')
+				strip = true
+			else:
+				text += "\n[color=aqua]$name[/color] seemed to hesitate when considering stripping " + globals.expansion.nameNaked() + " as per your rules "+ globals.randomitemfromarray(['','as this is all new','as $he still feels awkward about it','as $he is unsure how $he feels about it']) +". "
+				var captured = 0
+				for i in self.effects.values():
+					if i.code == 'captured':
+						captured = i.duration/2
+				var chance = round(self.metric.own + ((self.loyal + self.obed + self.fear)/2) - (captured * 10))
+				var roll = round(rand_range(0,100))
+				if roll <= chance:
+					text += "$He decided that $he did want to strip " + globals.expansion.nameNaked() + " " + globals.randomitemfromarray(['','','slowly','quickly','eagerly','obediently','for you']) + " as per your rules. "
+					if self.fetish.exhibitionism in ['enjoyable','mindblowing'] || self.checkFetish('exhibitionism', 1, false, false):
+						text += "$His [color=green]"+ globals.randomitemfromarray(['exhibitionism','natural exhibitionism','exhibitionism fetish','love of being nude','enjoyment of others seeing $his naked body']) +"[/color] shone through and $he chose not hesistate to strip for you in the future. "
+						self.consentexp.nudity = true
+					else:
+						text += "$He still seems hesitant about doing it in the future. $He may need to be more [color=green]"+ globals.randomitemfromarray(['exhibitionist','comfortable showing others $his body','into the exhibitionism fetish','of a nudist','into others seeing $his naked body']) +"[/color] to fully accept it. "
+					if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
+						self.dailyevents.append('rule_nudity_obeyed')
+					strip = true
+				else:
+					text += "\n[color=red][color=aqua]$name[/color] refused to strip " + globals.expansion.nameNaked() + " per your orders. $He has broke your rules. $He seems to need a lesson in [color=aqua]Fear[/color], [color=aqua]Obedience[/color], or [color=aqua]Loyalty[/color]. [/color]\n[color=green]Punishment Valid Reason added; Bonus Applied to Next Date[/color] "
+					if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
+						self.dailyevents.append('rule_nudity_disobeyed')
+				if globals.expansionsettings.perfectinfo == true:
+					text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Chance [color=aqua]" + str(chance) + " [/color]. "+ globals.fastif(roll <= chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
+		elif self.fetish.exhibitionism == 'mindblowing':
+			strip = true
+			text += "\n[color=aqua]$name[/color] "+ globals.randomitemfromarray(['','','eagerly','excitedly','happily']) +" tried to strip "+ globals.expansion.nameNaked() +"  due to $his [color=aqua]"+ globals.randomitemfromarray(['exhibitionism','natural exhibitionism','exhibitionism fetish','love of being nude','enjoyment of others seeing $his naked body']) +"[/color]. "
+			
+		#Strip
+		if strip == true:
+			text += "\n"
+			#Attempt Failed due to Restraints
+			if self.restrained != "none":
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['','','','desparately','frustratedly','angrily','grumpily','sarcastically']) +" tried to "+ globals.randomitemfromarray(['strip','undress','get naked','get nude','strip $himself']) +", but $he was unable to due to $his [color=red]restraints[/color]. "
+				globals.expansion.updateMood(self, -1)
+				return text
+			if self.exposed.chest == false:
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['took off','stripped','removed','stripped off','pulled off','slipped out of']) +" $his tunic, revealing $his "+ globals.expansion.getChest(self) +". "
+				self.exposed.chest = true
+			if self.exposed.genitals == false || self.exposed.ass == true:
+				text += "[color=aqua]$name[/color] "+ globals.randomitemfromarray(['took off','stripped','removed','stripped off','pulled off','slipped out of']) +" $his pants, revealing $his "
+				if self.exposed.genitals == false:
+					text += globals.expansion.getGenitals(self)
+				if self.exposed.ass == true:
+					if self.exposed.genitals == false:
+						text += " and " 
+					text += globals.expansion.nameAss()
+				self.exposed.genitals = true
+				self.exposed.ass = true
+				text += ". "
+				
+	return text
+
+#---Vice (Formerly Flaw)
+#Vice Checks/Reveals
+func checkVice(type, countascheck = true):
+	var allvices = globals.expansion.vicearray
 	var success = false
-	if !allflaws.has(type):
-		print('Flaw type ' + type + ' does not exist to be Checked')
+	if !allvices.has(type):
+		print('Vice type ' + type + ' does not exist to be Checked')
 		return success
 	
-	if self.mind.flaw == type:
+	if self.mind.vice == type:
 		success = true
 		if countascheck == true:
 			self.dailyevents.append(type)
 	
 	return success
 
-func revealFlaw(incomingtype = 'none'):
-	#use person.revealFlaw() to reveal their Flaw, use person.revealFlaw('type') to "guess" the flaw
-	if self.flawknown == true:
-		return "\nYou already know $his Flaw."
+func revealVice(incomingtype = 'none'):
+	#use person.revealVice() to reveal their Vice, use person.revealVice('type') to "guess" the vice
+	if self.mind.vice_known == true:
+		return "\nYou already know $his [color=aqua]Vice[/color]."
 	
-	var allflaws = globals.expansion.flawarray
+	var allvices = globals.expansion.vicearray
 	var text = ""
 	var type = incomingtype
-	if type != 'none' && !allflaws.has(type):
-		print('Flaw type ' + type + ' does not exist to be Revealed')
+	if type != 'none' && !allvices.has(type):
+		print('Vice type ' + type + ' does not exist to be Revealed')
 		return
 	
-	#Guess Modifier
-	var guess_bonus = 0
-	if type == self.mind.flaw:
-		guess_bonus = globals.player.smaf*10
-	type = self.mind.flaw
+	#Modifier
+	var chance = (globals.player.smaf*10) + (self.dailyevents.count(self.mind.vice)*10)
+	if self.mind.vice_presented == true:
+		chance += globals.expansionsettings.vices_discovery_presentation_bonus
 	
-	if rand_range(0,100) <= (self.dailyevents.find(type) * 10) + guess_bonus:
-		self.flawknown = true
-		text = globals.expansion.flawdict[type]
+	type = self.mind.vice
+	
+	if rand_range(0,100) <= chance:
+		self.mind.vice_known = true
+		text = globals.expansion.vicedict[type]
 	else:
 		self.dailyevents.append(type)
 	return text

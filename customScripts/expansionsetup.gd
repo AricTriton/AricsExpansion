@@ -170,6 +170,8 @@ func expandGame():
 			person.scalecolor = globals.randomfromarray(globals.races["Dragonkin"].scalecolor)
 		if person.race == "Harpy" && person.feathercolor == '':
 			person.feathercolor = globals.randomfromarray(globals.races["Harpy"].feathercolor)
+		if globals.state.relativesdata.has(person.id):
+			globals.state.relativesdata[person.id].name = person.name_long()
 	for i in globals.guildslaves:
 		for person in globals.guildslaves[i]:
 			if person.expanded == false:
@@ -183,6 +185,8 @@ func expandGame():
 			if person.race == "Harpy" && person.feathercolor == '':
 				person.feathercolor = globals.randomfromarray(globals.races["Harpy"].feathercolor)
 
+			if globals.state.relativesdata.has(person.id):
+				globals.state.relativesdata[person.id].name = person.name_long()
 
 	#---BugFixing & Cleanup
 	#erase NPCs with duplicate ids to slaves
@@ -249,11 +253,11 @@ func expandPerson(person):
 		var persondignitymin = globals.expansion.dignitymin[origins]
 		var persondignitymax = globals.expansion.dignitymax[origins]
 		person.dignity = round(rand_range(persondignitymin,persondignitymax))
-		#---Readd when Flaws/Personalities are Readded
-		setFlaw(person)
+		setVice(person)
 		setDemeanor(person)
 		setSexuality(person)
 		setDesiredOffspring(person)
+		#---Readd when Vices/Personalities are Readded
 		#getPersonality(person)
 		
 		#Check Relation Data and Add if Non-Existant
@@ -278,14 +282,15 @@ func expandPerson(person):
 	
 	#Sets Id/Ego for Everyone
 	#setIdentity(person) Currently Crashing Game
+	
 	person.expanded = true
 	globals.expansion.updatePerson(person)
 
 #"Set" functions are intended to run Once per person for the initial setup
-func setFlaw(person):
-	var temparray = globals.expansion.flawarray.duplicate()
-	if person.mind.flaw == 'none' && person.mind.flawless == false:
-		person.mind.flaw = str(globals.randomitemfromarray(temparray))
+func setVice(person):
+	var temparray = globals.expansion.vicearray.duplicate()
+	if person.mind.vice == 'none' && person.mind.vice_removed == false:
+		person.mind.vice = str(globals.randomitemfromarray(temparray))
 
 func setDemeanor(person):
 	#Changing into Personality/Identity in Future Update

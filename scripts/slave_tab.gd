@@ -192,10 +192,10 @@ func buildmetrics():
 	#Check if Specific Info/Unlock for Specific Info or Generic (Description)
 	if person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height) || person.swollen > 0 && globals.state.perfectinfo == true:
 		text += "\nSwollen Belly: [color=aqua]" + str(person.swollen) + "[/color]"
-	if person.flawknown == true:
-		text += "\n[color=#d1b970][center]Personality Flaw:[/color] [color=aqua]" + person.mind.flaw.capitalize() + "[/color][/center]\n"
+	if person.mind.vice_known == true:
+		text += "\n[color=#d1b970][center]Vice:[/color] [color=aqua]" + person.mind.vice.capitalize() + "[/color][/center]\n"
 	else:
-		text += "\n[color=#d1b970][center]Personality Flaw:[/color] [color=red]Unknown[/color][/center]\n"
+		text += "\n[color=#d1b970][center]Vice:[/color] [color=red]Unknown[/color][/center]\n"
 	text = "[color=#d1b970][center]Sexual achievments[/center][/color]\n"
 	text += "Had intimacy: " + textForCountNoun(person.metrics.sex, " time") +"\n"
 	text += "Fucked by strangers: " + textForCountNoun(person.metrics.randompartners, " time") +"\n"

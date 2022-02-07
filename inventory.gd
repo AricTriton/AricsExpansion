@@ -459,3 +459,33 @@ func applytestic():
 	selectedslave.toxicity += 30
 	updateitems()
 	globals.main.popup(text)
+
+func amnesiapoteffect():
+	var text = 'After chugging down the Amnesia Potion, $name looks lightheaded and confused. "W-what was that? I feel like I have forgotten something..." $He is lost, unable to recall the memories of the time before $his confinement as your servant. '
+	if selectedslave.effects.has('captured'):
+		selectedslave.add_effect(globals.effectdict.captured, true)
+		text = text + 'Memories from before $his confinement no longer influence $him to resist you. '
+	if selectedslave.loyal < 50 && selectedslave.memory != 'clear':
+		text = text + "$He grows closer to you, having no one else $he can rely on. "
+		selectedslave.loyal += rand_range(15,25) - selectedslave.conf/10
+	###---Added by Expansion---### Vice Removal
+	if selectedslave.mind.vice != "none":
+		if selectedslave.mind.vice_known == true:
+			text += selectedslave.dictionary("\n$His mental regression seems to have removed $his [color=aqua]"+ str(selectedslave.mind.vice.capitalize()) +" Vice[/color] as well. ")
+		selectedslave.mind.vice = "none"
+		selectedslave.mind.vice_removed = true
+		selectedslave.mind.vice_known = true
+	###---End Expansion---###
+	text += "\n\nYou can choose new name for $name."
+	currentpotion = 'amnesiapot'
+	selectedslave.memory = 'clear'
+	selectedslave.toxicity += 25
+	if state == 'inventory':
+		globals.itemdict[currentpotion].amount -= 1
+	elif state == 'backpack':
+		globals.state.backpack.stackables[currentpotion] -= 1
+	updateitems()
+	$amnesia.visible = true
+	$amnesia/name.text = selectedslave.name
+	$amnesia/surname.text = selectedslave.surname
+	$amnesia/RichTextLabel.bbcode_text = selectedslave.dictionary(text)

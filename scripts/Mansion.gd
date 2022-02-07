@@ -144,7 +144,11 @@ func rebuild_slave_list():
 			elif catIdx == 2:
 				if person.sleep != 'farm':
 					continue
-
+			
+			###---Added by Expansion---### Person Expanded; Strip/Redress
+			person.updateClothing()
+			###---End Expansion---###
+			
 			if nodeIndex < personList.get_children().size() - (3 - catIdx):
 				if personList.get_children()[nodeIndex].has_meta('id') && personList.get_children()[nodeIndex].get_meta('id') == person.id:
 					updateSlaveListNode(personList.get_children()[nodeIndex], person, categoryButtons[catIdx].pressed)
@@ -944,7 +948,7 @@ func _on_end_pressed():
 
 			###---Added by Expansion---### Flaws; Lust
 			#sleep conditions
-			if person.lust < 25 || person.traits.has('Sex-crazed') || person.checkFlaw('lust'):
+			if person.lust < 25 || person.traits.has('Sex-crazed') || person.checkVice('lust'):
 				person.lust += round(rand_range(3,6))
 			###---End Expansion---###
 			if person.sleep == 'communal' && globals.count_sleepers()['communal'] > globals.state.mansionupgrades.mansioncommunal:
@@ -1101,10 +1105,25 @@ func _on_end_pressed():
 				gold_consumption += luxurycheck.goldspent
 				if luxurycheck.nosupply == true:
 					lacksupply = true
+				###---Added by Expansion---### Vices
 				if !person.traits.has("Grateful") && luxury < personluxury && person.metrics.ownership - person.metrics.jail > 7:
 					person.loyal -= (personluxury - luxury)/2.5
 					person.obed -= (personluxury - luxury)
-					text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=#ff4949]$name appears to be rather unhappy about quality of $his life and demands better living conditions from you. [/color]\n"))
+					text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=#ff4949][color=aqua]$name[/color] appears to be rather unhappy about quality of $his life and demands better living conditions from you. [/color]\n"))
+				if luxurycheck.vice_modifier != 0:
+					if person.mind.vice_known == false:
+						person.mind.vice_presented = true
+						if luxurycheck.vice_modifier > 0:
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] seems to have an unknown [color=aqua]Vice[/color] affecting $his happiness and [color=aqua]Luxury[/color] [color=green]positively[/color] today. Perhaps [color=aqua]reading $his mind[/color] will reveal more. \n"))
+						elif luxurycheck.vice_modifier < 0:
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] seems to have an unknown [color=aqua]Vice[/color] affecting $his happiness and [color=aqua]Luxury[/color] [color=red]negatively[/color] today. Perhaps [color=aqua]reading $his mind[/color] will reveal more. \n"))
+					else:
+						text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] has a [color=aqua]"+ str(person.mind.vice.capitalize()) +" Vice[/color] which affected $his happiness and [color=aqua]Luxury[/color] "))
+						if luxurycheck.vice_modifier > 0:
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=green]positively[/color] today. \n"))
+						elif luxurycheck.vice_modifier < 0:
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=red]negatively[/color] today. \n"))
+				###---End Expansion---###
 		elif person.away.duration > 0:
 			person.away.duration -= 1
 			###---Added by Expansion---### Hybrid Support && Ankmairdor's BugFix v4
@@ -1239,7 +1258,7 @@ func _on_end_pressed():
 				else:
 					globals.addrelations(person, farmmanager, rand_range(-25,-40))
 #	text3.set_bbcode(text3.get_bbcode()+farmtext)
-	if farmtext != null && text3 != null:
+	if farmtext != null && text3 != null && globals.state.farm >= 3:
 		text3.set_bbcode(farmtext)
 	
 	###---Added by Expansion---### Ank BugFix v4a
@@ -3848,6 +3867,8 @@ func _on_confirmentertext_pressed():
 	if meta == 'rename':
 		person = get_node("entertext").get_meta("slave")
 		person.name = text
+		if globals.state.relativesdata.has(person.id):
+			globals.state.relativesdata[person.id].name = person.name_long()
 		rebuild_slave_list()
 	elif meta == 'eyecolor':
 		person = get_node("entertext").get_meta("slave")

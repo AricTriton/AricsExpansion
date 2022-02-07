@@ -389,38 +389,60 @@ func set_genealogy(person):
 	elif person.race in magic_races_array:
 		person.race_type = 4
 	
-	#Set Primary Race
-	if person.race.find('Halfkin') < 0 && (person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon)):
+	#Set Primary Race #ralphE
+	if (globals.expansionsettings.player_secondaryracepercent == 0 && person.unique == 'player') || (globals.expansionsettings.startslave_secondaryracepercent == 0 && person.unique == 'startslave'):
+		random_number = allot_percentage('purebreed')
+	#/ralphE
+	elif (globals.rules.furry == false || person.race.find('Halfkin') < 0) && (person.unique != null || person.race in magic_races_array || rand_range(0,100) <= globals.expansionsettings.randompurebreedchance || (person.race in uncommon_races_array && rand_range(0,100) <= globals.expansionsettings.randompurebreedchanceuncommon)):
 		random_number = allot_percentage('purebreed')
 	elif person.race.find('Halfkin') >= 0 || rand_range(0,100) <= globals.expansionsettings.randommixedbreedchance:
 		random_number = allot_percentage('primary_mixed')
 	else:
 		random_number = allot_percentage('primary')
-
-	random_number = clamp(random_number, 30, remaining_percent)
-	remaining_percent -= random_number
 	
-	genealogy = genealogy_decoder(person.race)
-	person.genealogy[genealogy] += random_number
-	
-	#Allot Secondary
-	if remaining_percent > 0:
-		#Set Second Race
-		newrace = raceLottery(person)
-		person.race_secondary = newrace
-		#Set Percentage
-		random_number = allot_percentage('secondary')
-		random_number = clamp(random_number, 10, remaining_percent)
-		#Reduce Random Genes < 10
-		if remaining_percent - random_number < 0 || remaining_percent - random_number < globals.expansionsettings.genealogy_equalizer:
-			random_number = remaining_percent
+	#ralphE
+	if person.unique == 'player' && globals.expansionsettings.player_secondaryracepercent <= 50 && globals.expansionsettings.player_secondaryracepercent > 0 && globals.expansionsettings.player_secondaryrace in globals.expansion.genealogies:
+		genealogy = genealogy_decoder(person.race)
+		person.genealogy[genealogy] += 100 - globals.expansionsettings.player_secondaryracepercent
+		genealogy = globals.expansionsettings.player_secondaryrace
+		person.genealogy[genealogy] += globals.expansionsettings.player_secondaryracepercent
+		remaining_percent = 0
+	elif person.unique == 'startslave' && globals.expansionsettings.startslave_secondaryracepercent <= 50 && globals.expansionsettings.startslave_secondaryracepercent > 0 && globals.expansionsettings.startslave_secondaryrace in globals.expansion.genealogies:
+		genealogy = genealogy_decoder(person.race)
+		person.genealogy[genealogy] += 100 - globals.expansionsettings.startslave_secondaryracepercent
+		genealogy = globals.expansionsettings.startslave_secondaryrace
+		person.genealogy[genealogy] += globals.expansionsettings.startslave_secondaryracepercent
+		remaining_percent = 0
+	elif person.unique in ['player','startslave'] && globals.rules.furry && person.race.find('Halfkin') >= 0:
+		genealogy = genealogy_decoder(person.race)
+		person.genealogy[genealogy] = 69
+		person.genealogy['human'] = 31
+		remaining_percent = 0
+	else: #ralphE - note - below code is unchanged except for indents
+		random_number = clamp(random_number, 30, remaining_percent)
 		remaining_percent -= random_number
-		#Add to Genealogy
-		genealogy = genealogy_decoder(newrace)
-		person.genealogy[genealogy] += random_number
-	else:
-		person.race_secondary = 'Full Blooded'
 	
+		genealogy = genealogy_decoder(person.race)
+		person.genealogy[genealogy] += random_number
+	
+		#Allot Secondary
+		if remaining_percent > 0:
+			#Set Second Race
+			newrace = raceLottery(person)
+			person.race_secondary = newrace
+			#Set Percentage
+			random_number = allot_percentage('secondary')
+			random_number = clamp(random_number, 10, remaining_percent)
+			#Reduce Random Genes < 10
+			if remaining_percent - random_number < 0 || remaining_percent - random_number < globals.expansionsettings.genealogy_equalizer:
+				random_number = remaining_percent
+			remaining_percent -= random_number
+			#Add to Genealogy
+			genealogy = genealogy_decoder(newrace)
+			person.genealogy[genealogy] += random_number
+		else:
+			person.race_secondary = 'Full Blooded'
+	#/ralphE
 	#Fill in Remaining Percentages
 	while remaining_percent > 0:
 		#Set Minor Races
@@ -714,7 +736,7 @@ func setRace(person,raceselected,highestpercent): #ralphD - consolidated to func
 			person.race = 'Gnoll'
 		else:
 			#Beastkin/Halfkin Decoder
-			if highestpercent >= 70:
+			if highestpercent >= 70 && globals.rules.furry: #ralphE - changed so that with furries disabled, you get Halfkin instead of Beastkin
 				caprace = 'Beastkin '
 			else:
 				caprace = 'Halfkin '

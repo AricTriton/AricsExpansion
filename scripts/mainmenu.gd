@@ -237,6 +237,7 @@ func regenerateplayer():
 func regenerateslave():
 	var memory = startSlave.memory
 	startSlave = globals.newslave(startSlave.race, startSlave.age, startSlave.sex, 'poor', 'startslave') ###---Added by Expansion---### new arg unique
+	startSlave.unique = 'startslave' #ralphE - needed for my quickfix to allow startslave hybrid race to be set
 	startSlave.memory = memory
 	startSlave.beautybase = variables.characterstartbeauty
 
@@ -658,7 +659,9 @@ func _on_slaveconfirm_pressed():
 	startSlave.health = 1000
 	###---End Expansion---###
 
-	globals.expansion.updatePerson(player)
+	globals.expansion.updatePerson(startSlave)
+	if globals.state.relativesdata.has(startSlave.id):
+		globals.state.relativesdata[startSlave.id].name = startSlave.name_long()
 	#Assign start slave to global slave list
 	globals.slaves = startSlave #A bit deceptive as it assigns 'person' to 'array', works because of 'setget'
 
@@ -747,6 +750,8 @@ func _on_slaveconfirm_pressed():
 	globals.player = player
 	###---Added by Expansion---###
 	globals.expansion.updatePerson(globals.player)
+	if globals.state.relativesdata.has(globals.player.id):
+		globals.state.relativesdata[globals.player.id].name = globals.player.name_long()
 	###---End Expansion---###
 	globals.state.upcomingevents.append({code = 'ssinitiate', duration = 1})
 	#Change scene to game start 'Mansion'
