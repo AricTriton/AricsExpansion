@@ -8,7 +8,7 @@ var jobdict = {
 		code = 'rest',
 		name = "Rest",
 		type = 'basic',
-		description = "$name will rest for today",
+		description = "$name will rest for today.\n[color=aqua]Enjoyed by Slothful slaves[/color]",
 		workline = "$name will be taking a rest for today.",
 		reqs = 'true',
 		unlockreqs = 'true',
@@ -99,7 +99,7 @@ var jobdict = {
 		code = 'whorewimborn',
 		name = "W - Prostitution",
 		type = 'sexual',
-		description = "$name will be assigned to the town's brothel as a common whore.\n\n[color=yellow]Efficiency grows with Charm, Endurance, Beauty and basic sexual actions. \n\nRequires unlocked sex actions for sufficient performance.[/color]",
+		description = "$name will be assigned to the town's brothel as a common whore.\n\n[color=yellow]Efficiency grows with Charm, Endurance, Beauty and basic sexual actions. \n\nRequires unlocked sex actions for sufficient performance.[/color]\n[color=aqua]Enjoyed by Lustful slaves[/color]",
 		workline = "$name will whore $himself at the brothel.",
 		reqs = "true",
 		unlockreqs = 'globals.state.sidequests.brothel >= 2',
@@ -112,7 +112,7 @@ var jobdict = {
 		code = 'escortwimborn',
 		name = "W - Escort",
 		type = 'sexual',
-		description = "$name will be assigned to the town's brothel as a high class whore for rich men. \n\n[color=yellow]Requires grade of a [color=aqua]Commoner[/color] or higher. \n\nEfficiency grows with Charm, Confidence, Beauty and your reputation. [/color]",
+		description = "$name will be assigned to the town's brothel as a high class whore for rich men. \n\n[color=yellow]Requires grade of a [color=aqua]Commoner[/color] or higher. \n\nEfficiency grows with Charm, Confidence, Beauty and your reputation. [/color]\n[color=aqua]Enjoyed by Lustful slaves[/color]",
 		workline = "$name will be earning money as an escort for rich people.",
 		reqs = "globals.originsarray.find(globals.currentslave.origins) >= 2",
 		unlockreqs = 'globals.state.sidequests.brothel >= 2',
@@ -125,7 +125,7 @@ var jobdict = {
 		code = 'fucktoywimborn',
 		name = "W - Exotic Whore",
 		type = 'sexual',
-		description = "$name will be used by the most deviant men in the brothel. \n\n[color=yellow]Efficiency grows with Courage, Endurance, Beauty, and advanced sex actions. \n\nRequires unlocked advanced sex actions for sufficient performance. [/color]",
+		description = "$name will be used by the most deviant men in the brothel. \n\n[color=yellow]Efficiency grows with Courage, Endurance, Beauty, and advanced sex actions. \n\nRequires unlocked advanced sex actions for sufficient performance. [/color]\n[color=aqua]Enjoyed by Lustful slaves[/color]",
 		workline = "$name will be earning money by offering $his body for all sorts of deviant plays.",
 		reqs = "true",
 		unlockreqs = 'globals.state.sidequests.brothel >= 2',
@@ -138,7 +138,7 @@ var jobdict = {
 		code = 'fucktoy',
 		name = "U - Fucktoy",
 		type = 'sexual',
-		description = "$name will be subjugated and abused by all sorts of criminals in Umbra without $his consent. \n\n[color=yellow]Builds obedience in exchange for mental degeneration. Income is based on your negative reputation. [/color]",
+		description = "$name will be subjugated and abused by all sorts of criminals in Umbra without $his consent. \n\n[color=yellow]Builds obedience in exchange for mental degeneration. Income is based on your negative reputation. [/color]\n[color=aqua]Enjoyed by Lustful slaves[/color]",
 		workline = "$name will be subjugated and abused by all sorts of criminals in Umbra without $his consent. ",
 		reqs = "true",
 		unlockreqs = 'globals.state.portals.umbra.enabled == true',
@@ -203,7 +203,7 @@ var jobdict = {
 		code = 'ffprostitution',
 		name = "F - Prostitution",
 		type = 'sexual',
-		description = "$name will be serving lone customers with $his body at Frostford. \n\n[color=yellow]\n\nEfficiency grows with Charm and beauty.[/color]",
+		description = "$name will be serving lone customers with $his body at Frostford. \n\n[color=yellow]\n\nEfficiency grows with Charm and beauty.[/color]\n[color=aqua]Enjoyed by Lustful slaves[/color]",
 		workline = "$name will be serving lone customers with $his body in the streets of Frostford.",
 		reqs = "globals.currentslave.tags.find('nosex') < 0",
 		unlockreqs = 'true',
@@ -216,7 +216,7 @@ var jobdict = {
 		code = 'guardian',
 		name = "G - Guardian",
 		type = 'social',
-		description = "$name will be patrolling streets with Gorn's city guard. \n\n[color=yellow]Requires grade of [color=aqua]Poor[/color] or higher. \n\nEfficiency grows with Strength, Courage.[/color]",
+		description = "$name will be patrolling streets with Gorn's city guard. \n\n[color=yellow]Requires grade of [color=aqua]Poor[/color] or higher. \n\nEfficiency grows with Strength, Courage.[/color]\n[color=aqua]Enjoyed by Wrathful slaves[/color]",
 		workline = "$name will be patrolling streets with Gorn's city guard.",
 		reqs = "globals.originsarray.find(globals.currentslave.origins) >= 1 && globals.currentslave.traits.has('Mute') == false",
 		unlockreqs = 'true',
@@ -242,7 +242,7 @@ var jobdict = {
 		code = 'slavecatcher',
 		name = "G - Slave Catcher",
 		type = 'social',
-		description = "$name will be joining slaver parties and help catching and transporting slaves. \n\n[color=yellow]Requires grade of [color=aqua]Poor[/color] or higher. \n\nEfficiency grows with Agility, Strength and Courage.[/color]",
+		description = "$name will be joining slaver parties and help catching and transporting slaves. \n\n[color=yellow]Requires grade of [color=aqua]Poor[/color] or higher. \n\nEfficiency grows with Agility, Strength and Courage.[/color]\n[color=aqua]Enjoyed by Wrathful slaves[/color]",
 		workline = "$name will be joining slaver parties and help catching and transporting slaves around Gorn.",
 		reqs = "globals.originsarray.find(globals.currentslave.origins) >= 1",
 		unlockreqs = 'true',
@@ -255,7 +255,7 @@ var jobdict = {
 		code = 'headgirl',
 		name = "Headgirl",
 		type = 'social',
-		description = "$name will watch over other servants, improving their behavior.\n\nEfficiency grows with Charm(Patronage) or Confidence(Strict).\n\n[color=yellow]Requires grade of [color=aqua]Rich[/color] or higher. [/color]",
+		description = "$name will watch over other servants, improving their behavior.\n\nEfficiency grows with Charm(Patronage) or Confidence(Strict).\n\n[color=yellow]Requires grade of [color=aqua]Rich[/color] or higher. [/color]\n[color=aqua]Enjoyed by Prideful slaves[/color]",
 		workline = "$name will be directing and managing other residents.",
 		reqs = "globals.originsarray.find(globals.currentslave.origins) >= 3 && globals.currentslave.traits.has('Mute') == false ",
 		unlockreqs = 'globals.slaves.size() >= 8',
@@ -268,7 +268,7 @@ var jobdict = {
 		code = 'jailer',
 		name = "Jailer",
 		type = 'social',
-		description = "$name will be feeding and watching over your prisoners.\n\nEfficiency grows with Confidence, Charm, and Wit.\n\n[color=yellow]Requires grade of [color=aqua]Poor[/color] or higher. [/color]",
+		description = "$name will be feeding and watching over your prisoners.\n\nEfficiency grows with Confidence, Charm, and Wit.\n\n[color=yellow]Requires grade of [color=aqua]Poor[/color] or higher. [/color]\n[color=aqua]Enjoyed by Prideful slaves[/color]",
 		workline = "$name will be managing prisoners.",
 		reqs = 'globals.originsarray.find(globals.currentslave.origins) >= 1',
 		unlockreqs = 'true',
@@ -281,7 +281,7 @@ var jobdict = {
 		code = 'farmmanager',
 		name = "Farm Manager",
 		type = 'basic',
-		description = "$name will be managing your farm and slaves assigned to it.\n\nEfficiency grows with Confidence and Wit. Stress gained by slaves can be reduced by Charm.\n\n[color=yellow]Requires grade of [color=aqua]Commoner[/color] or higher. [/color]",
+		description = "$name will be managing your farm and slaves assigned to it.\n\nEfficiency grows with Confidence and Wit. Stress gained by slaves can be reduced by Charm.\n\n[color=yellow]Requires grade of [color=aqua]Commoner[/color] or higher. [/color]\n[color=aqua]Enjoyed by Prideful slaves[/color]",
 		workline = "$name will be looking over your farm and collect its income.",
 		reqs = 'globals.originsarray.find(globals.currentslave.origins) >= 2',
 		unlockreqs = 'globals.state.farm >= 3',
@@ -359,7 +359,7 @@ var jobdict = {
 		code = 'housepet',
 		name = "Housepet",
 		type = 'basic',
-		description = "$name will remain at the mansion as a playful housepet, reducing the stress of residents.\n\n[color=yellow]Energy determines effectiveness.[/color]",
+		description = "$name will remain at the mansion as a playful housepet, reducing the stress of residents.\n\n[color=yellow]Energy determines effectiveness.[/color]\n[color=aqua]Enjoyed by Slothful slaves[/color]",
 		workline = "$name will be housepet around the mansion.",
 		reqs = 'true',
 		unlockreqs = "globals.currentslave.brand == 'advanced'",
@@ -372,7 +372,7 @@ var jobdict = {
 		code = 'trainer',
 		name = "Trainer",
 		type = 'basic',
-		description = "$name will work in the Training Grounds as a Trainer. $He will give XP to Trainees of lower level than $himself with a chance of granting Learning Points as well. $He can teach a number of slaves equal to twice $his level.\n\n[color=yellow]Requires grade of [color=aqua]Commoner[/color] or higher. Requires [color=aqua]Level 3[/color] or higher. Requires that $he has [color=aqua]Won 5 Battles[/color] or more.\n\nResults improve with [color=aqua]Wit[/color] and [color=aqua]Confidence[/color]. Only affects [color=aqua]Trainees[/color] of a [color=aqua]Lower level[/color] who have [color=aqua]won less total battles[/color].[/color]",
+		description = "$name will work in the Training Grounds as a Trainer. $He will give XP to Trainees of lower level than $himself with a chance of granting Learning Points as well. $He can teach a number of slaves equal to twice $his level.\n\n[color=yellow]Requires grade of [color=aqua]Commoner[/color] or higher. Requires [color=aqua]Level 3[/color] or higher. Requires that $he has [color=aqua]Won 5 Battles[/color] or more.\n\nResults improve with [color=aqua]Wit[/color] and [color=aqua]Confidence[/color]. Only affects [color=aqua]Trainees[/color] of a [color=aqua]Lower level[/color] who have [color=aqua]won less total battles[/color].[/color]\n[color=aqua]Enjoyed by Wrathful slaves[/color]",
 		workline = "$name will be teach slaves of a lower level in the Training Grounds.",
 		reqs = 'globals.originsarray.find(globals.currentslave.origins) >= 2 && globals.currentslave.level >= 3 && globals.currentslave.metrics.win >= 5',
 		unlockreqs = "globals.state.mansionupgrades.traininggrounds > 0",
@@ -385,7 +385,7 @@ var jobdict = {
 		code = 'trainee',
 		name = "Trainee",
 		type = 'basic',
-		description = "$name will train in the Training Grounds. $He will gain XP if $he is a lower level than the Trainer and has won less total battles than the Trainer.\n\n[color=yellow]Requires a Trainer of higher level who has won more battles than $he has.\nResults improve with [color=aqua]Wit[/color] and [color=aqua]Courage[/color].\n\n[color=aqua]XP Gain[/color] is equal to (Trainer Level - Trainee Level) * (1 + the number of Training Ground upgrades). The chance of gaining [color=aqua]Learning Points[/color] equal to the [color=aqua]difference in their total battles won[/color] (15 Max per Day) is equal to the (Trainers Wit & Confidence/2) + (Trainees Wit & Courage/2) + (10*Training Ground Upgrades/2)[/color]",
+		description = "$name will train in the Training Grounds. $He will gain XP if $he is a lower level than the Trainer and has won less total battles than the Trainer.\n\n[color=yellow]Requires a Trainer of higher level who has won more battles than $he has.\nResults improve with [color=aqua]Wit[/color] and [color=aqua]Courage[/color].\n\n[color=aqua]XP Gain[/color] is equal to (Trainer Level - Trainee Level) * (1 + the number of Training Ground upgrades). The chance of gaining [color=aqua]Learning Points[/color] equal to the [color=aqua]difference in their total battles won[/color] (15 Max per Day) is equal to the (Trainers Wit & Confidence/2) + (Trainees Wit & Courage/2) + (10*Training Ground Upgrades/2)[/color]\n[color=aqua]Enjoyed by Wrathful slaves[/color]",
 		workline = "$name will be studying under the Trainer in the Training Grounds.",
 		reqs = 'true',
 		unlockreqs = "globals.state.mansionupgrades.traininggrounds > 0",
@@ -831,15 +831,7 @@ func cooking(person):
 	var gold = 0
 	var food = 0
 	person.xp += globals.slavecount() * globals.expansionsettings.food_experience
-	if globals.resources.food < 200:
-		var scaling = 20.0 / globals.itemdict.food.cost
-		var temp = min(globals.state.foodbuy, globals.resources.foodcaparray[globals.state.mansionupgrades.foodcapacity] - globals.resources.food)
-		if globals.resources.gold >= floor(temp/scaling):
-			text = '$name went to purchase groceries and brought back new food supplies.\n'
-			gold = -floor(temp/scaling)
-			food = temp
-		else:
-			text = '$name complained about the lack of food and no money to supply the kitchen on $his own.\n'
+	text += '$name spent $his time preparing meals for everyone.\n'
 	###---Added by Expansion---### Job Skills
 	var bonusfood = 0
 	person.add_jobskill('cook', 1)
@@ -848,10 +840,24 @@ func cooking(person):
 		bonusfood = round(rand_range(person.jobskills.cook*.1, person.jobskills.cook))
 		text += "$name had a flash of inspiration today and scraped together an impromptu meal with surprising ingredients. $He added [color=green]" + str(bonusfood) + " Food[/color] to the food supply with $his clever cooking. "
 		if globals.expansionsettings.perfectinfo == true:
-			text += "- " + str(chance) + "% Chance"
+			text += "- " + str(chance) + "% Chance "
 		food += bonusfood
 	###---End Expansion---###
-	text += '$name spent $his time preparing meals for everyone.\n'
+	var maxFood = min(globals.state.foodbuy,globals.resources.foodcaparray[globals.state.mansionupgrades.foodcapacity])
+	var foodDiff = int(maxFood - globals.resources.food - food)
+	var toBuy = int(gold + globals.resources.gold)
+	var foodPrice = globals.itemdict.food.cost
+	var foodCount = 20
+	if foodDiff > 0:
+		foodDiff -= foodDiff % foodCount
+		foodDiff /= foodCount
+		toBuy -= toBuy % foodPrice
+		toBuy /= foodPrice
+		toBuy = min(foodDiff,toBuy)
+		if toBuy > 0:
+			text += "$He purchased [color=aqua]" + str(toBuy * foodCount) + "[/color] food, costing [color=yellow]" + str(toBuy * foodPrice) + "[/color] gold.\n"
+			gold -= toBuy * foodPrice
+			food += toBuy * foodCount
 	text = person.dictionary(text)
 	var dict = {text = text, gold = gold, food = food}
 	return dict
@@ -1776,14 +1782,14 @@ func public_nudity_law(person, gold):
 			d100 = round(rand_range(0,100))
 			if d100 <= towndict.guardskill:
 				var fine = 50
-				text += "\n[color=aqua]$name[/color] was stopped by the local guards in [color=aqua]" + str(joblocation).capitalize() + "[/color]. [color=red]$He was informed that $he was breaking the local [/color][color=aqua]Public Nudity[/color][color=red] law and would receive a fine of [/color][color=yellow]50[/color][color=red] for public indecency.[/color] "
+				text += "\n[color=aqua]$name[/color] was stopped by the local guards in [color=aqua]" + str(joblocation).capitalize() + "[/color]. [color=red]$He was informed that $he was breaking the local [color=aqua]Public Nudity[/color] law and would receive a fine of [color=yellow]50[/color] for public indecency.[/color] "
 				if globals.expansionsettings.perfectinfo == true:
 					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Public Indecency Fine Chance[/color] of [color=aqua]" + str(towndict.guardskill) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color] || "
 				
 				#Reduced due to Charm
 				d100 = round(rand_range(0,100))
 				if d100 <= person.charm:
-					text += "[color=aqua]$name[/color][color=red] managed to [color=aqua]Charm[/color] them down to only fining $him [color=yellow]25[/color] instead. "
+					text += "[color=aqua]$name[/color][color=red] managed to [color=aqua]Charm[/color] them down to only fining $him [color=yellow]25[/color] instead. [/color]"
 					fine = 25
 				if globals.expansionsettings.perfectinfo == true:
 					text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Chance to Reduce Fine[/color] of [color=aqua]" + str(person.charm) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color] || "

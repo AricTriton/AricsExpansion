@@ -85,8 +85,10 @@ var elasticitytrait = ['Rigid Elasticity','Elasticity 1','Elasticity 2','Elastic
 var moodarray = ['sad','angry','scared','indifferent','obediant','horny','respectful','happy','playful']
 #var moodarray = ['sad','sad','sad','neutral','neutral','neutral','happy','happy','happy'] #Explicit Moods (Forced by Events): Crying, Angry, Horny
 var demeanorarray = ['meek','shy','reserved','open','excitable']
-var flawarray = ['lust','envy','pride','wrath','greed','sloth','gluttony']
-var flawdict = {
+
+#Flaws
+var vicearray = ['lust','envy','pride','wrath','greed','sloth','gluttony']
+var vicedict = {
 	lust = "\n[color=lime]You have discovered that $he is wrought with [color=red]Lust[/color] and hyperactive in $his sexuality.[/color]\n[color=green]Sexual Consent and Actions will be easier to initiate.[/color]\n[color=green]Luxury +5 if [color=aqua]Fucked[/color] that day.[/color]\n[color=red]Every day they aren't Fucked, Luxury Requirement +3[/color]",
 	pride = "\n[color=lime]You have discovered that $he is incredibly [color=red]Prideful[/color] and focused on $his own appearance.[/color]\n[color=green]If permitted [color=aqua]Cosmetics[/color], uses [color=aqua]+1 Supply[/color] for +5 Luxury (if possible). If permitted a [color=aqua]Personal Bath[/color], Luxury +2.[/color]\n[color=red]If not permitted [color=aqua]Cosmetics[/color], Luxury Requirement +5[/color]",
 	wrath = "\n[color=lime]You have discovered that $he is filled with [color=red]Wrath[/color], is plagued with a short temper, and feels unsettled if $he isn't able to fight.[/color]\n[color=green]More likely to [color=aqua]Consent[/color] to [color=aqua]Fight Alongside You[/color] with the chance increasing based on their [color=aqua]Courage[/color].[/color]\n[color=green]If [color=aqua]Consent to Fight[/color] has been given, their Luxury will increase (or possibly decrease) by their [color=aqua]Days Owned[/color] minus their total [color=aqua]Combat Wins[/color][/color]",
@@ -94,6 +96,7 @@ var flawdict = {
 	sloth = "\n[color=lime]You have discovered that $he is very lazy and a complete [color=red]Sloth[/color]. $He is happiest when allowed not to do anything at all.[/color]\n[color=green]If permitted a [color=aqua]Personal Bath[/color], Luxury +2.[/color]\n[color=green]If ending the day with full [color=aqua]Energy[/color], Luxury +10. If ending the day with 25 percent or lower [color=aqua]Stress[/color], Luxury +5[/color]\n[color=red]If [color=aqua]Energy[/color] is below half or [color=aqua]Stress[/color] is above half (calculated separately), Luxury Requirement is increased by 10 Percent of the Difference of Max to Current.[/color]",
 	gluttony = "\n[color=lime]You have discovered that $he is very [color=red]Gluttonous[/color] and takes $his greatest pleasure in food and drinks.[/color]\n[color=green]Food and Drink Interactions will always give the best result on Dates.[/color]\n[color=green]If permitted [color=aqua]Better Food[/color], uses +3 Food for +5 Luxury (if possible)[/color]\n[color=red]If not permitted [color=aqua]Better Food[/color], Luxury Requirement +5[/color]",
 	envy = "\n[color=lime]You have discovered that $he is incredibly [color=red]Envious[/color] of others.[/color]\n[color=green]If they are considered the [color=aqua]Best Slave[/color] (per the standard formula of Level+DaysOwned+Sex+Wins), negates all Luxury Requirements. Otherwise, if they are of a higher [color=aqua]Grade[/color] than the [color=aqua]Best Slave[/color], Luxury +5.[/color]\n[color=red]If they are not the [color=aqua]Best Slave[/color], they compare their [color=aqua]Beds[/color], [color=aqua]Last Sex Days[/color], [color=aqua]Grade[/color], and [color=aqua]Stress Levels[/color] for a maximum of +20 Luxury Requirement.[/color]",
+	none = "\n$He is [color=aqua]Vice-less[/color]. $He doesn't seem to have any particular [color=aqua]Vice[/color] at at all.",
 }
 
 var libidoarray = ['prudish','low','average','seductive','nympho']
@@ -2018,7 +2021,7 @@ func dailyUpdate(person):
 			text += "\n$name had " +nameCum()+ " stuck to $his body. "
 		elif person.cum.body > 0:
 			text += "\n$name had " +nameCum()+ " stuck to $his body and cleaned it off. "
-			person.cum.face = 0
+			person.cum.body = 0
 
 	person.cum.face = max(0, person.cum.face - .5)
 	person.cum.body = max(0, person.cum.body - .5)
@@ -2078,57 +2081,12 @@ func dailyUpdate(person):
 	person.cum.pussy = max(0, person.cum.pussy - .2)
 
 	#Consent Changes: Will Change to Giving Consent in Dialogue Only
-	if person.consentexp.incest == false && person.fetish.incest in ['mindblowing','enjoyable','acceptable']:
+	if person.consentexp.incest == false && person.fetish.incest in ['mindblowing','enjoyable']:
 		text += "\n$name seems to be talking differently about $his thoughts on [color=aqua]Incest[/color]. $He doesn't seem to mind it anymore."
 		person.consentexp.incest = true
 
-	#---Reclothe if Able and Unrestrained
-	if person.restrained == "none" && person != globals.player:
-		if person.rules.nudity == false:
-			if person.fetish.exhibitionism in ['dirty','taboo','none']:
-				if person.exposed.chest == true && person.exposed.chestforced == false:
-					text += "\n$name covered $his tits. "
-					person.exposed.chest = false
-				if person.exposed.genitals == true && person.exposed.genitalsforced == false:
-					text += "\n$name covered $his "
-					var poolGenitals = PoolStringArray()
-					if person.penis != "none":
-						poolGenitals.append("penis")
-					if person.vagina != "none":
-						poolGenitals.append("vagina")
-					text += poolGenitals.join(" and ") + ". "
-					person.exposed.genitals = false
-				if person.exposed.ass == true && person.exposed.assforced == false:
-					text += "\n$name covered $his ass. "
-					person.exposed.ass = false
-		#Will try to Undress
-		elif person.exposed.chest == false || person.exposed.genitals == false || person.exposed.ass == false:
-			if person.consentexp.nudity == true:
-				text += "\n[color=green]$name[/color] stripped " + nameNaked() + " " + globals.randomitemfromarray(['slowly','eagerly','quickly']) + " as per your rules."
-				person.dailyevents.append('followedrulenudity')
-				person.exposed.chest = true
-				person.exposed.genitals = true
-				person.exposed.ass = true
-			else:
-				var captured = 0
-				for i in person.effects.values():
-					if i.code == 'captured':
-						captured = i.duration/2
-				if (person.obed + person.fear - 100) + person.loyal < 100*captured:
-					text += "\n[color=red]$name refused to strip naked as you demanded and broke your rules.[/color]"
-					person.dailyevents.append('brokerulenudity')
-				else:
-					text += "\n[color=green]$name[/color] stripped " + nameNaked() + " " + globals.randomitemfromarray(['slowly','eagerly','quickly']) + " as per your rules."
-					person.dailyevents.append('followedrulenudity')
-					person.exposed.chest = true
-					person.exposed.genitals = true
-					person.exposed.ass = true
-	elif person.restrained != "none" && person != globals.player:
-		if person.exposed.chest == true || person.exposed.genitals == true || person.exposed.ass == true:
-			if person.fetish.exhibitionism in ['dirty','taboo','none']:
-				text += "\n$name wanted to put back on $his clothing but couldn't due to $his restraints"
-#			if person.rules.nudity == true:
-#				text += "\n$name wanted to put back on $his clothing but couldn't due to $his restraints."
+	#---Clothing Status
+	text += person.updateClothing()
 
 	#Chance to Add/Remove Lisp or Mute due to oversized Lips
 	if person.npcexpanded.temptraits.find('vocaltraitdelay') >= 0:
@@ -2179,9 +2137,6 @@ func dailyUpdate(person):
 	###Night Phase###
 
 	dailyFetish(person)
-	#Flaw
-	if person.dailyevents.find(person.mind.flaw) >= 0:
-		text += person.revealFlaw()
 
 	#Check Milk Leak
 	if person.lactation == true && person.lactating.milkedtoday == false && person.lactating.milkstorage > 0:
@@ -3236,9 +3191,13 @@ var dictUniqueImagePaths = {
 	},
 	'Tia': {
 		IMAGE_DEFAULT: {
+			LOW_STRESS: 'res://files/aric_expansion_images/characters/tiaclothed.png',
+			MID_STRESS: 'res://files/aric_expansion_images/characters/tiaclothed.png',
 			HIGH_STRESS: 'res://files/aric_expansion_images/characters/tiaclothed.png',
 		},
 		IMAGE_NAKED: {
+			LOW_STRESS: 'res://files/aric_expansion_images/characters/tianaked.png',
+			MID_STRESS: 'res://files/aric_expansion_images/characters/tianaked.png',
 			HIGH_STRESS: 'res://files/aric_expansion_images/characters/tianaked.png',
 		},
 	},
@@ -3351,24 +3310,6 @@ func checkIncest(person):
 			if modifier == 0:
 				modifier += rand_range(-1,1)
 	return modifier
-
-func checkGluttony(person):
-	var text = ""
-	if person.mind.flaw == 'gluttony':
-		person.dailyevents.append('gluttony')
-		if rand_range(0,10) + person.dailyevents.find('gluttony') >= 10:
-			person.flawknown = true
-			text = "\n[color=green]You have discovered that [he2] is secretly " + globals.randomitemfromarray(['a glutton','gluttonous','obsessed with food and drink']) + " and takes joy in food and drinks.[/color]\n[color=aqua]Food and Drink Interactions will always give the best result.[/color]\n "
-	return text
-
-func checkGreed(person):
-	var text = ""
-	if person.mind.flaw == 'greed':
-		person.dailyevents.append('greed')
-		if rand_range(0,10) + person.dailyevents.find('greed') >= 10:
-			person.flawknown = true
-			text = "\n[color=green]You have discovered that [he2] is secretly " + globals.randomitemfromarray(['greedy','obsessed with material possessions','pretty greedy']) + " and is very susceptible to gifts and money.[/color]\n[color=aqua]Gifts and Money will always give the best result.[/color]\n "
-	return text
 
 func quickStrip(person):
 	person.exposed.chest = true

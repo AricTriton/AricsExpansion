@@ -39,3 +39,12 @@ func setslaveimage(path):
 	self.visible = false
 	updatepage()
 ###---End Expansion---###
+
+func _on_reverseportrait_pressed():
+	if person.unique != null:
+		var temp = globals.characters.characters.get(person.unique)
+		if temp != null:
+			person.imageportait = temp.imageportait
+		self.visible = false
+		person.imagefull = null
+		updatepage()

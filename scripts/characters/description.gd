@@ -4,7 +4,7 @@ func getslavedescription(tempperson, mode = 'default'):
 	person = tempperson
 	###---Added by Expansion---###
 	globals.expansion.updatePerson(person)
-	var text = basics() + features() + genitals() + mods() + tattoo() + piercing() + showFlaw() + onceperdayConvos()
+	var text = basics() + features() + genitals() + mods() + tattoo() + piercing() + showVice() + onceperdayConvos()
 	###---Expansion End---###
 	if person.customdesc != '':
 		text += '\n\n' + person.customdesc
@@ -88,31 +88,33 @@ func onceperdayConvos():
 			text += "\n[color=aqua]Encourage or Discourage the Number of Kids $He Wants[/color]"
 		#Crystal
 		if !person.dailytalk.has('crystalresearch') && globals.state.thecrystal.power <= person.smaf - 1:
-			text += "\n[color=aqua]Attempt to Research the Crystal[/color]: $His [color=aqua]Wit[/color] equates to $his chance of success to not accidentally make the [color=aqua]Crystal[/color] more [color=aqua]Powerful[/color] and harder to [color=aqua]Research[/color]."
+			text += "\n[color=aqua]Attempt to Research the Crystal[/color]\n     $His [color=aqua]Wit[/color] equates to $his chance of success to not accidentally make the [color=aqua]Crystal[/color] more [color=aqua]Powerful[/color] and harder to [color=aqua]Research[/color]."
 			if globals.state.thecrystal.mode == "dark":
 				text += "\n[color=red]Extreme Failure may result in $his being consumed by the [color=aqua]Crystal[/color] to sate its hunger.[/color]"
 		
 	return text
 
-func showFlaw():
+func showVice():
 	var text = ""
-	if person.flawknown == false:
+	if person.mind.vice_known == false:
 		return ""
-	match person.mind.flaw:
+	match person.mind.vice:
 		'lust':
-			return "\n\n[color=#d1b970]Flaw:[/color]\nYou have discovered that $he is wrought with [color=red]Lust[/color] and hyperactive in $his sexuality.\n[color=green]Sexual Consent and Actions will be easier to initiate.[/color]\n[color=green]Luxury +5[/color] if [color=aqua]Fucked[/color] that day.\n[color=red]Every day they aren't Fucked, Luxury Requirement +3[/color]"
+			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is wrought with [color=red]Lust[/color] and hyperactive in $his sexuality.\n[color=green]Sexual Consent and Actions will be easier to initiate.[/color]\n[color=green]Luxury +5[/color] if [color=aqua]Fucked[/color] that day.\n[color=red]Every day they aren't Fucked, Luxury Requirement +3[/color]"
 		'pride':
-			return "\n\n[color=#d1b970]Flaw:[/color]\nYou have discovered that $he is incredibly [color=red]Prideful[/color] and focused on $his own appearance.\n[If permitted [color=aqua]Cosmetics[/color], uses [color=red]+1 Supply[/color] for [color=green]+5 Luxury[/color] (if possible). If permitted a [color=aqua]Personal Bath[/color], [color=green]Luxury +2.[/color]\n[color=red]If not permitted [color=aqua]Cosmetics[/color], Luxury Requirement +5[/color]"
+			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is incredibly [color=red]Prideful[/color] and focused on $his own appearance.\n[If permitted [color=aqua]Cosmetics[/color], uses [color=red]+1 Supply[/color] for [color=green]+5 Luxury[/color] (if possible). If permitted a [color=aqua]Personal Bath[/color], [color=green]Luxury +2.[/color]\n[color=red]If not permitted [color=aqua]Cosmetics[/color], Luxury Requirement +5[/color]"
 		'wrath':
-			return "\n\n[color=#d1b970]Flaw:[/color]\nYou have discovered that $he is filled with [color=red]Wrath[/color], is plagued with a short temper, and feels unsettled if $he isn't able to fight.\n[color=green]More likely to [color=aqua]Consent[/color] to [color=aqua]Fight Alongside You[/color] with the chance increasing based on their [color=aqua]Courage[/color].[/color]\nIf [color=aqua]Consent to Fight[/color] has been given, their [color=aqua]Luxury[/color] will [color=green]increase[/color] (or possibly [color=red]decrease[/color]) by their [color=aqua]Days Owned[/color] minus their total [color=aqua]Combat Wins[/color]."
+			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is filled with [color=red]Wrath[/color], is plagued with a short temper, and feels unsettled if $he isn't able to fight.\n[color=green]More likely to [color=aqua]Consent[/color] to [color=aqua]Fight Alongside You[/color] with the chance increasing based on their [color=aqua]Courage[/color].[/color]\nIf [color=aqua]Consent to Fight[/color] has been given, their [color=aqua]Luxury[/color] will [color=green]increase[/color] (or possibly [color=red]decrease[/color]) by their [color=aqua]Days Owned[/color] minus their total [color=aqua]Combat Wins[/color]."
 		'greed':
-			return "\n\n[color=#d1b970]Flaw:[/color]\nYou have discovered that $he is incredibly [color=red]Greedy[/color] and materialistic.\nIf permitted [color=aqua]Pocket Money[/color], uses [color=aqua]+5 Gold[/color] for [color=green]+5 Luxury[/color] (if possible).\n[color=red]If not permitted [color=aqua]Pocket Money[/color], Luxury Requirement +5[/color]"
+			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is incredibly [color=red]Greedy[/color] and materialistic.\nIf permitted [color=aqua]Pocket Money[/color], uses [color=aqua]+5 Gold[/color] for [color=green]+5 Luxury[/color] (if possible).\n[color=red]If not permitted [color=aqua]Pocket Money[/color], Luxury Requirement +5[/color]"
 		'sloth':
-			return "\n\n[color=#d1b970]Flaw:[/color]\nYou have discovered that $he is very lazy and a complete [color=red]Sloth[/color]. $He is happiest when allowed not to do anything at all.\nIf permitted a [color=aqua]Personal Bath[/color], [color=green]+2 Luxury[/color].\nIf ending the day with [color=aqua]full Energy[/color], [color=green]+10 Luxury[/color] . If ending the day with [color=aqua]25 percent or lower Stress[/color], [color=green]+5 Luxury[/color].\n[color=red]If [color=aqua]Energy[/color] is below half or [color=aqua]Stress[/color] is above half (calculated separately), Luxury Requirement is increased by 10 Percent of the Difference of Max to Current.[/color]"
+			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is very lazy and a complete [color=red]Sloth[/color]. $He is happiest when allowed not to do anything at all.\nIf permitted a [color=aqua]Personal Bath[/color], [color=green]+2 Luxury[/color].\nIf ending the day with [color=aqua]full Energy[/color], [color=green]+10 Luxury[/color] . If ending the day with [color=aqua]25 percent or lower Stress[/color], [color=green]+5 Luxury[/color].\n[color=red]If [color=aqua]Energy[/color] is below half or [color=aqua]Stress[/color] is above half (calculated separately), Luxury Requirement is increased by 10 Percent of the Difference of Max to Current.[/color]"
 		'gluttony':
-			return "\n\n[color=#d1b970]Flaw:[/color]\nYou have discovered that $he is very [color=red]Gluttonous[/color] and takes $his greatest pleasure in food and drinks.\n[color=green]Food and Drink Interactions will always give the best result on Dates.[/color]\nIf permitted [color=aqua]Better Food[/color], uses [color=red]+3 Food[/color]  for [color=green]+5 Luxury[/color] (if possible)\n[color=red]If not permitted [color=aqua]Better Food[/color], Luxury Requirement +5[/color]"
+			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is very [color=red]Gluttonous[/color] and takes $his greatest pleasure in food and drinks.\n[color=green]Food and Drink Interactions will always give the best result on Dates.[/color]\nIf permitted [color=aqua]Better Food[/color], uses [color=red]+3 Food[/color]  for [color=green]+5 Luxury[/color] (if possible)\n[color=red]If not permitted [color=aqua]Better Food[/color], Luxury Requirement +5[/color]"
 		'envy':
-			return "\n\n[color=#d1b970]Flaw:[/color]\nYou have discovered that $he is incredibly [color=red]Envious[/color] of others.\nIf they are considered the [color=aqua]Best Slave[/color] (per the standard formula of Level+DaysOwned+Sex+Wins), [color=green]negates all Luxury Requirements[/color]. Otherwise, if they are of a higher [color=aqua]Grade[/color] than the [color=aqua]Best Slave[/color], [color=green]Luxury +5[/color].\n[color=red]If they are not the [color=aqua]Best Slave[/color], they compare their [color=aqua]Beds[/color], [color=aqua]Last Sex Days[/color], [color=aqua]Grade[/color], and [color=aqua]Stress Levels[/color] for a maximum of +20 Luxury Requirement.[/color]"
+			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is incredibly [color=red]Envious[/color] of others.\nIf they are considered the [color=aqua]Best Slave[/color] (per the standard formula of Level+DaysOwned+Sex+Wins), [color=green]negates all Luxury Requirements[/color]. Otherwise, if they are of a higher [color=aqua]Grade[/color] than the [color=aqua]Best Slave[/color], [color=green]Luxury +5[/color].\n[color=red]If they are not the [color=aqua]Best Slave[/color], they compare their [color=aqua]Beds[/color], [color=aqua]Last Sex Days[/color], [color=aqua]Grade[/color], and [color=aqua]Stress Levels[/color] for a maximum of +20 Luxury Requirement.[/color]"
+		'none':
+			return ""
 
 ###---End Expansion---###
 
