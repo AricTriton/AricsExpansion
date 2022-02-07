@@ -1265,6 +1265,7 @@ var expansiontalk = loadModFile("AricsExpansion", "customScripts/expansiontalk.g
 var backwardscompatibility = loadModFile("AricsExpansion", "customScripts/backwardscompatibility.gd").new()
 var expansionsettings = loadModFile("AricsExpansion", "customScripts/expansionsettings.gd").new()
 var useRalphsTweaks = expansionsettings.use_ralphs_tweaks
+var enable_all_player_races = expansionsettings.enable_all_player_races #ralphE
 var expansiontravel = loadModFile("AricsExpansion", "customScripts/expansiontravel.gd").new() #ralphD
 
 ###---Added by Expansion---### General Arrays
@@ -1365,6 +1366,8 @@ func _ready():
 	constructor.fillSizeArrayDict()
 	if useRalphsTweaks:
 		expansionsettings.applyTweaks()
+	if enable_all_player_races: #ralphE
+		expansionsettings.enableallplayerraces() #ralphE
 
 ###---Added by Expansion---### Farm Expanded
 func getVatMaxCapacity(type):
