@@ -5,137 +5,59 @@
 #---Core Expansion Setup Functions---#
 func expandGame():
 	#globals.expansionsetup.setIdentity(person)
-	if float(globals.state.expansionversion) < float(globals.expansionsettings.modversion):
-		#v.05
-		#Set up Crystal
-		if !globals.state.mansionupgrades.has('dimensionalcrystal'):
-			globals.state.mansionupgrades['dimensionalcrystal'] = 0
-		
-		#Nursery to Crystal Conversion
-		if globals.state.mansionupgrades.mansionnursery > 1:
-			if globals.state.mansionupgrades.mansionnursery == 3:
-				globals.state.mansionupgrades.dimensionalcrystal == 2
-				globals.state.mansionupgrades.mansionnursery == 1
-			else:
-				globals.state.mansionupgrades.dimensionalcrystal == 1
-				globals.state.mansionupgrades.mansionnursery == 1
-		
-		#Crystal to Abilities Conversion
-		if globals.state.mansionupgrades.dimensionalcrystal >= 1:
-			globals.state.thecrystal.abilities.append('pregnancyspeed')
-		
-		#Sex Expanded
-		for person in globals.slaves:
-			if person.sexexpanded == null:
-				person.sexexpanded = {pliability = 0,elasticity = 0}
-	#v.06
-		#Person Expansions
-		for person in globals.slaves + globals.state.allnpcs:
-			if person == null:
-				continue
-#			#NPCs Expanded
-#			if person.npcexpanded == null:
-#				person.npcexpanded = {mansionbred = false,citizen = true,timesmet = 0,timesfought = 0,timesrescued = 0,timesraped = 0}
-#			
-#			#Farm Expanded
-#			if person.farmexpanded == null:
-#				person.farmexpanded = {production = 'default',extraction='default',autopump=false,restraints='free',sleeplocation='default',worklocation='default',bedding='dirt',objects = []}
-#			
-			#Pregnancy Expanded
-			for i in ['gestationspeed','babysize','titssizebonus','incestbaby']:
-				if !person.pregexp.has(i):
-					if i in ['babysize','titssizebonus']:
-						person.pregexp[i] = 0
-					elif i == 'gestationspeed':
-						person.pregexp[i] = 1
-					elif i == 'incestbaby':
-						person.pregexp[i] = false
-
-			#Lactating Expanded
-			for i in ['milkedtoday','daysunmilked','milkmax','milkstorage','titssizebonus','pressure','leaking']:
-				if !person.lactating.has(i):
-					if i == 'milkedtoday':
-						person.lactating[i] = false
-					else:
-						person.lactating[i] = 0
-			
-			#Mind Expanded
-			for i in ['identity','id','ego','thoughts','secrets','secretslog','status','treatment']:
-				if !person.mind.has(i):
-					if i in ['identity','secretslog','status','demeanor']:
-						person.mind[i] = ""
-					elif i in ['id','ego']:
-						person.mind[i] = ['self']
-					elif i in ['thoughts','secrets','treatment']:
-						person.mind[i] = []
-		
-		#Town Expansion Addition
-		for towns in ['wimborn','frostford','gorn','amberguard']:
-			if !globals.state.townsexpanded[towns].has('dailyreport'):
-				globals.state.townsexpanded[towns]['dailyreport'] = {shopping = 0, crimeattempted = 0, crimeprevented = 0, crimesucceeded = 0}
-	#v.07
-		#NPC Array Change
-		if !globals.state.npclastlocation.empty():
-			#offscreennpcs = [person.id, location.code, encounterchance, action, reputation, status]
-			for npcarray in globals.state.npclastlocation:
-				var newarray = []
-				var npc = globals.state.findnpc(npcarray[1])
-				if npc == null:
-					continue
-		
-				var id = npcarray[1]
-				newarray.append(id)
-				var location = npcarray[0]
-				newarray.append(location)
-				var encounterchance = npcarray[2]
-				newarray.append(encounterchance)
-				var action = npc.npcexpanded.dailyaction
-				if action == "":
-					action = "resting"
-				newarray.append(action)
-				var reputation = 0
-				var status = ""
-				if npc.npcexpanded.citizen == true:
-					reputation = round(rand_range(1,5)) + globals.originsarray.find(npc.origins)
-					status = 'citizen'
-				else:
-					reputation = -round(rand_range(1,5) + rand_range(-globals.originsarray.find(npc.origins), globals.originsarray.find(npc.origins)))
-					status = 'criminal'
-				newarray.append(action)
-				newarray.append(status)
-				globals.state.npclastlocation.erase(npcarray)
-				globals.state.offscreennpcs.append(newarray)
-		globals.state.npclastlocation.clear()
 	
-	#v.07.1
-		for town in globals.expansion.citiesarray:
-			if !globals.state.townsexpanded[town].dailyreport.has('text'):
-				globals.state.townsexpanded[town].dailyreport['text'] = ""
-		
-		#Permanent NPC Reputations
-		for person in globals.slaves + globals.state.allnpcs:
-			if person == null:
-				continue
-			if !person.npcexpanded.has('reputation'):
-				if person.npcexpanded.citizen == true:
-					person.npcexpanded['reputation'] = round(rand_range(1,5))
-				else:
-					person.npcexpanded['reputation'] = round(rand_range(-1,-5))
-		
-		#Restoring old reputations
-		for npc in globals.state.offscreennpcs:
-			var person = globals.state.findnpc(npc[0])
-			person.npcexpanded.reputation = npc[4]
-	
-	#v.0.81
+	#---Person Expanded
 	for person in globals.slaves + globals.state.allnpcs:
 		if person == null:
 			continue
+		#Origins Fix
 		if person.origins == 'atypical':
 			person.origins = 'commoner'
-	
-	#v.9
-	
+		#Sex Expanded
+		if person.sexexpanded == null:
+			person.sexexpanded = {pliability = 0,elasticity = 0}
+		#Pregnancy Expanded
+		for i in ['gestationspeed','babysize','titssizebonus','incestbaby']:
+			if !person.pregexp.has(i):
+				if i in ['babysize','titssizebonus']:
+					person.pregexp[i] = 0
+				elif i == 'gestationspeed':
+					person.pregexp[i] = 1
+				elif i == 'incestbaby':
+					person.pregexp[i] = false
+		
+		#Lactating Expanded
+		for i in ['milkedtoday','daysunmilked','milkmax','milkstorage','titssizebonus','pressure','leaking']:
+			if !person.lactating.has(i):
+				if i == 'milkedtoday':
+					person.lactating[i] = false
+				else:
+					person.lactating[i] = 0
+		
+		#Mind Expanded
+		for i in ['identity','id','ego','thoughts','secrets','secretslog','status','treatment']:
+			if !person.mind.has(i):
+				if i in ['identity','secretslog','status','demeanor']:
+					person.mind[i] = ""
+				elif i in ['id','ego']:
+					person.mind[i] = ['self']
+				elif i in ['thoughts','secrets','treatment']:
+					person.mind[i] = []
+		#Permanent NPC Reputations
+		if !person.npcexpanded.has('reputation'):
+			if person.npcexpanded.citizen == true:
+				person.npcexpanded['reputation'] = round(rand_range(1,5))
+			else:
+				person.npcexpanded['reputation'] = round(rand_range(-1,-5))
+# Unneeded?
+#		#NPCs Expanded
+#		if person.npcexpanded == null:
+#			person.npcexpanded = {mansionbred = false,citizen = true,timesmet = 0,timesfought = 0,timesrescued = 0,timesraped = 0}		
+#		#Farm Expanded
+#		if person.farmexpanded == null:
+#			person.farmexpanded = {production = 'default',extraction='default',autopump=false,restraints='free',sleeplocation='default',worklocation='default',bedding='dirt',objects = []}
+
+	#---Mansion Expanded	
 	#New Mansion Upgrades
 	if !globals.state.mansionupgrades.has('dimensionalcrystal'):
 		globals.state.mansionupgrades['dimensionalcrystal'] = 0
@@ -151,17 +73,49 @@ func expandGame():
 		globals.state.mansionupgrades['vatpiss'] = 0
 	if !globals.state.mansionupgrades.has('bottler'):
 		globals.state.mansionupgrades['bottler'] = 0
+	#Nursery to Crystal Conversion
+	if globals.state.mansionupgrades.mansionnursery > 1:
+		if globals.state.mansionupgrades.mansionnursery == 3:
+			globals.state.mansionupgrades.dimensionalcrystal == 2
+			globals.state.mansionupgrades.mansionnursery == 1
+		else:
+			globals.state.mansionupgrades.dimensionalcrystal == 1
+			globals.state.mansionupgrades.mansionnursery == 1
+	#Crystal to Abilities Conversion
+	if globals.state.mansionupgrades.dimensionalcrystal >= 1:
+		globals.state.thecrystal.abilities.append('pregnancyspeed')
 	
+	#---Farm Expanded
+	#Resources
+	if !globals.resources.farmexpanded.has('worker_cycle'):
+		globals.resources.farmexpanded['worker_cycle'] = []
+	if !globals.resources.farmexpanded.has('work_type'):
+		globals.resources.farmexpanded['work_type'] = ""
+	#v1.6a
+	if typeof(globals.resources.farmexpanded.worker_cycle) != TYPE_DICTIONARY || globals.resources.farmexpanded.worker_cycle.has('herder'):
+		globals.resources.farmexpanded.worker_cycle = {'farmhand':[], 'milkmaid':[], 'stud':[]}
+		globals.resources.farmexpanded.work_type = ''
 	#Commented Out as throws up errors
 #	if !globals.state.has('farmexpanded'):
-#	globals.state['farmexpanded'] = {aphrodisiacs = 0, production = "food", extraction='hand', totalcontainers = {bucket = -1, pail = -1, jug = -1, canister = -1}, autopump=false, restraints=[], zones = {sleeplocations = ['field'], worklocations = ['field'], furnishings = ['dirt']}, objects = []}
-	
+#		globals.state['farmexpanded'] = {aphrodisiacs = 0, production = "food", extraction='hand', totalcontainers = {bucket = -1, pail = -1, jug = -1, canister = -1}, autopump=false, restraints=[], zones = {sleeplocations = ['field'], worklocations = ['field'], furnishings = ['dirt']}, objects = []}
 #	if !globals.state.farmexpanded.has('totalcontainers'):
 #		globals.state.farmexpanded['totalcontainers'] = {bucket = -1, pail = -1, jug = -1, canister = -1}
 #	if !globals.state.farmexpanded.has('aphrodisiacs'):
 #		globals.state.farmexpanded['aphrodisiacs'] = 0
 	
-	#Towns Expanded
+	#---Towns Expanded
+	#Reputations
+	if !globals.state.reputation.has('shaliq'):
+		globals.state.reputation['shaliq'] = 0
+	if !globals.state.reputation.has('umbra'):
+		globals.state.reputation['umbra'] = 0
+	#Town Expansion
+	for towns in ['wimborn','frostford','gorn','amberguard']:
+		if !globals.state.townsexpanded[towns].has('dailyreport'):
+			globals.state.townsexpanded[towns]['dailyreport'] = {shopping = 0, crimeattempted = 0, crimeprevented = 0, crimesucceeded = 0}
+	for town in globals.expansion.citiesarray:
+		if !globals.state.townsexpanded[town].dailyreport.has('text'):
+			globals.state.townsexpanded[town].dailyreport['text'] = ""
 	for town in globals.expandedtowns:
 		if !globals.state.townsexpanded[town].has('milkinterest'):
 			globals.state.townsexpanded[town]['milkinterest'] = 5
@@ -170,18 +124,37 @@ func expandGame():
 		if !globals.state.townsexpanded[town].has('laws'):
 			globals.state.townsexpanded[town]['laws'] = {public_nudity = false,}
 	
-	#Reputations
-	if !globals.state.reputation.has('shaliq'):
-		globals.state.reputation['shaliq'] = 0
-	if !globals.state.reputation.has('umbra'):
-		globals.state.reputation['umbra'] = 0
+	#---Fixing Old Issues; Possibly Unneeded
+	#NPC Array Change
+	if !globals.state.npclastlocation.empty():
+		#offscreennpcs = [person.id, location.code, encounterchance, action, reputation, status]
+		for npcarray in globals.state.npclastlocation.duplicate():
+			var npc = globals.state.findnpc(npcarray[1])
+			if npc == null:
+				continue
 	
-	#Resources
-	if !globals.resources.farmexpanded.has('worker_cycle'):
-		globals.resources.farmexpanded['worker_cycle'] = []
-	if !globals.resources.farmexpanded.has('work_type'):
-		globals.resources.farmexpanded['work_type'] = ""
-		
+			var id = npcarray[1]
+			var location = npcarray[0]
+			var encounterchance = npcarray[2]
+			var action = npc.npcexpanded.dailyaction
+			if action == "":
+				action = "resting"
+			var reputation = 0
+			var status = ""
+			if npc.npcexpanded.citizen == true:
+				reputation = round(rand_range(1,5)) + globals.originsarray.find(npc.origins)
+				status = 'citizen'
+			else:
+				reputation = -round(rand_range(1,5) + globals.originsarray.find(npc.origins)*rand_range(-1, 1))
+				status = 'criminal'
+			globals.state.offscreennpcs.append([id,location,encounterchance,action,reputation,status])
+			globals.state.npclastlocation.erase(npcarray)
+		globals.state.npclastlocation.clear()
+	#Restoring Old Reputations
+	for npc in globals.state.offscreennpcs:
+		var person = globals.state.findnpc(npc[0])
+		person.npcexpanded.reputation = npc[4]
+	
 	#End Update
 	globals.state.expansionversion = globals.expansionsettings.modversion
 	
@@ -189,30 +162,26 @@ func expandGame():
 	for person in globals.slaves + globals.state.allnpcs + globals.state.babylist:
 		if person.expanded == false:
 			globals.expansionsetup.expandPerson(person)
-		if float(person.expansionversion) < float(globals.expansionsettings.modversion):
+#		if float(person.expansionversion) < float(globals.expansionsettings.modversion): #Old Method#
+		if str(person.expansionversion) != str(globals.expansionsettings.modversion):
 			globals.backwardscompatibility.backwardsCompatibility(person)
 		globals.expansion.updatePerson(person)
-	
 	for i in globals.guildslaves:
 		for person in globals.guildslaves[i]:
 			if person.expanded == false:
 				globals.expansionsetup.expandPerson(person)
-			if float(person.expansionversion) < float(globals.expansionsettings.modversion):
+#			if float(person.expansionversion) < float(globals.expansionsettings.modversion):
+			if str(person.expansionversion) != str(globals.expansionsettings.modversion):
 				globals.backwardscompatibility.backwardsCompatibility(person)
 			globals.expansion.updatePerson(person)
 
-	#v1.6a
-	if typeof(globals.resources.farmexpanded.worker_cycle) != TYPE_DICTIONARY || globals.resources.farmexpanded.worker_cycle.has('herder'):
-		globals.resources.farmexpanded.worker_cycle = {'farmhand':[], 'milkmaid':[], 'stud':[]}
-		globals.resources.farmexpanded.work_type = ''
-
+	#---BugFixing & Cleanup
 	#erase NPCs with duplicate ids to slaves
 	for i in globals.state.allnpcs.duplicate():
 		for j in globals.slaves:
 			if str(j.id) == str(i.id):
 				globals.state.allnpcs.erase(i)
 				break
-
 	#fix slaves with duplicate ids
 	var idx1 = globals.slaves.size() - 1
 	var idx2
@@ -226,7 +195,6 @@ func expandGame():
 			idx2 -= 1
 		idx1 -= 1
 
-			
 
 func expandPerson(person):
 	var sexvag = int(round(person.metrics.vag/10))
@@ -258,11 +226,11 @@ func expandPerson(person):
 		var persondignitymin = globals.expansion.dignitymin[origins]
 		var persondignitymax = globals.expansion.dignitymax[origins]
 		person.dignity = round(rand_range(persondignitymin,persondignitymax))
-		#---Readd when Flaws/Personalities are Readded
-		setFlaw(person)
+		setVice(person)
 		setDemeanor(person)
 		setSexuality(person)
 		setDesiredOffspring(person)
+		#---Readd when Vices/Personalities are Readded
 		#getPersonality(person)
 		
 		#Check Relation Data and Add if Non-Existant
@@ -287,14 +255,15 @@ func expandPerson(person):
 	
 	#Sets Id/Ego for Everyone
 	#setIdentity(person) Currently Crashing Game
+	
 	person.expanded = true
 	globals.expansion.updatePerson(person)
 
 #"Set" functions are intended to run Once per person for the initial setup
-func setFlaw(person):
-	var temparray = globals.expansion.flawarray.duplicate()
-	if person.mind.flaw == 'none' && person.mind.flawless == false:
-		person.mind.flaw = str(globals.randomitemfromarray(temparray))
+func setVice(person):
+	var temparray = globals.expansion.vicearray.duplicate()
+	if person.mind.vice == 'none' && person.mind.vice_removed == false:
+		person.mind.vice = str(globals.randomitemfromarray(temparray))
 
 func setDemeanor(person):
 	#Changing into Personality/Identity in Future Update

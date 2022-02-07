@@ -1814,6 +1814,14 @@ func amnesiapoteffect():
 	if person.loyal < 50 && person.memory != 'clear':
 		text = text + person.dictionary("$He grows closer to you, having no one else $he can rely on. ")
 		person.loyal += rand_range(15,25) - person.conf/10
+	###---Added by Expansion---### Vice Removal
+	if person.mind.vice != "none":
+		if person.mind.vice_known == true:
+			text += person.dictionary("\n$His mental regression seems to have removed $his [color=aqua]"+ str(person.mind.vice.capitalize()) +" Vice[/color] as well. ")
+		person.mind.vice = "none"
+		person.mind.vice_removed = true
+		person.mind.vice_known = true
+	###---End Expansion---###
 	for i in person.relations:
 		person.relations[i] = 0
 		if i == globals.player.id:

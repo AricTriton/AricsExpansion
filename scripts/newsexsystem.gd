@@ -1393,9 +1393,9 @@ func generaterequest(member):
 
 
 	rval = rval[randi()%rval.size()]
-
-	$Panel/sceneeffects.bbcode_text += ("[color=#f4adf4]Desire: " + member.person.dictionary(requests[rval]) + '[/color]\n')
-
+	###---Added by Expansion---### Centered/Set Alerted Text
+	$Panel/sceneeffects.bbcode_text += ("\n[center][color=#f4adf4]Desire! -  " + member.person.dictionary(requests[rval]) + '[/color][/center]\n')
+	###---End Expansion---###
 	member.request = rval
 
 func checkrequest(member):
@@ -2275,6 +2275,9 @@ func endencounter():
 			###---End Expansion---###
 		if i.person.race_display == "Succubus": #ralphC - Succubus orgasms don't produce mana
 			mana = 0  #ralphC
+		###---Added by Expansion---### Person Expanded; Strip/Redress
+		text += i.person.updateClothing()
+		###---End Expansion---###
 		mana = round(mana)
 		manaDict[i.person] = mana
 		totalmana += mana

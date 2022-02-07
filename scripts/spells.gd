@@ -284,18 +284,24 @@ func mindreadeffect():
 	var spell = globals.spelldict.mindread
 	var text = ''
 	globals.resources.mana -= spellcost(spell)
-	###---Added by Expansion---### Colored
+	###---Added by Expansion---### Colored / Legibility; 
 	text = "You peer into $name's soul. "
 	if person.effects.has('captured') == true:
 		text = text + "\n[color=red]\n$name doesn't accept $his new life in your domain. (Rebelling: " + str(person.effects.captured.duration) + ")[/color]"
-	text += "\n$He is of " + person.origins + " origins. \nObedience: " + str(round(person.obed)) + ", Fear: " + str(person.fear) + ', Stress: '+ str(round(person.stress)) + ', Loyalty: ' + str(round(person.loyal)) + ', Lust: '+ str(round(person.lust)) + ', Courage: ' + str(round(person.cour)) + ', Confidence: ' + str(round(person.conf)) + ', Wit: '+ str(round(person.wit)) + ', Charm: ' + str(round(person.charm)) + ", Toxicity: " + str(floor(person.toxicity)) + ", Lewdness: " + str(floor(person.lewdness)) + ", Role Preference: " + str(floor(person.asser))
-	text += "\nStrength: " + str(person.sstr) + ", Agility: " + str(person.sagi) + ", Magic Affinity: " + str(person.smaf) + ", Endurance: " + str(person.send)
-	text += "\nBase Beauty: " + str(person.beautybase) + ', Temporal Beauty: ' + str(person.beautytemp)
+	text += "\n\n$He is of [color=aqua]" + person.origins.capitalize() + "[/color] origins.\nStrength: " + str(person.sstr) + ", Agility: " + str(person.sagi) + ", Magic Affinity: " + str(person.smaf) + ", Endurance: " + str(person.send)
+	text += "\nBase Beauty: " + str(person.beautybase) + ', Temporal (Temporary) Beauty: ' + str(person.beautytemp)
+	text += "\nObedience: " + str(round(person.obed)) + ", Fear: " + str(person.fear) + ', Stress: '+ str(round(person.stress)) + ', Loyalty: ' + str(round(person.loyal)) + ', Lust: '+ str(round(person.lust)) + ', Courage: ' + str(round(person.cour)) + ', Confidence: ' + str(round(person.conf)) + ', Wit: '+ str(round(person.wit)) + ', Charm: ' + str(round(person.charm)) + ", Toxicity: " + str(floor(person.toxicity)) + ", Lewdness: " + str(floor(person.lewdness)) + ", Role Preference: " + str(floor(person.asser))
 	if person.traits.size() >= 0:
 		text += '\n\n$name has corresponding traits: [color=aqua]'
 		for i in person.traits:
-			text += ' ' + i
-		text += '[/color].'
+			text += '\n' + i
+		text += '[/color]'
+	#Trait Storage
+	if !person.traitstorage.empty():
+		text += "\nYou also sense the following traits buried deep within $him. $He may pass these down to $his offspring, but $he will likely never know that $he carried these.[color=aqua]"
+		for i in person.traitstorage:
+			text += "\n" + i
+		text += "[/color]"
 	if person.preg.duration > 0:
 		text += "\nPregnancy: " + str(person.preg.duration)
 		if !person.knowledge.has('currentpregnancy') && !person.mind.secrets.has('currentpregnancy'):
@@ -306,10 +312,11 @@ func mindreadeffect():
 			text += "\n[center][color=red]She doesn't want this baby and the pregnancy will be more stressful for her as she resists the changes her body goes through.[/color][/center]\n\n"
 	###---End Expansion---###
 	if person.lastsexday != 0:
-		text += "\n$name had sex last time " + str(globals.resources.day - person.lastsexday) + " day(s) ago"
+		text += "\n\n$name had sex last time " + str(globals.resources.day - person.lastsexday) + " day(s) ago"
 	###---Added by Expansion---### NPC Expanded
+	text += "\n\n[center][color=#d1b970]History[/color][/center]"
 	if person.npcexpanded.timesmet > 0:
-		text += "\n\nYou have met $him before [color=aqua]"+str(person.npcexpanded.timesmet)+"[/color] times. "
+		text += "\nYou have met $him before [color=aqua]"+str(person.npcexpanded.timesmet)+"[/color] times. "
 	if person.npcexpanded.timesfought > 0:
 		text += "\nYou have fought and beaten $him [color=red]"+str(person.npcexpanded.timesfought)+"[/color] times. "
 	if person.npcexpanded.timesrescued > 0:
@@ -318,13 +325,25 @@ func mindreadeffect():
 		text += "\nYou have raped $him before [color=red]"+str(person.npcexpanded.timesraped)+"[/color] times. "
 	if person.npcexpanded.timesreleased > 0:
 		text += "\nYou freed $him [color=aqua]"+str(person.npcexpanded.timesreleased)+"[/color] times. "
-	#Flaw Discovery (Add Resistance later?)
-	if person.flawknown == false:
-		var flawtext = person.revealFlaw(person.mind.flaw)
-		if flawtext == "":
-			text += "\n\nYou sense $him resisting your mental probing. It seems there is an internal weakness or [color=aqua]Flaw[/color] that $he is subconsciousnessly desparate to hide from you. You feel you may be able to break this resistance down if you continued to cast this on $him. You currently have a base [color=aqua]" + str((globals.player.smaf*10) + (person.dailyevents.find(person.mind.flaw)*10)) + " Percent[/color] to break this resistance."
-		else:
-			text += "\n" + flawtext
+	if person.npcexpanded.timesreleased == 0 && person.npcexpanded.timesraped == 0 && person.npcexpanded.timesrescued == 0 && person.npcexpanded.timesfought == 0 && person.npcexpanded.timesmet == 0:
+		text += "\nYou have no prior history together."
+	#Vice Discovery
+	if person.mind.vice_known == false:
+		if globals.expansionsettings.vices_discovery_has_to_present_first == false || globals.expansionsettings.vices_discovery_has_to_present_first == true && person.mind.vice_presented == true:
+			var vice_text = person.revealVice(person.mind.vice)
+			var vice_discoverychance = (globals.player.smaf*10) + (person.dailyevents.count(person.mind.vice)*10)
+			if person.mind.vice_presented == true:
+				vice_discoverychance += globals.expansionsettings.vices_discovery_presentation_bonus
+			if vice_text == "":
+				text += "\n\nYou sense $him resisting your mental probing. It seems there is an internal weakness or [color=aqua]Vice[/color] that $he is subconsciousnessly desparate to hide from you. You feel you may be able to break this resistance down if you continued to cast this on $him. You currently have a [color=aqua]" + str(vice_discoverychance) + " Percent[/color] to break this resistance."
+			else:
+				text += "\n" + vice_text
+	else:
+		text += "\n\n[center][color=#d1b970]Vice[/color][/center]\n$His [color=aqua]Vice[/color] is [color=aqua]"+ str(person.mind.vice.capitalize()) +"[/color]"
+	#Luxury
+	var luxurydict = person.countluxury(false)
+	var luxuryreq = str(person.calculateluxury())
+	text += "\n\n[center][color=#d1b970]Luxury[/color][/center]\nCurrent Luxury: [color=aqua]"+ str(luxurydict.luxury) +"[/color]  |  Current Luxury Requirement: [color=red]"+ luxuryreq +"[/color]"
 	###---End Expansion---###
 	text = person.dictionary(text)
 	return text

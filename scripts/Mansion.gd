@@ -143,7 +143,11 @@ func rebuild_slave_list():
 			elif catIdx == 2:
 				if person.sleep != 'farm':
 					continue
-
+			
+			###---Added by Expansion---### Person Expanded; Strip/Redress
+			person.updateClothing()
+			###---End Expansion---###
+			
 			if nodeIndex < personList.get_children().size() - (3 - catIdx):
 				if personList.get_children()[nodeIndex].has_meta('id') && personList.get_children()[nodeIndex].get_meta('id') == person.id:
 					updateSlaveListNode(personList.get_children()[nodeIndex], person, categoryButtons[catIdx].pressed)
@@ -729,6 +733,7 @@ func _on_end_pressed():
 					person.obed += person.loyal/5 - (person.cour+person.conf)/10
 					globals.resources.food -= consumption
 				else:
+					text0.set_bbcode(text0.get_bbcode()+person.dictionary('[color=red]There was not enough food for $name.[/color]\n')) 
 					person.stress += 20
 					person.health -= rand_range(person.stats.health_max/6,person.stats.health_max/4)
 					person.obed -= max(35 - person.loyal/3,10)
@@ -935,7 +940,7 @@ func _on_end_pressed():
 
 			###---Added by Expansion---### Flaws; Lust
 			#sleep conditions
-			if person.lust < 25 || person.traits.has('Sex-crazed') || person.checkFlaw('lust'):
+			if person.lust < 25 || person.traits.has('Sex-crazed') || person.checkVice('lust'):
 				person.lust += round(rand_range(3,6))
 			###---End Expansion---###
 			if person.sleep == 'communal' && globals.count_sleepers()['communal'] > globals.state.mansionupgrades.mansioncommunal:
@@ -1092,10 +1097,25 @@ func _on_end_pressed():
 				gold_consumption += luxurycheck.goldspent
 				if luxurycheck.nosupply == true:
 					lacksupply = true
+				###---Added by Expansion---### Vices
 				if !person.traits.has("Grateful") && luxury < personluxury && person.metrics.ownership - person.metrics.jail > 7:
 					person.loyal -= (personluxury - luxury)/2.5
 					person.obed -= (personluxury - luxury)
-					text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=#ff4949]$name appears to be rather unhappy about quality of $his life and demands better living conditions from you. [/color]\n"))
+					text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=#ff4949][color=aqua]$name[/color] appears to be rather unhappy about quality of $his life and demands better living conditions from you. [/color]\n"))
+				if luxurycheck.vice_modifier != 0:
+					if person.mind.vice_known == false:
+						person.mind.vice_presented = true
+						if luxurycheck.vice_modifier > 0:
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] seems to have an unknown [color=aqua]Vice[/color] affecting $his happiness and [color=aqua]Luxury[/color] [color=green]positively[/color] today. Perhaps [color=aqua]reading $his mind[/color] will reveal more. \n"))
+						elif luxurycheck.vice_modifier < 0:
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] seems to have an unknown [color=aqua]Vice[/color] affecting $his happiness and [color=aqua]Luxury[/color] [color=red]negatively[/color] today. Perhaps [color=aqua]reading $his mind[/color] will reveal more. \n"))
+					else:
+						text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] has a [color=aqua]"+ str(person.mind.vice.capitalize()) +" Vice[/color] which affected $his happiness and [color=aqua]Luxury[/color] "))
+						if luxurycheck.vice_modifier > 0:
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=green]positively[/color] today. \n"))
+						elif luxurycheck.vice_modifier < 0:
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=red]negatively[/color] today. \n"))
+				###---End Expansion---###
 		elif person.away.duration > 0:
 			person.away.duration -= 1
 			###---Added by Expansion---### Hybrid Support && Ankmairdor's BugFix v4
@@ -1230,7 +1250,7 @@ func _on_end_pressed():
 				else:
 					globals.addrelations(person, farmmanager, rand_range(-25,-40))
 #	text3.set_bbcode(text3.get_bbcode()+farmtext)
-	if farmtext != null && text3 != null:
+	if farmtext != null && text3 != null && globals.state.farm >= 3:
 		text3.set_bbcode(farmtext)
 	
 	###---Added by Expansion---### Ank BugFix v4a
@@ -1350,9 +1370,9 @@ func _on_end_pressed():
 		text0.set_bbcode(text0.get_bbcode() + '[color=yellow]Some of your food reserves have spoiled.[/color]\n')
 
 	###---Added by Expansion---### Ovulation System
-	text0.set_bbcode(globals.expansion.nightly_womb(globals.player))
+	text0.set_bbcode(text0.get_bbcode()+globals.expansion.nightly_womb(globals.player))
 	for i in globals.slaves:
-		text0.set_bbcode(globals.expansion.nightly_womb(i))
+		text0.set_bbcode(text0.get_bbcode()+globals.expansion.nightly_womb(i))
 	###---End Expansion---###
 	
 	#####         Results
@@ -1480,8 +1500,7 @@ func nextdayevents():
 		checkforevents = true
 		#ralphD - trying to stop my MC from being eternally fertilized 8P
 		player.cum.pussy = 0
-		if !player.preg.womb.empty():
-			player.preg.womb.clear()
+		player.preg.womb.clear()
 		#/ralphD
 		return
 	for i in globals.slaves:
@@ -1495,8 +1514,7 @@ func nextdayevents():
 			i.away.at = 'in labor'
 			childbirth_loop(i)
 			i.cum.pussy = 0 #ralphD - better help npcs keep from being eternally preggers from 1 f%$& too
-			if !i.preg.womb.empty():
-				i.preg.womb.clear()
+			i.preg.womb.clear()
 			checkforevents = true
 			return
 		###---End Expansion---###
@@ -2905,7 +2923,7 @@ func selectslavelist(prisoners = false, calledfunction = 'popup', targetnode = s
 ###---End Expansion---###
 
 func _on_farmadd_pressed():
-	selectslavelist(false, 'farmassignpanel')
+	selectslavelist(true, 'farmassignpanel')
 
 func farmassignpanel(person):
 	#Handles putting a selected slave into the farm
