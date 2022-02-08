@@ -494,7 +494,7 @@ var itemlist = {
 		code = 'clothcommon',
 		name = 'Common Clothes',
 		iconbig = true,
-		icon = "res://files/images/items/clothcommon.png",
+		icon = load("res://files/images/items/clothcommon.png"),
 		description = "Bland common clothes without much of appeal. Thankfully there's no shortage of them.",
 		effect = '',
 		recipe = '',
@@ -507,7 +507,7 @@ var itemlist = {
 	clothsundress = {
 		code = 'clothsundress',
 		name = 'Sundress',
-		icon = "res://files/images/items/sundress.png",
+		icon = load("res://files/images/items/sundress.png"),
 		iconbig = true,
 		description = "Simple, comfortable, and lighthearted. Perfect for relaxation and exposure to sudden wind gusts.",
 		effect = [{type = 'onendday', effect = 'sundresseffect', descript = "Reduces Stress by the end of a day"}],
@@ -522,7 +522,7 @@ var itemlist = {
 	clothmaid = {
 		code = 'clothmaid',
 		name = 'Maid Uniform',
-		icon = "res://files/images/items/maiduniform.png",
+		icon = load("res://files/images/items/maiduniform.png"),
 		iconbig = true,
 		description = "A set of black and white frilly clothes with a mandatory skirt and garter belt. Makes cleaning duty pleasant to watch.",
 		effect = [{type = 'onendday', effect = 'maiduniformeffect', descript = "Increases Obedience by the end of a day"}],
@@ -537,7 +537,7 @@ var itemlist = {
 	clothkimono = {
 		code = 'clothkimono',
 		name = 'Kimono',
-		icon = "res://files/images/items/clothkimono.png",
+		icon = load("res://files/images/items/clothkimono.png"),
 		description = "Brightly colored foreign clothes which are pretty popular for certain people.",
 		effect = [{type = 'onequip', effect = 'beauty', effectvalue = 10, descript = "Slightly increases beauty"},{type = 'onequip', effect = 'luxury', effectvalue = 5, descript = "Slightly increases luxury (+5)"}],
 		recipe = '',
@@ -551,7 +551,7 @@ var itemlist = {
 	clothmiko = {
 		code = 'clothmiko',
 		name = 'Miko Outfit',
-		icon = "res://files/images/items/clothmiko.png",
+		icon = load("res://files/images/items/clothmiko.png"),
 		description = "Contrasting red and white clothes, originally worn by young women of certain foreign religions. They are now fetishized by certain people...",
 		effect = [{type = 'onendday', effect = 'mikoeffect', descript = "Reduces stress and lust by the end of a day"}],
 		recipe = '',
@@ -565,7 +565,7 @@ var itemlist = {
 	armorninja = {
 		code = 'armorninja',
 		name = 'Ninja Suit',
-		icon = "res://files/images/items/clothninja.png",
+		icon = load("res://files/images/items/clothninja.png"),
 		description = "A compact and versatile outfit rumored to be used by foreign assassins.",
 		effect = [{type = 'incombat', effect = 'protection', effectvalue = 30, descript = "30% Protection"},{type = 'onequip', id = 'armoragi', effect = 'agi', effectvalue = 1, descript = "+1 Agility"}],
 		recipe = '',
@@ -579,7 +579,7 @@ var itemlist = {
 	clothpet = {
 		code = 'clothpet',
 		name = 'Pet Suit',
-		icon = "res://files/images/items/clothpet.png",
+		icon = load("res://files/images/items/clothpet.png"),
 		description = "Specially designed pieces of leather decoration which represent a domestic animal, and force the wearer to walk on all fours. For obvious reasons, this should generally not be worn outside.",
 		effect = [{type = 'onendday', effect = 'peteffect', descript = "Greatly increases obedience. If Confidence above 40, cause stress penalty and lowers it by the end of a day."}],
 		recipe = '',
@@ -594,7 +594,7 @@ var itemlist = {
 	clothchainbikini = {
 		code = 'clothchainbikini',
 		name = 'Chainmail Bikini',	
-		icon = "res://files/aric_expansion_images/items/chainbikini1.png",
+		icon = load("res://files/aric_expansion_images/items/chainbikini1.png"),
 		description = "Sexy armored underwear that emphasizes the physical fitness of the wearer. Contrary to popular belief, it is an impractical choice for protective wear. It has been known to chafe, however.",
 		effect = [{type = 'incombat', effect = 'armor', effectvalue = 1, descript = "+1 Armor"},{type = 'onendday', effect = 'chainbikinieffect', descript = "Gains Lust and Lewdness Daily; Gains Stress Daily"}],
 		recipe = '',
@@ -609,7 +609,7 @@ var itemlist = {
 	clothbutler = {
 		code = 'clothbutler',
 		name = 'Butlers Uniform',
-		icon = "res://files/images/items/clothbutler.png",
+		icon = load("res://files/images/items/clothbutler.png"),
 		description = "This is the uniform of a butler, a well fitted suit comprising of a double-breasted coat, waistcoat and trousers, along with a small black tie.",
 		effect = [{type = 'onendday', effect = 'butleruniformeffect', descript = "Increases Obedience by the end of a day"}],
 		recipe = '',
@@ -623,7 +623,7 @@ var itemlist = {
 	clothbedlah = {
 		code = 'clothbedlah',
 		name = 'Bedlah',
-		icon = "res://files/images/items/clothbedlah.png",
+		icon = load("res://files/images/items/clothbedlah.png"),
 		description = "Loose, translucent clothing from southern regions, generally worn by dancers and members of a harem.",
 		effect = [{type = 'onendday', effect = 'bedlaheffect', descript = "Slightly increases Charm by the end of a day."}],
 		recipe = '',
@@ -637,7 +637,7 @@ var itemlist = {
 	underwearplain = {
 		code = 'underwearplain',
 		name = 'Plain Underwear',
-		icon = "res://files/images/items/underwear.png",
+		icon = load("res://files/images/items/underwear.png"),
 		iconbig = true,
 		description = "Plain white cotton underwear for everyday life.",
 		effect = "",
@@ -651,7 +651,7 @@ var itemlist = {
 	underwearlacy = {
 		code = 'underwearlacy',
 		name = 'Lacy Underwear',
-		icon = "res://files/images/items/underwearlacy.png",
+		icon = load("res://files/images/items/underwearlacy.png"),
 		description = "Fancy and cute underwear available for people with moderate income.\n[color=green]Increases person's luxury[/color]",
 		effect = [{type = 'onequip', effect = 'luxury', effectvalue = 5, descript = "Slightly increases luxury (+5)"}],
 		recipe = '',
@@ -665,7 +665,7 @@ var itemlist = {
 	underwearboxers = {
 		code = 'underwearboxers',
 		name = 'Silk Boxers',
-		icon = "res://files/images/items/underwearboxers.png",
+		icon = load("res://files/images/items/underwearboxers.png"),
 		description = "Fancy and comfortable male underwear available for people with moderate income.\n[color=green]Increases person's luxury[/color]",
 		effect = [{type = 'onequip', effect = 'luxury', effectvalue = 5, descript = "Slightly increases luxury (+5)"}],
 		recipe = '',
@@ -679,7 +679,7 @@ var itemlist = {
 	armorleather = {
 		code = 'armorleather',
 		name = 'Leather Armor',
-		icon = "res://files/images/items/armorleather.png",
+		icon = load("res://files/images/items/armorleather.png"),
 		description = "Suit of tanned leather, providing some protection while not restricting movement too much.",
 		effect = [{type = 'incombat', effect = 'protection', effectvalue = 20, descript = "20% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 2, descript = "+2 Armor"}],
 		recipe = '',
@@ -694,7 +694,7 @@ var itemlist = {
 	armorpadded = {
 		code = 'armorpadded',
 		name = 'Padded Armor',
-		icon = "res://files/aric_expansion_images/items/armorpadded2.png",
+		icon = load("res://files/aric_expansion_images/items/armorpadded2.png"),
 		description = "A step up from leather armor made from multiple layers of linen. It is effective, comfortable, and cheap, making it incredibly common.",
 		effect = [{type = 'incombat', effect = 'protection', effectvalue = 25, descript = "25% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 4, descript = "+4 Armor"}],
 		recipe = '',
@@ -709,7 +709,7 @@ var itemlist = {
 	armorchain = {
 		code = 'armorchain',
 		name = 'Chain Armor',
-		icon = "res://files/images/items/armorchain.png",
+		icon = load("res://files/images/items/armorchain.png"),
 		description = "A finely crafted suit of armor created from interwoven iron rings. Offers reasonable protection against sharp objects. ",
 		effect = [{type = 'incombat', effect = 'protection', effectvalue = 40, descript = "40% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 6, descript = "+6 Armor"}],
 		recipe = '',
@@ -723,7 +723,7 @@ var itemlist = {
 	armorelvenchain = {
 		code = 'armorelvenchain',
 		name = 'Elven Chain Armor',
-		icon = "res://files/images/items/armorelvenchain.png",
+		icon = load("res://files/images/items/armorelvenchain.png"),
 		description = "A suit of elvish armor created from interwoven mithril rings. It is supple and light yet provides ample protection.",
 		effect = [{type = 'incombat', effect = 'protection', effectvalue = 35, descript = "35% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 5, descript = "+5 Armor"}, {type = 'incombat', effect = 'speed', effectvalue = 3, descript = "+3 speed"}],
 		recipe = '',
@@ -738,7 +738,7 @@ var itemlist = {
 	armorplate = {
 		code = 'armorplate',
 		name = 'Plate Armor',
-		icon = "res://files/images/items/armorplate.png",
+		icon = load("res://files/images/items/armorplate.png"),
 		description = "An old, durable suit of plate armor. Protects the wearer against most physical damage. \n[color=yellow]Requirements: 1 Strength, 3 Endurance[/color]",
 		effect = [{type = 'incombat', effect = 'protection', effectvalue = 60, descript = "60% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 10, descript = "+10 Armor"}],
 		recipe = '',
@@ -752,7 +752,7 @@ var itemlist = {
 	armorhalfplate = {
 		code = 'armorhalfplate',
 		name = "Half-Plate",
-		icon = "res://files/aric_expansion_images/items/halfplate.png",
+		icon = load("res://files/aric_expansion_images/items/halfplate.png"),
 		description = "A combination of chaimail with plate covering only the most vital areas. Slightly cheaper and lighter than full plate, requiring less experience to use it. \n[color=yellow]Requirements: 1 Strength, 2 Endurance[/color]",
 		effect = [{type = 'incombat', effect = 'protection', effectvalue = 50, descript = "50% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 8, descript = "+8 Armor"}],
 		recipe = '',
@@ -766,7 +766,7 @@ var itemlist = {
 	armorelvenhalfplate = {
 		code = 'armorelvenhalfplate',
 		name = "Elven Half-Plate",
-		icon = "res://files/aric_expansion_images/items/elven_halfplate.png",
+		icon = load("res://files/aric_expansion_images/items/elven_halfplate.png"),
 		description = "This highly efficient armor sacrifices no durabiltiy to achive lighter weight than it's human counterpart. \n[color=yellow]Requirements: 1 Agility, 1 Endurance[/color]",
 		effect = [{type = 'incombat', effect = 'protection', effectvalue = 45, descript = "45% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 8, descript = "+8 Armor"}],
 		recipe = '',
@@ -780,7 +780,7 @@ var itemlist = {
 	armorfieldplate = {
 		code = 'armorfieldplate',
 		name = "Field Plate Armor",
-		icon = "res://files/aric_expansion_images/items/fieldplate.png",
+		icon = load("res://files/aric_expansion_images/items/fieldplate.png"),
 		description = "A magnificent suit of ornate field plate armor. Provides some of the best protection money can buy.\n[color=yellow]Requirements: 2 Strength, 2 Endurance[/color]",
 		effect = [{type = 'incombat', effect = 'protection', effectvalue = 70, descript = "70% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 10, descript = "+10 Armor"}],
 		recipe = '',
@@ -794,7 +794,7 @@ var itemlist = {
 	armormagerobe = {
 		code = 'armormagerobe',
 		name = "Archmages Robe",
-		icon = "res://files/aric_expansion_images/items/archhmagerobe.png",
+		icon = load("res://files/aric_expansion_images/items/archhmagerobe.png"),
 		description = "These runed robes do not restrict movement and amplify their wearer's inate Magic. However, they were not designed for combat and provide little protection.",
 		effect = [{type = 'incombat', effect = 'protection', effectvalue = 20, descript = "20% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 2, descript = "+2 Armor"},{type = 'onequip', id = 'armormaf', effect = 'maf', effectvalue = 2, descript = "+2 Magic Affinity"}],
 		recipe = '',
@@ -809,7 +809,7 @@ var itemlist = {
 	armorrobe = {
 		code = 'armorrobe',
 		name = "Wizard's Robe",
-		icon = "res://files/images/items/armorrobe.png",
+		icon = load("res://files/images/items/armorrobe.png"),
 		description = "Despite what might appear as a clunky piece of clothing, combat robes allow the wearer to hold and hide various items and potions for quick and unexpected use and don't restrict movement. Outer fabric is easily torn to prevent grabbing and tuckling and can be quickly repaired with magic later. ",
 		effect = [{type = 'incombat', effect = 'protection', effectvalue = 35, descript = "35% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 4, descript = "+4 Armor"},{type = 'onequip', id = 'armormaf', effect = 'maf', effectvalue = 1, descript = "+1 Magic Affinity"}],
 		recipe = '',
@@ -823,7 +823,7 @@ var itemlist = {
 	weapondaggerrust = {
 		code = 'weapondaggerrust',
 		name = 'Rusty Dagger',
-		icon = "res://files/images/items/weapondaggerrust.png",
+		icon = load("res://files/images/items/weapondaggerrust.png"),
 		description = "An alleged weapon. You really should find something else... ",
 		effect = [{type = 'incombat', effect = 'damage', effectvalue = 2, descript = "+2 Damage"}],
 		recipe = '',
@@ -837,11 +837,11 @@ var itemlist = {
 	weapondagger = {
 		code = 'weapondagger',
 		name = 'Dagger',
-		icon = "res://files/images/items/weapondagger.png",
+		icon = load("res://files/images/items/weapondagger.png"),
 		description = "A simple weapon providing bare minimum of physical power. ",
 		effect = [{type = 'incombat', effect = 'damage', effectvalue = 4, descript = "+4 Damage"}],
-		recipe = '',
-		reqs = null,
+		recipe = 'recipedagger',
+		reqs = 'globals.state.mansionupgrades.mansionalchemy >= 1',
 		cost = 50,
 		type = 'gear',
 		subtype = 'weapon',
@@ -851,7 +851,7 @@ var itemlist = {
 	weaponsword = {
 		code = 'weaponsword',
 		name = 'Long Sword',
-		icon = "res://files/images/items/weaponsword.png",
+		icon = load("res://files/images/items/weaponsword.png"),
 		description = "Medium sized sword perfectly balanced for close combat. \n[color=yellow]Requirements: 2 Agility[/color]",
 		effect = [{type = 'incombat', effect = 'damage', effectvalue = 7, descript = "+7 Damage"}],
 		recipe = '',
@@ -866,7 +866,7 @@ var itemlist = {
 	weaponclaymore = {
 		code = 'weaponclaymore',
 		name = 'Claymore',
-		icon = "res://files/images/items/weaponclaymore.png",
+		icon = load("res://files/images/items/weaponclaymore.png"),
 		description = "Large greatsword designed with a more aerodynamic design to minimize weight while still capable of delivering a heavy blow.\n[color=yellow]Requirements: 3 Strength[/color] ",
 		effect = [{type = 'incombat', effect = 'damage', effectvalue = 9, descript = "+9 Damage"},{type = 'incombat', id = 'weaponspeed', effect = 'speed', effectvalue = -1, descript = "-1 Speed"}],
 		recipe = '',
@@ -880,7 +880,7 @@ var itemlist = {
 	weapongreatsword = {
 		code = 'weapongreatsword',
 		name = 'Greatsword',
-		icon = "res://files/aric_expansion_images/items/zweihander.png",
+		icon = load("res://files/aric_expansion_images/items/zweihander.png"),
 		description = "Massive two-handed sword with a long reach. Slows the wielder due to its size and weight, but capable of delivering devastating blows.\n[color=yellow]Requirements: 4 Strength[/color] ",
 		effect = [{type = 'incombat', effect = 'damage', effectvalue = 12, descript = "+12 Damage"},{type = 'incombat', id = 'weaponspeed', effect = 'speed', effectvalue = -3, descript = "-3 Speed"}],
 		recipe = '',
@@ -895,7 +895,7 @@ var itemlist = {
 	weaponaynerisrapier = {
 		code = 'weaponaynerisrapier',
 		name = "Ayneris's Rapier",
-		icon = "res://files/images/items/weaponaynerisrapier.png",
+		icon = load("res://files/images/items/weaponaynerisrapier.png"),
 		description = "\n[color=yellow]Requirements: 4 Agility[/color] ",
 		effect = [{type = 'incombat', effect = 'damage', effectvalue = 8, descript = "+8 Damage"}, {type = 'passive', effect = 'doubleattack', effectvalue = 50, descript = '50% chance to attack twice'}],
 		recipe = '',
@@ -911,7 +911,7 @@ var itemlist = {
 	weaponrunesword = {
 		code = 'weaponrunesword',
 		name = 'Runesword',
-		icon = "res://files/aric_expansion_images/items/ornate_sword_1.png",
+		icon = load("res://files/aric_expansion_images/items/ornate_sword_1.png"),
 		description = "A sword made for an ancient order of spellblades that is engraved with runes that help focus magical power. These weapons are now hard to find and unusable by anyone without some magical affinity.\n[color=yellow]Requirements: 2 Agility, 1 Magic[/color]",
 		effect = [{type = 'incombat', effect = 'damage', effectvalue = 7, descript = "+7 Damage"}, {type = 'onequip', effect = 'maf', effectvalue = 1, descript = "+1 Magic Affinity"}],
 		recipe = '',
@@ -925,7 +925,7 @@ var itemlist = {
 	weaponceremonialsword = {
 		code = 'weaponceremonialsword',
 		name = "Ceremonial Sword",
-		icon = "res://files/aric_expansion_images/items/ornate_sword_2.png",
+		icon = load("res://files/aric_expansion_images/items/ornate_sword_2.png"),
 		description = "More work of art than weapon, this blade has a beautifully decorated golden hilt. Unlike most ceremonial weaponry, this is blade seems to be completely functional in combat as well.\n[color=yellow]Requirements: 2 Agility[/color]",
 		effect = [{type = 'incombat', effect = 'damage', effectvalue = 7, descript = "+7 Damage"}, {type = 'onequip', effect = 'luxury', effectvalue = 10, descript = "Increases luxury (+10)"}],
 		recipe = '',
@@ -939,7 +939,7 @@ var itemlist = {
 	weaponancientsword = {
 		code = 'weaponancientsword',
 		name = "Ancient Sword",
-		icon = "res://files/aric_expansion_images/items/ornate_sword_3.png",
+		icon = load("res://files/aric_expansion_images/items/ornate_sword_3.png"),
 		description = "This blade has clearly seen hundreds of battles, yet remains sharp and functional. Holding it reminds the wielder of its previous victories as well as its prior defeats.\n[color=yellow]Requirements: 1 Strength, 2 Agility[/color]",
 		effect = [{type = 'incombat', effect = 'damage', effectvalue = 8, descript = "+8 Damage"},{type = 'onendday', effect = 'ancientswordeffect', descript = "Increase Confidence or Fear by the end of a day based on Courage."}],
 		recipe = '',
@@ -953,7 +953,7 @@ var itemlist = {
 	accbooklife = {
 		code = 'accbooklife',
 		name = 'Book of Life',
-		icon = "res://files/aric_expansion_images/items/book_life.png",
+		icon = load("res://files/aric_expansion_images/items/book_life.png"),
 		description = "This ancient book contains wisdom, tips, and helpful reminders for Mages.",
 		effect = [{type = 'onequip', effect = 'wit', effectvalue = 15, descript = "Increases wit (+15)"},{type = 'onequip', effect = 'maf', effectvalue = 1, descript = "+1 Magic Affinity"}],
 		recipe = '',
@@ -967,7 +967,7 @@ var itemlist = {
 	accelvenboots = {
 		code = 'accelvenboots',
 		name = 'Elven Boots',
-		icon = "res://files/aric_expansion_images/items/elvenboots.png",
+		icon = load("res://files/aric_expansion_images/items/elvenboots.png"),
 		description = "Exquisite Elven-made boots that are not only comfortable, but also seem to hasten your step and make your steps less tiring.",
 		effect = [{type = 'onequip', effect = 'energy', effectvalue = 20, descript = "+20 Energy"},{type = 'incombat', effect = 'speed', effectvalue = 2, descript = "+2 Speed"}],
 		recipe = '',
@@ -982,7 +982,7 @@ var itemlist = {
 	accgoldring = {
 		code = 'accgoldring',
 		name = 'Golden Ring',
-		icon = "res://files/images/items/goldring.png",
+		icon = load("res://files/images/items/goldring.png"),
 		description = "This finely crafted gold ring comprises of two intertwined bands.\n[color=green]Increases person's luxury[/color]",
 		effect = [{type = 'onequip', effect = 'luxury', effectvalue = 10, descript = "Increases luxury (+10)"}],
 		recipe = '',
@@ -996,7 +996,7 @@ var itemlist = {
 	accslavecollar = {
 		code = 'accslavecollar',
 		name = 'A Leather Slave Collar',
-		icon = "res://files/images/items/collar.png",
+		icon = load("res://files/images/items/collar.png"),
 		description = "This leather collar is designed to fit tightly around the neck. It has rings to which bindings can be attached.\n",
 		effect = [{type = 'onendday', effect = 'slavecollareffect', descript = "Increases Obedience by the end of a day. "}],
 		recipe = '',
@@ -1010,7 +1010,7 @@ var itemlist = {
 	acchandcuffs = {
 		code = 'acchandcuffs',
 		name = 'A Pair Of Handcuffs',
-		icon = "res://files/images/items/handcuffs.png",
+		icon = load("res://files/images/items/handcuffs.png"),
 		description = "These handcuffs are lightly padded but robust enough to secure even the most troublesome person.\n",
 		effect = [{type = 'onendday', effect = 'handcuffeffect', descript = "Increases Obedience by the end of a day and prevents escapes. "}],
 		recipe = '',
@@ -1024,7 +1024,7 @@ var itemlist = {
 	acctravelbag = {
 		code = 'acctravelbag',
 		name = 'Travelling Bag',
-		icon = "res://files/images/items/bag.png",
+		icon = load("res://files/images/items/bag.png"),
 		description = "A great partner of any experienced adventurer. Despite minor wear, it looks really sturdy. \nIncreases party's total carry weight by 20. ",
 		effect = [],
 		recipe = '',
@@ -1039,7 +1039,7 @@ var itemlist = {
 	weaponelvensword = {
 		code = 'weaponelvensword',
 		name = 'Elven Sword',
-		icon = "res://files/images/items/elvensword.png",
+		icon = load("res://files/images/items/elvensword.png"),
 		description = "Medium sized sword perfectly balanced for close combat. \n[color=yellow]Requirements: 4 Agility[/color]",
 		effect = [{type = 'incombat', effect = 'damage', effectvalue = 9, descript = "+9 Damage"},{type = 'onequip', effect = 'agi', effectvalue = 1, descript = "+1 Agility"}],
 		recipe = '',
@@ -1053,7 +1053,7 @@ var itemlist = {
 	accamuletruby = {
 		code = 'accamuletruby',
 		name = 'Ruby Amulet',
-		icon = "res://files/images/items/amuletruby.png",
+		icon = load("res://files/images/items/amuletruby.png"),
 		description = "A luxury piece of jewelry with a trace of magic. ",
 		effect = [{type = 'incombat', effect = 'damage', effectvalue = 2, descript = "+2 Damage"},{type = 'onequip', effect = 'luxury', effectvalue = 5, descript = "Increases luxury (+5)"}],
 		recipe = '',
@@ -1067,7 +1067,7 @@ var itemlist = {
 	accamuletemerald = {
 		code = 'accamuletemerald',
 		name = 'Emerald Amulet',
-		icon = "res://files/images/items/amuletemerald.png",
+		icon = load("res://files/images/items/amuletemerald.png"),
 		description = "A luxury piece of jewelry with a trace of magic. ",
 		effect = [{type = 'onequip', effect = 'health', effectvalue = 15, descript = "+15 Health"},{type = 'onequip', effect = 'luxury', effectvalue = 5, descript = "Increases luxury (+5)"}],
 		recipe = '',
@@ -1081,7 +1081,7 @@ var itemlist = {
 	weaponnaturestaff = {
 		code = 'weaponnaturestaff',
 		name = 'Staff of Nature',
-		icon = "res://files/images/items/naturestaff.png",
+		icon = load("res://files/images/items/naturestaff.png"),
 		description = "A twisted branch infused with Nature's power. Strengthens wielder but is not a very effective weapon.\n[color=yellow]Requirements: 1 Magic Affinity[/color]",
 		effect = [{type = 'incombat', effect = 'damage', effectvalue = 4, descript = "+4 Damage"},{type = 'onequip', effect = 'health', effectvalue = 25, descript = "+25 Health"},{type = 'onequip', effect = 'maf', effectvalue = 1, descript = "+1 Magic Affinity"}],
 		recipe = '',
@@ -1095,7 +1095,7 @@ var itemlist = {
 	armortentacle = {
 		code = 'armortentacle',
 		name = 'Living Armor',
-		icon = "res://files/images/items/armortentacle.png",
+		icon = load("res://files/images/items/armortentacle.png"),
 		description = "An unearthly semi-living object which can be worn. Feeds on the fluids of wearer which periodically stimulates in private places. ",
 		effect = [{type = 'incombat', effect = 'protection', effectvalue = 50, descript = "50% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 8, descript = "+8 Armor"},{type = 'onequip', effect = 'health', effectvalue = 50, descript = "+50 Health"},{type = 'incombatturn', effect = 'lust', effectvalue = 2, descript = "lust grows during the combat"}],
 		recipe = '',
@@ -1110,7 +1110,7 @@ var itemlist = {
 	clothtentacle = {
 		code = 'clothtentacle',
 		name = 'Living Suit',
-		icon = "res://files/images/items/clothtentacle.png",
+		icon = load("res://files/images/items/clothtentacle.png"),
 		description = "Parasitic suit which feeds on bodily fluids and stimulates person's privates. ",
 		effect = [{type = 'onendday', effect = 'livingsuiteffect', descript = "lust grows at the end of the day"}],
 		recipe = '',
@@ -1125,7 +1125,7 @@ var itemlist = {
 	armorrogue = {
 		code = 'armorrogue',
 		name = "Rogue's Armor",
-		icon = "res://files/images/items/roguearmor.png",
+		icon = load("res://files/images/items/roguearmor.png"),
 		description = "An unearthly semi-living object which can be worn. Feeds on the fluids of wearer which periodically stimulates in private places. ",
 		effect = [{type = 'incombat', effect = 'protection', effectvalue = 45, descript = "45% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 7, descript = "+7 Armor"},{type = 'onequip', effect = 'energy', effectvalue = 20, descript = "+20 Energy"}],
 		recipe = '',
@@ -1140,7 +1140,7 @@ var itemlist = {
 	weaponcursedsword = {
 		code = 'weaponcursedsword',
 		name = "Cursed Blade",
-		icon = "res://files/images/items/weaponcursedsword.png",
+		icon = load("res://files/images/items/weaponcursedsword.png"),
 		description = "An ancient mystical blade. Strong magic keeps it sharp even to this day, but all power comes with a price... ",
 		effect = [{type = 'incombat', effect = 'damage', effectvalue = 15, descript = "+15 Damage"}, {type = 'passive', effect = 'doubleattack', effectvalue = 20, descript = '20% chance to attack twice'}, {type = 'passive', effect = 'defenseless', descript = "Wielder's armor is useless"}],
 		recipe = '',
@@ -1155,7 +1155,7 @@ var itemlist = {
 	weaponhammer = {
 		code = 'weaponhammer',
 		name = "Great Hammer",
-		icon = "res://files/images/items/weaponhammer.png",
+		icon = load("res://files/images/items/weaponhammer.png"),
 		description = "A mighty weapon designed to deal with armored targets, but it is sluggish and heavy. \n[color=yellow]Requirements: 3 Strength[/color] ",
 		effect = [{type = 'incombat', effect = 'damage', effectvalue = 14, descript = "+14 Damage"},{type = 'incombatphyattack', effect = 'protpenetration', effectvalue = 1, descript = 'Ignores protection'},{type = 'incombat', id = 'weaponspeed', effect = 'speed', effectvalue = -5, descript = "-5 speed"}],
 		recipe = '',
@@ -1169,7 +1169,7 @@ var itemlist = {
 	weaponkatana = {
 		code = 'weaponkatana',
 		name = "Eastern Sword",
-		icon = "res://files/images/items/9.png",
+		icon = load("res://files/images/items/9.png"),
 		description = "A long sword originates from eastern lands. Its sharp edge allows a user to compensate for their strength with speed and precision.\n[color=yellow]Requirements: 3 Agility[/color] ",
 		effect = [{type = 'incombat', effect = 'damage', effectvalue = 8, descript = "+8 Damage"},{type = 'onequip', effect = 'str', effectvalue = 2, descript = '+2 Strength'},{type = 'onequip', effect = 'end', effectvalue = 1, descript = '+1 Endurance'}],
 		recipe = '',
@@ -1183,7 +1183,7 @@ var itemlist = {
 	weaponshortsword = {
 		code = 'weaponshortsword',
 		name = "Armor Breaker",
-		icon = "res://files/images/items/6.png",
+		icon = load("res://files/images/items/6.png"),
 		description = "A mighty weapon designed to deal with armored targets. ",
 		effect = [{type = 'incombat', effect = 'damage', effectvalue = 6, descript = "+9 Damage"}, {type = 'incombat', effect = 'passive', effectvalue = 'armorbreaker', descript = "Bypass 8 Armor"}],
 		recipe = '',
@@ -1197,7 +1197,7 @@ var itemlist = {
 	armorredcloak = {
 		code = 'armorredcloak',
 		name = "Red Cloak",
-		icon = "res://files/images/items/2.png",
+		icon = load("res://files/images/items/2.png"),
 		description = "An armor once worn by a legendary mercenary. It still smells of blood.",
 		effect = [{type = 'incombat', effect = 'protection', effectvalue = 50, descript = "50% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 6, descript = "+6 Armor"},{type = 'incombat', effect = 'speed', effectvalue = 5, descript = "+5 speed"}],
 		recipe = '',
@@ -1212,7 +1212,7 @@ var itemlist = {
 	armorcarapace= {
 		code = 'armorcarapace',
 		name = "Carapace",
-		icon = "res://files/images/items/3.png",
+		icon = load("res://files/images/items/3.png"),
 		description = "Thick plate made for finest defense. \n[color=yellow]Requirements: 4 Endurance[/color]  ",
 		effect = [{type = 'incombat', effect = 'protection', effectvalue = 65, descript = "65% Protection"},{type = 'incombat', effect = 'armor', effectvalue = 5, descript = "+5 Armor"}],
 		recipe = '',
@@ -1226,7 +1226,7 @@ var itemlist = {
 	accessoryneck = {
 		code = 'accessoryneck',
 		name = "Golden Necklace",
-		icon = "res://files/images/items/42.png",
+		icon = load("res://files/images/items/42.png"),
 		description = "A heavy necklace providing some protection.",
 		effect = [{type = 'incombat', effect = 'armor', effectvalue = 4, descript = "+4 Armor"}],
 		recipe = '',
@@ -1388,6 +1388,24 @@ var itemlist = {
 		amount = 0
 	},
 ###---End Expansion---###
+	#alpha - item crafting framework
+	ironing = {
+		code = 'ironing',
+		name = 'Iron Ingot',
+		icon = load("res://files/images/items/ironingmc.png"),
+		description = "An ingot of decent-quality iron.",
+		effect = '',
+		recipe = '',
+		cost = 50,
+		type = 'ingredient',
+		toxicity = 0,
+		reqs = 'globals.state.mansionupgrades.mansionalchemy >= 1',
+		weight = 2,
+		amount = 0
+	}
+	
+
+
 }
 
 var recipeaphrodisiac = {
@@ -1494,6 +1512,14 @@ var recipesexchangepot = {
 	bottledsemen = 2,
 	bottledlube= 2,
 }
+
+#crafting
+var recipedagger = {
+	ironing = 1
+}
+#crafting
+
+
 ###---End Expansion
 
 func armor(value):
@@ -2064,10 +2090,10 @@ func sexchangepoteffect():
 
 ###---Expansion End---###
 
+#crafting
 var craftitemingredients = []
-
 #recipes
-func recipedecrypt(item):
+func recipedecrypt(item): #apparently never used...
 	#print("recipedecrypt")
 	craftitemingredients.clear()
 	var text = ''
@@ -2143,8 +2169,7 @@ func recipemake(item):
 		var tmpitem = globals.items.createunstackable(item.code) 
 		globals.state.unstackables[str(tmpitem.id)] = tmpitem
 	###---Expansion End---###
-
-
+#crafting
 
 #unstackable item management
 
@@ -2261,6 +2286,13 @@ func sortbytype(first, second):
 	else:
 		return true
 
+#crafting
+#pallington
+func sortbyenchant(item1,item2):
+	return (item1.effects.size() < item2.effects.size())
+#pallington
+#crafting
+
 func foodpurchase(item):
 	var amount = globals.itemdict.food.amount
 	amount = min(amount, ceil((globals.resources.foodcaparray[globals.state.mansionupgrades.foodcapacity] - globals.resources.food) / 20.0))
@@ -2300,3 +2332,4 @@ func aydajewel(item):
 func zoebook(item):
 	main.popup("The Mysterious Book Acquired. ")
 	globals.itemdict['zoebook'].amount += 1
+
