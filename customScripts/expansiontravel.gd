@@ -9,10 +9,13 @@ func getzonetraveltext(zone,progress):
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
 	var teammates = []
+	var bunnyteammates = [] #by Fibian - Ralph note: I moved the code up here so it can be accessible beyond just the forest and changed to populating an array for flexibility
 	for i in party:
 		var j = globals.state.findslave(i)
 		if globals.player != j:
 			teammates.append(j)
+		if j.race in ['Halfkin Bunny','Beastkin Bunny']:
+			bunnyteammates.append(j)
 	var tempteammate = null if teammates.empty() else randomfromarray(teammates)
 
 	var corestats = ['sstr','sagi','smaf','send']
@@ -121,8 +124,8 @@ func getzonetraveltext(zone,progress):
 			array.append("A large "+travelgroup()+" of " +travelcheerful()+" "+randomfromarray(['townsfolk','revelers','students','tradesmen'])+" returning to town sees you then they "+travelfearreaction()+" and pointedly averts their gaze after noticing your procession of captives shuffling along in their restraints.")
 		elif captives.size() > 5 && globals.state.reputation.wimborn > 50 && captivebaddiesratio > 69:
 			array.append("A large "+travelgroup()+" of " +travelcheerful()+" "+randomfromarray(['townsfolk','revelers','students','tradesmen','guards'])+" returning to town cheers you and your party along after they see your "+travelcaptivedesc()+" captives shuffling along in their restraints.")
-		if rand_range(0,1) > 0.9 && globals.expansionsettings.sillymode:
-			array.append("You notice a "+travelcheerful()+" "+travelrandomperson()+" "+travelfucking()+" "+travelrandomadj()+" "+travelfucktarget()+" - "+travelobserved()+".\n\n"+travellink()+"\n\nIt's clearly a "+travelreaction()+" moment for him and a "+travelreaction()+" moment for you.")
+		if rand_range(0,1) > 0.8 && globals.expansionsettings.sillymode:
+			array.append("You notice a "+travelcheerful()+" "+travelrandomperson()+" "+travelfucking()+" "+travelrandomadj()+" "+travelfucktarget()+" - "+travelobserved()+".\n\n"+travellink()+"\n\nIt's clearly a "+travelreaction()+" moment for them and a "+travelreaction()+" moment for you.")
 		if globals.state.reputation.wimborn >= -20:
 			if globals.state.mainquest >= 2 && globals.state.bountiescollected["wimborn"] <= 3 && progress < 3:
 				array.append("A man leading a group of Wimborn guards calls you over.\n\n[color=yellow]Hail "+globals.player.name+".  Ah, no we haven't met, but I know of you by reputation.\n\nListen, I understand you're a Mage and it's not my place to ask, but if you happen to come across bandits in your travels we could really use a hand rounding them up.\n\nWe can't do much to them if they don't already have bounties on their heads, but a lot of them do.  I know you can make good coin selling them through the Slavers' Guild depending on their value, but we can pay you a good bounty on a lot of them based purely on their crimes too.  You never know, sometimes a wimp thief is out here or in the wilds with a huge bounty just waiting to be collected.\n\nAll I'm sayin' really is: keep us in mind.  There aren't enough of us to put much of a dent in the banditry problem around here, and if you turn some over for justice under the law instead of making a quick sale to the slavers it couldn't hurt your reputation and most of the time we'll put some gold in your pockets too.[/color]")
@@ -162,9 +165,24 @@ func getzonetraveltext(zone,progress):
 	elif zone.code == 'prairie':
 		array.append_array(["You see a hill, conspicuous among the expanse of flat earth, with a crude leather curtain covering a hole in its side and several dozen spikes sporting decapitated heads and skulls in various states of decay.  It's a goblin nest and a big one at that.  This would be a very bad place to be after nightfall.","You spot a whole herd of Centaurs and keep your distance so as not to provoke them.","A war party of orcs is skirmishing with a large "+travelgroup()+" of "+randomfromarray(['tribal elves','goblins','centaurs','bandits'])+" not far off and you hasten to avoid getting involved."])
 	elif zone.code == 'forest':
-		array.append_array(["A squirrel chitters at you and pelts your party with sticks and nuts.","You pass forest animals that show no particular concern for your presence.","You enjoy a peaceful walk through the woods.","Your party stumbles into "+randomfromarray(['a heavily webbed section of trees','a charnel pit heaped with the rotting carcasses and bones of wolves, bears, and even giant spiders','an illusory veil that tugs violently at your sanity, probably concealing a foxkin village if the rumors are true'])+" and carefully, quietly make your way back to the path."])
+		array.append_array(["A squirrel chitters at you and pelts your party with sticks and nuts.","You pass forest animals that show no particular concern for your presence.","You enjoy a peaceful walk through the woods.","Your party stumbles into "+randomfromarray(['a heavily webbed section of trees','a charnel pit heaped with the rotting carcasses and bones of wolves, bears, and even giant spiders','an illusory veil that tugs violently at your sanity, probably concealing a foxkin village if the rumors are true'])+" and carefully, quietly make your way back to the path.","The sounds of songbirds ring out across the forest.  It's a lovely day to be looking for an acquisition.","Enjoying the "+traveltimeofday()+" sun, you stroll through the forest looking for the next encounter.  It so happens that your next encounter is a facefull of spider webbing.  You spend longer than you should have incinerating the place to ensure that the spider's entire family is long dead.","Lost in thought, you walk along the path and nothing really happens for some time.  After a while, some movement in the brush to your right ends your daydream of how to handle your latest guest."]) #several adds by Fibian 
+		if captives.size() > 4 && rand_range(0,1) > 0.5: 
+			array.append("In the distance you catch glimpse of a foxkin walking along the path.  As you slowly draw nearer, one of your captives stumbles and falls into a thornbush and yelps in pain.  When you turn back around to look for the foxkin, it has disappeared.") #by Fibian
+		if tempteammate == null && rand_range(0,1) > 0.5: 
+			var tempforestwalk = ["You think nothing of it and continue along your path.","You try to approach the animal, but you spook it and it runs off."] #by Fibian
+			if globals.expansionsettings.sillymode:
+				tempforestwalk.append("Feeling generous you pull out a can of soup, open the top, and partially bury the can in the ground.  As you move away from the offering, the fox approaches the soup and sniffs at it for a bit.  The fox lifts up the can of soup sideways and bolts off into the forest... spilling out the entire can of soup along the way.  Good job dumbass.") #by Fibian - Ralph Note: I made the "can of soup" possibility part of sillymode b/c I'm not sure canned goods are lore friendly, etc.
+			array.append("You've been walking along the path for some time and you've noticed you've picked up a companion somewhere along the way.  You occasionally catch glimpses of a small fox stealthily following you far behind.  "+randomfromarray(tempforestwalk)) #by Fibian
+		if globals.expansionsettings.sillymode:
+			if bunnyteammates.size() > 0 && rand_range(0,1) > 0.5: #by Fibian - Ralph Note: I thought this was a more flexible way to use the boolean
+				var tempbunny = randomfromarray(bunnyteammates)
+				array.append("As your party walks through the forest, it appears that a group of bunnies has started to gather around "+str(tempbunny.name)+".  As the party continues, more and more bunnies begin to gather around "+str(tempbunny.name)+" to the point that it's hard to walk without stepping on one.  "+str(he(tempbunny))+" pleads with you for help, but this is actually quite amusing and you outdistance "+him(tempbunny)+", perhaps to leave "+him(tempbunny)+" to "+his(tempbunny)+" bunny fate.") #by Fibian
+			else:
+				array.append_array(["In the brush you can barely see a bunny nibbling on something.  Seizing the moment you very stealthily creep up on the animal.  Slowly.  Slower.  You reach out and very gently put your hand on the animal.  It turns around very methodically and gazes upon a creature 20 times it's size.\n\n[color = yellow]Boo![/color]\n\nThe bunny panics and bolts deeper into the brush.  Got him.", "The numerous squeaking bunnies can be heard in the nearby brush as the party moves along a portion of the trail.  Better not upset the bunny god today.  You and your party continue without a moments delay."]) #by Fibian
 	elif zone.code == 'elvenforest':
 		array.append_array(["There's a clearing here, likely used to allow carts or wagons to pass one another given the narrow forest road.","This patch of trees is especially tranquil.","You pass forest animals that show no particular concern for your presence.","You enjoy a peaceful walk through the woods.","The forest here is meticulously maintained.","The path meanders wide and flat enough for a cart and yet twisting around trees, many ancient, suggesting none were removed to form this forest road."])
+		if globals.state.reputation.amberguard <= -20 && rand_range(0,1) > 0.5:
+			array.append("Your party walks deeper and deeper into the forest. Light fades in the forest as high above the canopy threatens to blot out the sun. Deeper and deeper you walk into the forest all the while having the sensation of someone, or something, watching you from high above in the canopy.  It's unsettling but you must move on.") #by Fibian
 	elif zone.code == 'grove':
 		array.append_array(["Strange disembodied voices seem to whisper from all sides as your veer off the beaten path and you rush back to resume your trek.","Your party stumbles into "+randomfromarray(['a heavily webbed section of trees','a charnel pit heaped with the rotting carcasses and bones of wolves, bears, and even giant spiders','an illusory veil that tugs violently at your sanity, probably concealing a foxkin village if the rumors are true'])+" and carefully, quietly you make your way back to the path."])
 	elif zone.code == 'marsh':
@@ -226,7 +244,25 @@ func getcya(zone): #this is a placeholder that does nothing at present
 	elif zone.code == 'sea':
 		rvar.append_array([])				
 	return rvar
-	
+
+func he(person):
+	if person.sex == 'male':
+		return "he"
+	else:
+		return "she"
+
+func his(person):
+	if person.sex == 'male':
+		return "his"
+	else:
+		return "her"
+		
+func him(person):
+	if person.sex == 'male':
+		return "him"
+	else:
+		return "her"
+
 func traveltimeofday():
 	var alreadycamped = (globals.state.restday == globals.resources.day)
 	var text = "morning"
@@ -290,31 +326,48 @@ func travelharassment():
 	return randomfromarray(["jostled","shoved","pushed","knocked about","spit upon","gestured at rudely"])
 	
 func travelrandomperson():
-	var array = ["psychopath","farmer","herder","rancher","artist","traveler","slaver","politician","guard","peddler","mage","mercenary","bandit","old man","bard","tax collector","thug"]
+	var array = ["Centerflag","Pallington","Aric Triton","psychopath","farmer","herder","rancher","artist","traveler","slaver","politician","guardsman","peddler","mage","mercenary","bandit","old man","bard","tax collector","thug","pugilist","strap-on clad dominatrix","hunter","alchemist","breeder"]
 	if globals.expansionsettings.sillymode:
-		randomfromarray(["Ankmairdor","Aric Triton","mod author","smutty video game developer","thespian","philosopher","pedestrian","clown","mime","puppeteer","barkeep","prince"])
+		randomfromarray(["Aric Triton","mod author","smutty video game developer","thespian","philosopher","pedestrian","clown","mime","puppeteer","barkeep","prince","pixel art Colonel Custer","mid-boss","final boss"])
 	return randomfromarray(array)
 
 func travelfucktarget():
-	var array = ["horse","sheep","goat","dog","fencepost","watermelon","prostitute","sack of produce","corpse","farmgirl","farmer's wife","woman","whore","girl you had turned over to the Mage Guild","fairy you had turned over to the Mage Guild","taurus girl you had turned over to the Mage Guild","slave you believe you had sold at some point","bandit","traveling salesman"]
+	var array = ["Centerflag","Ralphomayo","Aric Triton","horse","sheep","goat","dog","fencepost","watermelon","prostitute","sack of produce","corpse","farmgirl","farmer's wife","woman","whore","girl you had turned over to the Mage Guild","fairy you had turned over to the Mage Guild","taurus girl you had turned over to the Mage Guild","slave you believe you had sold at some point","bandit","traveling salesman"]
 	array.append_array(globals.constructor.humanoid_races_array)
 	array.append_array(globals.constructor.beast_races_array)
 	if globals.expansionsettings.sillymode:
-		array.append_array(["Aric Triton","Ralphomayo","Capitualize","Whims","El Presidente","Deviate","Rendrassa","Redle","Leonidas","JJoseph","Pleione","Smargoos","Pallington","Centerflag","Futur Planet","Chaotic"])
-		array.append_array(["magical sheep that spits fireballs","receptionist you recognize from the slave guild","Sebastian","ghost as far as you can tell","Alise","pumpkin","Hade","giant sloth","effigy of a hated politician","famous actress","famous actor","Gazebo"])
+		array.append_array(["magical sheep that spits fireballs","receptionist you recognize from the slave guild","Sebastian","ghost as far as you can tell","Alise","pumpkin","Hade","giant sloth","effigy of a hated politician","famous actress","famous actor","Gazebo","portrait of a minor celebrity","anime waifu bodypillow","game console","statue","dragon in disguise","furry","model car enthusiast","trenchcoat-clad pervert","woman from your dreams","silhouette of a hard to illustrate race","pixel-art heroine"])
 	return randomfromarray(array)
 	
 func travelrandomadj():
-	return randomfromarray(["a disturbingly large","an oddly sensual","a comely","a handsome","a bizarre","a rotund","an obviously non-consenting","a lustful","a stoic","a fetching","a very unusual","a drop-dead gorgeous","a somewhat feminine","a somewhat masculine","a bored-looking","a sleeping","a drugged","a very out-of-place","a very confused-looking"])
+	return randomfromarray(["a disturbingly large","an oddly sensual","a comely","a handsome","a bizarre","a rotund","an obviously non-consenting","a lustful","a stoic","a fetching","a very unusual","a drop-dead gorgeous","a somewhat feminine","a somewhat masculine","a bored-looking","a sleeping","a drugged","a very out-of-place","a very confused-looking","a rueful","a well endowed","an oddly tiny","a muscular","an apoplectic","a narcoleptic","an epileptic","a perfectly proportioned","unfortunately physiqued"])
 
 func travellink():
-	var array = ["It begins to rain, but you take no heed.","Your eyes meet.","You cheer him on.","You hurl insults at him."]
+	var array = ["It begins to rain, but you take no heed.","Your eyes meet.","You cheer them on.","You hurl insults at them."]
 	if globals.expansionsettings.sillymode:
-		array.append_array(["This is indeed a disturbing universe.","Your eyes meet.","Your eyes meet.","Your eyes meet.","He gives you the finger.","He invites you to join in.","He attempts to disengage in mid-nut, making an awful mess in the process.","You smile at one another knowingly.","You feel a kinship.","You consider if it'd make a better story in retrospect if you charged toward him.","You share the moment.","He calls out your name as he climaxes.","You realize you missed a sale this morning.","You ponder your life's choices up to this point.","You feel inspired to write a poem.","Just then a sinkhole opens beneath them.","Just then the Sarlac pit monster drags them down and belches loudly.","You thought your life was on the upswing. This is a new low.","Random text should never be entrusted to mod authors.","The end is nigh.","Why? Why is this happening?","You remember you have somewhere else to be.","You feel a sudden and irresistable urge to eat sausage.","You sprint away."])
+		if wall4:
+			var modifier1 = int(rand_range(2,14))
+			var modifier2 = int(rand_range(0,6))
+			var judge1 = "[color=yellow]"+randomfromarray(["Ankmairdor","Aric Triton","Ankmairdor","Aric Triton","Redle","Leonidas","JJoseph"])+"[/color]"
+			var score1 = "[color=red]"+str(round(rand_range(modifier1,20-modifier2))/2-0.5)+"[/color]"
+			var judge2 = "[color=yellow]"+randomfromarray(["Ralphomayo","Capitualize","Pallington","Rendrassa","Whims","Smargoos","Centerflag"])+"[/color]"
+			var score2 = "[color=red]"+str(round(rand_range(modifier1,20-modifier2))/2)+"[/color]"
+			var judge3 = "[color=yellow]"+randomfromarray(["TrashMan","Chaotic","Pleione","El Presidente","Deviate","Futur Planet","Fibian","King"])+"[/color]"
+			var score3 = "[color=red]"+str(round(rand_range(modifier1,20-modifier2))/2)+"[/color]"
+			array = ["The judges confer briefly before holding up signs.\n"+judge1+": "+str(score1)+"\n"+judge2+": "+str(score2)+"\n"+judge3+": "+str(score3)+""]
+		else:
+			array.append_array(["This is indeed a disturbing universe.","Your eyes meet.","Your eyes meet.","Your eyes meet.","He gives you the finger.","He invites you to join in.","He attempts to disengage in mid-nut, making an awful mess in the process.","You smile at one another knowingly.","You feel a kinship.","You consider if it'd make a better story in retrospect if you charged toward him.","You share the moment.","He calls out your name as he climaxes.","You realize you missed a sale this morning.","You ponder your life's choices up to this point.","You feel inspired to write a poem.","Just then a sinkhole opens beneath them.","Just then the Sarlac pit monster drags them down and belches loudly.","You thought your life was on the upswing. This is a new low.","Random text should never be entrusted to mod authors.","The end is nigh.","Why? Why is this happening?","You remember you have somewhere else to be.","You feel a sudden and irresistable urge to eat sausage.","You sprint away."])
 	return randomfromarray(array)
 
+func traveljudgeadj():
+	return randomfromarray(["seriously","with bored expressions","intently","through cracks between the fingers they cover their faces with","impassively","with stoicism","with embarrassment","while drinking beer","with a lewd remark here and there","seemingly out of place","as if their very lives depended on this singular act","because of clear and purlient interest","with building excitement","skeptically","with meticulous attention to detail","as if their parents walk in at any moment","like 6th graders in an art class with a nude model to paint","as if they'd never seen this before","as if this were just business as usual"])
+
+var wall4 = false
 func travelobserved(): #ralphD - I know this could be 2 lines like others, but I am adding variable content shortly so leaving it as is
 	var array = ["in broad daylight","without any concern for being observed","for all to see","without a hint of embarrassment","as if in a trance","without a trace of self-consciousness"]
+	if globals.expansionsettings.sillymode && rand_range(0,1) > 0.7:
+		array = ["three judges look on "+traveljudgeadj()]
+		wall4 = true
 	return randomfromarray(array)
 	
 func travelcrops():
