@@ -1355,7 +1355,7 @@ func updateClothing():
 			for i in self.effects.values():
 				if i.code == 'captured':
 					captured = i.duration/2
-			var chance = round(self.metric.own + ((self.loyal + self.obed + self.fear)/3) - (captured * 10))
+			var chance = round(self.metrics.own + ((self.loyal + self.obed + self.fear)/3) - (captured * 10))
 			var roll = round(rand_range(0,100))
 			if roll <= chance:
 				text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. However, you ordered $him to stay "+ globals.expansion.nameNaked() +". $He followed your orders obediently. "
