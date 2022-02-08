@@ -3776,6 +3776,8 @@ func _on_confirmentertext_pressed():
 	if meta == 'rename':
 		person = get_node("entertext").get_meta("slave")
 		person.name = text
+		if globals.state.relativesdata.has(person.id):
+			globals.state.relativesdata[person.id].name = person.name_long()
 		rebuild_slave_list()
 	elif meta == 'eyecolor':
 		person = get_node("entertext").get_meta("slave")
