@@ -869,14 +869,13 @@ func countluxury(actually_run = true):
 	if globals.expansionsettings.vices_luxury_effects == true && (self.mind.vice_known == true || roll <= globals.expansionsettings.vices_undiscovered_trigger_chance):
 		#Lust
 		if self.checkVice('lust'):
-			var vice_lust_mod = clamp(5 + round(self.lewdness * .1), 5, 15)
+			var vice_lust_mod = clamp(round(self.lewdness * .1), 1, 10)
 			if self.work in ['fucktoy','fucktoywimborn','escortwimborn','whorewimborn','ffprostitution']:
 				vice_satisfied = true
-				vice_lust_mod += 5
-			if lastsexday == globals.resources.day || vice_satisfied == true:
-				vice_modifier = clamp(vice_lust_mod - ((globals.resources.day - self.lastsexday)*2), 0, 20)
-			else:
-				vice_modifier = clamp(vice_lust_mod - ((globals.resources.day - self.lastsexday)*2), -20, 10)
+			if lastsexday == globals.resources.day:
+				vice_lust_mod += 10
+			vice_modifier = clamp(vice_lust_mod - ((globals.resources.day - self.lastsexday)*3), -20, 20)
+
 		#Sloth
 		elif self.checkVice('sloth'):
 			if self.work in ['rest','housepet']:
@@ -898,10 +897,11 @@ func countluxury(actually_run = true):
 		elif self.checkVice('wrath') && self.consentexp.party:
 			if self.metrics.win >= self.metrics.ownership || self.work in ['guardian','slavecatcher','trainer','trainee']:
 				vice_satisfied = true
+				vice_modifier += 5
 			if vice_satisfied == true:
-				vice_modifier = clamp(self.metrics.win - self.metrics.ownership, 0, 40)
+				vice_modifier += clamp(self.metrics.win - self.metrics.ownership, 0, 20)
 			else:
-				vice_modifier = clamp(self.metrics.win - self.metrics.ownership, -20, 20)
+				vice_modifier += clamp(self.metrics.win - self.metrics.ownership, -20, 20)
 		#Pride
 		if self.checkVice('pride'):
 			if self.work in ['headgirl','farmmanager','jailer']:
@@ -922,7 +922,7 @@ func countluxury(actually_run = true):
 			if self.work == 'cooking':
 				vice_satisfied = true
 				vice_modifier += 10
-			if self.rules.betterfood == false && globals.resources.food >= 8:
+			if self.rules.betterfood == true && globals.resources.food >= 3:
 				foodspent += 3
 				if actually_run == true:
 					globals.resources.food -= 3
