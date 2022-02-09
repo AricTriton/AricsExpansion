@@ -1226,8 +1226,6 @@ func load_game(text):
 		print("Silly Mode Enabled. Fourth wall successfully removed.")
 	if expansionsettings.enablecheatbutton == true:
 		print("Aric's Cheat Button Active. Access via Talk > Piece of Candy")
-	if expansionsettings.enablecheatbutton == true:
-		print("Aric's Cheat Button Active. Access via Talk > Piece of Candy")
 	if expansionsettings.perfectinfo == true:
 		print("Perfect Information is Enabled. All Inspect information is available without Talking to the NPC first.")
 	if expansionsettings.ihavebloodygoodtaste == true:
