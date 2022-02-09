@@ -1495,35 +1495,25 @@ func talkconsent(mode=''):
 			text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]. "+ globals.fastif(roll <= consent_chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
 
 	elif mode == "sexual":
-		var difficulty = 300 - (person.obed*3 + person.loyal*2 + person.lust)
+		consent_chance = (person.obed*3 + person.loyal*2 + person.lust) - 250
+		roll = round(rand_range(0,100))
 		if person.effects.has('captured'):
-			difficulty += 100
+			consent_chance -= 100
 		###---Sexuality
 		if globals.expansion.getSexualAttraction(person,globals.player) == true:
-			difficulty += rand_range(10,40)
+			consent_chance += rand_range(10,40)
 		else:
-			difficulty -= rand_range(10,40)
+			consent_chance -= rand_range(10,40)
 		###---Family Matters; Incest Check
 		person.dailytalk.append('consent')
 		if related != "unrelated" && person.consentexp.incest == false:
 			person.dailytalk.append('consentincest')
 			var incest = (globals.fetishopinion.find(person.fetish.incest)-6) + round(person.dailyevents.count('incest')/4)
-			difficulty -= incest*10
+			consent_chance += incest*10
 		
 		if person.traits.has('Prude'):
-			difficulty += 50
-		if difficulty >= 0:
-			text += "$He shows a troubled face and rejects your proposal. "
-			###---Added by Expansion---### Incest Check
-			if related != "unrelated" && person.consentexp.incest != true:
-				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " my " + str(related) + ". [/color]")
-				person.dailyevents.append('incest')
-				if rand_range(0,5) + person.dailyevents.count('incest') >= 5:
-					text += "\n\nYou do catch onto a flash of hesitation, however, and think that $he may be coming around to the idea of it. "
-					person.dailyevents.append('incest')
-			else:
-				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " you. [/color]")
-		else:
+			consent_chance -= 50
+		if roll <= consent_chance:
 			person.lust += 3
 			text += "$He gives you a meek nod.\n[color=yellow]-" + person.quirk("Okay...I will have sex with you. ") + "[/color]"
 			###---Added by Expansion---### Incest Check
@@ -1540,8 +1530,19 @@ func talkconsent(mode=''):
 				text += "\n\n[color=green]After getting closer with $name, you felt like $he unlocked new potential. [/color]"
 				### Levelup Removed by Ank BugFix v4a
 			person.consent = true
+		else:
+			text += "$He shows a troubled face and rejects your proposal. "
+			###---Added by Expansion---### Incest Check
+			if related != "unrelated" && person.consentexp.incest != true:
+				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " my " + str(related) + ". [/color]")
+				person.dailyevents.append('incest')
+				if rand_range(0,5) + person.dailyevents.count('incest') >= 5:
+					text += "\n\nYou do catch onto a flash of hesitation, however, and think that $he may be coming around to the idea of it. "
+					person.dailyevents.append('incest')
+			else:
+				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " you. [/color]")
 		if globals.expansionsettings.perfectinfo == true:
-			text += "\n\nDifficulty [color=aqua]" + str(200-difficulty) + "[/color] | Required [color=aqua] 100 [/color]"
+			text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]. "+ globals.fastif(roll <= consent_chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
 
 	elif mode == "pregnancy":
 		person.dailytalk.append('consentpregnant')
