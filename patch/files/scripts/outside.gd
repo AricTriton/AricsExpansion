@@ -1017,7 +1017,6 @@ func _on_slavesellbutton_pressed():
 		###---End Expansion---###
 	elif guildlocation in ['sebastian','umbra'] && selectedslave.fromguild == false:
 		upgradefromslave = true
-		globals.resources.upgradepoints += globals.originsarray.find(selectedslave.origins)+1
 		###---Added by Expansion---### Person Expanded / Breeder Specialty
 		globals.expansion.updatePerson(selectedslave)
 		if selectedslave.npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
