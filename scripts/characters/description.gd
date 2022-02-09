@@ -98,7 +98,7 @@ func onceperdayConvos():
 
 func showVice():
 	var text = ""
-	if person.mind.vice_known == false:
+	if person.mind.vice_known == false || globals.expansionsettings.vices_luxury_effects == false:
 		return ""
 	match person.mind.vice:
 		'lust':

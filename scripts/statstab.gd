@@ -81,10 +81,21 @@ func chooseability(ability):
 			text += person.dictionary('\n[color=#ff4949]You must purchase this spell before you will be able to teach it others. [/color]')
 	get_node("trainingabilspanel/abilitytext").set_bbcode(text)
 
+func updateSprites(person):
+	var sprite = []
+	if nakedspritesdict.has(person.unique) && person.imageportait == globals.characters.characters[person.unique].get('imageportait','') && person.imagetype != 'naked':
+		if person.obed >= 50 || person.stress < 10:
+			sprite.append([nakedspritesdict[person.unique].clothcons, 'slave', 'opac'])
+		else:
+			sprite.append([nakedspritesdict[person.unique].clothrape, 'slave', 'opac'])
+	elif person.imagefull != null:
+		sprite.append([person.imagefull,'slave','opac'])
+	if globals.player.imagefull != null:
+		sprite.append([globals.player.imagefull,'player','opac'])
+	return sprite
 
 func _on_talk_pressed(mode = 'talk'):
 	var state = true
-	var sprite = []
 	var buttons = []
 	var text = ''
 
@@ -104,17 +115,6 @@ func _on_talk_pressed(mode = 'talk'):
 	elif person.unique == 'Ayda' && globals.state.sidequests.ayda in [9,12,15]:
 		globals.events.aydapersonaltalk()
 		return
-	###---Added by Expansion---### Ank BugFix v4a || Naked Image Modification by Deviate
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
 	if mode == 'talk':
 		###---Added by Expansion---###
 		text = str(expansion.getLocation(person)) + " " + str(expansion.getIntro(person))
@@ -492,7 +492,7 @@ func _on_talk_pressed(mode = 'talk'):
 		buttons.append({text = "Return", function = '_on_talk_pressed'})
 	elif mode == 'sexpunish':
 		buttons.append({text = "Return", function = '_on_talk_pressed', args = 'punish'})
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -520,49 +520,28 @@ func _on_callconfirm_pressed():
 
 #Rename Slave
 var pending_slave_rename = ""
+var dictNameParts = {'name': "First name", 'surname': "Last name", 'nickname': "Nickname"}
 
 func slave_rename_hub(mode = ''):
 	var state = true
-	var sprite = []
 	var buttons = []
 	var text = ""
 	if mode == 'intro':
 		text = str(expansion.getIntro(person)) + "\n[color=yellow]-"+ person.quirk(str(talk.introGeneral(person))) + "[/color]\n\nWhich name would you like to change?"
-		buttons.append({text = "Your First name is now...", function = 'slave_rename_hub', args = 'first', tooltip = "Change the slave's first name."})
-		buttons.append({text = "Your Last name is now...", function = 'slave_rename_hub', args = 'surname', tooltip = "Change the slave's last name."})
-		buttons.append({text = "Your Nickname is now...", function = 'slave_rename_hub', args = 'nickname', tooltip = "Change the slave's nickname. Same as in Customize Slave."})
-	elif mode == 'first':
+		buttons.append({text = "Your First name is now...", function = 'slave_rename_hub', args = 'name', tooltip = "Change the slave's First name."})
+		buttons.append({text = "Your Last name is now...", function = 'slave_rename_hub', args = 'surname', tooltip = "Change the slave's Last name."})
+		buttons.append({text = "Your Nickname is now...", function = 'slave_rename_hub', args = 'nickname', tooltip = "Change the slave's Nickname. Same as in Customize Slave."})
+	elif mode in dictNameParts:
 		get_node("slaverename").popup()
-		get_node("slaverename/Label").set_text(person.dictionary("What should $name's new First name be? It is currently " + str(person.name)))
-		get_node("slaverename/LineEdit").set_text(person.name)
-		pending_slave_rename = "first"
-	elif mode == 'surname':
-		get_node("slaverename").popup()
-		get_node("slaverename/Label").set_text(person.dictionary("What should $name's new Last name be? It is currently " + str(person.surname)))
-		get_node("slaverename/LineEdit").set_text(person.surname)
-		pending_slave_rename = "surname"
-	elif mode == 'nickname':
-		get_node("slaverename").popup()
-		get_node("slaverename/Label").set_text(person.dictionary("What should $name's new Nickname be? It is currently " + str(person.nickname)))
-		get_node("slaverename/LineEdit").set_text(person.nickname)
-		pending_slave_rename = "nickname"
+		get_node("slaverename/Label").set_text(("What should "+ person.name_short() +"'s new "+ dictNameParts[mode] +" be? It is currently " + str(person[mode])))
+		get_node("slaverename/LineEdit").set_text(person[mode])
+		pending_slave_rename = mode
 	
 	#Return Buttons`
 	if mode != "intro":
 		buttons.append({text = "Regarding another of your names...", function = 'slave_rename_hub', args = 'intro', tooltip = "Change another part of the slave's name."})
 	buttons.append({text = str(globals.randomitemfromarray(['Go Back','Return','Previous Menu'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -570,14 +549,8 @@ func _on_slaverename_pressed():
 	get_node("slaverename").visible = false
 	var text = "You demand that $he accept this as $his new name. "
 	text += "$name " + str(expansion.getExpression(person)) + " at you and says\n" + person.quirk("[color=yellow]-" + str(globals.randomitemfromarray(['As you wish','As you command','Fine','Alright','If that is your wish'])) + ", $master.[/color]")
-	if pending_slave_rename == "first":
-		person.name = get_node("slaverename/LineEdit").get_text()
-		pending_slave_rename = ""
-	elif pending_slave_rename == "surname":
-		person.surname = get_node("slaverename/LineEdit").get_text()
-		pending_slave_rename = ""
-	elif pending_slave_rename == "nickname":
-		person.nickname = get_node("slaverename/LineEdit").get_text()
+	if pending_slave_rename in dictNameParts:
+		person[pending_slave_rename] = get_node("slaverename/LineEdit").get_text()
 		pending_slave_rename = ""
 	if globals.state.relativesdata.has(person.id):
 		globals.state.relativesdata[person.id].name = person.name_long()
@@ -589,7 +562,6 @@ func eventPregnancyReveal(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	var moodmod = 0
 	
 	#Intro + Player Choice
@@ -638,18 +610,7 @@ func eventPregnancyReveal(mode=''):
 	if !mode in ['introtold','introdiscovered']:
 		buttons.append({text = str(globals.randomitemfromarray(['Anyways, like we were saying','As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main talk screen."})
 
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -657,7 +618,6 @@ func eventLactation(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	var moodmod = 0
 	
 	#Intro + Player Choice
@@ -721,18 +681,7 @@ func eventLactation(mode=''):
 	if !mode in ['introtold','introdiscovered']:
 		buttons.append({text = str(globals.randomitemfromarray(['Anyways, like we were saying','As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main talk screen."})
 
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -740,7 +689,6 @@ func eventWantedPregnancy(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	var moodmod = 0
 	#Intro + Player Choice
 	if mode == 'intro':
@@ -774,18 +722,7 @@ func eventWantedPregnancy(mode=''):
 	#Return after Choice
 	if mode != 'intro':
 		buttons.append({text = str(globals.randomitemfromarray(['As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main talk screen."})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -793,7 +730,6 @@ func eventIncestConsentGiven(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	var moodmod = 0
 	#Intro + Player Choice
 	if mode == 'intro':
@@ -824,18 +760,7 @@ func eventIncestConsentGiven(mode=''):
 	#Return after Choice
 	if mode != 'intro':
 		buttons.append({text = str(globals.randomitemfromarray(['As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main talk screen."})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -843,7 +768,6 @@ func eventIncestConsentRemoved(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	var moodmod = 0
 	#Intro + Player Choice
 	if mode == 'intro':
@@ -872,18 +796,7 @@ func eventIncestConsentRemoved(mode=''):
 	#Return after Choice
 	if mode != 'intro':
 		buttons.append({text = str(globals.randomitemfromarray(['As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main talk screen."})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -893,7 +806,6 @@ func thecrystal(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	var moodmod = 0
 	var blockreturn = false
 	
@@ -945,18 +857,7 @@ func thecrystal(mode=''):
 	#Return after Choice
 	if blockreturn == false:
 		buttons.append({text = str(globals.randomitemfromarray(['Nothing. Lets go back.'])), function = '_on_talk_pressed', tooltip = "Return to the main Talk screen."})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -964,7 +865,6 @@ func crystalimmortalitytoggle(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	var moodmod = 0
 	var finish = false
 	#Intro + Player Choice
@@ -1002,18 +902,7 @@ func crystalimmortalitytoggle(mode=''):
 	#Return after Choice
 	if finish == true:
 		buttons.append({text = str(globals.randomitemfromarray(['As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main Talk screen."})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -1021,7 +910,6 @@ func crystalconsequences(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	var moodmod = 0
 	if mode == 'save':
 		text += "You rush forward and pull $him back with all of your might. $He slips to the ground in your arms and falls unconscious as the tendrils ooze out of $his fingernails and vanish into the air.\n\n[color=red]$name will awaken, but it will take some time for $his soul to recover from $his experience with the Crystal.[/color]"
@@ -1059,18 +947,7 @@ func crystalconsequences(mode=''):
 		return
 	#Return after Choice
 #	buttons.append({text = str(globals.randomitemfromarray(['As we were saying...'])), function = '_on_talk_pressed', tooltip = "Return to the main Talk screen."})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -1079,7 +956,6 @@ func headgirltopics(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	
 	#Intro Text
 	text = str(expansion.getIntro(person)) + "\n[color=yellow]-"+ person.quirk(str(talk.introGeneral(person))) + "[/color]"
@@ -1095,18 +971,7 @@ func headgirltopics(mode=''):
 		buttons.append({text = person.dictionary("Remove the Crystal's hold on Death."), function = 'crystalimmortalitytoggle', args = 'disable', tooltip = "Re-enable death inside of your Mansion."})
 	
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -1114,7 +979,6 @@ func pregspeedchange(mode = ''):
 	var text = ''
 	var state = false
 	var buttons = []
-	var sprite = []
 	if mode == 'start':
 		text = '[color=green]$name[/color] stands in front of you holding an arcane rune tied to the Mansion and the dimensional crystals below it.\n[color=yellow]-' + person.quirk('It currently takes [color=green]' + str(variables.pregduration) + '[/color] days to fully grow a baby for the average slave right now. Do you have an issue with the current speed of pregnancy, $master? I can adjust the dimensional crystal chamber in the mansion to speed up or slow down the natural growth of babies in wombs while in the mansion, though that will not change the added speed that traits may provide or the speed increases of [color=aqua]Induction Potions[/color]. Would you like me to do that?[/color]\n\n') + 'You think for a moment.'
 		buttons.append({text = person.dictionary("It's good as it is now"), function = '_on_talk_pressed'})
@@ -1172,18 +1036,7 @@ func pregspeedchange(mode = ''):
 		buttons.append({text = person.dictionary("On second thought..."), function = 'pregspeedchange', args = 'start'})
 		
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -1194,7 +1047,6 @@ func farmmanagertopics(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	
 	#Milking Rack Restraints
 	if mode == 'milkrackson':
@@ -1278,18 +1130,7 @@ func farmmanagertopics(mode=''):
 
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
 	
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -1298,7 +1139,6 @@ func oneperdayconvos(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	
 	if mode == "sexuality":
 		person.dailytalk.append('talksexuality')
@@ -1318,18 +1158,7 @@ func oneperdayconvos(mode=''):
 		buttons.append({text = str(globals.randomitemfromarray(['About how many kids you want...','Talk with me about children','About how many children you want to have...'])), function = '_on_talk_pressed', args = 'general_slave_topics_numberofkidsknown', tooltip = "Raise or Lower the number of Children they want to have."})
 	
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -1338,7 +1167,6 @@ func talkfetishes(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	var tempbuttons = []
 	#Incomplete Fetish Variables
 	var invalidfetishfound = false
@@ -1460,18 +1288,7 @@ func talkfetishes(mode=''):
 	if tempbuttons.size() > 0:
 		for i in tempbuttons:
 			buttons.append(i)
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -1479,7 +1296,6 @@ func talkFetishEncourage(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	
 	var topic = str(mode)
 	var fetishname = globals.expansion.getFetishDescription(str(mode))
@@ -1494,18 +1310,7 @@ func talkFetishEncourage(mode=''):
 		text = person.quirk("[color=yellow]-No. No, I think that " + fetishname + " is " + str(person.fetish[mode]) + ".[/color]")
 	
 	buttons.append({text = str(globals.randomitemfromarray(['As we were saying...','Anyways...','On another note...'])), function = '_on_talk_pressed', tooltip = "Go back to the main conversation."})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -1513,7 +1318,6 @@ func talkFetishDiscourage(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	
 	var fetishname = globals.expansion.getFetishDescription(str(mode))
 	var fetishmod = -1 *(1+(person.loyal*.01))
@@ -1528,18 +1332,7 @@ func talkFetishDiscourage(mode=''):
 		text = person.quirk("[color=yellow]-No. No, I think that " + fetishname + " is " + str(person.fetish[mode]) + ".[/color]")
 	
 	buttons.append({text = str(globals.randomitemfromarray(['As we were saying...','Anyways...','On another note...'])), function = '_on_talk_pressed', tooltip = "Go back to the main conversation."})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -1548,7 +1341,6 @@ func talkSexualityShiftToggle(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	
 	if mode == 'lock':
 		person.sexexpanded.sexualitylocked = true
@@ -1567,18 +1359,7 @@ func talkSexualityShiftToggle(mode=''):
 	
 	buttons.append({text = str(globals.randomitemfromarray(['While we are on that topic...'])), function = '_on_talk_pressed', args = 'slave_sex_topics', tooltip = "Go back to the previous screen"})
 	buttons.append({text = str(globals.randomitemfromarray(['As we were saying...','Anyways...','On another note...'])), function = '_on_talk_pressed', tooltip = "Go back to the main conversation."})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -1588,7 +1369,6 @@ func eventDrainCum(mode = ''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	
 	var amount = 0
 	var reactions = ['$He moans slightly as $his '+str(globals.expansion.namePussy())+'','$He pushes out with $his '+str(globals.expansion.namePussy())+ ' as it ','$He turns bright red as $he spreads $his ' +str(globals.expansion.namePussy())+' and ']
@@ -1676,18 +1456,7 @@ func eventDrainCum(mode = ''):
 	else:
 		buttons.append({text = person.dictionary('Force $him to lick up the cum puddle'), function = 'eventDrainCum', args = 'lickuppuddle', tooltip = person.dictionary("Force $him to lick up the puddle - End Event")})
 		buttons.append({text = person.dictionary('Walk away from the cum puddle'), function = 'eventDrainCum', args = 'leavepuddle', tooltip = "Leave the cum puddle for someone else, add to mansion cleaning duties - End Event"})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -1696,7 +1465,6 @@ func talkconsent(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	
 	var related = globals.expansion.relatedCheck(person,globals.player)
 	var consent_chance = 0
@@ -2001,18 +1769,7 @@ func talkconsent(mode=''):
 	else:
 		buttons.append({text = person.dictionary("While we are discussing Consent..."), function = 'talkconsent', args = 'intro'})
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -2021,7 +1778,6 @@ func topicclothing(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	
 	#Reactions to Requests
 	if mode == 'strip chest':
@@ -2164,18 +1920,7 @@ func topicclothing(mode=''):
 			buttons.append({text = person.dictionary("Cover your " + str(expansion.nameAsshole())), function = 'topicclothing', args = 'clothe ass', tooltip = person.dictionary("Cover $his " + str(expansion.nameAsshole()))})
 	expansion.updateBodyImage(person)
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 ###---End Expansion---###
@@ -2186,7 +1931,6 @@ func cheatButton(mode = ''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	#Add Items
 	# Removed 'gear' as it won't Add Correctly
 	var itemtypes = ['supply','ingredient','potion','gear']
@@ -2253,18 +1997,7 @@ func cheatButton(mode = ''):
 		text += "Day gained. Days Pregnant now " + str(person.preg.duration) + ". "
 	
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -2273,7 +2006,6 @@ func cheatButtonAddItem(mode = ''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	
 	text += "1 [color=aqua]" +str(globals.itemdict[mode].name).capitalize() + "[/color] Added"
 	
@@ -2284,18 +2016,7 @@ func cheatButtonAddItem(mode = ''):
 		globals.state.unstackables[str(tmpitem.id)] = tmpitem
 	
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 	
@@ -2304,7 +2025,6 @@ func succubustopics(mode=''):
 	var text = ""
 	var state = false
 	var buttons = []
-	var sprite = []
 	
 	#Intro Text
 	text += str(expansion.getIntro(person)) + "\n[color=yellow]-"+ person.quirk(str(talk.introsuccubus(person)) + "[/color]")
@@ -2328,18 +2048,7 @@ func succubustopics(mode=''):
 	#	priotitize feeding
 	#	prioritize making money		
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
@@ -2347,7 +2056,6 @@ func birdsandbees(mode = ''):
 	var text = ''
 	var state = false
 	var buttons = []
-	var sprite = []
 	if mode == "revealsuccubus":
 		if person.vagvirgin && person.age == 'child':
 			text += "You explain to $name that $he is a "+str(person.race_display)+", that once $he's older or loses $his virginity, $he will require mana derived from sexual energy in order to survive. "+"\n\n[color=yellow]-"+ person.quirk(str(talk.succubusrevealed1(person)) + "[/color]") 
@@ -2362,18 +2070,7 @@ func birdsandbees(mode = ''):
 		else:
 			text += "I already understand $master. When I grow up, I'll need to make a lot of men really, really happy instead of eating."
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()	
 
@@ -2381,7 +2078,6 @@ func setmanafeedfloor(mode = ''):
 	var text = ''
 	var state = false
 	var buttons = []
-	var sprite = []
 	if mode == 'selection_0':
 		person.manafeedpolicy = 0
 		text += "Don't worry, so long as I have mana, I'll always feed you."
@@ -2430,18 +2126,7 @@ func setmanafeedfloor(mode = ''):
 		#get_node("slaverename/LineEdit").set_text(person.manafeedpolicy)
 		#pending_slave_rename = "manapolicyfloor"
 	buttons.append({text = str(globals.randomitemfromarray(['Nevermind','Go Back','Return','Cancel'])), function = '_on_talk_pressed', tooltip = "Go back to the previous screen"})
-	###---Added by Expansion---### Naked Images for Uniques Fix
-	if nakedspritesdict.has(person.unique) && person.imagetype != 'naked':
-		if person.obed >= 50 || person.stress < 10:
-			sprite = [[nakedspritesdict[person.unique].clothcons, 'slave', 'opac']]
-		else:
-			sprite = [[nakedspritesdict[person.unique].clothrape, 'slave', 'opac']]
-	elif person.imagefull != null:
-		sprite = [[person.imagefull,'slave','opac']]
-	if globals.player.imagefull != null:
-		sprite.append([globals.player.imagefull,'player','opac'])
-	###---End Expansion---###
-	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, sprite)
+	get_tree().get_current_scene().dialogue(state, self, person.dictionary(text), buttons, updateSprites(person))
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 #/ralphC
