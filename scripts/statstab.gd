@@ -974,7 +974,7 @@ func pregspeedchange(mode = ''):
 	var state = false
 	var buttons = []
 	if mode == 'start':
-		text = '[color=green]$name[/color] stands in front of you holding an arcane rune tied to the Mansion and the dimensional crystals below it.\n[color=yellow]-' + person.quirk('It currently takes [color=green]' + str(variables.pregduration) + '[/color] days to fully grow a baby for the average slave right now. Do you have an issue with the current speed of pregnancy, $master? I can adjust the dimensional crystal chamber in the mansion to speed up or slow down the natural growth of babies in wombs while in the mansion, though that will not change the added speed that traits may provide or the speed increases of [color=aqua]Induction Potions[/color]. Would you like me to do that?[/color]\n\n') + 'You think for a moment.'
+		text = '[color=green]$name[/color] stands in front of you holding an arcane rune tied to the Mansion and the dimensional crystals below it.\n[color=yellow]-' + person.quirk('It currently takes [color=green]' + str(globals.state.pregduration) + '[/color] days to fully grow a baby for the average slave right now. Do you have an issue with the current speed of pregnancy, $master? I can adjust the dimensional crystal chamber in the mansion to speed up or slow down the natural growth of babies in wombs while in the mansion, though that will not change the added speed that traits may provide or the speed increases of [color=aqua]Induction Potions[/color]. Would you like me to do that?[/color]\n\n') + 'You think for a moment.'
 		buttons.append({text = person.dictionary("It's good as it is now"), function = '_on_talk_pressed'})
 		if globals.state.mansionupgrades.dimensionalcrystal >= 2:
 			buttons.append({text = person.dictionary("I want girls giving birth as soon as my dick leaves them."), function = 'pregspeedchange', args = 'instant', tooltip = "This may break the game and will certainly break immersion."})
@@ -990,42 +990,42 @@ func pregspeedchange(mode = ''):
 		buttons.append({text = person.dictionary("I play this for the realism. The full 9 months."), function = 'pregspeedchange', args = 'ninemonths', tooltip = "You are unlikely to see an offspring and possibly never will see any slaves pregnant over the course of a normal game. It may be easier to use contraception."})
 	if mode == 'instant':
 		text = 'You smile leeringly at $name.\n[color=yellow]-Instant. Birth.[/color]\n\n$name shivers slightly at the thought of $his body splitting open to give birth in one day.\n[color=yellow]-Yes...$master. This is pretty much cheat mode, $master, and you will negate a lot of game features this way.[/color]\n$He runs off to do your will and returns a few minutes later.\n[color=yellow]-It is done, $master.[/color]'
-		variables.pregduration = 0
+		globals.state.pregduration = 0
 		buttons.append({text = person.dictionary("Good. As we were saying..."), function = '_on_talk_pressed'})
 		buttons.append({text = person.dictionary("On second thought..."), function = 'pregspeedchange', args = 'start'})
 	if mode == 'threeday':
 		text = 'You smile at $name.\n[color=yellow]-Three days should be plenty.[/color]\n\n$name shivers slightly at the thought of the growing pains crammed into three days.\n[color=yellow]-Yes...$master. You understand most of your girls who have sex will never be able to do anything, right?[/color]\n$He runs off to do your will.\n[color=yellow]-It is done, $master.[/color]'
-		variables.pregduration = 3
+		globals.state.pregduration = 3
 		buttons.append({text = person.dictionary("Good. As we were saying..."), function = '_on_talk_pressed'})
 		buttons.append({text = person.dictionary("On second thought..."), function = 'pregspeedchange', args = 'start'})
 	if mode == 'week':
 		text = 'You smile at $name.\n[color=yellow]-A week should be fine. Lets fill up this mansion.[/color]\n\n$name shivers slightly at the thought of the growing pains crammed into one week.\n[color=yellow]-Yes $master. This may feel fairly fast and have a handful of births daily still.[/color]\n$He runs off to do your will.\n[color=yellow]-It is done, $master.[/color]'
-		variables.pregduration = 7
+		globals.state.pregduration = 7
 		buttons.append({text = person.dictionary("Good. As we were saying..."), function = '_on_talk_pressed'})
 		buttons.append({text = person.dictionary("On second thought..."), function = 'pregspeedchange', args = 'start'})
 	if mode == 'biweekly':
 		text = 'You nod thoughtfully at $name.\n[color=yellow]-Two weeks will allow us to breed our girls steadily while keeping them from not being able to move.[/color]\n\n$name nods cheerfully.\n[color=yellow]-That sounds like a good trade-off of time pregnant to babies birthed.[/color]\n$He runs off to do your will.\n[color=yellow]-It is done, $master.[/color]'
-		variables.pregduration = 14
+		globals.state.pregduration = 14
 		buttons.append({text = person.dictionary("Good. As we were saying..."), function = '_on_talk_pressed'})
 		buttons.append({text = person.dictionary("On second thought..."), function = 'pregspeedchange', args = 'start'})
 	if mode == 'month':
 		text = 'You nod thoughtfully at $name.\n[color=yellow]-The gods of this land decreed a month when creating these crystals. A month it shall be.[/color]\n\n$name nods cheerfully.\n[color=yellow]-Yes, $master, and thus may he be honored, our grand creator.[/color]\n$He runs off to do your will.\n[color=yellow]-It is done, $master. Our god is honored. We should seal it by releasing the next baby born to the wilds in $his name. Surely, he shall bless our crops this harvest![/color]'
-		variables.pregduration = 30
+		globals.state.pregduration = 30
 		buttons.append({text = person.dictionary("Good. As we were saying..."), function = '_on_talk_pressed'})
 		buttons.append({text = person.dictionary("On second thought..."), function = 'pregspeedchange', args = 'start'})
 	if mode == 'monthandahalf':
 		text = 'You nod thoughtfully at $name.\n[color=yellow]-I am in this for the long haul. 45 days.[/color]\n\n$name widens $his eyes at the thought of that long carrying a baby.\n[color=yellow]-Yes...master, if you are sure. You are not going to see many babies however...[/color]\n$He runs off to do your will.\n[color=yellow]-It is done, $master.[/color]'
-		variables.pregduration = 45
+		globals.state.pregduration = 45
 		buttons.append({text = person.dictionary("Good. As we were saying..."), function = '_on_talk_pressed'})
 		buttons.append({text = person.dictionary("On second thought..."), function = 'pregspeedchange', args = 'start'})
 	if mode == 'twomonths':
 		text = 'You nod thoughtfully at $name.\n[color=yellow]-Who cares about babies? I want my girls working. 60 days.[/color]\n\n$name widens $his eyes at the thought of that long carrying a baby.\n[color=yellow]-Yes...master, if you are sure. You are not going to see many babies however...[/color]\n$He runs off to do your will.\n[color=yellow]-It is done, $master.[/color]'
-		variables.pregduration = 60
+		globals.state.pregduration = 60
 		buttons.append({text = person.dictionary("Good. As we were saying..."), function = '_on_talk_pressed'})
 		buttons.append({text = person.dictionary("On second thought..."), function = 'pregspeedchange', args = 'start'})
 	if mode == 'ninemonths':
 		text = 'You snort and look at $name.\n[color=yellow]-I want the immersion, and naturally babies grow in nine months. So nine months it is. Make it nine, and nine it shall be. Do it, plebian![/color]\n\n$name faints in terror, for the thought of a full term pregnancy in this land has all but been forgotten. Eventually, $he comes to.\n[color=yellow]-$master, surely not? Truely, this is your wish? We...we shall have no babies. We shall see nary a one.[/color]\n$He runs off to do your will while sobbing hysterically.\n[color=yellow]-It is done, $master. As...nature...intended....[/color]'
-		variables.pregduration = 270
+		globals.state.pregduration = 270
 		buttons.append({text = person.dictionary("Good. As we were saying..."), function = '_on_talk_pressed'})
 		buttons.append({text = person.dictionary("On second thought..."), function = 'pregspeedchange', args = 'start'})
 		

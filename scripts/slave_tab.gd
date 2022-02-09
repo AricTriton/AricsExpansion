@@ -285,7 +285,7 @@ func buildmetrics():
 		text += "\n[color=#d1b970][center]Current Pregnancy[/center][/color]\n"
 		if person.preg.baby_type == 'birth':
 			text += "Current Trimester: " + globals.expansion.getTrimester(person).capitalize() + "\n"
-		elif person.preg.duration >= floor(variables.pregduration/3):
+		elif person.preg.duration >= floor(globals.state.pregduration/3):
 			text += "Laid " + textForCountNoun(person.metrics.sex, " egg") +"\n"
 		else:
 			text += "Has not laid eggs yet\n"

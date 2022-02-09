@@ -1621,7 +1621,7 @@ var operationdict = {
 		code = 'abortion',
 		name = 'Commit Abortion',
 		number = 2,
-		reqs = "person.preg.duration >= variables.pregduration/6",
+		reqs = "person.preg.duration >= globals.state.pregduration/6",
 		description = "[color=yellow]Stops pregnancy. [/color] ",
 		price = 75,
 		confirm = "You leave $name in the custody of guild's specialists. As $his pregnancy ends, you can notice how $name looks considerably more stressed."

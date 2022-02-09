@@ -1191,7 +1191,7 @@ func getSwollenDescription(person,short=false):
 				else:
 					text += "swallows $his entire body behind it, easily doubling $his size if not more. "
 			else:
-				if person.preg.duration > variables.pregduration * .8 && person.knowledge.has('currentpregnancy'):
+				if person.preg.duration > globals.state.pregduration * .8 && person.knowledge.has('currentpregnancy'):
 					text += "[color=#F4A7D0]$His unborn child forces $his " + nameBelly() + " to protrude massively. $He will give birth soon, and it looks like $his body will give out if $he doesn't. [/color]"
 				else:
 					text += "[color=#E0D8C6]The impossible amount of [/color][color=aqua]" + nameCum() + "[/color][color=#E0D8C6] inside of $him has $his " + nameBelly() + " so swollen that $he looks like $he is about to give birth, and $he keeps coughing up and drooling " + nameCum() + " that worked its way through $his " + nameAsshole() + " up to $his mouth.[/color]"
@@ -1205,7 +1205,7 @@ func getSwollenDescription(person,short=false):
 				else:
 					text += "inflated. $He seems to be in constant discomfort. "
 			else:
-				if person.preg.duration > variables.pregduration * .6 && person.knowledge.has('currentpregnancy'):
+				if person.preg.duration > globals.state.pregduration * .6 && person.knowledge.has('currentpregnancy'):
 					text += "[color=#F4A7D0]$His " + nameBelly() + " is swollen and heavy with child.[/color]"
 				else:
 					text += "[color=#E0D8C6]$He looks like $he is about to give birth just from the [/color][color=aqua]" + nameCum() + "[/color][color=#E0D8C6] inflating $his body. $His " + nameBelly() + " looks bloated like an inseminated balloon.[/color]"
@@ -1219,7 +1219,7 @@ func getSwollenDescription(person,short=false):
 				else:
 					text += "is starting to look stretched and uncomfortable. "
 			else:
-				if person.preg.duration > variables.pregduration * .4 && person.knowledge.has('currentpregnancy'):
+				if person.preg.duration > globals.state.pregduration * .4 && person.knowledge.has('currentpregnancy'):
 					text += "[color=#F4A7D0]$His advanced pregnancy is clearly evident by the prominent bulge in $his " + nameBelly() + ".[/color]"
 				else:
 					text += "[color=#E0D8C6]$His " + nameBelly() + " is swollen due to the [/color][color=aqua]" + nameCum() + "[/color][color=#E0D8C6] $he is retaining inside of $him.[/color]"
@@ -1233,7 +1233,7 @@ func getSwollenDescription(person,short=false):
 				else:
 					text += "looks like the bump is firm and tight. "
 			else:
-				if person.preg.duration > variables.pregduration * .2 && person.knowledge.has('currentpregnancy'):
+				if person.preg.duration > globals.state.pregduration * .2 && person.knowledge.has('currentpregnancy'):
 					text += "[color=#F4A7D0]$His pregnancy is causing $his " + nameBelly() + " to protrude obviously.[/color]"
 				else:
 					text += "[color=#E0D8C6]$His " + nameBelly() + " is poking out from what must be an unnatural amount of [/color][color=aqua]" + nameCum() + "[/color][color=#E0D8C6] inside of $him.[/color]"
@@ -1659,7 +1659,7 @@ func fertilize_egg(mother, father_id, father_unique):
 
 func nightly_womb(person):
 	var text = ""
-	if person.preg.duration > variables.pregduration:
+	if person.preg.duration > globals.state.pregduration:
 		#Childbirth still checked/called in End of Day
 		text = person.dictionary("[center][color=yellow]$name went into Labor![/color][/center]\n")
 
@@ -1716,24 +1716,24 @@ func dailyPregnancy(person):
 
 		#Set Stats
 		pregdict.gestationspeed = gestationspeed
-		person.preg.duration = min(person.preg.duration + gestationspeed, variables.pregduration + 1)
+		person.preg.duration = min(person.preg.duration + gestationspeed, globals.state.pregduration + 1)
 
-		var gestation = min(float(person.preg.duration) / max(variables.pregduration, 1), 1.0)
+		var gestation = min(float(person.preg.duration) / max(globals.state.pregduration, 1), 1.0)
 		#Set Size Factors (for Swelling)
 		pregdict.babysize = round(totalbabysize * pow(gestation, 2))
 
 		#Trimester Events
 		#First
-		if person.preg.duration < floor(variables.pregduration/3):
+		if person.preg.duration < floor(globals.state.pregduration/3):
 			#Chance to Start Lactating
 			if person.lactation == false:
-				if person.preg.duration >= round(variables.pregduration* rand_range(1/6.0, 1/3.0)):
+				if person.preg.duration >= round(globals.state.pregduration* rand_range(1/6.0, 1/3.0)):
 					person.lactation = true
 					if !person.mind.secrets.has('currentpregnancy') && !person.knowledge.has('currentpregnancy'):
 						getSecret(person,'currentpregnancy')
 
 		#Second
-		#elif person.preg.duration < floor(variables.pregduration/1.5):
+		#elif person.preg.duration < floor(globals.state.pregduration/1.5):
 		#	person.lactation = true
 		#	#Realize Pregnant if haven't yet
 		#	if !person.mind.secrets.has('currentpregnancy') && !person.knowledge.has('currentpregnancy'):
@@ -1821,9 +1821,9 @@ func dailyBioClock(person):
 		person.instinct.reproduce -= round(rand_range(1,person.instinct.reproduce))
 
 func getTrimester(person):
-	if person.preg.duration >= floor(variables.pregduration/1.5):
+	if person.preg.duration >= floor(globals.state.pregduration/1.5):
 		return "third"
-	elif person.preg.duration >= floor(variables.pregduration/3):
+	elif person.preg.duration >= floor(globals.state.pregduration/3):
 		return "second"
 	elif person.preg.duration > 0:
 		return "first"
@@ -2272,7 +2272,7 @@ func dailyNPCs():
 			npcs[NPC_ACTION] = "recover"
 			canact = false
 		#Pregnancy and Childbirth
-		if npc.preg.duration >= variables.pregduration && rand_range(0,100) <= actions.childbirth:
+		if npc.preg.duration >= globals.state.pregduration && rand_range(0,100) <= actions.childbirth:
 			npcs[NPC_ACTION] = "childbirth"
 			canact = false
 		elif npcs[NPC_ACTION] == "childbirth":

@@ -39,7 +39,7 @@ var banditishumanchance = 70.0
 #Pregnancies
 
 ###---Added by Expansion---### Pregnancy Expanded
-var pregduration = 14.0
+#var pregduration = 14.0
 var growuptimechild = 2.0
 var growuptimeteen = 4.0
 var growuptimeadult = 6.0
