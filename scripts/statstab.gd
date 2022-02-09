@@ -1600,7 +1600,7 @@ func talkconsent(mode=''):
 	elif mode == "breeder":
 		person.dailytalk.append('consentbreeder')
 		#Chance & Roll
-		consent_chance = ((person.loyal*.2) + (person.lewdness*.2) + (person.lust*.2) + (person.instinct.reproduce*10)) - ((person.metrics.birth-person.pregexp.desiredoffspring)*10)
+		consent_chance = ((person.loyal*.2) + (person.lewdness*.2) + (person.lust*.2) + person.instinct.reproduce) - ((person.metrics.birth-person.pregexp.desiredoffspring)*10)
 		roll = round(rand_range(50,100))
 		#Modifiers; Fetish: Pregnancy
 		if person.checkFetish('pregnancy'):
