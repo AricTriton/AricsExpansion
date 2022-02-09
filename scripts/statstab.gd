@@ -1470,7 +1470,7 @@ func talkconsent(mode=''):
 	if mode == "party":
 		person.dailytalk.append('consentparty')
 		#Chance & Roll
-		consent_chance = (person.metrics.ownership*5) + (person.obed*.25) + (person.loyal*.5) + (person.fear*.25)
+		consent_chance = round(person.metrics.ownership*5 + person.obed*.25 + person.loyal*.5 + person.fear*.25)
 		roll = round(rand_range(0,100))
 		#Modifiers; Captured Effect, Wrath Vice
 		for i in person.effects.values():
@@ -1498,15 +1498,15 @@ func talkconsent(mode=''):
 			text += getRollText(roll,consent_chance)
 
 	elif mode == "sexual":
-		consent_chance = (person.obed*3 + person.loyal*2 + person.lust) - 250
+		consent_chance = round(person.obed*3 + person.loyal*2 + person.lust - 250)
 		roll = round(rand_range(0,100))
 		if person.effects.has('captured'):
 			consent_chance -= 100
 		###---Sexuality
 		if globals.expansion.getSexualAttraction(person,globals.player) == true:
-			consent_chance += rand_range(10,40)
+			consent_chance += round(rand_range(10,40))
 		else:
-			consent_chance -= rand_range(10,40)
+			consent_chance -= round(rand_range(10,40))
 		###---Family Matters; Incest Check
 		person.dailytalk.append('consent')
 		if related != "unrelated" && person.consentexp.incest == false:
@@ -1551,7 +1551,7 @@ func talkconsent(mode=''):
 		person.dailytalk.append('consentpregnant')
 		if person.consent == true:
 			#Chance & Roll
-			consent_chance = person.loyal + person.instinct.reproduce - (person.metrics.birth*10)
+			consent_chance = round(person.loyal + person.instinct.reproduce - person.metrics.birth*10)
 			roll = round(rand_range(0,100))
 			#Modifiers; Fetishes: Pregnancy & Incest
 			related = globals.expansion.relatedCheck(person,globals.player)
@@ -1584,7 +1584,7 @@ func talkconsent(mode=''):
 	elif mode == "stud":
 		person.dailytalk.append('consentstud')
 		#Chance & Roll
-		consent_chance = ((person.loyal*.2) + (person.lewdness*.3) + (person.lust*.3) + (person.instinct.reproduce*5)) - ((person.metrics.birth-person.pregexp.desiredoffspring)*5)
+		consent_chance = round(person.loyal*.2 + person.lewdness*.3 + person.lust*.3 + person.instinct.reproduce*5 - (person.metrics.birth-person.pregexp.desiredoffspring)*5)
 		roll = round(rand_range(25,100))
 		#Modifiers; Fetish: Pregnancy
 		if person.checkFetish('pregnancy'):
@@ -1604,7 +1604,7 @@ func talkconsent(mode=''):
 	elif mode == "breeder":
 		person.dailytalk.append('consentbreeder')
 		#Chance & Roll
-		consent_chance = ((person.loyal*.2) + (person.lewdness*.2) + (person.lust*.2) + person.instinct.reproduce) - ((person.metrics.birth-person.pregexp.desiredoffspring)*10)
+		consent_chance = round(person.loyal*.2 + person.lewdness*.2 + person.lust*.2 + person.instinct.reproduce - (person.metrics.birth-person.pregexp.desiredoffspring)*10)
 		roll = round(rand_range(50,100))
 		#Modifiers; Fetish: Pregnancy
 		if person.checkFetish('pregnancy'):
@@ -1633,7 +1633,7 @@ func talkconsent(mode=''):
 				text += "\n\n[color=green]$name will now do Incestuous Actions for you.[/color]"
 		else:
 			#Chance & Roll
-			consent_chance = (person.loyal*.2) + (person.lewdness*.2) + (person.lust*.1) + (globals.fetishopinion.find(person.fetish.incest)*10) + (person.dailyevents.find('incest')*5)
+			consent_chance = round(person.loyal*.2 + person.lewdness*.2 + person.lust*.1 + globals.fetishopinion.find(person.fetish.incest)*10 + person.dailyevents.find('incest')*5)
 			roll = round(rand_range(0,100))
 			if roll <= consent_chance:
 				text += str(expansion.getIntro(person)) + "[color=yellow]-"+person.quirk("Okay, I'll fuck my family members for you.")+"[/color]"
@@ -1648,7 +1648,7 @@ func talkconsent(mode=''):
 	elif mode == "incestbreeder":
 		person.dailytalk.append('consentincestbreeder')
 		#Chance & Roll
-		consent_chance = ((person.loyal*.2) + (person.lewdness*.2) + (person.lust*.1) + person.instinct.reproduce + (globals.fetishopinion.find(person.fetish.incest)*10) + (person.dailyevents.find('incest')*5)) - (person.metrics.birth*10)
+		consent_chance = round(person.loyal*.2 + person.lewdness*.2 + person.lust*.1 + person.instinct.reproduce + globals.fetishopinion.find(person.fetish.incest)*10 + person.dailyevents.find('incest')*5 - person.metrics.birth*10)
 		roll = round(rand_range(0,100))
 		if roll <= consent_chance:
 			#Change Dialogue
@@ -1665,7 +1665,7 @@ func talkconsent(mode=''):
 		person.dailytalk.append('consentlivestock')
 		if person.consentexp.breeder == true || person.consentexp.stud == true:
 			#Chance & Roll
-			consent_chance = globals.expansionsettings.baselivestockconsentchance + (person.loyal*.35) + (person.obed*.25)
+			consent_chance = round(globals.expansionsettings.baselivestockconsentchance + person.loyal*.35 + person.obed*.25)
 			roll = round(rand_range(50,100))
 			#Modifiers; Lactating, Fetish: BeMilked, Pregnancy, & Submission, 
 			var livestockcounter = 0
