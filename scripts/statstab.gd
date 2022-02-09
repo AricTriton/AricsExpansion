@@ -1454,6 +1454,9 @@ func eventDrainCum(mode = ''):
 	get_tree().get_current_scene().rebuild_slave_list()
 	get_parent().slavetabopen()
 
+func getRollText(roll,consent_chance):
+	return "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + "[/color]. "+ globals.fastif(roll <= consent_chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
+
 #Consent Topics
 func talkconsent(mode=''):
 	var text = ""
@@ -1492,7 +1495,7 @@ func talkconsent(mode=''):
 			expansion.updateMood(person,-1)
 			text += person.quirk("[color=yellow]-" + str(talk.consentPartyRefuse(person)) +"[/color]")
 		if globals.expansionsettings.perfectinfo == true:
-			text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]. "+ globals.fastif(roll <= consent_chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
+			text += getRollText(roll,consent_chance)
 
 	elif mode == "sexual":
 		consent_chance = (person.obed*3 + person.loyal*2 + person.lust) - 250
@@ -1542,7 +1545,7 @@ func talkconsent(mode=''):
 			else:
 				text += "\n$He looks at you. " + person.quirk("\n[color=yellow]-I just am not " + str(globals.randomitemfromarray(['comfortable with','interested in','ready to','prepared to','okay to'])) + " " + globals.expansion.nameSex() + " you. [/color]")
 		if globals.expansionsettings.perfectinfo == true:
-			text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]. "+ globals.fastif(roll <= consent_chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
+			text += getRollText(roll,consent_chance)
 
 	elif mode == "pregnancy":
 		person.dailytalk.append('consentpregnant')
@@ -1573,7 +1576,7 @@ func talkconsent(mode=''):
 				else:
 					text += str(expansion.getIntro(person)) + person.quirk("[color=yellow]-I am just not ready for children. Sorry.[/color]")
 			if globals.expansionsettings.perfectinfo == true:
-				text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]. "+ globals.fastif(roll <= consent_chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
+				text += getRollText(roll,consent_chance)
 		else:
 			expansion.updateMood(person,-1)
 			text += str(expansion.getIntro(person)) + "[color=yellow]-"+person.quirk("I haven't agreed to have sex with you, why do you think I'd have your baby? Shouldn't we talk about that first?")+"[/color]"
@@ -1596,7 +1599,7 @@ func talkconsent(mode=''):
 			expansion.updateMood(person,-1)
 			text += str(expansion.getIntro(person)) + "[color=yellow]-"+person.quirk("Nah, I'm not interested.")+"[/color]"
 		if globals.expansionsettings.perfectinfo == true:
-			text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]. "+ globals.fastif(roll <= consent_chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
+			text += getRollText(roll,consent_chance)
 
 	elif mode == "breeder":
 		person.dailytalk.append('consentbreeder')
@@ -1618,7 +1621,7 @@ func talkconsent(mode=''):
 			else:
 				text += str(expansion.getIntro(person)) + person.quirk("[color=yellow]-I am just not ready for children yet.[/color]")
 		if globals.expansionsettings.perfectinfo == true:
-			text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]"
+			text += getRollText(roll,consent_chance)
 
 	elif mode == "incest":
 		person.dailytalk.append('consentincest')
@@ -1640,7 +1643,7 @@ func talkconsent(mode=''):
 				expansion.updateMood(person,-1)
 				text += str(expansion.getIntro(person)) + "[color=yellow]-"+person.quirk("No! I'm not interested.")+"[/color]"
 			if globals.expansionsettings.perfectinfo == true:
-				text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]. "+ globals.fastif(roll <= consent_chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
+				text += getRollText(roll,consent_chance)
 
 	elif mode == "incestbreeder":
 		person.dailytalk.append('consentincestbreeder')
@@ -1656,7 +1659,7 @@ func talkconsent(mode=''):
 			expansion.updateMood(person,-1)
 			text += str(expansion.getIntro(person)) + "[color=yellow]-"+person.quirk("Nah, I'm not interested.")+"[/color]"
 		if globals.expansionsettings.perfectinfo == true:
-			text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]. "+ globals.fastif(roll <= consent_chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
+			text += getRollText(roll,consent_chance)
 	
 	elif mode == "livestock":
 		person.dailytalk.append('consentlivestock')
@@ -1690,7 +1693,7 @@ func talkconsent(mode=''):
 				expansion.updateMood(person,-1)
 				text += str(expansion.getIntro(person)) + "[color=yellow]-"+person.quirk("NO! Please, no! Anything but that. Don't send me to that awful place! I'm not livestock!")+"[/color]"
 			if globals.expansionsettings.perfectinfo == true:
-				text += "\n\nRolled [color=aqua]" + str(roll) + "[/color] | Consent Chance [color=aqua]" + str(consent_chance) + " [/color]. "+ globals.fastif(roll <= consent_chance, '[color=green]Success[/color]', '[color=red]Failure[/color]') +" "
+				text += getRollText(roll,consent_chance)
 		else:
 			expansion.updateMood(person,-1)
 			text += str(expansion.getIntro(person)) + "[color=yellow]-"+person.quirk("Seriously? I haven't even agreed to any [color=aqua]Breeding[/color] whatsoever, why do you think I'd agree to get stuck in the farm and milked, fucked, and " + globals.fastif(person.preg.has_womb, 'be bred', 'breed others') + " at your whim? No thank you.")+"[/color]"
