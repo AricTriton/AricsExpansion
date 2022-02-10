@@ -241,7 +241,7 @@ var reduce_rebellion_with_fear = 1				# Ralph's - 3, This divides by the players
 var summontentacle_lewdness = 0					# Ralph's - 5, Make... them... lewd...
 
 #Reputation Tweak
-var reputation_loss = -4						# Ralph's - -18, How much your reputation suffers when you sell a bad slave to Sebastian.
+var reputation_loss = 4							# Ralph's - 18, How much your reputation suffers when you sell a bad slave to Sebastian.
 
 #Food Tweak Effects
 var food_experience = 2							# Ralph's = 1, How much experience a slave earns from cooking, equal to the amount of slaves the player owns multiplied by this number.
@@ -302,7 +302,7 @@ func applyTweaks():
 	summontentacle_lewdness = 5
 
 	#Reputation Tweak
-	reputation_loss = -18
+	reputation_loss = 18
 
 	#Food Tweak Effects
 	food_experience = 1
