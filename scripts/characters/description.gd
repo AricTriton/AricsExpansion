@@ -150,11 +150,11 @@ func genitals():
 		if person.exposed.chest == true:
 			text += "\n" + getdescription("titssize") + gettitsextra()
 			if person.lactation == true:
-				text += "\n$His nipples are incredibly hard and occassionally sput streams of milk when $he moves or breathes heavily. [color=green]$He is obviously lactating.[/color]"
+				text += "\n$His nipples are incredibly hard and occassionally spout streams of milk when $he moves or breathes heavily. [color=green]$He is obviously lactating.[/color]"
 		elif person == globals.player:
 			text += "\n" + getdescription("titssize") + gettitsextra()
 			if person.lactation == true:
-				text += "\nYour nipples are incredibly hard and occassionally sput streams of milk when you move or breathe heavily. [color=green]You are obviously lactating.[/color]"
+				text += "\nYour nipples are incredibly hard and occassionally spout streams of milk when you move or breathe heavily. [color=green]You are obviously lactating.[/color]"
 		else:
 			text += '\n$He is wearing a [color=red]shirt[/color] at the moment, obscuring the details of $his ' + str(globals.expansion.getChest(person)) + ' from your ' + globals.randomitemfromarray(['eyes','gaze','inspection']) + '.'
 			if person.lactation == true:
