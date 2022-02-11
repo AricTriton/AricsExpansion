@@ -397,6 +397,27 @@ var enemygrouppools = {
 		units = [['amberguardpatrol',7,10]], awareness = -10, captured = null, special = null,
 		description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Amberguard. ",
 	},
+	#Bubblepot grouppool additions for new regions
+	#Forest
+	naturespirit = {
+		units = [['dryadwarrior',1,1]], awareness = 30, captured = null, special = null, 
+		description = "You spot a glowing plant spirit moving between the trees. It hasn't noticed you yet", 
+		descriptionambush = 'You are attacked by [color=aqua]an angry tree spirit[/color]. ', 
+	},
+	naturespiritmany = {
+		units = [['dryadwarrior',2,4]], awareness = 30, captured = null, special = null, 
+		description = "You spot many glowing figures moving between the trees. They haven't noticed you yet", 
+		descriptionambush = 'You are attacked by [color=aqua]angry tree spirits[/color]. ', 
+	},
+	naturespiritandtree = {
+		units = [['dryadwarrior',2,3],['mtree',1,1]], awareness = 20, captured = null, special = null, 
+		description = "You spot a number of glowing spirits communing with a suspicious tree. They haven't noticed you yet", 
+		descriptionambush = 'You are attacked by [color=aqua]angry tree spirits[/color]. ', 
+	},
+	''' amberguardguardsmany = {
+		units = [['amberguardpatrol',7,10]], awareness = -10, captured = null, special = null,
+		description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Amberguard. ",
+	}, '''
 }
 
 var capturespool = {
@@ -1442,6 +1463,62 @@ var enemypool = {
 		stats = {health = 1000, power = 200, speed = 40, energy = 50, armor = 20, magic = 8, abilities = ['attack', 'darknessattack']},
 		skills = [],
 	},
+	#Bubblepot Enemypool additions
+	#Forest
+	naturespirit = {
+	name = 'Nature Spirit',
+	code = 'dryadwarrior',
+	faction = 'monster',
+	icon = load("res://files/images/enemies/dryadm.png"),
+	iconalt = load("res://files/images/enemies/dryadf.png"),
+	special = '',
+	capture = null,
+	capturerace = [['Dryad',100]],
+	captureoriginspool = [{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
+	captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 4}],
+	capturesex = ['any'],
+	rewardpool = {natureessenceing = 35},
+	rewardgold = [0],
+	rewardexp = 50,
+	stats = {health = 150, power = 6, speed = 24, energy = 60, armor = 4, magic = 0, abilities = ['attack']},
+	gear = 'forest',
+	skills = [],
+	},
+	malevolenttree = {
+		name = 'Malevolent Tree',
+		code = 'mtree',
+		level = 10,
+		faction = 'plant',
+		icon = load("res://files/images/enemies/plant.png"),
+		special = null,
+		capture = null,
+		rewardpool = {natureessenceing = 40},
+		rewardgold = 0,
+		rewardexp = 50,
+		stats = {health = 200, power = 12, speed = 2, energy = 50, armor = 10, magic = 0, abilities = ['attack']},
+		skills = [],
+	},
+	#Mountains
+	''' valkyrie = {
+	name = 'Valkyrie',
+	code = 'seraphwarrior',
+	faction = 'monster',
+	icon = load("res://files/images/enemies/stranger.png"),
+	iconalt = load("res://files/images/enemies/stranger.png"),
+	special = '',
+	capture = true,
+	capturerace = [['Seraph',100]],
+	captureoriginspool = [{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
+	captureagepool = [{value = 'teen', weight = 6}, {value = 'adult', weight = 10}],
+	capturesex = ['any'],
+	rewardpool = {gold = 10},
+	rewardgold = [5,20],
+	rewardexp = 50,
+	stats = {health = 65, power = 6, speed = 18, energy = 50, armor = 2, magic = 0, abilities = ['attack']},
+	gear = 'guard',
+	skills = [],
+		
+	}, '''
 }
 
 ###---Added by Expansion---### ElPresidente Items

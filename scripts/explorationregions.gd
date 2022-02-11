@@ -274,6 +274,93 @@ var database = {
 		tags = [],
 		races = [],
 	},
+	#BubblepotAdditions
+	#Forest
+	thespine = {
+		background = 'grove',
+		music = 'explore',
+		reqs = "true",
+		combat = true,
+		code = 'thespine',
+		name = 'The Spine',
+		description = "A dark and foreboding forest. The trees whisper despite the lack of wind, and the many branches and roots seem to stretch toward you like eldritch fingers... ",
+		enemies = [{value= 'naturespiritandtree', weight =7},{value= 'naturespiritmany', weight =7},{value= 'naturespirit', weight =7}, {value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		encounters = [],
+		length = 15,
+		exits = ['forest','grove'],
+		tags = ['wimborn'],
+		races = [{value = 'Dyrad', weight = 12}],
+		levelrange = [7,15],
+	},
+	# #Prairies-(Wasteland, Hidden Cave, Hidden Cave Depths)
+	# wimbornoutskirts = {
+	# 	background = 'meadows',
+	# 	music = 'explore',
+	# 	reqs = "true",
+	# 	combat = true,
+	# 	code = 'wimbornoutskirts',
+	# 	name = 'Wimborn Outskirts',
+	# 	description = "The rural road leads across green plains and various settlements. Bright scenery puts you at peace. ",
+	# 	enemies = [{value = 'peasant', weight = 2},{value = 'banditseasy', weight = 1},{value = 'thugseasy',weight = 3},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+	# 	encounters = [],
+	# 	length = 5,
+	# 	exits = ['wimborn','forest', 'prairie'],
+	# 	tags = ['wimborn'],
+	# 	races = [{value = 'Taurus', weight = 2}, {value = 'Cat', weight = 1},{value = 'Human', weight = 12}],
+	# 	levelrange = [1,2],
+	# },
+	# #Mountains-The Peaks, StormCrown[Optional Boss=[Draconis], Skysphere, The Beyond, Coliseum of the Gods[Optional Boss=RandomSkyfather]
+	# thepeaks = {
+	# 	background = 'meadows',
+	# 	music = 'explore',
+	# 	reqs = "true",
+	# 	combat = true,
+	# 	code = 'wimbornoutskirts',
+	# 	name = 'The Peaks',
+	# 	description = "This high up in the mountains it is very cold and the air is thin. The sun shines its unmitigated light on you. Everything is very bright. ",
+	# 	enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+	# 	encounters = [],
+	# 	length = 5,
+	# 	exits = ['wimborn','forest', 'prairie'],
+	# 	tags = ['wimborn'],
+	# 	races = [{value = 'Taurus', weight = 2}, {value = 'Cat', weight = 1},{value = 'Human', weight = 12}],
+	# 	levelrange = [5,8],
+	# },
+	# #Sea-Deep Sea, Sea Floor[Town=Mermaidia], Underwater Canyon, Leviathan's Lair[Boss= Leviathan]
+	# deapssea = {
+	# 	background = 'meadows',
+	# 	music = 'explore',
+	# 	reqs = "true",
+	# 	combat = true,
+	# 	code = 'wimbornoutskirts',
+	# 	name = 'Deep Sea',
+	# 	description = "There is no land in sight. The water is dark and unreadable. The heavy waters push and pull at you. ",
+	# 	enemies = [{value = 'peasant', weight = 2},{value = 'banditseasy', weight = 1},{value = 'thugseasy',weight = 3},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+	# 	encounters = [],
+	# 	length = 5,
+	# 	exits = ['sea'],
+	# 	tags = ['wimborn'],
+	# 	races = [{value = 'Taurus', weight = 2}, {value = 'Cat', weight = 1},{value = 'Human', weight = 12}],
+	# 	levelrange = [4,7],
+	# },
+	# #Marsh-(Poisonous Swamp, Deep Hole, Dark Tunnel, Hellscape=[Optional Boss= Maou]
+	# poisonswamp = {
+	# 	background = 'meadows',
+	# 	music = 'explore',
+	# 	reqs = "true",
+	# 	combat = true,
+	# 	code = 'wimbornoutskirts',
+	# 	name = 'Poisonous Swamp',
+	# 	description = "Ugly waterlogged trees dot these twisted lands. Every step squelches in liquids that seem to be melting your shoes. ",
+	# 	enemies = [{value = 'peasant', weight = 2},{value = 'banditseasy', weight = 1},{value = 'thugseasy',weight = 3},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+	# 	encounters = [],
+	# 	length = 5,
+	# 	exits = ['marsh'],
+	# 	tags = ['frostford'],
+	# 	races = [{value = 'Taurus', weight = 2}, {value = 'Cat', weight = 1},{value = 'Human', weight = 12}],
+	# 	levelrange = [1,2],
+	# },
+	#Bubblepot additions end here
 	witchhut = {
 		background = 'amberroad',
 		music = 'explore',
