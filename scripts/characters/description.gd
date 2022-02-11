@@ -178,8 +178,22 @@ func lowergenitals():
 				text += ' $He spreads $his legs open to show you $his tight, [color=green]virgin ' + globals.expansion.namePussy() + '[/color]. '
 			else:
 				text += ' $He spreads $his legs open to show you ' + getdescription('vagina')
+			if person.lust >= 50:
+				if person.lust >= 100:
+					text+= "A large quantity of lubrication drips from their"+ globals.expansion.namePussy()+" and down their thighs. A small puddle has formed beneath them. " 
+				elif person.lust >= 75:
+					text+= "You notice that they are leaking juices. Some of it dribbles down their inner thighs. "
+				else:
+					text += "You notice a little wetness between $his folds. "
 			if person.cum.pussy > 0:
 				text += " As $his legs are spread open, you notice a little [color=aqua]" +globals.expansion.nameCum()+"[/color] slip out of $his [color=aqua]" + globals.expansion.namePussy() + "[/color]. "
+				if person.lust >= 50:
+					if person.lust >= 100:
+						text+= "Excessive juices are mixed in with the" +globals.expansion.nameCum()+". " 
+					elif person.lust >= 75:
+						text+= "Their juices have mixed with the " +globals.expansion.nameCum()+" escaping from their "+ globals.expansion.namePussy()+".  "
+					else:
+						text += "There is some lubrication mixed in with the " +globals.expansion.nameCum()+". "
 			if person.cum.pussy > vagcapacity:
 				text += "" + globals.expansion.vagOverload(person) + "\n"
 		if person.penis != 'none':
