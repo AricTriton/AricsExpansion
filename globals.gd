@@ -423,7 +423,7 @@ class resource:
 			panel.get_node("energy").set_text(str(round(globals.player.energy)))
 
 class progress:
-	var pregduration = 14
+	var pregduration = variables.pregduration
 	var tutorialcomplete = false
 	var supporter = false
 	var location = 'wimborn'
