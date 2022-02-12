@@ -211,7 +211,7 @@ func lowergenitals():
 				text += " " + newpenisdescription[temp]
 				if person.lust >= 50:
 					if person.lust >= 100:
-						text+= "$His" +globals.expansion.namePenis()+" is so pumped with blood that veins are visible along its length. It pulses visibly. " 
+						text+= "$His" +globals.expansion.namePenis()+" is rock hard and bulging. It pulses visibly. " 
 					elif person.lust >= 75:
 				 		text+= "$His" +globals.expansion.namePenis()+" is fully erect. "
 					else:
