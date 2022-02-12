@@ -197,7 +197,7 @@ func lowergenitals():
 			else:
 				if person.lust >= 50:
 					if person.lust >= 80:
-						text+= "A large quantity of [color=fuchsia]girlcum[/color] drips from $his quivering"+ globals.expansion.namePussy()+" and down $his thighs. A small puddle has formed beneath them. " 
+						text+= "A large quantity of [color=fuchsia]girlcum[/color] drips from $his [color=fuchsia] quivering "+ globals.expansion.namePussy()+" [/color]and down $his thighs. A small puddle has formed beneath them. " 
 					elif person.lust >= 65:
 						text+= "$His clit is [color=fuchsia]visibly swollen[/color]. You notice that $he is [color=fuchsia]leaking juices[/color]. Some of it dribbles down $his thighs. "
 					else:
@@ -211,17 +211,17 @@ func lowergenitals():
 				text += " " + newpenisdescription[temp]
 				if person.lust >= 50:
 					if person.lust >= 80:
-						text+= "$His" +globals.expansion.namePenis()+" is [color=fuchsia]rock hard[/color] and bulging. It pulses visibly. " 
+						text+= "$His " +globals.expansion.namePenis()+" is [color=fuchsia]rock hard[/color] and bulging. It pulses visibly. " 
 					elif person.lust >= 65:
-						text+= "$His" +globals.expansion.namePenis()+" is [color=fuchsia]fully erect[/color]. "
+						text+= "$His " +globals.expansion.namePenis()+" is [color=fuchsia]fully erect[/color]. "
 					else:
-						text += "$His " + globals.expansion.namePenis()+ "[color=fuchsia]twitches and flexes[/color] from time to time."
+						text += "$His " + globals.expansion.namePenis()+ " [color=fuchsia]twitches and flexes[/color] from time to time."
 		if person.balls != 'none':
 			text += "\n[color=#d1b970]Balls:[/color]\n"
 			text += getdescription('balls')
 			text += "$He produces [color=aqua]" + str(person.pregexp.cumprod) + "oz[/color] of [color=aqua]" +globals.expansion.nameCum()+ "[/color] per ejaculation. "
 			if person.lust >= 80:
-				text+= "As you watch, $his" +globals.expansion.nameBalls() + "seem to pulse and a small bulge travels up through $his"+globals.expansion.namePenis()+". A bit of"+globals.expansion.nameCum()+" drips from $his"+globals.expansion.namePenis()+" to the floor." 
+				text+= "As you watch, $his " +globals.expansion.nameBalls() + " seem to [color=fuchsia]pulse[/color] and a [color=fuchsia]small bulge[/color] travels up through $his "+globals.expansion.namePenis()+". A bit of "+globals.expansion.nameCum()+" drips from $his "+globals.expansion.namePenis()+" to the floor." 
 	elif person != globals.player:
 		text += ' $His crotch is [color=red]clothed[/color] and [color=red]covered[/color] at the moment, obscuring the details of $his ' + str(globals.expansion.getGenitals(person)) + ' from your ' + globals.randomitemfromarray(['eyes','gaze','inspection']) + '.'
 		if person.cum.pussy > vagcapacity:
