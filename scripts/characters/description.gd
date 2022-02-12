@@ -191,7 +191,7 @@ func lowergenitals():
 					if person.lust >= 100:
 						text+= "Excessive juices are mixed in with the" +globals.expansion.nameCum()+". " 
 					elif person.lust >= 75:
-				 		text+= "Their juices have mixed with the " +globals.expansion.nameCum()+" escaping from their "+ globals.expansion.namePussy()+".  "
+						text+= "Their juices have mixed with the " +globals.expansion.nameCum()+" escaping from their "+ globals.expansion.namePussy()+".  "
 					else:
 				 		text += "There is some lubrication mixed in with the " +globals.expansion.nameCum()+". "
 			else:
@@ -213,7 +213,7 @@ func lowergenitals():
 					if person.lust >= 100:
 						text+= "$His" +globals.expansion.namePenis()+" is rock hard and bulging. It pulses visibly. " 
 					elif person.lust >= 75:
-				 		text+= "$His" +globals.expansion.namePenis()+" is fully erect. "
+						text+= "$His" +globals.expansion.namePenis()+" is fully erect. "
 					else:
 				 		text += "$His " + globals.expansion.namePenis()+ "twitches and flexes from time to time."
 		if person.balls != 'none':
