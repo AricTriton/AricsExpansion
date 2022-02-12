@@ -221,7 +221,7 @@ func lowergenitals():
 			text += getdescription('balls')
 			text += "$He produces [color=aqua]" + str(person.pregexp.cumprod) + "oz[/color] of [color=aqua]" +globals.expansion.nameCum()+ "[/color] per ejaculation. "
 			if person.lust >= 80:
-				text+= "As you watch, $his " +globals.expansion.nameBalls() + " seem to [color=fuchsia]pulse[/color] and a [color=fuchsia]small bulge[/color] travels up through $his "+globals.expansion.namePenis()+". A bit of "+globals.expansion.nameCum()+" drips from $his "+globals.expansion.namePenis()+" to the floor." 
+				text+= "As you watch, $his " +globals.expansion.nameBalls() + " seem to clench and a [color=fuchsia]small bulge[/color] travels up through $his "+globals.expansion.namePenis()+". A bit of "+globals.expansion.nameCum()+" drips from $his "+globals.expansion.namePenis()+" to the floor." 
 	elif person != globals.player:
 		text += ' $His crotch is [color=red]clothed[/color] and [color=red]covered[/color] at the moment, obscuring the details of $his ' + str(globals.expansion.getGenitals(person)) + ' from your ' + globals.randomitemfromarray(['eyes','gaze','inspection']) + '.'
 		if person.cum.pussy > vagcapacity:
