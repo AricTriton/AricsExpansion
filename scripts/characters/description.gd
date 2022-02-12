@@ -245,9 +245,9 @@ func lowergenitals():
 		text += "\n[color=#d1b970]Asshole:[/color]\n"
 		if person.exposed.ass == true && person != globals.player:
 			if person.assvirgin == true:
-				text += 'When requested, $he turns around and bends over when requested to show off $his tight, [color=green]virgin ' + globals.expansion.nameAsshole() + '[/color]. '
+				text += 'When requested, $he turns around and bends over to show off $his tight, [color=green]virgin ' + globals.expansion.nameAsshole() + '[/color]. '
 			else:
-				text += 'When requested, $he turns around and bends over when requested to show off ' + getdescription('asshole')
+				text += 'When requested, $he turns around and bends over to show off ' + getdescription('asshole')
 			if person.cum.ass > 0:
 				text += " As $his legs are spread open, you see a little [color=aqua]" +globals.expansion.nameCum()+"[/color] slip out of $his [color=aqua]" + globals.expansion.nameAsshole() + "[/color]. "
 			if person.cum.ass > asscapacity:
