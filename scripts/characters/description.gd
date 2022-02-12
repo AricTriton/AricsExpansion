@@ -191,15 +191,15 @@ func lowergenitals():
 					if person.lust >= 80:
 						text+= "Excessive juices are mixed in with the" +globals.expansion.nameCum()+". " 
 					elif person.lust >= 65:
-						text+= "Their juices have mixed with the " +globals.expansion.nameCum()+" escaping from their "+ globals.expansion.namePussy()+".  "
+						text+= "$His juices have mixed with the " +globals.expansion.nameCum()+" escaping from their "+ globals.expansion.namePussy()+".  "
 					else:
 						text += "There is some lubrication mixed in with the " +globals.expansion.nameCum()+". "
 			else:
 				if person.lust >= 50:
 					if person.lust >= 80:
-						text+= "A large quantity of lubrication drips from their"+ globals.expansion.namePussy()+" and down their thighs. A small puddle has formed beneath them. " 
+						text+= "A large quantity of lubrication drips from $his quivering"+ globals.expansion.namePussy()+" and down $his thighs. A small puddle has formed beneath them. " 
 					elif person.lust >= 65:
-						text+= "You notice that they are leaking juices. Some of it dribbles down their inner thighs. "
+						text+= "$His clit is visibly swollen. You notice that $he is leaking juices. Some of it dribbles down $his thighs. "
 					else:
 						text += "You notice a little wetness between $his folds. "
 			if person.cum.pussy > vagcapacity:
