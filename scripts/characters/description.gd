@@ -189,9 +189,9 @@ func lowergenitals():
 				text += " As $his legs are spread open, you notice a little [color=aqua]" +globals.expansion.nameCum()+"[/color] slip out of $his [color=aqua]" + globals.expansion.namePussy() + "[/color]. "
 				if person.lust >= 50:
 					if person.lust >= 80:
-						text+= "[color=fuchsia]Excessive[/color] are mixed in with the" +globals.expansion.nameCum()+". " 
+						text+= "[color=fuchsia]Excessive juices[/color] are mixed in with the" +globals.expansion.nameCum()+". " 
 					elif person.lust >= 65:
-						text+= "$His [color=fuchsia]arousal[/color] has mixed with the " +globals.expansion.nameCum()+" escaping from their "+ globals.expansion.namePussy()+".  "
+						text+= "$His [color=fuchsia]liquid arousal[/color] has mixed with the " +globals.expansion.nameCum()+" escaping from their "+ globals.expansion.namePussy()+".  "
 					else:
 						text += "There is some [color=fuchsia]girlcum[/color] mixed in with the " +globals.expansion.nameCum()+". "
 			else:
