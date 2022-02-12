@@ -189,19 +189,19 @@ func lowergenitals():
 				text += " As $his legs are spread open, you notice a little [color=aqua]" +globals.expansion.nameCum()+"[/color] slip out of $his [color=aqua]" + globals.expansion.namePussy() + "[/color]. "
 				if person.lust >= 50:
 					if person.lust >= 80:
-						text+= "Excessive juices are mixed in with the" +globals.expansion.nameCum()+". " 
+						text+= "[color=fuchsia]Excessive[/color] are mixed in with the" +globals.expansion.nameCum()+". " 
 					elif person.lust >= 65:
-						text+= "$His juices have mixed with the " +globals.expansion.nameCum()+" escaping from their "+ globals.expansion.namePussy()+".  "
+						text+= "$His [color=fuchsia]arousal[/color] has mixed with the " +globals.expansion.nameCum()+" escaping from their "+ globals.expansion.namePussy()+".  "
 					else:
-						text += "There is some lubrication mixed in with the " +globals.expansion.nameCum()+". "
+						text += "There is some [color=fuchsia]girlcum[/color] mixed in with the " +globals.expansion.nameCum()+". "
 			else:
 				if person.lust >= 50:
 					if person.lust >= 80:
-						text+= "A large quantity of lubrication drips from $his quivering"+ globals.expansion.namePussy()+" and down $his thighs. A small puddle has formed beneath them. " 
+						text+= "A large quantity of [color=fuchsia]girlcum[/color] drips from $his quivering"+ globals.expansion.namePussy()+" and down $his thighs. A small puddle has formed beneath them. " 
 					elif person.lust >= 65:
-						text+= "$His clit is visibly swollen. You notice that $he is leaking juices. Some of it dribbles down $his thighs. "
+						text+= "$His clit is [color=fuchsia]visibly swollen[/color]. You notice that $he is [color=fuchsia]leaking juices[/color]. Some of it dribbles down $his thighs. "
 					else:
-						text += "You notice a little wetness between $his folds. "
+						text += "You notice a little [color=fuchsia]wetness[/color] between $his folds. "
 			if person.cum.pussy > vagcapacity:
 				text += "" + globals.expansion.vagOverload(person) + "\n"
 		if person.penis != 'none':
@@ -211,11 +211,11 @@ func lowergenitals():
 				text += " " + newpenisdescription[temp]
 				if person.lust >= 50:
 					if person.lust >= 80:
-						text+= "$His" +globals.expansion.namePenis()+" is rock hard and bulging. It pulses visibly. " 
+						text+= "$His" +globals.expansion.namePenis()+" is [color=fuchsia]rock hard[/color] and bulging. It pulses visibly. " 
 					elif person.lust >= 65:
-						text+= "$His" +globals.expansion.namePenis()+" is fully erect. "
+						text+= "$His" +globals.expansion.namePenis()+" is [color=fuchsia]fully erect[/color]. "
 					else:
-						text += "$His " + globals.expansion.namePenis()+ "twitches and flexes from time to time."
+						text += "$His " + globals.expansion.namePenis()+ "[color=fuchsia]twitches and flexes[/color] from time to time."
 		if person.balls != 'none':
 			text += "\n[color=#d1b970]Balls:[/color]\n"
 			text += getdescription('balls')
