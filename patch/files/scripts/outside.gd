@@ -1017,7 +1017,6 @@ func _on_slavesellbutton_pressed():
 		###---End Expansion---###
 	elif guildlocation in ['sebastian','umbra'] && selectedslave.fromguild == false:
 		upgradefromslave = true
-		globals.resources.upgradepoints += globals.originsarray.find(selectedslave.origins)+1
 		###---Added by Expansion---### Person Expanded / Breeder Specialty
 		globals.expansion.updatePerson(selectedslave)
 		if selectedslave.npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
@@ -1038,7 +1037,7 @@ func _on_slavesellbutton_pressed():
 				reputationloss[1][1] += 10
 			###---End Expansion---###
 			reputationloss = globals.weightedrandom(reputationloss)
-			globals.state.reputation[reputationloss] -= globals.expansionsettings.reputation_loss
+			globals.state.reputation[reputationloss] += globals.expansionsettings.reputation_loss
 			text += "[color=yellow]Your reputation has suffered from this deal. [/color]\n"
 	if globals.guildslaves.has(guildlocation):
 		globals.guildslaves[guildlocation].append(selectedslave)
@@ -1621,7 +1620,7 @@ var operationdict = {
 		code = 'abortion',
 		name = 'Commit Abortion',
 		number = 2,
-		reqs = "person.preg.duration >= variables.pregduration/6",
+		reqs = "person.preg.duration >= globals.state.pregduration/6",
 		description = "[color=yellow]Stops pregnancy. [/color] ",
 		price = 75,
 		confirm = "You leave $name in the custody of guild's specialists. As $his pregnancy ends, you can notice how $name looks considerably more stressed."
