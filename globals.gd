@@ -1271,8 +1271,7 @@ var expansionfarm = loadModFile("AricsExpansion", "customScripts/expansionfarm.g
 var expansiontalk = loadModFile("AricsExpansion", "customScripts/expansiontalk.gd").new()
 var backwardscompatibility = loadModFile("AricsExpansion", "customScripts/backwardscompatibility.gd").new()
 var expansionsettings = loadModFile("AricsExpansion", "customScripts/expansionsettings.gd").new()
-var useRalphsTweaks = expansionsettings.use_ralphs_tweaks
-var enable_all_player_races = expansionsettings.enable_all_player_races #ralphE
+var useRalphsTweaks # = expansionsettings.use_ralphs_tweaks
 var expansiontravel = loadModFile("AricsExpansion", "customScripts/expansiontravel.gd").new() #ralphD
 
 ###---Added by Expansion---### General Arrays
@@ -1302,8 +1301,8 @@ var expandedplayerspecs = {
 	Slaver = "+100% gold from selling captured slaves\n+33% gold reward from slave delivery tasks",
 	Hunter = "+100% gold drop from random encounters\n+20% gear drop chance\nBonus to preventing ambushes",
 	Alchemist = "Double potion production\nSelling potions earn +100% more gold\n[color=aqua]Start with an Alchemy Room unlocked[/color]",
-	Mage = ("Combat spell deal +20% more damage" if useRalphsTweaks else "-50% mana cost of spells\nCombat spell deal +20% more damage"),
-	Breeder = ("Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for +20% more gold and provide 20% more upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]" if useRalphsTweaks else "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for +100% more and receive 2x as many upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]")
+	Mage = "-50% mana cost of spells\nCombat spell deal +20% more damage", # if useRalphsTweaks "Combat spell deal +20% more damage"
+	Breeder = "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for 60% more and receive 60% more upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]" # if useRalphsTweaks "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for 20% more gold and provide 20% more upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]"
 }
 
 ###---Added by Expansion---### Movement Icons (replicated)
@@ -1372,10 +1371,6 @@ var sexuality_images = {
 func _ready():
 	expansionsettings.addConstantsSupport()
 	constructor.fillSizeArrayDict()
-	if useRalphsTweaks:
-		expansionsettings.applyTweaks()
-	if enable_all_player_races: #ralphE
-		expansionsettings.enableallplayerraces() #ralphE
 
 ###---Added by Expansion---### Farm Expanded
 func getVatMaxCapacity(type):
