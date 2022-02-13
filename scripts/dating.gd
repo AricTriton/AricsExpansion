@@ -469,7 +469,7 @@ func praise(person, counter):
 		self.stress -= rand_range(5,10)
 		text = text + "[he2] listens to your praise with joy evident on [his2] face.  "
 	elif person.obed >= 85:
-		text = text + "[he2] takes your words respectfully but without great joy. You’ve probably overpraised [him2] lately. "
+		text = text + "[he2] takes your words respectfully but without great joy. You've probably overpraised [him2] lately. "
 		
 	else:
 		text = text + "[he2] takes your praise arrogantly, gaining joy from it. "

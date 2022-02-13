@@ -423,6 +423,7 @@ class resource:
 			panel.get_node("energy").set_text(str(round(globals.player.energy)))
 
 class progress:
+	var pregduration = variables.pregduration
 	var tutorialcomplete = false
 	var supporter = false
 	var location = 'wimborn'
@@ -1225,8 +1226,6 @@ func load_game(text):
 		print("Silly Mode Enabled. Fourth wall successfully removed.")
 	if expansionsettings.enablecheatbutton == true:
 		print("Aric's Cheat Button Active. Access via Talk > Piece of Candy")
-	if expansionsettings.enablecheatbutton == true:
-		print("Aric's Cheat Button Active. Access via Talk > Piece of Candy")
 	if expansionsettings.perfectinfo == true:
 		print("Perfect Information is Enabled. All Inspect information is available without Talking to the NPC first.")
 	if expansionsettings.ihavebloodygoodtaste == true:
@@ -1451,8 +1450,8 @@ func slimeConversionCheck(mother, father):
 			if father.id != ['-1'] && father.id != null:
 				globals.connectrelatives(father, baby, 'slimesire')
 			
-			rapidpregnancydamage = (variables.pregduration-1) - person.preg.duration
-			person.preg.duration = variables.pregduration-1
+			rapidpregnancydamage = (globals.state.pregduration-1) - person.preg.duration
+			person.preg.duration = globals.state.pregduration-1
 			mother.stress += rapidpregnancydamage*2
 			mother.health -= rapidpregnancydamage
 			text += mother.dictionary("$name felt a shift in $his body from the slimey goo inside of $him. $His baby, " + baby.dictionary("$name ") + mother.dictionary(", has been warped into a Slime and is about to ooze out of $him. Health -"+str(rapidpregnancydamage)+" / Stress +"+str(rapidpregnancydamage*2)))
