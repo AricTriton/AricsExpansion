@@ -299,7 +299,7 @@ var characters = {
 		end_base = 2,
 		skillpoints = 1,
 		obed = 90,
-		traits = ['Nimble', 'Quick', 'Spoiled', 'Likes It Rough', 'Masochist'],
+		traits = ['Nimble', 'Quick', 'Spoiled', 'Likes it rough', 'Masochist'],
 		ability = ['attack','aimedstrike'],
 	},
 	Yris = {

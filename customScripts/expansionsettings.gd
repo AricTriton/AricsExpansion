@@ -292,6 +292,9 @@ var ralphs_tweaks_partial = {
 	reduce_slave_price_bonus = true,
 	randomize_travel_awareness = true,
 	increase_food_cost = true,
+	clear_player_racial_bonus = true,
+	tweak_invigorate = true,
+	restrict_convert_to_upgrade_point = true,
 }
 
 """

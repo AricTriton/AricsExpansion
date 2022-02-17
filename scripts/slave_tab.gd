@@ -1,7 +1,7 @@
 
 func buyattributepoint():
 	#ralphA - added "if globals.useRalphsTweaks:" section and adjusted tabs for original code 
-	if globals.useRalphsTweaks: #ralphA - closes attribute point to upgrade point conversion unless npcs are Loyalty 50 (no using recent additions for quick upgrade points)
+	if globals.useRalphsTweaks && globals.ralphs_tweaks_partial.restrict_convert_to_upgrade_point: #ralphA - closes attribute point to upgrade point conversion unless npcs are Loyalty 50 (no using recent additions for quick upgrade points)
 		if person.loyal >=50 && person.skillpoints >= variables.attributepointsperupgradepoint:
 			person.skillpoints -= variables.attributepointsperupgradepoint
 			globals.resources.upgradepoints += 1

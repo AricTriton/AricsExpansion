@@ -459,9 +459,9 @@ func praise(person, counter):
 	###---Added by Expansion---### Valid Praise Bonus
 	if person.dailyevents.has('rule_nudity_obeyed'):
 		text += "\nYou explain your happiness at [his2] obedience in following your [color=aqua]Nudity[/color] order. [name2] seems to accept that this praise is for a valid reason.\n[color=red]Praise Valid Reason removed[/color]; [color=green]3 Turns Gained[/color] "
-		turns_set(turns + 3)
-		while person.dailyevents.find('rule_nudity_obeyed'):
-			person.dailyevents.remove('rule_nudity_obeyed')
+		turns += 3
+		while person.dailyevents.find('rule_nudity_obeyed') >= 0:
+			person.dailyevents.erase('rule_nudity_obeyed')
 	###---End Expansion---###
 	
 	if person.obed >= 85 && counter < 2:
@@ -510,9 +510,9 @@ func punishaddedeffect():
 	###---Added by Expansion---### Valid Punishment Bonus
 	if person.dailyevents.has('rule_nudity_disobeyed'):
 		text += "\nYou explain that [his2] punishment is due to [his2] refusal to follow your [color=aqua]Nudity[/color] order. [name2] seems to understand that this punishment is for a valid reason.\n[color=red]Punishment Valid Reason removed[/color]; [color=green]3 Turns Gained[/color] "
-		turns_set(turns + 3)
-		while person.dailyevents.find('rule_nudity_disobeyed'):
-			person.dailyevents.remove('rule_nudity_disobeyed')
+		turns += 3
+		while person.dailyevents.find('rule_nudity_disobeyed') >= 0:
+			person.dailyevents.erase('rule_nudity_disobeyed')
 	###---End Expansion---###
 	
 	return text
