@@ -999,10 +999,8 @@ func _on_slavesellbutton_pressed():
 	#ralph5
 	racepricemod = globals.state.racemarketsat[selectedslave.race.replace('Halfkin', 'Beastkin')] #ralph5
 	racepricemodchange = (racepricemod - 0.5)*0.1 #the bigger the premium the more the premium will be decreased
-	#print("Pricemod for " + selectedslave.race + " is " + str(racepricemod))
 	racepricemod = clamp(racepricemod - racepricemodchange,0.5,5)
 	globals.state.racemarketsat[selectedslave.race] = racepricemod
-	#print("Sold 1 " + selectedslave.race + "   Pricemod decreased " + str(racepricemodchange) + " to " + str(racepricemod))
 	#/ralph5
 	if selectedslave.obed >= 90 && selectedslave.fromguild == false && selectedslave.effects.has('captured') == false:
 		upgradefromslave = true

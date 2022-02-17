@@ -1000,7 +1000,7 @@ func _on_end_pressed():
 						text0.set_bbcode(text0.get_bbcode() + person.dictionary("$name's virginity was taken by a dog.\n\n"))
 						person.vagvirgin = false
 						person.asser -= 10
-						person.stats.obed_cur += 10
+						person.obed += 10
 					person.lust -= round(person.lust/2)
 					person.obed += 10
 					person.loyal += 5
@@ -1019,7 +1019,7 @@ func _on_end_pressed():
 						text0.set_bbcode(text0.get_bbcode() + person.dictionary("$name's virginity was taken by a dog.\n\n"))
 						person.vagvirgin = false
 						person.asser -= 10
-						person.stats.obed_cur += 10
+						person.obed += 10
 					else:
 						text0.set_bbcode(text0.get_bbcode() + person.dictionary("\n"))
 					person.lust -= round(person.lust/2)
@@ -2040,8 +2040,8 @@ func childbirth_loop(person):
 		person.metrics.birth += 1
 		person.preg.is_preg = false
 		person.preg.duration = 0
-		person.preg.ovulation_stage = 1
-		person.preg.ovulation_day = -3
+		person.preg.ovulation_stage = 2
+		person.preg.ovulation_day = randi() % 3 - 5
 ###---End of Expansion---###
 
 ###---Added by Expansion---### Added by Deviate - Minor modifications to add multiple births
