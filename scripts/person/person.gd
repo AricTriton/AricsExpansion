@@ -468,7 +468,7 @@ func cleartraits():
 		trait_remove(traits.back())
 	for i in ['str_base','agi_base', 'maf_base', 'end_base']:
 		stats[i] = 0
-	if globals.useRalphsTweaks && self == globals.player:
+	if globals.useRalphsTweaks && globals.ralphs_tweaks_partial.clear_player_racial_bonus && self == globals.player:
 		for i in ['str_mod','agi_mod','maf_mod','end_mod']:
 			stats[i] = 0
 	skillpoints = 2
@@ -1338,7 +1338,7 @@ func updateClothing():
 	var amnude = false
 	for part in ['chest','genitals','ass']:
 		if self.exposed[part] == true:
-			exposed_parts.append([part])
+			exposed_parts.append(part)
 	if exposed_parts.size() > 1:
 		amnude = true
 	

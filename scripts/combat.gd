@@ -371,7 +371,7 @@ class combatant:
 			attack = 0
 		###---Expansion End---###
 		
-		if person.preg.duration > variables.pregduration/3:
+		if person.preg.duration > globals.state.pregduration/3:
 			speed = round(speed - speed*0.25)
 			scene.getbuff(scene.makebuff('pregnancy', self, self), self)
 		#Gear
