@@ -250,7 +250,17 @@ var chestloot = {
 }
 ###---End Expansion---###
 
-
+func winscreenclear():
+	var winpanel = get_node("winningpanel")
+	defeated = []
+	enemyloot = {stackables = {}, unstackables = []}
+	for i in winpanel.get_node("ScrollContainer/VBoxContainer").get_children():
+		if i != winpanel.get_node("ScrollContainer/VBoxContainer/Button"):
+			i.visible = false
+			i.free()
+	winpanel.get_node("ScrollContainer").visible = false
+	winpanel.get_node("Panel").visible = false
+	main.checkplayergroup()
 
 func enemydefeated():
 	if launchonwin != null:
@@ -311,10 +321,10 @@ func enemydefeated():
 			stolengold += unit.capture.npcexpanded.possessions.gold
 			unit.capture.npcexpanded.possessions.gold = 0
 			###---End Expansion---###
-			defeated.units.append(unit.capture)
-			defeated.names.append(unit.name)
-			defeated.select.append(0)
-			defeated.faction.append(unit.faction)
+			if globals.expansionsettings.captureChance >= rand_range(0,100):
+				defeated.append({"unit":unit.capture,"name":unit.name,"select":globals.expansionsettings.capturedSelect,"faction":unit.faction})
+			else:
+				text += " [color=red]"+unit.name+" died during capture.[/color]"
 			for i in unit.capture.gear.values():
 				if i != null:
 					###---Added by Expansion---### Fix items flipping out on NPCs
@@ -390,11 +400,11 @@ func enemydefeated():
 			person.cour += rand_range(1,3)
 	
 	
-	if defeated.units.size() > 0:
+	if !defeated.empty():
 		text += 'Your group gathers defeated opponents in one place for you to decide what to do about them. \n'
 		###---Added by Expansion---### Quick Strip/Sizing Support
-		for i in defeated.units:
-			globals.expansion.quickStrip(i)
+		for i in defeated:
+			globals.expansion.quickStrip(i.unit)
 		text += "You quickly strip off all of their clothing so you can see the potential merchandise you have gained. \n"
 		###---End Expansion---###
 	if enemygroup.captured != null:
@@ -404,15 +414,13 @@ func enemydefeated():
 			i.npcexpanded.timesmet += 1
 			i.npcexpanded.timesrescued += 1
 			###---End Expansion---###
-			defeated.units.append(i)
-			defeated.names.append('Captured')
-			defeated.select.append(0)
-			defeated.faction.append('stranger')
+			defeated.append({"unit":i,"name":'Captured',"select":globals.expansionsettings.rescuedSelect,"faction":'stranger'})
 	###---Added by Expansion---### NPCs Expanded | Baby && Noncombatants Support
 	var extranpcs = 0
 	var npc2
 	var latetext = ""
-	for npc in defeated.units:
+	for i in defeated:
+		var npc = i.unit
 		if !npc.npcexpanded.possessions.noncombatants.empty():
 			for npc2id in npc.npcexpanded.possessions.noncombatants:
 				extranpcs += 1
@@ -423,10 +431,7 @@ func enemydefeated():
 					latetext += ", "
 				else:
 					latetext += " "
-				defeated.units.append(npc2)
-				defeated.names.append('Innocent Bystander')
-				defeated.select.append(0)
-				defeated.faction.append('stranger')
+				defeated.append({"unit":npc2,"name":'Innocent Bystander',"select":globals.expansionsettings.foundSelect,"faction":'stranger'})
 	if extranpcs > 0:
 		text += "You are surprised to see "
 		if extranpcs > 1:
@@ -447,22 +452,65 @@ func enemydefeated():
 	
 	winpanel.visible = true
 	winpanel.get_node("wintext").set_bbcode(text)
-	for i in range(0, defeated.units.size()):
-		var person = defeated.units[i]
+	for i in defeated:
+		var person = i.unit
 		if globals.races[person.race.replace("Halfkin", "Beastkin")].uncivilized && person.spec != 'tamer':
 			person.add_trait('Uncivilized')
 		person.stress += rand_range(20, 50)
 		person.obed += rand_range(10, 20)
 		person.health -= rand_range(40,70)
-		if defeated.names[i] == 'Captured':
+		if i.name == 'Captured':
 			person.obed += rand_range(10,20)
 			person.loyal += rand_range(5,15)
 	buildcapturelist()
 	builditemlists()
 	
-	if globals.state.sidequests.cali == 18 && defeated.names.find('Bandit 1') >= 0 && currentzone.code == 'forest':
-		main.popup("One of the defeated bandits in exchange for their life reveals the location of their camp you've been searching for. ")
-		globals.state.sidequests.cali = 19
+	if globals.state.sidequests.cali == 18 && currentzone.code == 'forest':
+		for i in defeated:
+			if "Bandit" in i.name:
+				main.popup("One of the defeated bandits in exchange for their life reveals the location of their camp you've been searching for. ")
+				globals.state.sidequests.cali = 19
+				return
+		
+
+func buildcapturelist():
+	var winpanel = get_node("winningpanel")
+	var text = "Defeated and Captured | Free ropes left: "
+	text += str(globals.state.backpack.stackables.get('rope', 0))
+	winpanel.get_node("Panel/Label").set_text(text)
+	for i in get_node("winningpanel/ScrollContainer/VBoxContainer").get_children():
+		if i.get_name() != 'Button':
+			i.visible = false
+			i.queue_free()
+	for i in defeated:
+		var person = i.unit
+		var newbutton = winpanel.get_node("ScrollContainer/VBoxContainer/Button").duplicate()
+		winpanel.get_node("ScrollContainer/VBoxContainer").add_child(newbutton)
+		newbutton.visible = true
+		newbutton.get_node("capture").connect("pressed",self,'captureslave', [person])
+		if globals.state.backpack.stackables.get('rope', 0) < variables.consumerope:
+			newbutton.get_node('capture').set_disabled(true)
+		newbutton.get_node("Label").set_text(i.name + ' ' + person.sex+ ' ' + person.race)
+		if i.name == 'Captured':
+			newbutton.get_node("Label").set('custom_colors/font_color', Color(0.25,0.3,0.75))
+		else:
+			newbutton.get_node("Label").set('custom_colors/font_color', Color(0.8,0.2,0.2))
+		newbutton.connect("pressed", self, 'defeatedselected', [person])
+		newbutton.connect("mouse_entered", globals, 'slavetooltip', [person])
+		newbutton.connect("mouse_exited", globals, 'slavetooltiphide')
+		newbutton.get_node("choice").set_meta('person', person)
+		newbutton.get_node("mindread").connect("pressed",self,'mindreadslave', [person])
+		if globals.resources.mana < globals.spells.spellcost(globals.spelldict.mindread) || !globals.spelldict.mindread.learned:
+			newbutton.get_node('mindread').set_disabled(true)
+		newbutton.get_node("choice").add_to_group('winoption')
+		newbutton.get_node("choice").select(i.select)
+		newbutton.get_node("choice").connect("item_selected",self, 'defeatedchoice', [person, newbutton.get_node("choice")])
+
+func defeatedchoice(ID, person, node):
+	for i in defeated:
+		if i.unit == person:
+			i.select = ID
+			return
 
 func captureeffect(person):
 	
@@ -475,6 +523,27 @@ func captureeffect(person):
 	effect.duration = round((4 + (person.conf+person.cour)/20) * dict[person.origins])
 	person.add_effect(effect)
 	globals.state.capturedgroup.append(person)
+
+func captureslave(person):
+	var location
+	if variables.consumerope > 0:
+		globals.state.backpack.stackables.rope -= variables.consumerope
+	for i in person.gear:
+		i = null
+	captureeffect(person)
+	for i in defeated:
+		if i.unit == person:
+			if i.name == 'Captured' || i.faction in ['stranger','elf']:
+				for place in ['wimborn','frostford','gorn','amberguard']:
+					if currentzone.tags.has(place):
+						location = place
+				if location != null:
+					globals.state.reputation[location] -= 1
+			defeated.erase(i)
+			break
+	get_tree().get_current_scene().infotext("New captive added to your group",'green')
+	buildcapturelist()
+	builditemlists()
 
 func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 	var text = ''
@@ -495,18 +564,18 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 		location = 'amberguard'
 	else:
 		location = 'wimborn'
-	for i in range(0, defeated.units.size()):
+	for i in defeated:
 		###---Added by Expansion---### NPCs Expanded
 		var reputation = 0
 		var status = ""
 		###---End Expansion---###
-		if defeated.faction[i] in ['stranger','elf'] && defeated.names[i] != "Captured":
+		if i.faction in ['stranger','elf'] && i.name != "Captured":
 			globals.state.reputation[location] -= 1
-		if defeated.select[i] == 0:
-			if defeated.names[i] != 'Captured':
+		if i.select == 0:
+			if i.name != 'Captured':
 				###---Added by Expansion---### NPCs Expanded and Ank BugFix v4
-				text += defeated.units[i].dictionary("You have left the $race $child alone.\n")
-				var baddie = defeated.units[i]
+				text += i.unit.dictionary("You have left the $race $child alone.\n")
+				var baddie = i.unit
 				baddie.npcexpanded.timesreleased += 1
 				baddie.npcexpanded.lastevent = 'fought'
 				var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(globals.expansion.enemyreencountermodifier * rand_range(-1,1))
@@ -520,9 +589,9 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 				globals.state.offscreennpcs.append([baddie.id, currentzone.code, reencounterchance, 'defeated', reputation, status])
 				###---End Expansion---###
 			else:
-				text += defeated.units[i].dictionary("You have released the $race $child. $His life is $his own.\n")
+				text += i.unit.dictionary("You have released the $race $child. $His life is $his own.\n")
 				###---Added by Expansion---### Category: Better NPCs
-				var baddie = defeated.units[i]
+				var baddie = i.unit
 				baddie.npcexpanded.timesreleased += 1
 				baddie.npcexpanded.lastevent = 'rescued'
 				var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(globals.expansion.enemyreencountermodifier * rand_range(-1,1))
@@ -538,29 +607,29 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 				globals.state.reputation[location] += rand_range(1,2)
 				if randf() < 0.25 + globals.state.reputation[location]/20 && reward == false:
 					reward = true
-					rewardslave = defeated.units[i]
-		elif defeated.select[i] == 1:
+					rewardslave = i.unit
+		elif i.select == 1:
 			###---Added by Expansion---### Brutal Content && No Bandit Rep Loss
-			if defeated.units[i].npcexpanded.citizen == true:
-				if !defeated.faction[i] in ['bandit','monster']:
+			if i.unit.npcexpanded.citizen == true:
+				if !i.faction in ['bandit','monster']:
 					globals.state.reputation[location] -= rand_range(0,1)
 			###---End Expansion---###
 			orgy = true
-			orgyarray.append(defeated.units[i])
-		elif defeated.select[i] == 2:
+			orgyarray.append(i.unit)
+		elif i.select == 2:
 			killed = true
 			###---Added by Expansion---### Brutal Content && No Bandit Rep Loss
 			if globals.expansionsettings.brutalcontent == true:
-				text += defeated.units[i].dictionary("You walk towards the $race $child, $name, with a grimace on your face. " + globals.expansion.nameExecution())
-			if defeated.units[i].npcexpanded.citizen == true:
-				if !defeated.faction[i] in ['monster','bandit']:
+				text += i.unit.dictionary("You walk towards the $race $child, $name, with a grimace on your face. " + globals.expansion.nameExecution())
+			if i.unit.npcexpanded.citizen == true:
+				if !i.faction in ['monster','bandit']:
 					globals.state.reputation[location] -= 3
-				elif defeated.faction[i] == 'bandit':
+				elif i.faction == 'bandit':
 					globals.state.reputation[location] -= 1
-				if defeated.faction[i] == 'elf':
+				if i.faction == 'elf':
 					globals.state.reputation.amberguard -= 3
 			###---End Expansion---###
-			text += "\n[color=red] " +defeated.names[i] + " has been killed.[/color] \n\n"
+			text += "\n[color=red] " + i.name + " has been killed.[/color] \n\n"
 	if killed == true:
 		text += "[color=red]Your execution strikes fear into your group and captives.\n [/color]"
 		for i in globals.state.capturedgroup:

@@ -55,6 +55,14 @@ var use_nickname_plus_first_name = false
 #Show Once Per Day Conversations Available Notifications in Inspect
 var show_onceperday_notification = true
 
+#Automated choice for captives 0 = leave, 1 = rape, 2 = kill
+var capturedSelect = 2
+var rescuedSelect = 0
+var foundSelect = 0
+
+#Chance enemies will be captured instead of killed when defeated
+var captureChance = 100
+
 #---Vices (Formerly Flaws)
 #Vices Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations when enabled.)
 #Turning this off disables the entire Vice system in regards to Luxury Penalties or Bonuses
