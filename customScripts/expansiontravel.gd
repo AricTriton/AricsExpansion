@@ -192,7 +192,7 @@ func getzonetraveltext(zone,progress):
 	elif zone.code == 'mountaincave':
 		array.append_array(["You pass a pile of cracked bare bones.  The stench of ammonia is overwhelming.  An ooze has fed here recently.","Totems appear around a corner.  This must be goblin territory.","The walls are slick with condensation as the temperature drops inside the caves.","You think you hear voices and order the party to halt in silence, but hear only dripping and your own breathing."])
 		var canread = false
-		for i in party:
+		for i in teammates:
 			if i.race in ['Elf','Dark Elf','Tribal Elf']:
 				canread = true
 		if canread:

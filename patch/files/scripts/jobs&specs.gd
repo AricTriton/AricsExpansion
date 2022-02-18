@@ -826,6 +826,8 @@ func nurse(person):
 	var dict = {text = text}
 	return dict
 
+var foodCount = 20
+
 func cooking(person):
 	var text = ''
 	var gold = 0
@@ -844,16 +846,10 @@ func cooking(person):
 		food += bonusfood
 	###---End Expansion---###
 	var maxFood = min(globals.state.foodbuy,globals.resources.foodcaparray[globals.state.mansionupgrades.foodcapacity])
-	var foodDiff = int(maxFood - globals.resources.food - food)
-	var toBuy = int(gold + globals.resources.gold)
-	var foodPrice = globals.itemdict.food.cost
-	var foodCount = 20
+	var foodDiff = int(maxFood - globals.resources.food - food) / foodCount
 	if foodDiff > 0:
-		foodDiff -= foodDiff % foodCount
-		foodDiff /= foodCount
-		toBuy -= toBuy % foodPrice
-		toBuy /= foodPrice
-		toBuy = min(foodDiff,toBuy)
+		var foodPrice = globals.itemdict.food.cost
+		var toBuy = min(foodDiff, int(gold + globals.resources.gold) / foodPrice)
 		if toBuy > 0:
 			text += "$He purchased [color=aqua]" + str(toBuy * foodCount) + "[/color] food, costing [color=yellow]" + str(toBuy * foodPrice) + "[/color] gold.\n"
 			gold -= toBuy * foodPrice
@@ -1126,6 +1122,8 @@ func slavecatcher(person):
 	return dict
 
 ###---Added by Expansion---### Ank BugFix v4a
+var manaPrice = 5
+
 func storewimborn(person):
 	var text = "$name worked at the local market. \n"
 	var bonus = 1
@@ -1185,12 +1183,8 @@ func storewimborn(person):
 		supplySold = 0
 
 	var manaDiff = globals.state.manastock - globals.resources.mana
-	var toBuy = int(gold + globals.resources.gold)
-	var manaPrice = 5
 	if globals.state.manabuy && manaDiff > 0:
-		toBuy -= toBuy % manaPrice
-		toBuy /= manaPrice
-		toBuy = min(manaDiff,toBuy)
+		var toBuy = min(manaDiff, int(gold + globals.resources.gold) / manaPrice)
 		if gold > 0:
 			text += "Before buying mana $he would've returned with [color=yellow]" + str(gold) + "[/color] gold.\n"
 		if toBuy > 0:

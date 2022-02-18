@@ -1,7 +1,7 @@
 
 func buyattributepoint():
 	#ralphA - added "if globals.useRalphsTweaks:" section and adjusted tabs for original code 
-	if globals.useRalphsTweaks: #ralphA - closes attribute point to upgrade point conversion unless npcs are Loyalty 50 (no using recent additions for quick upgrade points)
+	if globals.useRalphsTweaks && globals.ralphs_tweaks_partial.restrict_convert_to_upgrade_point: #ralphA - closes attribute point to upgrade point conversion unless npcs are Loyalty 50 (no using recent additions for quick upgrade points)
 		if person.loyal >=50 && person.skillpoints >= variables.attributepointsperupgradepoint:
 			person.skillpoints -= variables.attributepointsperupgradepoint
 			globals.resources.upgradepoints += 1
@@ -285,7 +285,7 @@ func buildmetrics():
 		text += "\n[color=#d1b970][center]Current Pregnancy[/center][/color]\n"
 		if person.preg.baby_type == 'birth':
 			text += "Current Trimester: " + globals.expansion.getTrimester(person).capitalize() + "\n"
-		elif person.preg.duration >= floor(variables.pregduration/3):
+		elif person.preg.duration >= floor(globals.state.pregduration/3):
 			text += "Laid " + textForCountNoun(person.metrics.sex, " egg") +"\n"
 		else:
 			text += "Has not laid eggs yet\n"
