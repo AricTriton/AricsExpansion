@@ -63,6 +63,12 @@ var foundSelect = 0
 #Chance enemies will be captured instead of killed when defeated
 var captureChance = 100
 
+#Price modifiers
+var slavePriceMod = 1				#Multiply slave cost
+var upgradeCostMod = 1				#Multiply mansion upgrade gold cost
+var upgradePointsCostMod = 1		#Multiply mansion upgrade point cost
+var itemCostMod = 1					#Multiply item cost (excluding food)
+
 #---Vices (Formerly Flaws)
 #Vices Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations when enabled.)
 #Turning this off disables the entire Vice system in regards to Luxury Penalties or Bonuses

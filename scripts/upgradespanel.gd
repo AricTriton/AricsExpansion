@@ -143,12 +143,15 @@ func upgradeselected(upgrade):
 			cost = upgrade.cost
 		else:
 			cost = upgrade.cost[currentupgradelevel]
+		cost *= globals.expansionsettings.upgradeCostMod
 		purchaseupgrade.set_meta('cost', cost)
 		text += "\n\nPrice: [color=yellow]" + str(cost) + ' gold[/color]'
 		###---Added by Expansion---### Added Aqua Color to Upgrade Points
-		text += "\n\nRequired Upgrade Points: [color=aqua]" + str(upgrade.pointscost) + '[/color]'
+		var upgradePointCost = upgrade.pointscost * globals.expansionsettings.upgradePointsCostMod
+		purchaseupgrade.set_meta('pointsCost', upgradePointCost)
+		text += "\n\nRequired Upgrade Points: [color=aqua]" + str(upgradePointCost) + '[/color]'
 		###---End Expansion---###
-		if globals.resources.gold < cost || globals.resources.upgradepoints < upgrade.pointscost:
+		if globals.resources.gold < cost || globals.resources.upgradepoints < upgradePointCost:
 			canpurchase = false
 	get_node("upgradepanel/RichTextLabel").set_bbcode(text)
 	
@@ -165,9 +168,8 @@ func _on_cancelupgrade_pressed():
 func purchasconfirm():
 	var upgrade = purchaseupgrade.get_meta("upgrade")
 	var currentupgradelevel = globals.state.mansionupgrades[upgrade.code]
-	var cost = purchaseupgrade.get_meta("cost")
-	globals.resources.gold -= cost
-	globals.resources.upgradepoints -= upgrade.pointscost
+	globals.resources.gold -= purchaseupgrade.get_meta("cost")
+	globals.resources.upgradepoints -= purchaseupgrade.get_meta("pointsCost")
 	globals.state.mansionupgrades[upgrade.code] += 1
 	if upgrade.code == 'mansionlab':
 		globals.main.get_node("Navigation/laboratory").set_disabled(false)
