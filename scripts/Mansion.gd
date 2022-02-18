@@ -1626,7 +1626,6 @@ func _on_manastock_value_changed(value):
 func _on_manabuy_pressed():
 	globals.state.manabuy = get_node("mansionsettings/Panel/manastock/manabuy").is_pressed()
 
-
 #---Keeping to have the "X is following you" for pet groups
 func _on_mansion_pressed():
 	var text = ''
@@ -3732,8 +3731,35 @@ func _on_defeateddescript_meta_clicked( meta ):
 	var person = get_node("explorationnode/winningpanel/defeateddescript").get_meta('slave')
 	showracedescript(person)
 
-#---Lab Scripts for Sizing Below
+func showChoosePerson(arrayPersons, calledfunction = 'popup', targetnode = self):
+	nodetocall = targetnode
+	functiontocall = calledfunction
+	for i in $chooseslavepanel/ScrollContainer/chooseslavelist.get_children():
+		if i.name != 'Button':
+			i.hide()
+			i.free()
+	for person in arrayPersons:
+		var button = $chooseslavepanel/ScrollContainer/chooseslavelist/Button.duplicate()
+		button.show()
+		button.get_node('Label').text = person.name_long()
+		button.connect('mouse_entered', globals, "slavetooltip", [person])
+		button.connect('mouse_exited', globals, "slavetooltiphide")
+		#button.get_node("slaveinfo").set_bbcode(person.name_long()+', '+person.race+ ', occupation - ' + person.work + ", grade - " + person.origins.capitalize())
+		button.connect("pressed", self, "slaveselected", [button])
+		button.connect("pressed", self, 'hideslaveselection')
+		button.set_meta("slave", person)
+		button.get_node("portrait").set_texture(globals.loadimage(person.imageportait))
+		###---Added by Expansion---### Jail Expanded
+		button.get_node("jailportrait").visible = (person.sleep == 'jail')
+		###---End Expansion---###
+		$chooseslavepanel/ScrollContainer/chooseslavelist/.add_child(button)
+	if arrayPersons.empty():
+		$chooseslavepanel/Label.text = "No characters fit the condition"
+	else:
+		$chooseslavepanel/Label.text = "Select Character"
+	get_node("chooseslavepanel").show()
 
+#---Lab Scripts for Sizing Below
 func seteyecolor(person):
 	var assist
 	for i in globals.slaves:

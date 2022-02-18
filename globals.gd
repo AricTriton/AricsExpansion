@@ -1032,13 +1032,19 @@ func slavetooltip(person):
 	node.get_node("grade").visible = !globals.player == person
 	node.get_node("text").bbcode_text = text
 	node.get_node("sex").texture = globals.sexicon[person.sex]
-	###---Added by Expansion---### Movement Icons
+	###---Added by Expansion---###
+	#---Movement Icons
 	node.get_node("movement").set_texture(movementimages[str(expansion.getMovementIcon(person))])
 	node.get_node("movement").visible = true
 	if person.preg.duration > 0 && person.knowledge.has('currentpregnancy'):
 		node.get_node("pregnancy").visible = true
 	else:
 		node.get_node("pregnancy").visible = false
+	#---Jail Icons
+	if person.sleep == 'jail':
+		node.get_node("jailportrait").visible = true
+	else:
+		node.get_node("jailportrait").visible = false
 	###---End Expansion---###
 	
 	text = 'Traits: '

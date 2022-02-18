@@ -52,6 +52,8 @@ func slavetabopen():
 			else:
 				$stats/basics/bodypanel/fullbody.set_texture(globals.spritedict[nakedspritesdict[person.unique].clothcons])
 		$stats/basics/bodypanel.visible = ($stats/basics/bodypanel/fullbody.get_texture() != null)
+		#---Jail Icons
+		$stats/basics/fullbodyjail.visible = (person.sleep == 'jail')
 	###---End Expansion---###
 	else:
 		$stats/basics/bodypanel.visible = false
@@ -665,11 +667,18 @@ func updatestats():
 	text = "Health: " + str(person.stats.health_cur) + "/" + str(person.stats.health_max) + "\nEnergy: " + str(person.stats.energy_cur) + "/" + str(person.stats.energy_max) + "\nExperience: " + str(person.xp) 
 	get_node("stats/statspanel/hptooltip").set_tooltip(text)
 	get_node("stats/statspanel/grade").set_texture(gradeimages[person.origins])
+	###---Added by Expansion---### Jail Images
 	if person.imageportait != null && globals.loadimage(person.imageportait):
 		$stats/statspanel/TextureRect/portrait.set_texture(globals.loadimage(person.imageportait))
 	else:
 		person.imageportait = null
 		$stats/statspanel/TextureRect/portrait.set_texture(null)
+	#---Jail Icons
+	if person.sleep == 'jail':
+		get_node("stats/statspanel/jailportrait").visible = true
+	else:
+		get_node("stats/statspanel/jailportrait").visible = false
+	###---End Expansion---###
 	$stats/statspanel/spec.set_texture(specimages[str(person.spec)])
 	if person.xp >= 100:
 		get_node("stats/statspanel/xp").tint_progress = Color(2.167,1.176,1.167,1)
