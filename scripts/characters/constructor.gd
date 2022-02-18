@@ -323,7 +323,7 @@ func newbaby(mother,father):
 			if mother.race == father.race:
 				person[i] = mother[i] if rand_range(0,10) < 5 else father[i]
 			elif i in racebound_body_array: #&& !globals.races[person.race].i.empty(): #ralphD - not working
-				print("Ralph's found "+str(person.name)+" has racebound feature: "+str(i))
+				#print("Ralph's found "+str(person.name)+" has racebound feature: "+str(i))
 				#print("Ralph's found racebound feature: "+str(i)+".  Race version is: "+str(globals.races[person.race][i])+"    Mother's: "+str(mother[i])+"  Father's: "+str(father[i]))
 				#print("Ralph TTTEEEST:  globals.races[person.race][i]: "+str(globals.races[person.race][i]))
 				if person.race == mother.race:
