@@ -468,7 +468,7 @@ func cleartraits():
 		trait_remove(traits.back())
 	for i in ['str_base','agi_base', 'maf_base', 'end_base']:
 		stats[i] = 0
-	if globals.useRalphsTweaks && globals.ralphs_tweaks_partial.clear_player_racial_bonus && self == globals.player:
+	if globals.useRalphsTweaks && globals.expansionsettings.ralphs_tweaks_partial.clear_player_racial_bonus && self == globals.player:
 		for i in ['str_mod','agi_mod','maf_mod','end_mod']:
 			stats[i] = 0
 	skillpoints = 2

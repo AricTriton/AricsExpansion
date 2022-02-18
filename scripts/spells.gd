@@ -366,7 +366,7 @@ var dictChangeParts = {
 }
 
 func invigorateeffect():
-	if globals.useRalphsTweaks && globals.ralphs_tweaks_partial.tweak_invigorate:
+	if globals.useRalphsTweaks && globals.expansionsettings.ralphs_tweaks_partial.tweak_invigorate:
 		return invigorateeffect_Ralphs()
 	var text = ''
 	var spell = globals.spelldict.invigorate
