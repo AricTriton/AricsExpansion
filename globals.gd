@@ -1041,10 +1041,7 @@ func slavetooltip(person):
 	else:
 		node.get_node("pregnancy").visible = false
 	#---Jail Icons
-	if person.sleep == 'jail':
-		node.get_node("jailportrait").visible = true
-	else:
-		node.get_node("jailportrait").visible = false
+	node.get_node("jailportrait").visible = (person.sleep == 'jail')
 	###---End Expansion---###
 	
 	text = 'Traits: '

@@ -8884,8 +8884,8 @@ theme = ExtResource( 3 )
 bbcode_enabled = true
 
 [node name="birthpanel" type="Panel" parent="." groups=[
-"blockmaininput",
 "blocknextdayevents",
+"blockmaininput",
 ]]
 visible = false
 anchor_left = 1.0
@@ -9809,8 +9809,8 @@ custom_fonts/font = ExtResource( 45 )
 text = "Confirm"
 
 [node name="dialogue" type="Control" parent="." groups=[
-"blockmaininput",
 "blocknextdayevents",
+"blockmaininput",
 ]]
 visible = false
 anchor_right = 1.0
@@ -10009,8 +10009,8 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 
 [node name="scene" type="Control" parent="." groups=[
-"blockmaininput",
 "blocknextdayevents",
+"blockmaininput",
 ]]
 visible = false
 anchor_right = 1.0
@@ -11902,14 +11902,12 @@ size_flags_vertical = 2
 scroll_horizontal_enabled = false
 
 [node name="chooseslavelist" type="VBoxContainer" parent="chooseslavepanel/ScrollContainer"]
-visible = false
-margin_right = 350.0
-margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 43 )
 
 [node name="Button" type="TextureButton" parent="chooseslavepanel/ScrollContainer/chooseslavelist"]
+visible = false
 margin_right = 350.0
 margin_bottom = 65.0
 rect_min_size = Vector2( 350, 65 )
@@ -12210,8 +12208,8 @@ expand = true
 stretch_mode = 6
 
 [node name="screenchange" type="TextureRect" parent="." groups=[
-"blockmaininput",
 "blockoutsideinput",
+"blockmaininput",
 ]]
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
