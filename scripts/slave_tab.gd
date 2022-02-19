@@ -52,11 +52,13 @@ func slavetabopen():
 			else:
 				$stats/basics/bodypanel/fullbody.set_texture(globals.spritedict[nakedspritesdict[person.unique].clothcons])
 		$stats/basics/bodypanel.visible = ($stats/basics/bodypanel/fullbody.get_texture() != null)
-		#---Jail Icons
+		#---Jail Bars
 		$stats/basics/fullbodyjail.visible = (person.sleep == 'jail')
-	###---End Expansion---###
 	else:
 		$stats/basics/bodypanel.visible = false
+		#---Jail Bars
+		$stats/basics/fullbodyjail.visible = false
+	###---End Expansion---###
 	for i in $stats/basics/traits/traitlist.get_children() + $stats/basics/sextraits/traitlist.get_children() :
 		if i.get_name() != 'Label':
 			i.visible = false

@@ -89,7 +89,7 @@ var demeanorarray = ['meek','shy','reserved','open','excitable']
 #Flaws
 var vicearray = ['lust','envy','pride','wrath','greed','sloth','gluttony']
 var vicedict = {
-	lust = "\n\n[color=lime]Vice Discovered![/color]\n$His greatest [color=aqua]vice[/color] is [color=red]Lust[/color]. $His sexuality is far higher than that of the average person and $he enjoys sex more than almost anything else. \n[color=#d1b970]Job Bonus:[/color] $He will be satisfied by [color=aqua]Prostitution[/color], [color=aqua]Escort[/color], and [color=aqua]Fucktoy[/color] jobs. $He will not experience any [color=red]Vice Luxury Penalties[/color] while in those positions. \n[color=#d1b970]Consent Bonus:[/color] $He is more likely to give [color=aqua]Sexual Consent[/color]. \n[color=green]Fucking Bonus:[/color] [color=green]+10 Luxury[/color] if $he was fucked today, whether from $his job or directly by $his master. Recieves [color=green]10 Percent[/color] of $his [color=aqua]Lewdness[/color] as bonus [color=aqua]Luxury[/color] daily. Every day $he isn't fucked reduces the total by [color=red]-3 Luxury[/color] to a maximum penalty of [color=aqua]-20 Luxury[/color] after [color=aqua]6 sexless days[/color]. ",
+	lust = "\n\n[color=lime]Vice Discovered![/color]\n$His greatest [color=aqua]vice[/color] is [color=red]Lust[/color]. $His sexuality is far higher than that of the average person and $he enjoys sex more than almost anything else. \n[color=#d1b970]Job Bonus:[/color] $He will be satisfied by [color=aqua]Prostitution[/color], [color=aqua]Escort[/color], and [color=aqua]Fucktoy[/color] jobs. $He will not experience any [color=red]Vice Luxury Penalties[/color] while in those positions. \n[color=#d1b970]Consent Bonus:[/color] $He is more likely to give [color=aqua]Sexual Consent[/color]. \n[color=green]Fucking Bonus:[/color] [color=green]+10 Luxury[/color] if $he was fucked today, whether from $his job or directly by $his master. Recieves [color=green]10 Percent[/color] of $his [color=aqua]Lewdness[/color] as bonus [color=aqua]Luxury[/color] daily. Every day $he isn't fucked reduces the total by [color=red]-3 Luxury[/color] to a maximum penalty of [color=aqua]-20 Luxury[/color] after [color=aqua]6 sexless days[/color].\n[color=#d1b970]Rule Penalty:[/color] Receive [color=red]-5 Luxury[/color] if not fucked that day and ordered not to [color=aqua]masturbate[/color]. ",
 	pride = "\n\n[color=lime]Vice Discovered![/color]\n$His greatest [color=aqua]vice[/color] is [color=red]Pride[/color]. $He is incredibly focused on $his own appearance and will feel disheartened if not allowed to maintain $his standards of presentability.\n[color=#d1b970]Job Bonus:[/color] $He will be satisfied by [color=aqua]Headgirl[/color], [color=aqua]Farm Manager[/color], and [color=aqua]Jailor[/color] jobs. $He will not experience any [color=red]Vice Luxury Penalties[/color] while in those positions. $He will additionally gain [color=green]+10 Luxury[/color] while in one of those positions.\n[color=#d1b970]Rule Bonus:[/color] Gain [color=green]+5 Luxury[/color] if $he is allowed [color=aqua]Cosmetics[/color] (using [color=red]1 Additional Supply[/color]) or a [color=aqua]Personal Bath[/color]. $He will lose [color=red]-10 Luxury[/color] if they are not allowed and not in a [color=aqua]satisfying[/color] job. ",
 	greed = "\n\n[color=lime]Vice Discovered![/color]\n$His greatest [color=aqua]vice[/color] is [color=red]Greed[/color]. $He is exceptionally materialistic and enjoys having the freedom to spend $his own money.\n[color=#d1b970]Job Bonus:[/color] $He will be satisfied by [color=aqua]Merchant[/color] and [color=aqua]Milk Merchant[/color] jobs. $He will not experience any [color=red]Vice Luxury Penalties[/color] while in those positions. $He will additionally gain [color=green]+10 Luxury[/color] while in one of those positions.\n[color=#d1b970]Rule Bonus:[/color] $He will gain [color=green]+10 Luxury[/color] (using [color=red]5 additional Gold[/color]) while allowed [color=aqua]Pocket Money[/color]. Otherwise, $he will lose [color=red]-10 Luxury[/color] if $he is not in a [color=aqua]satisfying[/color] job. ",
 	sloth = "\n\n[color=lime]Vice Discovered![/color]\n$His greatest [color=aqua]vice[/color] is [color=red]Sloth[/color]. $He enjoys rest, relaxation, and is very sensitive to stress.\n[color=#d1b970]Job Bonus:[/color] $He will be satisfied by [color=aqua]Rest[/color] and [color=aqua]Housepet[/color] jobs. $He will not experience any [color=red]Vice Luxury Penalties[/color] while in those positions. $He will additionally gain [color=green]+5 Luxury[/color] while in one of those positions.\n[color=#d1b970]Rule Bonus:[/color] $He will gain [color=green]+5 Luxury[/color] while allowed a [color=aqua]Personal Bath[/color].\n[color=aqua]Relaxation Bonus:[/color] $He will gain [color=green]+10 Luxury[/color] if $he has full [color=aqua]Energy[/color] by the end of the day. $He will also gain  Otherwise, $he will lose [color=red]-5 Luxury[/color] if $he has below [color=aqua]25 Percent[/color] [color=aqua]Energy[/color] and/or over [color=red]over 75%[/color] of $his maximum [color=aqua]Stress[/color]. ",
@@ -1790,7 +1790,7 @@ func dailyPregnancy(person):
 			if globals.titssizearray.find(person.titssize) > 0:
 				text += "$name's "+nameStretched()+" "+str(getChest(person))+" are starting to shrink back after $his pregnancy. They are now only "
 				person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)-1]
-				text += "[color=aqua]" +str(person.titssize)+". "
+				text += "[color=aqua]" +str(person.titssize)+"[/color]. "
 				pregdict.titssizebonus -= 1
 		#Reset Pregnancy Stats
 		person.knowledge.erase('currentpregnancy')
@@ -3172,13 +3172,9 @@ var dictUniqueImagePaths = {
 	},
 	'Ivrana': {
 		IMAGE_DEFAULT: {
-			LOW_STRESS: 'res://files/aric_expansion_images/characters/ivranaclothed.png',
-			MID_STRESS: 'res://files/aric_expansion_images/characters/ivranaclothed.png',
 			HIGH_STRESS: 'res://files/aric_expansion_images/characters/ivranaclothed.png',
 		},
 		IMAGE_NAKED: {
-			LOW_STRESS: 'res://files/aric_expansion_images/characters/ivrananaked.png',
-			MID_STRESS: 'res://files/aric_expansion_images/characters/ivrananaked.png',
 			HIGH_STRESS: 'res://files/aric_expansion_images/characters/ivrananaked.png',
 		},
 	},

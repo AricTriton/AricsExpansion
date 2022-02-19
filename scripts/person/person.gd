@@ -874,6 +874,8 @@ func countluxury(actually_run = true):
 				vice_satisfied = true
 			if lastsexday == globals.resources.day:
 				vice_lust_mod += 10
+			elif self.rules.masturbation == false:
+				vice_lust_mod -= 5
 			vice_modifier = clamp(vice_lust_mod - ((globals.resources.day - self.lastsexday)*3), -20, 20)
 
 		#Sloth
@@ -1343,21 +1345,21 @@ func updateClothing():
 		amnude = true
 	
 	#Determine if they should Strip or Dress
+	var captured = 0
 	if amnude == true:
 		var redress = false
 		#Naked - Do They Need/Want to Dress? Can They?
+		for i in self.effects.values():
+			if i.code == 'captured':
+				captured = i.duration/2
 		if self.rules.nudity == false && !self.fetish.exhibitionism in ['enjoyable','mindblowing']:
 			text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. You hadn't ordered $him to stay "+ globals.expansion.nameNaked() +" so $he proceeded. "
 			redress = true
 		elif self.rules.nudity == true && globals.fetishopinion.find(self.fetish.exhibitionism) <= 2:
 			#Chance to Rebel
-			var captured = 0
-			for i in self.effects.values():
-				if i.code == 'captured':
-					captured = i.duration/2
 			var chance = round(self.metrics.ownership + ((self.loyal + self.obed + self.fear)/3) - (captured * 10))
 			var roll = round(rand_range(0,100))
-			if roll <= chance:
+			if roll <= chance && (globals.expansionsettings.only_rebels_can_refuse_strip_rule == true && captured > 0 || globals.expansionsettings.only_rebels_can_refuse_strip_rule == false):
 				text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. However, you ordered $him to stay "+ globals.expansion.nameNaked() +". $He followed your orders obediently. "
 				if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
 					self.dailyevents.append('rule_nudity_obeyed')
@@ -1407,7 +1409,7 @@ func updateClothing():
 				strip = true
 			else:
 				text += "\n[color=aqua]$name[/color] seemed to hesitate when considering stripping " + globals.expansion.nameNaked() + " as per your rules "+ globals.randomitemfromarray(['','as this is all new','as $he still feels awkward about it','as $he is unsure how $he feels about it']) +". "
-				var captured = 0
+				captured = 0
 				for i in self.effects.values():
 					if i.code == 'captured':
 						captured = i.duration/2
