@@ -1,4 +1,4 @@
-AricsExpansion Rebred v1.6b
+AricsExpansion Rebred v1.7
 
 <HOW TO CORRECTLY INSTALL THIS MOD>
 1) Extract Ankmairdor's BugFix v6b and this mod, AricsExpansion, into your %AppData%/Strive/mods folder
@@ -9,6 +9,9 @@ AricsExpansion Rebred v1.6b
 4) Start the Game; Activate AricsExpansion BENEATH BugFix v6b. Hit the Exit Game button.
 5) Start the Game; Make a New Game. Immediately SAVE (as soon as possible). LOAD that game you just Saved.
 6) You are ready to play! Have fun and enjoy the new features. If you have any Bugs, please use the Debug mod to give me the specific error so we can resolve it.
+
+If you are using RalphsTweaks or want to enable/disable any features, please go to %AppData%/Strive/mods/customScripts/expansionsettings.gd and enable/disable your features.
+Custom Settings in expansionsettings.gd currently don't preserve through mod updates (but we're working on a solution to that).
 
 <Load Order & Disclaimer>
 Load Order should look like:

@@ -307,9 +307,9 @@ func mindreadeffect():
 		if !person.knowledge.has('currentpregnancy') && !person.mind.secrets.has('currentpregnancy'):
 			text += "\n$He doesn't even know that $he is having this baby yet. "
 		if person.pregexp.wantedpregnancy == true:
-			text += "\n[center][color=green]She wants this baby, won't resist her bodily changes, and will not be as stressed by those changes.[/color][/center]\n\n"
+			text += "\n[center][color=green]She wants this baby, won't resist her bodily changes, and will not be as stressed by those changes.[/color][/center]"
 		else:
-			text += "\n[center][color=red]She doesn't want this baby and the pregnancy will be more stressful for her as she resists the changes her body goes through.[/color][/center]\n\n"
+			text += "\n[center][color=red]She doesn't want this baby and the pregnancy will be more stressful for her as she resists the changes her body goes through.[/color][/center]"
 	###---End Expansion---###
 	if person.lastsexday != 0:
 		text += "\n\n$name had sex last time " + str(globals.resources.day - person.lastsexday) + " day(s) ago"
@@ -328,6 +328,7 @@ func mindreadeffect():
 	if person.npcexpanded.timesreleased == 0 && person.npcexpanded.timesraped == 0 && person.npcexpanded.timesrescued == 0 && person.npcexpanded.timesfought == 0 && person.npcexpanded.timesmet == 0:
 		text += "\nYou have no prior history together."
 	#Vice Discovery
+	var envytarget = globals.expansion.getBestSlave()
 	if person.mind.vice_known == false:
 		if globals.expansionsettings.vices_discovery_has_to_present_first == false || globals.expansionsettings.vices_discovery_has_to_present_first == true && person.mind.vice_presented == true:
 			var vice_text = person.revealVice(person.mind.vice)
@@ -335,11 +336,15 @@ func mindreadeffect():
 			if person.mind.vice_presented == true:
 				vice_discoverychance += globals.expansionsettings.vices_discovery_presentation_bonus
 			if vice_text == "":
-				text += "\n\nYou sense $him resisting your mental probing. It seems there is an internal weakness or [color=aqua]Vice[/color] that $he is subconsciousnessly desparate to hide from you. You feel you may be able to break this resistance down if you continued to cast this on $him. You currently have a [color=aqua]" + str(vice_discoverychance) + " Percent[/color] to break this resistance."
+				text += "\n\nYou sense $him resisting your mental probing. It seems there is an internal weakness or [color=aqua]Vice[/color] that $he is subconsciousnessly desparate to hide from you. You feel you may be able to break this resistance down if you continued to cast this on $him.\n\nYou currently have a [color=aqua]" + str(vice_discoverychance) + " Percent[/color] to break this resistance."
 			else:
 				text += "\n" + vice_text
+				if person.checkVice('envy'):
+					text += "\nSlave Currently considered Favored: [color=aqua]"+ envytarget.dictionary("$name") +"[/color]"
 	else:
 		text += "\n\n[center][color=#d1b970]Vice[/color][/center]\n$His [color=aqua]Vice[/color] is [color=aqua]"+ str(person.mind.vice.capitalize()) +"[/color]"
+		if person.checkVice('envy'):
+			text += "\nCurrent Favored Slave (Target of Envy): [color=aqua]"+ envytarget.dictionary("$name") +"[/color]"
 	#Luxury
 	var luxurydict = person.countluxury(false)
 	var luxuryreq = str(person.calculateluxury())
@@ -361,7 +366,7 @@ var dictChangeParts = {
 }
 
 func invigorateeffect():
-	if globals.useRalphsTweaks:
+	if globals.useRalphsTweaks && globals.expansionsettings.ralphs_tweaks_partial.tweak_invigorate:
 		return invigorateeffect_Ralphs()
 	var text = ''
 	var spell = globals.spelldict.invigorate

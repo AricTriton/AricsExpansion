@@ -2,7 +2,7 @@
 
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
-var modversion = "1.6c"
+var modversion = "1.7"
 
 #---Aric's and Game's Base Values potentially changed by Ralph's
 var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within ApplyTweaks as well as the Hybrid system.
@@ -36,7 +36,7 @@ var ihavebloodygoodtaste = false
 var unwantedfetishes = []		#Copy/Paste any you don't want into the 'unwantedfetishes' array below: ['incest','lactation','drinkmilk','bemilked','milking','exhibitionism','drinkcum','wearcum','wearcumface','creampiemouth','creampiepussy','creampieass','pregnancy','oviposition','drinkpiss','wearpiss','pissing','otherspissing','bondage','dominance','submission','sadism','masochism']
 
 #------Player Specific Info
-#Base Bonus or Penalty for Attraction Checks for PCs
+#Base Bonus or Penalty for Attraction Checks for MCs. Makes others like your MC more.
 var playerattractionmodifier = 20
 
 #Set to True for the Player to follow Slave's Clothing Dress/Redress System
@@ -54,6 +54,9 @@ var use_nickname_plus_first_name = false
 
 #Show Once Per Day Conversations Available Notifications in Inspect
 var show_onceperday_notification = true
+
+#Do they have to be Rebellious to refuse stripping?
+var only_rebels_can_refuse_strip_rule = true
 
 #---Vices (Formerly Flaws)
 #Vices Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations when enabled.)
@@ -292,6 +295,9 @@ var ralphs_tweaks_partial = {
 	reduce_slave_price_bonus = true,
 	randomize_travel_awareness = true,
 	increase_food_cost = true,
+	clear_player_racial_bonus = true,
+	tweak_invigorate = true,
+	restrict_convert_to_upgrade_point = true,
 }
 
 """

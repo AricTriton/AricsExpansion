@@ -1,7 +1,7 @@
 
 func buyattributepoint():
 	#ralphA - added "if globals.useRalphsTweaks:" section and adjusted tabs for original code 
-	if globals.useRalphsTweaks: #ralphA - closes attribute point to upgrade point conversion unless npcs are Loyalty 50 (no using recent additions for quick upgrade points)
+	if globals.useRalphsTweaks && globals.expansionsettings.ralphs_tweaks_partial.restrict_convert_to_upgrade_point: #ralphA - closes attribute point to upgrade point conversion unless npcs are Loyalty 50 (no using recent additions for quick upgrade points)
 		if person.loyal >=50 && person.skillpoints >= variables.attributepointsperupgradepoint:
 			person.skillpoints -= variables.attributepointsperupgradepoint
 			globals.resources.upgradepoints += 1
@@ -52,9 +52,13 @@ func slavetabopen():
 			else:
 				$stats/basics/bodypanel/fullbody.set_texture(globals.spritedict[nakedspritesdict[person.unique].clothcons])
 		$stats/basics/bodypanel.visible = ($stats/basics/bodypanel/fullbody.get_texture() != null)
-	###---End Expansion---###
+		#---Jail Bars
+		$stats/basics/fullbodyjail.visible = (person.sleep == 'jail')
 	else:
 		$stats/basics/bodypanel.visible = false
+		#---Jail Bars
+		$stats/basics/fullbodyjail.visible = false
+	###---End Expansion---###
 	for i in $stats/basics/traits/traitlist.get_children() + $stats/basics/sextraits/traitlist.get_children() :
 		if i.get_name() != 'Label':
 			i.visible = false
@@ -665,11 +669,18 @@ func updatestats():
 	text = "Health: " + str(person.stats.health_cur) + "/" + str(person.stats.health_max) + "\nEnergy: " + str(person.stats.energy_cur) + "/" + str(person.stats.energy_max) + "\nExperience: " + str(person.xp) 
 	get_node("stats/statspanel/hptooltip").set_tooltip(text)
 	get_node("stats/statspanel/grade").set_texture(gradeimages[person.origins])
+	###---Added by Expansion---### Jail Images
 	if person.imageportait != null && globals.loadimage(person.imageportait):
 		$stats/statspanel/TextureRect/portrait.set_texture(globals.loadimage(person.imageportait))
 	else:
 		person.imageportait = null
 		$stats/statspanel/TextureRect/portrait.set_texture(null)
+	#---Jail Icons
+	if person.sleep == 'jail':
+		get_node("stats/statspanel/jailportrait").visible = true
+	else:
+		get_node("stats/statspanel/jailportrait").visible = false
+	###---End Expansion---###
 	$stats/statspanel/spec.set_texture(specimages[str(person.spec)])
 	if person.xp >= 100:
 		get_node("stats/statspanel/xp").tint_progress = Color(2.167,1.176,1.167,1)
