@@ -473,7 +473,7 @@ func _on_end_pressed():
 
 #	if globals.player.preg.duration >= 1:
 #		globals.player.preg.duration += 1
-#		if globals.player.preg.duration == floor(variables.pregduration/6):
+#		if globals.player.preg.duration == floor(globals.state.pregduration/6):
 #			text0.set_bbcode(text0.get_bbcode() + "[color=yellow]You feel morning sickness. It seems you are pregnant. [/color]\n")
 
 	###---Added by Expansion---### Update Player, Towns, and People
@@ -1008,7 +1008,7 @@ func _on_end_pressed():
 						text0.set_bbcode(text0.get_bbcode() + person.dictionary("$name's virginity was taken by a dog.\n\n"))
 						person.vagvirgin = false
 						person.asser -= 10
-						person.stats.obed_cur += 10
+						person.obed += 10
 					person.lust -= round(person.lust/2)
 					person.obed += 10
 					person.loyal += 5
@@ -1027,7 +1027,7 @@ func _on_end_pressed():
 						text0.set_bbcode(text0.get_bbcode() + person.dictionary("$name's virginity was taken by a dog.\n\n"))
 						person.vagvirgin = false
 						person.asser -= 10
-						person.stats.obed_cur += 10
+						person.obed += 10
 					else:
 						text0.set_bbcode(text0.get_bbcode() + person.dictionary("\n"))
 					person.lust -= round(person.lust/2)
@@ -1079,20 +1079,20 @@ func _on_end_pressed():
 						text0.set_bbcode(text0.get_bbcode()+person.dictionary('[color=#ff4949]Due to $his poor health condition, $name had a miscarriage and lost $his unborn child.[/color]\n'))
 					person.stress += rand_range(35,50)
 				
-#				if person.preg.duration > variables.pregduration/6:
+#				if person.preg.duration > globals.state.pregduration/6:
 #					person.lactation = true
 #					if headgirl != null:
-#						if person.preg.duration == floor(variables.pregduration/5):
+#						if person.preg.duration == floor(globals.state.pregduration/5):
 #							text0.set_bbcode(text0.get_bbcode() + headgirl.dictionary('[color=yellow]$name reports, that ') + person.dictionary('$name appears to be pregnant. [/color]\n'))
-#						elif person.preg.duration == floor(variables.pregduration/2.7):
+#						elif person.preg.duration == floor(globals.state.pregduration/2.7):
 #							text0.set_bbcode(text0.get_bbcode() + headgirl.dictionary('[color=yellow]$name reports, that ') + person.dictionary('$name will likely give birth soon. [/color]\n'))
 #				else:
-#					if person.preg.duration > variables.pregduration/3:
+#					if person.preg.duration > globals.state.pregduration/3:
 #						person.lactation = true
 #						if headgirl != null:
-#							if person.preg.duration == floor(variables.pregduration/2.5):
+#							if person.preg.duration == floor(globals.state.pregduration/2.5):
 #								text0.set_bbcode(text0.get_bbcode() + headgirl.dictionary('[color=yellow]$name reports, that ') + person.dictionary('$name appears to be pregnant. [/color]\n'))
-#							elif person.preg.duration == floor(variables.pregduration/1.3):
+#							elif person.preg.duration == floor(globals.state.pregduration/1.3):
 #								text0.set_bbcode(text0.get_bbcode() + headgirl.dictionary('[color=yellow]$name reports, that ') + person.dictionary('$name will likely give birth soon. [/color]\n'))
 #				if randf() < 0.4:
 #					person.stress += rand_range(15,20)
@@ -1505,7 +1505,7 @@ func _on_end_pressed():
 func nextdayevents():
 	get_node("FinishDayPanel").hide()
 	var player = globals.player
-	if player.preg.duration > variables.pregduration && player.preg.is_preg == true:
+	if player.preg.duration > globals.state.pregduration && player.preg.is_preg == true:
 		childbirth_loop(player)
 		checkforevents = true
 		#ralphD - trying to stop my MC from being eternally fertilized 8P
@@ -1515,8 +1515,8 @@ func nextdayevents():
 		return
 	for i in globals.slaves:
 		###---Added by Expansion---### Hybrid Support
-		if (i.preg.baby != null || !i.preg.unborn_baby.empty()) && (i.preg.duration > variables.pregduration || (i.race.find('Goblin') >= 0 && i.preg.duration > variables.pregduration/2)):
-		#if i.preg.baby != null && (i.preg.duration > variables.pregduration || (i.race.find('Goblin') >= 0 && i.preg.duration > variables.pregduration/2)):
+		if (i.preg.baby != null || !i.preg.unborn_baby.empty()) && (i.preg.duration > globals.state.pregduration || (i.race.find('Goblin') >= 0 && i.preg.duration > globals.state.pregduration/2)):
+		#if i.preg.baby != null && (i.preg.duration > globals.state.pregduration || (i.race.find('Goblin') >= 0 && i.preg.duration > globals.state.pregduration/2)):
 			if i.race.find('Goblin') >= 0:
 				i.away.duration = 2
 			else:
@@ -1635,7 +1635,6 @@ func _on_manastock_value_changed(value):
 
 func _on_manabuy_pressed():
 	globals.state.manabuy = get_node("mansionsettings/Panel/manastock/manabuy").is_pressed()
-
 
 #---Keeping to have the "X is following you" for pet groups
 func _on_mansion_pressed():
@@ -2050,8 +2049,8 @@ func childbirth_loop(person):
 		person.metrics.birth += 1
 		person.preg.is_preg = false
 		person.preg.duration = 0
-		person.preg.ovulation_stage = 1
-		person.preg.ovulation_day = -3
+		person.preg.ovulation_stage = 2
+		person.preg.ovulation_day = randi() % 3 - 5
 ###---End of Expansion---###
 
 ###---Added by Expansion---### Added by Deviate - Minor modifications to add multiple births
@@ -3823,8 +3822,35 @@ func _on_defeateddescript_meta_clicked( meta ):
 	var person = get_node("explorationnode/winningpanel/defeateddescript").get_meta('slave')
 	showracedescript(person)
 
-#---Lab Scripts for Sizing Below
+func showChoosePerson(arrayPersons, calledfunction = 'popup', targetnode = self):
+	nodetocall = targetnode
+	functiontocall = calledfunction
+	for i in $chooseslavepanel/ScrollContainer/chooseslavelist.get_children():
+		if i.name != 'Button':
+			i.hide()
+			i.free()
+	for person in arrayPersons:
+		var button = $chooseslavepanel/ScrollContainer/chooseslavelist/Button.duplicate()
+		button.show()
+		button.get_node('Label').text = person.name_long()
+		button.connect('mouse_entered', globals, "slavetooltip", [person])
+		button.connect('mouse_exited', globals, "slavetooltiphide")
+		#button.get_node("slaveinfo").set_bbcode(person.name_long()+', '+person.race+ ', occupation - ' + person.work + ", grade - " + person.origins.capitalize())
+		button.connect("pressed", self, "slaveselected", [button])
+		button.connect("pressed", self, 'hideslaveselection')
+		button.set_meta("slave", person)
+		button.get_node("portrait").set_texture(globals.loadimage(person.imageportait))
+		###---Added by Expansion---### Jail Expanded
+		button.get_node("jailportrait").visible = (person.sleep == 'jail')
+		###---End Expansion---###
+		$chooseslavepanel/ScrollContainer/chooseslavelist/.add_child(button)
+	if arrayPersons.empty():
+		$chooseslavepanel/Label.text = "No characters fit the condition"
+	else:
+		$chooseslavepanel/Label.text = "Select Character"
+	get_node("chooseslavepanel").show()
 
+#---Lab Scripts for Sizing Below
 func seteyecolor(person):
 	var assist
 	for i in globals.slaves:

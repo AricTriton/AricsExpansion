@@ -510,11 +510,11 @@ func setLactation(person):
 				elif hasstoragetrait == false && variable > .5:
 					variable = rand_range(0,1)
 					if variable > .8:
-						person.add_trait("Milk Glands 2")
+						person.add_trait("Milk Storage 2")
 					elif variable < .2:
 						person.add_trait("Small Milk Glands")
 					else:
-						person.add_trait("Milk Glands 1")
+						person.add_trait("Milk Storage 1")
 				traitchance -= 1
 
 #ralph4

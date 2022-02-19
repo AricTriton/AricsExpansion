@@ -1215,7 +1215,7 @@ var itemlist = {
 		name = "Armor Breaker",
 		icon = "res://files/images/items/6.png",
 		description = "A mighty weapon designed to deal with armored targets. ",
-		effect = [{type = 'incombat', effect = 'damage', effectvalue = 6, effectscale = "agi", descript = "+9 Damage, Agi Scaling"}, {type = 'incombat', effect = 'passive', effectvalue = 'armorbreaker', descript = "Bypass 8 Armor"}],
+		effect = [{type = 'incombat', effect = 'damage', effectvalue = 9, effectscale = "agi", descript = "+9 Damage, Agi Scaling"}, {type = 'passive', effect = 'armorbreaker', descript = "Bypass 8 Armor"}],
 		recipe = '',
 		reqs = [],
 		cost = 500,

@@ -470,7 +470,7 @@ func cleartraits():
 		trait_remove(traits.back())
 	for i in ['str_base','agi_base', 'maf_base', 'end_base']:
 		stats[i] = 0
-	if globals.useRalphsTweaks && self == globals.player:
+	if globals.useRalphsTweaks && globals.expansionsettings.ralphs_tweaks_partial.clear_player_racial_bonus && self == globals.player:
 		for i in ['str_mod','agi_mod','maf_mod','end_mod']:
 			stats[i] = 0
 	skillpoints = 2
@@ -908,14 +908,15 @@ func countluxury(actually_run = true):
 	if globals.expansionsettings.vices_luxury_effects == true && (self.mind.vice_known == true || roll <= globals.expansionsettings.vices_undiscovered_trigger_chance):
 		#Lust
 		if self.checkVice('lust'):
-			var vice_lust_mod = clamp(5 + round(self.lewdness * .1), 5, 15)
+			var vice_lust_mod = clamp(round(self.lewdness * .1), 1, 10)
 			if self.work in ['fucktoy','fucktoywimborn','escortwimborn','whorewimborn','ffprostitution']:
 				vice_satisfied = true
-				vice_lust_mod += 5
-			if lastsexday == globals.resources.day || vice_satisfied == true:
-				vice_modifier = clamp(vice_lust_mod - ((globals.resources.day - self.lastsexday)*2), 0, 20)
-			else:
-				vice_modifier = clamp(vice_lust_mod - ((globals.resources.day - self.lastsexday)*2), -20, 10)
+			if lastsexday == globals.resources.day:
+				vice_lust_mod += 10
+			elif self.rules.masturbation == false:
+				vice_lust_mod -= 5
+			vice_modifier = clamp(vice_lust_mod - ((globals.resources.day - self.lastsexday)*3), -20, 20)
+
 		#Sloth
 		elif self.checkVice('sloth'):
 			if self.work in ['rest','housepet']:
@@ -937,10 +938,11 @@ func countluxury(actually_run = true):
 		elif self.checkVice('wrath') && self.consentexp.party:
 			if self.metrics.win >= self.metrics.ownership || self.work in ['guardian','slavecatcher','trainer','trainee']:
 				vice_satisfied = true
+				vice_modifier += 5
 			if vice_satisfied == true:
-				vice_modifier = clamp(self.metrics.win - self.metrics.ownership, 0, 40)
+				vice_modifier += clamp(self.metrics.win - self.metrics.ownership, 0, 20)
 			else:
-				vice_modifier = clamp(self.metrics.win - self.metrics.ownership, -20, 20)
+				vice_modifier += clamp(self.metrics.win - self.metrics.ownership, -20, 20)
 		#Pride
 		if self.checkVice('pride'):
 			if self.work in ['headgirl','farmmanager','jailer']:
@@ -961,7 +963,7 @@ func countluxury(actually_run = true):
 			if self.work == 'cooking':
 				vice_satisfied = true
 				vice_modifier += 10
-			if self.rules.betterfood == false && globals.resources.food >= 8:
+			if self.rules.betterfood == true && globals.resources.food >= 3:
 				foodspent += 3
 				if actually_run == true:
 					globals.resources.food -= 3
@@ -1387,26 +1389,26 @@ func updateClothing():
 	var amnude = false
 	for part in ['chest','genitals','ass']:
 		if self.exposed[part] == true:
-			exposed_parts.append([part])
+			exposed_parts.append(part)
 	if exposed_parts.size() > 1:
 		amnude = true
 	
 	#Determine if they should Strip or Dress
+	var captured = 0
 	if amnude == true:
 		var redress = false
 		#Naked - Do They Need/Want to Dress? Can They?
+		for i in self.effects.values():
+			if i.code == 'captured':
+				captured = i.duration/2
 		if self.rules.nudity == false && !self.fetish.exhibitionism in ['enjoyable','mindblowing']:
 			text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. You hadn't ordered $him to stay "+ globals.expansion.nameNaked() +" so $he proceeded. "
 			redress = true
 		elif self.rules.nudity == true && globals.fetishopinion.find(self.fetish.exhibitionism) <= 2:
 			#Chance to Rebel
-			var captured = 0
-			for i in self.effects.values():
-				if i.code == 'captured':
-					captured = i.duration/2
 			var chance = round(self.metrics.ownership + ((self.loyal + self.obed + self.fear)/3) - (captured * 10))
 			var roll = round(rand_range(0,100))
-			if roll <= chance:
+			if roll <= chance && (globals.expansionsettings.only_rebels_can_refuse_strip_rule == true && captured > 0 || globals.expansionsettings.only_rebels_can_refuse_strip_rule == false):
 				text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. However, you ordered $him to stay "+ globals.expansion.nameNaked() +". $He followed your orders obediently. "
 				if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
 					self.dailyevents.append('rule_nudity_obeyed')
@@ -1456,7 +1458,7 @@ func updateClothing():
 				strip = true
 			else:
 				text += "\n[color=aqua]$name[/color] seemed to hesitate when considering stripping " + globals.expansion.nameNaked() + " as per your rules "+ globals.randomitemfromarray(['','as this is all new','as $he still feels awkward about it','as $he is unsure how $he feels about it']) +". "
-				var captured = 0
+				captured = 0
 				for i in self.effects.values():
 					if i.code == 'captured':
 						captured = i.duration/2

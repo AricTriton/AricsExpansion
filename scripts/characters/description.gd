@@ -102,19 +102,19 @@ func showVice():
 		return ""
 	match person.mind.vice:
 		'lust':
-			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is wrought with [color=red]Lust[/color] and hyperactive in $his sexuality.\n[color=green]Sexual Consent and Actions will be easier to initiate.[/color]\n[color=green]Luxury +5[/color] if [color=aqua]Fucked[/color] that day.\n[color=red]Every day they aren't Fucked, Luxury Requirement +3[/color]"
+			return "\n\n[color=#d1b970]Vice:[/color]\n$His greatest [color=aqua]vice[/color] is [color=red]Lust[/color]. $His sexuality is far higher than that of the average person and $he enjoys sex more than almost anything else. \n[color=#d1b970]Job Bonus:[/color] $He will be satisfied by [color=aqua]Prostitution[/color], [color=aqua]Escort[/color], and [color=aqua]Fucktoy[/color] jobs. $He will not experience any [color=red]Vice Luxury Penalties[/color] while in those positions. \n[color=#d1b970]Consent Bonus:[/color] $He is more likely to give [color=aqua]Sexual Consent[/color]. \n[color=green]Fucking Bonus:[/color] [color=green]+10 Luxury[/color] if $he was fucked today, whether from $his job or directly by $his master. Recieves [color=green]10 Percent[/color] of $his [color=aqua]Lewdness[/color] as bonus [color=aqua]Luxury[/color] daily. Every day $he isn't fucked reduces the total by [color=red]-3 Luxury[/color] to a maximum penalty of [color=red]-20 Luxury[/color] after [color=aqua]6 sexless days[/color].\n[color=#d1b970]Rule Penalty:[/color] Receive [color=red]-5 Luxury[/color] if not fucked that day and ordered not to [color=aqua]masturbate[/color]. "
 		'pride':
-			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is incredibly [color=red]Prideful[/color] and focused on $his own appearance.\n[If permitted [color=aqua]Cosmetics[/color], uses [color=red]+1 Supply[/color] for [color=green]+5 Luxury[/color] (if possible). If permitted a [color=aqua]Personal Bath[/color], [color=green]Luxury +2.[/color]\n[color=red]If not permitted [color=aqua]Cosmetics[/color], Luxury Requirement +5[/color]"
-		'wrath':
-			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is filled with [color=red]Wrath[/color], is plagued with a short temper, and feels unsettled if $he isn't able to fight.\n[color=green]More likely to [color=aqua]Consent[/color] to [color=aqua]Fight Alongside You[/color] with the chance increasing based on their [color=aqua]Courage[/color].[/color]\nIf [color=aqua]Consent to Fight[/color] has been given, their [color=aqua]Luxury[/color] will [color=green]increase[/color] (or possibly [color=red]decrease[/color]) by their [color=aqua]Days Owned[/color] minus their total [color=aqua]Combat Wins[/color]."
+			return "\n\n[color=#d1b970]Vice:[/color]\n$His greatest [color=aqua]vice[/color] is [color=red]Pride[/color]. $He is incredibly focused on $his own appearance and will feel disheartened if not allowed to maintain $his standards of presentability.\n[color=#d1b970]Job Bonus:[/color] $He will be satisfied by [color=aqua]Headgirl[/color], [color=aqua]Farm Manager[/color], and [color=aqua]Jailor[/color] jobs. $He will not experience any [color=red]Vice Luxury Penalties[/color] while in those positions. $He will additionally gain [color=green]+10 Luxury[/color] while in one of those positions.\n[color=#d1b970]Rule Bonus:[/color] Gain [color=green]+5 Luxury[/color] if $he is allowed [color=aqua]Cosmetics[/color] (using [color=red]1 Additional Supply[/color]) or a [color=aqua]Personal Bath[/color]. $He will lose [color=red]-10 Luxury[/color] if they are not allowed and not in a [color=aqua]satisfying[/color] job. "
 		'greed':
-			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is incredibly [color=red]Greedy[/color] and materialistic.\nIf permitted [color=aqua]Pocket Money[/color], uses [color=aqua]+5 Gold[/color] for [color=green]+5 Luxury[/color] (if possible).\n[color=red]If not permitted [color=aqua]Pocket Money[/color], Luxury Requirement +5[/color]"
+			return "\n\n[color=#d1b970]Vice:[/color]\n$His greatest [color=aqua]vice[/color] is [color=red]Greed[/color]. $He is exceptionally materialistic and enjoys having the freedom to spend $his own money.\n[color=#d1b970]Job Bonus:[/color] $He will be satisfied by [color=aqua]Merchant[/color] and [color=aqua]Milk Merchant[/color] jobs. $He will not experience any [color=red]Vice Luxury Penalties[/color] while in those positions. $He will additionally gain [color=green]+10 Luxury[/color] while in one of those positions.\n[color=#d1b970]Rule Bonus:[/color] $He will gain [color=green]+10 Luxury[/color] (using [color=red]5 additional Gold[/color]) while allowed [color=aqua]Pocket Money[/color]. Otherwise, $he will lose [color=red]-10 Luxury[/color] if $he is not in a [color=aqua]satisfying[/color] job. "
 		'sloth':
-			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is very lazy and a complete [color=red]Sloth[/color]. $He is happiest when allowed not to do anything at all.\nIf permitted a [color=aqua]Personal Bath[/color], [color=green]+2 Luxury[/color].\nIf ending the day with [color=aqua]full Energy[/color], [color=green]+10 Luxury[/color] . If ending the day with [color=aqua]25 percent or lower Stress[/color], [color=green]+5 Luxury[/color].\n[color=red]If [color=aqua]Energy[/color] is below half or [color=aqua]Stress[/color] is above half (calculated separately), Luxury Requirement is increased by 10 Percent of the Difference of Max to Current.[/color]"
+			return "\n\n[color=#d1b970]Vice:[/color]\n$His greatest [color=aqua]vice[/color] is [color=red]Sloth[/color]. $He enjoys rest, relaxation, and is very sensitive to stress.\n[color=#d1b970]Job Bonus:[/color] $He will be satisfied by [color=aqua]Rest[/color] and [color=aqua]Housepet[/color] jobs. $He will not experience any [color=red]Vice Luxury Penalties[/color] while in those positions. $He will additionally gain [color=green]+5 Luxury[/color] while in one of those positions.\n[color=#d1b970]Rule Bonus:[/color] $He will gain [color=green]+5 Luxury[/color] while allowed a [color=aqua]Personal Bath[/color].\n[color=aqua]Relaxation Bonus:[/color] $He will gain [color=green]+10 Luxury[/color] if $he has full [color=aqua]Energy[/color] by the end of the day. $He will also gain  Otherwise, $he will lose [color=red]-5 Luxury[/color] if $he has below [color=aqua]25 Percent[/color] [color=aqua]Energy[/color] and/or over [color=red]over 75%[/color] of $his maximum [color=aqua]Stress[/color]. "
 		'gluttony':
-			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is very [color=red]Gluttonous[/color] and takes $his greatest pleasure in food and drinks.\n[color=green]Food and Drink Interactions will always give the best result on Dates.[/color]\nIf permitted [color=aqua]Better Food[/color], uses [color=red]+3 Food[/color]  for [color=green]+5 Luxury[/color] (if possible)\n[color=red]If not permitted [color=aqua]Better Food[/color], Luxury Requirement +5[/color]"
+			return "\n\n[color=#d1b970]Vice:[/color]\n$His greatest [color=aqua]vice[/color] is [color=red]Gluttony[/color]. $His greatest pleasure is in good food and drink.\n[color=#d1b970]Job Bonus:[/color] $He will be satisfied by the [color=aqua]Cook[/color] job. $He will not experience any [color=red]Vice Luxury Penalties[/color] while in those positions. $He will additionally gain [color=green]+10 Luxury[/color] while in one of those positions.\n[color=#d1b970]Date Bonus:[/color] Food and Drink Interactions will always give the [color=green]best results[/color] on [color=aqua]Dates[/color].\n[color=#d1b970]Rule Bonus:[/color] $He will gain [color=green]+10 Luxury[/color] while allowed [color=aqua]Better Food[/color] (using [color=red]3 additional Food[/color]). Otherwise, $he will lose [color=red]-10 Luxury[/color] if $he is not in a [color=aqua]satisfying[/color] job. "
+		'wrath':
+			return "\n\n[color=#d1b970]Vice:[/color]\n$His greatest [color=aqua]vice[/color] is [color=red]Wrath[/color]. $He loves the passion of battle and the thrill of combat. However, $he is an oddity among other [color=aqua]Vices[/color] in that $he holds no expectations on you unless you have promised $him a good fight.\n[color=#d1b970]Consent Bonus:[/color] $He is more likely to give [color=aqua]Consent to Fight Alongside You[/color]. However, $he will expect to be granted a good fight regularly once $his consent has been given.\n[color=#d1b970]Job Bonus:[/color] $He will be satisfied by the [color=aqua]Guardian[/color], [color=aqua]Slave-Catcher[/color], [color=aqua]Trainer[/color], and [color=aqua]Trainee[/color] jobs. $He will not experience any [color=red]Vice Luxury Penalties[/color] while in those positions. $He will additionally gain [color=green]+5 Luxury[/color] while in one of those positions.\n[color=#d1b970]Combat Bonus:[/color] $He will gain or lose [color=aqua]Luxury[/color] equal to $his total [color=aqua]Wins[/color] minus the number of days $he has been [color=aqua]Owned[/color] by you to a maximum bonus or penalty of [color=aqua]20[/color]. "
 		'envy':
-			return "\n\n[color=#d1b970]Vice:[/color]\nYou have discovered that $he is incredibly [color=red]Envious[/color] of others.\nIf they are considered the [color=aqua]Best Slave[/color] (per the standard formula of Level+DaysOwned+Sex+Wins), [color=green]negates all Luxury Requirements[/color]. Otherwise, if they are of a higher [color=aqua]Grade[/color] than the [color=aqua]Best Slave[/color], [color=green]Luxury +5[/color].\n[color=red]If they are not the [color=aqua]Best Slave[/color], they compare their [color=aqua]Beds[/color], [color=aqua]Last Sex Days[/color], [color=aqua]Grade[/color], and [color=aqua]Stress Levels[/color] for a maximum of +20 Luxury Requirement.[/color]"
+			return "\n\n[color=#d1b970]Vice:[/color]\n$His greatest [color=aqua]vice[/color] is [color=red]Envy[/color]. $He cannot help but compare $himself and $his living conditions to whoever $he considers to be the current favorite slave of the mansion.\n[color=#d1b970]Favored Slave Bonus:[/color] If $he is considered the [color=aqua]favored slave[/color], $he will receive a flat [color=green]+20 Luxury[/color] and ignore all remaining [color=aqua]vice[/color] factors.\n[color=#d1b970]Job Bonus:[/color] $He will be satisfied by the [color=aqua]Headgirl[/color], [color=aqua]Farm Manager[/color], and [color=aqua]Jailer[/color] jobs. $He will not experience any [color=red]Vice Luxury Penalties[/color] while in those positions. $He will additionally gain [color=green]+5 Luxury[/color] while in one of those positions.\n[color=#d1b970]Favored Slave Comparison:[/color] $He will compare $himself with your favored slave on the following factors and gain [color=green]+5 Luxury[/color] if successful or [color=red]-5 Luxury[/color] if not. $He will see if the favored slave is sleeping in [color=aqua]Your Bed[/color] or a [color=aqua]Personal Room[/color] and be envious if $he is not. $He will be envious if $he has [color=aqua]consented[/color] to [color=aqua]sex with you[/color] and the favored slave slept with you more recently than $he has. $He will be envious if the favored slave has [color=aqua]50 Percent[/color] less stress than $he does. Finally, $he will be envious if the favored slave has a higher [color=aqua]Grade[/color] than $he does. $He will receive a maximum [color=aqua]Bonus[/color] or [color=aqua]Penalty[/color] of 20. "
 		'none':
 			return ""
 
@@ -152,11 +152,11 @@ func genitals():
 		if person.exposed.chest == true:
 			text += "\n" + getdescription("titssize") + gettitsextra()
 			if person.lactation == true:
-				text += "\n$His nipples are incredibly hard and occassionally sput streams of milk when $he moves or breathes heavily. [color=green]$He is obviously lactating.[/color]"
+				text += "\n$His nipples are incredibly hard and occassionally spout streams of milk when $he moves or breathes heavily. [color=green]$He is obviously lactating.[/color]"
 		elif person == globals.player:
 			text += "\n" + getdescription("titssize") + gettitsextra()
 			if person.lactation == true:
-				text += "\nYour nipples are incredibly hard and occassionally sput streams of milk when you move or breathe heavily. [color=green]You are obviously lactating.[/color]"
+				text += "\nYour nipples are incredibly hard and occassionally spout streams of milk when you move or breathe heavily. [color=green]You are obviously lactating.[/color]"
 		else:
 			text += '\n$He is wearing a [color=red]shirt[/color] at the moment, obscuring the details of $his ' + str(globals.expansion.getChest(person)) + ' from your ' + globals.randomitemfromarray(['eyes','gaze','inspection']) + '.'
 			if person.lactation == true:
@@ -180,8 +180,30 @@ func lowergenitals():
 				text += ' $He spreads $his legs open to show you $his tight, [color=green]virgin ' + globals.expansion.namePussy() + '[/color]. '
 			else:
 				text += ' $He spreads $his legs open to show you ' + getdescription('vagina')
+			# if person.lust >= 50:
+			# 	if person.lust >= 100:
+			# 		text+= "A large quantity of lubrication drips from their"+ globals.expansion.namePussy()+" and down their thighs. A small puddle has formed beneath them. " 
+			# 	elif person.lust >= 75:
+			# 		text+= "You notice that they are leaking juices. Some of it dribbles down their inner thighs. "
+			# 	else:
+			# 		text += "You notice a little wetness between $his folds. "
 			if person.cum.pussy > 0:
 				text += " As $his legs are spread open, you notice a little [color=aqua]" +globals.expansion.nameCum()+"[/color] slip out of $his [color=aqua]" + globals.expansion.namePussy() + "[/color]. "
+				if person.lust >= 50:
+					if person.lust >= 80:
+						text+= "[color=fuchsia]Excessive juices[/color] are mixed in with the [color=aqua]" +globals.expansion.nameCum()+"[/color]. " 
+					elif person.lust >= 65:
+						text+= "$His [color=fuchsia]liquid arousal[/color] has mixed with the [color=aqua]" +globals.expansion.nameCum()+"[/color] escaping from their [color=yellow]"+ globals.expansion.namePussy()+"[/color].  "
+					else:
+						text += "There is some [color=fuchsia]girlcum[/color] mixed in with the [color=aqua]" +globals.expansion.nameCum()+"[/color]. "
+			else:
+				if person.lust >= 50:
+					if person.lust >= 80:
+						text+= "A large quantity of [color=fuchsia]girlcum[/color] drips from $his [color=fuchsia] quivering "+ globals.expansion.namePussy()+" [/color]and down $his thighs. A small puddle has formed beneath them. " 
+					elif person.lust >= 65:
+						text+= "$His clit is [color=fuchsia]visibly swollen[/color]. You notice that $he is [color=fuchsia]leaking juices[/color]. Some of it dribbles down $his thighs. "
+					else:
+						text += "You notice a little [color=fuchsia]wetness[/color] between $his folds. "
 			if person.cum.pussy > vagcapacity:
 				text += "" + globals.expansion.vagOverload(person) + "\n"
 		if person.penis != 'none':
@@ -189,10 +211,19 @@ func lowergenitals():
 			var temp = person.penistype + '_' + person.penis
 			if newpenisdescription.has(temp):
 				text += " " + newpenisdescription[temp]
+				if person.lust >= 50:
+					if person.lust >= 80:
+						text+= " $His [color=yellow]" +globals.expansion.namePenis() + "[/color] is [color=fuchsia]rock hard and bulging[/color]. It pulses visibly. " 
+					elif person.lust >= 65:
+						text+= " $His [color=yellow]" +globals.expansion.namePenis() + "[/color] is [color=fuchsia]fully erect[/color]. "
+					else:
+						text+= " $His [color=yellow]" +globals.expansion.namePenis() + "[/color] [color=fuchsia]twitches and flexes[/color] from time to time."
 		if person.balls != 'none':
 			text += "\n[color=#d1b970]Balls:[/color]\n"
 			text += getdescription('balls')
 			text += "$He produces [color=aqua]" + str(person.pregexp.cumprod) + "oz[/color] of [color=aqua]" +globals.expansion.nameCum()+ "[/color] per ejaculation. "
+			if person.lust >= 80:
+				text+= "As you watch, $his [color=yellow]" +globals.expansion.nameBalls() + "[/color] seem to clench and a [color=fuchsia]small bulge[/color] travels up through $his [color=yellow]"+globals.expansion.namePenis()+"[/color]. A bit of [color=aqua]"+globals.expansion.nameCum()+"[/color] drips from the tip of $his [color=yellow]"+globals.expansion.namePenis()+"[/color] to the floor." 
 	elif person != globals.player:
 		text += ' $His crotch is [color=red]clothed[/color] and [color=red]covered[/color] at the moment, obscuring the details of $his ' + str(globals.expansion.getGenitals(person)) + ' from your ' + globals.randomitemfromarray(['eyes','gaze','inspection']) + '.'
 		if person.cum.pussy > vagcapacity:
@@ -216,9 +247,9 @@ func lowergenitals():
 		text += "\n[color=#d1b970]Asshole:[/color]\n"
 		if person.exposed.ass == true && person != globals.player:
 			if person.assvirgin == true:
-				text += 'When requested, $he turns around and bends over when requested to show off $his tight, [color=green]virgin ' + globals.expansion.nameAsshole() + '[/color]. '
+				text += 'When requested, $he turns around and bends over to show off $his tight, [color=green]virgin ' + globals.expansion.nameAsshole() + '[/color]. '
 			else:
-				text += 'When requested, $he turns around and bends over when requested to show off ' + getdescription('asshole')
+				text += 'When requested, $he turns around and bends over to show off ' + getdescription('asshole')
 			if person.cum.ass > 0:
 				text += " As $his legs are spread open, you see a little [color=aqua]" +globals.expansion.nameCum()+"[/color] slip out of $his [color=aqua]" + globals.expansion.nameAsshole() + "[/color]. "
 			if person.cum.ass > asscapacity:

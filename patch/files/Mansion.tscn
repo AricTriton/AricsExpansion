@@ -1,4 +1,4 @@
-[gd_scene load_steps=212 format=2]
+[gd_scene load_steps=214 format=2]
 
 [ext_resource path="res://files/scripts/Mansion.gd" type="Script" id=1]
 [ext_resource path="res://files/backgrounds/mansion.png" type="Texture" id=2]
@@ -82,62 +82,64 @@
 [ext_resource path="res://files/scripts/upgradespanel.gd" type="Script" id=80]
 [ext_resource path="res://files/scripts/slave_tab.gd" type="Script" id=81]
 [ext_resource path="res://files/scripts/statstab.gd" type="Script" id=82]
-[ext_resource path="res://files/buttons/mainscreen/40.png" type="Texture" id=83]
-[ext_resource path="res://files/buttons/mainscreen/49.png" type="Texture" id=84]
-[ext_resource path="res://files/buttons/mainscreen/50.png" type="Texture" id=85]
-[ext_resource path="res://files/buttons/mainscreen/51.png" type="Texture" id=86]
-[ext_resource path="res://files/buttons/mainscreen/52.png" type="Texture" id=87]
-[ext_resource path="res://files/buttons/img-backG-popup.png" type="Texture" id=88]
-[ext_resource path="res://files/buttons/textfield.png" type="Texture" id=89]
-[ext_resource path="res://files/buttons/textfieldinact.png" type="Texture" id=90]
-[ext_resource path="res://files/bigpanel.tres" type="StyleBox" id=91]
-[ext_resource path="res://files/buttons/inventory/1.png" type="Texture" id=92]
-[ext_resource path="res://files/outside.tscn" type="PackedScene" id=93]
-[ext_resource path="res://files/combat.tscn" type="PackedScene" id=94]
-[ext_resource path="res://files/scripts/characterglossary.gd" type="Script" id=95]
-[ext_resource path="res://files/buttons/speechpanel.png" type="Texture" id=96]
-[ext_resource path="res://files/buttons/book/control.png" type="Texture" id=97]
-[ext_resource path="res://files/interactionpanel.tscn" type="PackedScene" id=98]
-[ext_resource path="res://files/date.tscn" type="PackedScene" id=99]
-[ext_resource path="res://files/inventory.tscn" type="PackedScene" id=100]
-[ext_resource path="res://files/scripts/exploration.gd" type="Script" id=101]
-[ext_resource path="res://files/buttons/itemactive.png" type="Texture" id=102]
-[ext_resource path="res://files/buttons/noimage.png" type="Texture" id=103]
-[ext_resource path="res://files/buttons/inventory/enchant.png" type="Texture" id=104]
-[ext_resource path="res://files/buttons/explorebar2.png" type="Texture" id=105]
-[ext_resource path="res://files/buttons/explorebar.png" type="Texture" id=106]
-[ext_resource path="res://files/buttons/arrows/right.png" type="Texture" id=107]
-[ext_resource path="res://files/buttons/arrows/right-press.png" type="Texture" id=108]
-[ext_resource path="res://files/buttons/arrows/right-hl.png" type="Texture" id=109]
-[ext_resource path="res://files/scripts/inputnode.gd" type="Script" id=110]
-[ext_resource path="res://files/buttons/effects/blur.shader" type="Shader" id=111]
-[ext_resource path="res://files/buttons/effects/white.png" type="Texture" id=112]
-[ext_resource path="res://files/buttons/tex-popup.png" type="Texture" id=113]
-[ext_resource path="res://files/buttons/scenes/0.png" type="Texture" id=114]
-[ext_resource path="res://files/buttons/scenes/2.png" type="Texture" id=115]
-[ext_resource path="res://files/buttons/scenes/5.png" type="Texture" id=116]
-[ext_resource path="res://files/buttons/scenes/4.png" type="Texture" id=117]
-[ext_resource path="res://files/buttons/scenes/7.png" type="Texture" id=118]
-[ext_resource path="res://files/buttons/scenes/6.png" type="Texture" id=119]
-[ext_resource path="res://files/buttons/scenes/3.png" type="Texture" id=120]
-[ext_resource path="res://files/buttons/scenes/1.png" type="Texture" id=121]
-[ext_resource path="res://files/scripts/dailyevents.gd" type="Script" id=122]
-[ext_resource path="res://files/buttons/panelempty.png" type="Texture" id=123]
-[ext_resource path="res://files/theme slavetab.tres" type="Theme" id=124]
-[ext_resource path="res://files/options.tscn" type="PackedScene" id=125]
-[ext_resource path="res://files/scripts/groupselectpanel.gd" type="Script" id=126]
-[ext_resource path="res://files/buttons/paneltransperent.png" type="Texture" id=127]
-[ext_resource path="res://files/imageselect.tscn" type="PackedScene" id=128]
-[ext_resource path="res://files/scripts/tutorial.gd" type="Script" id=129]
-[ext_resource path="res://files/images/alise/033.png" type="Texture" id=130]
-[ext_resource path="res://files/scripts/joblist.gd" type="Script" id=131]
-[ext_resource path="res://files/buttons/inventory/24(for_slave).png" type="Texture" id=132]
-[ext_resource path="res://files/buttons/inventory/37.png" type="Texture" id=133]
-[ext_resource path="res://files/buttons/sexicons/male.png" type="Texture" id=134]
-[ext_resource path="res://files/buttons/mainscreen/30.png" type="Texture" id=135]
-[ext_resource path="res://files/aric_expansion_images/pregnancy_icons/pregnancy_icon.png" type="Texture" id=136]
-[ext_resource path="res://files/buttons/inventory/33.png" type="Texture" id=137]
-[ext_resource path="res://files/buttons/mainscreen/1.png" type="Texture" id=138]
+[ext_resource path="res://files/aric_expansion_images/jail/cellportrait.png" type="Texture" id=83]
+[ext_resource path="res://files/buttons/mainscreen/40.png" type="Texture" id=84]
+[ext_resource path="res://files/buttons/mainscreen/49.png" type="Texture" id=85]
+[ext_resource path="res://files/buttons/mainscreen/50.png" type="Texture" id=86]
+[ext_resource path="res://files/buttons/mainscreen/51.png" type="Texture" id=87]
+[ext_resource path="res://files/buttons/mainscreen/52.png" type="Texture" id=88]
+[ext_resource path="res://files/aric_expansion_images/jail/cellbody.png" type="Texture" id=89]
+[ext_resource path="res://files/buttons/img-backG-popup.png" type="Texture" id=90]
+[ext_resource path="res://files/buttons/textfield.png" type="Texture" id=91]
+[ext_resource path="res://files/buttons/textfieldinact.png" type="Texture" id=92]
+[ext_resource path="res://files/bigpanel.tres" type="StyleBox" id=93]
+[ext_resource path="res://files/buttons/inventory/1.png" type="Texture" id=94]
+[ext_resource path="res://files/outside.tscn" type="PackedScene" id=95]
+[ext_resource path="res://files/combat.tscn" type="PackedScene" id=96]
+[ext_resource path="res://files/scripts/characterglossary.gd" type="Script" id=97]
+[ext_resource path="res://files/buttons/speechpanel.png" type="Texture" id=98]
+[ext_resource path="res://files/buttons/book/control.png" type="Texture" id=99]
+[ext_resource path="res://files/interactionpanel.tscn" type="PackedScene" id=100]
+[ext_resource path="res://files/date.tscn" type="PackedScene" id=101]
+[ext_resource path="res://files/inventory.tscn" type="PackedScene" id=102]
+[ext_resource path="res://files/scripts/exploration.gd" type="Script" id=103]
+[ext_resource path="res://files/buttons/itemactive.png" type="Texture" id=104]
+[ext_resource path="res://files/buttons/noimage.png" type="Texture" id=105]
+[ext_resource path="res://files/buttons/inventory/enchant.png" type="Texture" id=106]
+[ext_resource path="res://files/buttons/explorebar2.png" type="Texture" id=107]
+[ext_resource path="res://files/buttons/explorebar.png" type="Texture" id=108]
+[ext_resource path="res://files/buttons/arrows/right.png" type="Texture" id=109]
+[ext_resource path="res://files/buttons/arrows/right-press.png" type="Texture" id=110]
+[ext_resource path="res://files/buttons/arrows/right-hl.png" type="Texture" id=111]
+[ext_resource path="res://files/scripts/inputnode.gd" type="Script" id=112]
+[ext_resource path="res://files/buttons/effects/blur.shader" type="Shader" id=113]
+[ext_resource path="res://files/buttons/effects/white.png" type="Texture" id=114]
+[ext_resource path="res://files/buttons/tex-popup.png" type="Texture" id=115]
+[ext_resource path="res://files/buttons/scenes/0.png" type="Texture" id=116]
+[ext_resource path="res://files/buttons/scenes/2.png" type="Texture" id=117]
+[ext_resource path="res://files/buttons/scenes/5.png" type="Texture" id=118]
+[ext_resource path="res://files/buttons/scenes/4.png" type="Texture" id=119]
+[ext_resource path="res://files/buttons/scenes/7.png" type="Texture" id=120]
+[ext_resource path="res://files/buttons/scenes/6.png" type="Texture" id=121]
+[ext_resource path="res://files/buttons/scenes/3.png" type="Texture" id=122]
+[ext_resource path="res://files/buttons/scenes/1.png" type="Texture" id=123]
+[ext_resource path="res://files/scripts/dailyevents.gd" type="Script" id=124]
+[ext_resource path="res://files/buttons/panelempty.png" type="Texture" id=125]
+[ext_resource path="res://files/theme slavetab.tres" type="Theme" id=126]
+[ext_resource path="res://files/options.tscn" type="PackedScene" id=127]
+[ext_resource path="res://files/scripts/groupselectpanel.gd" type="Script" id=128]
+[ext_resource path="res://files/buttons/paneltransperent.png" type="Texture" id=129]
+[ext_resource path="res://files/imageselect.tscn" type="PackedScene" id=130]
+[ext_resource path="res://files/scripts/tutorial.gd" type="Script" id=131]
+[ext_resource path="res://files/images/alise/033.png" type="Texture" id=132]
+[ext_resource path="res://files/scripts/joblist.gd" type="Script" id=133]
+[ext_resource path="res://files/buttons/inventory/24(for_slave).png" type="Texture" id=134]
+[ext_resource path="res://files/buttons/inventory/37.png" type="Texture" id=135]
+[ext_resource path="res://files/buttons/sexicons/male.png" type="Texture" id=136]
+[ext_resource path="res://files/buttons/mainscreen/30.png" type="Texture" id=137]
+[ext_resource path="res://files/aric_expansion_images/pregnancy_icons/pregnancy_icon.png" type="Texture" id=138]
+[ext_resource path="res://files/buttons/inventory/33.png" type="Texture" id=139]
+[ext_resource path="res://files/buttons/mainscreen/1.png" type="Texture" id=140]
 
 [sub_resource type="StyleBoxTexture" id=1]
 texture = ExtResource( 40 )
@@ -266,7 +268,7 @@ extra_spacing_top = 3
 font_data = ExtResource( 58 )
 
 [sub_resource type="StyleBoxTexture" id=34]
-texture = ExtResource( 88 )
+texture = ExtResource( 90 )
 region_rect = Rect2( 0, 0, 860, 682 )
 margin_left = 4.0
 margin_right = 4.0
@@ -274,7 +276,7 @@ margin_top = 4.0
 margin_bottom = 4.0
 
 [sub_resource type="StyleBoxTexture" id=35]
-texture = ExtResource( 89 )
+texture = ExtResource( 91 )
 region_rect = Rect2( 0, 0, 50, 50 )
 margin_left = 10.0
 margin_right = 10.0
@@ -282,7 +284,7 @@ margin_top = 10.0
 margin_bottom = 10.0
 
 [sub_resource type="StyleBoxTexture" id=36]
-texture = ExtResource( 90 )
+texture = ExtResource( 92 )
 region_rect = Rect2( 0, 0, 50, 50 )
 margin_left = 10.0
 margin_right = 10.0
@@ -294,7 +296,7 @@ texture = ExtResource( 48 )
 region_rect = Rect2( 0, 0, 500, 500 )
 
 [sub_resource type="StyleBoxTexture" id=38]
-texture = ExtResource( 96 )
+texture = ExtResource( 98 )
 region_rect = Rect2( 0, 0, 500, 294 )
 
 [sub_resource type="StyleBoxTexture" id=39]
@@ -302,7 +304,7 @@ texture = ExtResource( 48 )
 region_rect = Rect2( 0, 0, 500, 500 )
 
 [sub_resource type="StyleBoxTexture" id=40]
-texture = ExtResource( 105 )
+texture = ExtResource( 107 )
 region_rect = Rect2( 0, 0, 150, 18 )
 margin_left = 5.0
 margin_right = 5.0
@@ -310,7 +312,7 @@ margin_top = 5.0
 margin_bottom = 5.0
 
 [sub_resource type="StyleBoxTexture" id=41]
-texture = ExtResource( 106 )
+texture = ExtResource( 108 )
 region_rect = Rect2( 0, 0, 150, 18 )
 margin_left = 5.0
 margin_right = 5.0
@@ -319,11 +321,11 @@ margin_bottom = 5.0
 
 [sub_resource type="ShaderMaterial" id=42]
 render_priority = 1
-shader = ExtResource( 111 )
+shader = ExtResource( 113 )
 shader_param/blurSize = 7
 
 [sub_resource type="StyleBoxTexture" id=43]
-texture = ExtResource( 113 )
+texture = ExtResource( 115 )
 region_rect = Rect2( 0, 0, 60, 60 )
 margin_left = 10.0
 margin_right = 10.0
@@ -337,35 +339,35 @@ extra_spacing_top = 3
 font_data = ExtResource( 58 )
 
 [sub_resource type="StyleBoxTexture" id=45]
-texture = ExtResource( 114 )
+texture = ExtResource( 116 )
 region_rect = Rect2( 0, 0, 183, 183 )
 
 [sub_resource type="StyleBoxTexture" id=46]
-texture = ExtResource( 115 )
+texture = ExtResource( 117 )
 region_rect = Rect2( 0, 0, 601, 822 )
 
 [sub_resource type="StyleBoxTexture" id=47]
-texture = ExtResource( 116 )
-region_rect = Rect2( 0, 0, 604, 60 )
-
-[sub_resource type="StyleBoxTexture" id=48]
-texture = ExtResource( 117 )
-region_rect = Rect2( 0, 0, 610, 64 )
-
-[sub_resource type="StyleBoxTexture" id=49]
 texture = ExtResource( 118 )
 region_rect = Rect2( 0, 0, 604, 60 )
 
-[sub_resource type="StyleBoxTexture" id=50]
+[sub_resource type="StyleBoxTexture" id=48]
 texture = ExtResource( 119 )
+region_rect = Rect2( 0, 0, 610, 64 )
+
+[sub_resource type="StyleBoxTexture" id=49]
+texture = ExtResource( 120 )
+region_rect = Rect2( 0, 0, 604, 60 )
+
+[sub_resource type="StyleBoxTexture" id=50]
+texture = ExtResource( 121 )
 region_rect = Rect2( 0, 0, 604, 60 )
 
 [sub_resource type="StyleBoxTexture" id=51]
-texture = ExtResource( 120 )
+texture = ExtResource( 122 )
 region_rect = Rect2( 0, 0, 1235, 212 )
 
 [sub_resource type="StyleBoxTexture" id=52]
-texture = ExtResource( 121 )
+texture = ExtResource( 123 )
 region_rect = Rect2( 0, 0, 1235, 822 )
 
 [sub_resource type="DynamicFont" id=53]
@@ -375,7 +377,7 @@ extra_spacing_top = 3
 font_data = ExtResource( 58 )
 
 [sub_resource type="StyleBoxTexture" id=54]
-texture = ExtResource( 123 )
+texture = ExtResource( 125 )
 region_rect = Rect2( 0, 0, 500, 500 )
 margin_left = 8.0
 margin_right = 8.0
@@ -403,7 +405,7 @@ flags = 4
 load_path = "res://.import/2.png-4cf966d13a2c7ebfca9f08501bafd5bd.stex"
 
 [sub_resource type="StyleBoxTexture" id=60]
-texture = ExtResource( 127 )
+texture = ExtResource( 129 )
 region_rect = Rect2( 0, 0, 500, 500 )
 margin_left = 10.0
 margin_right = 10.0
@@ -411,7 +413,7 @@ margin_top = 10.0
 margin_bottom = 10.0
 
 [sub_resource type="StyleBoxTexture" id=61]
-texture = ExtResource( 113 )
+texture = ExtResource( 115 )
 region_rect = Rect2( 0, 0, 60, 60 )
 margin_left = 20.0
 margin_right = 20.0
@@ -445,7 +447,7 @@ texture = ExtResource( 48 )
 region_rect = Rect2( 0, 0, 500, 500 )
 
 [sub_resource type="StyleBoxTexture" id=70]
-texture = ExtResource( 113 )
+texture = ExtResource( 115 )
 region_rect = Rect2( 0, 0, 60, 60 )
 margin_left = 10.0
 margin_right = 10.0
@@ -6794,7 +6796,6 @@ texture_under = ExtResource( 54 )
 texture_progress = ExtResource( 57 )
 
 [node name="TextureRect" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
-editor/display_folded = true
 margin_left = 14.0
 margin_top = 13.0
 margin_right = 154.0
@@ -6808,6 +6809,15 @@ margin_right = 139.0
 margin_bottom = 139.0
 expand = true
 stretch_mode = 6
+
+[node name="jailportrait" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
+visible = false
+margin_left = 14.0
+margin_top = 13.0
+margin_right = 154.0
+margin_bottom = 153.0
+texture = ExtResource( 83 )
+expand = true
 
 [node name="info" type="RichTextLabel" parent="MainScreen/slave_tab/stats/statspanel"]
 margin_left = 160.0
@@ -6824,7 +6834,7 @@ margin_left = 305.0
 margin_top = 14.0
 margin_right = 345.0
 margin_bottom = 54.0
-texture = ExtResource( 83 )
+texture = ExtResource( 84 )
 expand = true
 stretch_mode = 6
 
@@ -7197,7 +7207,7 @@ margin_left = -75.0
 margin_top = -11.0
 margin_right = -35.0
 margin_bottom = 29.0
-texture = ExtResource( 84 )
+texture = ExtResource( 85 )
 expand = true
 
 [node name="conf" type="Label" parent="MainScreen/slave_tab/stats/trainingabilspanel"]
@@ -7227,7 +7237,7 @@ margin_left = -75.0
 margin_top = -11.0
 margin_right = -35.0
 margin_bottom = 29.0
-texture = ExtResource( 85 )
+texture = ExtResource( 86 )
 expand = true
 
 [node name="wit" type="Label" parent="MainScreen/slave_tab/stats/trainingabilspanel"]
@@ -7257,7 +7267,7 @@ margin_left = -75.0
 margin_top = -11.0
 margin_right = -35.0
 margin_bottom = 29.0
-texture = ExtResource( 86 )
+texture = ExtResource( 87 )
 expand = true
 
 [node name="charm" type="Label" parent="MainScreen/slave_tab/stats/trainingabilspanel"]
@@ -7287,7 +7297,7 @@ margin_left = -75.0
 margin_top = -11.0
 margin_right = -35.0
 margin_bottom = 29.0
-texture = ExtResource( 87 )
+texture = ExtResource( 88 )
 expand = true
 
 [node name="learncost" type="Label" parent="MainScreen/slave_tab/stats/trainingabilspanel"]
@@ -7645,6 +7655,21 @@ texture = ExtResource( 75 )
 expand = true
 stretch_mode = 6
 
+[node name="fullbodyjail" type="TextureRect" parent="MainScreen/slave_tab/stats/basics"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 752.0
+margin_top = -165.0
+margin_right = 396.0
+margin_bottom = -54.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 89 )
+expand = true
+stretch_mode = 6
+
 [node name="HSeparator" type="HSeparator" parent="MainScreen/slave_tab/stats/basics"]
 margin_left = 10.0
 margin_top = 290.0
@@ -7736,7 +7761,8 @@ margin_left = -286.0
 margin_top = 40.0
 margin_right = -79.0
 margin_bottom = 68.0
-hint_tooltip = "Require that they take an herbal supplement that prevents ovulation. This will prevent pregnancy. This only takes place the day after it is ordered.
+hint_tooltip = "Require that they take an herbal supplement that prevents ovulation.
+This will prevent pregnancy. This only takes place the day after it is ordered.
 Cost: 5 Gold Daily"
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -7794,7 +7820,8 @@ margin_left = -286.0
 margin_top = 270.0
 margin_right = -152.0
 margin_bottom = 298.0
-hint_tooltip = "They will be forced to act animalistically. They will be forced to crawl on all fours and may not speak using anything but animal noises."
+hint_tooltip = "They will be forced to act animalistically.
+They will be forced to crawl on all fours and may not speak using anything but animal noises."
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 30 )
@@ -7813,7 +7840,8 @@ margin_top = 294.0
 margin_right = -115.0
 margin_bottom = 322.0
 hint_tooltip = "They may not masturbate or orgasm without your permission.
-Resistant slaves may attempt to refuse to comply."
+Resistant slaves may attempt to refuse to comply.
+Penalty for Lust Vices"
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 31 )
@@ -7831,9 +7859,9 @@ margin_left = -286.0
 margin_top = 318.0
 margin_right = -146.0
 margin_bottom = 346.0
-hint_tooltip = "They will be required to remain naked at all times.
-This may risk Public Nudity fines if they work in Public depending on the town.
-Resistant slaves may attempt to refuse to comply."
+hint_tooltip = "They will be ordered to remain naked at all times.
+This may risk Public Nudity fines if they work in Public depending on the local town's Public Nudity laws.
+Rebellious slaves may refuse to comply, which will give a Valid Punishment reason during their next date."
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 32 )
@@ -7852,7 +7880,8 @@ margin_top = 119.0
 margin_right = -161.0
 margin_bottom = 147.0
 hint_tooltip = "They will be permitted a higher quality and extra portion of food.
-Cost: 5 Food Daily"
+Cost: 5 Food Daily
+Bonus for Gluttony Vices"
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 29 )
@@ -7871,7 +7900,8 @@ margin_top = 143.0
 margin_right = -142.0
 margin_bottom = 171.0
 hint_tooltip = "They will be permitted 1 personal bath a day. This will clean out any remaining cum from their orifaces.
-Cost: 2 Supplies Daily"
+Cost: 2 Supplies Daily
+Bonus for Proud and Sloth Vices"
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 30 )
@@ -7890,7 +7920,8 @@ margin_top = 167.0
 margin_right = -171.0
 margin_bottom = 195.0
 hint_tooltip = "They will be permitted various cosmetics to enhance their beauty and self-worth.
-Cost: 1 Supply Daily"
+Cost: 1 Supply Daily
+Bonus for Proud Vices"
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 32 )
@@ -7909,7 +7940,8 @@ margin_top = 191.0
 margin_right = -136.0
 margin_bottom = 219.0
 hint_tooltip = "They will be paid a small sum daily which they may use for their personal luxuries.
-Cost: 10 Gold Daily"
+Cost: 10 Gold Daily
+Bonus for Greedy Vices"
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 31 )
@@ -8038,8 +8070,8 @@ margin_left = -729.0
 margin_top = 310.0
 margin_right = -604.0
 margin_bottom = 338.0
-hint_tooltip = "While in mansion, servant will be wearing 
-special clothes, revealing their naughty pieces."
+hint_tooltip = "Force the Slave to Strip or Reclothe immediately.
+They may choose to redress after a little while even during the same day."
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/focus = SubResource( 32 )
@@ -8547,7 +8579,7 @@ margin_right = -4.0
 margin_bottom = -4.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 91 )
+custom_styles/panel = ExtResource( 93 )
 
 [node name="statstext" type="RichTextLabel" parent="MainScreen/slave_tab/stats/statisticpanel"]
 margin_left = 40.0
@@ -8605,7 +8637,7 @@ margin_top = 170.0
 margin_right = 940.0
 margin_bottom = 619.0
 mouse_filter = 2
-texture = ExtResource( 92 )
+texture = ExtResource( 94 )
 expand = true
 __meta__ = {
 "_edit_lock_": true
@@ -8638,7 +8670,7 @@ theme = ExtResource( 3 )
 custom_fonts/font = ExtResource( 45 )
 text = "Hide UI"
 
-[node name="outside" parent="." instance=ExtResource( 93 )]
+[node name="outside" parent="." instance=ExtResource( 95 )]
 visible = false
 margin_left = 2.0
 margin_top = 2.0
@@ -8646,7 +8678,7 @@ margin_right = 8.0
 margin_bottom = 8.0
 mouse_filter = 2
 
-[node name="combat" parent="." instance=ExtResource( 94 )]
+[node name="combat" parent="." instance=ExtResource( 96 )]
 visible = false
 margin_left = -5.0
 margin_top = 8.0
@@ -8664,7 +8696,7 @@ margin_bottom = -48.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-script = ExtResource( 95 )
+script = ExtResource( 97 )
 
 [node name="charlist" type="ScrollContainer" parent="gallery"]
 anchor_bottom = 1.0
@@ -8915,8 +8947,8 @@ theme = ExtResource( 3 )
 bbcode_enabled = true
 
 [node name="birthpanel" type="Panel" parent="." groups=[
-"blocknextdayevents",
 "blockmaininput",
+"blocknextdayevents",
 ]]
 visible = false
 anchor_left = 1.0
@@ -9299,7 +9331,7 @@ margin_right = -14.0
 margin_bottom = 44.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 97 )
+texture = ExtResource( 99 )
 expand = true
 stretch_mode = 6
 
@@ -9422,19 +9454,19 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 texture_normal = ExtResource( 63 )
 
-[node name="interactions" parent="." instance=ExtResource( 98 )]
+[node name="interactions" parent="." instance=ExtResource( 100 )]
 visible = false
 margin_left = 1.0
 margin_top = 6.0
 margin_right = -12.0
 margin_bottom = -121.0
 
-[node name="date" parent="." instance=ExtResource( 99 )]
+[node name="date" parent="." instance=ExtResource( 101 )]
 visible = false
 
 [node name="inventory" parent="." groups=[
 "blockmaininput",
-] instance=ExtResource( 100 )]
+] instance=ExtResource( 102 )]
 visible = false
 margin_right = 16.0
 margin_bottom = 16.0
@@ -9448,7 +9480,7 @@ mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-script = ExtResource( 101 )
+script = ExtResource( 103 )
 __meta__ = {
 "_edit_lock_": true
 }
@@ -9508,8 +9540,8 @@ margin_bottom = 50.0
 rect_min_size = Vector2( 50, 50 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
-texture_pressed = ExtResource( 102 )
-texture_hover = ExtResource( 102 )
+texture_pressed = ExtResource( 104 )
+texture_hover = ExtResource( 104 )
 expand = true
 
 [node name="image" type="TextureRect" parent="explorationnode/winningpanel/lootpanel/backpack/VBoxContainer/Button"]
@@ -9518,7 +9550,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 103 )
+texture = ExtResource( 105 )
 expand = true
 
 [node name="amount" type="Label" parent="explorationnode/winningpanel/lootpanel/backpack/VBoxContainer/Button"]
@@ -9538,7 +9570,7 @@ show_behind_parent = true
 margin_right = 52.0
 margin_bottom = 53.0
 mouse_filter = 2
-texture = ExtResource( 104 )
+texture = ExtResource( 106 )
 expand = true
 
 [node name="enemyloot" type="ScrollContainer" parent="explorationnode/winningpanel/lootpanel"]
@@ -9567,8 +9599,8 @@ margin_bottom = 50.0
 rect_min_size = Vector2( 50, 50 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
-texture_pressed = ExtResource( 102 )
-texture_hover = ExtResource( 102 )
+texture_pressed = ExtResource( 104 )
+texture_hover = ExtResource( 104 )
 expand = true
 
 [node name="image" type="TextureRect" parent="explorationnode/winningpanel/lootpanel/enemyloot/VBoxContainer/Button"]
@@ -9577,7 +9609,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 103 )
+texture = ExtResource( 105 )
 expand = true
 
 [node name="amount" type="Label" parent="explorationnode/winningpanel/lootpanel/enemyloot/VBoxContainer/Button"]
@@ -9597,7 +9629,7 @@ show_behind_parent = true
 margin_right = 52.0
 margin_bottom = 53.0
 mouse_filter = 2
-texture = ExtResource( 104 )
+texture = ExtResource( 106 )
 expand = true
 
 [node name="weightmeter" type="ProgressBar" parent="explorationnode/winningpanel/lootpanel"]
@@ -9656,9 +9688,9 @@ margin_top = 292.0
 margin_right = 218.0
 margin_bottom = 332.0
 hint_tooltip = "Take all"
-texture_normal = ExtResource( 107 )
-texture_pressed = ExtResource( 108 )
-texture_hover = ExtResource( 109 )
+texture_normal = ExtResource( 109 )
+texture_pressed = ExtResource( 110 )
+texture_hover = ExtResource( 111 )
 expand = true
 
 [node name="Panel" type="Panel" parent="explorationnode/winningpanel"]
@@ -9840,8 +9872,8 @@ custom_fonts/font = ExtResource( 45 )
 text = "Confirm"
 
 [node name="dialogue" type="Control" parent="." groups=[
-"blocknextdayevents",
 "blockmaininput",
+"blocknextdayevents",
 ]]
 visible = false
 anchor_right = 1.0
@@ -9853,7 +9885,7 @@ margin_bottom = 7.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-script = ExtResource( 110 )
+script = ExtResource( 112 )
 
 [node name="TextureRect" type="TextureRect" parent="dialogue"]
 material = SubResource( 42 )
@@ -9861,7 +9893,7 @@ margin_left = -1.0
 margin_top = -1.0
 margin_right = 1378.0
 margin_bottom = 774.0
-texture = ExtResource( 112 )
+texture = ExtResource( 114 )
 expand = true
 
 [node name="Panel 2" type="Panel" parent="dialogue"]
@@ -9953,7 +9985,7 @@ margin_right = -419.0
 margin_bottom = -184.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 91 )
+custom_styles/panel = ExtResource( 93 )
 
 [node name="buttonpanel" type="Panel" parent="dialogue"]
 anchor_left = 1.0
@@ -10040,8 +10072,8 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 
 [node name="scene" type="Control" parent="." groups=[
-"blocknextdayevents",
 "blockmaininput",
+"blocknextdayevents",
 ]]
 visible = false
 anchor_right = 1.0
@@ -10053,7 +10085,7 @@ margin_bottom = 8.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-script = ExtResource( 110 )
+script = ExtResource( 112 )
 
 [node name="Panel 2" type="Panel" parent="scene"]
 anchor_right = 1.0
@@ -10386,7 +10418,7 @@ margin_bottom = 1.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-script = ExtResource( 122 )
+script = ExtResource( 124 )
 
 [node name="Panel" type="Panel" parent="dailyevents"]
 anchor_right = 1.0
@@ -10411,7 +10443,7 @@ margin_right = -465.0
 margin_bottom = -34.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-script = ExtResource( 110 )
+script = ExtResource( 112 )
 
 [node name="buttonscroll" type="ScrollContainer" parent="dailyevents/buttonpanel"]
 anchor_left = 1.0
@@ -10737,7 +10769,7 @@ margin_right = 731.0
 margin_bottom = 428.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-theme = ExtResource( 124 )
+theme = ExtResource( 126 )
 text = "Open folder"
 
 [node name="deletebutton" type="Button" parent="menucontrol/menupanel/SavePanel"]
@@ -10843,7 +10875,7 @@ stretch_mode = 6
 
 [node name="options" parent="." groups=[
 "blockmaininput",
-] instance=ExtResource( 125 )]
+] instance=ExtResource( 127 )]
 visible = false
 margin_left = -371.0
 margin_top = -250.0
@@ -10928,7 +10960,7 @@ margin_bottom = -35.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-script = ExtResource( 126 )
+script = ExtResource( 128 )
 
 [node name="Control" type="Control" parent="groupselectnode"]
 margin_left = -27.0
@@ -11009,7 +11041,7 @@ bbcode_enabled = true
 
 [node name="imageselect" parent="." groups=[
 "blockmaininput",
-] instance=ExtResource( 128 )]
+] instance=ExtResource( 130 )]
 visible = false
 margin_left = -1033.0
 margin_top = -562.0
@@ -11641,7 +11673,7 @@ margin_right = 8.0
 margin_bottom = 3.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-script = ExtResource( 129 )
+script = ExtResource( 131 )
 
 [node name="Panel" type="Panel" parent="tutorialnode"]
 modulate = Color( 1, 1, 1, 0.580118 )
@@ -11666,7 +11698,7 @@ margin_right = -39.0
 margin_bottom = -4.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 130 )
+texture = ExtResource( 132 )
 expand = true
 stretch_mode = 6
 
@@ -11832,7 +11864,7 @@ margin_bottom = -69.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-script = ExtResource( 131 )
+script = ExtResource( 133 )
 
 [node name="Panel" type="Panel" parent="joblist"]
 anchor_right = 1.0
@@ -11860,7 +11892,7 @@ margin_right = 263.0
 margin_bottom = -52.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 91 )
+custom_styles/panel = ExtResource( 93 )
 
 [node name="jobs" type="ScrollContainer" parent="joblist"]
 anchor_bottom = 1.0
@@ -11943,9 +11975,9 @@ margin_right = 350.0
 margin_bottom = 65.0
 rect_min_size = Vector2( 350, 65 )
 toggle_mode = true
-texture_normal = ExtResource( 132 )
-texture_pressed = ExtResource( 133 )
-texture_hover = ExtResource( 133 )
+texture_normal = ExtResource( 134 )
+texture_pressed = ExtResource( 135 )
+texture_hover = ExtResource( 135 )
 expand = true
 
 [node name="portrait" type="TextureRect" parent="chooseslavepanel/ScrollContainer/chooseslavelist/Button"]
@@ -11954,6 +11986,16 @@ margin_top = 7.0
 margin_right = 57.0
 margin_bottom = 57.0
 texture = ExtResource( 73 )
+expand = true
+stretch_mode = 6
+
+[node name="jailportrait" type="TextureRect" parent="chooseslavepanel/ScrollContainer/chooseslavelist/Button"]
+visible = false
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 57.0
+margin_bottom = 57.0
+texture = ExtResource( 83 )
 expand = true
 stretch_mode = 6
 
@@ -12116,6 +12158,18 @@ texture = ExtResource( 73 )
 expand = true
 stretch_mode = 6
 
+[node name="jailportrait" type="TextureRect" parent="slavetooltip"]
+visible = false
+margin_left = 13.0
+margin_top = 16.0
+margin_right = 193.0
+margin_bottom = 196.0
+rect_min_size = Vector2( 180, 180 )
+mouse_filter = 2
+texture = ExtResource( 83 )
+expand = true
+stretch_mode = 6
+
 [node name="name" type="Label" parent="slavetooltip"]
 margin_left = 216.0
 margin_top = 13.0
@@ -12131,7 +12185,7 @@ margin_top = 4.0
 margin_right = 560.0
 margin_bottom = 44.0
 mouse_filter = 2
-texture = ExtResource( 134 )
+texture = ExtResource( 136 )
 expand = true
 stretch_mode = 7
 
@@ -12141,7 +12195,7 @@ margin_top = 160.0
 margin_right = 248.0
 margin_bottom = 200.0
 mouse_filter = 2
-texture = ExtResource( 83 )
+texture = ExtResource( 84 )
 expand = true
 stretch_mode = 6
 
@@ -12151,7 +12205,7 @@ margin_top = 160.0
 margin_right = 288.0
 margin_bottom = 200.0
 mouse_filter = 2
-texture = ExtResource( 135 )
+texture = ExtResource( 137 )
 expand = true
 stretch_mode = 6
 
@@ -12161,7 +12215,7 @@ margin_top = 160.0
 margin_right = 335.0
 margin_bottom = 200.0
 mouse_filter = 2
-texture = ExtResource( 135 )
+texture = ExtResource( 137 )
 expand = true
 stretch_mode = 6
 
@@ -12171,7 +12225,7 @@ margin_top = 160.0
 margin_right = 380.0
 margin_bottom = 200.0
 mouse_filter = 2
-texture = ExtResource( 136 )
+texture = ExtResource( 138 )
 expand = true
 stretch_mode = 6
 
@@ -12188,7 +12242,7 @@ size_flags_vertical = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-texture = ExtResource( 137 )
+texture = ExtResource( 139 )
 expand = true
 
 [node name="text" type="RichTextLabel" parent="itemtooltip"]
@@ -12217,8 +12271,8 @@ expand = true
 stretch_mode = 6
 
 [node name="screenchange" type="TextureRect" parent="." groups=[
-"blockoutsideinput",
 "blockmaininput",
+"blockoutsideinput",
 ]]
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
@@ -12229,7 +12283,7 @@ margin_right = 25.0
 margin_bottom = 21.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 88 )
+texture = ExtResource( 90 )
 expand = true
 __meta__ = {
 "_edit_lock_": true
@@ -12248,7 +12302,7 @@ margin_bottom = 8.0
 mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 138 )
+texture = ExtResource( 140 )
 expand = true
 __meta__ = {
 "_edit_lock_": true

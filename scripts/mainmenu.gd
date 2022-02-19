@@ -122,6 +122,13 @@ var hobbydescription = {
 	'Perfect Specimen' : "[color=aqua]Start with the traits [color=green]Strong[/color], [color=green]Quick[/color], [color=green]Robust[/color], and [color=green]Responsive[/color].[/color]\n\n$name has been perfectly crafted to be the perfect specimen of their race.\n\n[color=red]Insanely Unbalanced[/color]\n"
 }
 
+<AddTo 7>
+func _ready():
+	###---Added by Expansion---###
+	globals.useRalphsTweaks = globals.expansionsettings.use_ralphs_tweaks
+	if globals.useRalphsTweaks:
+		globals.expansionsettings.applyTweaks()
+
 func _slave_hobby(button):
 	for i in get_tree().get_nodes_in_group("slavehobby"):
 		if i != button:
