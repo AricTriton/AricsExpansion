@@ -3172,13 +3172,9 @@ var dictUniqueImagePaths = {
 	},
 	'Ivrana': {
 		IMAGE_DEFAULT: {
-			LOW_STRESS: 'res://files/aric_expansion_images/characters/ivranaclothed.png',
-			MID_STRESS: 'res://files/aric_expansion_images/characters/ivranaclothed.png',
 			HIGH_STRESS: 'res://files/aric_expansion_images/characters/ivranaclothed.png',
 		},
 		IMAGE_NAKED: {
-			LOW_STRESS: 'res://files/aric_expansion_images/characters/ivrananaked.png',
-			MID_STRESS: 'res://files/aric_expansion_images/characters/ivrananaked.png',
 			HIGH_STRESS: 'res://files/aric_expansion_images/characters/ivrananaked.png',
 		},
 	},

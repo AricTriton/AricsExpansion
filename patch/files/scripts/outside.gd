@@ -1007,7 +1007,7 @@ func _on_slavesellbutton_pressed():
 		###---Added by Expansion---###
 		globals.expansion.updatePerson(selectedslave)
 		if selectedslave.npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
-			globals.resources.upgradepoints += (globals.originsarray.find(selectedslave.origins)+1)*globals.expansionsettings.mansion_bred_and_breeder
+			globals.resources.upgradepoints += round((globals.originsarray.find(selectedslave.origins)+1)*globals.expansionsettings.mansion_bred_and_breeder)
 		elif selectedslave.npcexpanded.mansionbred == true:
 			globals.resources.upgradepoints += round((globals.originsarray.find(selectedslave.origins)+1)*1.25)
 		else:
