@@ -1,4 +1,49 @@
 
+func gornpalaceivran(stage):
+	var text
+	var state = true
+	var buttons = []
+	var sprite = null
+	
+	if stage == 1:
+		sprite = [['garthor','pos1']]
+		text = textnode.MainQuestGornIvranExecute
+		if !globals.state.sidequests.ivran in ['tobetaken','tobealtered','potionreceived','notaltered']:
+			text += textnode.MainQuestGornAydaSolo
+		globals.state.sidequests.ivran = 'killed'
+		globals.state.mainquest = 16
+		globals.main.exploration.zoneenter('gorn')
+	elif stage == 2:
+		sprite = [['garthor','pos1']]
+		text = textnode.MainQuestGornIvranImprison
+		if !globals.state.sidequests.ivran in ['tobetaken','tobealtered','potionreceived','notaltered']:
+			text += textnode.MainQuestGornAydaSolo
+		globals.state.sidequests.ivran = 'imprisoned'
+		globals.state.mainquest = 16
+		globals.main.exploration.zoneenter('gorn')
+	elif stage == 3 && !globals.state.sidequests.ivran in ['tobetaken','tobealtered','potionreceived']:
+		sprite = [['garthor','pos1']]
+		text = textnode.MainQuestGornIvranKeep
+		globals.state.sidequests.ivran = 'tobetaken'
+		globals.main.exploration.zoneenter('gorn')
+	elif stage == 3 && globals.state.sidequests.ivran in ['tobetaken','tobealtered']:
+		text = "Garthor refuses to give you Ivran as is. You should find his acquaintance. "
+	elif stage == 3 && globals.state.sidequests.ivran == 'potionreceived':
+		text = textnode.MainQuestGornIvranChange
+		sprite = [['garthor','pos1']]
+		globals.state.sidequests.ivran = 'changed'
+		globals.state.mainquest = 16
+		globals.state.decisions.append('ivrantaken')
+		ivran = globals.characters.create("Ivrana")
+		globals.main._on_mansion_pressed()
+		buttons = [['Continue','ivranname']]
+		state = false
+	elif stage == 4:
+		closedialogue()
+		return
+	
+	globals.main.dialogue(state, self, text, buttons, sprite)
+
 #Main Quest Finale
 func mountainwin(stage = 0):
 	var state = false

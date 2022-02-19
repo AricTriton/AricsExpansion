@@ -52,7 +52,7 @@ func initiate(tempperson):
 	self.learningpointsStart = person.learningpoints
 	self.turns = int(variables.timeformeetinteraction)
 	$fullbody.set_texture(null)
-	if nakedspritesdict.has(person.unique):
+	if nakedspritesdict.has(person.unique) && person.imageportait == globals.characters.characters[person.unique].get('imageportait','') && person.imagetype != 'naked':
 		if person.obed >= 50 || person.stress < 10:
 			$fullbody.set_texture(globals.spritedict[nakedspritesdict[person.unique].clothcons])
 		else:
