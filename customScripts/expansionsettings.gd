@@ -495,6 +495,37 @@ func applyRaceTweaks():
 	
 	#Beastkin Tanuki
 	globals.races["Beastkin Tanuki"].stats = {str_max = 3, agi_max = 3, maf_max = 5, end_max = 3}
+	
+	#Gnoll
+	globals.races["Gnoll"].stats = {str_max = 5, agi_max = 4, maf_max = 2, end_max = 5}
+
+	#Ogre
+	globals.races["Ogre"].stats = {str_max = 7, agi_max = 2, maf_max = 1, end_max = 7}
+
+	#Giant
+	globals.races["Giant].stats = {str_max = 9, agi_max = 2, maf_max = 3, end_max = 5}
+
+	#Lizardfolk
+	globals.races["Lizardfolk"].stats = {str_max = 5, agi_max = 4, maf_max = 3, end_max = 5}
+
+	#Kobold
+	globals.races["Kobold"].stats = {str_max = 2, agi_max = 6, maf_max = 3, end_max = 5}
+
+	#Avali
+	globals.races["Avali"].stats = {str_max = 1, agi_max = 8, maf_max = 8, end_max = 3}
+
+	#Beastkin Mouse
+	globals.races["Beastkin Mouse"].stats = {str_max = 2, agi_max = 6, maf_max = 5, end_max = 2}
+
+	#Beastkin Squirrel
+	globals.races["Beastkin Squirrel"].stats = {str_max = 3, agi_max = 5, maf_max = 3, end_max = 5}
+
+	#Beastkin Otter
+	globals.races["Beastkin Otter"].stats = {str_max = 4, agi_max = 4, maf_max = 2, end_max = 6}
+
+	#Beastkin Bird
+	globals.races["Beastkin Bird"].stats = {str_max = 2, agi_max = 5, maf_max = 3, end_max = 6}
+
 
 """
 Applies Capitulize's tweaks to the game, mostly description and furry based changes.

@@ -271,7 +271,7 @@ var races = {
 		highcorruptionbonus = "N/A",
 		lowcorruptionbonus = "Endurance-, Agility+",
 		breedingquirk = "Agility+ with Bunny/Harpy ancestry, Endurance- with Harpy ancestry.",
-		mutations = "Imp, Mousekin",
+		mutations = "Imp",
 		pricemod = 1.5,
 		#ralph5
 		marketup = ["Demand for [color=aqua]gnomes[/color] is up.\n","Goblins revolt at a nearby mine and they are left shorthanded. The taskmasters are looking for an alternative species of slaves and have begun offering a premium for [color=aqua]gnomes[/color].\n","Demand for [color=aqua]gnomes[/color] is up as a new fad of brothels offering them as a 'two-for-one' gimmick picks up."],
@@ -1696,7 +1696,7 @@ var races = {
 		stats = {
 			str_max = 2,
 			agi_max = 6,
-			maf_max = 6,
+			maf_max = 5,
 			end_max = 2
 		}
 	},
