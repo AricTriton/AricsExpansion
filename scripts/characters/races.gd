@@ -319,7 +319,7 @@ var races = {
 		highcorruptionbonus = "N/A",
 		lowcorruptionbonus = "Beauty+,  Agility+, Strength-",
 		breedingquirk = "Extra penis size from Orc heritage.",
-		mutations = "Kobold, Gremlin, Hobgoblin, Redcap",
+		mutations = "Gremlin, Hobgoblin, Redcap",
 		pricemod = 1.5,
 		#ralph5
 		marketup = ["After a mild pestilence, demand for new [color=aqua]goblins[/color] drives up value.\n","Demand for [color=aqua]goblins[/color] is up inexplicably.\n","A nearby warlord is looking for sappers and cannon fodder for a siege. Pricing for [color=aqua]goblins[/color] is up.\n"],
@@ -467,7 +467,7 @@ var races = {
 		highcorruptionbonus = "N/A",
 		lowcorruptionbonus = "Attributes- depending on races bred with",
 		breedingquirk = "Demons jokingly encourage their spawn to breed with Seraphs.",
-		mutations = "Ogre, Succubus, Incubus, Rusalka",
+		mutations = "Succubus, Incubus, Rusalka",
 		pricemod = 2.5,
 		#ralph5
 		marketup = ["A shortage of tainted essence drives up [color=aqua]demon[/color] demand.\n","Demand for [color=aqua]demons[/color] is up.\n","Word is that an arena boss from across the sea has started an aerial league and has been buying up [color=aqua]demons[/color].\n"],
@@ -1334,8 +1334,8 @@ var races = {
 		uncivilized = true,
 		sebastian = true,
 		shade = {
-			male = "res://files/buttons/inventory/shades/Orc_-M.png",
-			female = "res://files/buttons/inventory/shades/Orc_F.png"
+			male = "res://files/aric_expansion_images/shades/Gnoll_Male.png",
+			female = "res://files/aric_expansion_images/shades/Gnoll_Female.png"
 		},
 		skin = ['none'],
 		skincov = ['full_body_fur'],
@@ -1496,8 +1496,8 @@ var races = {
 		uncivilized = true,
 		sebastian = true,
 		shade = {
-			male = "res://files/buttons/inventory/shades/Dragonkin_M.png",
-			female = "res://files/buttons/inventory/shades/Dragonkin_F.png"
+			male = "res://files/aric_expansion_images/shades/Lizardfolk_Male.png",
+			female = "res://files/aric_expansion_images/shades/Lizardfolk_Female.png"
 		},
 		skin = ['none'],
 		eyecolor = ['amber', 'red', 'brown'],
@@ -1561,8 +1561,8 @@ var races = {
 		uncivilized = false,
 		sebastian = true,
 		shade = {
-			male = "res://files/aric_expansion_images/shades/Kobold_M.png",
-			female = "res://files/aric_expansion_images/shades/Kobold_F.png"
+			male = "res://files/aric_expansion_images/shades/Kobold_Male.png",
+			female = "res://files/aric_expansion_images/shades/Kobold_Female.png"
 		},
 		eyecolor = ['amber', 'red', 'brown'],
 		eyeshape = ['slit', 'normal'],
@@ -1620,7 +1620,10 @@ var races = {
 		banditrace = false,
 		uncivilized = false,
 		sebastian = true,
-		shade = {male = "res://files/buttons/inventory/shades/Human_M.png", female = "res://files/buttons/inventory/shades/Human_F.png"},
+		shade = {
+			male = "res://files/aric_expansion_images/shades/Avali_Male.png",
+			female = "res://files/aric_expansion_images/shades/Avali_Female.png"
+		},
 		bodyshape = ['raptorshortstack'],
 		haircolor = ['white', 'green', 'purple', 'blue', 'blond', 'red', 'auburn'],
 		tail = ['avali'],
@@ -1678,7 +1681,10 @@ var races = {
 		banditrace = true,
 		uncivilized = false,
 		sebastian = true,
-		shade = {male = "res://files/buttons/inventory/shades/Human_M.png", female = "res://files/buttons/inventory/shades/Human_F.png"},
+		shade = {
+			male = "res://files/aric_expansion_images/shades/Beastkin_Mouse_Male.png",
+			female = "res://files/aric_expansion_images/shades/Beastkin_Mouse_Female.png"
+		},
 		eyecolor = ['blue', 'green', 'amber', 'red', 'brown'],
 		eyeshape = ['normal'],
 		ears = ['wide_furry'],
@@ -1733,7 +1739,10 @@ var races = {
 		banditrace = true,
 		uncivilized = false,
 		sebastian = true,
-		shade = {male = "res://files/buttons/inventory/shades/Human_M.png", female = "res://files/buttons/inventory/shades/Human_F.png"},
+		shade = {
+			male = "res://files/aric_expansion_images/shades/Beastkin_Squirrel_Male.png",
+			female = "res://files/aric_expansion_images/shades/Beastkin_Squirrel_Female.png"
+		},
 		eyecolor = ['blue', 'green', 'amber', 'red', 'brown'],
 		eyeshape = ['normal'],
 		ears = ['short_furry', 'long_pointy_furry'],
@@ -1788,7 +1797,10 @@ var races = {
 		banditrace = true,
 		uncivilized = false,
 		sebastian = true,
-		shade = {male = "res://files/buttons/inventory/shades/Human_M.png", female = "res://files/buttons/inventory/shades/Human_F.png"},
+		shade = {
+			male = "res://files/aric_expansion_images/shades/Beastkin_Otter_Male.png",
+			female = "res://files/aric_expansion_images/shades/Beastkin_Otter_Female.png"
+		},
 		eyecolor = ['blue', 'green', 'amber', 'red', 'brown'],
 		eyeshape = ['normal'],
 		ears = ['short_furry'],
@@ -1843,7 +1855,10 @@ var races = {
 		banditrace = true,
 		uncivilized = false,
 		sebastian = true,
-		shade = {male = "res://files/buttons/inventory/shades/Human_M.png", female = "res://files/buttons/inventory/shades/Human_F.png"},
+		shade = {
+			male = "res://files/aric_expansion_images/shades/Beastkin_Bird_Male.png",
+			female = "res://files/aric_expansion_images/shades/Beastkin_Bird_Female.png"
+		},
 		eyecolor = ['blue', 'green', 'amber', 'red', 'brown'],
 		eyeshape = ['slit'],
 		ears = ['feathery'],

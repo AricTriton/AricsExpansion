@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Kobold_F.png-683c7b8c610008ff7813add86a8296b9.stex"
+path="res://.import/Female_Gnoll.png-4d21c7d24291b2be614bc01c661b2723.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://files/aric_expansion_images/shades/Kobold_F.png"
-dest_files=[ "res://.import/Kobold_F.png-683c7b8c610008ff7813add86a8296b9.stex" ]
+source_file="res://files/aric_expansion_images/shades/Female_Gnoll.png"
+dest_files=[ "res://.import/Female_Gnoll.png-4d21c7d24291b2be614bc01c661b2723.stex" ]
 
 [params]
 

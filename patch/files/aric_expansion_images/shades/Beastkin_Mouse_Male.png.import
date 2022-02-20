@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Kobold_M.png-6c31a7a099749a1916971077a8bb6c0e.stex"
+path="res://.import/Beastkin_Mouse_Male.png-fe00e743a48bdd997b6810ca824dcff8.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://files/aric_expansion_images/shades/Kobold_M.png"
-dest_files=[ "res://.import/Kobold_M.png-6c31a7a099749a1916971077a8bb6c0e.stex" ]
+source_file="res://files/aric_expansion_images/shades/Beastkin_Mouse_Male.png"
+dest_files=[ "res://.import/Beastkin_Mouse_Male.png-fe00e743a48bdd997b6810ca824dcff8.stex" ]
 
 [params]
 
