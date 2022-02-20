@@ -126,8 +126,11 @@ var hobbydescription = {
 func _ready():
 	###---Added by Expansion---###
 	globals.useRalphsTweaks = globals.expansionsettings.use_ralphs_tweaks
+	globals.useRalphsTweaks = globals.expansionsettings.use_caps_tweaks
 	if globals.useRalphsTweaks:
-		globals.expansionsettings.applyTweaks()
+		globals.expansionsettings.applyRalphsTweaks()
+	if globals.useCapsTweaks:
+		globals.expansionsettings.applyCapitulizeTweaks()
 
 func _slave_hobby(button):
 	for i in get_tree().get_nodes_in_group("slavehobby"):
