@@ -567,12 +567,6 @@ func applyCapitulizeTweaks():
 	
 	variables.banditishumanchance = 25.0				# Original - 70.0
 	
-# Re-Enable Races here if enable_all_player_races == true. #ralphE
-func enableallplayerraces():
-	for i in globals.races:
-		globals.races[i].startingrace = true
-#/ralphE
-
 func addConstantsSupport():
 	variables.list["Aric's Expansion Mod"] = {
 		autoattackability = {descript = "Use abilities on auto attack, left to right. Hint: reorder/activate abilities in the character info menu when out.", object = self},
