@@ -72,6 +72,13 @@ func enemyencounter():
 	mansion.maintext = text
 	enemyinfo()
 
+var guardRaces = {
+	'wimborn' : [['Human', 12],['Demon', 2],['Taurus', 2],['Cat', 1]],
+	'frostford' : [['Halfkin Wolf', 6],['Beastkin Wolf', 6],['Human', 5],['Halfkin Cat', 2],['Beastkin Cat', 2],['Halfkin Fox', 1],['Beastkin Fox', 1],['Halfkin Mouse', 2],['Beastkin Mouse', 2],],
+	'gorn' : [['Orc', 4],['Goblin', 2],['Centaur', 1],['Taurus', 1]],
+	'amberguard' : [['Elf', 12],['Tribal Elf', 1],['Dark Elf', 1]]
+}
+
 ###---Added by Expansion---### NPCs Expanded | Criminal = False and to all buildslave calls
 func buildslave(i, criminal = false):
 	var race = ''
@@ -244,13 +251,95 @@ var treasuremisc = [['magicessenceing',7],['taintedessenceing',7],['natureessenc
 
 ###---Added by Expansion---### ElPresidente Items
 var chestloot = {
-	easy = ['armorleather','armorchain','weapondagger','weaponsword','clothsundress','clothmaid','clothbutler','armorpadded','weaponclaymore'],
-	medium = ['armorchain','weaponsword','clothsundress','clothmaid','clothbutler', 'armorelvenchain','armorrobe', 'weaponhammer','weapongreatsword','clothkimono','clothpet','clothmiko','clothbedlah','accgoldring','accslavecollar','acchandcuffs','acctravelbag','weaponancientsword','accelvenboots'],
+	easy = ['armorleather','armorchain','weapondagger','weaponbasicstaff','weaponserrateddagger','weaponsword','clothsundress','clothmaid','clothbutler','armorpadded','weaponclaymore'],
+	medium = ['armorchain','weaponsword','weaponserrateddagger','clothsundress','clothmaid','clothbutler', 'armorelvenchain','armorrobe', 'weaponhammer','weapongreatsword','clothkimono','clothpet','clothmiko','clothbedlah','accgoldring','accslavecollar','acchandcuffs','acctravelbag','weaponancientsword','accelvenboots'],
 	hard = ['armorplate','accamuletemerald','accamuletruby','armorelvenhalfplate','armorhalfplate','armorfieldplate','weaponrunesword','armormagerobe','accbooklife'],
 }
 ###---End Expansion---###
 
+func chestselectslave(action):
+	chestaction = action
+	var reqs = ''
+	var text = ''
+	if chestaction == 'chestlockpick':
+		reqs = 'person.energy >= 5'
+		text = 'Lock difficulty: ' + str(chest.agility)
+	elif chestaction == 'chestmouselockpick':
+		reqs = 'person.energy >= 10'
+		text = 'Lock difficulty: ' + str(chest.agility)
+	else:
+		reqs = 'person.energy >= 20'
+		text = 'Lock strength: ' + str(chest.strength)
+	outside.chosepartymember(true, [self,chestaction], reqs, text)#func chosepartymember(includeplayer = true, targetfunc = [null,null], reqs = 'true'):
 
+func treasurechestoptions(text = ''):
+	var array = []
+	mansion.maintext = text
+	array.append({name = 'Use a lockpick (5 energy)', function = 'chestselectslave', args = 'chestlockpick'})
+	if !globals.state.backpack.stackables.has("lockpick"):
+		array.back().disabled = true
+	array.append({name = 'Mouse w/o lockpick (10 energy)', function = 'chestselectslave', args = 'chestmouselockpick'})
+	array.back().disabled = true
+	if globals.player.race.find('Mouse') >= 0:
+		array.back().disabled = false
+	for i in globals.state.playergroup:
+		if globals.state.findslave(i).race.find('Mouse') >= 0:
+			array.back().disabled = false
+	array.append({name = 'Crack it open (20 energy)', function = 'chestselectslave', args = 'chestbash'})
+	array.append({name = "Leave", function = 'enemyleave'})
+	outside.buildbuttons(array, self)
+
+func chestlockpick(person):
+	var unlock = false
+	var text = ''
+	person.energy -= 5
+	globals.state.backpack.stackables.lockpick -= 1
+	var agility = person.sagi
+	if person.race.find('Mouse') >= 0:
+		agility += 2
+	if agility >= chest.agility:
+		unlock = true
+		text = "$name skillfully picks the lock on the chest."
+	else:
+		if 60 - (chest.agility - agility) * 10 >= rand_range(0,100):
+			text = "With some luck, $name manages to pick the lock on the chest. "
+			unlock = true
+		else:
+			text = "$name fails to pick the lock and breaks the lockpick. "
+			unlock = false
+
+	text = person.dictionary(text)
+	if unlock == false:
+		###---Added by Expansion---### Ank Bugfix v4
+		outside.playergrouppanel()
+		###---End Exploration---###
+		treasurechestoptions(text)
+	else:
+		showlootscreen(text)
+
+func chestmouselockpick(person):
+	var unlock = false
+	var text = ''
+	person.energy -= 10
+	if person.sagi >= chest.agility:
+		unlock = true
+		text = "$name skillfully picks the lock on the chest."
+	else:
+		if 60 - (chest.agility - person.sagi) * 10 >= rand_range(0,100):
+			text = "With some luck, $name manages to pick the lock on the chest. "
+			unlock = true
+		else:
+			text = "$name fails to pick the lock. "
+			unlock = false
+
+	text = person.dictionary(text)
+	if unlock == false:
+		###---Added by Expansion---### Ank Bugfix v4
+		outside.playergrouppanel()
+		###---End Exploration---###
+		treasurechestoptions(text)
+	else:
+		showlootscreen(text)
 
 func enemydefeated():
 	if launchonwin != null:

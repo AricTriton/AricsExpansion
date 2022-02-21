@@ -10,7 +10,7 @@ func chooseability(ability):
 	var text = ''
 	var confirmbutton = get_node("trainingabilspanel/abilityconfirm")
 	###---Added by Expansion---### Racial Abilities
-	var dict = {'sstr': 'Strength', 'sagi' : 'Agility', 'smaf': 'Magic', 'level': 'Level', 'race': 'Primary Race'}
+	var dict = {'sstr': 'Strength', 'sagi' : 'Agility', 'smaf': 'Magic', 'level': 'Level', 'race': 'Primary Race', 'spec': 'Spec'}
 	###---End Expansion---###
 	for i in get_node("trainingabilspanel/ScrollContainer/VBoxContainer").get_children():
 		if i.get_text() != ability.name:
@@ -44,6 +44,12 @@ func chooseability(ability):
 				text += '[color=#ff4949]'+dict[i] + ': ' + str(ability.reqs[i]) + '[/color], '
 			else:
 				text += '[color=green]'+dict[i] + ': ' + str(ability.reqs[i]) + '[/color], '
+		elif typeof(ability.reqs[i]) == TYPE_ARRAY: # Capitulize - Specialization based abilities 
+			if !ability.reqs[i].has(ref):
+				confirmbutton.set_disabled(true)
+				text += '[color=#ff4949]'+dict[i] + ': ' + str(ability.reqs[i]) + '[/color], '
+			else:
+				text += '[color=green]'+dict[i] + ': ' + str(ability.reqs[i]) + '[/color], ' # /Capitulize: Fix this someday ugh
 		elif ref < ability.reqs[i]:
 			confirmbutton.set_disabled(true)
 		###---End Expansion---###

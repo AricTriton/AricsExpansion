@@ -153,6 +153,28 @@ func backwardsCompatibility(person):
 		if person.traits.has(i):
 			person.trait_remove(i)
 	
+	#Genealogy Changes
+	if !person.genealogy.has('ogre'):
+		person.genealogy['ogre'] = 0
+	if !person.genealogy.has('giant'):
+		person.genealogy['giant'] = 0
+	if !person.genealogy.has('kobold'):
+		person.genealogy['kobold'] = 0
+	if !person.genealogy.has('lizardfolk'):
+		person.genealogy['lizardfolk'] = 0
+	if !person.genealogy.has('avali'):
+		person.genealogy['avali'] = 0
+	if !person.genealogy.has('hyena'):
+		person.genealogy['hyena'] = 0
+	if !person.genealogy.has('mouse'):
+		person.genealogy['mouse'] = 0
+	if !person.genealogy.has('squirrel'):
+		person.genealogy['squirrel'] = 0
+	if !person.genealogy.has('otter'):
+		person.genealogy['otter'] = 0
+	if !person.genealogy.has('bird'):
+		person.genealogy['bird'] = 0
+
 	#Flaws to Vices
 	if !person.mind.has('vice'):
 		person.mind['vice'] = "none"
