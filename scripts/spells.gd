@@ -348,7 +348,7 @@ func mindreadeffect():
 	#Luxury
 	var luxurydict = person.countluxury(false)
 	var luxuryreq = str(person.calculateluxury())
-	text += "\n\n[center][color=#d1b970]Luxury[/color][/center]\nCurrent Luxury: [color=aqua]"+ str(luxurydict.luxury) +"[/color]  |  Current Luxury Requirement: [color=red]"+ luxuryreq +"[/color]"
+	text += "\n\n[center][color=#d1b970]Luxury[/color][/center]\nCurrent Luxury: "+ globals.fastif(int(luxurydict.luxury) >= int(luxuryreq), "[color=lime]","[color=red]") + str(luxurydict.luxury) +"[/color]  |  Current Luxury Requirement: [color=aqua]"+ luxuryreq +"[/color]"
 	###---End Expansion---###
 	text = person.dictionary(text)
 	return text
