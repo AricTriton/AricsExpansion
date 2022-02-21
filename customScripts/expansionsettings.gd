@@ -58,6 +58,20 @@ var use_nickname_plus_first_name = false
 #Show Once Per Day Conversations Available Notifications in Inspect
 var show_onceperday_notification = true
 
+#Automated choice for captives 0 = leave, 1 = rape, 2 = kill
+var capturedSelect = 2
+var rescuedSelect = 0
+var foundSelect = 0
+
+#Chance enemies will be captured instead of killed when defeated
+var captureChance = 100
+
+#Price modifiers
+var slavePriceMod = 1				#Multiply slave cost
+var upgradeCostMod = 1				#Multiply mansion upgrade gold cost
+var upgradePointsCostMod = 1		#Multiply mansion upgrade point cost
+var itemCostMod = 1					#Multiply item cost (excluding food)
+
 #Do they have to be Rebellious to refuse stripping?
 var only_rebels_can_refuse_strip_rule = true
 

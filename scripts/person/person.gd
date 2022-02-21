@@ -1061,8 +1061,10 @@ func calculateprice():
 	
 	price = price*bonus
 
-	if price < 0:
-		price = variables.priceminimum
+	price *= globals.expansionsettings.slavePriceMod
+
+	price = max(price,variables.priceminimum)
+
 	return round(price)
 
 func sellprice(alternative = false):
