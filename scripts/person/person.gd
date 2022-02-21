@@ -1,3 +1,5 @@
+var scalecolor = ''
+var feathercolor = ''
 
 
 ###---Added by Expansion---### Modified by Deviate
@@ -449,11 +451,11 @@ func levelup():
 func getessence():
 	var essence
 	###---Added by Expansion---### Races Expanded
-	if findRace(['Demon', 'Arachna', 'Lamia']):
+	if findRace(['Demon', 'Arachna', 'Lamia','Gnoll']):
 		essence = 'taintedessenceing'
-	if findRace(['Fairy','Dark Elf','Dragonkin']):
+	if findRace(['Fairy','Dark Elf','Dragonkin','Kobold']):
 		essence = 'magicessenceing'
-	if findRace(['Dryad']):
+	if findRace(['Dryad','Lizardfolk']):
 		essence = 'natureessenceing'
 	if findRace(['Harpy', 'Centaur','Beastkin','Halfkin']):
 		essence = 'bestialessenceing'
@@ -479,7 +481,10 @@ func health_set(value):
 	###---Added by Expansion---### Crystal | Added Death Prevention
 	var text = ""
 	var color
-	stats.health_max = max(10, ((variables.basehealth + (stats.end_base+stats.end_mod)*variables.healthperend) + floor(level/2)*5) + stats.health_bonus)
+	if race.find('Ogre') >= 0: # Capitulize
+		stats.health_max = max(10, ((variables.ogrebasehealth + (stats.end_base+stats.end_mod)*variables.ogrehealthperend) + floor(level/2)*5) + stats.health_bonus)
+	else:
+		stats.health_max = max(10, ((variables.basehealth + (stats.end_base+stats.end_mod)*variables.healthperend) + floor(level/2)*5) + stats.health_bonus) # /Capitulize
 	stats.health_cur = clamp(floor(value), 0, stats.health_max)
 	if stats.health_cur <= 0:
 		if globals.state.thecrystal.preventsdeath == true:
@@ -772,6 +777,8 @@ func selfdictionary(text):
 	string = string.replace('$master', masternoun)
 	string = string.replace('[haircolor]', haircolor)
 	string = string.replace('[eyecolor]', eyecolor)
+	string = string.replace('[scalecolor]', scalecolor)
+	string = string.replace('[feathercolor]', feathercolor)
 	return string
 
 ###---Expansion End---###
@@ -810,10 +817,42 @@ func dictionary(text):
 	string = string.replace('$master', getMasterNoun())
 	string = string.replace('[haircolor]', haircolor)
 	string = string.replace('[eyecolor]', eyecolor)
+	string = string.replace('[scalecolor]', scalecolor)
+	string = string.replace('[feathercolor]', feathercolor)
 	var idx = string.find('$stutter') # "$stutter$master" may produce "M-Master"
 	while idx >= 0:
 		string = string.left(idx) + string.substr(idx + 8, randi() % 2 + 1) + "-" + string.right(idx + 8)
 		idx = string.find('$stutter')
+	return string
+	
+func dictionaryplayer(text):
+	var string = text
+	string = string.replace('[Playername]', globals.player.name_short())
+	string = string.replace('$name', name_short())
+	string = string.replace('$sex', sex)
+	string = string.replace('$He', 'You')
+	string = string.replace('$he', 'you')
+	string = string.replace('$His', 'Your')
+	string = string.replace('$his', 'your')
+	string = string.replace('$him', 'your')
+	string = string.replace('$master', getMasterNoun())
+	if sex == 'male':
+		string = string.replace('$penis', globals.fastif(penis == 'none', 'strapon', 'his cock'))
+		string = string.replace('$child', 'boy')
+		string = string.replace('$child', 'son')
+		string = string.replace('$sibling', 'brother')
+		string = string.replace('$sir', 'Sir')
+	else:
+		string = string.replace('$penis', globals.fastif(penis == 'none', 'strapon', 'her cock'))
+		string = string.replace('$child', 'girl')
+		string = string.replace('$child', 'daughter')
+		string = string.replace('$sibling', 'sister')
+		string = string.replace('$sir', "Ma'am")
+	string = string.replace('[haircolor]', haircolor)
+	string = string.replace('[eyecolor]', eyecolor)
+	string = string.replace('[scalecolor]', scalecolor)
+	string = string.replace('[feathercolor]', feathercolor)
+	string = string.replace('$race', race.to_lower())
 	return string
 
 ###---Added by Expansion---### Added Actually_Run to allow checking without affecting
@@ -874,6 +913,8 @@ func countluxury(actually_run = true):
 				vice_satisfied = true
 			if lastsexday == globals.resources.day:
 				vice_lust_mod += 10
+			elif self.rules.masturbation == false:
+				vice_lust_mod -= 5
 			vice_modifier = clamp(vice_lust_mod - ((globals.resources.day - self.lastsexday)*3), -20, 20)
 
 		#Sloth
@@ -1228,15 +1269,20 @@ var genealogy = {
 	dark_elf = 0,
 	tribal_elf = 0,
 	orc = 0,
+	ogre = 0,
+	giant = 0,
 	gnome = 0,
 	goblin = 0,
 	demon = 0,
+	kobold = 0,
 	dragonkin = 0,
+	lizardfolk = 0,
 	fairy = 0,
 	seraph = 0,
 	dryad = 0,
 	lamia = 0,
 	harpy = 0,
+	avali = 0,
 	arachna = 0,
 	nereid = 0,
 	scylla = 0,
@@ -1244,10 +1290,15 @@ var genealogy = {
 	bunny = 0,
 	dog = 0,
 	cow = 0,
+	hyena = 0,
 	cat = 0,
 	fox = 0,
 	horse = 0,
 	raccoon = 0,
+	mouse = 0,
+	squirrel = 0,
+	otter = 0,
+	bird = 0,
 }
 
 func get_birth_amount_name():
@@ -1345,21 +1396,21 @@ func updateClothing():
 		amnude = true
 	
 	#Determine if they should Strip or Dress
+	var captured = 0
 	if amnude == true:
 		var redress = false
 		#Naked - Do They Need/Want to Dress? Can They?
+		for i in self.effects.values():
+			if i.code == 'captured':
+				captured = i.duration/2
 		if self.rules.nudity == false && !self.fetish.exhibitionism in ['enjoyable','mindblowing']:
 			text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. You hadn't ordered $him to stay "+ globals.expansion.nameNaked() +" so $he proceeded. "
 			redress = true
 		elif self.rules.nudity == true && globals.fetishopinion.find(self.fetish.exhibitionism) <= 2:
 			#Chance to Rebel
-			var captured = 0
-			for i in self.effects.values():
-				if i.code == 'captured':
-					captured = i.duration/2
 			var chance = round(self.metrics.ownership + ((self.loyal + self.obed + self.fear)/3) - (captured * 10))
 			var roll = round(rand_range(0,100))
-			if roll <= chance:
+			if roll <= chance && (globals.expansionsettings.only_rebels_can_refuse_strip_rule == true && captured > 0 || globals.expansionsettings.only_rebels_can_refuse_strip_rule == false):
 				text += "\n[color=aqua]$name[/color] wanted to cover $his "+ globals.expansion.nameNaked() +" body. However, you ordered $him to stay "+ globals.expansion.nameNaked() +". $He followed your orders obediently. "
 				if self.dailyevents.find('rule_nudity_obeyed') < 0 && self.dailyevents.find('rule_nudity_obeyed') < 0:
 					self.dailyevents.append('rule_nudity_obeyed')
@@ -1409,7 +1460,7 @@ func updateClothing():
 				strip = true
 			else:
 				text += "\n[color=aqua]$name[/color] seemed to hesitate when considering stripping " + globals.expansion.nameNaked() + " as per your rules "+ globals.randomitemfromarray(['','as this is all new','as $he still feels awkward about it','as $he is unsure how $he feels about it']) +". "
-				var captured = 0
+				captured = 0
 				for i in self.effects.values():
 					if i.code == 'captured':
 						captured = i.duration/2

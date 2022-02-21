@@ -67,7 +67,7 @@ func joblist():
 					newbutton.set_tooltip(currentslave.dictionary("$He has won as many or more battles than ") + trainer.dictionary("$name, the Trainer. ") + currentslave.dictionary("$He will get nothing out of training there right now. "))
 			###---End Expansion---###
 			if i.tags.find('sex') >= 0 && i.code != 'fucktoy':
-				if !globals.currentslave.bodyshape in ['humanoid', 'bestial', 'shortstack']:
+				if !globals.currentslave.bodyshape in ['humanoid', 'bestial', 'shortstack', 'reptilianshortstack', 'reptilian', 'furryshortstack', 'avian', 'raptorshortstack']:
 					newbutton.set_disabled(true)
 					newbutton.set_tooltip(currentslave.dictionary("This occupation only allows humanoid currentslaves. "))
 				elif currentslave.tags.find('nosex') >= 0:

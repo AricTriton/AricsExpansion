@@ -52,11 +52,13 @@ func slavetabopen():
 			else:
 				$stats/basics/bodypanel/fullbody.set_texture(globals.spritedict[nakedspritesdict[person.unique].clothcons])
 		$stats/basics/bodypanel.visible = ($stats/basics/bodypanel/fullbody.get_texture() != null)
-		#---Jail Icons
+		#---Jail Bars
 		$stats/basics/fullbodyjail.visible = (person.sleep == 'jail')
-	###---End Expansion---###
 	else:
 		$stats/basics/bodypanel.visible = false
+		#---Jail Bars
+		$stats/basics/fullbodyjail.visible = false
+	###---End Expansion---###
 	for i in $stats/basics/traits/traitlist.get_children() + $stats/basics/sextraits/traitlist.get_children() :
 		if i.get_name() != 'Label':
 			i.visible = false
@@ -625,6 +627,7 @@ func updatestats():
 		text = str(person[i]) 
 		get(i).get_node('cur').set_text(text)
 		if i in ['sstr','sagi','smaf','send']:
+			get(i).get_node('base').set_text(str(person.stats[globals.basestatdict[i]]))
 			if person.stats[globals.maxstatdict[i].replace("_max",'_mod')] >= 1:
 				get(i).get_node('cur').set('custom_colors/font_color', Color(0,1,0))
 			elif person.stats[globals.maxstatdict[i].replace("_max",'_mod')] < 0:
@@ -699,6 +702,75 @@ func updatestats():
 	$stats/statspanel/sexuality_base.set_texture(sexuality_images[str(person.sexuality_images.base)])
 	###---End Expansion---###
 
+func _on_hairstyle_item_selected( ID ):
+	person = globals.currentslave
+	var hairstyles = ['bald', 'straight', 'ponytail', 'twintails', 'braid', 'two braids', 'bun']
+	person.hairstyle = hairstyles[ID]
+	slavetabopen()
+
+var gradeimages = globals.gradeimages
+
+var specimages = globals.specimages
+
+
+func _on_traittext_meta_clicked( meta ):
+	var text = globals.origins.trait(meta).description
+	globals.showtooltip(person.dictionary(text))
+
+
+func _on_traittext_mouse_exit():
+	globals.hidetooltip()
+
+
+#warning-ignore:unused_argument
+func _on_info_meta_clicked( meta ):
+	get_tree().get_current_scene().showracedescript(person)
+
+func _on_spec_mouse_entered():
+	var text 
+	if person.spec == null:
+		text = "Specialization can provide special abilities and effects and can be trained at Slavers' Guild. "
+	else:
+		var spec = globals.jobs.specs[person.spec]
+		text = "[center]" + spec.name + '[/center]\n'+ spec.descript + "\n[color=aqua]" +  spec.descriptbonus + '[/color]'
+	globals.showtooltip(text)
+
+
+func _on_spec_mouse_exited():
+	globals.hidetooltip()
+
+
+func _on_inspect_pressed():
+	$stats/inspect.pressed = true
+	$stats/customize.pressed = false
+	$stats/basics.visible = true
+	$stats/customization.visible = false
+
+func _on_customize_pressed():
+	$stats/inspect.pressed = false
+	$stats/customize.pressed = true
+	$stats/basics.visible = false
+	$stats/customization.visible = true
+
+
+
+
+func _on_fullbodycheck_pressed():
+	globals.rules.showfullbody = $stats/basics/fullbodycheck.pressed
+	globals.overwritesettings()
+	slavetabopen()
+
+
+func _process(delta):
+	var panel = $stats/basics/bodypanel
+	if panel.is_visible_in_tree():
+		if globals.main && globals.main.get_node("dialogue").visible:
+			panel.modulate.a = max(panel.modulate.a - 0.1, 0.0)
+		else:
+			var pos = panel.get_local_mouse_position()
+			var area = panel.rect_size
+			var val = -0.05 if (0 <= pos.x && 0 <= pos.y && pos.x <= area.x && pos.y <= area.y) else 0.05
+			panel.modulate.a = clamp(panel.modulate.a + val, 0.2, 1.0)
 
 ###---Added by Expansion---### New Images and Icons
 #---Movement Images
