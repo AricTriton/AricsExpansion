@@ -405,6 +405,14 @@ var specs = {
 		descriptreqs = "Charm 75+, Beauty 60+, grade Commoner or above, unlocked sex.",
 		reqs = "person.charm >= 75 && person.beautybase >= 60 && !person.origins in ['slave','poor'] && person.consent == true"
 	},
+	dancer = { # Capitulize - Dancer spec, faster in combat and good at jobs!
+		name = "Dancer",
+		code = 'dancer',
+		descript = "A Dancer takes every little movement into account. Whether on the stage or in battle, their serene motions entertain and empower those that view them. ",
+		descriptbonus = "+25% gold from entertainer job, unlocks abilities [not implemented yet], +7 Speed",
+		descriptreqs = "Charm 75+, grade Commoner or above, Agility 4+",
+		reqs = "person.charm >= 75 && !person.origins in ['slave','poor'] && person.sagi >= 4"
+	},
 	ranger = {
 		name = "Ranger",
 		code = 'ranger',
@@ -425,17 +433,33 @@ var specs = {
 		name = "Bodyguard",
 		code = 'bodyguard',
 		descript = "A Bodyguard is trained to put their Master’s life before their own. Not only are they capable of taking down threats on their own, but are also substantially more effective at protecting others. ",
-		descriptbonus = "+ 4 Armor, +40 Maximum Health, 'Protect' action doubles the amount of reduced damage.",
+		descriptbonus = "+4 Armor, +40 Maximum Health, 'Protect' action doubles the amount of reduced damage.",
 		descriptreqs = "Courage 60+, agility 3+, strength 4+, loyalty 50+",
 		reqs = "person.cour >= 60 && person.sagi >= 3 && person.sstr >= 4 && person.loyal >= 50"
+	},
+	warrior = { # Capitulize - Warrior spec, actually does have an ability unlock.
+		name = "Warrior",
+		code = 'warrior',
+		descript = "A Warrior is a battle hardened individual, experienced enough to know when to take a hit and how to dish them out. ",
+		descriptbonus = "+2 Armor, +20 Maximum Health, +3 Speed, +3 Damage",
+		descriptreqs = "Courage 60+, agility 2+, strength 5+, loyalty 40+",
+		reqs = "person.cour >= 60 && person.sagi >= 2 && person.sstr >= 5 && person.loyal >= 40"
 	},
 	assassin = {
 		name = "Assassin",
 		code = 'assassin',
-		descript = "Assassins are trained to act swiftly and decisively, when required. They prefer efficiency over show and offence to defence.  ",
+		descript = "Assassins are trained to act swiftly and decisively, when required. They prefer efficiency over show and offence to defence. ",
 		descriptbonus = "Speed +5, Damage +5",
 		descriptreqs = "Agility 5+, Wit 65+",
 		reqs = "person.wit >= 65 && person.sagi >= 5"
+	},
+	mage = { # Capitulize - Mage spec, big magic damage.
+		name = "Mage",
+		code = 'mage',
+		descript = "Mages are magically attuned individuals, capable of extraordinary feats. They are quite capable of blasting their enemies to ashes. ",
+		descriptbonus = "20% more effective at Mage Order Assistant Job, Magic Affinity treated as 1.5x effective in combat.",
+		descriptreqs = "Magic Affinity 5+, Wit 65+",
+		reqs = "person.wit >= 65 && person.smaf >= 5"
 	},
 	housekeeper = {
 		name = "Housekeeper",
@@ -788,6 +812,27 @@ func hunt(person):#agility, strength, endurance, courage
 	
 	var dict = {text = text, food = food}
 	return dict
+	
+func gnollhunt(person):#agility, strength, endurance, courage
+	var text = "After finishing their duties, $name went to the forest to search for wild animals.\n"
+	var food = person.awareness(true)*rand_range(globals.expansionsettings.func_hunt_tweaks[0],4) + max(0,person.send*rand_range(globals.expansionsettings.func_hunt_tweaks[1],globals.expansionsettings.func_hunt_tweaks[2]))
+	###---Added by Expanion---### Job Skills && Hybrid Support
+	person.add_jobskill('hunter', 1)
+	if person.cour < 60 && rand_range(0,100) + person.cour/4 < 45 - person.jobskills.hunter:
+		food = food*rand_range(0.25, 0.50)
+		text +=  "Due to [color=yellow]lack of courage[/color], $he obtained less food than $he likely could have. \n"
+	###---End Expansion---###
+	if person.spec in ['ranger','trapper']:
+		food *= globals.expansionsettings.func_hunt_tweaks[4]
+	###---Added by Expansion---### Ank Bugfix v4
+	food = round(min(food, max(person.sstr+person.send, -1)*globals.expansionsettings.func_hunt_tweaks[5]+globals.expansionsettings.func_hunt_tweaks[6])/2)
+	###---End Expansion---###
+	globals.itemdict.supply.amount += round(food/12)
+	text += "In the end $he brought [color=aqua]" + str(round(food)) + "[/color] food and [color=yellow]" + str(round(food/12)) + "[/color] supplies. \n"
+
+	var dict = {text = text, food = food}
+	return dict
+
 
 func library(person):
 	var text = "$name spends $his time studying in the library.\n"
@@ -809,6 +854,9 @@ func nurse(person):
 	var count = 0
 	###---Added by Expansion---### Job Skills
 	person.add_jobskill('nurse', 1)
+	var avalinurse = 0
+	if person.race.find("Avali") >= 0:
+		avalinurse = 15
 	if globals.player.health < globals.player.stats.health_max:
 		globals.player.health += (person.wit/15+person.smaf*3) + round(person.jobskills.nurse/2)
 		person.xp += 1
@@ -817,9 +865,9 @@ func nurse(person):
 		if i.away.duration == 0 && i.health < i.stats.health_max:
 			count += 1
 			if globals.itemdict.supply.amount > 0:
-				i.health += (person.wit/25+person.smaf*3) + round(person.jobskills.nurse/2)
+				i.health += (person.wit/(25-avalinurse)+person.smaf*3) + round(person.jobskills.nurse/2)
 			else:
-				i.health += (person.wit/35+person.smaf*3) + round(person.jobskills.nurse/2)
+				i.health += (person.wit/(25-avalinurse)+person.smaf*3) + round(person.jobskills.nurse/2)
 	person.xp += count * 8
 	###---End Expansion---###
 	
@@ -1206,6 +1254,8 @@ func assistwimborn(person):
 	var gold
 	text = "$name worked at the Mage's Order.\n"
 	gold = rand_range(1,5) + person.smaf*15 + person.wit/4 + min(globals.state.reputation.wimborn/1.5,50)
+	if person.spec in ['mage']:
+		gold *= 1.2
 	###---Added by Expansion---###
 	#Job Skills
 	person.add_jobskill('mage', 1)
@@ -1239,6 +1289,8 @@ func artistwimborn(person):
 	###---Added by Expansion---### Hybrid Support
 	if person.race.find('Nereid') >= 0:
 		gold = gold*1.25
+	if person.spec in ['dancer']:
+		gold *= 1.2
 	###---End Expansion---###
 	if person.traits.has('Pretty voice') == true:
 		gold = gold*1.2

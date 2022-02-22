@@ -1,13 +1,13 @@
 
 ###---Added by Expansion---### Deviate
-var animal_races_array = ['bunny','dog','cow','cat','fox','horse','raccoon']
-var humanoid_races_array = ['Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome','Goblin','Demon','Dragonkin']
-var uncommon_races_array = ['Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla']
-var beast_races_array = ['Centaur','Taurus','Beastkin Cat','Beastkin Fox','Beastkin Wolf','Beastkin Bunny','Beastkin Tanuki','Halfkin Cat','Halfkin Fox','Halfkin Wolf','Halfkin Bunny','Halfkin Tanuki']
+var animal_races_array = ['bunny','dog','cow','cat','fox','horse','hyena','raccoon','mouse','squirrel','otter','bird',]
+var humanoid_races_array = ['Human','Elf','Dark Elf','Tribal Elf','Orc','Ogre','Giant','Gnome','Goblin','Kobold','Demon','Dragonkin']
+var uncommon_races_array = ['Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla','Lizardfolk','Avali']
+var beast_races_array = ['Centaur','Taurus','Gnoll','Beastkin Cat','Beastkin Fox','Beastkin Wolf','Beastkin Bunny','Beastkin Tanuki','Halfkin Cat','Halfkin Fox','Halfkin Wolf','Halfkin Bunny','Halfkin Tanuki','Beastkin Mouse','Halfkin Mouse','Beastkin Squirrel','Halfkin Squirrel','Beastkin Otter','Halfkin Otter','Beastkin Bird','Halfkin Bird',]
 var magic_races_array = ['Slime']
-var races_beastfree_darkelf_free = ['Human','Elf','Dark Elf','Orc','Gnome','Goblin','Demon','Dragonkin','Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla','Slime']
-var genealogies = ['human','gnome','elf','tribal_elf','dark_elf','orc','goblin','dragonkin','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime','bunny','dog','cow','cat','fox','horse','raccoon']
-var genealogies_beastfree = ['human','gnome','elf','tribal_elf','dark_elf','orc','goblin','dragonkin','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime',]
+var races_beastfree_darkelf_free = ['Human','Elf','Dark Elf','Orc','Ogre','Giant','Gnome','Goblin','Demon','Dragonkin','Kobold','Lizardfolk','Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla','Slime','Avali']
+var genealogies = ['human','gnome','elf','tribal_elf','dark_elf','orc','ogre','giant','goblin','kobold','dragonkin','lizardfolk','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime','bunny','dog','cow','cat','fox','horse','hyena','raccoon','mouse','squirrel','otter','bird','avali']
+var genealogies_beastfree = ['human','gnome','elf','tribal_elf','dark_elf','orc','ogre','giant','goblin','kobold','dragonkin','lizardfolk','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime','avali']
 var genealogies_beastkin_only = ['bunny','dog','cat','fox','raccoon'] #ralphB - for breeding race consolidation - needs to include all races to be consolidated
 ###---End Expansion---###
 
@@ -323,7 +323,7 @@ func newbaby(mother,father):
 			if mother.race == father.race:
 				person[i] = mother[i] if rand_range(0,10) < 5 else father[i]
 			elif i in racebound_body_array: #&& !globals.races[person.race].i.empty(): #ralphD - not working
-				print("Ralph's found "+str(person.name)+" has racebound feature: "+str(i))
+				#print("Ralph's found "+str(person.name)+" has racebound feature: "+str(i))
 				#print("Ralph's found racebound feature: "+str(i)+".  Race version is: "+str(globals.races[person.race][i])+"    Mother's: "+str(mother[i])+"  Father's: "+str(father[i]))
 				#print("Ralph TTTEEEST:  globals.races[person.race][i]: "+str(globals.races[person.race][i]))
 				if person.race == mother.race:
@@ -528,6 +528,8 @@ func genealogy_decoder(chosenrace):
 		path = 'horse'
 	elif chosenrace == 'Taurus':
 		path = 'cow'
+	elif chosenrace == 'Gnoll':
+		path = 'hyena'
 	elif chosenrace == 'Wolf':
 		path = 'dog'
 	elif chosenrace == 'Cat':
@@ -538,6 +540,14 @@ func genealogy_decoder(chosenrace):
 		path = 'bunny'
 	elif chosenrace == 'Tanuki':
 		path = 'raccoon'
+	elif chosenrace == 'Mouse':
+		path = 'mouse'
+	elif chosenrace == 'Squirrel':
+		path = 'squirrel'
+	elif chosenrace == 'Otter':
+		path = 'otter'
+	elif chosenrace == 'Bird':
+		path = 'bird'
 	
 	return path
 
@@ -558,6 +568,8 @@ func decodeGenealogytoRace(race):
 			text = 'Centaur'
 		elif race == 'cow':
 			text = 'Taurus'
+		elif race == 'hyena':
+			text = 'Gnoll'
 		elif race == 'dog':
 			text = 'Wolf'
 		elif race == 'raccoon':
@@ -716,14 +728,12 @@ func setRace(person,raceselected,highestpercent): #ralphD - consolidated to func
 		person.race = caprace
 	elif currentrace in animal_races_array:
 		person.race_type = 3
-		#if person.genealogy.horse >= highestpercent: #ralph3 - should fix instances of <50% Centaur dominant hybrids being born as 'Halfkin ' only for race
-		#if person.genealogy.horse >= 50:
 		if currentrace == "horse":
 			person.race = 'Centaur'
-		#elif person.genealogy.cow >= highestpercent: #ralph3 - should fix instances of <50% Centaur dominant hybrids being born as 'Halfkin ' only for race
-		#elif person.genealogy.cow >= 50:
 		elif currentrace == "cow":
 			person.race = 'Taurus'
+		elif currentrace == "hyena":
+			person.race = 'Gnoll'
 		else:
 			#Beastkin/Halfkin Decoder
 			if highestpercent >= 70 && globals.rules.furry: #ralphE - changed so that with furries disabled, you get Halfkin instead of Beastkin
@@ -741,6 +751,15 @@ func setRace(person,raceselected,highestpercent): #ralphD - consolidated to func
 				caprace += 'Fox'
 			elif currentrace == 'raccoon':
 				caprace += 'Tanuki'
+			elif currentrace == 'mouse':
+				caprace += 'Mouse'
+			elif currentrace == 'squirrel':
+				caprace += 'Squirrel'
+			elif currentrace == 'otter':
+				caprace += 'Otter'
+			elif currentrace == 'bird':
+				caprace += 'Bird'
+
 			person.race = caprace
 	else:
 		person.race_type = 1
@@ -835,7 +854,7 @@ func set_race_secondary(person):
 	var race_secondary = ''
 	var race_secondary_percent = 0
 	
-	var plaintext_races = ['human','elf','orc','gnome','goblin','demon','dragonkin','fairy','seraph','dryad','lamia','harpy','arachna','nereid','scylla']
+	var plaintext_races = ['human','elf','orc','ogre','giant','gnome','goblin','kobold','demon','dragonkin','lizardfolk','fairy','seraph','dryad','lamia','harpy','arachna','nereid','scylla','avali']
 	var mainrace = person.race
 	
 	#Remove any Halfkin/Beastkin so Mixed Races don't Glitch
@@ -870,6 +889,10 @@ func set_race_secondary(person):
 	if person.race != 'Taurus' && person.race != 'Halfkin Taurus' && person.genealogy.cow > race_secondary_percent && person.genealogy.cow > 0:
 		race_secondary = 'Halfkin Taurus'
 		race_secondary_percent = person.genealogy.cow
+		
+	if person.race != 'Gnoll' && person.race != 'Halfkin Gnoll' && person.genealogy.hyena > race_secondary_percent && person.genealogy.hyena > 0:
+		race_secondary = 'Halfkin Gnoll'
+		race_secondary_percent = person.genealogy.hyena
 	
 	if person.race != 'Beastkin Cat' && person.race != 'Halfkin Cat' && person.genealogy.cat > race_secondary_percent && person.genealogy.cat > 0:
 		race_secondary = 'Halfkin Cat'
@@ -884,8 +907,24 @@ func set_race_secondary(person):
 		race_secondary_percent = person.genealogy.horse
 	
 	if person.race != 'Beastkin Tanuki' && person.race != 'Halfkin Tanuki' && person.genealogy.raccoon > race_secondary_percent && person.genealogy.raccoon > 0:
-		race_secondary = 'Halfkin Fox'
+		race_secondary = 'Halfkin Tanuki'
 		race_secondary_percent = person.genealogy.raccoon
+
+	if person.race != 'Beastkin Mouse' && person.race != 'Halfkin Mouse' && person.genealogy.mouse > race_secondary_percent && person.genealogy.mouse > 0:
+		race_secondary = 'Halfkin Mouse'
+		race_secondary_percent = person.genealogy.mouse
+
+	if person.race != 'Beastkin Squirrel' && person.race != 'Halfkin Squirrel' && person.genealogy.squirrel > race_secondary_percent && person.genealogy.squirrel > 0:
+		race_secondary = 'Halfkin Squirrel'
+		race_secondary_percent = person.genealogy.Squirrel
+
+	if person.race != 'Beastkin Otter' && person.race != 'Halfkin Otter' && person.genealogy.otter > race_secondary_percent && person.genealogy.otter > 0:
+		race_secondary = 'Halfkin Otter'
+		race_secondary_percent = person.genealogy.otter
+
+	if person.race != 'Beastkin Bird' && person.race != 'Halfkin Bird' && person.genealogy.bird > race_secondary_percent && person.genealogy.bird > 0:
+		race_secondary = 'Halfkin Bird'
+		race_secondary_percent = person.genealogy.bird
 
 	if race_secondary == '':
 		person.race_secondary = 'Full Blooded'
@@ -898,7 +937,7 @@ func set_race_secondary(person):
 func setBabyType(person):
 	if person.preg.has_womb == false || person.race_type == 4:
 		person.preg.baby_type = 'none'
-	elif person.race in ['Dragonkin','Lamia','Harpy','Arachna','Scylla']:
+	elif person.race in ['Dragonkin','Lamia','Harpy','Arachna','Scylla','Kobold','Lizardfolk','Beastkin Bird','Avali',]:
 		person.preg.baby_type = 'egg'
 	else:
 		person.preg.baby_type = 'birth'
@@ -958,7 +997,7 @@ func set_race_by_genealogy(person):
 	var race = ""
 	var genealogy
 
-	var racetype1 = ['human','elf','dark_elf','tribal_elf','orc','gnome','goblin','demon','dragonkin']
+	var racetype1 = ['human','elf','dark_elf','tribal_elf','orc','ogre','giant','gnome','goblin','kobold','demon','dragonkin','lizardfolk','avali']
 	var racetype2 = ['fairy','seraph','dryad','lamia','harpy','arachna','nereid','scylla']
 	
 	#Humanoids (1)
@@ -986,6 +1025,9 @@ func set_race_by_genealogy(person):
 	elif person.genealogy.cow >= 50:
 		race = 'Taurus'
 		person.race_type = 3
+	elif person.genealogy.hyena >= 50:
+		race = 'Gnoll'
+		person.race_type = 3
 	#Beastkin
 	elif person.genealogy.bunny >= 70:
 		race = 'Beastkin Bunny'
@@ -1001,6 +1043,18 @@ func set_race_by_genealogy(person):
 		person.race_type = 3
 	elif person.genealogy.raccoon >= 70:
 		race = 'Beastkin Tanuki'
+		person.race_type = 3
+	elif person.genealogy.mouse >= 70:
+		race = 'Beastkin Mouse'
+		person.race_type = 3
+	elif person.genealogy.squirrel >= 70:
+		race = 'Beastkin Squirrel'
+		person.race_type = 3
+	elif person.genealogy.otter >= 70:
+		race = 'Beastkin Otter'
+		person.race_type = 3
+	elif person.genealogy.bird >= 70:
+		race = 'Beastkin Bird'
 		person.race_type = 3
 	if race in ['','Human']:
 		#Halfkin
@@ -1018,6 +1072,18 @@ func set_race_by_genealogy(person):
 			person.race_type = 3
 		elif person.genealogy.raccoon >= 30:
 			race = 'Halfkin Tanuki'
+			person.race_type = 3
+		elif person.genealogy.mouse >= 30:
+			race = 'Halfkin Mouse'
+			person.race_type = 3
+		elif person.genealogy.squirrel >= 30:
+			race = 'Halfkin Squirrel'
+			person.race_type = 3
+		elif person.genealogy.otter >= 30:
+			race = 'Halfkin Otter'
+			person.race_type = 3
+		elif person.genealogy.bird >= 30:
+			race = 'Halfkin Bird'
 			person.race_type = 3
 	
 	#Magic (4)
@@ -1064,6 +1130,8 @@ func set_race_display(person):
 			person.race_display = 'Centaur'
 		elif person.genealogy.cow >= 70:
 			person.race_display = 'Taurus'
+		elif person.genealogy.hyena >= 70:
+			person.race_display = 'Gnoll'
 		elif person.genealogy.bunny >= 70:
 			person.race_display = 'Beastkin Bunny'
 		elif person.genealogy.dog >= 70:
@@ -1074,12 +1142,22 @@ func set_race_display(person):
 			person.race_display = 'Beastkin Fox'
 		elif person.genealogy.raccoon >= 70:
 			person.race_display = 'Beastkin Tanuki'
+		elif person.genealogy.mouse >= 70:
+			person.race_display = 'Beastkin Mouse'
+		elif person.genealogy.squirrel >= 70:
+			person.race_display = 'Beastkin Squirrel'
+		elif person.genealogy.otter >= 70:
+			person.race_display = 'Beastkin Otter'
+		elif person.genealogy.bird >= 70:
+			person.race_display = 'Beastkin Bird'
 	
 		#Halfkin
 		elif person.genealogy.horse >= 50:
 			person.race_display = 'Halfkin Centaur'
 		elif person.genealogy.cow >= 50:
 			person.race_display = 'Halfkin Taurus'
+		elif person.genealogy.hyena >= 50:
+			person.race_display = 'Halfkin Gnoll'
 		elif person.genealogy.bunny >= 50:
 			person.race_display = 'Halfkin Bunny'
 		elif person.genealogy.dog >= 50:
@@ -1090,6 +1168,14 @@ func set_race_display(person):
 			person.race_display = 'Halfkin Fox'
 		elif person.genealogy.raccoon >= 50:
 			person.race_display = 'Halfkin Tanuki'
+		elif person.genealogy.mouse >= 50:
+			person.race_display = 'Halfkin Mouse'
+		elif person.genealogy.squirrel >= 50:
+			person.race_display = 'Halfkin Squirrel'
+		elif person.genealogy.otter >= 50:
+			person.race_display = 'Halfkin Otter'
+		elif person.genealogy.bird >= 50:
+			person.race_display = 'Halfkin Bird'
 	
 	#Mixed Blooded
 	if founddisplay == false:

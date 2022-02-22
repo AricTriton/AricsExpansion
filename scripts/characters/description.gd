@@ -46,7 +46,9 @@ func getslavedescription(tempperson, mode = 'default'):
 
 	if text.find('[furcolor]'):
 		text = text.replace('[furcolor]', getdescription('furcolor'))
-
+		
+	if text.find('[hairstyle]'):
+		text = text.replace('[hairstyle]', getdescription('hairstyle'))
 
 	return text
 
@@ -96,7 +98,7 @@ func onceperdayConvos():
 
 func showVice():
 	var text = ""
-	if person.mind.vice_known == false || globals.expansionsettings.vices_luxury_effects == false:
+	if person == globals.player || person.mind.vice_known == false || globals.expansionsettings.vices_luxury_effects == false:
 		return ""
 	match person.mind.vice:
 		'lust':
@@ -126,7 +128,7 @@ func features():
 	if globals.state.descriptsettings.appearance == true || showmode != 'default':
 		text = "\n" + text
 		#Face
-		text += "\n[color=#d1b970]Head:[/color]\n" + getdescription('hairlength') + getdescription('hairstyle') + getdescription("eyesclera") + getdescription("eyecolor") + getdescription("eyeshape") + getdescription('horns') + getdescription('ears') + getdescription('lips') #ralph2
+		text += "\n[color=#d1b970]Head:[/color]\n" + getdescription('hairlength') + getdescription("eyesclera") + getdescription("eyecolor") + getdescription("eyeshape") + getdescription('horns') + getdescription('ears') + getdescription('lips') #ralph2
 		text += "\n" + globals.expansion.getCheeksDescription(person) + globals.expansion.getCumCoatedDescription(person,'face')
 		#Body
 		text += "\n[color=#d1b970]Body:[/color]\n" + getdescription('skin') + getdescription("skincov") + getdescription("wings") + getdescription("tail") + getdescription("height") + getdescription("asssize")
@@ -311,8 +313,10 @@ func getbeauty(justtext = false):
 		calculate = 'cute'
 	elif appeal <= 85:
 		calculate = 'pretty'
-	else:
+	elif appeal <= 100:
 		calculate = 'beautiful'
+	else:
+		calculate = 'gorgeous'
 
 	text = descriptions['beauty'][calculate]
 	if justtext == false:
@@ -328,24 +332,30 @@ func getbeauty(justtext = false):
 		return calculate
 
 func getBabyDescription(person):
-	#ralph2
 	var moreeyeinfo = ''
 	if person.eyesclera != 'normal':
 		moreeyeinfo = ' with ' + str(person.eyesclera) + ' sclera'
-	var text = '$He has ' + person.haircolor + ' hair and ' + person.eyecolor + ' eyes' + moreeyeinfo + '. $His skin is ' + person.skin + '. '#ralph2
-	#/ralph2
+	var text
+	if(person.skin != 'none'):	#Capitulize
+		text = '$He has ' + person.haircolor + ' hair and ' + person.eyecolor + ' eyes' + moreeyeinfo + '. $His skin is ' + person.skin + '. '
+	else:
+		text = '$He has ' + person.haircolor + ' hair and ' + person.eyecolor + ' eyes' + moreeyeinfo + '. '
+
 	var dict = {
 		none = '',
 		plants = "It is covered in some leaves and green plant matter. ",
 		scales = "It is covered in a few scales. ",
 		feathers = "It has bird feathers in some places. ",
 		full_body_fur = "It shows the beginnings of fur. ",
+		fullscales = '$He is covered in scales. ',
 	}
+	
 	text += dict[person.skincov]
 	if person.tail != 'none':
 		text += '$He appears to have a small tail, inherited from one of the parents. '
 	if person.horns != 'none':
 		text += '$He has pair of tiny horns on $his head. '
+		
 	dict = {
 		human = 'normal',
 		short_furry = 'short and furry',
@@ -355,8 +365,20 @@ func getBabyDescription(person):
 		long_droopy_furry = 'of a bunny',
 		feathery = "feathery",
 		fins = 'fin-like',
+		short_reptilian = 'short and scaled',
+		long_pointy_reptilian = 'long and scaled',
+		frilled = 'frills',
+		none = '',
+		long_round_reptilian = 'long, round, and reptilian',
+		long_droopy_reptilian = 'long, droopy, and reptilian',
+		wide_furry = 'big and round',
+		avali = 'long and fluffy, with two pairs',
 	}
-	text += '$His ears are ' + dict[person.ears] + '. '
+	
+	if(person.ears != 'none'):
+		text += '$His ears are ' + dict[person.ears] + '. '
+	else:
+		text += '$He has no ears. '
 	
 	text = person.dictionary(text)
 	return text
@@ -390,30 +412,48 @@ func nameAss():
 
 ###---Added by Expansion---###
 var newpenisdescription = {
-	human_micro = '$His [color=yellow]' +namePenis()+'[/color] is so ' + randomitemfromarray(['incredibly miniscule','microscopic','miniature']) + ' that it is pitiable.',
-	human_tiny = '$He has a ' + randomitemfromarray(['extremely small','tiny','itty bitty']) + ' [color=yellow]' +namePenis()+'[/color] dangling below $his groin.',
-	human_small = 'Below $his waist dangles a [color=yellow]tiny humanish '+namePenis()+'[/color], small enough that it could be called cute. ',
-	human_average ='$He has an [color=yellow]ordinary humanish ' +namePenis()+'[/color] below $his waist, more than enough to make most men proud. ',
-	human_large = 'A [color=yellow]huge humanish ' +namePenis()+'[/color] swings heavily from $his groin, big enough to give even the most veteran whore pause. ',
-	human_massive ='$He has a thick ' + randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big']) + ' [color=yellow]' +namePenis()+'[/color] dangling below his groin that would destroy the average ' + namePussy() + '.',
-	canine_micro = '$His slender, canine [color=yellow]' +namePenis()+'[/color] is so ' + randomitemfromarray(['incredibly miniscule','microscopic','miniature']) + ' that you can barely see the knot at all.',
-	canine_tiny = '$He has a thin, ' + randomitemfromarray(['extremely small','tiny','itty bitty']) + ' canine [color=yellow]' +namePenis()+'[/color] dangling barely noticably below $his groin.',
-	canine_small = 'A slender, pointed [color=yellow]canine ' +namePenis()+'[/color] hangs below $his waist, so small that its knot is barely noticeable. ',
-	canine_average = '$He has a knobby, red, [color=yellow]canine ' +namePenis()+'[/color] of respectable size below $his waist, which wouldn’t look out of place on a large dog. ',
-	canine_large = 'Growing from $his crotch is a [color=yellow]massive canine ' +namePenis()+'[/color], red-skinned and sporting a thick knot near the base. ',
-	canine_massive = '$He has a slender, ' + randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big']) + ' canine [color=yellow]' +namePenis()+'[/color] dangling below his groin that would destroy the average ' + namePussy() + '. The knot alone would make the average girl look pregnant.',
-	feline_micro = '$His slender, feline [color=yellow]' +namePenis()+'[/color] is so ' + randomitemfromarray(['incredibly miniscule','microscopic','miniature']) + ' that you can barely see the barbs at all.',
-	feline_tiny = '$He has a thin, ' + randomitemfromarray(['extremely small','tiny','itty bitty']) + ' feline [color=yellow]' +namePenis()+'[/color] dangling barely noticably below $his groin. It is covered in tiny barbs.',
-	feline_small = 'A [color=yellow]tiny feline ' +namePenis()+'[/color] dangles below $his waist, so small you can barely see the barbs. ',
-	feline_average = '$He has a barbed [color=yellow]cat ' +namePenis()+'[/color] growing from $his crotch, big enough to rival an average human. ',
-	feline_large = 'There is a frighteningly [color=yellow]large feline ' +namePenis()+'[/color] hanging between $his thighs, its sizable barbs making it somewhat intimidating. ',
-	feline_massive = '$He has a sleek, ' + randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big']) + ' feline [color=yellow]' +namePenis()+'[/color] dangling below his groin that would destroy the average ' + namePussy() + '. The barbs would be excruciatingly painful to the unprepared.',
-	equine_micro = '$His slender, equine [color=yellow]' +namePenis()+'[/color] is so ' + randomitemfromarray(['incredibly miniscule','microscopic','miniature']) + ' that you could reasonably believe $he is a woman and it is $his clit.',
-	equine_tiny = '$He has a thin, ' + randomitemfromarray(['extremely small','tiny','itty bitty']) + ' equine [color=yellow]' +namePenis()+'[/color] dangling barely noticably below $his groin. It is spotted a variety of colors.',
-	equine_small = 'Below $his waist hangs a [color=yellow]smallish equine ' +namePenis()+'[/color], which is still respectable compared to the average man. ',
-	equine_average= 'A [color=yellow]sizable equine ' +namePenis()+'[/color] grows from $his nethers, which, while small on a horse, is still thicker and heavier than the average human tool. ',
-	equine_large = 'A [color=yellow]massive equine ' +namePenis()+'[/color] hangs heavily below $his waist, its mottled texture not quite matching the rest of $his skin. ',
-	equine_massive ='$He has a club-like, ' + randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big']) + ' equine [color=yellow]' +namePenis()+'[/color] dangling below $his groin that would destroy the average ' + namePussy() + '. The lumps in the middle could break someone in two.',
+	human_micro = '$His [color=yellow]' + namePenis() +'[/color] is so ' + randomitemfromarray(['incredibly miniscule','microscopic','miniature']) + ' that it is pitiable.',
+	human_tiny = '$He has a ' + randomitemfromarray(['extremely small','tiny','itty bitty']) + ' [color=yellow]' + namePenis() + '[/color] dangling below $his groin.',
+	human_small = 'Below $his waist dangles a [color=yellow]tiny humanish '+ namePenis() + '[/color], small enough that it could be called cute. ',
+	human_average ='$He has an [color=yellow]ordinary humanish ' + namePenis() + '[/color] below $his waist, more than enough to make most men proud. ',
+	human_large = 'A [color=yellow]huge humanish ' + namePenis() + '[/color] swings heavily from $his groin, big enough to give even the most veteran whore pause. ',
+	human_massive ='$He has a thick ' +  randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big']) + ' [color=yellow]' + namePenis() + '[/color] dangling below his groin that would destroy the average ' + namePussy() + '.',
+	reptilian_micro = '$His [color=yellow]' + namePenis() + '[/color] is so ' +  randomitemfromarray(['incredibly miniscule','microscopic','miniature']) + ' that it barely extends out of $his slit.',
+	reptilian_tiny = '$He has a ' +  randomitemfromarray(['extremely small','tiny','itty bitty']) + ' [color=yellow]' + namePenis() + '[/color] extending out $his slit.',
+	reptilian_small = 'Below $his waist extends a [color=yellow]tiny reptilian '+ namePenis() + '[/color], small enough that it could be called cute. ',
+	reptilian_average ='$He has [color=yellow]regular reptilian ' + namePenis() + '[/color] extending out of his slit, it is averagely sized. ',
+	reptilian_large = 'A [color=yellow]huge reptilian ' + namePenis() + '[/color] extends out of $his slit, it is long and fit for deep penetration. ',
+	reptilian_massive ='$He has a thick ' +  randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big']) + ' [color=yellow]' + namePenis() + '[/color] extendin from his slit that would destroy the average ' + namePussy() + '.', # /Capitulize
+	canine_micro = '$His slender, canine [color=yellow]' + namePenis() + '[/color] is so ' +  randomitemfromarray(['incredibly miniscule','microscopic','miniature']) + ' that you can barely see the knot at all.',
+	canine_tiny = '$He has a thin, ' +  randomitemfromarray(['extremely small','tiny','itty bitty']) + ' canine [color=yellow]' + namePenis() + '[/color] dangling barely noticably below $his groin.',
+	canine_small = 'A slender, pointed [color=yellow]canine ' + namePenis() + '[/color] hangs below $his waist, so small that its knot is barely noticeable. ',
+	canine_average = '$He has a knobby, red, [color=yellow]canine ' + namePenis() + '[/color] of respectable size below $his waist, which wouldn’t look out of place on a large dog. ',
+	canine_large = 'Growing from $his crotch is a [color=yellow]massive canine ' + namePenis() + '[/color], red-skinned and sporting a thick knot near the base. ',
+	canine_massive = '$He has a slender, ' +  randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big']) + ' canine [color=yellow]' + namePenis() + '[/color] dangling below his groin that would destroy the average ' + namePussy() + '. The knot alone would make the average girl look pregnant.',
+	feline_micro = '$His slender, feline [color=yellow]' + namePenis() + '[/color] is so ' +  randomitemfromarray(['incredibly miniscule','microscopic','miniature']) + ' that you can barely see the barbs at all.',
+	feline_tiny = '$He has a thin, ' +  randomitemfromarray(['extremely small','tiny','itty bitty']) + ' feline [color=yellow]' + namePenis() + '[/color] dangling barely noticably below $his groin. It is covered in tiny barbs.',
+	feline_small = 'A [color=yellow]tiny feline ' + namePenis() + '[/color] dangles below $his waist, so small you can barely see the barbs. ',
+	feline_average = '$He has a barbed [color=yellow]cat ' + namePenis() + '[/color] growing from $his crotch, big enough to rival an average human. ',
+	feline_large = 'There is a frighteningly [color=yellow]large feline ' + namePenis() + '[/color] hanging between $his thighs, its sizable barbs making it somewhat intimidating. ',
+	feline_massive = '$He has a sleek, ' +  randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big']) + ' feline [color=yellow]' + namePenis() + '[/color] dangling below his groin that would destroy the average ' + namePussy() + '. The barbs would be excruciatingly painful to the unprepared.',
+	rodent_micro = '$His slender, rodent [color=yellow]' + namePenis() + '[/color] is so ' +  randomitemfromarray(['incredibly miniscule','microscopic','miniature']) + ' that you can barely see its sheath under the fur.', # /Capitulize
+	rodent_tiny = '$He has a thin, ' +  randomitemfromarray(['extremely small','tiny','itty bitty']) + ' rodent [color=yellow]' + namePenis() + '[/color] hidden within $his sheath.',
+	rodent_small = 'A [color=yellow]tiny rodent ' + namePenis() + '[/color] is in its sheath, so small you can barely see the it. ',
+	rodent_average = '$He has a [color=yellow]rodent ' + namePenis() + '[/color] growing from $his sheath, big enough to rival an average human. ',
+	rodent_large = 'There is a frighteningly [color=yellow]large rodent ' + namePenis() + '[/color] inside a sheath between $his thighs as it extends in an intimidating way. ',
+	rodent_massive = '$He has a sleek, ' +  randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big']) + ' rodent [color=yellow]' + namePenis() + '[/color] extending out of $his sheath, it would destroy the average ' + namePussy() + '. ', 
+	bird_micro = '$His slender, bird [color=yellow]' + namePenis() + '[/color] is so ' +  randomitemfromarray(['incredibly miniscule','microscopic','miniature']) + ' that you can barely see its cloaca under the feathers.',
+	bird_tiny = '$He has a thin, ' +  randomitemfromarray(['extremely small','tiny','itty bitty']) + ' bird [color=yellow]' + namePenis() + '[/color] hidden within $his cloaca.',
+	bird_small = 'A [color=yellow]tiny bird ' + namePenis() + '[/color] is in its cloaca, so small you can barely see the it. ',
+	bird_average = '$He has a [color=yellow]bird ' + namePenis() + '[/color] growing from $his cloaca, big enough to rival an average human. ',
+	bird_large = 'There is a frighteningly [color=yellow]large bird ' + namePenis() + '[/color] inside a cloaca between $his thighs as it extends in an intimidating way. ',
+	bird_massive = '$He has a sleek, ' +  randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big']) + ' bird [color=yellow]' + namePenis() + '[/color] extending out of $his cloaca, it would destroy the average ' + namePussy() + '. ', # /Capitulize
+	equine_micro = '$His slender, equine [color=yellow]' + namePenis() + '[/color] is so ' +  randomitemfromarray(['incredibly miniscule','microscopic','miniature']) + ' that you could reasonably believe $he is a woman and it is $his clit.',
+	equine_tiny = '$He has a thin, ' +  randomitemfromarray(['extremely small','tiny','itty bitty']) + ' equine [color=yellow]' + namePenis() + '[/color] dangling barely noticably below $his groin. It is spotted a variety of colors.',
+	equine_small = 'Below $his waist hangs a [color=yellow]smallish equine ' + namePenis() + '[/color], which is still respectable compared to the average man. ',
+	equine_average= 'A [color=yellow]sizable equine ' + namePenis() + '[/color] grows from $his nethers, which, while small on a horse, is still thicker and heavier than the average human tool. ',
+	equine_large = 'A [color=yellow]massive equine ' + namePenis() + '[/color] hangs heavily below $his waist, its mottled texture not quite matching the rest of $his skin. ',
+	equine_massive ='$He has a club-like, ' +  randomitemfromarray(['truly massive','gigantic','magnificent','outrageously big']) + ' equine [color=yellow]' + namePenis() + '[/color] dangling below $his groin that would destroy the average ' + namePussy() + '. The lumps in the middle could break someone in two.',
 }
 ###---Expansion End---###
 
@@ -421,8 +461,13 @@ var newpenisdescription = {
 var newdescriptions = {
 	bodyshape = {
 		humanoid = '$His body is quite [color=yellow]normal[/color]. ',
+		giant = "$His body resembles a human's, except that $he is [color=yellow]extremely large.[/color] ",
 		bestial = "$His body resembles a human's, except for some [color=yellow]bestial features[/color] in $his face and body structure. ",
+		reptilian ="$His body resembles a human's, except for [color=yellow]reptilian features[/color] in $his face and body structure. ",
 		shortstack = '$His body is rather [color=yellow]petite[/color], about half the size of the average person. ',
+		reptilianshortstack = '$His body is rather [color=yellow]petite[/color], about half the size of the average person. $He has [color=yellow]reptilian features[/color] in $his face and body structure. ',
+		furryshortstack = '$His body is rather [color=yellow]petite[/color], about half the size of the average person. $He has [color=yellow]bestial features[/color] in $his face and body structure. ',
+		avian = "$His body resembles a human's, except for [color=yellow]avian features[/color] in $his face and body structure. ",
 		jelly = '$His body is [color=yellow]jelly-like[/color] and partly transparent. ',
 		halfbird = '$His body has [color=yellow]wings for arms and avian legs[/color] making everyday tasks difficult. ',
 		halfsnake = 'The lower portion of $his body consists of a long-winding [color=yellow]snake’s tail[/color]. ',
@@ -430,6 +475,7 @@ var newdescriptions = {
 		halfspider = "The lower portion of $his body consists of a [color=yellow]spider's legs and abdomen[/color]. ",
 		halfhorse = 'While $his upper body is human, $his lower body is [color=yellow]equine[/color] in nature. ',
 		halfsquid = 'The lower portion of $his body consists of a [color=yellow]number of tentacular appendages[/color], similar to those of an octopus. ',
+		raptorshortstack = '$His body is rather [color=yellow]petite[/color], about half the size of the average person. $He has [color=yellow]raptor-like features[/color] in $his face and body structure. ',
 	},
 	age = {
 		child = '$He looks like a [color=aqua]' + randomitemfromarray(['','child','kid','young']) + ' $sex [/color] that has barely hit puberty. ',
@@ -443,6 +489,7 @@ var newdescriptions = {
 		cute = '$His looks are quite [color=yellow]cute[/color] and appealing. ',
 		pretty = '$He looks unusually [color=yellow]pretty[/color] and attracts some attention. ',
 		beautiful = '$He looks exceptionally [color=yellow]beautiful[/color], having no visible flaws and easily evoking envy. ',
+		gorgeous = '$He is unbelievably [color=yellow]gorgeous[/color], outside of what any would consider normal beauty. ',
 	},
 	lips = {
 		masculine = '$He has thin, narrow [color=aqua]lips[/color] on his face that look rough and [color=aqua]manly[/color]. ',
@@ -457,14 +504,15 @@ var newdescriptions = {
 		facepussy = '$His [color=aqua]' + randomitemfromarray(['unnaturaly','immobile','unusable','throbbing']) + '[/color] [color=aqua]lips[/color] are so large $he is unable to speak any longer. $He no longer has working lips, rather a flushed, moist face-pussy. ',
 	},
 	hairlength = {
-		ear = '$His [color=aqua][haircolor][/color] hair is cut [color=aqua]short[/color]. ',
-		neck = '$His [color=aqua][haircolor][/color] hair falls down to just [color=aqua]below $his neck[/color]. ',
+		ear = '$His [color=aqua][haircolor][/color] hair is cut [color=aqua]short[/color]. [hairstyle]',
+		neck = '$His [color=aqua][haircolor][/color] hair falls down to just [color=aqua]below $his neck[/color]. [hairstyle]',
 		shoulder = '$His wavy [color=aqua][haircolor][/color] hair is [color=aqua]shoulder length[/color]. ',
-		waist = '$His gorgeous [color=aqua][haircolor][/color] hair [color=aqua]sways down to $his waist[/color]. ',
-		hips = '$His [color=aqua][haircolor][/color] hair cascades down, [color=aqua]reaching $his hips[/color]. ',
+		waist = '$His gorgeous [color=aqua][haircolor][/color] hair [color=aqua]sways down to $his waist[/color]. [hairstyle]',
+		hips = '$His [color=aqua][haircolor][/color] hair cascades down, [color=aqua]reaching $his hips[/color]. [hairstyle]',
+		bald = '$He is bald. ', #/Capitulize
 	},
 	hairstyle = {
-		straight = 'It [color=aqua]hangs freely[/color] from $his head. ',
+		straight = 'It [color=aqua]hangs freely[/color] from their head. ',
 		ponytail = 'It is tied in a [color=aqua]high ponytail[/color]. ',
 		twintails = 'It is managed in girly [color=aqua]twin-tails[/color]. ',
 		braid = 'It is combed into a single [color=aqua]braid[/color]. ',
@@ -486,7 +534,6 @@ var newdescriptions = {
 		black = 'Instead of whites, the sclera of $his eyes are entirely [color=aqua]black[/color]. ',
 		red = 'Instead of whites, the sclera of $his eyes are entirely [color=aqua]red[/color]. ',
 		glowing = '$His eyes glow with some luminous power. ',
-		default = '$He has no discernable pupils or irises. ', #this is intended for tiefling subspecies and will be wrong if new colors are added (check expansionsetup.gd)
 		#default = 'Instead of whites, the sclera of $his eyes are entirely [color=aqua][eyesclera][/color]. ', #displays "[eyesclera]" instead of the color
 	},
 	#/ralph2
@@ -495,18 +542,28 @@ var newdescriptions = {
 		short = 'There is a pair of [color=aqua]tiny, pointed horns[/color] on top of $his head. ',
 		'long_straight' : '$He has a pair of [color=aqua]long, bull-like horns[/color]. ',
 		curved = 'There are [color=aqua]curved horns[/color] coiling around $his head. ',
+		manyhorned = 'There are [color=aqua]many horns[/color] along $his head. ',
 	},
 	ears = {
 		human = '',
 		short_furry = '$He has a pair of fluffy, [color=aqua]medium-sized animal-like ears[/color]. ',
+		short_reptilian = '$He has a pair of scaled, [color=aqua]medium-sized reptilian-like ears[/color]. ',
 		long_pointy_furry = '$He has a pair of fluffy, [color=aqua]lengthy, animal-like ears[/color]. ',
+		long_pointy_reptilian = '$He has a pair of scaled, [color=aqua]lengthy, reptilian-like ears[/color]. ',
 		pointy = '$He has quite long, [color=aqua]pointed[/color] ears. ',
+		frilled = '$He has reptilian frills on the sides of $his head that act as ears. ',
+		none = '$He has no ears. ',
 		long_round_furry = '$He has a pair of [color=aqua]standing bunny ears[/color] rising above $his head. ',
+		long_round_reptilian = '$He has a pair of [color=aqua]standing reptilian ears[/color] rising above $his head. ',
 		long_droopy_furry = '$He has a pair of [color=aqua]droopy, bunny ears[/color] on $his head. ',
-		feathery = "There's a pair of clutched [color=aqua]feathery ears[/color] on the sides of " + '$His head. ',
+		long_droopy_reptilian = '$He has a pair of [color=aqua]droopy, reptilian ears[/color] on $his head. ',
+		feathery = "There's a pair of clutched [color=aqua]feathery ears[/color] on the sides of " + '$his head. ',
+		wide_furry = '$He has a pair of big, wide [color=aqua]animal-like ears[/color]. ',
 		fins = '$His ears look like a pair of [color=aqua]fins[/color]. ',
+		avali = '$He has two pairs of [color=aqua]lengthy, animal-like ears[/color] ears, one pair pointed above the head while the other pair dropping low below the neck. ',
 	},
 	skin = {
+		none = '',
 		pale = '$His skin is a [color=aqua]pale[/color] white. ',
 		fair = '$His skin is healthy and [color=aqua]fair[/color] color. ',
 		olive = '$His skin is of an unusual [color=aqua]olive[/color] tone. ',
@@ -524,8 +581,11 @@ var newdescriptions = {
 	skincov = {
 		none = '',
 		plants = 'Various leaves and bits of [color=aqua]plant matter[/color] cover parts of $his body. ',
-		scales = '$His skin is partly covered with [color=aqua]scales[/color]. ',
-		feathers = '$His body is covered in [color=aqua]bird-like feathers[/color] in many places. ',
+		scales = '$His skin is partly covered with [color=aqua][scalecolor] scales[/color]. ',
+		feathers = '$His body is covered in [color=aqua][feathercolor] bird-like feathers[/color] in many places. ',
+		feathers_and_fur = '$His body is sparsely covered with [color=aqua][feathercolor] bird-like feathers[/color]. Beneath that is thick, soft [color=aqua]fur of [furcolor]',
+		fullscales = '$His body is covered with [color=aqua][scalecolor] scales[/color]. ',
+		fullfeathers = '$His body is covered with [color=aqua][feathercolor] feathers[/color]. ',
 		full_body_fur = '$His body is covered in thick, soft [color=aqua]fur of [furcolor]',
 	},
 	furcolor ={ # fur color
@@ -538,7 +598,17 @@ var newdescriptions = {
 		black = 'jet-black color[/color]. ',
 		orange = 'common fox pattern[/color]. ',
 		brown = 'light-brown tone[/color]. ',
+		blue = 'deep blue tone[/color]. ', # Capitulize
+		whiteandpink = 'white and pink color[/color]. ',
+		'guardian white' : 'a glowing white color, tattooed with tribal magical runes[/color]. ',
 	},
+	feathercolor = { # feather color
+		default = '[feathercolor]',
+	},
+	scalecolor = {
+		default = '[scalecolor]',
+	},
+
 	#arms = {
 	#	scales = '$His' + fastif(person['legs'] == 'scales', ' arms and legs', ' arms') + ' are covered in [color=aqua]scales[/color]. ',
 	#	winged = "$His arms closely resemblance a [color=aqua]bird's wings[/color]. ",
@@ -554,24 +624,33 @@ var newdescriptions = {
 		gossamer = 'On $his back rests translucent, silky [color=aqua]fairy wings[/color]. ',
 		leather_black = 'Hidden on $his back is a pair of bat-like, [color=aqua]black leather wings[/color]. ',
 		leather_red = 'Hidden on $his back is a pair of bat-like, [color=aqua]red leather wings[/color]. ',
+		leather_green = 'Hidden on $his back is a pair of bat-like, [color=aqua]green leather wings[/color]. ',
+		leather_white = 'Hidden on $his back is a pair of bat-like, [color=aqua]white leather wings[/color]. ',
+		leather_blue = 'Hidden on $his back is a pair of bat-like, [color=aqua]blue leather wings[/color]. ',
 	},
 	tail = {
 		none = '',
 		cat = 'Below $his waist, you spot a slim [color=aqua]cat tail[/color] covered with fur. ',
 		fox = '$He has a large, fluffy [color=aqua]fox tail[/color]. ',
+		neko = 'Below $his waist, you spot a slim [color=aqua]cat tail that splits into two[/color] covered with fur. ',
+		hyena = '$He has a large, matted [color=aqua]hyena tail[/color]. ',
 		wolf = "Below $his waist there's a short, fluffy, [color=aqua]wolf tail[/color]. ",
 		bunny = '$He has a [color=aqua]small ball of fluff[/color] behind $his rear. ',
 		racoon = '$He has a plump, fluffy [color=aqua]raccoon tail[/color]. ',
 		scruffy = 'Behind $his back you notice a long tail covered in a thin layer of fur which ends in a [color=aqua]scruffy brush[/color]. ',
 		demon = '$He has a long, thin, [color=aqua]demonic tail[/color] ending in a pointed tip. ',
-		dragon = 'Trailing somewhat behind $his back is a [color=aqua]scaled tail[/color]. ',
+		dragon = 'Trailing somewhat behind $his back is a spiky [color=aqua]draconic tail[/color]. ',
 		bird = '$He has a [color=aqua]feathery bird tail[/color] on $his rear. ',
 		fish = '$His rear ends in long, sleek [color=aqua]fish tail[/color]. ',
+		otter = '$He has a slender, sleek[color=aqua] otter tail[/color]. ', # Capitulize
+		squirrel = '$He has a huge, fluffy[color=aqua] squirrel tail[/color]. ',
+		reptilian = 'Trailing somewhat behind $his back is a [color=aqua]scaled tail[/color]. ',
 		"snake tail" : '',
 		tentacles = '',
 		horse = '',
 		"spider abdomen" : '',
-		mouse = 'Below $his waist, you spot a slim [color=aqua]mouse tail[/color] covered in a fine thin layer of fuzz. '
+		mouse = 'Below $his waist, you spot a slim [color=aqua]mouse tail[/color] covered in a fine thin layer of fuzz. ',
+		avali = 'Trailing behind $his waist, you see a very long [color=aqua]avali tail[/color] with feathers at the base and a large feather at the tip. ',
 	},
 	height = {
 		tiny = '$His stature is [color=aqua]' + randomitemfromarray(['extremely small','tiny','itty bitty']) + '[/color], barely half the size of a normal person. ',

@@ -5,11 +5,14 @@
 var modversion = "1.7"
 
 #---Aric's and Game's Base Values potentially changed by Ralph's
-var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within ApplyTweaks as well as the Hybrid system.
+var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within applyRalphsTweaks as well as the Hybrid system.
 var unique_trait_generation = false				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
 var consolidatebeastDNA = false					# Set this to true if you don't like npcs with a mix of Beastkin/Halfkin race%'s (no half cat half foxes, etc.) #ralphB
 var gratitude_for_all = false					# Set this to true so that babies aged up to Child or Teen have as much chance to spawn with the Grateful trait as ones aged up to Adult (Ralph sets this to False, but up to you) #ralphC
 var sillymode = true							# Set it to false if you don't abide, so far it only affects random travel event text #ralphD
+
+#---Base Game descriptions and the sort changed by Capitulize
+var use_caps_tweaks = false						# Set this to true if you want to use Capitulize's tweaks (namely furry shit)
 
 #---Debug Tools (True/False)
 var perfectinfo = false
@@ -54,6 +57,20 @@ var use_nickname_plus_first_name = false
 
 #Show Once Per Day Conversations Available Notifications in Inspect
 var show_onceperday_notification = true
+
+#Automated choice for captives 0 = leave, 1 = rape, 2 = kill
+var capturedSelect = 2
+var rescuedSelect = 0
+var foundSelect = 0
+
+#Chance enemies will be captured instead of killed when defeated
+var captureChance = 100
+
+#Price modifiers
+var slavePriceMod = 1				#Multiply slave cost
+var upgradeCostMod = 1				#Multiply mansion upgrade gold cost
+var upgradePointsCostMod = 1		#Multiply mansion upgrade point cost
+var itemCostMod = 1					#Multiply item cost (excluding food)
 
 #Do they have to be Rebellious to refuse stripping?
 var only_rebels_can_refuse_strip_rule = true
@@ -283,7 +300,7 @@ var random_enemy_awareness = [0,0]				# Ralph's - [-7,7], This value applies a r
 
 #Constructor Changes
 var same_type_weight = 2						# Ralph's - 4, The divider value that divides the genealogy of the person's temporary race to determine the sametypeweight used in the constructor.
-
+	
 
 #Ralph's tweaks partial settings, true is default for all settings
 var ralphs_tweaks_partial = {
@@ -304,7 +321,7 @@ var ralphs_tweaks_partial = {
 Applies Ralph's tweaks to the game, making it a slightly more challenging experience.
 Feel free to change as you see fit!
 """
-func applyTweaks():
+func applyRalphsTweaks():
 	applyVariableTweaks()
 
 	if ralphs_tweaks_partial.disable_mage_mana_reduction:
@@ -398,8 +415,8 @@ func applyItemMarketCostTweaks():
 
 # Apply Constructor Changes here.
 func applyConstructorTweaks():
-	globals.constructor.humanoid_races_array = ['Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome','Goblin','Demon']					# Original - ['Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome','Goblin','Demon','Dragonkin']
-	globals.constructor.uncommon_races_array = ['Dragonkin','Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla']		# Original - ['Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla']
+	globals.constructor.humanoid_races_array = ['Human','Elf','Dark Elf','Tribal Elf','Orc','Ogre','Giant','Gnome','Goblin','Kobold','Demon']			# Original - ['Human','Elf','Dark Elf','Tribal Elf','Orc','Ogre','Giant','Gnome','Goblin','Kobold','Demon','Dragonkin']
+	globals.constructor.uncommon_races_array = ['Dragonkin','Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla','Lizardfolk','Avali']	# Original - ['Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla','Lizardfolk','Avali']
 
 # Apply Combat Data Tweaks here
 func applyCombatDataTweaks():
@@ -492,8 +509,78 @@ func applyRaceTweaks():
 	
 	#Beastkin Tanuki
 	globals.races["Beastkin Tanuki"].stats = {str_max = 3, agi_max = 3, maf_max = 5, end_max = 3}
+	
+	#Gnoll
+	globals.races["Gnoll"].stats = {str_max = 5, agi_max = 4, maf_max = 2, end_max = 5}
+
+	#Ogre
+	globals.races["Ogre"].stats = {str_max = 7, agi_max = 2, maf_max = 1, end_max = 7}
+
+	#Giant
+	globals.races["Giant"].stats = {str_max = 9, agi_max = 2, maf_max = 3, end_max = 5}
+
+	#Lizardfolk
+	globals.races["Lizardfolk"].stats = {str_max = 5, agi_max = 4, maf_max = 3, end_max = 5}
+
+	#Kobold
+	globals.races["Kobold"].stats = {str_max = 2, agi_max = 6, maf_max = 3, end_max = 5}
+
+	#Avali
+	globals.races["Avali"].stats = {str_max = 1, agi_max = 8, maf_max = 8, end_max = 3}
+
+	#Beastkin Mouse
+	globals.races["Beastkin Mouse"].stats = {str_max = 2, agi_max = 6, maf_max = 5, end_max = 2}
+
+	#Beastkin Squirrel
+	globals.races["Beastkin Squirrel"].stats = {str_max = 3, agi_max = 5, maf_max = 3, end_max = 5}
+
+	#Beastkin Otter
+	globals.races["Beastkin Otter"].stats = {str_max = 4, agi_max = 4, maf_max = 2, end_max = 6}
+
+	#Beastkin Bird
+	globals.races["Beastkin Bird"].stats = {str_max = 2, agi_max = 5, maf_max = 3, end_max = 6}
 
 
+"""
+Applies Capitulize's tweaks to the game, mostly description and furry based changes.
+"""
+func applyCapitulizeTweaks():
+	#--- Race Changes
+	#Dragonkin
+	globals.races.Dragonkin.skin = ['none']
+	globals.races.Dragonkin.eyeshape = ['slit']
+	globals.races.Dragonkin.bodyshape = ['reptilian']
+	globals.races.Dragonkin.ears = ['short_reptilian','pointy', 'frilled','none','long_round_reptilian','long_droopy_reptilian','long_pointy_reptilian']
+	globals.races.Dragonkin.skincov = ['fullscales']
+	globals.races.Dragonkin.surname = globals.names.reptiliansurname
+	
+	#---Trait Tweaks
+	
+	#Strength
+	globals.origins.traitlist["Weak"].description = "$name is rather weak compared to others. \n\n[color=aqua]Strength -2, Strength Max -2[/color]"
+	globals.origins.traitlist["Weak"].effect.str_max = -2
+	globals.origins.traitlist["Strong"].description = "$name has been blessed with greater strength than most. $He also appears to be harder to tame. \n\n[color=aqua]Strength +2, Strength Max +2, Obedience growth -20%[/color]"
+	globals.origins.traitlist["Strong"].effect.str_max = 2
+	#Agility
+	globals.origins.traitlist["Clumsy"].description = "$name's reflexes are somewhat slower, than the others. \n\n[color=aqua]Agility -2, Agility Max -2, physical occupations are less effective[/color]"
+	globals.origins.traitlist["Clumsy"].effect.agi_max = -2
+	globals.origins.traitlist["Quick"].description = "$name is very active whenever $he does something. However, it also makes $his nervous system less stable. \n\n[color=aqua]Agility +2, Agility Max +2, Stress change +20%[/color]"
+	globals.origins.traitlist["Quick"].effect.agi_max = 2
+	#Magic Affinity
+	globals.origins.traitlist["Magic Deaf"].description = "$name's senses are very dull when it comes to magic. \n\n[color=aqua]Magic Affinity -2, Magic Affinity Max -2[/color]"
+	globals.origins.traitlist["Magic Deaf"].effect.maf_max = -2
+	globals.origins.traitlist["Responsive"].description = "$name is in touch with raw energy, making $him potentially useful in magic area. \n\n[color=aqua]Magic Affinity +2, Magic Affinity Max +2, Toxicity change +20%[/color]"
+	globals.origins.traitlist["Responsive"].effect.maf_max = 2
+	#Endurance
+	globals.origins.traitlist["Frail"].description = "$name's body is much less durable than most. $His physical potential is severely impaired. \n\n[color=aqua]Endurance -2, Endurance Max -2,[/color]"
+	globals.origins.traitlist["Frail"].effect.end_max = -2
+	globals.origins.traitlist["Robust"].description = "$name's physique is way better than most. \n\n[color=aqua]Endurance +2, Endurance Max +2, Fear change -20%[/color]"
+	globals.origins.traitlist["Robust"].effect.end_max = 2
+
+	#---Variable Tweaks
+	
+	variables.banditishumanchance = 25.0				# Original - 70.0
+	
 func addConstantsSupport():
 	variables.list["Aric's Expansion Mod"] = {
 		autoattackability = {descript = "Use abilities on auto attack, left to right. Hint: reorder/activate abilities in the character info menu when out.", object = self},
@@ -561,3 +648,4 @@ func addConstantsSupport():
 		basemanafoodconsumption = {descript = "The average capacity that the hole's size adds or subtracts from", min = 0.0, max = 100.0},
 		orgasmmana = {descript = "The average capacity that the hole's size adds or subtracts from", min = 1.0, max = 100.0},
 	}
+	
