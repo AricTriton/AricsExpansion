@@ -407,10 +407,12 @@ func checkFetish(fetish, alternatemod = 0, increase = true, addevent = true):
 		clamper = clamp(opinionrank-2, 0.5, 3)
 	else:
 		clamper = alternatemod
-	if rand_range(0,100) <= globals.expansionsettings.fetish_base_increase_chance + ((opinionrank*10) * clamper):
+	if rand_range(0,100) <= globals.expansionsettings.fetish_base_increase_chance + ((opinionrank*10) * clamper) || self.effects.has("entranced"):
 		success = true
 		if addevent == true:
 			self.dailyevents.append(fetish)
+		if self.effects.has("entranced"):
+			self.add_effect(globals.effectdict.entranced, true)
 	
 	#Fetish Increase Check
 	if increase == true:

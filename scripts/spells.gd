@@ -102,7 +102,7 @@ var spelllist = {
 	entrancement = {
 		code = 'entrancement',
 		name = 'Entrancement',
-		description = 'Makes target more susceptible to suggestions and easier to acquire various kinks.',
+		description = 'Makes target more susceptible to suggestions. Kinks, Fetishes, and Consent are easier to manipulate.',
 		effect = 'entrancementeffect',
 		manacost = 15,
 		req = 10,
@@ -397,6 +397,21 @@ func invigorateeffect_Ralphs():
 			text = person.dictionary("You cast Invigorate on yourself and make a sputtering gasp, coughing up a little blood. You're not in any shape for this. Your energy is partly restored, but not as much as you hoped. ")
 	return text
 #/ralph
+
+func entrancementeffect():
+	var text = ''
+	var spell = globals.spelldict.entrancement
+	var exists = false
+#	globals.resources.mana -= spellcost(spell)
+	if person.effects.has('entranced') == false:
+		###---Added by Expansion---### Entrancement Expanded
+		globals.resources.mana -= spellcost(spell)
+		text = "$name's eyes "+ globals.randomitemfromarray(['dialate','slowly spin','half-close','drift lazily','glaze over','become unable to focus on anything','cross slightly','go listless','glow faintly violet','grow dim']) +". $He seems ready to accept whatever you tell $him. The next suggestion you give him, whether a request for [color=aqua]Consent[/color], [color=aqua]Fetish[/color] changes, or [color=aqua]Number of Children Wanted[/color], $he will fully accept. This will consume the mana flowing through $him and end the trance, however. "
+		###---End Expansion---###
+		person.add_effect(globals.effectdict.entranced)
+	else:
+		text = "It seems like $name is already entranced. "
+	return person.dictionary(text)
 
 func feareffect():
 	var text = "You grab hold of $name's shoulders and hold $his gaze. At first, $he’s calm, but the longer you stare into $his eyes, the more $he trembles in fear. Soon, panic takes over $his stare. "

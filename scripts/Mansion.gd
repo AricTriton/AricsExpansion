@@ -1114,9 +1114,9 @@ func _on_end_pressed():
 					if person.mind.vice_known == false:
 						person.mind.vice_presented = true
 						if luxurycheck.vice_modifier > 0:
-							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] seems to have an unknown [color=aqua]Vice[/color] affecting $his happiness and [color=aqua]Luxury[/color] [color=green]positively[/color] today. Perhaps [color=aqua]reading $his mind[/color] will reveal more. \n"))
+							text1.set_bbcode(text1.get_bbcode() + person.dictionary("[color=aqua]$name[/color] seems to have an unknown [color=aqua]Vice[/color] affecting $his happiness and [color=aqua]Luxury[/color] [color=green]positively[/color] today. Perhaps [color=aqua]reading $his mind[/color] will reveal more. \n"))
 						elif luxurycheck.vice_modifier < 0:
-							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] seems to have an unknown [color=aqua]Vice[/color] affecting $his happiness and [color=aqua]Luxury[/color] [color=red]negatively[/color] today. Perhaps [color=aqua]reading $his mind[/color] will reveal more. \n"))
+							text1.set_bbcode(text1.get_bbcode() + person.dictionary("[color=aqua]$name[/color] seems to have an unknown [color=aqua]Vice[/color] affecting $his happiness and [color=aqua]Luxury[/color] [color=red]negatively[/color] today. Perhaps [color=aqua]reading $his mind[/color] will reveal more. \n"))
 					else:
 						text1.set_bbcode(text1.get_bbcode() + person.dictionary("[color=aqua]$name[/color] has a [color=aqua]"+ str(person.mind.vice.capitalize()) +" Vice[/color] which affected $his happiness and [color=aqua]Luxury[/color] "))
 						if luxurycheck.vice_modifier > 0:

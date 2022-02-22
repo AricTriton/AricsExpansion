@@ -944,6 +944,10 @@ func getIntro(person):
 		text += str(getMovementText(person))+ ".\n"
 	else:
 		text += ".\n"
+	#Entrancement
+	var effect = globals.effectdict.entranced.duplicate()
+	if person.effects.has(effect.code):
+		text += "\n$His eyes are "+ globals.randomitemfromarray(['dialated','slowly spinning','half-closed','drifting lazily','glazed over','unable to focus on anything','crossed slightly','listless','glowing faintly']) +" and $he is obviously [color=aqua]entranced[/color]. $He will accept the next thing $he is told as truth without question or argument.\n"
 	return text
 
 func getExpression(person):

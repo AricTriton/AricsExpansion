@@ -517,7 +517,7 @@ func applyRaceTweaks():
 	globals.races["Ogre"].stats = {str_max = 7, agi_max = 2, maf_max = 1, end_max = 7}
 
 	#Giant
-	globals.races["Giant].stats = {str_max = 9, agi_max = 2, maf_max = 3, end_max = 5}
+	globals.races["Giant"].stats = {str_max = 9, agi_max = 2, maf_max = 3, end_max = 5}
 
 	#Lizardfolk
 	globals.races["Lizardfolk"].stats = {str_max = 5, agi_max = 4, maf_max = 3, end_max = 5}
