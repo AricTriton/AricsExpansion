@@ -82,8 +82,8 @@ func slimeConversionCheck(mother, father):
 			if father.id != ['-1'] && father.id != null:
 				globals.connectrelatives(father, baby, 'slimesire')
 			
-			rapidpregnancydamage = (variables.pregduration-1) - person.preg.duration
-			person.preg.duration = variables.pregduration-1
+			rapidpregnancydamage = (globals.state.pregduration-1) - person.preg.duration
+			person.preg.duration = globals.state.pregduration-1
 			mother.stress += rapidpregnancydamage*2
 			mother.health -= rapidpregnancydamage
 			text += mother.dictionary("$name felt a shift in $his body from the slimey goo inside of $him. $His baby, " + baby.dictionary("$name ") + mother.dictionary(", has been warped into a Slime and is about to ooze out of $him. Health -"+str(rapidpregnancydamage)+" / Stress +"+str(rapidpregnancydamage*2)))

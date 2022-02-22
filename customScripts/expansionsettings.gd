@@ -2,7 +2,7 @@
 
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
-var modversion = "1.6c"
+var modversion = "1.7"
 
 #---Aric's and Game's Base Values potentially changed by Ralph's
 var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within ApplyTweaks as well as the Hybrid system.
@@ -10,7 +10,6 @@ var unique_trait_generation = false				# Set this to true if you want a 1 in 5 c
 var consolidatebeastDNA = false					# Set this to true if you don't like npcs with a mix of Beastkin/Halfkin race%'s (no half cat half foxes, etc.) #ralphB
 var gratitude_for_all = false					# Set this to true so that babies aged up to Child or Teen have as much chance to spawn with the Grateful trait as ones aged up to Adult (Ralph sets this to False, but up to you) #ralphC
 var sillymode = true							# Set it to false if you don't abide, so far it only affects random travel event text #ralphD
-var enable_all_player_races = false				# Set to true to allow all races for player & startslave on new game; This is a cheat especially for a Ralphs playthrough - Ralph recommends setting this to true only if you are in true love with starting as an uncommon race and cannot cheat on that race with any other - true love people, this is serious. Ralph has spoken. #ralphE
 
 #---Debug Tools (True/False)
 var perfectinfo = false
@@ -37,7 +36,7 @@ var ihavebloodygoodtaste = false
 var unwantedfetishes = []		#Copy/Paste any you don't want into the 'unwantedfetishes' array below: ['incest','lactation','drinkmilk','bemilked','milking','exhibitionism','drinkcum','wearcum','wearcumface','creampiemouth','creampiepussy','creampieass','pregnancy','oviposition','drinkpiss','wearpiss','pissing','otherspissing','bondage','dominance','submission','sadism','masochism']
 
 #------Player Specific Info
-#Base Bonus or Penalty for Attraction Checks for PCs
+#Base Bonus or Penalty for Attraction Checks for MCs. Makes others like your MC more.
 var playerattractionmodifier = 20
 
 #Set to True for the Player to follow Slave's Clothing Dress/Redress System
@@ -55,6 +54,9 @@ var use_nickname_plus_first_name = false
 
 #Show Once Per Day Conversations Available Notifications in Inspect
 var show_onceperday_notification = true
+
+#Do they have to be Rebellious to refuse stripping?
+var only_rebels_can_refuse_strip_rule = true
 
 #---Vices (Formerly Flaws)
 #Vices Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations when enabled.)
@@ -283,6 +285,21 @@ var random_enemy_awareness = [0,0]				# Ralph's - [-7,7], This value applies a r
 var same_type_weight = 2						# Ralph's - 4, The divider value that divides the genealogy of the person's temporary race to determine the sametypeweight used in the constructor.
 
 
+#Ralph's tweaks partial settings, true is default for all settings
+var ralphs_tweaks_partial = {
+	disable_mage_mana_reduction = true,
+	increase_spell_cost = true,
+	tweak_spell_costs = true,
+	increase_black_market_reputation_loss = true,
+	reduce_breeder_profit = true,
+	reduce_slave_price_bonus = true,
+	randomize_travel_awareness = true,
+	increase_food_cost = true,
+	clear_player_racial_bonus = true,
+	tweak_invigorate = true,
+	restrict_convert_to_upgrade_point = true,
+}
+
 """
 Applies Ralph's tweaks to the game, making it a slightly more challenging experience.
 Feel free to change as you see fit!
@@ -290,10 +307,13 @@ Feel free to change as you see fit!
 func applyTweaks():
 	applyVariableTweaks()
 
-	mage_mana_reduction = false
+	if ralphs_tweaks_partial.disable_mage_mana_reduction:
+		mage_mana_reduction = false
+		globals.expandedplayerspecs.Mage = "Combat spell deal +20% more damage"
 
 	# Ralph likes his increased mana costs
-	spellcost = 2
+	if ralphs_tweaks_partial.increase_spell_cost:
+		spellcost = 2
 
 	applySpellManacostTweaks()
 
@@ -302,7 +322,8 @@ func applyTweaks():
 	summontentacle_lewdness = 5
 
 	#Reputation Tweak
-	reputation_loss = -18
+	if ralphs_tweaks_partial.increase_black_market_reputation_loss:
+		reputation_loss = -18
 
 	#Food Tweak Effects
 	food_experience = 1
@@ -317,15 +338,19 @@ func applyTweaks():
 	magic_hobby_maf_max = 1
 	
 	#Sell Slave Prices
-	mansion_bred_and_breeder = 1.5
-	calculate_price_bonus_divide = 2
+	if ralphs_tweaks_partial.reduce_breeder_profit:
+		mansion_bred_and_breeder = 1.5
+		globals.expandedplayerspecs.Breeder = "Pregnancy chance for everyone increased by 25%\nHalved grow-up times for offspring\nBred Slaves sell for +20% more gold and provide 20% more upgrade points as normal slaves.\n[color=aqua]Start with the Nursery unlocked[/color]"
+	if ralphs_tweaks_partial.reduce_slave_price_bonus:
+		calculate_price_bonus_divide = 2
 	quicksell_slave_pressed = 1.11
 	
 	#Capture Changes
 	times_rescued_multiplier = 10
 	
 	#Random Awareness
-	random_enemy_awareness = [-7,7]	
+	if ralphs_tweaks_partial.randomize_travel_awareness:
+		random_enemy_awareness = [-7,7]	
 	
 	#Genealogy Changes
 	randompurebreedchance = 10
@@ -355,6 +380,8 @@ func applyVariableTweaks():
 
 # Apply Manacost Tweaks here
 func applySpellManacostTweaks():
+	if !ralphs_tweaks_partial.tweak_spell_costs:
+		return
 	globals.spelldict.mindread.manacost = 1			# Original - globals.spelldict.mindread.manacost = 3
 	globals.spelldict.sedation.manacost = 20		# Original - globals.spelldict.sedation.manacost = 10
 	globals.spelldict.dream.manacost = 5			# Original - globals.spelldict.dream.manacost = 20
@@ -366,7 +393,8 @@ func applySpellManacostTweaks():
 
 # Apply Market Item Tweaks here
 func applyItemMarketCostTweaks():
-	globals.itemdict.food.cost = 40					# Original - 10
+	if ralphs_tweaks_partial.increase_food_cost:
+		globals.itemdict.food.cost = 40					# Original - 10
 
 # Apply Constructor Changes here.
 func applyConstructorTweaks():
@@ -465,11 +493,6 @@ func applyRaceTweaks():
 	#Beastkin Tanuki
 	globals.races["Beastkin Tanuki"].stats = {str_max = 3, agi_max = 3, maf_max = 5, end_max = 3}
 
-# Re-Enable Races here if enable_all_player_races == true. #ralphE
-func enableallplayerraces():
-	for i in globals.races:
-		globals.races[i].startingrace = true
-#/ralphE
 
 func addConstantsSupport():
 	variables.list["Aric's Expansion Mod"] = {
@@ -528,7 +551,8 @@ func addConstantsSupport():
 		livestockloseconsentchance = {descript = "", min = 0.0, max = 100.0, object = self},
 	}
 	variables.list["AE Mod - Ralph's Tweaks"]  = {
-		use_ralphs_tweaks = {descript = "Set this to true if you want to use the settings within ApplyTweaks as well as the Hybrid system.", object = self},
+		use_ralphs_tweaks = {descript = "REQUIRES RESTART! Set this to true if you want to use the settings within ApplyTweaks as well as the Hybrid system.", object = self},
+		ralphs_tweaks_partial = {descript = "REQUIRES RESTART! Set values to false to disable parts of Ralph's tweaks", object = self},
 		unique_trait_generation = {descript = "Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.", object = self},
 		consolidatebeastDNA = {descript = "Set this to true if you don't like npcs with a mix of Beastkin/Halfkin race%'s (no half cat half foxes, etc.)", object = self},
 		gratitude_for_all = {descript = "Set this to true so that babies aged up to Child or Teen have as much chance to spawn with the Grateful trait as ones aged up to Adult (Ralph sets this to False, but up to you)", object = self},

@@ -299,7 +299,7 @@ var characters = {
 		end_base = 2,
 		skillpoints = 1,
 		obed = 90,
-		traits = ['Nimble', 'Quick', 'Spoiled', 'Likes It Rough', 'Masochist'],
+		traits = ['Nimble', 'Quick', 'Spoiled', 'Likes it rough', 'Masochist'],
 		ability = ['attack','aimedstrike'],
 	},
 	Yris = {
@@ -426,6 +426,31 @@ var characters = {
 		lewdness = 50,
 		traits = ['Experimenter','Clever'],
 	},
+	Ivrana = {
+		basics = ['Tribal Elf', 'adult', 'female', 'rich'],
+		name = 'Ivran',
+		unique = 'Ivrana',
+		surname = '',
+		imageportait = 'res://files/aric_expansion_images/characters/ivranaportrait.png',
+		beautybase = 75,
+		haircolor = 'brown',
+		hairlength = 'shoulder',
+		hairstyle = 'straight',
+		titssize = 'big',
+		asssize = 'average',
+		skin = 'brown',
+		eyecolor = 'amber',
+		vagvirgin = true,
+		obed = 50,
+		loyal = 0,
+		stress = 60,
+		asser = 20,
+		cour = 65,
+		conf = 83,
+		wit = 55,
+		charm = 48,
+		height = 'tall',
+	},
 }
 
 var sprites = {
@@ -522,10 +547,15 @@ var sprites = {
 	tiaportrait = load("res://files/aric_expansion_images/characters/tiaportrait.png"),
 	tiaclothed = load("res://files/aric_expansion_images/characters/tiaclothed.png"),
 	tianaked = load("res://files/aric_expansion_images/characters/tianaked.png"),
-	
 	#Bunny Boy in Aydas Shop
 	adya_assist_neutral = load("res://files/aric_expansion_images/characters/bunnyboy_neutral.png"),
 	adya_assist_nervous = load("res://files/aric_expansion_images/characters/bunnyboy_nervous.png"),
+	#Ivran/a
+	ivran_male = load("res://files/aric_expansion_images/characters/ivranenemy.png"),
+	ivran_male_portrait = load("res://files/aric_expansion_images/characters/ivranenemyicon.png"),
+	ivrana_clothed = load("res://files/aric_expansion_images/characters/ivranaclothed.png"),
+	ivrana_naked = load("res://files/aric_expansion_images/characters/ivrananaked.png"),
+	ivrana_portrait = load("res://files/aric_expansion_images/characters/ivranaportrait.png"),
 	###---End Expansion---###
 }
 var scenes = {
@@ -605,6 +635,7 @@ var nakedsprites = {
 	Ayda = {cons = 'aydanaked',rape = 'aydanaked', clothcons = 'aydanormal',clothrape = 'aydanormal'},
 	###---Added by Expansion---### Tia
 	Tia = {cons = 'tianaked', rape = 'tianaked', clothcons = 'tiaclothed', clothrape = 'tiaclothed'},
+	Ivrana = {cons = 'ivrana_naked', rape = 'ivrana_naked', clothcons = 'ivrana_clothed', clothrape = 'ivrana_clothed'},
 	###---End Expansion---###
 }
 
