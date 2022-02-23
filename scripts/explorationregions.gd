@@ -275,7 +275,7 @@ var database = {
 		races = [],
 	},
 	#BubblepotAdditions
-	#Forest
+	#Forest -(The Spine, Great Tree Roots, Great Tree Trunk, Great Tree Banches, Great Tree Nest [Boss=Roc])
 	thespine = {
 		background = 'grove',
 		music = 'explore',
@@ -286,7 +286,39 @@ var database = {
 		description = "A dark and foreboding forest. The trees whisper despite the lack of wind, and the many branches and roots seem to stretch toward you like eldritch fingers... ",
 		enemies = [{value= 'naturespiritandtree', weight =7},{value= 'naturespiritmany', weight =7},{value= 'naturespirit', weight =7}, {value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
-		length = 15,
+		length = 20,
+		exits = ['forest','grove'],
+		tags = ['wimborn'],
+		races = [{value = 'Dyrad', weight = 12}],
+		levelrange = [7,15],
+	},
+	greattreebottom = {
+		background = 'grove',
+		music = 'explore',
+		reqs = 'globals.state.mainquest >= 18',
+		combat = false,
+		code = 'gtb',
+		name = "Great Tree Entrance",
+		description = "A wall of wood stands before you. Could this perhaps be the trunk of a tree? It has great doorway carved in it, leading to a dark interior. You hear strange whispers from within.",
+		enemies = [],
+		encounters = [],
+		length = 1,
+		locationscript = 'undercityentrance',
+		exits = ['undercityentrance'],
+		tags = [],
+		races = [],
+	},
+	greattree = {
+		background = 'grove',
+		music = 'explore',
+		reqs = "true",
+		combat = true,
+		code = 'thespine',
+		name = 'The Spine',
+		description = "A dark and foreboding forest. The trees whisper despite the lack of wind, and the many branches and roots seem to stretch toward you like eldritch fingers... ",
+		enemies = [{value= 'naturespiritandtree', weight =7},{value= 'naturespiritmany', weight =7},{value= 'naturespirit', weight =7}, {value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		encounters = [],
+		length = 20,
 		exits = ['forest','grove'],
 		tags = ['wimborn'],
 		races = [{value = 'Dyrad', weight = 12}],

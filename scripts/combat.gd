@@ -337,7 +337,7 @@ class combatant:
 		stressmax = person.stats.stress_max
 		lust = person.lust
 		lustmax = person.stats.lust_max
-		
+		#statcalculations// Added this comment so I can find them easier- Bubblepot
 		attack = variables.baseattack + round(person.sstr * variables.damageperstr) + floor(person.level/2)
 		magic = person.smaf
 		armor = person.stats.armor_cur

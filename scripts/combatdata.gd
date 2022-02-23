@@ -1480,7 +1480,7 @@ var enemypool = {
 	rewardpool = {natureessenceing = 35},
 	rewardgold = [0],
 	rewardexp = 50,
-	stats = {health = 150, power = 6, speed = 24, energy = 60, armor = 4, magic = 0, abilities = ['attack']},
+	stats = {health = 150, power = 120, speed = 40, energy = 50, armor = 0, magic = 10, abilities = ['attack','debilitate','leechingstrike']},
 	gear = 'forest',
 	skills = [],
 	},
@@ -1495,7 +1495,7 @@ var enemypool = {
 		rewardpool = {natureessenceing = 40},
 		rewardgold = 0,
 		rewardexp = 50,
-		stats = {health = 200, power = 12, speed = 2, energy = 50, armor = 10, magic = 0, abilities = ['attack']},
+		stats = {health = 300, power = 80, speed = 15, energy = 50, armor = 25, magic = 10, abilities = ['attack','heavystike']},,
 		skills = [],
 	},
 	#Mountains
