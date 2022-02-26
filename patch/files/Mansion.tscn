@@ -1992,13 +1992,20 @@ stretch_mode = 5
 [node name="sstr" type="TextureRect" parent="MainScreen/mansion/selfinspect/statspanel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -580.0
-margin_top = 12.0
-margin_right = -580.0
-margin_bottom = 36.0
+margin_left = -546.0
+margin_top = 10.0
+margin_right = -546.0
+margin_bottom = 34.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
+
+[node name="base" type="Label" parent="MainScreen/mansion/selfinspect/statspanel/sstr"]
+margin_left = 1.0
+margin_top = 2.0
+margin_right = 41.0
+margin_bottom = 22.0
+text = "1"
 
 [node name="cur" type="Label" parent="MainScreen/mansion/selfinspect/statspanel/sstr"]
 margin_left = 36.0
@@ -2044,13 +2051,20 @@ custom_styles/normal = SubResource( 10 )
 [node name="sagi" type="TextureRect" parent="MainScreen/mansion/selfinspect/statspanel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -580.0
-margin_top = 46.0
-margin_right = -580.0
-margin_bottom = 70.0
+margin_left = -546.0
+margin_top = 44.0
+margin_right = -546.0
+margin_bottom = 68.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
+
+[node name="base" type="Label" parent="MainScreen/mansion/selfinspect/statspanel/sagi"]
+margin_left = 1.0
+margin_top = 2.0
+margin_right = 41.0
+margin_bottom = 22.0
+text = "1"
 
 [node name="cur" type="Label" parent="MainScreen/mansion/selfinspect/statspanel/sagi"]
 margin_left = 36.0
@@ -2096,13 +2110,20 @@ custom_styles/normal = SubResource( 10 )
 [node name="smaf" type="TextureRect" parent="MainScreen/mansion/selfinspect/statspanel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -580.0
-margin_top = 79.0
-margin_right = -580.0
-margin_bottom = 103.0
+margin_left = -546.0
+margin_top = 78.0
+margin_right = -546.0
+margin_bottom = 102.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
+
+[node name="base" type="Label" parent="MainScreen/mansion/selfinspect/statspanel/smaf"]
+margin_left = 1.0
+margin_top = 2.0
+margin_right = 41.0
+margin_bottom = 22.0
+text = "1"
 
 [node name="cur" type="Label" parent="MainScreen/mansion/selfinspect/statspanel/smaf"]
 margin_left = 36.0
@@ -2148,13 +2169,20 @@ custom_styles/normal = SubResource( 10 )
 [node name="send" type="TextureRect" parent="MainScreen/mansion/selfinspect/statspanel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -580.0
-margin_top = 113.0
-margin_right = -580.0
-margin_bottom = 137.0
+margin_left = -546.0
+margin_top = 110.0
+margin_right = -546.0
+margin_bottom = 134.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
+
+[node name="base" type="Label" parent="MainScreen/mansion/selfinspect/statspanel/send"]
+margin_left = 1.0
+margin_top = 2.0
+margin_right = 41.0
+margin_bottom = 22.0
+text = "1"
 
 [node name="cur" type="Label" parent="MainScreen/mansion/selfinspect/statspanel/send"]
 margin_left = 36.0
@@ -6305,13 +6333,20 @@ stretch_mode = 5
 editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -580.0
-margin_top = 12.0
-margin_right = -580.0
-margin_bottom = 36.0
+margin_left = -546.0
+margin_top = 10.0
+margin_right = -546.0
+margin_bottom = 34.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
+
+[node name="base" type="Label" parent="MainScreen/slave_tab/stats/statspanel/sstr"]
+margin_left = 1.0
+margin_top = 2.0
+margin_right = 41.0
+margin_bottom = 22.0
+text = "1"
 
 [node name="cur" type="Label" parent="MainScreen/slave_tab/stats/statspanel/sstr"]
 margin_left = 36.0
@@ -6358,13 +6393,20 @@ custom_styles/normal = SubResource( 10 )
 editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -580.0
-margin_top = 46.0
-margin_right = -580.0
-margin_bottom = 70.0
+margin_left = -546.0
+margin_top = 44.0
+margin_right = -546.0
+margin_bottom = 68.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
+
+[node name="base" type="Label" parent="MainScreen/slave_tab/stats/statspanel/sagi"]
+margin_left = 1.0
+margin_top = 2.0
+margin_right = 41.0
+margin_bottom = 22.0
+text = "1"
 
 [node name="cur" type="Label" parent="MainScreen/slave_tab/stats/statspanel/sagi"]
 margin_left = 36.0
@@ -6411,13 +6453,20 @@ custom_styles/normal = SubResource( 10 )
 editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -580.0
-margin_top = 79.0
-margin_right = -580.0
-margin_bottom = 103.0
+margin_left = -546.0
+margin_top = 78.0
+margin_right = -546.0
+margin_bottom = 102.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
+
+[node name="base" type="Label" parent="MainScreen/slave_tab/stats/statspanel/smaf"]
+margin_left = 1.0
+margin_top = 2.0
+margin_right = 41.0
+margin_bottom = 22.0
+text = "1"
 
 [node name="cur" type="Label" parent="MainScreen/slave_tab/stats/statspanel/smaf"]
 margin_left = 36.0
@@ -6464,13 +6513,20 @@ custom_styles/normal = SubResource( 10 )
 editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -580.0
-margin_top = 113.0
-margin_right = -580.0
-margin_bottom = 137.0
+margin_left = -546.0
+margin_top = 110.0
+margin_right = -546.0
+margin_bottom = 134.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
+
+[node name="base" type="Label" parent="MainScreen/slave_tab/stats/statspanel/send"]
+margin_left = 1.0
+margin_top = 2.0
+margin_right = 41.0
+margin_bottom = 22.0
+text = "1"
 
 [node name="cur" type="Label" parent="MainScreen/slave_tab/stats/statspanel/send"]
 margin_left = 36.0
@@ -6496,9 +6552,9 @@ text = "5"
 
 [node name="Control" type="Control" parent="MainScreen/slave_tab/stats/statspanel/send"]
 margin_left = -5.0
-margin_top = -1.0
+margin_top = -1.5
 margin_right = 86.0
-margin_bottom = 22.0
+margin_bottom = 21.5
 size_flags_horizontal = 2
 size_flags_vertical = 2
 
@@ -6517,10 +6573,10 @@ custom_styles/normal = SubResource( 10 )
 editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -462.0
-margin_top = 12.0
-margin_right = -462.0
-margin_bottom = 36.0
+margin_left = -428.0
+margin_top = 11.0
+margin_right = -428.0
+margin_bottom = 35.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
@@ -6562,10 +6618,10 @@ size_flags_vertical = 2
 editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -462.0
-margin_top = 45.0
-margin_right = -462.0
-margin_bottom = 69.0
+margin_left = -428.0
+margin_top = 44.0
+margin_right = -428.0
+margin_bottom = 68.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
@@ -6607,10 +6663,10 @@ size_flags_vertical = 2
 editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -462.0
-margin_top = 79.0
-margin_right = -462.0
-margin_bottom = 103.0
+margin_left = -428.0
+margin_top = 77.0
+margin_right = -428.0
+margin_bottom = 101.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
@@ -6652,10 +6708,10 @@ size_flags_vertical = 2
 editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -462.0
-margin_top = 113.0
-margin_right = -462.0
-margin_bottom = 137.0
+margin_left = -428.0
+margin_top = 111.0
+margin_right = -428.0
+margin_bottom = 135.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
@@ -7436,7 +7492,7 @@ caret_blink = true
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 594.0
+margin_left = 634.0
 margin_top = -610.0
 margin_right = -10.0
 margin_bottom = -470.0

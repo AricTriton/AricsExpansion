@@ -39,11 +39,11 @@ var traits = {
 	},
 	"Devoted": {
 		"name": "Devoted",
-		"description": "$name trusts you to a great degree. $His willingness to follow you caused $him to find new strengths in $his character. \n\n[color=aqua]Courage +25. Wit +25. Min Loyalty: 80.[/color]",
+		"description": "$name trusts you to a great degree. $His willingness to follow you caused $him to find new strengths in $his character. \n\n[color=aqua]Max Courage +25. Max Wit +25. Min Loyalty: 80.[/color]",
 		"effect": {
 			"code": "devoted",
-			"cour": 25,
-			"wit": 25,
+			"cour_max": 25,
+			"wit_max": 25,
 			"loyal_min": 80,
 			"loyal": 0
 		},
@@ -102,11 +102,11 @@ var traits = {
 	},
 	"Slutty": {
 		"name": "Slutty",
-		"description": "Your influence over $name caused $him to accept sex in many forms and enjoy $his body to the fullest. \n\n[color=aqua]Confidence +25. Charm +25. Min Loyalty: 80. [/color]",
+		"description": "Your influence over $name caused $him to accept sex in many forms and enjoy $his body to the fullest. \n\n[color=aqua]Max Confidence +25. Max Charm +25. Min Loyalty: 80. [/color]",
 		"effect": {
 			"code": "slutty",
-			"charm": 25,
-			"conf": 25,
+			"charm_max": 25,
+			"conf_max": 25,
 			"loyal_min": 80,
 			"loyal": 0
 		},
@@ -214,7 +214,8 @@ var traits = {
 		"description": "$name is rather weak compared to others. \n\n[color=aqua]Strength -2[/color]",
 		"effect": {
 			"code": "weak",
-			"str_mod": -2
+			"str_mod": -2,
+			"str_max": 0,
 		},
 		"tags": [
 			"physical",
@@ -230,6 +231,7 @@ var traits = {
 		"effect": {
 			"code": "strong",
 			"str_mod": 2,
+			"str_max": 0,
 			"obed_mod": -0.2
 		},
 		"tags": [
@@ -244,7 +246,8 @@ var traits = {
 		"description": "$name's reflexes are somewhat slower, than the others. \n\n[color=aqua]Agility -2, physical occupations are less effective[/color]",
 		"effect": {
 			"code": "clumsy",
-			"agi_mod": -2
+			"agi_mod": -2,
+			"agi_max": 0
 		},
 		"tags": [
 			"physical",
@@ -260,6 +263,7 @@ var traits = {
 		"effect": {
 			"code": "quick",
 			"agi_mod": 2,
+			"agi_max": 0,
 			"stress_mod": 0.2
 		},
 		"tags": [
@@ -274,7 +278,8 @@ var traits = {
 		"description": "$name's senses are very dull when it comes to magic. \n\n[color=aqua]Magic Affinity -2[/color]",
 		"effect": {
 			"code": "magicdeaf",
-			"maf_mod": -2
+			"maf_mod": -2,
+			"maf_max": 0
 		},
 		"tags": [
 			"physical",
@@ -290,6 +295,7 @@ var traits = {
 		"effect": {
 			"code": "responsive",
 			"maf_mod": 2,
+			"maf_max": 0,
 			"tox_mod": 0.2
 		},
 		"tags": [
@@ -304,7 +310,8 @@ var traits = {
 		"description": "$name's body is much less durable than most. $His physical potential is severely impaired. \n\n[color=aqua]Endurance -2[/color]",
 		"effect": {
 			"code": "frail",
-			"end_mod": -2
+			"end_mod": -2,
+			"end_max": 0
 		},
 		"tags": [
 			"physical",
@@ -320,6 +327,7 @@ var traits = {
 		"effect": {
 			"code": "robust",
 			"end_mod": 2,
+			"end_max":0,
 			"fear_mod": -0.2
 		},
 		"tags": [

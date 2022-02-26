@@ -29,7 +29,7 @@ var rules = {
 }
 
 ###---Added by Expansion---### Hucow Specialization
-var specarray = ['geisha','ranger','executor','bodyguard','assassin','housekeeper','trapper','nympho','merchant','tamer','hucow']
+var specarray = ['geisha','ranger','executor','bodyguard','assassin','housekeeper','trapper','nympho','merchant','tamer','hucow','mage','warrior','dancer']
 ###---End Expansion---###
 
 var gradeimages = {
@@ -55,6 +55,9 @@ var specimages = {
 	merchant = load("res://files/buttons/mainscreen/35.png"),
 	tamer = load("res://files/buttons/mainscreen/32.png"),
 	hucow = load("res://files/aric_expansion_images/specialization_icons/cow_icon.png"),
+	mage = load("res://files/aric_expansion_images/specialization_icons/mage_icon.png"),
+	warrior = load("res://files/aric_expansion_images/specialization_icons/warrior_icon.png"),
+	dancer = load("res://files/aric_expansion_images/specialization_icons/dancer_icon.png"),
 }
 ###---End Expansion---###
 
@@ -686,6 +689,8 @@ class progress:
 			_slave = globals.state.findslave(i)
 			array.append(_slave)
 			maxweight += max(_slave.sstr*variables.slavecarryweightperstr,0) + variables.baseslavecarryweight
+			if _slave.race.find('Squirrel') >= 0:
+				maxweight += 15
 		for i in globals.state.backpack.stackables:
 			if globals.itemdict[i].has('weight'):
 				currentweight += globals.itemdict[i].weight * globals.state.backpack.stackables[i]
@@ -857,9 +862,9 @@ func addrelations(person, person2, value):
 		value = value/1.5
 	elif person.relations[person2.id] < -500 && value < 0 && checkifrelatives(person,person2):
 		value = value/1.5
-	if value > 0 && (person.race.find('Otter') >= 0 || person2.race.find('Otter') >= 0): # /Capitulize
-		person.relations[person2.id] += value*1.5 # /Capitulize
-	else: # /Capitulize
+	if value > 0 && (person.race.find('Otter') >= 0 || person2.race.find('Otter') >= 0):
+		person.relations[person2.id] += value*1.5
+	else:
 		person.relations[person2.id] += value
 	person.relations[person2.id] = clamp(person.relations[person2.id], -1000, 1000)
 	person2.relations[person.id] = person.relations[person2.id]
@@ -912,6 +917,11 @@ var fatherRaceMods = {
 	'fox': [.4, 4],
 	'horse': [.3, 6],
 	'raccoon': [.4, 4],
+	'hyena': [.6, 6],
+	'mouse': [.3, 3],
+	'squirrel': [.3, 3],
+	'otter': [.4, 4],
+	'bird': [.4, 4]
 }
 # size : penis_mod
 var fatherSizeMods = {
@@ -1064,9 +1074,15 @@ func slavetooltip(person):
 	if node.get_rect().end.y >= screen.size.y:
 		node.rect_global_position.y -= node.get_rect().end.y - screen.size.y
 
-var longtails = ['cat','fox','wolf','demon','dragon','scruffy','snake tail','racoon','mouse']
-var alltails = ['cat','fox','wolf','bunny','bird','demon','dragon','scruffy','snake tail','racoon','mouse']
+var hairlengtharray = ['bald','ear','neck','shoulder','waist','hips']
+var longtails = ['cat','fox','neko','hyena','wolf','demon','dragon','scruffy','snake tail','racoon','mouse','reptilian','otter','squirrel','avali',]
+var skincovarray = ['none','scales','fullscales','fullfeathers','feathers','full_body_fur','plants']
+var penistypearray = ['human','canine','feline','equine','reptilian','rodent','bird',]
+var alltails = ['cat','fox','wolf','bunny','bird','demon','dragon','scruffy','snake tail','racoon','mouse','reptilian','squirrel','otter','avali',]
+var allwings = ['feathered_black', 'feathered_white', 'feathered_brown', 'leather_black','leather_red','leather_green','leather_white','leather_blue','insect','gossamer']
+var allears = ['human','feathery','pointy','frilled','none','short_furry','short_reptilian','long_pointy_furry','long_pointy_reptilian','fins','long_round_furry','long_droopy_furry','long_round_reptilian','long_droopy_reptilian','wide_furry','avali',]
 var alleyecolors = ['blue', 'green', 'brown', 'hazel', 'black', 'gray', 'purple', 'yellow', 'amber', 'red', 'auburn']
+
 ###---Added by Expansion---### Kennels Expanded
 var sleepdict = {communal = {name = 'Communal Room'}, jail = {name = "Jail"}, personal = {name = 'Personal Room'}, your = {name = "Your bed"}, kennel = {name = "Dog Kennel"}}
 
@@ -1266,6 +1282,18 @@ func load_game(text):
 			person.checksex()
 
 
+func checkfurryrace(text):
+	if text in ['Cat','Wolf','Fox','Bunny','Tanuki','Mouse','Squirrel','Otter','Bird']:
+		if rules.furry == true:
+			if rand_range(0,1) >= 0.5:
+				text = 'Halfkin ' + text
+			else:
+				text = 'Beastkin ' + text
+		else:
+			text = 'Halfkin ' + text
+	return text
+
+
 ###---Added by Expansion---### Only to load from Mods folder
 var expansion = loadModFile("AricsExpansion", "customScripts/expansion.gd").new()
 var expansionsetup = loadModFile("AricsExpansion", "customScripts/expansionsetup.gd").new()
@@ -1274,6 +1302,7 @@ var expansiontalk = loadModFile("AricsExpansion", "customScripts/expansiontalk.g
 var backwardscompatibility = loadModFile("AricsExpansion", "customScripts/backwardscompatibility.gd").new()
 var expansionsettings = loadModFile("AricsExpansion", "customScripts/expansionsettings.gd").new()
 var useRalphsTweaks # = expansionsettings.use_ralphs_tweaks
+var useCapsTweaks # = expansionsettings.use_caps_tweaks
 var expansiontravel = loadModFile("AricsExpansion", "customScripts/expansiontravel.gd").new() #ralphD
 
 ###---Added by Expansion---### General Arrays
@@ -1401,6 +1430,84 @@ func semen_volume(semen):
 	return rvar
 
 
+func fertilize_egg(mother, father_id, father_unique):
+	var expansion = globals.expansion
+	var expansionsetup = globals.expansionsetup
+	var father
+	var baby
+	
+	###Get/Build Father
+	if father_id != null && father_id != '-1' && !father_unique in ['','dog','horse']:
+		father = globals.state.findslave(father_id)
+		#If Father disappeared from the World
+		if father == null:
+			father = globals.newslave('randomany', 'adult', 'male')
+	else:
+		father = globals.newslave('randomany', 'adult', 'male')
+		father.id = '-1'
+		
+		if father_unique != null:
+			father.unique = father_unique
+		
+		constructor.clearGenealogies(father)
+		if father_unique == 'bunny':
+			father.genealogy.bunny = 100
+			father.race = 'Beastkin Bunny'
+		elif father_unique == 'dog':
+			father.genealogy.dog = 100
+			father.race = 'Beastkin Wolf'
+		elif father_unique == 'hyena':
+			father.genealogy.hyena = 100
+			father.race = 'Gnoll'
+		elif father_unique == 'cow':
+			father.genealogy.cow = 100
+			father.race = 'Taurus'
+		elif father_unique == 'cat':
+			father.genealogy.cat = 100
+			father.race = 'Beastkin Cat'
+		elif father_unique == 'fox':
+			father.genealogy.fox = 100
+			father.race = 'Beastkin Fox'
+		elif father_unique == 'horse':
+			father.genealogy.horse = 100
+			father.race = 'Centaur'
+		elif father_unique == 'raccoon':
+			father.genealogy.raccoon = 100
+			father.race = 'Beastkin Tanuki'
+		elif father_unique == 'mouse':
+			father.genealogy.mouse = 100
+			father.race = 'Beastkin Mouse'
+		elif father_unique == 'squirrel':
+			father.genealogy.squirrel = 100
+			father.race = 'Beastkin Squirrel'
+		elif father_unique == 'otter':
+			father.genealogy.otter = 100
+			father.race = 'Beastkin Otter'
+		elif father_unique == 'bird':
+			father.genealogy.bird = 100
+			father.race = 'Beastkin Bird'
+		else:
+			father.race = getracebygroup("starting")
+			constructor.set_genealogy(father)
+	
+	#Consent/Wanted Pregnancy Check
+	if father.id == player.id:
+		mother.pregexp.wantedpregnancy = mother.consentexp.pregnancy
+	else:
+		mother.pregexp.wantedpregnancy = mother.consentexp['breeder' if expansion.relatedCheck(mother,father) == "unrelated" else 'incestbreeder']
+
+	baby = constructor.newbaby(mother, father)
+
+	if baby.id != null:
+		baby.state == 'fetus'
+		mother.preg.is_preg = true
+		mother.preg.duration = 0
+		mother.preg.baby = -1
+		mother.preg.unborn_baby.append({id = baby.id})
+		mother.preg.ovulation_stage = 0
+		mother.preg.ovulation_day = 0
+	
+	traceFile('fertilize egg')
 
 func miscarriage(person):
 	var miscarried = false

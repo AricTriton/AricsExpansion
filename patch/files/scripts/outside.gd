@@ -87,7 +87,7 @@ func buildbuttons(array, target = self, doClear = true, curCount = 0):
 		else:
 			newbutton.connect('pressed', target, i.function)
 		if i.has('disabled'):
-			newbutton.set_disabled(true)
+			newbutton.set_disabled(i.disabled)
 		if i.has('tooltip'):
 			newbutton.set_tooltip(i.tooltip)
 		if i.has('textcolor'):
@@ -2073,7 +2073,7 @@ var shops = {
 		code = 'wimbornmarket',
 		sprite = 'merchant',
 		name = "Wimborn's Market",
-		items = ['teleportwimborn','food','supply','bandage','rope','torch','teleportseal', 'basicsolutioning','hairdye', 'aphrodisiac' ,'beautypot', 'magicessenceing', 'natureessenceing','armorleather','armorchain','weapondagger','weaponsword','weaponceremonialsword','clothsundress','clothmaid','clothbutler','underwearlacy','underwearboxers', 'acctravelbag'],
+		items = ['teleportwimborn','food','supply','bandage','rope','torch','teleportseal', 'basicsolutioning','hairdye', 'aphrodisiac' ,'beautypot', 'magicessenceing', 'natureessenceing','armorleather','armorchain','weapondagger','weaponserrateddagger','weaponbasicstaff','weaponsword','weaponceremonialsword','clothsundress','clothmaid','clothbutler','underwearlacy','underwearboxers', 'acctravelbag'],
 		selling = true
 	},
 	shaliqshop = {
@@ -3176,8 +3176,13 @@ func chosepartymember(includeplayer = true, targetfunc = [null,null], reqs = 'tr
 	var array = []
 	if includeplayer:
 		array.append(globals.player)
-	for i in globals.state.playergroup:
-		array.append(globals.state.findslave(i))
+	if execfunc[1] == "chestmouselockpick":
+		for i in globals.state.playergroup:
+			if globals.state.findslave(i).race.find('Mouse') >= 0:
+				array.append(globals.state.findslave(i))
+	else:
+		for i in globals.state.playergroup:
+			array.append(globals.state.findslave(i))
 	for i in $choseparty/HBoxContainer.get_children():
 		if i.name != 'Button':
 			i.hide()

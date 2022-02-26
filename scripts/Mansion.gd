@@ -3,6 +3,7 @@
 var corejobs = ['rest','forage','hunt','cooking','library','nurse','maid','storewimborn','artistwimborn','assistwimborn','whorewimborn','escortwimborn','fucktoywimborn', 'lumberer', 'ffprostitution','guardian', 'research', 'slavecatcher','fucktoy','housepet']
 var manaeaters = ['Succubus','Golem'] #ralphC - used in food consumption calcs, etc.
 ###---End Expansion---###
+var outOfMansionJobs = ['storewimborn','artistwimborn','assistwimborn','whorewimborn','escortwimborn','fucktoywimborn', 'lumberer', 'ffprostitution','guardian', 'research', 'slavecatcher','fucktoy'] # /Capitulize - Jobs outside of the mansion.
 
 func _ready():
 	###---Added by Expansion---### Minor Tweaks by Dabros Mod Integration
@@ -635,6 +636,11 @@ func _on_end_pressed():
 						if workdict.has("food"):
 							globals.resources.food += workdict.food
 							person.metrics.foodearn += workdict.food
+						if (outOfMansionJobs.has(person.work) && person.race.find('Gnoll') >= 0):
+							var gnolldict = globals.jobs.call('gnollhunt', person)
+							text += gnolldict.text
+							globals.resources.food += gnolldict.food
+							person.metrics.foodearn += gnolldict.food
 			text1.set_bbcode(text1.get_bbcode()+person.dictionary(text))
 			######## Counting food
 			for i in person.effects.values():
@@ -716,6 +722,8 @@ func _on_end_pressed():
 					###---End Expansion---###
 				if person.traits.has("Small Eater"):
 					consumption = consumption/3
+				if person.race.find('Giant') >= 0:
+					consumption = consumption*3
 				###---Added by Expansion---### ---PENDING: Add option to "Drink from the Source"
 				consumption = consumption * hungryforfood #ralphC - hungryforfood should be 1 unless starving Succubus
 				if person.traits.has("Altered Dietary Needs"): 
@@ -808,7 +816,7 @@ func _on_end_pressed():
 				person.loyal -= rand_range(1,5)
 				text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=yellow]$name is annoyed by you paying no attention to $him. [/color]\n"))
 			if person.traits.has('Pliable'):
-				if person.loyal >= 60:
+				if person.loyal >= 60 && !person.traits.has('Devoted'):
 					person.trait_remove('Pliable')
 					person.add_trait('Devoted')
 					text0.set_bbcode(text0.get_bbcode() + person.dictionary('[color=green]$name has become Devoted. $His willpower strengthened.[/color]\n'))
@@ -1106,9 +1114,9 @@ func _on_end_pressed():
 					if person.mind.vice_known == false:
 						person.mind.vice_presented = true
 						if luxurycheck.vice_modifier > 0:
-							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] seems to have an unknown [color=aqua]Vice[/color] affecting $his happiness and [color=aqua]Luxury[/color] [color=green]positively[/color] today. Perhaps [color=aqua]reading $his mind[/color] will reveal more. \n"))
+							text1.set_bbcode(text1.get_bbcode() + person.dictionary("[color=aqua]$name[/color] seems to have an unknown [color=aqua]Vice[/color] affecting $his happiness and [color=aqua]Luxury[/color] [color=green]positively[/color] today. Perhaps [color=aqua]reading $his mind[/color] will reveal more. \n"))
 						elif luxurycheck.vice_modifier < 0:
-							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] seems to have an unknown [color=aqua]Vice[/color] affecting $his happiness and [color=aqua]Luxury[/color] [color=red]negatively[/color] today. Perhaps [color=aqua]reading $his mind[/color] will reveal more. \n"))
+							text1.set_bbcode(text1.get_bbcode() + person.dictionary("[color=aqua]$name[/color] seems to have an unknown [color=aqua]Vice[/color] affecting $his happiness and [color=aqua]Luxury[/color] [color=red]negatively[/color] today. Perhaps [color=aqua]reading $his mind[/color] will reveal more. \n"))
 					else:
 						text1.set_bbcode(text1.get_bbcode() + person.dictionary("[color=aqua]$name[/color] has a [color=aqua]"+ str(person.mind.vice.capitalize()) +" Vice[/color] which affected $his happiness and [color=aqua]Luxury[/color] "))
 						if luxurycheck.vice_modifier > 0:
@@ -1321,6 +1329,8 @@ func _on_end_pressed():
 		if chef.race.find('Scylla') >= 0:
 			consumption = max(3, consumption - 1)
 		###---End Expansion---###
+	if globals.player.race.find('Giant') >= 0:
+		consumption = consumption*3
 	if globals.resources.food >= consumption:
 		globals.resources.food -= consumption
 	else:
@@ -2358,6 +2368,41 @@ func _on_selfbutton_pressed():
 		$MainScreen/mansion/selfinspect/selfpierce.set_tooltip("Unlock Beauty Parlor to access Piercing options. ")
 	$MainScreen/mansion/selfinspect/Contraception.pressed = person.effects.has("contraceptive")
 
+func updatestats(person):
+	var text = ''
+	for i in ['sstr','sagi','smaf','send']:
+		text = str(person[i])
+		get(i).get_node('cur').set_text(text)
+		if i in ['sstr','sagi','smaf','send']:
+			get(i).get_node('base').set_text(str(person.stats[globals.basestatdict[i]]))
+			if person.stats[globals.maxstatdict[i].replace("_max",'_mod')] >= 1:
+				get(i).get_node('cur').set('custom_colors/font_color', Color(0,1,0))
+			elif person.stats[globals.maxstatdict[i].replace("_max",'_mod')] < 0:
+				get(i).get_node('cur').set('custom_colors/font_color', Color(1,0.29,0.29))
+			else:
+				get(i).get_node('cur').set('custom_colors/font_color', Color(1,1,1))
+		get(i).get_node('max').set_text(str(min(person.stats[globals.maxstatdict[i]], person.originvalue[person.origins])))
+	text = person.name_long() + '\n[color=aqua][url=race]' +person.dictionary('$race[/url][/color]').capitalize() +  '\nLevel : '+str(person.level)
+	get_node("MainScreen/mansion/selfinspect/statspanel/info").set_bbcode(person.dictionary(text))
+	get_node("MainScreen/mansion/selfinspect/statspanel/attribute").set_text("Free Attribute Points : "+str(person.skillpoints))
+	
+	for i in ['send','smaf','sstr','sagi']:
+		if person.skillpoints >= 1 && (globals.slaves.find(person) >= 0||globals.player == person) && person.stats[globals.maxstatdict[i].replace('_max','_base')] < person.stats[globals.maxstatdict[i]]:
+			get_node("MainScreen/mansion/selfinspect/statspanel/" + i +'/Button').visible = true
+		else:
+			get_node("MainScreen/mansion/selfinspect/statspanel/" + i+'/Button').visible = false
+	get_node("MainScreen/mansion/selfinspect/statspanel/hp").set_value((person.stats.health_cur/float(person.stats.health_max))*100)
+	get_node("MainScreen/mansion/selfinspect/statspanel/en").set_value((person.stats.energy_cur/float(person.stats.energy_max))*100)
+	get_node("MainScreen/mansion/selfinspect/statspanel/xp").set_value(person.xp)
+	text = "Health: " + str(person.stats.health_cur) + "/" + str(person.stats.health_max) + "\nEnergy: " + str(person.stats.energy_cur) + "/" + str(person.stats.energy_max) + "\nExperience: " + str(person.xp)
+	get_node("MainScreen/mansion/selfinspect/statspanel/hptooltip").set_tooltip(text)
+	if person.imageportait != null && globals.loadimage(person.imageportait):
+		$MainScreen/mansion/selfinspect/statspanel/TextureRect/portrait.set_texture(globals.loadimage(person.imageportait))
+	else:
+		person.imageportait = null
+		$MainScreen/mansion/selfinspect/statspanel/TextureRect/portrait.set_texture(null)
+
+
 #Save for modifying reputations
 func reputationword(value):
 	var text = ""
@@ -2372,6 +2417,52 @@ func reputationword(value):
 	else:
 		text = "Neutral"
 	return text
+
+func selfabilityselect(ability):
+	var text = ''
+	var person = globals.player
+	var dict = {'sstr': 'Strength', 'sagi' : 'Agility', 'smaf': 'Magic', 'level': 'Level', 'spec': 'Spec'}
+	var confirmbutton = get_node("MainScreen/mansion/selfinspect/selfabilitypanel/abilitypurchase")
+	
+	for i in get_node("MainScreen/mansion/selfinspect/selfabilitypanel/ScrollContainer/VBoxContainer").get_children():
+		if i.get_text() != ability.name:
+			i.set_pressed(false)
+	
+	confirmbutton.set_disabled(false)
+	
+	text = '[center]'+ ability.name + '[/center]\n' + ability.description + '\nCooldown:' + str(ability.cooldown) + '\nLearn requirements: '
+	
+	var array = []
+	for i in ability.reqs:
+		array.append(i)
+	array.sort_custom(self, 'levelfirst')
+	
+	for i in array:
+		var temp = i
+		var ref = person
+		if i.find('.') >= 0:
+			temp = i.split('.')
+			for ii in temp:
+				ref = ref[ii]
+		else:
+			ref = person[i]
+		if typeof(ability.reqs[i]) == TYPE_ARRAY: # Capitulize - Specialization based abilities 
+			if !ability.reqs[i].has(ref):
+				confirmbutton.set_disabled(true)
+				text += '[color=#ff4949]'+dict[i] + ': ' + str(ability.reqs[i]) + '[/color], '
+			else:
+				text += '[color=green]'+dict[i] + ': ' + str(ability.reqs[i]) + '[/color], ' #fix this someday UGHH
+		elif ref < ability.reqs[i]: # /Capitulize
+			confirmbutton.set_disabled(true)
+			text += '[color=#ff4949]'+dict[i] + ': ' + str(ability.reqs[i]) + '[/color], '
+		else:
+			text += '[color=green]'+dict[i] + ': ' + str(ability.reqs[i]) + '[/color], '
+	text = text.substr(0, text.length() - 2) + '.'
+	
+	confirmbutton.set_meta('abil', ability)
+
+	get_node("MainScreen/mansion/selfinspect/selfabilitypanel/abilitydescript").set_bbcode(text)
+
 
 ###---Added by Expansion---### Family Expanded
 func _on_selfrelatives_pressed():

@@ -1,0 +1,31 @@
+Changelog v1.6
+
+NEW FEATURES
+
+<Integrated Name Coloration>
+
+Added by Whims
+You can now customize the color of a slave's name so you can color code your slave list. (This is a really awesome feature he added in)
+<Trait Sorting>
+
+Recommended by Whims
+Traits will now be sorted Alphabetically in the Slave's list to make it easier to compare at a glance
+BUGFIXES
+
+Fixed Commented out NewSexSystem decoder
+Many various bugfixes by Ankmairdor and other Collaborators
+Fixed Pretty Voice to Pretty voice in expansionsettings
+<Start Slave>
+
+Fixed Commented out startSlave traits
+Replaced the Submissive trait on Waifu specialization with a preset submission and dominance fetish along with automatic knowledge of it.
+<Public Nudity System>
+
+Fixed typo in the EOD report - Reported by DSS_Blacky
+<Sex System>
+
+New Attraction Formula: (Beauty - 40) + (Lewdness * .25) + (Lust * .35)
+>If Calculating towards Player: + Ownership and times they've Orgasmed
+Removed the RNG from Attraction. It does still have a component based on Lust, however, so it may fluctuate some within sex scenes (but not nearly as much). You may see "unattracted" characters gain attraction the closer to orgasm they get, however. The Player is now automatically sexually compatible (for now) with anyone they choose to sleep with (regarding their own desire to, not the other person).
+Generate Requests in Sex System no longer tracks every time it checks as one to add into dailyevents
+Fixed the order in which the fetishes are checked for sexual requests
