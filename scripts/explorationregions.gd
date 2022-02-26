@@ -304,7 +304,7 @@ var database = {
 		encounters = [],
 		length = 1,
 		locationscript = 'undercityentrance', #Remember to add an appropriate script in expliration.gd. Just copy this script and edit to your needs.
-		exits = ['thespine'],
+		exits = ['greattreetrunk','thespine'],
 		tags = [],
 		races = [],
 	},
@@ -319,7 +319,7 @@ var database = {
 		enemies = [{value= 'naturespiritmany', weight =7},{value= 'naturespirit', weight =7}, {value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
-		exits = ['greattreetrunk'],
+		exits = ['greatreeentrance','greattreebranch'],
 		tags = [],
 		races = [{value = 'Dyrad', weight = 12}],
 		levelrange = [15,20],
@@ -336,7 +336,7 @@ var database = {
 		encounters = [],
 		length = 1,
 		locationscript = 'undercityentrance', #Remember to add an appropriate script in expliration.gd. Just copy this script and edit to your needs.
-		exits = ['greattreetrunk'],
+		exits = ['greattreebranch','greattreetrunk'],
 		tags = [],
 		races = [],
 	},
@@ -351,7 +351,7 @@ var database = {
 		enemies = [{value= 'naturespiritmany', weight =7},{value= 'naturespirit', weight =7}, {value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
-		exits = ['greattreetrunk'],
+		exits = ['greattreenest','greattreebranchentrance'],
 		tags = ['wimborn'],
 		races = [{value = 'Dyrad', weight = 12}],
 		levelrange = [15,20],
@@ -367,7 +367,7 @@ var database = {
 		enemies = [], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 1,
-		exits = ['greattreenest'],
+		exits = ['greattreebranch'],
 		tags = [],
 		races = [],
 		levelrange = [],
@@ -611,7 +611,7 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 10,
-		exits = ['marsh'],
+		exits = ['deephole','marsh'],
 		tags = [],
 		races = [],
 		levelrange = [7,15],
@@ -643,10 +643,26 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 30,
-		exits = [],
+		exits = ['deephole'],
 		tags = [],
 		races = [],
 		levelrange = [7,15],
+	},
+	hellscapeentrance = {
+		background = 'sea',
+		music = 'dungeon',
+		reqs = 'true',
+		combat = false,
+		code = 'hellscapeentrance',
+		name = "Mysterious Opening",
+		description = "There is a fierce orange glow from up ahead. Heat emanates from a large opening in the tunnel. ",
+		enemies = [],
+		encounters = [],
+		length = 1,
+		locationscript = 'undercityentrance', #Remember to add an appropriate script in expliration.gd. Just copy this script and edit to your needs.
+		exits = ['hellscape','deephole'],
+		tags = [],
+		races = [],
 	},
 	hellscape = {
 		background = 'marsh',
@@ -659,7 +675,7 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 10,
-		exits = [],
+		exits = ['darktunnel'],
 		tags = [],
 		races = [],
 		levelrange = [7,15],
