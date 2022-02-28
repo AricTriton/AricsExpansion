@@ -5,8 +5,8 @@ var spinebosswin= "The great bird stumbles backwards, dazed. It shakes off the d
 var spinebosswin2= "The great bird falls to the ground with a final weak screech and dies. It appears to have several treasures in its next. Most are too big for you to carry with you."
 
 #Desert
-var prairiebossenc
-var prairiebosswin
+# var prairiebossenc
+# var prairiebosswin
 
 #Sea
 var seabossenc= "At the centre of the cavern a giant serpent lays curled at the very bottom of a whirlpool. Mysteriously, the rough current does not displace its position even slightly. The water here glows with an otherwordly quality. \n\n The great serpent opens a single glowing green eye. The eye alone looks big enough that if it were to pop from its socket it would crush you. The serpent uncoils revealing its scaly bulk fully. Even lying on the floor it was big enough to be mistaken for a small mountain within the cavern. Now that it has reared up its head brushes the roof of the cavern and its body curls around the perimetre, sealing the entrance. \n\n It's roar of challenge vibrates the cavern and everything in it. "
