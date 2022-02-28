@@ -1060,3 +1060,53 @@ func frostford():
 		else:
 			array.append({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold', disabled = true})
 	outside.buildbuttons(array,self)
+
+	###---Added by Expansion---### LocationScripts for Expanded Areas (Bubblepot)
+	# func undercityentrance():
+	# 	var array = []
+	# 	if globals.state.mainquest == 18:
+	# 		globals.state.mainquest = 19
+	# 	if globals.state.mainquest >= 24:
+	# 		array.append({name = 'Go through hidden passage', function = 'zoneenter', args = 'undercitytunnels'})
+	# 	array.append({name = "Return to Amber Road", function = 'zoneenter', args = 'amberguardforest'})
+	# 	outside.buildbuttons(array,self)
+	
+	# func undercityhall():
+	# 	var array = []
+	# 	if globals.state.mainquest == 24:
+	# 		array.append({name = "Search for documents", function = 'undercityboss'})
+	# 	else:
+	# 		array.append({name = "Search for valuables", function = 'undercityboss'})
+	# 	outside.buildbuttons(array,self)
+	
+	# func undercityboss():
+	# 	main.get_node("combat").nocaptures = true
+	# 	if globals.state.mainquest == 24:
+	# 		buildenemies("bossgolem")
+	# 		launchonwin = 'undercitybosswin'
+	# 		enemyfight()
+	# 	else:
+	# 		buildenemies("bosswyvern")
+	# 		launchonwin = 'undercitybosswin'
+	# 		enemyfight()
+	
+	# func undercitylibrary():
+	# 	globals.main.maintext = globals.questtext.undercitybookenc
+	# 	var array = []
+	# 	array.append({name = "Fight", function = 'undercitylibraryfight'})
+	# 	outside.buildbuttons(array,self)
+	
+	# func undercitylibraryfight():
+	# 	buildenemies("bookmutants")
+	# 	globals.main.get_node("combat").nocaptures = true
+	# 	launchonwin = 'undercitylibrarywin'
+	# 	enemyfight()
+	
+	# func undercitylibrarywin():
+	# 	winscreenclear()
+	# 	generateloot(['zoebook', 1], globals.questtext.undercitybookafterabttle)
+	# 	showlootscreen()
+	# 	zoneenter("undercityruins")
+	###---End Expansion---###
+
+	

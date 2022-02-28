@@ -472,3 +472,5 @@ func sssexscene(stage = 0):
 			text = ssnode.sssexignore
 	
 	globals.main.dialogue(state, self, startslave.dictionary(text), buttons, sprites)
+###---Added by Expansion---### BossWin Functions for Expanded Areas (Bubblepot)
+###---Expansion End---###
