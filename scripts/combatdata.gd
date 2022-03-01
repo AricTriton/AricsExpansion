@@ -397,7 +397,7 @@ var enemygrouppools = {
 		units = [['amberguardpatrol',7,10]], awareness = -10, captured = null, special = null,
 		description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Amberguard. ",
 	},
-	#Bubblepot grouppool additions for new regions
+	###---Added By Expansion---### Bubblepot grouppool additions for new regions
 	#Forest
 	naturespirit = {
 		units = [['dryadwarrior',1,1]], awareness = 30, captured = null, special = null, 
@@ -1463,20 +1463,30 @@ var enemypool = {
 		stats = {health = 1000, power = 200, speed = 40, energy = 50, armor = 20, magic = 8, abilities = ['attack', 'darknessattack']},
 		skills = [],
 	},
-	#Bubblepot Enemypool additions
+	###---Added by Expansion---### Bubblepot Enemypool additions
 	#Forest
+	wisp = {
+		name = 'Wisp',
+		code = 'wisp',
+		level = 10,
+		faction = 'plant',
+		icon = load("res://files/images/enemies/plant.png"),
+		special = null,
+		capture = null,
+		rewardpool = {natureessenceing = 65},
+		rewardgold = 0,
+		rewardexp = 50,
+		stats = {health = 10, power = 200, speed = 50, energy = 50, armor = 0, magic = 10, abilities = ['aoeattack']},
+		skills = [],
+	},
 	naturespirit = {
 	name = 'Nature Spirit',
-	code = 'dryadwarrior',
+	code = 'naturespirit',
 	faction = 'monster',
 	icon = load("res://files/images/enemies/dryadm.png"),
 	iconalt = load("res://files/images/enemies/dryadf.png"),
 	special = '',
 	capture = null,
-	capturerace = [['Dryad',100]],
-	captureoriginspool = [{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
-	captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 4}],
-	capturesex = ['any'],
 	rewardpool = {natureessenceing = 35},
 	rewardgold = [0],
 	rewardexp = 50,
@@ -1486,7 +1496,7 @@ var enemypool = {
 	},
 	malevolenttree = {
 		name = 'Malevolent Tree',
-		code = 'mtree',
+		code = 'malevolenttree',
 		level = 10,
 		faction = 'plant',
 		icon = load("res://files/images/enemies/plant.png"),
@@ -1495,30 +1505,54 @@ var enemypool = {
 		rewardpool = {natureessenceing = 40},
 		rewardgold = 0,
 		rewardexp = 50,
-		stats = {health = 300, power = 80, speed = 15, energy = 50, armor = 25, magic = 10, abilities = ['attack','heavystike']},,
+		stats = {health = 300, power = 80, speed = 15, energy = 50, armor = 25, magic = 10, abilities = ['attack','heavystike']},
 		skills = [],
 	},
-	#Mountains
-	''' valkyrie = {
-	name = 'Valkyrie',
-	code = 'seraphwarrior',
-	faction = 'monster',
-	icon = load("res://files/images/enemies/stranger.png"),
-	iconalt = load("res://files/images/enemies/stranger.png"),
-	special = '',
-	capture = true,
-	capturerace = [['Seraph',100]],
-	captureoriginspool = [{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
-	captureagepool = [{value = 'teen', weight = 6}, {value = 'adult', weight = 10}],
-	capturesex = ['any'],
-	rewardpool = {gold = 10},
-	rewardgold = [5,20],
-	rewardexp = 50,
-	stats = {health = 65, power = 6, speed = 18, energy = 50, armor = 2, magic = 0, abilities = ['attack']},
-	gear = 'guard',
-	skills = [],
-		
-	}, '''
+	maliciousvine = {
+		name = 'Malicious Vine',
+		code = 'maliciousvine',
+		level = 13,
+		faction = 'plant',
+		icon = load("res://files/images/enemies/plant.png"),
+		special = null,
+		capture = null,
+		rewardpool = {natureessenceing = 55, clothtentacle=30},
+		rewardgold = 0,
+		rewardexp = 60,
+		stats = {health = 100, power = 40, speed = 80, energy = 50, armor = 25, magic = 10, abilities = ['webattack','alwayshitattack',]},
+		skills = [],
+	},
+	violentbranch = {
+		name = 'Violent Branch',
+		code = 'violentbranch',
+		level = 15,
+		faction = 'plant',
+		icon = load("res://files/images/enemies/plant.png"),
+		special = null,
+		capture = null,
+		rewardpool = {natureessenceing = 65, armortentacle=15},
+		rewardgold = 0,
+		rewardexp = 100,
+		stats = {health = 200, power = 80, speed = 40, energy = 50, armor = 25, magic = 10, abilities = ['attack','heavystike']},
+		skills = [],
+	},
+	spineharpy = {
+		name = 'Harpy',
+		code = 'spineharpy',
+		faction = 'monster',
+		icon = null,
+		special = '',
+		capture = null,
+		rewardpool = {bestialessenceing = 50},
+		rewardgold = [],
+		rewardexp = 100,
+		stats = {health = 100, power = 150, speed = 80, energy = 50, armor = 5, magic = 0, abilities = ['attack','debilitate','alwayshitattack']},
+		skills = [],
+	},
+	#Desert
+	#Sea
+	#Marsh
+	#Mountains	
 }
 
 ###---Added by Expansion---### ElPresidente Items
