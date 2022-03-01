@@ -1062,14 +1062,41 @@ func frostford():
 	outside.buildbuttons(array,self)
 
 	###---Added by Expansion---### LocationScripts for Expanded Areas (Bubblepot)
-	# func undercityentrance():
-	# 	var array = []
-	# 	if globals.state.mainquest == 18:
-	# 		globals.state.mainquest = 19
-	# 	if globals.state.mainquest >= 24:
-	# 		array.append({name = 'Go through hidden passage', function = 'zoneenter', args = 'undercitytunnels'})
-	# 	array.append({name = "Return to Amber Road", function = 'zoneenter', args = 'amberguardforest'})
-	# 	outside.buildbuttons(array,self)
+	#Entrances
+	#Forest
+	func greattreeentrance():
+		var array = []
+		array.append({name = 'Enter the doorway', function = 'zoneenter', args = 'greattreetrunk'})
+		array.append({name = "Return to The Spine", function = 'zoneenter', args = 'thespine'})
+		outside.buildbuttons(array,self)
+
+		func greattreebranchentrance():
+			var array = []
+			array.append({name = 'Enter the opening', function = 'zoneenter', args = 'greattreenest'})
+			array.append({name = "Return to Great Tree Trunk", function = 'zoneenter', args = 'greattreetrunk'})
+			outside.buildbuttons(array,self)
+
+	#Prairie
+	#Marsh
+	func hellscapeentrance():
+		var array = []
+		array.append({name = 'Enter the opening', function = 'zoneenter', args = 'hellscape'})
+		array.append({name = "Return to the Dark Tunnel", function = 'zoneenter', args = 'darktunnel'})
+		outside.buildbuttons(array,self)
+	#Sea
+	func deepseaentrance():
+		var array = []
+		array.append({name = 'Dive', function = 'zoneenter', args = 'deepsea'})
+		array.append({name = "Return to the Far Sea", function = 'zoneenter', args = 'farsea'})
+		outside.buildbuttons(array,self)
+
+	func sealairentrance():
+		var array = []
+		array.append({name = 'Enter the cave', function = 'zoneenter', args = 'leviathanlair'})
+		array.append({name = "Return to the Deep Sea", function = 'zoneenter', args = 'deepsea'})
+		outside.buildbuttons(array,self)
+	
+		#Mountains
 	
 	# func undercityhall():
 	# 	var array = []
