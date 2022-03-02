@@ -318,7 +318,7 @@ func getbeauty(justtext = false):
 	else:
 		calculate = 'gorgeous'
 
-	text = descriptions['beauty'][calculate]
+	text = newdescriptions['beauty'][calculate]
 	if justtext == false:
 		text += "("
 		if tempappeal != 0:
