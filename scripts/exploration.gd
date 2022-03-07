@@ -1062,7 +1062,7 @@ func frostford():
 	outside.buildbuttons(array,self)
 
 	###---Added by Expansion---### LocationScripts for Expanded Areas (Bubblepot)
-	#Important! Grouping Order is: Entrances, Locations, Fights, Bosses, Wins, Exits
+	#Important! Grouping Order is: Entrances, Locations, Fights, FightWins Bosses, BossWins, Exits
 	#Entrances
 	#Forest
 	func greattreeentrance():
