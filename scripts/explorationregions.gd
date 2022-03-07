@@ -372,7 +372,7 @@ var database = {
 		races = [],
 		levelrange = [],
 	},
-	# #Prairies-(Wasteland, Hidden Cave, Hidden Cave Depths)
+	# #Prairies-(Oasis, Ruins>Antechamber, Desert>Deep Desert>Sand Tomb )
 	# wimbornoutskirts = {
 	# 	background = 'meadows',
 	# 	music = 'explore',
@@ -610,7 +610,7 @@ var database = {
 		description = "Ugly waterlogged trees dot these twisted lands. Every step squelches in liquids that seem to be melting your shoes. ",
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
-		length = 10,
+		length = 20,
 		exits = ['deephole','marsh'],
 		tags = [],
 		races = [],
@@ -674,7 +674,7 @@ var database = {
 		description = "The tunnel opens up into what looks like the innards of a volcano. Lava oozes over a red-hot rock floor, licks of flame leaping off it's surface liked dolphins clearing the waves of the sea. Sweltering heat bathes the area and a sickening, malevolent magic lingers in the air. Every now and then you hear malicious laughter. ",
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
-		length = 10,
+		length = 50,
 		exits = ['darktunnel'],
 		tags = [],
 		races = [],

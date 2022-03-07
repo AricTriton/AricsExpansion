@@ -1062,6 +1062,7 @@ func frostford():
 	outside.buildbuttons(array,self)
 
 	###---Added by Expansion---### LocationScripts for Expanded Areas (Bubblepot)
+	#Important! Grouping Order is: Entrances, Locations, Fights, Bosses, Wins, Exits
 	#Entrances
 	#Forest
 	func greattreeentrance():
@@ -1096,7 +1097,7 @@ func frostford():
 		array.append({name = "Return to the Deep Sea", function = 'zoneenter', args = 'deepsea'})
 		outside.buildbuttons(array,self)
 	
-		#Mountains
+	#Mountains
 	
 	# func undercityhall():
 	# 	var array = []
