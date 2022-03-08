@@ -1,0 +1,93 @@
+<---1.7 Changelog--->
+(Some were likely missed here. Check the Commit log on GitHub for all details/features)
+
+New Features
+<Jail Improvements>
+Initial Rework of the Jail Tab. Tired of shuffling through your lists of prisoners checking the rebellious status? Now you can access your Jailer, All Prisoners, or just Prisoner's Ready to Release (ie: prisoners who have stopped rebelling) in one easy to use, already existing panel. Check out your local Jail today!
+Went ahead and added some color around the place (ie: text).
+More fun features are coming.
+Added Bar Sprites over jailed slaves for portraits and bodies to instantly indicate they are in "jail" - Images provided by Rendrassa
+
+<Interaction Hints>
+Added a new Interaction button at the bottom of the Slave Panel with a current count of number of remaining interactions. Should be a QOL aid.
+
+<Person Expanded - Stripping>
+Strip Toggle: There is now a Strip Toggle in the Customize section of the Slave Tab to allow you to automatically strip slaves. This toggle reflects the slave's nudity state, so it will appear pressed if they are already nude.
+Rule Change: Renamed the Rule "Partial Nudity" to "Maintain Nudity" for better clarification
+Updated Stripping/Reclothing: Slaves will automatically check to see if they were ordered to reclothe or strip themselves (rule), want to reclothe or strip themselves (exhibitionism fetish), or if they can (restraints on/destroyed clothing in Talk scene). They will run this check whenever the Slave List refreshes, after sex, and at the end of the day.
+The player has a toggle in expansionsettings to be treated like any other slave and undress/redress based on their exhibitionism (as the player can't currently toggle their own clothing, UI update pending)
+Praise and Punishment Bonus: Added a Praise and Punishment Bonus to Dates adding 3 extra turns the first time they are Praised or Punished the day they obey or disobey the nudity rules
+Rebels Settings: globals.expansionsettings.only_rebels_can_refuse_strip_rule is set to true by default, meaning only actual Rebellious slaves can refuse strip orders. Set to false to let any disobedient or upset slave refuse.
+
+<Rules Hints>
+Rewrote the Tooltips for each of the Rules under Slave Tab/Customization for clarity and consistency.
+
+<Tia>
+Added Images to Tia - Image Created by Rendrassa
+
+<Ivran>
+Added Images to Ivran/Ivrana - Images created by Rendrassa
+>Note: Not 100% its working right as I can't find anywhere Ivran is set as a Unique character. May just be the portrait in combat atm
+
+<Ayda's Shop>
+Added images to the Bunny Boy in Ayda's Shop (when she's gone) - Image Created by Rendrassa
+
+<Succubus> - by Ralph
+Added extensive "Succubus" mechanics/content for Demon (Succubus) hybrids (available when using RalphsTweaks)
+Fixed some Ralphstweaks content: Quicksell pricing fixed to match (mainly)
+Added additional marketup/down text for Race Price movements written by The Alchemist, Rendrassa
+
+<Mana Market> - by Smargoos
+You can now set your Merchant to buy Mana as well as Food (up to a specifically set supply number). This is accessible in the same menu you set your headgirl settings in the Mansion.
+
+<Non-Combat Travel Events> - by Ralph
+Non-Combat encounters break up combat zones on the map so it's not all just "Oops more bandits".
+(just conditional/random text atm; see expansiontravel.gd and Projects in the Github)
+Purpose of the addition:
+added opportunity to add lore/immersion to the game
+you run into less capturables potentially in a given day (it's a slight economy nerf in line with the general direction of Ralphstweaks, but applied to base Aric's mod).
+Future plans:
+Add Choose Your Own Adventure variants to the non-combat encounters
+Add toggle/settings to adjust the rate of non-combat encounter occurrences
+also fixed eternally pregnant MCs;
+also added sillymode (though toggling this in expansionsettings.gd only affects the new Non-Combat Encounters so far.
+
+<Vices (formerly known as Flaws)>
+Expanded the Vices system, renamed from Flaws as they aren't necessarily negative. Vices have more of an effect on personal luxury now, but each that increases luxury costs also can be negated by the appropriate rule.
+The system can be disabled by toggling expansionsettings > flaw_luxury_effects to false
+There is a dictionary entry explaining the system in more depth. It will also show in the description once revealed.
+Added a reveal function for Vices in dailyUpdate. It also has a chance to be revealed on Mind Read (it may take multiple casts to break their "resistance". Will add a Talk feature to "discover" it in the future.
+Only Lust and Wrath can increase Luxury Reqs to 40 (max change) which is the base for a Rich slave. All the others are 5-20, thus can be ignored/circumvented if needed.
+Revealing the Vices via Mind Read is a check with a chance of Player Magic * 10 + Times Attempted that Day * 10.
+
+Discovery: Vices can be Discovered via Mind Reading. The chance is the Presentation Bonus (settable in expansionsettings) + (player magic * 10) + (times attempted that day * 10). There is also an option to ONLY allow them to be discovered after they randomly present themselves
+Removal: Vices can be Removed via Amnesia Potions, which will clear them entirely.
+
+>Luxury Effects:
+Jobs "satisfy" their needs as well, negating the penalties they may incur.
+Lust: Maximum Base Bonus is 5 + 10% of Lewdness if they were fucked that day (Max 10). Every day they aren't fucked reduces that by -2 (which can turn into a penalty after).
+Sloth: Bath +5, Rest or Housepet +5, Maxed Energy at EOD +10 (-5 if below 25%), Stress <= 25% +5 (-5 if above 75%)
+Pride: Headgirl, Farm Manager, or Jailer positions give +10. Cosmetics & Bath provide +5 each (but -10 each if not allowed).
+Gluttony: Cooking Job gives +10. Better Food + 10, refused Better Food -10.
+Greed: Merchant and Milk Merchant jobs provide +10. Spend 5 extra gold with the Pocket Money job for +10 Luxury.
+Envy: +20 if self is the "envy target". Otherwise, +10 if Headgirl, Farm Manager, or Jailer. Compares Sleeping arangements, Last Sex Day, Stress (only if < 50* less than Envy Target), and Origins for a difference of +5/-5.
+
+<Food Purchasing> - Smargoos
+Implemented Food Purchasing changes to match Mana Purchasing
+
+<Consent Chance>
+Added Perfect Info showing the Roll to Consent Chance (specifically for Party Consent)
+Reworked Consent Chances to be more consistent, cleaned up some code, and prepared for future modifications. Tied in more Fetishes and Flaws.
+Rebellion reduces slightly when they agree to Fight Alongside You
+Made the hidden Nudity consent more visible in the new stripping format
+
+Bugfixes
+Full list Here: https://github.com/AricTriton/AricsExpansion/commits/main
+Cleaned up lots of various bugs/typos held over from previous version's code cleanup - Ank
+Cleaned up & fixed calculation for the Town Guard to better optimize it
+Cleaned up Pregnancy and more various features - Ank
+Fixed the Fetish: Incest Increase to only automatically give Incest consent on Enjoyable + Mindblowing
+Fixed Fetish Prompt
+Disabled Farm Tab EOD if there's no farm
+Coloration issue with breasts
+A loooot of other minor fixes and tweaks

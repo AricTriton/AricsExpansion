@@ -337,8 +337,8 @@ class combatant:
 		stressmax = person.stats.stress_max
 		lust = person.lust
 		lustmax = person.stats.lust_max
-		#statcalculations// Added this comment so I can find them easier- Bubblepot
-		attack = variables.baseattack + round(person.sstr * variables.damageperstr) + floor(person.level/2)
+		
+		attack = variables.baseattack + floor(person.level/2)
 		magic = person.smaf
 		armor = person.stats.armor_cur
 		speed = variables.speedbase + (person.sagi * variables.speedperagi)
@@ -358,11 +358,22 @@ class combatant:
 		if person.spec == 'assassin':
 			speed += 5
 			attack += 5
+		elif person.spec == 'mage':
+			magic *= 1.5
+		elif person.spec == 'warrior':
+			speed += 3
+			attack += 3
+		elif person.spec == 'dancer':
+			speed += 7
 		
 		###---Added by Expansion---### Movement Expanded
 		if person.movement == 'flying':
-			speed = round(speed*1.25)
-			attack = round(attack*1.25)
+			if person.race.find('Bird') >= 0:
+				speed = round(speed*1.4)
+				attack = round(attack*1.4)
+			else:
+				speed = round(speed*1.25)
+				attack = round(attack*1.25)
 		elif person.movement == 'crawl':
 			speed = round(speed*.5)
 			attack = round(attack*.5)
@@ -376,7 +387,8 @@ class combatant:
 			scene.getbuff(scene.makebuff('pregnancy', self, self), self)
 		#Gear
 		
-		
+		if (person.gear.weapon == null): # Capitulize - Fists = Strength
+			attack += round(person.sstr * variables.damageperstr)
 		for i in person.gear.values():
 			var tempitem
 			if i != null:
@@ -391,8 +403,16 @@ class combatant:
 #					tempitem = scene.enemygear[i]
 				###---End Expansion---###
 				for k in tempitem.effects:
-					if k.type == 'incombat' && globals.abilities.has_method(k.effect):
+					if k.type == 'incombat' && globals.abilities.has_method(k.effect) && !k.has("effectscale"):
 						globals.abilities.call(k.effect, self, k.effectvalue)
+					elif k.type == 'incombat' && k.has("effectscale"): # Capitulize - Checks to see if incombat item has effectscale, if it does then give it proper damage type.
+						globals.abilities.call(k.effect, self, k.effectvalue)
+						if k.effectscale == 'str':
+							attack += round(person.sstr * variables.damageperstr)
+						elif k.effectscale == 'agi':
+							attack += round(person.sagi * variables.damageperagi)
+						elif k.effectscale == 'maf':
+							attack += round(person.smaf * variables.damagepermaf)
 					if k.type in ['incombatphyattack', 'incombatturn', 'incombatspecial']:
 						self.geareffects.append(k)
 					if k.type == 'passive':

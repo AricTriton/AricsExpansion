@@ -237,6 +237,9 @@ var C_BODYSHAPE = 'bodyshape'
 var C_CHILD = 'child'
 var C_SKINCOV = 'skincov'
 var C_FULL_BODY_FUR = 'full_body_fur'
+var C_FULL_BODY_SCALES = 'fullscales'
+var C_FULL_BODY_FEATHERS = 'fullfeathers'
+var C_FULL_BODY_FEATHERS_AND_FUR = 'feathers_and_fur'
 var C_HALFHORSE = 'halfhorse'
 var C_SINGLE = 'single'
 var C_PLURAL = 'plural'
@@ -250,7 +253,7 @@ var refTitsSizeArray = globals.titssizearray # ['masculine','flat','small','aver
 var refAgesArray = globals.agesarray # ['child','teen','adult']
 var refHeightArray = globals.heightarrayexp # ['tiny','petite','short','average','tall','towering']
 var refGenitaliaArray  = globals.penissizearray # ['micro','tiny','small','average','large','massive']
-var refPenisTypeArray = globals.penistypearray # ['human','canine','feline','equine']
+var refPenisTypeArray = globals.penistypearray # ['human','canine','feline','equine','reptilian','rodent','bird',]
 var refAssSizeArray = globals.asssizearray #['masculine','flat','small','average','big','huge']
 ###---End Expansion---###
 
@@ -671,6 +674,18 @@ var racenames = {
 		singlepos = " orc's",
 		pluralpos = " orcs'"
 	},
+	Ogre = {
+		single = " ogre",
+		plural = " ogres",
+		singlepos = " ogre's",
+		pluralpos = " ogres'"
+	},
+	Giant = {
+		single = " giant",
+		plural = " giants",
+		singlepos = " giant's",
+		pluralpos = " giants'"
+	},
 	Gnome = {
 		single = " gnome",
 		plural = " gnomes",
@@ -713,6 +728,24 @@ var racenames = {
 		singlepos = " dragon's",
 		pluralpos = " dragons'"
 	},
+	Lizardfolk = {
+		single = " lizard",
+		plural = " lizards",
+		singlepos = " lizard's",
+		pluralpos = " lizards'",
+	},
+	Kobold = {
+		single = " kobold",
+		plural = " kobolds",
+		singlepos = " kobold's",
+		pluralpos = " kobolds'",
+	}, 
+	Gnoll = {
+		single = " gnoll",
+		plural = " gnolls",
+		singlepos = " gnoll's",
+		pluralpos = " gnolls'"
+	},
 	Taurus = {
 		single = " taurus",
 		plural = " tauruses",
@@ -736,6 +769,12 @@ var racenames = {
 		plural = " harpies",
 		singlepos = " harpy's",
 		pluralpos = " harpies'"
+	},
+	Avali = {
+		single = " avali",
+		plural = " avalis",
+		singlepos = " avali's",
+		pluralpos = " avalis''"
 	},
 	Arachna = {
 		single = " arachna",
@@ -791,6 +830,30 @@ var racenames = {
 		singlepos = " tanuki's",
 		pluralpos = " tanukis'"
 	},
+	"Beastkin Mouse" : {
+		single = " mousekin",
+		plural = " micekin",
+		singlepos = " mouse's",
+		pluralpos = " mice",
+	},
+	"Beastkin Squirrel" : {
+		single = " squirrelkin",
+		plural = " squirrelkin",
+		singlepos = " squirrel's",
+		pluralpos = " squirrels'",
+	},
+	"Beastkin Otter" : {
+		single = " otterkin",
+		plural = " otterkin",
+		singlepos = " otter's",
+		pluralpos = " otters'",
+	},
+	"Beastkin Bird" : {
+		single = " birdkin",
+		plural = " birdkin",
+		singlepos = " bird's",
+		pluralpos = " birds'",
+	},
 	"Halfkin Cat" : {
 		single = " cat",
 		plural = " cats",
@@ -820,6 +883,30 @@ var racenames = {
 		plural = " tanukis",
 		singlepos = " tanuki's",
 		pluralpos = " tanukis'"
+	},
+	"Halfkin Mouse" : {
+		single = " mousekin",
+		plural = " micekin",
+		singlepos = " mouse's",
+		pluralpos = " mice",
+	},
+	"Halfkin Squirrel" : {
+		single = " squirrelkin",
+		plural = " squirrelkin",
+		singlepos = " squirrel's",
+		pluralpos = " squirrels'",
+	},
+	"Halfkin Otter" : {
+		single = " otterkin",
+		plural = " otterkin",
+		singlepos = " otter's",
+		pluralpos = " otters'",
+	},
+	"Halfkin Bird" : {
+		single = " birdkin",
+		plural = " birdkin",
+		singlepos = " bird's",
+		pluralpos = " birds'",
 	},
 }
 
@@ -1187,6 +1274,9 @@ var descBodyType = [
 	["transparent","squishy","gelatinous"], # bodyshape: jelly
 	["long","serpentine"], # bodyshape: halfsnake
 	["furry","fluffy","fur-covered"], # skincov: full_body_fur
+	["scaly","reptilian",], # skincov: fullscales
+	["feathery","feathered",], # skincov: fullfeathers
+	["raptorish","feathered","alien"], # skincov: feathers_and_fur
 ]
 # tries to pick a descriptor that applies to the entire group, else returns null
 func describeBodyType(group):
@@ -1196,6 +1286,12 @@ func describeBodyType(group):
 		return getRandStr(descBodyType[1])
 	if areAllAttrib_E_val(group, C_SKINCOV, C_FULL_BODY_FUR):
 		return getRandStr(descBodyType[2])
+	if areAllAttrib_E_val(group, C_SKINCOV, C_FULL_BODY_SCALES):
+		return getRandStr(descBodyType[3])
+	if areAllAttrib_E_val(group, C_SKINCOV, C_FULL_BODY_FEATHERS):
+		return getRandStr(descBodyType[4])
+	if areAllAttrib_E_val(group, C_SKINCOV, C_FULL_BODY_FEATHERS_AND_FUR):
+		return getRandStr(descBodyType[5])
 	return null
 
 
@@ -1264,6 +1360,9 @@ var descPenisType = [
 	["knotted","tapered"], # penisType: canine
 	["barbed"], # penisType: feline
 	["flared","long"], # penisType: equine
+	["tapered","slender","reptilian"], # penisType: reptilian
+	["unsheathed","tapered","slender","rodent-like"], # penisType: rodent
+	["unsheathed","tapered","slender","bird-like"], # penisType: bird
 ]
 # tries to pick a descriptor that applies to the entire group, else returns null
 func describePenisType(group):
@@ -1470,6 +1569,9 @@ var descAssBodyType = [
 	["equine","hairy"], # bodyshape: halfhorse
 	["chitinous","spider"], # bodyshape: halfspider
 	["furry","hairy"], # skincov: full_body_fur
+	["scaly","reptilian"], # skincov: fullscales
+	["feathery","feathered",], # skincov: fullfeathers
+	["raptorish","feathered","alien"], # skincov: feathers_and_fur
 ]
 # tries to pick a descriptor that applies to the entire group, else returns null
 func describeAssBodyType(group):
@@ -1481,6 +1583,12 @@ func describeAssBodyType(group):
 		return getRandStr(descAssBodyType[2])
 	if areAllAttrib_E_val(group, C_SKINCOV, C_FULL_BODY_FUR):
 		return getRandStr(descAssBodyType[3])
+	if areAllAttrib_E_val(group, C_SKINCOV, C_FULL_BODY_SCALES):
+		return getRandStr(descAssBodyType[4])
+	if areAllAttrib_E_val(group, C_SKINCOV, C_FULL_BODY_FEATHERS):
+		return getRandStr(descAssBodyType[5])
+	if areAllAttrib_E_val(group, C_SKINCOV, C_FULL_BODY_FEATHERS_AND_FUR):
+		return getRandStr(descAssBodyType[6])
 	return null
 
 
@@ -1599,6 +1707,9 @@ func describeHipsSizeAge(group):
 var descHipsBodyType = [
 	["equine","hairy"], # bodyshape: halfhorse
 	["furry","hairy"], # skincov: full_body_fur
+	["scaly","reptilian"], # skincov: fullscales
+	["feathery","feathered",], # skincov: fullfeathers
+	["raptor-like","feathery"], # skincov: feathers_and_fur
 ]
 # tries to pick a descriptor that applies to the entire group, else returns null
 func describeHipsBodyType(group):
@@ -1608,6 +1719,12 @@ func describeHipsBodyType(group):
 		return "scaly"
 	if areAllAttrib_E_val(group, C_SKINCOV, C_FULL_BODY_FUR):
 		return getRandStr(descAssBodyType[1])
+	if areAllAttrib_E_val(group, C_SKINCOV, C_FULL_BODY_SCALES):
+		return getRandStr(descAssBodyType[2])
+	if areAllAttrib_E_val(group, C_SKINCOV, C_FULL_BODY_FEATHERS):
+		return getRandStr(descAssBodyType[3])
+	if areAllAttrib_E_val(group, C_SKINCOV, C_FULL_BODY_FEATHERS_AND_FUR):
+		return getRandStr(descAssBodyType[4])
 	return null
 
 
@@ -1696,6 +1813,9 @@ func describeTitsSizeAge(group):
 var descTitsBodyType = [
 	["gelatinous","slimy","gooey"], # bodyshape: jelly
 	["furry","fluffy"], # skincov: full_body_fur
+	["scaly","reptilian"], # skincov: fullscales
+	["feathery","feathered",], # skincov: fullfeathers
+	["furry","fluffy"], # skincov: feathers_and_fur
 ]
 # tries to pick a descriptor that applies to the entire group, else returns null
 func describeTitsBodyType(group):
@@ -1705,6 +1825,12 @@ func describeTitsBodyType(group):
 	if areAllAttrib_E_val(group, C_SKINCOV, C_FULL_BODY_FUR):
 		return getRandStr(descTitsBodyType[1])
 	###---End Expansion---###
+	if areAllAttrib_E_val(group, C_SKINCOV, C_FULL_BODY_SCALES):
+		return getRandStr(descTitsBodyType[2])
+	if areAllAttrib_E_val(group, C_SKINCOV, C_FULL_BODY_FEATHERS):
+		return getRandStr(descTitsBodyType[3])
+	if areAllAttrib_E_val(group, C_SKINCOV, C_FULL_BODY_FEATHERS_AND_FUR):
+		return getRandStr(descTitsBodyType[4])
 	return null
 
 

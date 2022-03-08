@@ -166,6 +166,10 @@ func expandGame():
 		if str(person.expansionversion) != str(globals.expansionsettings.modversion):
 			globals.backwardscompatibility.backwardsCompatibility(person)
 		globals.expansion.updatePerson(person)
+		if person.race == "Dragonkin" && person.scalecolor == '':
+			person.scalecolor = globals.randomfromarray(globals.races["Dragonkin"].scalecolor)
+		if person.race == "Harpy" && person.feathercolor == '':
+			person.feathercolor = globals.randomfromarray(globals.races["Harpy"].feathercolor)
 		if globals.state.relativesdata.has(person.id):
 			globals.state.relativesdata[person.id].name = person.name_long()
 	for i in globals.guildslaves:
@@ -176,6 +180,11 @@ func expandGame():
 			if str(person.expansionversion) != str(globals.expansionsettings.modversion):
 				globals.backwardscompatibility.backwardsCompatibility(person)
 			globals.expansion.updatePerson(person)
+			if person.race == "Dragonkin" && person.scalecolor == '':
+				person.scalecolor = globals.randomfromarray(globals.races["Dragonkin"].scalecolor)
+			if person.race == "Harpy" && person.feathercolor == '':
+				person.feathercolor = globals.randomfromarray(globals.races["Harpy"].feathercolor)
+
 			if globals.state.relativesdata.has(person.id):
 				globals.state.relativesdata[person.id].name = person.name_long()
 
@@ -198,7 +207,21 @@ func expandGame():
 				break
 			idx2 -= 1
 		idx1 -= 1
-
+	
+	#v1.8 prolly
+	#add weapon scaling attributes to all weapons
+	for item in globals.state.unstackables.values():
+		var refEffect = globals.itemdict[item.code].effect
+		var newEffects = refEffect.duplicate(true)
+		for j in item.effects:
+			var isPresent = false
+			for k in refEffect:
+				if j.effect == k.effect && j.get('id') == k.get('id'):
+					isPresent = true
+					break
+			if !isPresent:
+				newEffects.append(j)
+		item.effects = newEffects
 
 func expandPerson(person):
 	var sexvag = int(round(person.metrics.vag/10))
@@ -1113,67 +1136,67 @@ func setRaceBonus(person, increasestats):
 	
 	var somethingchanged = false
 	if addstats == true:
-		if bonus_strength > 0:
+		if bonus_strength != 0:
 			person.stats.str_mod += round(bonus_strength)
 			somethingchanged = true
-		if bonus_agility > 0:
+		if bonus_agility != 0:
 			person.stats.agi_mod += round(bonus_agility)
 			somethingchanged = true
-		if bonus_magic > 0:
+		if bonus_magic != 0:
 			person.stats.maf_mod += round(bonus_magic)
 			somethingchanged = true
-		if bonus_endurance > 0:
+		if bonus_endurance != 0:
 			person.stats.end_mod += round(bonus_endurance)
 			somethingchanged = true
-		if bonus_courage > 0:
+		if bonus_courage != 0:
 			person.stats.cour_racial += round(bonus_courage)
 			somethingchanged = true
-		if bonus_confidence > 0:
+		if bonus_confidence != 0:
 			person.stats.conf_racial += round(bonus_confidence)
 			somethingchanged = true
-		if bonus_wit > 0:
+		if bonus_wit != 0:
 			person.stats.wit_racial += round(bonus_wit)
 			somethingchanged = true
-		if bonus_charm > 0:
+		if bonus_charm != 0:
 			person.stats.charm_racial += round(bonus_charm)
 			somethingchanged = true
-		if bonus_beauty > 0:
+		if bonus_beauty != 0:
 			person.beautybase += round(bonus_beauty)
 			somethingchanged = true
-		if bonus_fertility > 0:
+		if bonus_fertility != 0:
 			person.preg.bonus_fertility += round(bonus_fertility)
 			somethingchanged = true
 		if somethingchanged == true:
 			person.npcexpanded.racialbonusesapplied = true
 	else:
-		if bonus_strength > 0:
+		if bonus_strength != 0:
 			person.stats.str_mod -= round(bonus_strength)
 			somethingchanged = true
-		if bonus_agility > 0:
+		if bonus_agility != 0:
 			person.stats.agi_mod -= round(bonus_agility)
 			somethingchanged = true
-		if bonus_magic > 0:
+		if bonus_magic != 0:
 			person.stats.maf_mod -= round(bonus_magic)
 			somethingchanged = true
-		if bonus_endurance > 0:
+		if bonus_endurance != 0:
 			person.stats.end_mod -= round(bonus_endurance)
 			somethingchanged = true
-		if bonus_courage > 0:
+		if bonus_courage != 0:
 			person.stats.cour_racial -= round(bonus_courage)
 			somethingchanged = true
-		if bonus_confidence > 0:
+		if bonus_confidence != 0:
 			person.stats.conf_racial -= round(bonus_confidence)
 			somethingchanged = true
-		if bonus_wit > 0:
+		if bonus_wit != 0:
 			person.stats.wit_racial -= round(bonus_wit)
 			somethingchanged = true
-		if bonus_charm > 0:
+		if bonus_charm != 0:
 			person.stats.charm_racial -= round(bonus_charm)
 			somethingchanged = true
-		if bonus_beauty > 0:
+		if bonus_beauty != 0:
 			person.beautybase -= round(bonus_beauty)
 			somethingchanged = true
-		if bonus_fertility > 0:
+		if bonus_fertility != 0:
 			person.preg.bonus_fertility -= round(bonus_fertility)
 			somethingchanged = true
 		
@@ -1191,10 +1214,18 @@ func setRaceBonus_Ralph(person, increasestats):
 	var bonus_agility = 0
 	var bonus_magic = 0
 	var bonus_endurance = 0
+	var bonus_strength_max = 0
+	var bonus_agility_max = 0
+	var bonus_magic_max = 0
+	var bonus_endurance_max = 0
 	var bonus_courage = 0
 	var bonus_confidence = 0
 	var bonus_wit = 0
 	var bonus_charm = 0
+	var bonus_courage_racial = 0
+	var bonus_confidence_racial = 0
+	var bonus_wit_racial = 0
+	var bonus_charm_racial = 0
 	var bonus_beauty = 0
 	var bonus_fertility = 0
 	var bonus_titssize = 0
@@ -1210,6 +1241,9 @@ func setRaceBonus_Ralph(person, increasestats):
 	var bonus_catpenis = false
 	var bonus_dogpenis = false
 	var bonus_horsepenis = false
+	var bonus_lizardpenis = false
+	var bonus_rodentpenis = false
+	var bonus_birdpenis = false
 	var bonus_skincov = 'none'
 	var bonus_skin = 'fair' #unless a variable is implemented to store previous person.skin, a reset applied to person.skin will only result in 'fair'
 	var bonus_eyesclera = 'normal'
@@ -1217,7 +1251,10 @@ func setRaceBonus_Ralph(person, increasestats):
 	var bonus_tail = 'none'
 	var bonus_wings = 'none'
 	var bonus_furcolor = 'none'
+	var bonus_scalecolor = 'none'
+	var bonus_eyecolor = 'none'
 	var bonus_ears = 'human'
+	var bonus_bodyshape = 'humanoid'
 	var fire = 0
 	var wind = 0
 	var water = 0
@@ -1281,6 +1318,10 @@ func setRaceBonus_Ralph(person, increasestats):
 	person.stats.agi_mod = 0
 	person.stats.maf_mod = 0
 	person.stats.end_mod = 0
+	person.stats.str_max = globals.races[person.race.replace('Halfkin', 'Beastkin')].stats[globals.maxstatdict["sstr"]]
+	person.stats.agi_max = globals.races[person.race.replace('Halfkin', 'Beastkin')].stats[globals.maxstatdict["sagi"]]
+	person.stats.maf_max = globals.races[person.race.replace('Halfkin', 'Beastkin')].stats[globals.maxstatdict["smaf"]]
+	person.stats.end_max = globals.races[person.race.replace('Halfkin', 'Beastkin')].stats[globals.maxstatdict["send"]]
 	#person.stats.str_base = 0	
 	#person.stats.agi_base = 0
 	#person.stats.maf_base = 0
@@ -1294,46 +1335,62 @@ func setRaceBonus_Ralph(person, increasestats):
 	#	person.trait_remove(trait)
 	#	person.add_trait(trait)
 	if person.traits.has('Weak'):
-		person.stats.str_mod -= 2
+		person.stats.str_mod -= globals.origins.traitlist["Weak"].effect.str_mod
+		person.stats.str_max -= globals.origins.traitlist["Weak"].effect.str_max
 	if person.traits.has('Strong'):
-		person.stats.str_mod += 2
-	if person.traits.has('Quick'):
-		person.stats.agi_mod += 2
+		person.stats.str_mod += globals.origins.traitlist["Strong"].effect.str_mod
+		person.stats.str_max += globals.origins.traitlist["Strong"].effect.str_max
 	if person.traits.has('Clumsy'):
-		person.stats.agi_mod -= 2
-	if person.traits.has('Responsive'):
-		person.stats.maf_mod += 2
+		person.stats.agi_mod -= globals.origins.traitlist["Clumsy"].effect.agi_mod
+		person.stats.agi_max -= globals.origins.traitlist["Clumsy"].effect.agi_max
+	if person.traits.has('Quick'):
+		person.stats.agi_mod += globals.origins.traitlist["Quick"].effect.agi_mod
+		person.stats.agi_max += globals.origins.traitlist["Quick"].effect.agi_max
 	if person.traits.has('Magic Deaf'):
-		person.stats.maf_mod -= 2
-	if person.traits.has('Robust'):
-		person.stats.end_mod += 2
+		person.stats.maf_mod -= globals.origins.traitlist["Magic Deaf"].effect.maf_mod
+		person.stats.maf_max -= globals.origins.traitlist["Magic Deaf"].effect.maf_max
+	if person.traits.has('Responsive'):
+		person.stats.maf_mod += globals.origins.traitlist["Responsive"].effect.maf_mod
+		person.stats.maf_max += globals.origins.traitlist["Responsive"].effect.maf_max
 	if person.traits.has('Frail'):
-		person.stats.end_mod -= 2
-	#if person.unique == 'startslave':
-	#	globals.constructor.forceFullblooded(person) #may not be needed; haven't fully tested
-		#person.skillpoints += 10
-		#hybridtype = 'Imp'
+		person.stats.end_mod -= globals.origins.traitlist["Frail"].effect.end_mod
+		person.stats.end_max -= globals.origins.traitlist["Frail"].effect.end_max
+	if person.traits.has('Robust'):
+		person.stats.end_mod += globals.origins.traitlist["Robust"].effect.end_mod
+		person.stats.end_max += globals.origins.traitlist["Robust"].effect.end_max
 	#/ralph
-		
+	
+	var racedict = {'human':'Human', 'gnome':'Gnome', 'elf':'Elf', 'tribal_elf':'Tribal Elf', 'dark_elf':'Dark Elf', 'orc':'Orc', 'goblin':'Goblin', 'dragonkin':'Dragonkin', 'dryad':'Dryad', 'arachna':'Arachna', 'lamia':'Lamia', 'fairy':'Fairy', 'harpy':'Harpy', 'seraph':'Seraph', 'demon':'Demon', 'nereid':'Nereid', 'scylla':'Scylla', 'slime':'Slime', 'bunny':'Beastkin Bunny', 'dog':'Beastkin Wolf', 'cow':'Taurus', 'cat':'Beastkin Cat', 'fox':'Beastkin Fox', 'horse':'Centaur', 'raccoon':'Beastkin Tanuki', 'hyena':'Gnoll', 'ogre':'Ogre', 'giant':'Giant', 'lizardfolk':'Lizardfolk', 'kobold':'Kobold', 'avali':'Avali', 'mouse':'Beastkin Mouse', 'squirrel':'Beastkin Squirrel', 'otter':'Beastkin Otter', 'bird':'Beastkin Bird'}
+
 	#Count the person's races - used in Human >50% Hybrids bonus stat calcs
 	for race in person.genealogy:
 		if person.genealogy[race] > 0:
-			count_races += 1		
+			count_races += 1
+			fire = globals.races[racedict[race]].elementalmod.fire/float(person.genealogy[race])
+			wind = globals.races[racedict[race]].elementalmod.wind/float(person.genealogy[race])
+			water = globals.races[racedict[race]].elementalmod.water/float(person.genealogy[race])
+			earth = globals.races[racedict[race]].elementalmod.earth/float(person.genealogy[race])
+			nature = globals.races[racedict[race]].elementalmod.nature/float(person.genealogy[race])
+			corruption = globals.races[racedict[race]].elementalmod.corruption/float(person.genealogy[race])
+	
+	corruption -= (float(person.genealogy.slime))/100
+	
+	var elements = {'fire':fire, 'wind':wind, 'water':water, 'earth':earth}
 
-	###ANK'S FIX? This + Dictionary? ###Ralpho: "I changed it; hopefully might still work if needed, but better check before using"
-	#for race in person.genealogy: 
-	#	if person.genealogy[race] > 0:
-	#		descript += race.replace('_',' ').capitalize() + " : " + str(genealogy[race]) + "%\n"
-	###
+	var currentelement = ""
+	var secondelement = ""
+	var highestpercent = 0
+	var secondhighestpercent = 0
 
-	#assign elemental values
-	fire += (person.genealogy.dragonkin*1.0 + person.genealogy.demon*0.75 + person.genealogy.seraph*0.5 + 0.25*(person.genealogy.tribal_elf + person.genealogy.orc + person.genealogy.dog + person.genealogy.fox + person.genealogy.lamia))/100
-	wind += (person.genealogy.harpy*1.0 + person.genealogy.fairy*0.75 + person.genealogy.seraph*0.5 + 0.25*(person.genealogy.elf + person.genealogy.arachna + person.genealogy.cat + person.genealogy.raccoon))/100
-	water += (person.genealogy.nereid*1.0 + person.genealogy.scylla*0.75 + 0.5*(person.genealogy.slime + person.genealogy.lamia) + 0.25*(person.genealogy.cow + person.genealogy.dryad + person.genealogy.dark_elf))/100
-	earth += (person.genealogy.gnome*1.0 + person.genealogy.goblin*0.75+ 0.5*(person.genealogy.bunny + person.genealogy.arachna) + 0.25*(person.genealogy.cow + person.genealogy.horse + person.genealogy.dryad + person.genealogy.lamia))/100
-	nature += (1.0*(person.genealogy.dryad + person.genealogy.fairy + person.genealogy.goblin) + 0.75*(person.genealogy.tribal_elf + person.genealogy.fox + person.genealogy.raccoon) + 0.5*(person.genealogy.elf + person.genealogy.dark_elf + person.genealogy.nereid + person.genealogy.harpy + person.genealogy.dragonkin + person.genealogy.arachna + person.genealogy.lamia + person.genealogy.slime + person.genealogy.cat + person.genealogy.dog + person.genealogy.bunny + person.genealogy.horse) + 0.25*(person.genealogy.human + person.genealogy.gnome + person.genealogy.orc + person.genealogy.scylla + person.genealogy.cow))/100
-	corruption += (1.0*(person.genealogy.demon + person.genealogy.gnome + person.genealogy.goblin) + 0.75*(person.genealogy.orc + person.genealogy.scylla + person.genealogy.harpy + person.genealogy.dragonkin + person.genealogy.arachna) + 0.5*(person.genealogy.dark_elf + person.genealogy.nereid + person.genealogy.cow + person.genealogy.lamia + person.genealogy.horse) + 0.25*(person.genealogy.elf + person.genealogy.tribal_elf + person.genealogy.cat + person.genealogy.dog + person.genealogy.bunny + person.genealogy.fox + person.genealogy.raccoon))/100
-	corruption -= person.genealogy.slime
+	for element in elements.keys():
+		if elements[element] >= highestpercent:
+			secondelement = currentelement
+			currentelement = element
+			secondhighestpercent = highestpercent
+			highestpercent = elements[element]
+		if highestpercent == secondhighestpercent && rand_range(0,100) <= 50:
+			currentelement = secondelement
+
 	
 	#assign racial bonuses
 #	if person.npcexpanded.racialbonusesapplied == false && addstats == true || person.npcexpanded.racialbonusesapplied == true && addstats == false:
@@ -1368,11 +1425,13 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_magic += 1
 			bonus_endurance += 2
 			bonus_wit += 20
+			bonus_wit_racial += 2
 			bonus_penissize -= 1
 			bonus_vagsize -= 1
 			bonus_ballssize -= 1
 		elif person.genealogy.gnome >= 50 && person.race == thisrace:
 			bonus_wit += person.genealogy.gnome/5
+			bonus_wit_racial += person.genealogy.gnome/50
 			bonus_magic += earth + (nature - 0.25)*4
 			bonus_endurance += person.genealogy.gnome/50
 			if person.genealogy.demon >= 40 && person.sex == 'male': #Imp
@@ -1394,27 +1453,6 @@ func setRaceBonus_Ralph(person, increasestats):
 					bonus_horns = 'short'
 				if person.wings == 'none':
 					bonus_wings = 'leather_red'
-			elif person.genealogy.bunny >= 40:
-				hybridtype = 'Mousekin'
-				bonus_agility += 1.5
-				bonus_fertility += person.genealogy.bunny/2
-				bonus_penissize -= 2
-				bonus_ballssize += 1
-				bonus_vagsize -= 1
-				bonus_titssize -= 1
-				bonus_asssize -= 1
-				bonus_ears = 'short_furry'
-				bonus_tail = 'mouse'
-				bonus_skincov = 'full_body_fur'
-				if person.genealogy.bunny >=40 && person.genealogy.bunny < 43:
-					bonus_furcolor = 'gray'
-				elif person.genealogy.bunny >=43 && person.genealogy.bunny < 46:
-					bonus_furcolor = 'black'
-				elif person.genealogy.bunny >=46 && person.genealogy.bunny < 48:
-					bonus_furcolor = 'brown'	
-				else:	
-					bonus_furcolor = 'white'
-				person.add_trait('Small Eater') #not reversible
 			else:
 				bonus_agility += (person.genealogy.bunny + person.genealogy.harpy)/33 + (1 - corruption)*2
 				bonus_endurance -= person.genealogy.harpy/33 + (1 - corruption)*2 #offset by any hollow bird bones
@@ -1453,6 +1491,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_beauty += 10
 			bonus_fertility -= 10
 			bonus_charm += 10
+			bonus_charm_racial += 1
 			bonus_titssize -= 1
 			bonus_penissize -= 1
 			bonus_asssize -= 1
@@ -1465,6 +1504,7 @@ func setRaceBonus_Ralph(person, increasestats):
 					bonus_endurance += 0.5
 					bonus_beauty -= 40
 					bonus_charm -= 10
+					bonus_charm_racial -= 1
 				else:
 					hybridtype = 'Nymph'
 					bonus_agility += 0.5
@@ -1475,6 +1515,7 @@ func setRaceBonus_Ralph(person, increasestats):
 				hybridtype = 'Siren'
 				bonus_beauty += 30
 				bonus_charm += 20
+				bonus_charm_racial += 2
 				person.trait_remove('Mute')
 				person.add_trait('Pretty Voice')
 			else:
@@ -1484,6 +1525,7 @@ func setRaceBonus_Ralph(person, increasestats):
 				bonus_endurance += earth
 				bonus_beauty += person.genealogy.elf/10
 				bonus_charm += person.genealogy.elf/10
+				bonus_charm_racial += person.genealogy.elf/100
 				bonus_fertility -= person.genealogy.elf/10
 				bonus_titssize -= person.genealogy.elf/120 
 				bonus_penissize -= person.genealogy.elf/120
@@ -1493,6 +1535,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_beauty += person.genealogy.elf/10
 			bonus_fertility -= person.genealogy.elf/10
 			bonus_charm += person.genealogy.elf/10
+			bonus_charm_racial += person.genealogy.elf/100
 			bonus_asssize -= person.genealogy.elf/50
 			if person.genealogy.fairy >= 50 || person.genealogy.goblin >= 50 || person.genealogy.gnome >= 50 || person.genealogy.tribal_elf || person.genealogy.dark_elf >= 50: #no need to make 'em smaller if they're already a small race
 				bonus_titssize -= 0
@@ -1511,6 +1554,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_beauty += 10
 			bonus_fertility -= 15
 			bonus_wit += 10
+			bonus_wit_racial += 1
 			bonus_penissize -= 1	
 		elif person.genealogy.dark_elf >= 50 && person.race == thisrace:
 			if water >= 0.4 && person.sex != 'male': #undine
@@ -1533,12 +1577,14 @@ func setRaceBonus_Ralph(person, increasestats):
 					bonus_magic += 1.5
 					bonus_beauty -= 40
 					bonus_charm -= 10
+					bonus_charm_racial -= 1
 				else:
 					hybridtype = 'Nymph'
 					bonus_agility += 0.5
 					bonus_magic += 1.5
 					bonus_beauty += 30
 					bonus_charm += 10
+					bonus_charm_racial += 1
 			else:
 				bonus_strength += fire*4*(.75 + nature) - (corruption - 0.5)*2 - 0.1
 				bonus_agility += person.genealogy.dark_elf/100 + wind*4*(0.75 + nature) - (corruption - 0.5)*2 - 0.1
@@ -1547,6 +1593,7 @@ func setRaceBonus_Ralph(person, increasestats):
 				bonus_beauty += person.genealogy.dark_elf/6.667 - corruption*10
 				bonus_fertility -= person.genealogy.dark_elf/10 + corruption*10
 				bonus_wit += person.genealogy.dark_elf/10
+				bonus_wit_racial += person.genealogy.dark_elf/100
 				bonus_charm -= (corruption - 0.5)*40
 				bonus_titssize -= person.genealogy.dark_elf/200
 				bonus_penissize -= person.genealogy.dark_elf/150
@@ -1595,12 +1642,14 @@ func setRaceBonus_Ralph(person, increasestats):
 					bonus_endurance += 0.5
 					bonus_beauty -= 40
 					bonus_charm -= 10
+					bonus_charm_racial -= 1
 				else:
 					hybridtype = 'Nymph'
 					bonus_agility += 0.5
 					bonus_magic += 1.5
 					bonus_beauty += 30
 					bonus_charm += 10
+					bonus_charm_racial += 1
 			else:
 				bonus_strength += fire*4 - (corruption - 0.25)*6 #(.86*.25+.14*.25)*4 = 1 - (.25*64+.5*.25+11)/100-.25*6 = 0   = 1 + 0 + .14
 				bonus_agility += person.genealogy.tribal_elf/50 + (nature - 0.75)*5.333 + wind #(.53*.75+.36*.5+.04*1) = 1.06-.71
@@ -1616,6 +1665,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_beauty += person.genealogy.tribal_elf/10
 			bonus_fertility -= person.genealogy.tribal_elf/10
 			bonus_confidence += person.genealogy.tribal_elf/5
+			bonus_confidence_racial += person.genealogy.tribal_elf/50
 			bonus_asssize -= person.genealogy.tribal_elf/100
 			if person.genealogy.fairy >= 50 || person.genealogy.goblin >= 50 || person.genealogy.gnome >= 50 || person.genealogy.elf >= 50: #no need to make 'em smaller if they're already a small race
 				bonus_titssize -= 0
@@ -1635,6 +1685,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_endurance += 2
 			bonus_beauty -= 10
 			bonus_courage += 10
+			bonus_courage_racial += 1
 			bonus_vagsize += 1
 			bonus_height += 1
 		elif person.genealogy.orc >= 50 && person.race == thisrace:
@@ -1642,22 +1693,9 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_beauty += ElvishBlood
 			bonus_beauty -= person.genealogy.orc/10 + (corruption - .75)*40
 			bonus_courage += person.genealogy.orc/10
+			bonus_courage_racial += person.genealogy.orc/100
 			bonus_vagsize += 1
-			if (person.genealogy.dog + person.genealogy.fox) >= 40: #gnoll
-				hybridtype = 'Gnoll'
-				bonus_skincov = 'full_body_fur'
-				if person.furcolor == 'none':
-					if person.genealogy.fox >= 30:
-						bonus_furcolor = 'orange'
-					elif person.genealogy.dog >= 30:
-						bonus_furcolor = 'gray'
-					else:
-						bonus_furcolor = 'brown'
-				bonus_strength += person.genealogy.orc/50 + person.genealogy.dog/50 + person.genealogy.fox/100
-				bonus_agility += person.genealogy.dog/50 + person.genealogy.fox/25
-				bonus_endurance += person.genealogy.orc/100
-				bonus_height += person.genealogy.dog/50 + person.genealogy.fox/100
-			elif (person.genealogy.lamia + person.genealogy.dragonkin + person.genealogy.arachna/2) >= 40: #lizardman
+			if (person.genealogy.lamia + person.genealogy.dragonkin + person.genealogy.arachna/2) >= 40: #lizardman
 				hybridtype = 'Lizardman'
 				bonus_skincov = 'scales'
 				bonus_tail = 'snake tail'
@@ -1682,6 +1720,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_endurance += person.genealogy.orc/100
 			bonus_beauty -= person.genealogy.orc/10
 			bonus_courage += person.genealogy.orc/10
+			bonus_courage_racial += person.genealogy.orc/100
 			bonus_height += person.genealogy.orc/40
 			if person.genealogy.dog >= 50 || person.genealogy.demon >= 50 || person.genealogy.horse >= 50 || person.genealogy.cow >= 50 || person.genealogy.dragonkin >= 50: #no need to make it bigger if they're already a hung race
 				bonus_penissize += 0
@@ -1713,16 +1752,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_lewdness += person.genealogy.goblin/10
 			bonus_fertility += nature*50
 			bonus_height += (100 - person.genealogy.goblin - person.genealogy.fairy - person.genealogy.gnome)/20
-			if person.genealogy.dragonkin >= 30: #kobold
-				hybridtype = 'Kobold'
-				bonus_skincov = 'scales'
-				if person.horns == 'none':
-					bonus_horns = 'short'
-				bonus_tail = 'dragon'
-				bonus_agility += 1.5
-				bonus_magic += 1.5
-				bonus_wit += person.genealogy.dragonkin/5
-			elif person.genealogy.fairy >= 40: #gremlin
+			if person.genealogy.fairy >= 40: #gremlin
 				hybridtype = 'Gremlin'
 				bonus_agility += 1.5
 				bonus_magic += 0.5
@@ -1840,7 +1870,9 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_magic += 3
 			bonus_beauty += 20
 			bonus_courage -= 10
+			bonus_courage_racial -= 1
 			bonus_charm += 10
+			bonus_charm_racial += 1
 			if person.sex != 'male':
 				bonus_height += 1
 		elif person.genealogy.nereid >= 50 && person.race == thisrace: 
@@ -1886,7 +1918,7 @@ func setRaceBonus_Ralph(person, increasestats):
 				if person.traits.has('Natural Beauty'):
 					person.trait_remove('Natural Beauty') #not reversible
 				person.add_trait('Blemished') #not reversible
-				person.mods['augmenttongue'] = 'augmenttongue' #not reversible as applied				
+				person.mods['augmenttongue'] = 'augmenttongue' #not reversible as applied	
 				if person.sex == 'male':
 					bonus_courage += 25
 				if !person.skin in ['green', 'jelly', 'teal']:
@@ -1897,7 +1929,7 @@ func setRaceBonus_Ralph(person, increasestats):
 				bonus_agility += 1.5
 				bonus_pliability += 1
 				person.tail = 'none' #not reversible as applied
-				person.mods['augmenttongue'] = 'augmenttongue' #not reversible as applied				
+				person.mods['augmenttongue'] = 'augmenttongue' #not reversible as applied
 				if !person.skin in ['green', 'jelly', 'teal']:
 					bonus_skin = 'jelly'
 			elif corruption >= 0.6: #Kappa
@@ -1924,14 +1956,18 @@ func setRaceBonus_Ralph(person, increasestats):
 				bonus_endurance += reptilian*2 + (0.5 - corruption)*4
 				bonus_beauty += person.genealogy.nereid/4 - corruption*10
 				bonus_courage -= person.genealogy.nereid/10 #Nereid avoid sailors and contact in general
+				bonus_courage_racial -= person.genealogy.nereid/100
 				bonus_charm += person.genealogy.nereid/10
+				bonus_charm_racial += person.genealogy.nereid/100
 				if person.sex != 'male':
 					bonus_height += person.genealogy.nereid/100
 		else:
 			bonus_magic += person.genealogy.nereid/50
 			bonus_beauty += person.genealogy.nereid/5
 			bonus_courage -= person.genealogy.nereid/10
+			bonus_courage_racial -= person.genealogy.nereid/100
 			bonus_charm += person.genealogy.nereid/10
+			bonus_charm_racial += person.genealogy.nereid/100
 			if person.sex != 'male':
 				bonus_height += person.genealogy.nereid/100
 	
@@ -1943,6 +1979,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_agility += 1
 			bonus_magic += 2
 			bonus_confidence += 20
+			bonus_confidence_racial += 2
 		elif person.genealogy.scylla >= 50 && person.race == thisrace:
 			if person.genealogy.dryad >= 40 && person.sex != 'male': #Alraune
 				hybridtype = 'Alraune'
@@ -1979,6 +2016,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_agility += person.genealogy.scylla/100
 			bonus_magic += person.genealogy.scylla/100
 			bonus_confidence += person.genealogy.scylla/5
+			bonus_confidence_racial += person.genealogy.scylla/50
 	
 	#Aerials
 	#Fairy
@@ -1989,6 +2027,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_agility += 2
 			bonus_magic += 2
 			bonus_charm += 10
+			bonus_charm_racial += 1
 			bonus_titssize -= 1
 			bonus_penissize -= 1
 			bonus_asssize -= 1
@@ -2024,6 +2063,7 @@ func setRaceBonus_Ralph(person, increasestats):
 		else:
 			bonus_magic += person.genealogy.fairy/50
 			bonus_charm += person.genealogy.fairy/10
+			bonus_charm += person.genealogy.fairy/100
 			if person.sex in ['female', 'futanari']:
 				bonus_lewdness += person.genealogy.fairy/10
 			if person.genealogy.gnome >= 50 || person.genealogy.goblin >= 50 || person.genealogy.harpy >= 50: #no need to make 'em smaller if they're already a small race
@@ -2049,6 +2089,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_magic += 1
 			bonus_fertility += 20
 			bonus_courage += 25
+			bonus_courage_racial += 2
 			bonus_height -= 1
 			if person.sex in ['female', 'futanari']:
 				bonus_lewdness += 10
@@ -2078,6 +2119,7 @@ func setRaceBonus_Ralph(person, increasestats):
 		else:
 			bonus_agility += person.genealogy.harpy/50
 			bonus_courage += person.genealogy.harpy/4
+			bonus_courage_racial += person.genealogy.harpy/50
 			if person.sex in ['female', 'futanari']:
 				bonus_lewdness += person.genealogy.harpy/10
 			if person.genealogy.gnome >= 50 || person.genealogy.goblin >= 50 || person.genealogy.fairy >= 50: #no need to make 'em smaller if they're already a small race
@@ -2166,28 +2208,12 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_agility += 1
 			bonus_magic += 1
 			bonus_charm += 25
+			bonus_charm_racial += 2
 			if person.sex == 'male':
 				bonus_lewdness += 5
 				bonus_charm -= 5
 		elif person.genealogy.demon >= 50 && person.race == thisrace:
-			if person.genealogy.orc >= 40: #Ogre/Oni
-				hybridtype = 'Ogre'
-				bonus_strength += 1.5
-				bonus_endurance += 1.5
-				bonus_courage += 10
-				bonus_wit -= 10
-				bonus_penissize += 2
-				bonus_ballssize += 2
-				bonus_vagsize += 1.4
-				bonus_titssize += 1.4
-				bonus_height += 2
-				bonus_beauty -= 15
-				person.tail = 'none' #not reversible
-				if person.horns != null: 
-					bonus_horns = 'long_straight' #not reversible
-				else:
-					bonus_horns = 'short'
-			elif person.genealogy.bunny >= 40: #Succubus/Incubus
+			if person.genealogy.bunny >= 40: #Succubus/Incubus
 				if person.sex == 'male':
 					hybridtype = 'Incubus'
 					bonus_magic += 1.5
@@ -2258,6 +2284,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_strength += person.genealogy.demon/100
 			bonus_magic += person.genealogy.demon/100
 			bonus_charm += person.genealogy.demon/4
+			bonus_charm_racial += person.genealogy.demon/50
 			if person.genealogy.dog >= 50 || person.genealogy.demon >= 50 || person.genealogy.horse >= 50 || person.genealogy.cow >= 50 || person.genealogy.dragonkin >= 50: #no need to make it bigger if they're already a hung race	
 				bonus_penissize += 0
 			else:	
@@ -2273,6 +2300,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_agility += 1
 			bonus_magic += 1
 			bonus_courage += 10
+			bonus_courage_racial += 1
 			if person.traits.has('Ascetic'):
 				person.trait_remove('Ascetic')
 			else:
@@ -2348,6 +2376,7 @@ func setRaceBonus_Ralph(person, increasestats):
 		else:
 			bonus_strength += person.genealogy.dragonkin/50
 			bonus_courage += person.genealogy.dragonkin/10
+			bonus_courage_racial += person.genealogy.dragonkin/100
 			if person.sex in ['male']:
 				bonus_height += person.genealogy.dragonkin/100
 			if person.genealogy.dog >= 50 || person.genealogy.demon >= 50 || person.genealogy.horse >= 50 || person.genealogy.cow >= 50 || person.genealogy.orc >= 50: #no need to make it bigger if they're already a hung race
@@ -2425,6 +2454,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_magic += 1
 			bonus_endurance += 1
 			bonus_confidence += 25
+			bonus_confidence_racial += 2
 			bonus_elasticity += 2
 			bonus_pliability += 1
 			bonus_vagsize -= 1
@@ -2463,12 +2493,14 @@ func setRaceBonus_Ralph(person, increasestats):
 				bonus_magic += person.genealogy.lamia/100 + (water - 0.5)*4 + (nature -0.5)*4 + (corruption - 0.5)*8
 				bonus_endurance += (earth - 0.25)*4 + person.genealogy.arachna/100
 				bonus_confidence += person.genealogy.lamia/4
+				bonus_confidence_racial += person.genealogy.lamia/50
 				bonus_elasticity += person.genealogy.lamia/50
 				bonus_pliability += person.genealogy.lamia/100
 		else:
 			bonus_strength += person.genealogy.lamia/100
 			bonus_magic += person.genealogy.lamia/100
 			bonus_confidence += person.genealogy.lamia/4
+			bonus_confidence_racial += person.genealogy.lamia/50
 			bonus_elasticity += person.genealogy.lamia/25
 			bonus_pliability += person.genealogy.lamia/50
 			bonus_vagsize -= person.genealogy.lamia/50
@@ -2479,6 +2511,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_strength += 2
 			bonus_agility += 2
 			bonus_charm += 15
+			bonus_charm_racial += 1
 			if person.sex in ['male', 'futanari']:
 				bonus_catpenis = true
 			if person.sex in ['female', 'futanari']:
@@ -2504,10 +2537,12 @@ func setRaceBonus_Ralph(person, increasestats):
 				bonus_agility += person.genealogy.cat/100 + wind*4 					#50% max wind-> 0.5 + 2.5 (+1gob; +2.5 fairy)
 				bonus_endurance += (nature - 0.5)*8 - (corruption - 0.25)*4 		#50% 2 + 2.5 (-0.5gob; +2.5 fairy)
 				bonus_charm += person.genealogy.cat/6.66
+				bonus_charm_racial += person.genealogy.cat/100
 		else:
 			bonus_strength += person.genealogy.cat/100
 			bonus_agility += person.genealogy.cat/100
 			bonus_charm += person.genealogy.cat/6.66
+			bonus_charm_racial += person.genealogy.cat/100
 			if person.sex in ['female', 'futanari']:
 				bonus_height -= person.genealogy.cat/100
 	
@@ -2518,6 +2553,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_agility += 1
 			bonus_endurance += 1
 			bonus_courage += 10
+			bonus_courage_racial += 1
 			if person.sex in ['male']:
 				bonus_height += 1
 				bonus_dogpenis = true
@@ -2526,6 +2562,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_agility += person.genealogy.dog/100 - (corruption - 0.25)*4
 			bonus_endurance += (nature - 0.5)*4 + (corruption - 0.25)*4
 			bonus_courage += person.genealogy.dog/10
+			bonus_courage_racial += person.genealogy.dog/100
 			if person.sex in ['male']:
 				bonus_height += person.genealogy.dog/100
 				bonus_dogpenis = true
@@ -2554,6 +2591,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_strength += person.genealogy.dog/100
 			bonus_agility += person.genealogy.dog/100
 			bonus_courage += person.genealogy.dog/10
+			bonus_courage_racial += person.genealogy.dog/100
 			if person.genealogy.orc >= 50 || person.genealogy.demon >= 50 || person.genealogy.horse >= 50 || person.genealogy.cow >= 50 || person.genealogy.dragonkin >= 50: #no need to make it bigger if they're already a hung race			
 				bonus_penissize += 0
 			else:	
@@ -2566,12 +2604,16 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_magic += 2
 			bonus_beauty += 5
 			bonus_wit += 20
+			bonus_wit_racial += 2
 			bonus_charm += 20
+			bonus_charm_racial += 2
 			bonus_dogpenis = true
 		elif person.genealogy.fox >= 50 && person.race in ['Beastkin Fox', 'Halfkin Fox']:
 			bonus_beauty += person.genealogy.fox/20
 			bonus_wit += person.genealogy.fox/5
 			bonus_charm += person.genealogy.fox/5
+			bonus_wit_racial += person.genealogy.fox/50
+			bonus_charm_racial += person.genealogy.fox/50
 			if (person.genealogy.seraph >= 20 && person.genealogy.fox >= 70) || (fire >= 0.3 && wind >= 0.2): #Kitsune - $He appears to be a normal foxkin, but exhibits heightened magical aptitude and many claim that the shadows they cast have multiple tails.
 				hybridtype = 'Kitsune'
 				bonus_agility += 1.5
@@ -2586,7 +2628,9 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_beauty += person.genealogy.fox/20
 			bonus_wit += person.genealogy.fox/5
 			bonus_charm += person.genealogy.fox/5
-	
+			bonus_wit_racial += person.genealogy.fox/50
+			bonus_charm_racial += person.genealogy.fox/50
+
 	#Tanuki
 	if person.genealogy.raccoon > 0: #Tanuki are generally compatible with any non-beast race that might be thought of as a guardian of the forest.
 		if person.genealogy.raccoon >= 100:
@@ -2594,6 +2638,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_magic += 2
 			bonus_endurance += 1
 			bonus_wit += 20
+			bonus_wit_racial += 2
 			bonus_ballssize += 3
 		elif person.genealogy.raccoon >= 50 && person.race in ['Beastkin Tanuki', 'Halfkin Tanuki']:
 			if corruption >= 0.6:
@@ -2612,10 +2657,12 @@ func setRaceBonus_Ralph(person, increasestats):
 				bonus_magic += person.genealogy.raccoon/50 + forestprotector*(1 + nature)*2 - (corruption - 0.25)*4
 				bonus_endurance += forestprotector*(1 + nature) + (corruption - 0.25)*4
 				bonus_wit += person.genealogy.raccoon/5
+				bonus_wit_racial += person.genealogy.raccoon/50
 				bonus_ballssize += person.genealogy.raccoon/33
 		else:
 			bonus_magic += person.genealogy.raccoon/50
 			bonus_wit += person.genealogy.raccoon/5
+			bonus_wit_racial += person.genealogy.raccoon/50
 			bonus_ballssize += person.genealogy.raccoon/20
 	
 	#Centaur
@@ -2627,6 +2674,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_agility += 1
 			bonus_endurance += 2
 			bonus_courage += 20
+			bonus_courage_racial += 2
 			bonus_penissize += 1
 			bonus_ballssize += 1
 			bonus_vagsize += 2
@@ -2636,6 +2684,7 @@ func setRaceBonus_Ralph(person, increasestats):
 				bonus_horsepenis = true
 		elif person.genealogy.horse >= 50 && person.race == thisrace:
 			bonus_courage += person.genealogy.horse/5
+			bonus_courage_racial += person.genealogy.horse/50
 			bonus_penissize += person.genealogy.horse/100
 			bonus_ballssize += person.genealogy.horse/100
 			bonus_vagsize += person.genealogy.horse/50
@@ -2683,6 +2732,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_agility += person.genealogy.horse/100
 			bonus_endurance += person.genealogy.horse/100
 			bonus_courage += person.genealogy.horse/5
+			bonus_courage_racial += person.genealogy.horse/50
 			bonus_ballssize += person.genealogy.horse/50
 			bonus_vagsize += person.genealogy.horse/100
 			bonus_asssize += person.genealogy.horse/150
@@ -2810,6 +2860,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_endurance += 2
 			bonus_fertility += 50
 			bonus_courage -= 10
+			bonus_courage_racial -= 1
 			bonus_ballssize += 1
 			bonus_pliability += 1
 			bonus_lewdness += 25
@@ -2821,6 +2872,7 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_beauty += bonus_beauty
 			bonus_fertility += person.genealogy.bunny/2 + (corruption - 0.25)*bonus_fertility
 			bonus_courage -= person.genealogy.bunny/10
+			bonus_courage_racial -= person.genealogy.bunny/100
 			bonus_ballssize += (corruption - 0.25)*bonus_ballssize + person.genealogy.bunny/100
 			bonus_titssize += (corruption - 0.25)*bonus_titssize
 			bonus_penissize += (corruption - 0.25)*bonus_penissize
@@ -2832,25 +2884,353 @@ func setRaceBonus_Ralph(person, increasestats):
 			bonus_agility += person.genealogy.bunny/50
 			bonus_fertility += person.genealogy.bunny/2
 			bonus_courage -= person.genealogy.bunny/10
+			bonus_courage_racial -= person.genealogy.bunny/100
 			bonus_ballssize += person.genealogy.bunny/50
 			bonus_pliability += person.genealogy.bunny/50
 			bonus_lewdness += person.genealogy.bunny/4
+
+	#-- NEW RACES
+	#Ogres
+	#\n\nBreeding Note: 
+	#\n\nBreeding Note: 
+	if person.genealogy.ogre > 0:
+		thisrace = 'Ogre'
+		if person.genealogy.ogre >= 100:
+			bonus_strength += 2
+			bonus_endurance += 2
+			bonus_wit -= 10
+			bonus_wit_racial -= 1
+			bonus_beauty -= 10
+			if person.sex in ['male']:
+				bonus_penissize += 2
+				bonus_ballssize += 2
+			else:
+				bonus_vagsize += 1
+				bonus_titssize += 1
+			bonus_height += 2
+		elif person.genealogy.ogre >= 50 && person.race == thisrace:
+			bonus_strength += person.genealogy.ogre/50
+			bonus_endurance += person.genealogy.ogre/50
+			bonus_wit -= person.genealogy.ogre/10
+			bonus_wit_racial -= person.genealogy.ogre/100
+			bonus_beauty -= person.genealogy.ogre/10
+			if person.sex in ['male']:
+				bonus_penissize += person.genealogy.ogre/50
+				bonus_ballssize += person.genealogy.ogre/50
+			else:
+				bonus_vagsize += person.genealogy.ogre/100
+				bonus_titssize += person.genealogy.ogre/100
+			bonus_height += person.genealogy.ogre/50
+		else:
+			bonus_strength += person.genealogy.ogre/50
+			bonus_endurance += person.genealogy.ogre/100
+			bonus_wit -= person.genealogy.ogre/10
+			bonus_wit_racial -= person.genealogy.ogre/50
+			bonus_beauty -= person.genealogy.ogre/10
+			if person.sex in ['male']:
+				bonus_penissize += person.genealogy.ogre/50
+				bonus_ballssize += person.genealogy.ogre/50
+			else:
+				bonus_vagsize += person.genealogy.ogre/100
+				bonus_titssize += person.genealogy.ogre/100
+			bonus_height += person.genealogy.ogre/50
+			
+	#Giants
+	#\n\nBreeding Note: 
+	#\n\nBreeding Note: 
+	if person.genealogy.giant > 0:
+		thisrace = 'Giant'
+		if person.genealogy.giant >= 100:
+			bonus_strength += 3
+			bonus_endurance += 2
+			bonus_courage += 20
+			bonus_courage_racial += 2
+			if person.sex in ['male']:
+				bonus_penissize += 4
+				bonus_ballssize += 4
+			else:
+				bonus_vagsize += 3
+				bonus_titssize += 3
+			bonus_height += 4
+		elif person.genealogy.giant >= 50 && person.race == thisrace:
+			bonus_strength += person.genealogy.giant/33
+			bonus_endurance += person.genealogy.giant/50
+			bonus_courage += person.genealogy.giant/5
+			bonus_courage_racial += person.genealogy.giant/50
+			if person.sex in ['male']:
+				bonus_penissize += person.genealogy.giant/25
+				bonus_ballssize += person.genealogy.giant/25
+			else:
+				bonus_vagsize += person.genealogy.giant/33
+				bonus_titssize += person.genealogy.giant/33
+			bonus_height += person.genealogy.giant/25
+		else:
+			bonus_strength += person.genealogy.giant/50
+			bonus_endurance += person.genealogy.giant/100
+			bonus_courage += person.genealogy.giant/10
+			if person.sex in ['male']:
+				bonus_penissize += person.genealogy.giant/33
+				bonus_ballssize += person.genealogy.giant/33
+			else:
+				bonus_vagsize += person.genealogy.giant/50
+				bonus_titssize += person.genealogy.giant/50
+			bonus_height += person.genealogy.giant/33
+
+	#Kobold - Capitulize
+	#\n\nBreeding Note: 
+	#
+	if person.genealogy.kobold > 0:
+		thisrace = 'Kobold'
+		if person.genealogy.kobold >= 100:
+			bonus_skin = 'none'
+			bonus_strength += 1
+			bonus_agility += 2
+			bonus_magic += 1
+			bonus_fertility += 33
+			bonus_titssize -= 1 
+			bonus_penissize -= 1
+			bonus_lewdness += 10
+			bonus_confidence -= 10
+			bonus_confidence_racial -= 1
+			bonus_charm += 10
+			bonus_charm_racial += 1
+			if person.sex in ['male', 'futanari']:
+				bonus_lizardpenis = true
+		elif person.genealogy.kobold >= 50 && person.race == thisrace:
+			bonus_skin = 'none'
+			bonus_titssize -= person.genealogy.kobold/50 
+			bonus_lewdness += person.genealogy.kobold/10
+			bonus_penissize -= person.genealogy.kobold/100
+			bonus_confidence -= person.genealogy.kobold/10
+			bonus_confidence_racial -= person.genealogy.kobold/100
+			bonus_charm += person.genealogy.kobold/10
+			bonus_charm_racial += person.genealogy.kobold/100
+			bonus_fertility += nature*33
+			bonus_fertility += person.genealogy.harpy/2 #get on the egg train CHOOO CHOOOOOO!
+			bonus_endurance += earth*3
+			bonus_strength += fire*3 + person.genealogy.kobold/100
+			bonus_agility += wind*3 + person.genealogy.kobold/50
+			bonus_magic += water*3 + person.genealogy.kobold/100
+		else:
+			bonus_agility += person.genealogy.kobold/50
+			bonus_magic += person.genealogy.kobold/100
+			bonus_titssize -= person.genealogy.kobold/50 
+			bonus_penissize -= person.genealogy.kobold/100
+			bonus_height -= person.genealogy.kobold/25
+			bonus_confidence -= person.genealogy.kobold/10
+			bonus_confidence_racial -= person.genealogy.kobold/100
+			bonus_charm += person.genealogy.kobold/10
+			bonus_charm_racial += person.genealogy.kobold/100
+			bonus_fertility += nature*33
+			
+	#Lizardfolk - Capitulize
+	if person.genealogy.lizardfolk > 0:
+		thisrace = 'Lizardfolk'
+		if person.genealogy.lizardfolk >= 100:
+			bonus_strength += 1
+			bonus_agility += 1
+			bonus_endurance += 2
+			bonus_courage += 10
+			bonus_courage_racial += 1
+			if person.sex in ['male', 'futanari']:
+				bonus_height += 1
+				bonus_strength += 1
+			if person.sex in ['female']:
+				bonus_magic += 1
+		elif person.genealogy.lizardfolk >= 50 && person.race == thisrace:
+			bonus_strength += person.genealogy.lizardfolk/100
+			bonus_endurance += person.genealogy.lizardfolk/50
+			bonus_fertility += person.genealogy.harpy/2 #get on the egg train CHOOO CHOOOOOO!
+			if person.sex in ['male', 'futanari']:
+				bonus_height += person.genealogy.lizardfolk/100
+				bonus_strength += person.genealogy.lizardfolk/100
+			if person.sex in ['female']:
+				bonus_magic += person.genealogy.lizardfolk/100
+		else:
+			bonus_strength += person.genealogy.lizardfolk/100
+			bonus_endurance += person.genealogy.lizardfolk/50
+			bonus_agility += person.genealogy.lizardfolk/100
+			if person.sex in ['female']:
+				bonus_magic += person.genealogy.lizardfolk/100
+				
+	#Mouse - Capitulize
+	if person.genealogy.mouse > 0:
+		if person.genealogy.mouse >= 100:
+			bonus_magic += 2
+			bonus_agility += 2
+			bonus_wit += 20
+			bonus_wit_racial += 2
+			bonus_courage -= 10
+			bonus_courage_racial -= 1
+			if person.sex in ['male', 'futanari']:
+				bonus_penissize -= 1
+		elif person.genealogy.mouse >= 50 && person.race in ['Beastkin Mouse', 'Halfkin Mouse']:
+			bonus_wit += person.genealogy.mouse/5
+			bonus_wit_racial += person.genealogy.mouse/50
+			bonus_courage -= person.genealogy.mouse/10
+			bonus_courage_racial -= person.genealogy.mouse/100
+			if person.sex in ['male', 'futanari']:
+				bonus_penissize -= person.genealogy.mouse/100
+			#Guardian Spirit
+			if nature >= 0.6:
+				hybridtype = 'Guardian Spirit'
+				person.add_trait("Sturdy")
+				person.trait_remove("Frail")
+				bonus_endurance += 4
+				bonus_endurance_max += 4
+				bonus_skincov = 'full_body_fur'
+				bonus_furcolor = 'guardian white'
+				bonus_ears = 'long_pointy_furry'
+			bonus_magic += person.genealogy.mouse/50
+			bonus_agility += person.genealogy.mouse/50
+			bonus_wit += person.genealogy.mouse/5
+			bonus_wit_racial += person.genealogy.mouse/50
+			bonus_courage -= person.genealogy.mouse/10
+			bonus_courage_racial -= person.genealogy.mouse/100
+			bonus_penissize -= person.genealogy.mouse/100
+		else:
+			bonus_magic += person.genealogy.mouse/50
+			bonus_agility += person.genealogy.mouse/50
+			bonus_wit += person.genealogy.mouse/5
+			bonus_wit_racial += person.genealogy.mouse/50
+			bonus_courage -= person.genealogy.mouse/10
+			bonus_courage_racial -= person.genealogy.mouse/100
+			bonus_penissize -= person.genealogy.mouse/100
+
+	#Squirrel - Capitulize, gotta set these up more
+	if person.genealogy.squirrel > 0: #
+		if person.genealogy.squirrel >= 100:
+			bonus_strength += 1
+			bonus_agility += 2
+			bonus_endurance += 1
+			bonus_confidence -= 10
+			bonus_confidence_racial -= 1
+			bonus_charm += 10
+			bonus_charm_racial += 1
+			if person.sex in ['male', 'futanari']:
+				bonus_penissize -= 1
+		elif person.genealogy.squirrel >= 50 && person.race in ['Beastkin Squirrel', 'Halfkin Squirrel']:
+			bonus_strength += person.genealogy.squirrel/100
+			bonus_agility += person.genealogy.squirrel/50
+			bonus_endurance += person.genealogy.squirrel/100
+			bonus_confidence -= person.genealogy.squirrel/10
+			bonus_confidence_racial -= person.genealogy.squirrel/100
+			bonus_charm += person.genealogy.squirrel/10
+			bonus_charm_racial += person.genealogy.squirrel/100
+			if person.sex in ['male', 'futanari']:
+				bonus_penissize -= person.genealogy.squirrel/100
+		else:
+			bonus_strength += person.genealogy.squirrel/100
+			bonus_agility += person.genealogy.squirrel/50
+			bonus_endurance += person.genealogy.squirrel/100
+			bonus_confidence -= person.genealogy.squirrel/10
+			bonus_confidence_racial -= person.genealogy.squirrel/100
+			bonus_charm += person.genealogy.squirrel/10
+			bonus_charm_racial += person.genealogy.squirrel/100
+
+	#Otter - Capitulize, gotta set these up more
+	if person.genealogy.otter > 0: #
+		if person.genealogy.otter >= 100:
+			bonus_endurance += 2
+			bonus_confidence += 10
+			bonus_courage += 10
+			bonus_confidence_racial += 1
+			bonus_courage_racial += 1
+		elif person.genealogy.otter >= 50 && person.race in ['Beastkin Otter', 'Halfkin Otter']:
+			bonus_endurance += person.genealogy.otter/50
+			bonus_confidence_racial += person.genealogy.otter/100
+			bonus_courage_racial += person.genealogy.otter/100
+		else:
+			bonus_endurance += person.genealogy.otter/50
+			bonus_confidence += person.genealogy.otter/10
+			bonus_courage += person.genealogy.otter/10
+			bonus_confidence_racial += person.genealogy.otter/100
+			bonus_courage_racial += person.genealogy.otter/100
+
+
+	#Bird - Capitulize, gotta set these up more
+	if person.genealogy.bird > 0: #
+		if person.genealogy.bird >= 100:
+			bonus_agility += 2
+			bonus_endurance += 2
+			bonus_confidence += 10
+			bonus_confidence_racial += 1
+		elif person.genealogy.bird >= 50 && person.race in ['Beastkin Bird', 'Halfkin Bird']:
+			bonus_agility += person.genealogy.bird/50
+			bonus_endurance += person.genealogy.bird/50
+			bonus_confidence += person.genealogy.bird/10
+			bonus_confidence_racial += person.genealogy.bird/100
+		else:
+			bonus_agility += person.genealogy.bird/50
+			bonus_endurance += person.genealogy.bird/50
+
+	#Gnoll - Capitulize, gotta set these up more
+	if person.genealogy.hyena > 0: #
+		if person.genealogy.hyena >= 100:
+			bonus_strength += 2
+			bonus_endurance += 1
+			bonus_agility += 1
+			bonus_confidence += 10
+			bonus_confidence_racial += 1
+			bonus_courage += 10
+			bonus_courage_racial = 1
+			if person.sex in ['male', 'futanari']:
+				bonus_penissize += 1
+			else:
+				bonus_titssize += 1
+		elif person.genealogy.hyena >= 50 && person.race in ['Gnoll']:
+			bonus_strength += person.genealogy.hyena/50
+		else:
+			bonus_strength += person.genealogy.hyena/50
+
+	#Avali - Capitulize, gotta set these up more
+	if person.genealogy.avali > 0: #
+		if person.genealogy.avali >= 100:
+			bonus_magic += 2
+			bonus_agility += 2
+			bonus_wit += 20
+			bonus_wit_racial += 2
+			if person.sex in ['male', 'futanari']:
+				bonus_penissize -= 1
+		elif person.genealogy.avali >= 50 && person.race in ['Avali', 'Avali']:
+			bonus_magic += person.genealogy.avali/50
+			bonus_agility += person.genealogy.avali/50
+			bonus_wit += person.genealogy.avali/5
+			bonus_wit_racial += person.genealogy.avali/50
+			if person.sex in ['male', 'futanari']:
+				bonus_birdpenis = true
+		else:
+			bonus_magic += person.genealogy.avali/50
+			bonus_agility += person.genealogy.avali/50
+
 	
 	if person.sex == 'male': #little boys born with big asses... workaround
 		person.asssize = globals.asssizearray[clamp(globals.asssizearray.find(person.asssize) - 1, 0, globals.asssizearray.size()-1)]
 	var somethingchanged = false
 	if addstats == true:
-		if bonus_strength > 0:
+		if bonus_strength != 0:
 			person.stats.str_mod += round(bonus_strength)
 			somethingchanged = true
-		if bonus_agility > 0:
+		if bonus_agility != 0:
 			person.stats.agi_mod += round(bonus_agility)
 			somethingchanged = true
-		if bonus_magic > 0:
+		if bonus_magic != 0:
 			person.stats.maf_mod += round(bonus_magic)
 			somethingchanged = true
-		if bonus_endurance > 0:
+		if bonus_endurance != 0:
 			person.stats.end_mod += round(bonus_endurance)
+			somethingchanged = true
+		if bonus_strength_max != 0:
+			person.stats.str_max += round(bonus_strength_max)
+			somethingchanged = true
+		if bonus_agility_max != 0:
+			person.stats.agi_max += round(bonus_agility_max)
+			somethingchanged = true
+		if bonus_magic_max != 0:
+			person.stats.maf_max += round(bonus_magic_max)
+			somethingchanged = true
+		if bonus_endurance_max != 0:
+			person.stats.end_max += round(bonus_endurance_max)
 			somethingchanged = true
 		if bonus_courage != 0:
 			person.stats.cour_racial += round(bonus_courage)
@@ -2863,6 +3243,18 @@ func setRaceBonus_Ralph(person, increasestats):
 			somethingchanged = true
 		if bonus_charm != 0:
 			person.stats.charm_racial += round(bonus_charm)
+			somethingchanged = true
+		if bonus_courage_racial != 0:
+			person.stats.cour_racial += round(bonus_courage_racial)
+			somethingchanged = true
+		if bonus_confidence_racial != 0:
+			person.stats.conf_racial += round(bonus_confidence_racial)
+			somethingchanged = true
+		if bonus_wit_racial != 0:
+			person.stats.wit_racial += round(bonus_wit_racial)
+			somethingchanged = true
+		if bonus_charm_racial != 0:
+			person.stats.charm_racial += round(bonus_charm_racial)
 			somethingchanged = true
 		if bonus_beauty != 0:
 			person.beautybase += round(bonus_beauty)
@@ -2898,6 +3290,15 @@ func setRaceBonus_Ralph(person, increasestats):
 			if bonus_horsepenis:
 				person.penistype = 'equine'
 				somethingchanged = true
+			if bonus_lizardpenis:
+				person.penistype = 'reptilian'
+				somethingchanged = true
+			if bonus_rodentpenis:
+				person.penistype = 'rodent'
+				somethingchanged = true
+			if bonus_birdpenis:
+				person.penistype = 'bird'
+				somethingchanged = true
 		if bonus_skincov != 'none' && person.unique == null:
 			person.skincov = bonus_skincov
 			somethingchanged = true
@@ -2922,6 +3323,15 @@ func setRaceBonus_Ralph(person, increasestats):
 		if bonus_furcolor != 'none' && person.unique == null:
 			person.furcolor = bonus_furcolor
 			somethingchanged = true
+		if bonus_scalecolor != 'none' && person.unique == null:
+			person.scalecolor = bonus_scalecolor
+			somethingchanged = true
+		if bonus_eyecolor != 'none' && person.unique == null:
+			person.eyecolor = bonus_eyecolor
+			somethingchanged = true
+		if bonus_bodyshape != 'humanoid' && person.unique == null:
+			person.bodyshape = bonus_bodyshape
+			somethingchanged = true
 		if bonus_lewdness != 0 && person.unique == null:
 			person.lewdness += round(bonus_lewdness)
 			somethingchanged = true
@@ -2938,18 +3348,30 @@ func setRaceBonus_Ralph(person, increasestats):
 		if somethingchanged == true:
 			person.npcexpanded.racialbonusesapplied = true
 	else:
-		if bonus_strength > 0:
+		if bonus_strength != 0:
 			person.stats.str_mod -= round(bonus_strength)
 			somethingchanged = true
-		if bonus_agility > 0:
+		if bonus_agility != 0:
 			person.stats.agi_mod -= round(bonus_agility)
 			somethingchanged = true
-		if bonus_magic > 0:
+		if bonus_magic != 0:
 			person.stats.maf_mod -= round(bonus_magic)
 			somethingchanged = true
-		if bonus_endurance > 0:
+		if bonus_endurance != 0:
 			person.stats.end_mod -= round(bonus_endurance)
 			somethingchanged = true
+		if bonus_strength_max != 0: # Capitulize
+			person.stats.str_max -= round(bonus_strength_max)
+			somethingchanged = true
+		if bonus_agility_max != 0:
+			person.stats.agi_max -= round(bonus_agility_max)
+			somethingchanged = true
+		if bonus_magic_max != 0:
+			person.stats.maf_max -= round(bonus_magic_max)
+			somethingchanged = true
+		if bonus_endurance_max != 0:
+			person.stats.end_max -= round(bonus_endurance_max)
+			somethingchanged = true # /Capitulize
 		if bonus_courage != 0:
 			person.stats.cour_racial -= round(bonus_courage)
 			somethingchanged = true
@@ -2961,6 +3383,18 @@ func setRaceBonus_Ralph(person, increasestats):
 			somethingchanged = true
 		if bonus_charm != 0:
 			person.stats.charm_racial -= round(bonus_charm)
+			somethingchanged = true
+		if bonus_courage_racial != 0:
+			person.stats.cour_racial -= round(bonus_courage_racial)
+			somethingchanged = true
+		if bonus_confidence_racial != 0:
+			person.stats.conf_racial -= round(bonus_confidence_racial)
+			somethingchanged = true
+		if bonus_wit_racial != 0:
+			person.stats.wit_racial -= round(bonus_wit_racial)
+			somethingchanged = true
+		if bonus_charm_racial != 0:
+			person.stats.charm_racial -= round(bonus_charm_racial)
 			somethingchanged = true
 		if bonus_beauty != 0:
 			person.beautybase -= round(bonus_beauty)
@@ -3013,6 +3447,15 @@ func setRaceBonus_Ralph(person, increasestats):
 			somethingchanged = true
 		if bonus_furcolor != 'none' && person.unique == null: #only bonus_furcolor applied to races that normally have 'none' and have added skincov = 'full_body_fur'
 			person.furcolor = 'none'
+			somethingchanged = true
+		if bonus_scalecolor != 'none' && person.unique == null: #only bonus_scalecolor applied to races that normally have 'none' and have added skincov = 'fullscales' # /Capitulize
+			person.scalecolor = 'none'
+			somethingchanged = true
+		if bonus_eyecolor != 'none' && person.unique == null: #changing eyecolors depending
+			person.eyecolor = 'none'
+			somethingchanged = true
+		if bonus_bodyshape != 'humanoid' && person.unique == null: 
+			person.bodyshape = 'humanoid'
 			somethingchanged = true
 		if bonus_lewdness != 0 && person.unique == null:
 			person.lewdness -= round(bonus_lewdness)

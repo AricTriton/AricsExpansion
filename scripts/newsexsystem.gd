@@ -1,6 +1,6 @@
-
+var analcategories = ['assfingering','rimjob','missionaryanal','doggyanal','lotusanal','revlotusanal','doubledildoass','inerttaila','analvibrator','enemaplug','insertinturnsass','cowgirlanal','reversecowgirlanal','doublepen','triplepen']
+var penetratecategories = ['missionary','missionaryanal','doggy','doggyanal','lotus','lotusanal','revlotus','revlotusanal','doubledildo','doubledildoass','inserttailv','inserttaila','tribadism','frottage','cowgirl','reversecowgirl','doublepen','triplepen','deepthroat']
 var takercategories = ['cunnilingus','rimjob','handjob','titjob','tailjob','blowjob','footjob'] #ralphC - added footjob
-var penetratecategories = ['missionary','missionaryanal','doggy','doggyanal','lotus','lotusanal','revlotus','revlotusanal','doubledildo','doubledildoass','inserttailv','inserttaila','tribadism','frottage','deepthroat'] #ralphC - added deepthroat
 
 var succubuscounter = 0 #ralphC - count orgasms drained by succubi
 
@@ -47,6 +47,7 @@ class member:
 
 	var vagina
 	var penis
+	var balls
 	var clit
 	var breast
 	var feet
@@ -137,13 +138,22 @@ class member:
 		lust = min(value, 1000)
 
 	func sens_set(value):
-		var change = value - sens
+		var change 
+		var isKobold = person.race.find('Kobold') >= 0 # Capitulize - Kobolds are pretty horny
+		if (isKobold):
+			change = (value - sens)*1.2
+		else:
+			change = value - sens
 		sens += change*sensmod
 		if sens >= 1000:
 			if ((lastaction.givers.has(self) && lastaction.scene.givertags.has('noorgasm')) || (lastaction.takers.has(self) && lastaction.scene.takertags.has('noorgasm'))):
 				return
-			sens = 100
-			sensmod -= sensmod*0.2
+			if(isKobold):
+				sens = 150
+				sensmod -= sensmod*0.15
+			else:
+				sens = 100
+				sensmod -= sensmod*0.2
 			orgasm()
 
 	func lube():
@@ -337,8 +347,23 @@ class member:
 					if scene.scene.takerpart == '':
 						penistext += " {^semen:seed:cum} {^pours onto:shoots onto:falls to} the {^ground:floor} as [he1] ejaculate[s/1]."
 					elif ['anus','vagina','mouth'].has(scene.scene.takerpart):
-						if scene.scene.get('takerpart2') && scene.scene.givers.size() == 2 && scene.scene.givers[1] == self:
+						if (scene.scene.get('takerpart2') && scene.scene.givers.size() == 2 && scene.scene.givers[1] == self) || (scene.scene.get('takerpart3') && scene.scene.givers.size() == 3 && scene.scene.givers[2] == self):
 							temptext = scene.scene.takerpart2.replace('anus', '[anus2]').replace('vagina','[pussy2]')
+							if scene.scene.takerpart2 == 'anus':
+								for i in scene.takers:
+									i.person.cum.ass += person.pregexp.cumprod
+							elif scene.scene.takerpart2 == 'mouth':
+								for i in scene.takers:
+									i.person.cum.mouth += person.pregexp.cumprod
+							if scene.scene.get('takerpart3') && scene.scene.givers[2] == self:
+								temptext = scene.scene.takerpart3.replace('anus', '[anus2]').replace('vagina','[pussy2]')
+								if scene.scene.takerpart3 == 'anus':
+									for i in scene.takers:
+										i.person.cum.ass += person.pregexp.cumprod
+								elif scene.scene.takerpart3 == 'mouth':
+									for i in scene.takers:
+										i.person.cum.mouth += person.pregexp.cumprod
+										i.person.cum.face += round(person.pregexp.cumprod*.25) # /Capitulize
 						else:
 							temptext = scene.scene.takerpart.replace('anus', '[anus2]').replace('vagina','[pussy2]')
 							if scene.scene.takerpart == 'vagina':
@@ -356,6 +381,9 @@ class member:
 									i.person.cum.ass += person.pregexp.cumprod
 									i.person.checkFetish('creampieass')
 							###---End Expansion---###
+						if scene.scene.code in ['doublepen','triplepen']: # Capitulize
+							for i in scene.takers:
+								i.person.cum.body += round(person.pregexp.cumprod*.25) # /Capitulize
 						penistext += " {^semen:seed:cum} {^pours:shoots:pumps:sprays} into [names2] " + temptext + " as [he1] ejaculate[s/1]."
 					elif scene.scene.takerpart == 'nipples':
 						penistext += " {^semen:seed:cum} fills [names2] hollow nipples. "
@@ -396,6 +424,12 @@ class member:
 						for i in scene.givers:
 							i.person.cum.body += person.pregexp.cumprod
 							i.person.checkFetish('wearcum')
+						###---End Expansion---###
+					elif scene.scene.code == 'tribadismonpenis': # Capitulize
+						penistext += " {^sticky:white:hot} {^semen:seed:cum} {^sprays onto:shoots all over:covers} [names1] {^groins:vaginas:slits} as [he2] ejaculate[s/2]."
+						###---Added by Expansion---### Cum Tracking
+						for i in scene.givers:
+							i.person.cum.body += round(person.pregexp.cumprod*.75) # /Capitulize
 						###---End Expansion---###
 					elif scene.scene.giverpart == '':
 						penistext += " {^semen:seed:cum} {^pours onto:shoots onto:falls to} the {^ground:floor} as [he2] ejaculate[s/2]."
@@ -578,7 +612,7 @@ class member:
 			values.sens *= rand_range(1.1,1.4)
 			values.lust *= 2
 			
-			if lewd < 50 || scenedict.scene.code in ['doublepen','nipplefuck', 'spitroast', 'spitroastass', 'inserttailv', 'inserttaila','doubledildo','doubledildoass','tailjob','footjob','deepthroat']:
+			if lewd < 50 || scenedict.scene.code in ['doublepen', 'triplepen', 'nipplefuck', 'spitroast', 'spitroastass', 'inserttailv', 'inserttaila', 'doubledildo', 'doubledildoass', 'tailjob', 'footjob', 'deepthroat', 'tribadismonpenis']:
 				lewd += rand_range(1,3)
 			
 			for i in scenedict.givers + scenedict.takers:
@@ -588,7 +622,7 @@ class member:
 			values.sens *= 1.1
 			#values.lust *= 1
 			
-			if lewd < 50 || scenedict.scene.code in ['doublepen','nipplefuck', 'spitroast', 'spitroastass', 'inserttailv', 'inserttaila','doubledildo','doubledildoass','tailjob','footjob','deepthroat']:
+			if lewd < 50 || scenedict.scene.code in ['doublepen','triplepen','nipplefuck', 'spitroast', 'spitroastass', 'inserttailv', 'inserttaila', 'doubledildo', 'doubledildoass', 'tailjob', 'footjob', 'deepthroat', 'tribadismonpenis']:
 				lewd += rand_range(1,2)
 			
 			for i in scenedict.givers + scenedict.takers:
