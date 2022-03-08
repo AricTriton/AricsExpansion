@@ -504,8 +504,104 @@ var database = {
 		levelrange = [7,15],
 	},
 	#Amberguard
+	taintedforest = {
+		background = 'grove',
+		music = 'explore',
+		reqs = "true",
+		combat = true,
+		code = 'taintedforest',
+		name = 'Tainted Forest',
+		description = "A purple haze chokes the trees, giving them a sickly look. Despite this, they bear fruit and have luscious leaves. The bright purple is not an encouraging colour, especially when the nature seems to be contributing to the acrid smell in the air. ",
+		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		encounters = [],
+		length = 20,
+		exits = ['amberroad','elvenforest'],
+		tags = [],
+		races = [{value = 'Dyrad', weight = 12}],
+		levelrange = [7,15],
+	},
+	cliffsidefalls = {
+		background = 'grove',
+		music = 'explore',
+		reqs = "true",
+		combat = true,
+		code = 'cliffsidefalls',
+		name = 'Cliffside Falls',
+		description = "A waterfall roars down the cliff above you, crashing down into a small lake that has two rivers leading from it in opposite directions. The rapids look treacherous. It wouldn't do to fall in. ",
+		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		encounters = [],
+		length = 20,
+		exits = ['amberroad'],
+		tags = [],
+		races = [{value = 'Dyrad', weight = 12}],
+		levelrange = [7,15],
+	},
 	#Frostford
-
+	snowypeaks = {
+		background = 'grove',
+		music = 'explore',
+		reqs = "true",
+		combat = true,
+		code = 'snowypeaks',
+		name = 'Snowy Peaks',
+		description = "The freezing air cuts deep into your bones. The wind howls, carrying snow flakes in something just short of a blizzard. ",
+		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		encounters = [],
+		length = 20,
+		exits = ['frostford','skysphere'],
+		tags = [],
+		races = [{value = 'Dyrad', weight = 12}],
+		levelrange = [7,15],
+	},
+	snowplains = {
+		background = 'grove',
+		music = 'explore',
+		reqs = "true",
+		combat = true,
+		code = 'snowplains',
+		name = 'Snow Plains',
+		description = "Bright white snow covers the ground as far as you can see. There are no landmarks of note either. To lose your bearings here is to die. ",
+		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		encounters = [],
+		length = 20,
+		exits = ['frostfordoutskirts','Marsh'],
+		tags = [],
+		races = [{value = 'Dyrad', weight = 12}],
+		levelrange = [7,15],
+	},
+	lizardvillage = {
+		background = 'grove',
+		music = 'explore',
+		reqs = "true",
+		combat = true,
+		code = 'lizardvillage',
+		name = 'Lizardman Village',
+		description = "A shoddy village, constructed using rotting wood and whatever materials the marsh has to offer. It's not very impressive. ", #Bubblepot- This is a placeholder. I have no idea what the village is actually supposed to be like.
+		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		encounters = [],
+		length = 20,
+		exits = ['marsh','frostfordoutskirts'],
+		tags = [],
+		races = [{value = 'Dyrad', weight = 12}],
+		levelrange = [7,15],
+	},
+	abandonedvillage = {
+		background = 'grove',
+		music = 'explore',
+		reqs = "true",
+		combat = true,
+		code = 'abandonedvillage',
+		name = 'Abandoned Village',
+		description = "These are the ruins of an old fishing village. Wooden houses have been brought to rot by the sea air. Collapsed boats, rusted tools and household implements and torn fishing nets litter the ground. There may not be people here, but wildlife and the uncivilized almost certainly have been here. ",
+		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		encounters = [],
+		length = 20,
+		exits = ['forest','graveyard'],
+		tags = [],
+		races = [{value = 'Dyrad', weight = 12}],
+		levelrange = [7,15],
+	},
+	
 	#Hidden Challenge Areas
 	#Forest -(The Spine, Great Tree Roots, Great Tree Trunk, Great Tree Banches, Great Tree Nest [Boss=Roc])
 	thespine = {
