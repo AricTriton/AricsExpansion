@@ -285,13 +285,13 @@ var database = {
 		code = 'farmlands',
 		name = 'Wimborn Farmlands',
 		description = "Cultivated land lays on the left side of the road, stretching out for some distance. You see many workers tending to the crops. ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'banditsmedium', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 10,
 		exits = ['wimbornoutskirts','lakeside'],
 		tags = [],
 		races = [],
-		levelrange = [6,12],
+		levelrange = [4,7],
 	},
 	lakeside = {
 		background = 'grove', #Find something appropriate
@@ -307,7 +307,7 @@ var database = {
 		exits = ['farmlands','lakebottom'],
 		tags = [],
 		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		levelrange = [7,9],
 	},
 	lakebottom = {
 		background = 'grove',
@@ -322,8 +322,8 @@ var database = {
 		length = 20,
 		exits = ['forest','grove'],
 		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		races = [],
+		levelrange = [9,10],
 	},
 	riversideplains = {
 		background = 'grove',
@@ -334,12 +334,12 @@ var database = {
 		name = 'Riverside Plains',
 		description = "You are surrounded by vast open space, green grass underfoot and a river off in the distance. Wild horses race each other freely, cows and bulls graze peacefully. This is a grazers heaven. ",
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
-		encounters = [],
+		encounters = [{value = 'banditcamp',weight = 1.35},{value = 'banditsmedium', weight = 2}],
 		length = 20,
 		exits = ['wimbornoutskirts','dwarvenfortress'],
 		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		races = [{value = 'Centaur', weight = 8}],
+		levelrange = [7,10],
 	},
 	dwarvenfortress = {
 		background = 'grove',
@@ -354,8 +354,8 @@ var database = {
 		length = 20,
 		exits = ['forest','grove'],
 		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		races = [],
+		levelrange = [10,15],
 	},
 	rivercrossing = {
 		background = 'grove',
@@ -365,13 +365,13 @@ var database = {
 		code = 'rivercrossing',
 		name = 'River Crossing',
 		description = "The river is very thin here, more of a stream. It makes for very easy crossing.  ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'banditsmedium', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
-		length = 20,
+		length = 5,
 		exits = ['forest','graveyard'],
 		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		races = [],
+		levelrange = [4,10],
 	},
 	graveyard= {
 		background = 'grove',
@@ -387,7 +387,7 @@ var database = {
 		exits = ['forest','crypt'],
 		tags = [],
 		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		levelrange = [7,10],
 	},
 	crypt = {
 		background = 'grove',
@@ -401,9 +401,9 @@ var database = {
 		encounters = [],
 		length = 20,
 		exits = ['graveyard'],
-		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		tags = ['enclosed'],
+		races = [],
+		levelrange = [5,10],
 	},
 	#Between Gorn and Wimborn
 	forestofrefuge = {
@@ -414,13 +414,13 @@ var database = {
 		code = 'forestofrefuge',
 		name = 'Forest of Refuge',
 		description = "The trees are thick and tall here, shaded together as if to form a barrier to all entry. You cannot see very far ahead.  ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'banditcamp',weight = 1.35},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
 		exits = ['wimbornoutskirts','prairie','ruins'],
-		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		tags = ['enclosed'],
+		races = [{value = 'Dyrad', weight = 1}],
+		levelrange = [10,15],
 	},
 	ruins = {
 		background = 'grove',
@@ -430,13 +430,13 @@ var database = {
 		code = 'ruins',
 		name = 'Ancient Ruins',
 		description = "Collapsed structures of stone indicate that this was once a  sea-side city. Now it is merely crumbled stone and roofless rooms. Statues and sculptures rendered unrecognizable by the elements litter the ground. ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'banditcamp',weight = 1.35},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
 		exits = ['forestofrefuge','prairie','sea'],
-		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		tags = ['enclosed'],
+		races = [],
+		levelrange = [9,12],
 	},
 	#Gorn
 	oasis = {
@@ -452,8 +452,8 @@ var database = {
 		length = 10,
 		exits = ['prairie','gornoutskirts','desert'],
 		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		races = [],
+		levelrange = [],
 	},
 	desert = {
 		background = 'grove',
@@ -463,13 +463,13 @@ var database = {
 		code = 'desert',
 		name = 'Desert',
 		description = "You are in the desert proper now. There are few plants. The sands are hot and shifting, scalding your feet and messing with your balance. This is a harsh biome. ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'banditcamp', weight = 1.35},{value = 'banditsmedium', weight = 2}{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
 		exits = ['prairie','gornoutskirts','deepdesert'],
 		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		races = [{value = 'Centaur', weight = 5}],
+		levelrange = [6,9],
 	},
 	deepdesert = {
 		background = 'grove',
@@ -484,8 +484,8 @@ var database = {
 		length = 20,
 		exits = ['gornoutskirts','desert'],
 		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		races = [{value = 'Centaur', weight = 3}],
+		levelrange = [7,12],
 	},
 	sandtomb = {
 		background = 'grove',
@@ -499,9 +499,9 @@ var database = {
 		encounters = [],
 		length = 20,
 		exits = ['deepdesert'],
-		tags = [],
+		tags = ['enclosed'],
 		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		levelrange = [12,15],
 	},
 	#Amberguard
 	taintedforest = {
@@ -518,7 +518,7 @@ var database = {
 		exits = ['amberroad','elvenforest'],
 		tags = [],
 		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		levelrange = [7,10],
 	},
 	cliffsidefalls = {
 		background = 'grove',
@@ -534,7 +534,7 @@ var database = {
 		exits = ['amberroad'],
 		tags = [],
 		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		levelrange = [4,10],
 	},
 	#Frostford
 	snowypeaks = {
@@ -548,10 +548,10 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
-		exits = ['frostford','skysphere'],
+		exits = ['frostfordoutskirts','skysphere'],
 		tags = [],
 		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		levelrange = [10,15],
 	},
 	snowplains = {
 		background = 'grove',
@@ -564,10 +564,10 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
-		exits = ['frostfordoutskirts','Marsh'],
+		exits = ['frostfordoutskirts','marsh'],
 		tags = [],
 		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		levelrange = [6,10],
 	},
 	lizardvillage = {
 		background = 'grove',
@@ -596,12 +596,11 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
-		exits = ['forest','graveyard'],
+		exits = ['frostfordoutskirts','marsh'],
 		tags = [],
 		races = [{value = 'Dyrad', weight = 12}],
-		levelrange = [7,15],
+		levelrange = [6,10],
 	},
-	
 	#Hidden Challenge Areas
 	#Forest -(The Spine, Great Tree Roots, Great Tree Trunk, Great Tree Banches, Great Tree Nest [Boss=Roc])
 	thespine = {
@@ -648,7 +647,7 @@ var database = {
 		encounters = [],
 		length = 20,
 		exits = ['greatreeentrance','greattreebranch'],
-		tags = [],
+		tags = ['enclosed'],
 		races = [{value = 'Dyrad', weight = 12}],
 		levelrange = [15,20],
 	},
@@ -675,7 +674,7 @@ var database = {
 		combat = true,
 		code = 'greattreebranch',
 		name = 'Great Tree Branches',
-		description = " ",
+		description = "The branches up here are thick enough to be more like streets. You can see all Wimborn, Shaliq and Amberguard from here. Odd then that you never noticed a tree this tall in your travels. Is this tree cloaked? ",
 		enemies = [{value= 'naturespiritmany', weight =7},{value= 'naturespirit', weight =7}, {value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
@@ -691,7 +690,7 @@ var database = {
 		combat = true,
 		code = 'greattreenest',
 		name = 'Great Tree Nest',
-		description = " ",
+		description = "The branches all seem to converge on this spot. There is a large nest in the intersection of branches. ",
 		enemies = [], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 1,
@@ -700,23 +699,6 @@ var database = {
 		races = [],
 		levelrange = [],
 	},
-	# #Prairies-(Oasis, Ruins>Antechamber, Desert>Deep Desert>Sand Tomb )
-	# wimbornoutskirts = {
-	# 	background = 'meadows',
-	# 	music = 'explore',
-	# 	reqs = "true",
-	# 	combat = true,
-	# 	code = 'wimbornoutskirts',
-	# 	name = 'Wimborn Outskirts',
-	# 	description = "The rural road leads across green plains and various settlements. Bright scenery puts you at peace. ",
-	# 	enemies = [{value = 'peasant', weight = 2},{value = 'banditseasy', weight = 1},{value = 'thugseasy',weight = 3},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
-	# 	encounters = [],
-	# 	length = 5,
-	# 	exits = ['wimborn','forest', 'prairie'],
-	# 	tags = ['wimborn'],
-	# 	races = [{value = 'Taurus', weight = 2}, {value = 'Cat', weight = 1},{value = 'Human', weight = 12}],
-	# 	levelrange = [1,2],
-	# },
 	#Mountains-The Peaks, StormCrown[Optional Boss=[Draconis], Skysphere, The Beyond, Coliseum of the Gods[Optional Boss=RandomSkyfather]
 	thepeaks = {
 		background = 'mountains',
@@ -794,7 +776,7 @@ var database = {
 		encounters = [],
 		length = 5,
 		exits = ['colliseumcollapse'],
-		tags = [],
+		tags = ['enclosed'],
 		races = [],
 		levelrange = [50],
 	},
@@ -923,7 +905,7 @@ var database = {
 		encounters = [],
 		length = 1,
 		exits = ['farsea'],
-		tags = [],
+		tags = ['enclosed'],
 		races = [],
 		levelrange = [],
 	},
@@ -956,7 +938,7 @@ var database = {
 		encounters = [],
 		length = 1,
 		exits = ['poisonswamp'],
-		tags = [],
+		tags = ['enclosed'],
 		races = [],
 		levelrange = [],
 	},
@@ -972,7 +954,7 @@ var database = {
 		encounters = [],
 		length = 30,
 		exits = ['deephole'],
-		tags = [],
+		tags = ['enclosed'],
 		races = [],
 		levelrange = [7,15],
 	},

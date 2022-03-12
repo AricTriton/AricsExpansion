@@ -1487,6 +1487,35 @@ var enemypool = {
 		skills = [],
 	},
 	###---Added by Expansion---### Bubblepot Enemypool additions
+	#WIMBORN
+	#Farmlands
+	#RiversidePlains
+	#DwarvenFortress
+	#RiverCrossing
+	#Graveyard
+	#Crypt
+	#WIMBORNXGORN
+	#Ruins
+	#Forest of Refuge
+	#GORN
+	#Oasis
+	#Desert
+	#DeepDesert
+	#SandTomb
+	#AMBERGUARD
+	#TaintedForest
+	#CliffsideFalls
+	#FROSTFORD
+	#Snowy Peaks
+	#Snow Plains
+	#Lizard Village
+	#AbandonedVillage
+	
+	
+	
+	
+	
+	#Hidden
 	#Forest
 	wisp = {
 		name = 'Wisp',
