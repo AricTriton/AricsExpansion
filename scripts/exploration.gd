@@ -605,9 +605,8 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 			var friend = null ### tracker for keeping our joining party member in the correct scope. prepared for null entry, which should be most cases.
 			var mean = false ### this will track our victim's opinion at the start of the scene, used for continuity of scene
 			for h in helpers: ### iterate the helpers array, return the last successful attraction check as our 'friend'
-				var helping = h
-				if globals.expansion.getSexualAttraction(helping,baddie):
-					friend = helping
+				if globals.expansion.getSexualAttraction(h,baddie):
+					friend = h
 
 			if friend != null:  ### introduction scene:
 				helpers.erase(friend) ### consume instance
@@ -620,24 +619,22 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 				mean = false
 				text += baddie.dictionary("The $race $child, $name, begins to "+str(globals.randomitemfromarray(['squirm','moan','moan excitedly','rock $his hips toward you','start panting heavily']))+ ".")
 				if baddie.npcexpanded.timesraped > 0:
-					text += baddie.quirk("\n[color=yellow]-"+str(globals.randomitemfromarray(['Oh divines, I missed this!','Fuck! That is what I needed!','Yeah, come and get me!','Fuck me! Please!','You earned me. Ravage my body!','Take my body!','Sure, I will fuck you!']))+ "[/color]")
+					text += baddie.quirk("\n[color=yellow]-"+str(globals.randomitemfromarray(['Oh divines, I missed this!','Fuck! That is what I needed!','Yeah, come and get me!','Fuck me! Please!','You earned me. Ravage my body!','Take my body!','Sure, I will fuck you!']))+ "[/color]\n")
 				else:
-					text += baddie.quirk("\n[color=yellow]-"+str(globals.randomitemfromarray(['Oh divines! Yeah, lets do this!','Fuck! That is what I needed!','Yeah, come and get me!','Fuck me! Please!','You earned me. Ravage my body!','Take my body!','Sure, I will fuck you!']))+ "[/color]")
+					text += baddie.quirk("\n[color=yellow]-"+str(globals.randomitemfromarray(['Oh divines! Yeah, lets do this!','Fuck! That is what I needed!','Yeah, come and get me!','Fuck me! Please!','You earned me. Ravage my body!','Take my body!','Sure, I will fuck you!']))+ "[/color]\n")
 				relations = round(rand_range(10,20)) + (baddie.npcexpanded.timesraped*5)
 				baddie.lewdness = round(baddie.npcexpanded.timesraped*2.5)+1
 				baddie.metrics.roughsexlike += 1
-				text += '\n'
 
 			else:
 				mean = true
 				text += baddie.dictionary("The $race $child, $name, begins to "+str(globals.randomitemfromarray(['cry','sob','scream','whine','whimper pitifully','start bawling','feebly struggle to get away','weakly pull away']))+ ".")
 				if baddie.npcexpanded.timesraped > 0:
-					text += baddie.quirk("\n[color=yellow]-"+str(globals.randomitemfromarray(['No! No! Not again!','Please, no! Not again!','You...you are going to rape me AGAIN?','Why does this keep happening?','No! Please stop this!','I am going to be sick!','N-n-no!',"Please don't do this!",'Why me?!','Please stop!','Someone help me!',"I'll do anything! Please, no!"]))+ "[/color]")
+					text += baddie.quirk("\n[color=yellow]-"+str(globals.randomitemfromarray(['No! No! Not again!','Please, no! Not again!','You...you are going to rape me AGAIN?','Why does this keep happening?','No! Please stop this!','I am going to be sick!','N-n-no!',"Please don't do this!",'Why me?!','Please stop!','Someone help me!',"I'll do anything! Please, no!"]))+ "[/color]\n")
 				else:
-					text += baddie.quirk("\n[color=yellow]-"+str(globals.randomitemfromarray(['No! Please stop this!','I am going to be sick!','N-n-no!',"Please don't do this!",'Why me?!','Please stop!','Someone help me!',"I'll do anything! Please, no!"]))+ "[/color]")
+					text += baddie.quirk("\n[color=yellow]-"+str(globals.randomitemfromarray(['No! Please stop this!','I am going to be sick!','N-n-no!',"Please don't do this!",'Why me?!','Please stop!','Someone help me!',"I'll do anything! Please, no!"]))+ "[/color]\n")
 				relations = round(rand_range(-10,-20)) - (baddie.npcexpanded.timesraped*5)
 				baddie.fear = round(baddie.npcexpanded.timesraped*2.5)+1
-				text += '\n'
 
 			if friend != null:  ### we react to the captive. this could be relatively short. could make a number of actions based on flaws, too...
 				if (friend.checkVice('wrath') || friend.checkFetish('sadism')) && mean == true:
@@ -824,12 +821,12 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 			baddie.npcexpanded.timesraped += 1
 			baddie.npcexpanded.lastevent = 'raped'
 			globals.player.lastsexday = globals.resources.day
-			var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(rand_range(-globals.expansion.enemyreencountermodifier,globals.expansion.enemyreencountermodifier))
+			var reencounterchance = globals.expansion.enemyreencounterchancerelease + round(globals.expansion.enemyreencountermodifier * rand_range(-1,1))
 			if baddie.npcexpanded.citizen == true:
 				reputation = round(rand_range(1,5)) + globals.originsarray.find(baddie.origins)
 				status = 'citizen'
 			else:
-				reputation = -round(rand_range(1,5) + rand_range(-globals.originsarray.find(baddie.origins), globals.originsarray.find(baddie.origins)))
+				reputation = -round(rand_range(1,5) + globals.originsarray.find(baddie.origins)*rand_range(-1, 1))
 				status = 'criminal'
 			globals.state.allnpcs = baddie
 			globals.state.offscreennpcs.append([baddie.id, currentzone.code, reencounterchance, 'raped', reputation, status])
