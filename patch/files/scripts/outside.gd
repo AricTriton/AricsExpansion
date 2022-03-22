@@ -2807,13 +2807,7 @@ func itembackpackselect(item):
 		get_node("playergroupdetails/Panel/usebutton").set_disabled(true)
 	var text ='[center]' + item.name + '[/center]\n' + item.description + '\n\nWeight: ' + str(item.weight)
 	if item.code == 'teleportseal' && partyselectedslave == globals.player:
-		if globals.state.playergroup.empty():
-			if globals.state.capturedgroup.empty():
-				text += '\n\n[color=#ff4949]If you had brought a party, they would take time to return home on their own, while transporting your captured slaves. [/color]'
-			else:
-				text += '\n\n[color=#ff4949]Your captured slaves will be freed. If you had brought a party, they would be transported by your party. [/color]'
-		else:
-			text += '\n\n[color=#ff4949]Your party will take time to return home on their own, while transporting your captured slaves. [/color]'
+		text += '\n\n[color=yellow]You can choose to teleport alone, with your party or with your captured slaves, if you have enough teleport seals. [/color]'
 	get_node("playergroupdetails/Panel/itemdescript").set_bbcode(text)
 
 func spellbackpackselect(spell):
@@ -2837,35 +2831,107 @@ func spellbackpackselect(spell):
 	get_node("playergroupdetails/Panel/itemdescript").set_bbcode(text)
 
 
+var teleport_seals_used = 0
+
+func teleport_finale():
+	main.close_dialogue()
+	_on_closegroup_pressed()
+	if teleport_seals_used > 0:
+		globals.state.backpack.stackables['teleportseal'] -= teleport_seals_used
+		globals.main.sound("teleport")
+		main.exploration.deeperregion = false
+		mansion()
+	else:
+		playergrouppanel()
+		_on_details_pressed()
+
+
+func teleportseal_player_self():
+	teleport_seals_used = 1
+	if globals.state.playergroup.empty():
+		if globals.state.capturedgroup.empty():
+			main.popup("After activating Teleportation Seal, you appear inside of your mansion. ")
+		else:
+			main.popup("After activating Teleportation Seal, you appear inside of your mansion, leaving your captives behind to free themselves. ")
+	else:
+		main.popup("After activating Teleportation Seal, you appear inside of your mansion, leaving your party behind. Hopefully they will find a way back in the near future. ")
+		var away = round(rand_range(1,3))
+		for i in globals.state.playergroup:
+			var temp = globals.state.findslave(i)
+			temp.away.duration = away
+			temp.away.at = 'travel back'
+		for temp in globals.state.capturedgroup:
+			globals.slaves = temp
+			temp.away.duration = away
+			temp.away.at = 'transported back'
+	globals.state.capturedgroup.clear()
+	teleport_finale()
+
+
+func teleportseal_player_party():
+	teleport_seals_used = 1 + globals.state.playergroup.size()
+	if globals.state.capturedgroup.empty():
+		main.popup("After activating Teleportation Seals, you and your party appear inside of your mansion. ")
+	else:
+		main.popup("After activating Teleportation Seals, you and your party appear inside of your mansion, leaving your captives behind to free themselves. ")
+	globals.state.capturedgroup.clear()
+	teleport_finale()
+
+
+func teleportseal_player_party_slaves():
+	teleport_seals_used = 1 + globals.state.playergroup.size() + globals.state.capturedgroup.size()
+	if globals.state.playergroup.empty():
+		main.popup("After activating Teleportation Seals, you and your new slaves appear inside of your mansion. ")
+	else:
+		main.popup("After activating Teleportation Seals, you, your party and your new slaves appear inside of your mansion. ")
+	teleport_finale()
+
+
+func teleportseal_player():
+	var text = ''
+	var buttons = []
+	var partysize = globals.state.playergroup.size()
+	var capturedsize = globals.state.capturedgroup.size()
+	var sealcount = globals.state.backpack.stackables['teleportseal']
+	var not_enough_seals = 'You need %d teleport seals for teleporting everyone.'
+	var have_seals = 'Use %d teleport seals.'
+	teleport_seals_used = 0
+	if partysize == 0 and capturedsize == 0:
+		teleportseal_player_self()
+	else:
+		if partysize == 0:
+			text = 'You can teleport yourself and leave your captives behind; or you can teleport with all slaves. '
+		else:
+			if capturedsize == 0:
+				text = 'You can teleport yourself and leave your party to find their way back; or you can teleport everyone. '
+			else:
+				text = 'You can teleport yourself and leave your party to find their way back with slaves; you can teleport yourself and party and leave your captives behind; or you can teleport everyone. '
+		buttons.append({text = 'Teleport yourself', function = 'teleportseal_player_self', tooltip = 'Use 1 teleport seal.'})
+		if partysize > 0:
+			var seals_needed = partysize + 1
+			var enabled = sealcount >= seals_needed
+			var tip = (have_seals if enabled else not_enough_seals) % seals_needed # Godot ternary operator is: [true] if [condition] else [false]
+			buttons.append({text = 'Teleport with party', function = 'teleportseal_player_party', disabled = not enabled, tooltip = tip})
+		if capturedsize > 0:
+			var seals_needed = partysize + capturedsize + 1
+			var enabled = sealcount >= seals_needed
+			var tip = (have_seals if enabled else not_enough_seals) % seals_needed # Godot ternary operator is: [true] if [condition] else [false]
+			buttons.append({text = 'Teleport everyone', function = 'teleportseal_player_party_slaves', disabled = not enabled, tooltip = tip})
+		var dialogue_node = main.get_node("dialogue")
+		main.dialogue(true, self, text, buttons)
+
+
 func useitem(item, person):
 	globals.items.person = person
+	if item.code == 'teleportseal' and person == globals.player:
+		teleportseal_player()
+		return
 	globals.state.backpack.stackables[item.code] -= 1
 	if item.code == 'bandage':
 		globals.items.call(item.effect)
 	elif item.code == 'teleportseal':
 		if person == globals.player:
-			_on_closegroup_pressed()
-			if globals.state.playergroup.empty():
-				if globals.state.capturedgroup.empty():
-					get_parent().popup("After activating Teleportation Seal, you appear inside of your mansion. ")
-				else:
-					get_parent().popup("After activating Teleportation Seal, you appear inside of your mansion, leaving your captives behind to free themselves. ")
-			else:
-				get_parent().popup("After activating Teleportation Seal, you appear inside of your mansion, leaving your party behind. Hopefully they will find a way back in the near future. ")
-				var away = round(rand_range(1,3))
-				for i in globals.state.playergroup:
-					var temp = globals.state.findslave(i)
-					temp.away.duration = away
-					temp.away.at = 'travel back'
-				for temp in globals.state.capturedgroup:
-					globals.slaves = temp
-					temp.away.duration = away
-					temp.away.at = 'transported back'
-			globals.state.capturedgroup.clear()
-			globals.main.sound("teleport")
-			main.exploration.deeperregion = false
-			mansion()
-			return
+			assert(false)
 		elif globals.slaves.find(person) >= 0:
 			get_parent().popup(person.dictionary("After activating Teleportation Seal, $name slowly dissipates in bright sparkles."))
 			globals.state.playergroup.erase(person.id)
