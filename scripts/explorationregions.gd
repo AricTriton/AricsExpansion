@@ -550,7 +550,7 @@ var database = {
 		length = 20,
 		exits = ['frostfordoutskirts','skysphere'],
 		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
+		races = [],
 		levelrange = [10,15],
 	},
 	snowplains = {
