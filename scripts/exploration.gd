@@ -1295,6 +1295,60 @@ func frostford():
 	# 	generateloot(['zoebook', 1], globals.questtext.undercitybookafterabttle)
 	# 	showlootscreen()
 	# 	zoneenter("undercityruins")
+	
+	#Remember to add the appropriate questtext and add a function that tells the player they can or cannot pass
+	func snowymountainsentry():
+		var player = globals.player
+		var party = globals.state.playergroup.duplicate()
+		var accessgranted
+		var accesscounter=0
+		for i in party:
+			if person.sagi>6 && person.send>6:
+				accesscounter+=1
+			else:
+				accessgranted=false
+		if player.sagi>6 && player.send>6:
+			accesscounter+=1
+		if accesscounter>=party.size():
+			accessgranted=true
+		
+	func refugeentry():
+		var player = globals.player
+		var party = globals.state.playergroup.duplicate()
+		var accesscounter=0
+		if player.race="Beastkin Wolf" && player.spec= "ranger": #This second but may be unnecessary. Ask in server
+			return true
+		else:		
+			for i in party:
+				if person.race= "Beastkin Wolf" && person.spec="ranger":
+					return true
+				else:
+					return false
+
+
+	
+	func desertentry():
+		var player = globals.player
+		var party = globals.state.playergroup.duplicate()
+		var accessgranted
+		var accesscounter=0
+		for i in party:
+			if person.race= "Centaur" || player.race="Centaur":
+				accessgranted=true
+			else:
+				accessgranted=false
+	
+	func deepdesertentry():
+		var player = globals.player
+		var party = globals.state.playergroup.duplicate()
+		var accessgranted
+		var accesscounter=0
+		for i in party:
+			if person.race= "Centaur" || player.race="Centaur":
+				accessgranted=true
+			else:
+				accessgranted=false
+
 	###---End Expansion---###
 
 	
