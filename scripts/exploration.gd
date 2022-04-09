@@ -1306,11 +1306,11 @@ func frostford():
 			if person.sagi>6 && person.send>6:
 				accesscounter+=1
 			else:
-				accessgranted=false
+				return false
 		if player.sagi>6 && player.send>6:
 			accesscounter+=1
 		if accesscounter>=party.size():
-			accessgranted=true
+			return true
 		
 	func refugeentry():
 		var player = globals.player
@@ -1334,20 +1334,22 @@ func frostford():
 		var accesscounter=0
 		for i in party:
 			if person.race= "Centaur" || player.race="Centaur":
-				accessgranted=true
+				#accessgranted=true
+				return true
 			else:
-				accessgranted=false
+				#accessgranted=false
 	
 	func deepdesertentry():
 		var player = globals.player
 		var party = globals.state.playergroup.duplicate()
 		var accessgranted
-		var accesscounter=0
 		for i in party:
 			if person.race= "Centaur" || player.race="Centaur":
-				accessgranted=true
+				#accessgranted=true
+				return true
 			else:
-				accessgranted=false
+				return false
+				#accessgranted=false
 
 	###---End Expansion---###
 
