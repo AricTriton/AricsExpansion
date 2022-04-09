@@ -1,6 +1,6 @@
 
 ###---Added by Expansion---### Deviate
-var corejobs = ['rest','forage','hunt','cooking','library','nurse','maid','storewimborn','artistwimborn','assistwimborn','whorewimborn','escortwimborn','fucktoywimborn', 'lumberer', 'ffprostitution','guardian', 'research', 'slavecatcher','fucktoy','housepet']
+var corejobs = ['rest','forage','hunt','cooking','library','nurse','maid','storewimborn','artistwimborn','assistwimborn','whorewimborn','escortwimborn','fucktoywimborn', 'lumberer', 'ffprostitution','guardian', 'research', 'slavecatcher','fucktoy','housepet','trainer']
 var manaeaters = ['Succubus','Golem'] #ralphC - used in food consumption calcs, etc.
 ###---End Expansion---###
 var outOfMansionJobs = ['storewimborn','artistwimborn','assistwimborn','whorewimborn','escortwimborn','fucktoywimborn', 'lumberer', 'ffprostitution','guardian', 'research', 'slavecatcher','fucktoy'] # /Capitulize - Jobs outside of the mansion.
@@ -4174,3 +4174,60 @@ func updateSlaveListNode(node, person, visible):
 	node.find_node('stress').set_normal_texture( person.stress_icon())
 	if person.imageportait != null:
 		node.find_node('portait').set_texture( globals.loadimage(person.imageportait))
+
+func dialogue(showcloseButton, destination, dialogtext, dialogbuttons = null, sprites = null, background = null): #for arrays: 0 - boolean to show close button or not. 1 - node to return connection back. 2 - text to show 3+ - arrays of buttons and functions in those
+	var text = get_node("dialogue/dialoguetext")
+	var buttons = $dialogue/buttonscroll/buttoncontainer
+	var newbutton
+	var counter = 1
+	get_node("dialogue/blockinput").hide()
+	get_node("dialogue/background").set_texture(null if background == null else globals.backgrounds[background])
+	if !get_node("dialogue").visible:
+		get_node("dialogue").popup()
+		nodeunfade($dialogue, 0.4)
+		#get_node("dialogue/AnimationPlayer").play("fading")
+	text.set_bbcode('')
+	for i in buttons.get_children():
+		if i.name != "Button":
+			i.hide()
+			i.queue_free()
+	if dialogtext == "":
+		dialogtext = var2str(dialogtext)
+	text.set_bbcode(globals.player.dictionary(dialogtext))
+	text.scroll_to_line(0)
+	if dialogbuttons != null:
+		for i in dialogbuttons:
+			dialoguebuttons(dialogbuttons[counter-1], destination, counter)
+			counter += 1
+	if showcloseButton == true:
+		newbutton = $dialogue/buttonscroll/buttoncontainer/Button.duplicate()
+		newbutton.show()
+		newbutton.set_text('Close')
+		newbutton.connect('pressed',self,'close_dialogue')
+		newbutton.get_node("Label").set_text(str(counter))
+		buttons.add_child(newbutton)
+	
+	var clearSprites = []
+	for key in nodedict:
+		if nodedict[key].get_texture() != null:
+			clearSprites.append(key)
+	
+	if sprites != null && globals.rules.spritesindialogues == true:
+		for i in sprites:
+			if !spritedict.has(i[0]) && globals.loadimage(i[0]) == null:
+				var temp = "WARNING: Dialogue cannot display sprite '%s'." %[i[0]]
+				print(temp)
+				globals.traceFile(temp)
+				continue
+			else:
+				if spritedict.has(i[0]):
+					if i.size() > 2 && (i[2] != 'opac' || spritedict[i[0]] != nodedict[i[1]].get_texture()):
+						tweenopac(nodedict[i[1]])
+					nodedict[i[1]].set_texture(spritedict[i[0]])
+				else:
+					if i.size() > 2 && (i[2] != 'opac' || globals.loadimage(i[0]) != nodedict[i[1]].get_texture()):
+						tweenopac(nodedict[i[1]])
+					nodedict[i[1]].set_texture(globals.loadimage(i[0]))
+				clearSprites.erase(i[1])
+	for key in clearSprites:
+		nodedict[key].set_texture(null)
