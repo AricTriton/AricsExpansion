@@ -734,42 +734,84 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 		enemyleave()
 	get_node("winningpanel/defeateddescript").set_bbcode('')
 	outside.playergrouppanel()
+	
 	if orgy == true:
 		var totalmanagain = 0
 		###---Added by Expansion---### NPCs Expanded
 		var relations = 0
 		var reputation = 0
 		var status = ''
-		var temp
+		var temp = 0
+		var helpers = []	### statistically, 9 out of 10 people enjoy gangbangs. these are your "average" gangbangers
+		var watchers = []	### we're going to keep track of who doesn't join in, though these slaves may still have a solo adventure if they're inclined
+		for i in globals.state.playergroup: ### let's find our "helpers". bool 'allowed' should be set from a person.rules variable (or similar) to control whether the MC allows this conduct
+			var person = globals.state.findslave(i)
+			var allowed = !person.rules.masturbation ### for initial implimentation, let's just tie it (inversely) into masturbation
+			if (person.checkVice('lust') || person.traits.has('Pervert') || person.traits.has('Sex-crazed') || person.checkFetish('dominance')) && (person.lewdness >= 60 && person.lust >= 50) && allowed == true:
+				helpers.append(person)
+			else:
+				watchers.append(person)
+		text += '\n'
 		if orgyarray.size() >= 2: ### See if there's more than 1 enemy to rape
-			text += "After freeing those left from their clothes, you joyfully start to savour their bodies one after another. "
+			text += "After freeing those left from their clothes, you joyfully start to savour their bodies one after another. \n\n"
 		else:
-			text += "You grab the " + orgyarray[0].dictionary("$race $child") + " with a determined look in your eye. "
+			text += "You grab the " + orgyarray[0].dictionary("$race $child") + " with a determined look in your eye. \n"
 		for i in orgyarray:
 			#Vanilla
-			temp = rand_range(3,5)
-			
+			temp += rand_range(1,3)
+
 			#Expansion - Rape Scene
 			var baddie = i
+			var friend = null ### tracker for keeping our joining party member in the correct scope. prepared for null entry, which should be most cases.
+			var mean = false ### this will track our victim's opinion at the start of the scene, used for continuity of scene
+			for h in helpers: ### iterate the helpers array, return the last successful attraction check as our 'friend'
+				if globals.expansion.getSexualAttraction(h,baddie):
+					friend = h
+
+			if friend != null:  ### introduction scene:
+				helpers.erase(friend) ### consume instance
+				text += friend.dictionary(globals.randomitemfromarray(['$name eagerly grapples ','$name dives onto ','$name quickly grabs ']))  #who initiates and how
+				text += baddie.dictionary(globals.randomitemfromarray(['one of the prisoners ','a terrified $race $sex '])) #who it's done to
+				text += baddie.dictionary(globals.randomitemfromarray(['and holds $him down ','and kneels on $his chest ','and grabs $his wrists '])) #what they do
+				text += friend.dictionary(globals.randomitemfromarray(['with a twisted gleam in $his eye. ','with a menacing laugh. '])) #additional detail
 
 			if globals.expansion.getSexualAttraction(baddie,globals.player) == true:
-				text += baddie.dictionary("\nThe $race $child, $name, begins to "+str(globals.randomitemfromarray(['squirm','moan','moan excitedly','rock $his hips toward you','start panting heavily']))+ ".")
+				mean = false
+				text += baddie.dictionary("The $race $child, $name, begins to "+str(globals.randomitemfromarray(['squirm','moan','moan excitedly','rock $his hips toward you','start panting heavily']))+ ".")
 				if baddie.npcexpanded.timesraped > 0:
-					text += baddie.quirk("\n[color=yellow]-"+str(globals.randomitemfromarray(['Oh divines, I missed this!','Fuck! That is what I needed!','Yeah, come and get me!','Fuck me! Please!','You earned me. Ravage my body!','Take my body!','Sure, I will fuck you!']))+ "[/color]")
+					text += baddie.quirk("\n[color=yellow]-"+str(globals.randomitemfromarray(['Oh divines, I missed this!','Fuck! That is what I needed!','Yeah, come and get me!','Fuck me! Please!','You earned me. Ravage my body!','Take my body!','Sure, I will fuck you!']))+ "[/color]\n")
 				else:
-					text += baddie.quirk("\n[color=yellow]-"+str(globals.randomitemfromarray(['Oh divines! Yeah, lets do this!','Fuck! That is what I needed!','Yeah, come and get me!','Fuck me! Please!','You earned me. Ravage my body!','Take my body!','Sure, I will fuck you!']))+ "[/color]")
+					text += baddie.quirk("\n[color=yellow]-"+str(globals.randomitemfromarray(['Oh divines! Yeah, lets do this!','Fuck! That is what I needed!','Yeah, come and get me!','Fuck me! Please!','You earned me. Ravage my body!','Take my body!','Sure, I will fuck you!']))+ "[/color]\n")
 				relations = round(rand_range(10,20)) + (baddie.npcexpanded.timesraped*5)
 				baddie.lewdness = round(baddie.npcexpanded.timesraped*2.5)+1
 				baddie.metrics.roughsexlike += 1
+
 			else:
-				text += baddie.dictionary("\nThe $race $child, $name, begins to "+str(globals.randomitemfromarray(['cry','sob','scream','whine','whimper pitifully','start bawling','feebly struggle to get away','weakly pull away']))+ ".")
+				mean = true
+				text += baddie.dictionary("The $race $child, $name, begins to "+str(globals.randomitemfromarray(['cry','sob','scream','whine','whimper pitifully','start bawling','feebly struggle to get away','weakly pull away']))+ ".")
 				if baddie.npcexpanded.timesraped > 0:
-					text += baddie.quirk("\n[color=yellow]-"+str(globals.randomitemfromarray(['No! No! Not again!','Please, no! Not again!','You...you are going to rape me AGAIN?','Why does this keep happening?','No! Please stop this!','I am going to be sick!','N-n-no!',"Please don't do this!",'Why me?!','Please stop!','Someone help me!',"I'll do anything! Please, no!"]))+ "[/color]")
+					text += baddie.quirk("\n[color=yellow]-"+str(globals.randomitemfromarray(['No! No! Not again!','Please, no! Not again!','You...you are going to rape me AGAIN?','Why does this keep happening?','No! Please stop this!','I am going to be sick!','N-n-no!',"Please don't do this!",'Why me?!','Please stop!','Someone help me!',"I'll do anything! Please, no!"]))+ "[/color]\n")
 				else:
-					text += baddie.quirk("\n[color=yellow]-"+str(globals.randomitemfromarray(['No! Please stop this!','I am going to be sick!','N-n-no!',"Please don't do this!",'Why me?!','Please stop!','Someone help me!',"I'll do anything! Please, no!"]))+ "[/color]")
+					text += baddie.quirk("\n[color=yellow]-"+str(globals.randomitemfromarray(['No! Please stop this!','I am going to be sick!','N-n-no!',"Please don't do this!",'Why me?!','Please stop!','Someone help me!',"I'll do anything! Please, no!"]))+ "[/color]\n")
 				relations = round(rand_range(-10,-20)) - (baddie.npcexpanded.timesraped*5)
 				baddie.fear = round(baddie.npcexpanded.timesraped*2.5)+1
-			text += "\n"
+
+			if friend != null:  ### we react to the captive. this could be relatively short. could make a number of actions based on flaws, too...
+				if (friend.checkVice('wrath') || friend.checkFetish('sadism')) && mean == true:
+					text += friend.dictionary(globals.randomitemfromarray(['$name angrily grabs ', '$name growls and clutches ']))
+					text += baddie.dictionary(globals.randomitemfromarray(['$his hair as $he protests, and strikes $his face again and again until $he is reduced to mere whimpers. ','$his throat until $he can no longer protest. ']))
+					friend.stress -= rand_range(10,20)
+				elif friend.checkFetish('submission') && mean == false:
+					text += friend.dictionary(globals.randomitemfromarray(['$name kneels next to ','$name smiles to ']))
+					text += baddie.dictionary(globals.randomitemfromarray(['$him and whispers encouragements into $his ear. ', '$him and strokes $his hair as $he coooperates. ']))
+				elif friend.checkFetish('bondage') && mean == true:
+					text += friend.dictionary(globals.randomitemfromarray(['$name tightens some rope around ','$name collects some nearby vines, then binds ']))
+					text += baddie.dictionary(globals.randomitemfromarray(['$his arms and chest and $his struggles become more labored. ','$him and lifts $him into position for you. ']))
+				else:
+					text += friend.dictionary(globals.randomitemfromarray(['$name gives you a knowing smile ','$name grins in anticipation ']))
+					text += baddie.dictionary(globals.randomitemfromarray(['while $he squirms. ','as you approach. ']))
+				text += '\n'
+
 			if globals.player.penis != "none":
 				if baddie.vagina != "none":
 					if baddie.vagvirgin == true:
@@ -777,9 +819,9 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 						text += baddie.dictionary("\nYou slam your "+str(globals.expansion.namePenis())+" into $his tight, virgin "+str(globals.expansion.namePussy())+" mercilessly. You hear $him sob as $his hymen rips but keep fucking $him ")
 					else:
 						text += baddie.dictionary("\nYou slam your "+str(globals.expansion.namePenis())+" into $his "+str(globals.expansion.namePussy())+" relentlessly. You occassionally switch to pounding $his "+str(globals.expansion.nameAsshole())+" ")
-					if baddie.assvirgin == true:
-						baddie.assvirgin = false
-						baddie.cum.ass += round(globals.player.pregexp.cumprod*.4)
+						if baddie.assvirgin == true:
+							baddie.assvirgin = false
+							baddie.cum.ass += round(globals.player.pregexp.cumprod*.4)
 					if rand_range(0,100) <= globals.expansion.chanceimpregnatebaddies:
 						text += baddie.dictionary("and finish inside of $his "+str(globals.expansion.namePussy())+".\n ")
 						baddie.cum.pussy += globals.player.pregexp.cumprod
@@ -811,10 +853,125 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 					temp += rand_range(1,3)
 				else:
 					temp += 1
+
+			elif globals.player.vagina != "none":
+				temp += rand_range(1,2)
+				text += '\n'  ### step one, foreplay
+				text += baddie.dictionary(globals.randomitemfromarray(['You grab $him by the back of $his neck as $he kneels and ','You push $him onto $his back to kneel over $his shoulders and ','You turn your back and pull $his cheeks under your ass to ']))
+				text += baddie.dictionary(globals.randomitemfromarray(['bury $his face between the folds of your '+str(globals.expansion.namePussy())+'. ','grind your '+str(globals.expansion.namePussy())+' onto $his lips. ']))
+				if mean == false: ### of *course* you can't resist loving our wonderful box. 
+					text += baddie.dictionary(globals.randomitemfromarray(['$His eyes betray $his lust as $he breathes in your essence. ','$He moans lightly and you feel $his tongue as $he tastes you. ']))
+				text += baddie.dictionary(globals.randomitemfromarray(['You rock your hips as you feel your orgasm approach, ','You feel your arousal swelling as you take your pleasure, ']))
+				text += baddie.dictionary(globals.randomitemfromarray(['and hold $his dome against your '+str(globals.expansion.namePussy())+' as you cum. ',' and climax loudly with your fingers tangled in $his hair. ']))
+				text += '\n'
+				if baddie.penis != "none": ### oh, boy! a penis!
+					var loaded = false  ### we're only tracking if we get creampied. if not, we molest them. then, it's all coming back out before our scene is over.
+					text += baddie.dictionary(globals.randomitemfromarray(['You inspect $his '+str(globals.expansion.namePenis())+' with interest before wrapping your hand around $his shaft. ','$name\'s '+str(globals.expansion.namePenis())+' catches your eye, casting a wicked grin across your face. ']))
+					text += baddie.dictionary(globals.randomitemfromarray(['In your hands, it quickly becomes stiff and responsive. ','It takes little coaxing from your lips before it swells to fullness. ']))
+					if globals.player.vagvirgin == false: ### we know our way around a cock. let's play with it!
+						if baddie.penisvirgin == true:
+							baddie.penisvirgin == false   ### and all the girlies say he's pretty fly for a white guy
+						text += '\n'
+						text += baddie.dictionary(globals.randomitemfromarray(['You slam yourself down onto $his '+str(globals.expansion.namePenis())+', ','You take $his '+str(globals.expansion.namePenis())+' into your '+str(globals.expansion.namePussy())+' ','You quickly mount $him ']))
+						text += baddie.dictionary(globals.randomitemfromarray(['and let out a moan of pleasure. ','and pound $his loins like a jackhammer. ','and ride $him like an animal. ']))
+						text += baddie.dictionary(globals.randomitemfromarray(['You rock your hips until ','You sheath $his '+str(globals.expansion.namePenis())+' into yourself again and again, until ','You grind your flower on $him until ']))
+						if rand_range(0,100) <= globals.expansion.rapedorgasmchance + ((globals.resources.day-baddie.lastsexday)*1.5):
+							text += baddie.dictionary(globals.randomitemfromarray(['$he cums hard with you. ','$his throbbing '+str(globals.expansion.namePenis())+' sets you off. ','$his hot '+globals.expansion.nameCum()+' fills your quivering '+str(globals.expansion.namePussy())+'. ']))
+							loaded = true
+							temp += rand_range(1,3)
+							relations += round(rand_range(10,20))
+							baddie.metrics.orgasm += 1
+						else:
+							text += baddie.dictionary(globals.randomitemfromarray(['you cum hard on $his '+str(globals.expansion.namePenis())+'. ','you feel your '+str(globals.expansion.namePussy())+' violently convulse. ','the walls of your '+globals.expansion.namePussy()+' squeeze $his '+globals.expansion.namePenis()+'. ']))
+							temp += rand_range(1,2)
+					if loaded == false:  ### presumably, they didn't cum. let's molest them!
+						text += baddie.dictionary(globals.randomitemfromarray(['You take $his '+str(globals.expansion.namePenis())+' into your hand and begin to stroke $him. ','Your begin to trace your fingers along $his '+globals.expansion.namePenis()+'. ']))
+						text += baddie.dictionary(globals.randomitemfromarray(['Using a little of your spit, you lube up $his shaft and work it to completion. ','You slowly stroke and tease $his '+str(globals.expansion.namePenis())+' with your lips until $he lets out a moan. ']))
+						text += baddie.dictionary(globals.randomitemfromarray(['You can\'t help but giggle a bit as you spray $his own '+globals.expansion.nameCum()+' all over $his chest and face. ','$He groans and convulses as $he bursts. You smile while smearing $his seed over $his body and face with your fingers. ']))
+						baddie.cum.face += round(baddie.pregexp.cumprod*.25)
+						baddie.cum.body += round(baddie.pregexp.cumprod*.25)
+						relations += round(rand_range(-5,20))
+						baddie.metrics.orgasm += 1
+					if loaded == true:  ### we are creampied. *somebody* needs to clean up this mess
+						text += baddie.dictionary(globals.randomitemfromarray(['You feel the slick but sticky '+globals.expansion.nameCum()+' inside you and smile. ','As you stand, $his '+globals.expansion.nameCum()+' begins to drip down your thigh. ']))
+						text += '\n'
+						text += baddie.dictionary(globals.randomitemfromarray(['You push the $race $child to the ground and ','You grab the $race $sex by the back of $his neck and ']))
+						text += baddie.dictionary(globals.randomitemfromarray(['push $his '+globals.expansion.nameCum()+' out of your '+str(globals.expansion.namePussy())+'. ','drain $his '+globals.expansion.nameCum()+' into $his mouth. ']))
+						if baddie.checkFetish('creampiemouth'):
+							text += baddie.dictionary(globals.randomitemfromarray(['$He moans and blushes as $his seed is returned. ','$he gulps it down, staring into your eyes. ']))
+						else:
+							text += baddie.dictionary(globals.randomitemfromarray(['$He chokes and gasps while $he is fed. ','$His eyes go wide as $his seed slides out of your '+globals.expansion.namePussy()+'. ']))
+						text += baddie.dictionary(globals.randomitemfromarray(['$His face is now smeared in '+globals.expansion.nameCum()+'. ','$His '+globals.expansion.nameCum()+' leaves a shine across $his cheeks and lips. ']))
+						baddie.cum.face += round(baddie.pregexp.cumprod*.5)
+					text += '\n'
+				if baddie.vagina != "none": ### a vagina! my favorite!
+					text += baddie.dictionary(globals.randomitemfromarray(['You turn your eyes to $his '+str(globals.expansion.namePussy())+' with a mischievious grin. ','$name\'s wet '+str(globals.expansion.namePussy())+' beckons to you. ']))
+					if mean == true:
+						text += baddie.dictionary(globals.randomitemfromarray(['$He whimpers pathetically as you begin to pleasure $him. ','$He quietly sobs as you enjoy $him. ']))
+					text += baddie.dictionary(globals.randomitemfromarray(['You begin stroking $his slit ','You allow yourself a taste of $his sweet honey ','You bury your fingers into $him ']))
+					text += baddie.dictionary(globals.randomitemfromarray(['while $he writhes and moans. ','and $he shudders in pleasure. ','causing $him to gasp in surprise. ']))
+					text += baddie.dictionary(globals.randomitemfromarray(['It\'s not long before $name is rocking $his hips into you. ','$name begins groaning with desire and need. ']))
+					text += '\n'
+					text += baddie.dictionary(globals.randomitemfromarray(['You draw a dagger and push the pommel into $his '+str(globals.expansion.namePussy())+'. ','You reach for your sword, and penetrate $him with the grip. ','You retrieve a toy from your bag and insert it without warning. ']))
+					if baddie.vagvirgin == true:
+						baddie.vagvirgin = false
+						text += baddie.dictionary(globals.randomitemfromarray(['With one sharp jab, you steal $his first time. $He sobs as $his hymen rips, but moans in spite of $himself. ','$His eyes go wide as you enter $him, but $his hymen offers little resistance. ','$His virgin '+str(globals.expansion.namePussy())+' stretches and tears while $he gasps. ']))
+					text += baddie.dictionary(globals.randomitemfromarray(['You thrust into $him again and again ','$He has trouble breathing as you brutally pound $him with your tool ','$His lips quiver as you massage $his insides ']))
+					temp += rand_range(1,2)
+					relations += round(rand_range(10,20))
+					baddie.metrics.orgasm += 1
+					text += baddie.dictionary(globals.randomitemfromarray(['until $he\'s left gasping and spent. ','until a long, low moan rings out of $him. ','until $he screams in climax. ']))
+					text += '\n'
+				text += baddie.dictionary(globals.randomitemfromarray(['You smile at the quivering mess you leave on the ground. ','You straighten your hair as you walk away. ','You let out a satisfied sigh. ']))
+				text += '\n'
+				
 			else:
 				text += baddie.dictionary("\nYou take your time savoring $his $race body and enjoy $him immensely.")
 				temp += rand_range(1,2)
 				relations += round(rand_range(-20,20))
+ 
+			if friend != null:			### This is the old (slightly modified) code for party members to join in. We will fire it here, instead.
+				friend.asser += rand_range(6,12)
+				friend.lastsexday = globals.resources.day
+				friend.lust -= rand_range(20,35)
+				text += friend.dictionary('\n$name, overwhelmed by the situation, joins you and pleasures $himself with ')
+				text += baddie.dictionary(' the $race $child, $name. ')
+				if friend.penis != "none":
+					if baddie.vagina != "none":
+							text += friend.dictionary("$He eventually cums inside of ") + baddie.dictionary("$name's "+str(globals.expansion.namePussy())+". \n")
+							baddie.cum.pussy += friend.pregexp.cumprod
+							globals.impregnation(baddie,friend)
+					#Shared/Baddie Sexual Attraction
+				if globals.expansion.getSexualAttraction(baddie,friend) == true:
+					relations = round(rand_range(10,20))
+					baddie.metrics.roughsexlike += 1
+					text += baddie.dictionary("$name seemed to enjoy ") + friend.dictionary(" $name's attention and barely resists before ")
+				else:
+					relations = round(rand_range(-10,-20))
+					text += baddie.dictionary("$name struggled against ") + friend.dictionary(" $name the entire time but ")
+				if rand_range(0,100) <= globals.expansion.rapedorgasmchance + ((globals.resources.day-baddie.lastsexday)*5):
+					relations += round(rand_range(10,20))
+					baddie.metrics.orgasm += 1
+					temp += rand_range(1,3)
+					text += baddie.dictionary(" $he cums loudly and violently. \n")
+				else:
+					temp += 1
+					text += friend.dictionary(" $name came loudly on top of ") + baddie.dictionary("$him.\n")
+				globals.addrelations(baddie,friend,relations)
+				baddie.metrics.sex += 1
+				baddie.metrics.roughsex += 1
+				baddie.metrics.partners.append(friend.id)
+				#Person Relations Added
+				if globals.expansion.getSexualAttraction(friend,baddie) == true:
+					relations = round(rand_range(10,20))
+				else:
+					relations = -round(rand_range(10,20))
+				globals.addrelations(friend,baddie,relations)
+				friend.metrics.sex += 1
+				friend.metrics.orgasm += 1
+				friend.metrics.partners.append(baddie.id)
+
+			text += '\n'
 			globals.addrelations(baddie, globals.player, relations)
 			globals.player.metrics.orgasm += 1
 			baddie.lastsexday = globals.resources.day
@@ -833,60 +990,68 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 				status = 'criminal'
 			globals.state.allnpcs = baddie
 			globals.state.offscreennpcs.append([baddie.id, currentzone.code, reencounterchance, 'raped', reputation, status])
+			#globals.state.npclastlocation.append([currentzone.code, baddie.id, reencounterchance])
 			###---End Expansion---###
-		
-		for i in globals.state.playergroup:
-			var person = globals.state.findslave(i)
+		watchers.append_array(helpers) ### anyone who qualified as a helper but didn't help is now a watcher.
+		for i in watchers:  ###  Repurposed the old code to handle everyone who didn't participate in the orgy.
+			var person = i
+			var toys = []
+			var toy = globals.randomitemfromarray(orgyarray)  ### formerly shared
 			if killed == true && person.fear < 50 && person.loyal < 40:
 				person.fear += rand_range(20,30)
-			if person.lust < 50 || person.vagina != "none" && person.vagvirgin == true:
-				if person.loyal < 30 && person.lewdness < 50 || person.traits.has('Prude'):
-					text+= person.dictionary('\n$name watches your actions with disgust, eventually averting $his eyes with a look of horror on $his face. \n')
-					person.obed += -rand_range(15,25)
+			for t in orgyarray:  ### Let's see if any of our guys really strike our fancy.
+				var baddie = t
+				if globals.expansion.getSexualAttraction(person,baddie):
+					toys.push_back(baddie)
+			if !toys.empty():  ### if toys isn't empty, there's a prefered partner, so we pick one of them. 
+				toy = globals.randomitemfromarray(toys)
+			if ((person.loyal < 30 && person.lewdness < 50) || person.traits.has('Prude')) && !person.checkVice('lust'):
+				text+= person.dictionary('\n$name watches your actions with disgust, eventually averting $his eyes with a look of horror on $his face. \n')
+				person.obed += -rand_range(15,25)
+			elif (person.loyal >= 60 || globals.expansion.getSexualAttraction(person,globals.player) == true) && person.rules.masturbation == false && person.lewdness > 20:
+				if (person.consent == true):
+					text += person.dictionary(globals.randomitemfromarray(['\n$name watches openly and with great interest. After a few minutes, you see $his hand moving inside of $his pants as $he watches. ', '\nWhile you handle your business, $name keeps watch and busies one hand under $his clothes. ']))
+					person.lust += rand_range(10,20)
+					if person.lust >= 65 :
+						text += toy.dictionary(globals.randomitemfromarray(['While $name\'s cries go unanswered, ','While you are having your way with $name, ']))
+						text += person.dictionary(globals.randomitemfromarray(['$name lets out a moan and blushes. \n','$name smiles and gasps quietly. \n']))
+						person.lust -= rand_range(20,35)
+						person.metrics.orgasm += 1
+						if person.penis != "none":
+							person.cum.body += person.pregexp.cumprod
+					else:
+						text += ' \n'
 				else:
-					text += person.dictionary('\n$name watches your deeds with some interest despite $himself. After a few minutes, you see $his hand moving inside of $his pants as $he watches. \n')
-					person.lust = rand_range(15,25)
-			elif person.lust >= 50 || person.lust >= 40 && person.lewdness >= 40 || person.traits.has('Sex-Crazed') || person.traits.has('Pervert'):
-					person.asser += rand_range(6,12)
-					person.lastsexday = globals.resources.day
-					person.lust -= rand_range(5,15)
-					text += person.dictionary('\n$name, overwhelmed by the situation, joins you and pleasures $himself with ')
-					var shared = globals.randomitemfromarray(orgyarray)
-					text += shared.dictionary(' the $race $child, $name. ')
-					if person.penis != "none":
-						if shared.vagina != "none":
-							text += person.dictionary("$He eventually cums inside of ") + shared.dictionary("$name's "+str(globals.expansion.namePussy())+". \n")
-							shared.cum.pussy += person.pregexp.cumprod
-							globals.impregnation(shared, person)
-					#Shared/Baddie Sexual Attraction
-					if globals.expansion.getSexualAttraction(shared,person) == true:
-						relations = round(rand_range(10,20))
-						shared.metrics.roughsexlike += 1
-						text += shared.dictionary("$name seemed to enjoy ") + person.dictionary(" $name's attention and barely resists before ")
+					text += person.dictionary(globals.randomitemfromarray(['\n$name watches your deeds with some interest despite $himself. After a few minutes, you see $his hand moving inside of $his pants as $he watches. ','\nYou catch $name stealing glances while you work, and $his hands keep lingering near $his privates. ']))
+					person.lust += rand_range(10,20)
+					if person.lust >= 65:
+						text += 'It\'s not long before '
+						text += person.dictionary(globals.randomitemfromarray(['$he lets out a moan and blushes. \n','$he looks away with a quiet gasp. \n']))
+						person.lust -= rand_range(20,35)
+						person.metrics.orgasm += 1
+						if person.penis != "none":
+							person.cum.body += person.pregexp.cumprod
 					else:
-						relations = round(rand_range(-10,-20))
-						text += shared.dictionary("$name struggled against ") + person.dictionary(" $name the entire time but ")
-					if rand_range(0,100) <= globals.expansion.rapedorgasmchance + ((globals.resources.day-shared.lastsexday)*5):
-						relations += round(rand_range(10,20))
-						shared.metrics.orgasm += 1
-						temp += rand_range(1,3)
-						text += shared.dictionary(" $he cums loudly and violently. \n")
-					else:
-						temp += 1
-						text += person.dictionary(" $name finished inside of ") + shared.dictionary("$him.\n")
-					globals.addrelations(shared, person, relations)
-					shared.metrics.sex += 1
-					shared.metrics.roughsex += 1
-					shared.metrics.partners.append(person.id)
-					#Person Relations Added
-					if globals.expansion.getSexualAttraction(person,shared) == true:
-						relations = round(rand_range(10,20))
-					else:
-						relations = -round(rand_range(10,20))
-					globals.addrelations(person, shared, relations)
-					person.metrics.sex += 1
+						text += ' \n'
+			elif person.rules.masturbation == true && (person.lust >= 50 || person.loyal >= 50 || person.checkVice('lust')):
+				text+= '\n'
+				text += person.dictionary('As you work, $name\'s breathing grows heavier and $his eyes never leave you. While $he shifts from foot to foot, you recognize some glint of longing in $his gaze.\n ')
+				person.lust += rand_range(5,15)
+			elif person.lust >= 20 && person.lewdness <= 20 && (globals.expansion.getSexualAttraction(person,toy) || globals.expansion.getSexualAttraction(person,globals.player)):
+				text += '\n'
+				text += person.dictionary('$name watches your actions for several minutes before ')
+				text += person.dictionary(globals.randomitemfromarray(['biting $his lip','blushing deeply']))
+				text += person.dictionary(' and excusing $himself.')
+				person.lewdness += rand_range(1,2)
+				person.lust += rand_range(4,12)
+				if person.lust >= 65 && person.rules.masturbation == false:
+					text += person.dictionary(' $He returns looking flushed and embarassed. ')
+					person.lust -= rand_range(20,35)
 					person.metrics.orgasm += 1
-					person.metrics.partners.append(shared.id)
+					person.lewdness += rand_range(1,3)
+					if person.penis != "none":
+						person.cum.body += person.pregexp.cumprod
+				text += '\n'
 			else:
 				text += person.dictionary("\n$name does not appear to be very interested in the ongoing action and just waits patiently.\n")
 		text += "\n[color=green][center]---Rewards Earned---[/center][/color]\n"

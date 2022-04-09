@@ -9871,10 +9871,7 @@ size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Confirm"
 
-[node name="dialogue" type="Control" parent="." groups=[
-"blockmaininput",
-"blocknextdayevents",
-]]
+[node name="dialogue" type="Popup" parent="." groups=["blockmaininput", "blocknextdayevents"]]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -9885,6 +9882,7 @@ margin_bottom = 7.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
+popup_exclusive = true
 script = ExtResource( 112 )
 
 [node name="TextureRect" type="TextureRect" parent="dialogue"]
