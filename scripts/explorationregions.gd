@@ -189,6 +189,7 @@ var database = {
 		enemies = [{value = 'banditsmedium', weight = 2},{value = 'travelersgroup', weight = 1.5},{value = 'peasant', weight = 2},{value = 'thugseasy', weight = 2},{value = 'solobear', weight = 4},{value = 'noenemyencountered', weight = 10}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 5,
+		locationscript = "frostfordoutskirts",
 		exits = ['frostford','marsh','frostfordclearing'],
 		tags = ['frostford'],
 		races = [{value = 'Halfkin Fox', weight = 1},{value = 'Beastkin Fox', weight = 1},{value = 'Halfkin Cat', weight = 2},{value = 'Beastkin Cat', weight = 2},{value = 'Halfkin Wolf', weight = 6},{value = 'Beastkin Wolf', weight = 6},{value = 'Human', weight = 5}],
@@ -537,6 +538,22 @@ var database = {
 		levelrange = [4,10],
 	},
 	#Frostford
+	# snowypeaksfoot = {
+	# 	background = 'grove',
+	# 	music = 'explore',
+	# 	reqs = "true",
+	# 	combat = true,
+	# 	code = 'snowypeaksfoot',
+	# 	name = 'Foot of the Snowy Peaks',
+	# 	description = "The snow-encased mountain looms above you from down here. The path looks treacherous. ",
+	# 	enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+	# 	encounters = [],
+	# 	length = 20,
+	# 	exits = ['frostfordoutskirts','skysphere'],
+	# 	tags = [],
+	# 	races = [],
+	# 	levelrange = [10,15],
+	# },
 	snowypeaks = {
 		background = 'grove',
 		music = 'explore',

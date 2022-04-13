@@ -1462,7 +1462,9 @@ func frostford():
 	# 	zoneenter("undercityruins")
 	
 	#Remember to add the appropriate questtext and add a function that tells the player they can or cannot pass
-	func snowymountainsentry():
+	#All function names and calls are subject to change at this time.
+	func frostfordoutskirts(): #Added so as to check if the player is eligible to enter the snowy peaks. There's probably better ways to do this.
+		var array[]
 		var player = globals.player
 		var party = globals.state.playergroup.duplicate()
 		var accessgranted
@@ -1471,51 +1473,71 @@ func frostford():
 			if person.sagi>6 && person.send>6:
 				accesscounter+=1
 			else:
-				return false
+				accessgranted= false
 		if player.sagi>6 && player.send>6:
 			accesscounter+=1
 		if accesscounter>=party.size():
-			return true
+			accessgranted=true
+		else 
+			accessgranted=false
+		if accessgranted== true:
+			array.append({name = 'Climb the Mountain', function = 'zoneenter', args = 'snowypeaks'})
+	# array.append({name = "Return to Frostford", function = 'zoneenter', args = 'frostford'})
+	outside.buildbuttons(array,self)
+
 		
 	func refugeentry():
+		var accessgranted
 		var player = globals.player
 		var party = globals.state.playergroup.duplicate()
 		var accesscounter=0
 		if player.race="Beastkin Wolf" && player.spec= "ranger": #This second but may be unnecessary. Ask in server
-			return true
+			accessgranted true
 		else:		
 			for i in party:
 				if person.race= "Beastkin Wolf" && person.spec="ranger":
-					return true
+					accessgranted true
 				else:
-					return false
+					accessgranted = false
+		if accessgranted== true:
+			array.append({name = 'Enter the Forest', function = 'zoneenter', args = 'forestofrefuge'})
+	# array.append({name = "Return to Frostford", function = 'zoneenter', args = 'frostford'})
+	outside.buildbuttons(array,self)
 
 
 	
 	func desertentry():
+		var array[]
 		var player = globals.player
 		var party = globals.state.playergroup.duplicate()
 		var accessgranted
 		var accesscounter=0
 		for i in party:
 			if person.race= "Centaur" || player.race="Centaur":
-				#accessgranted=true
-				return true
+				accessgranted=true
 			else:
-				#accessgranted=false
+				accessgranted=false
+		if accessgranted== true:
+			array.append({name = 'Enter the Desert', function = 'zoneenter', args = 'desert'})
+	# array.append({name = "Return to Frostford", function = 'zoneenter', args = 'frostford'})
+	outside.buildbuttons(array,self)
 	
 	func deepdesertentry():
+		var array[]
 		var player = globals.player
 		var party = globals.state.playergroup.duplicate()
 		var accessgranted
+		var accesscounter=0
 		for i in party:
 			if person.race= "Centaur" || player.race="Centaur":
-				#accessgranted=true
-				return true
+				accessgranted=true
 			else:
-				return false
-				#accessgranted=false
-
+				accessgranted=false
+		if accessgranted== true:
+			array.append({name = 'Enter the Desert', function = 'zoneenter', args = 'desert'})
+	# array.append({name = "Return to Frostford", function = 'zoneenter', args = 'frostford'})
+	outside.buildbuttons(array,self)
+	
 	###---End Expansion---###
 
 	
