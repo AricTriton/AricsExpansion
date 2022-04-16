@@ -1463,7 +1463,7 @@ func frostford():
 	
 	#Remember to add the appropriate questtext and add a function that tells the player they can or cannot pass
 	#All function names and calls are subject to change at this time.
-	func frostfordoutskirts(): #Added so as to check if the player is eligible to enter the snowy peaks. There's probably better ways to do this.
+	func snowypeaksentry(): #Added so as to check if the player is eligible to enter the snowy peaks. There's probably better ways to do this.
 		var array[]
 		var player = globals.player
 		var party = globals.state.playergroup.duplicate()
