@@ -422,7 +422,8 @@ func _on_talk_pressed(mode = 'talk'):
 			if person.dailytalk.has('hint_sadism') || person.dailytalk.has('hint_masochism'):
 				text += "\nYou get the feeling that $name may feel strongly about [color=aqua]Pain[/color]."
 		
-		if !person.dailytalk.has('eventDrainCum'):
+		#if !person.dailytalk.has('eventDrainCum'):
+		if true:
 			if person.cum.pussy > 0 || !person.preg.womb.empty():
 				var cumtrail = str(globals.randomitemfromarray(['a small, white glob of ','a trail of ','something that looks like ','what might be ']))
 				var ooze = str(globals.randomitemfromarray(['ooze','spurt','drip','fall','squelch','trickle']))
