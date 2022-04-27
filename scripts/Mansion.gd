@@ -799,8 +799,8 @@ func _on_end_pressed():
 			#Traits
 			if person.traits.has("Uncivilized"):
 				for i in globals.slaves:
-					###---Added by Expansion---### Ankmairdor's BugFix v4
-					if i.spec == 'tamer' && i.away.duration == 0 && i.obed > 60 && (i.work == person.work || i.work in ['rest','nurse','headgirl'] || (i.work == 'jailer' && person.sleep == 'jail') || (i.work == 'farmmanager' && person.work in ['cow','hen'])):
+					###---Added by Expansion---### Added Cow/Hen/Trainer/Trainee
+					if i.spec == 'tamer' && i.away.duration == 0 && i.obed > 60 && (i.work == person.work || i.work in ['rest','nurse','headgirl'] || (i.work == 'jailer' && person.sleep == 'jail') || (i.work == 'farmmanager' && person.work in ['cow','hen']) || (i.work == 'trainer' && person.work == 'trainee')):
 						person.obed += 30
 						person.loyal += 5
 						if randf() < 0.1:
