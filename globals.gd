@@ -1398,6 +1398,17 @@ var sexuality_images = {
 	futa_3 = load("res://files/aric_expansion_images/sexuality_icons/futa_3.png"),
 }
 
+var dimcrystal_images = {
+	Null = null,
+	dull = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_dull.png"),
+	light1 = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_light_1.png"),
+	light2 = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_light_2.png"),
+	light3 = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_light_3.png"),
+	dark1 = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_dark_1.png"),
+	dark2 = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_dark_2.png"),
+	dark3 = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_dark_3.png"),
+}
+
 <AddTo 0>
 func _ready():
 	expansionsettings.addConstantsSupport()
