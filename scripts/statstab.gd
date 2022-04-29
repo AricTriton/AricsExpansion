@@ -421,19 +421,23 @@ func _on_talk_pressed(mode = 'talk'):
 				text += "\nYou get the feeling that $name may feel strongly about [color=aqua]Control[/color]."
 			if person.dailytalk.has('hint_sadism') || person.dailytalk.has('hint_masochism'):
 				text += "\nYou get the feeling that $name may feel strongly about [color=aqua]Pain[/color]."
-		
+
 		if person.cum.pussy > 0 || !person.preg.womb.empty():
 			var cumtrail = str(globals.randomitemfromarray(['a small, white glob of ','a trail of ','something that looks like ','what might be ']))
 			var ooze = str(globals.randomitemfromarray(['ooze','spurt','drip','fall','squelch','trickle']))
 			text += "\n\nYou see " + cumtrail + " of " + str(globals.expansion.nameCum()) + " " + ooze + " onto $his leg from $his " + str(globals.expansion.namePussy()) + ". "
-			buttons.append({text = 'I want you to drain your pussy of that cum.', function = 'eventDrainCum', args = 'intropussy', tooltip = "Order $him to drain the cum from $his pussy -Available Once per Day"})
+			if globals.expansionsettings.perfectinfo == true:
+				text += "\n[color=#d1b970]Loads = " + str(person.cum.pussy) + "[/color]"
+			buttons.append({text = 'I want you to drain your pussy of that cum.', function = 'eventDrainCum', args = 'intropussy', tooltip = person.dictionary("Order $him to drain the cum from $his pussy")})
 
 		if person.cum.ass > 0 :
 			var cumtrail = str(globals.randomitemfromarray(['a small, white glob of ','a trail of ','something that looks like ','what might be ']))
 			var ooze = str(globals.randomitemfromarray(['ooze','spurt','drip','fall','squelch','trickle']))
 			text += "\n\nYou see " + cumtrail + " of " + str(globals.expansion.nameCum()) + " " + ooze + " onto $his leg from $his " + str(globals.expansion.nameAsshole()) + ". "
-			buttons.append({text = 'I want you to drain your ass of that cum.', function = 'eventDrainCum', args = 'introass', tooltip = "Order $him to drain the cum from $his pussy -Available Once per Day"})
-		
+			if globals.expansionsettings.perfectinfo == true:
+				text += "\n[color=#d1b970]Loads = " + str(person.cum.ass) + "[/color]"
+			buttons.append({text = 'I want you to drain your ass of that cum.', function = 'eventDrainCum', args = 'introass', tooltip = person.dictionary("Order $him to drain the cum from $his ass")})
+
 		#Unlock Sexuality Knowledge
 		if !person.knowledge.has('sexuality'):
 			buttons.append({text = str(globals.randomitemfromarray(['How do you identify sexually?','What gender turns you on?','What is your sexuality?'])), function = 'oneperdayconvos', args = 'sexuality', tooltip = person.dictionary("Ask about $name's sexuality. -Available Once per Day")})
@@ -1416,13 +1420,15 @@ func eventDrainCum(mode = ''):
 			mode = 'asscum'
 		else:
 			mode = 'asscumempty'
-		
+
 	if mode == 'pussycum':
 		if person.cum.pussy > 0:
 			text += str(globals.randomitemfromarray(reactions)) + str(globals.randomitemfromarray(cumdrips)) + " " + str(globals.randomitemfromarray(landinglocations))
 			amount = clamp(round(rand_range(1,person.cum.pussy/2)),1,person.cum.pussy)
 			person.cum.pussy -= amount
 			puddle += amount
+			if globals.expansionsettings.perfectinfo == true:
+				text += "\n[color=#d1b970]Loads = " + str(person.cum.pussy) + " Puddle = " + str(puddle) + "[/color]"
 			buttons.append({text = str(globals.randomitemfromarray(['Keep going...','Continue','Dont stop draining','Did I say to stop?'])), function = 'eventDrainCum', args = 'pussycum', tooltip = person.dictionary("Order $him to continue")})
 		else:
 			mode = 'pussycumempty'
@@ -1433,10 +1439,12 @@ func eventDrainCum(mode = ''):
 			amount = clamp(round(rand_range(1,person.cum.ass/2)),1,person.cum.ass)
 			person.cum.ass -= amount
 			puddle += amount
+			if globals.expansionsettings.perfectinfo == true:
+				text += "\n[color=#d1b970]Loads = " + str(person.cum.ass) + " Puddle = " + str(puddle) + "[/color]"
 			buttons.append({text = str(globals.randomitemfromarray(['Keep going...','Continue','Dont stop draining','Did I say to stop?'])), function = 'eventDrainCum', args = 'asscum', tooltip = person.dictionary("Order $him to continue")})
 		else:
 			mode = 'asscumempty'
-	
+
 	if mode == 'pussycumempty':
 		text += "$name looks up at you, $his legs spread open revealing $his exposed " +str(globals.expansion.namePussy())+ ". $He pushes and squeezes $his pussy until $his face turns red but nothing else drips out of $him. $He looks up at you, seeking your next decision. "
 		if rand_range(0,1) >= .5:
