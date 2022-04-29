@@ -135,9 +135,13 @@ func backwardsCompatibility(person):
 	if person.vagina != "none" && person.lubrication == -1:
 		person.lubrication = round(rand_range(1,4))
 
+	#Add Stomach
+	if !person.cum.has('stomach'):
+		person.cum.stomach = 0
+
 	if !person.consentexp.has('livestock'):
 		person.consentexp['livestock'] = false
-	
+
 	#Racial Bonuses
 	if !person.stats.has('cour_racial'):
 		person.stats['cour_racial'] = 0
