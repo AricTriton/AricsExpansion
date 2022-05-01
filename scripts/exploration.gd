@@ -1470,7 +1470,7 @@ func frostford():
 		var accessgranted
 		var accesscounter=0
 		for i in party:
-			if person.sagi>6 && person.send>6:
+			if i.sagi>6 && i.send>6:
 				accesscounter+=1
 			else:
 				accessgranted= false
@@ -1491,12 +1491,13 @@ func frostford():
 		var player = globals.player
 		var party = globals.state.playergroup.duplicate()
 		var accesscounter=0
-		if player.race="Beastkin Wolf" && player.spec= "ranger": #This second but may be unnecessary. Ask in server
-			accessgranted true
+		if player.race=="Beastkin Wolf" && globals.state.spec== "Hunter": #This second but may be unnecessary. Ask in server
+			accessgranted = true
 		else:		
 			for i in party:
-				if person.race= "Beastkin Wolf" && person.spec="ranger":
+				if i.race== "Beastkin Wolf" && i.spec=="ranger":
 					accessgranted true
+					break
 				else:
 					accessgranted = false
 		if accessgranted== true:
@@ -1513,8 +1514,9 @@ func frostford():
 		var accessgranted
 		var accesscounter=0
 		for i in party:
-			if person.race= "Centaur" || player.race="Centaur":
+			if i.race== "Centaur" || i.race=="Centaur":
 				accessgranted=true
+				break
 			else:
 				accessgranted=false
 		if accessgranted== true:
@@ -1529,8 +1531,9 @@ func frostford():
 		var accessgranted
 		var accesscounter=0
 		for i in party:
-			if person.race= "Centaur" || player.race="Centaur":
+			if i.race== "Centaur" || i.race=="Centaur":
 				accessgranted=true
+				break
 			else:
 				accessgranted=false
 		if accessgranted== true:
