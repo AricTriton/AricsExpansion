@@ -1463,31 +1463,30 @@ func sealairentrance():
 
 #Remember to add the appropriate questtext and add a function that tells the player they can or cannot pass
 #All function names and calls are subject to change at this time.
-func snowypeaksentry(): #Added so as to check if the player is eligible to enter the snowy peaks. There's probably better ways to do this.
+func snowypeaks(): #Added so as to check if the player is eligible to enter the snowy peaks. There's probably better ways to do this.
 	var array[]
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
-	var accessgranted
+	var accessgranted=false
 	var accesscounter=0
 	for i in party:
 		if i.sagi>6 && i.send>6:
 			accesscounter+=1
-		else:
-			accessgranted= false
 	if player.sagi>6 && player.send>6:
 		accesscounter+=1
 	if accesscounter>=party.size():
 		accessgranted=true
-	else 
-		accessgranted=false
-	if accessgranted== true:
-		array.append({name = 'Climb the Mountain', function = 'zoneenter', args = 'snowypeaks'})
+	if accessgranted== false:
+		array.append({name = 'Turn Back', function = 'zoneenter', args = 'frostford'})
+		outside.buildbuttons(array,self)
+	# if accessgranted== true:
+	# 	array.append({name = 'Climb the Mountain', function = 'zoneenter', args = 'snowypeaks'})
 # array.append({name = "Return to Frostford", function = 'zoneenter', args = 'frostford'})
-outside.buildbuttons(array,self)
+# outside.buildbuttons(array,self)
 
 	
-func refugeentry():
-	var accessgranted
+func forestofrefuge():
+	var accessgranted=false
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
 	var accesscounter=0
@@ -1498,48 +1497,51 @@ func refugeentry():
 			if i.race== "Beastkin Wolf" && i.spec=="ranger":
 				accessgranted true
 				break
-			else:
-				accessgranted = false
-	if accessgranted== true:
-		array.append({name = 'Enter the Forest', function = 'zoneenter', args = 'forestofrefuge'})
+	if accessgranted== false:
+		array.append({name = 'Turn Back', function = 'zoneenter', args = 'ruins'})
+		outside.buildbuttons(array,self)
+	# if accessgranted== true:
+	# 	array.append({name = 'Enter the Forest', function = 'zoneenter', args = 'forestofrefuge'})
 # array.append({name = "Return to Frostford", function = 'zoneenter', args = 'frostford'})
-outside.buildbuttons(array,self)
+# outside.buildbuttons(array,self)
 
 
 
-func desertentry():
+func desert():
 	var array[]
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
-	var accessgranted
+	var accessgranted=false
 	var accesscounter=0
 	for i in party:
 		if i.race== "Centaur" || i.race=="Centaur":
 			accessgranted=true
 			break
-		else:
-			accessgranted=false
-	if accessgranted== true:
-		array.append({name = 'Enter the Desert', function = 'zoneenter', args = 'desert'})
+	if accessgranted== false:
+		array.append({name = 'Turn Back', function = 'zoneenter', args = 'gornoutskirts'})
+		outside.buildbuttons(array,self)
+		# if accessgranted== true:
+	# 	array.append({name = 'Enter the Desert', function = 'zoneenter', args = 'desert'})
 # array.append({name = "Return to Frostford", function = 'zoneenter', args = 'frostford'})
-outside.buildbuttons(array,self)
 
-func deepdesertentry():
+
+func deepdesert():
 	var array[]
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
-	var accessgranted
+	var accessgranted=false
 	var accesscounter=0
 	for i in party:
 		if i.race== "Centaur" || i.race=="Centaur":
 			accessgranted=true
 			break
-		else:
-			accessgranted=false
-	if accessgranted== true:
-		array.append({name = 'Enter the Desert', function = 'zoneenter', args = 'desert'})
+	if accessgranted== false:
+		array.append({name = 'Turn Back', function = 'zoneenter', args = 'desert'})
+		outside.buildbuttons(array,self)
+	# if accessgranted== true:
+	# 	array.append({name = 'Enter the Desert', function = 'zoneenter', args = 'desert'})
 # array.append({name = "Return to Frostford", function = 'zoneenter', args = 'frostford'})
-outside.buildbuttons(array,self)
+# outside.buildbuttons(array,self)
 
 ###---End Expansion---###
 

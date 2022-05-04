@@ -418,6 +418,7 @@ var database = {
 		enemies = [{value = 'banditcamp',weight = 1.35},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
+		locationscript = 'forestofrefuge',
 		exits = ['wimbornoutskirts','prairie','ruins'],
 		tags = ['enclosed'],
 		races = [{value = 'Dyrad', weight = 1}],
@@ -467,6 +468,7 @@ var database = {
 		enemies = [{value = 'banditcamp', weight = 1.35},{value = 'banditsmedium', weight = 2}{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
+		locationscript = 'desert',
 		exits = ['prairie','gornoutskirts','deepdesert'],
 		tags = [],
 		races = [{value = 'Centaur', weight = 5}],
@@ -483,6 +485,7 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
+		locationscript = 'deepdesert',
 		exits = ['gornoutskirts','desert'],
 		tags = [],
 		races = [{value = 'Centaur', weight = 3}],
@@ -565,6 +568,7 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
+		locationscript = 'snowypeaks',
 		exits = ['frostfordoutskirts','skysphere'],
 		tags = [],
 		races = [],
