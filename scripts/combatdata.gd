@@ -403,6 +403,31 @@ var enemygrouppools = {
 		description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Amberguard. ",
 	},
 	###---Added By Expansion---### Bubblepot grouppool additions for new regions
+	#WIMBORN
+	#Farmlands
+	#RiversidePlains
+	#DwarvenFortress
+	#RiverCrossing
+	#Graveyard
+	#Crypt
+	#WIMBORNXGORN
+	#Ruins
+	#Forest of Refuge
+	#GORN
+	#Oasis
+	#Desert
+	#DeepDesert
+	#SandTomb
+	#AMBERGUARD
+	#TaintedForest
+	#CliffsideFalls
+	#FROSTFORD
+	#Snowy Peaks
+	#Snow Plains
+	#Lizard Village
+	#AbandonedVillage
+
+	#Hidden
 	#Forest
 	naturespirit = {
 		units = [['dryadwarrior',1,1]], awareness = 30, captured = null, special = null, 
@@ -1489,6 +1514,21 @@ var enemypool = {
 	###---Added by Expansion---### Bubblepot Enemypool additions
 	#WIMBORN
 	#Farmlands
+	scarecrow = {
+		name = 'Scarecroww',
+		code = 'scarecrow',
+		faction = 'monster',
+		icon = null,
+		iconalt = null,
+		special = '',
+		capture = null,
+		rewardpool = {natureessenceing = 35},
+		rewardgold = [0],
+		rewardexp = 50,
+		stats = {health = 80, power = 12, speed = 10, energy = 50, armor = 0, magic = 10, abilities = ['attack','debilitate','leechingstrike']},
+		gear = 'forest',
+		skills = [],
+		},
 	#RiversidePlains
 	#DwarvenFortress
 	#RiverCrossing
