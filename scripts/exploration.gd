@@ -1128,6 +1128,10 @@ func capturedecide(stage): #1 - no reward, 2 - material, 3 - sex, 4 - join
 			rewardslave.stress = 10
 			globals.slaves = rewardslave
 			text = "$name observes you for some time, measuring your words, but to your surprise, $he complies either out of symphathy, or out of the desperate life $he had to carry. "
+			for i in globals.state.allnpcs.duplicate():
+				if str(rewardslave.id) == str(i.id):
+					globals.state.allnpcs.erase(i)
+					break
 	main.dialogue(true,self,rewardslave.dictionary(text))
 	
 

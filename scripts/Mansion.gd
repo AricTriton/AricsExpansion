@@ -799,8 +799,8 @@ func _on_end_pressed():
 			#Traits
 			if person.traits.has("Uncivilized"):
 				for i in globals.slaves:
-					###---Added by Expansion---### Ankmairdor's BugFix v4
-					if i.spec == 'tamer' && i.away.duration == 0 && i.obed > 60 && (i.work == person.work || i.work in ['rest','nurse','headgirl'] || (i.work == 'jailer' && person.sleep == 'jail') || (i.work == 'farmmanager' && person.work in ['cow','hen'])):
+					###---Added by Expansion---### Added Cow/Hen/Trainer/Trainee
+					if i.spec == 'tamer' && i.away.duration == 0 && i.obed > 60 && (i.work == person.work || i.work in ['rest','nurse','headgirl'] || (i.work == 'jailer' && person.sleep == 'jail') || (i.work == 'farmmanager' && person.work in ['cow','hen']) || (i.work == 'trainer' && person.work == 'trainee')):
 						person.obed += 30
 						person.loyal += 5
 						if randf() < 0.1:
@@ -1636,6 +1636,29 @@ func _on_manastock_value_changed(value):
 func _on_manabuy_pressed():
 	globals.state.manabuy = get_node("mansionsettings/Panel/manastock/manabuy").is_pressed()
 
+func hide_everything():
+	for i in get_tree().get_nodes_in_group("mansioncontrols"):
+		i.hide()
+	get_node("MainScreen/mansion/jailpanel").hide()
+	get_node("MainScreen/slave_tab").hide()
+	get_node("MainScreen/mansion/alchemypanel").hide()
+	get_node("MainScreen/mansion/mansioninfo").hide()
+	get_node("MainScreen/mansion/labpanel").hide()
+	get_node("MainScreen/mansion/labpanel/labmodpanel").hide()
+	get_node("MainScreen/mansion/librarypanel").hide()
+	get_node("MainScreen/mansion/farmpanel").hide()
+	get_node("MainScreen/mansion/selfinspect").hide()
+	get_node("MainScreen/mansion/portalspanel").hide()
+	get_node("MainScreen/mansion/upgradespanel").hide()
+	###---Added by Expansion---###
+	#---Headgirl
+	get_node("MainScreen/mansion/AE_Headgirl_TextRect").visible = false
+	#---DimCrystal
+	get_node("MainScreen/mansion/AE_DimCrystal").visible = false
+	get_node("MainScreen/mansion/dimcrystalpanel").hide()
+	###---End Expansion---###
+	globals.hidetooltip()
+
 #---Keeping to have the "X is following you" for pet groups
 func _on_mansion_pressed():
 	var text = ''
@@ -1827,92 +1850,7 @@ func build_mansion_info():
 	###---Added by Expansion---### Facilities Text Descriptions
 	if globals.expansionsettings.show_facilities_details_in_mansion == true:
 		text += "\n\n[center][color=#d1b970]---------------Facilities Details---------------[/color][/center]"
-		#---Pregnancy Expanded | The Crystal || TBK - Ensure No Overridden Text
-		text += "\n\n[color=#d1b970]-----The Dimensional Crystal------[/color] [color=aqua](" + str(globals.state.mansionupgrades.dimensionalcrystal) + ")[/color]\n"
-		text += "The Dimensional Crystal is located in the hallways beneath the Mansion. It is directly at the center of the Mansion and seems to be at exactly an equal distance from each end of the Mansion grounds. It seems to be a massive, perfectly symmetrical prism made out of a material that no one can identify. "
-		#Mode
-		if globals.state.thecrystal.mode == "light" && globals.state.mansionupgrades.dimensionalcrystal > 0:
-			text += "\nIt eminates a bright, violet light that radiates around it. "
-		elif globals.state.thecrystal.mode == "dark" && globals.state.mansionupgrades.dimensionalcrystal > 0:
-			text += "\nIt eminates a dark, purplish light that is split with shadowy tendrils running through it like writhing cracks. "
 		
-		if globals.state.mansionupgrades.dimensionalcrystal == 0:
-			text += "\nIt seems to be dull and lifeless, but catches and reflects the occassional candlelight that strikes it."
-		elif globals.state.mansionupgrades.dimensionalcrystal == 1:
-			text += "The glow seems to pulse with the rhythm of a weak heart. You occassionally see wisps of the same color radiating off of pregnancy women inside of the Mansion."
-		elif globals.state.mansionupgrades.dimensionalcrystal == 2:
-			text += "The Crystal pulses far more steadily recently and accompanies the glow with a light humming noise. You see wisps of the purplish glow it lets off trailing behind people all throughout the day as it works its strange magic on the Mansion's inhabitants."
-		elif globals.state.mansionupgrades.dimensionalcrystal == 3:
-			text += "The Dimensional Crystal pulses and hums slightly louder than it once did. You see the occassional flash of light come from it's chamber and feel a sense of peace at knowing that it is there and finally awakening once more."
-		elif globals.state.mansionupgrades.dimensionalcrystal >= 4:
-			text += "The Crystal pulses violently now and the low hum can be heard throughout the entire Mansion. Though it can grow irritating at times, you find that you quickly came to ignore the background noise. "
-		#Hunger
-		if globals.state.thecrystal.mode == "dark":
-			if globals.state.thecrystal.power + globals.state.thecrystal.hunger >= globals.player.smaf:
-				text += "It is hard to look at the Crystal. Something draws you toward it. It seems to beckon you closer with its dark, shadowy tendrils. You know that if you touch it, it will drain you of your very soul. "
-			elif globals.state.thecrystal.hunger > 0:
-				text += "You have a sense of unease when gazing into the Crystal. It seems to be...hungry. It wants to...consume. "
-		
-		#---Research
-		if globals.state.thecrystal.research > 0:
-			text += "\n\n[color=#d1b970]Crystal Research[/color]\nResearch: [color=aqua]" + str(globals.state.thecrystal.research) + "[/color]/100 \nResearch is the chance of discovering a new Crystal Ability at night. "
-		#Attunement
-		if globals.state.thecrystal.abilities.size() > 0 && !globals.state.thecrystal.abilities.has('attunement'):
-			text += "\n[color=green]Inspiration[/color]: You think that you can [color=aqua]Attune[/color] yourself to the [color=aqua]Crystal[/color]. "
-		#Preg Speed
-		if globals.state.mansionupgrades.dimensionalcrystal >= 1 && !globals.state.thecrystal.abilities.has('pregnancyspeed'):
-			text += "\n[color=green]Inspiration[/color]: You know that the [color=aqua]Crystal[/color] can affect the [color=aqua]Speed of Pregnancies[/color], but are not yet sure how to make it work. "
-		#Second Wind
-		if globals.state.mansionupgrades.dimensionalcrystal >= 2 && !globals.state.thecrystal.abilities.has('secondwind'):
-			text += "\n[color=green]Inspiration[/color]: You think you may be able to learn how to make the [color=aqua]Crystal[/color] to revive you and your slaves to half health from a fatal blow in combat once per day."
-		#Death Prevention
-		if globals.state.mansionupgrades.dimensionalcrystal >= 3 && !globals.state.thecrystal.abilities.has('immortality'):
-			text += "\n[color=green]Inspiration[/color]: You believe that the [color=aqua]Crystal[/color] can grant [color=aqua]Immortality[/color], but are not yet sure how."
-		#Sacrifice
-		if globals.state.thecrystal.mode == "dark" && !globals.state.thecrystal.abilities.has('sacrifice'):
-			text += "\n[color=red]Dark Inspiration[/color]: There must be some way to [color=red]Sacrifice[/color] something to the [color=aqua]Crystal[/color] to sate its [color=aqua]Hunger[/color] for [color=aqua]Lifeforce[/color], but you are not yet sure how to do that."
-		#---Powers
-		if globals.state.thecrystal.abilities.empty():
-			text += "\nThe truth behind what all the Crystal can do and why it was put here in the first place is still a complete mystery."
-		else:
-			text += "\n\n[color=#d1b970]Powers of the Crystal[/color]"
-			#Attunement
-			if globals.state.thecrystal.abilities.has('attunement'):
-				text += "\nYou understand the basic properties of the [color=aqua]Crystal[/color]. "
-				#Color
-				text += "\n    [color=#d1b970]Color[/color]: " + globals.fastif(globals.state.thecrystal.mode == "light", "[color=aqua]Light[/color]", "[color=red]Dark[/color]")
-				if globals.state.thecrystal.mode == "dark":
-					text += "; The [color=aqua]Crystal[/color] is [color=red]Dark[/color], so there is a chance that it may consume a [color=aqua]Researcher[/color] to sate its [color=aqua]Hunger[/color] by an amount equal to their [color=aqua]Level[/color] and [color=aqua]1 Lifeforce[/color]. If it has no [color=aqua]Hunger[/color] and [color=aqua]0+ Lifeforce[/color], it may repair itself."
-				#Lifeforce
-				text += "\n    [color=#d1b970]Lifeforce[/color]: " + globals.fastif(globals.state.thecrystal.lifeforce >= 0, "[color=lime]" +str(globals.state.thecrystal.lifeforce) + "[/color]", "[color=red]" +str(globals.state.thecrystal.lifeforce) + "[/color]")
-				if globals.state.thecrystal.mode == "light":
-					text += "; The [color=aqua]Crystal[/color] may grow [color=red]Dark[/color] if it ever has negative [color=aqua]Lifeforce[/color]. It will restore [color=aqua]1 Lifeforce[/color] Daily. If it is still below its [color=aqua]Level[/color], it has a [color=aqua]Chance[/color] to gain [color=aqua]+2[/color] equal to a [color=aqua]Researcher's Wits[/color] as long as they are over a minimum of [color=aqua]40[/color]."
-				else:
-					text += "; The [color=aqua]Crystal[/color] will not restore any [color=aqua]Lifeforce[/color] Daily and must be fed slaves to recover [color=aqua]Lifeforce[/color]."
-				#Hunger
-				if globals.state.thecrystal.hunger != 0:
-					text += "\n    [color=#d1b970]Hunger[/color]: " + globals.fastif(globals.state.thecrystal.hunger > 0, "[color=red]" +str(globals.state.thecrystal.hunger) + "[/color]", "[color=lime]" +str(globals.state.thecrystal.hunger) + "[/color]")
-					text += "; The [color=aqua]Crystal[/color] will consume [color=aqua]Lifeforce[/color] daily equal to its [color=aqua]Hunger[/color]. "
-					if globals.state.thecrystal.mode == "dark":
-						text += "Its [color=aqua]Hunger[/color] grows by [color=red]1[/color] Daily. It must have a [color=aqua]Hunger[/color] of [color=aqua]0 or less[/color] to turn [color=aqua]Light[/color] again."
-				text += "\n"
-			#Pregnancy Speeds
-			if globals.state.thecrystal.abilities.has('pregnancyspeed'):
-				text += "\nYou have learned how to use the magic of the [color=aqua]Crystal[/color] to affect the [color=aqua]Speed of Pregnancies[/color] in the Mansion. "
-			#Second Wind (1/Day Combat Revive)
-			if globals.state.thecrystal.abilities.has('secondwind'):
-				text += "\nYou have learned how to harness the magic of the [color=aqua]Crystal[/color] to revive you and your slaves to half health from a fatal blow in combat once per day. You know this will increase the [color=aqua]Crystal's Hunger[/color] and diminish any [color=aqua]Lifeforce[/color] stored within it."
-			#Immortality (Death Prevention)
-			if globals.state.thecrystal.abilities.has('immortality'):
-				text += "\nYou have learned how to use the magic of the [color=aqua]Crystal[/color] to grant temporary [color=aqua]Immortality[/color] to people inside the Mansion and in combat with you. "
-			#Sacrifice (Restore Lifeforce)
-			if globals.state.thecrystal.abilities.has('sacrifice'):
-				text += "\nYou know how to sacrifice your slaves sate the hunger of the [color=aqua]Crystal[/color] with their life-force. You understand that each level a slave has will provide more essence for the [color=aqua]Crystal[/color] to consume, and that the [color=aqua]Crystal[/color] can never fully heal while hungry. "
-				if globals.state.thecrystal.hunger > 0:
-					text += "\n\nCrystal's Hunger: [color=aqua]" + str(globals.state.thecrystal.hunger) + "[/color]"
-				
-				if globals.state.thecrystal.abilities.has('understandsacrifice'):
-					text += "\n\nYou have come to understand that sacrificing someone to the [color=aqua]Crystal[/color] will feed it an amount equal to their level (reducing hunger) as well as restoring 1 life-force to the [color=aqua]Crystal[/color], partially healing it. "
 		#---Training Grounds
 		if globals.state.mansionupgrades.traininggrounds > 0:
 			text += "\n\n[color=#d1b970]-----Training Grounds------[/color] [color=aqua](" + str(globals.state.mansionupgrades.traininggrounds) + ")[/color]\n"
@@ -1934,6 +1872,17 @@ func build_mansion_info():
 #	text += "\nSome report having seen faint visions inside of the Crystal's hardened shell, flashing inside of the glow. You have not seen it. Though you don't understand the Crystal, everyone seems to enjoy it. You love having the Crystal."
 #	text += "\nYou have heard that some slaves are reporting dreams of the Crystal in the dead of night. They can never recall what the Crystal did in their dreams, merely that it was there watching them and sensing every thought."
 	textnode.set_bbcode(text)
+	
+	#---Headgirl Portrait
+	if jobdict.headgirl != null && jobdict.headgirl.imageportait != null && globals.loadimage(jobdict.headgirl.imageportait):
+		get_node("MainScreen/mansion/AE_Headgirl_TextRect").visible = true
+		get_node("MainScreen/mansion/AE_Headgirl_TextRect/portrait").set_texture(globals.loadimage(jobdict.headgirl.imageportait))
+	else:
+		get_node("MainScreen/mansion/AE_Headgirl_TextRect").visible = false
+		get_node("MainScreen/mansion/AE_Headgirl_TextRect/portrait").set_texture(globals.loadimage(globals.sexuality_images.unknown))
+	#---Dimensional Crystal
+	get_node("MainScreen/mansion/AE_DimCrystal").visible = true
+	
 	###---End Expansion---###
 	
 	if (globals.slaves.size() >= 8 && jobdict.headgirl != null) || globals.developmode == true:
@@ -1941,6 +1890,317 @@ func build_mansion_info():
 	else:
 		get_node("charlistcontrol/slavelist").hide()
 
+#---The Dimensional Crystal
+func _on_dimcrystal_button_pressed():
+	get_node("MainScreen/mansion/dimcrystalpanel").show()
+	var text = ""
+	var refCrystal = globals.state.thecrystal
+	var buttonnode
+
+	#Build Stats
+	_on_dimcrystal_showstats_pressed()
+	#Build Description
+	_on_dimcrystal_description_pressed()
+	
+	#---Build Background Image
+	var crystal_image = "dull"
+	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/description")
+	if refCrystal.mode == "light" && globals.state.mansionupgrades.dimensionalcrystal > 0:
+		crystal_image = "light"
+	elif refCrystal.mode == "dark" && globals.state.mansionupgrades.dimensionalcrystal > 0:
+		crystal_image = "dark"
+	#Power Level
+	if globals.state.mansionupgrades.dimensionalcrystal == 1:
+		crystal_image += "1"
+	elif globals.state.mansionupgrades.dimensionalcrystal == 2:
+		crystal_image += "2"
+	elif globals.state.mansionupgrades.dimensionalcrystal >= 3:
+		crystal_image += "3"
+	get_node("MainScreen/mansion/dimcrystalpanel/background").set_texture(globals.loadimage(globals.dimcrystal_images[crystal_image]))
+	
+	#---Research
+	textnode = get_node("MainScreen/mansion/dimcrystalpanel/research_text")
+	text = "[color=#008BFB]Research[/color] is the chance of discovering a new Crystal Ability that night if there are any more available abilities at the Crystal's current [color=#d1b970]Upgrade Level[/color]. "
+	#Temp Researcher Solution (Pending Select Slave Button > Research > Pass/Fail and Daily Researcher option)
+	text += "You may currently select a [color=aqua]Reseacher[/color] by [color=aqua]Talking[/color] to a slave with [color=aqua]Magical Affinity[/color] and selecting [color=aqua]Research the Crystal[/color]. Their chance of success is equal to their [color=aqua]Wits[/color]."
+	#Attunement
+	if globals.state.thecrystal.abilities.size() > 0 && !globals.state.thecrystal.abilities.has('attunement'):
+		text += "\n[color=green]Inspiration[/color]: You think that you can [color=aqua]Attune[/color] yourself to the [color=aqua]Crystal[/color]. "
+	#Preg Speed
+	if globals.state.mansionupgrades.dimensionalcrystal >= 1 && !globals.state.thecrystal.abilities.has('pregnancyspeed'):
+		text += "\n[color=green]Inspiration[/color]: You know that the [color=aqua]Crystal[/color] can affect the [color=aqua]Speed of Pregnancies[/color], but are not yet sure how to make it work. "
+	#Second Wind
+	if globals.state.mansionupgrades.dimensionalcrystal >= 2 && !globals.state.thecrystal.abilities.has('secondwind'):
+		text += "\n[color=green]Inspiration[/color]: You think you may be able to learn how to make the [color=aqua]Crystal[/color] to revive you and your slaves to half health from a fatal blow in combat once per day."
+	#Death Prevention
+	if globals.state.mansionupgrades.dimensionalcrystal >= 3 && !globals.state.thecrystal.abilities.has('immortality'):
+		text += "\n[color=green]Inspiration[/color]: You believe that the [color=aqua]Crystal[/color] can grant [color=aqua]Immortality[/color], but are not yet sure how."
+	#Sacrifice
+	if globals.state.thecrystal.mode == "dark" && !globals.state.thecrystal.abilities.has('sacrifice'):
+		text += "\n[color=red]Dark Inspiration[/color]: There must be some way to [color=red]Sacrifice[/color] something to the [color=aqua]Crystal[/color] to sate its [color=aqua]Hunger[/color] for [color=aqua]Lifeforce[/color], but you are not yet sure how to do that."
+	textnode.set_bbcode(text)
+	textnode.show()
+	
+	#---Abilities
+	textnode = get_node("MainScreen/mansion/dimcrystalpanel/abilities_text")
+	text = "[center][color=#d1b970]Abilities[/color][/center]\n"
+	if globals.state.thecrystal.abilities.empty():
+		text += "[center]All [color=aqua]Abilities[/color] of the [color=aqua]Crystal[/color] remain a mystery to you.[/center]"
+	else:
+		text += "[center][color=#008BFB]Researched Powers[/color][/center]"
+	#Reset Buttons & Finish
+	reset_dimcrystal_ability_buttons()
+	textnode.set_bbcode(text)
+	textnode.show()
+	
+	return
+
+func reset_dimcrystal_ability_buttons():
+	var refCrystal = globals.state.thecrystal
+	#Description
+	get_node("MainScreen/mansion/dimcrystalpanel/description_button").set_disabled(false)
+	#Attunement
+	if refCrystal.abilities.has('attunement'):
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_attune").set_disabled(false)
+	else:
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_attune").set_disabled(true)
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_attune").set_tooltip("Try Researching the Crystal")
+	#Pregnancy Speeds
+	if refCrystal.abilities.has('pregnancyspeed'):
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed").set_disabled(false)
+	else:
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed").set_disabled(true)
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed").set_tooltip("Requires Upgrade Level 1")
+	#Second Wind (1/Day Combat Revive)
+	if refCrystal.abilities.has('secondwind'):
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_secondwind").set_disabled(false)
+	else:
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_secondwind").set_disabled(true)
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_secondwind").set_tooltip("Requires Upgrade Level 2")
+	#Immortality
+	if refCrystal.abilities.has('immortality'):
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_immortality").set_disabled(false)
+	else:
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_immortality").set_disabled(true)
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_immortality").set_tooltip("Requires Upgrade Level 3")
+	get_node("MainScreen/mansion/dimcrystalpanel/ability_immortality_enable").hide()
+	get_node("MainScreen/mansion/dimcrystalpanel/ability_immortality_disable").hide()
+	
+	#Sacrifice (Restore Lifeforce)
+	if refCrystal.abilities.has('sacrifice'):
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_understandsacrifice").show()
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_understandsacrifice").set_disabled(false)
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_choosesacrifice").show()
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_choosesacrifice").set_disabled(false)
+	else:
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_understandsacrifice").hide()
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_understandsacrifice").set_disabled(true)
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_choosesacrifice").hide()
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_choosesacrifice").set_disabled(true)
+
+func _on_dimcrystal_showstats_pressed():
+	var refCrystal = globals.state.thecrystal
+	var text = ""
+	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/scroll_text")
+	text = "[color=#d1b970]Upgrade Level[/color]     "+ str(globals.state.mansionupgrades.dimensionalcrystal) + "\n"
+	text += "[color=#008BFB]Research %[/color]           "+ globals.fastif(refCrystal.research >= 50, "[color=lime]", "[color=red]") + str(refCrystal.research) + "[/color]\n"
+	if refCrystal.abilities.has('attunement'):
+		text += "[color=#65CD72]Lifeforce[/color]                "+ globals.fastif(refCrystal.lifeforce > 0, "[color=lime]", "[color=red]") + str(refCrystal.lifeforce) + "[/color]\n"
+		if refCrystal.mode == "dark" && refCrystal.hunger > 0:
+			text += "[color=#AE0000]Hunger[/color]                   "+ globals.fastif(refCrystal.lifeforce >= 0 && refCrystal.hunger <= 0 && refCrystal.mode == "dark", "[color=lime]", "[color=red]") + str(refCrystal.hunger) + "[/color]\n"
+		else:
+			text += "\n"
+		text += "\n[center][color=#d1b970]Status[/color][/center]\n"+ globals.fastif(refCrystal.mode == "light", "[center][color=#1CB4B0]Light[/color][/center]", "[center][color=#B42E1C]Dark[/color][/center]")
+	else:
+		text += "\n[center]The [color=aqua]Crystal[/color] is still a mystery you aren't [color=red]Attuned[/color] to yet.[/center]"
+	textnode.set_bbcode(text)
+	textnode.show()
+
+func _on_dimcrystal_chooseresearcher_pressed():
+	var refCrystal = globals.state.thecrystal
+	var text = ""
+	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/description")
+	if refCrystal.abilities.has('sacrifice'):
+		text += "TEMPORARY TEXT - Will allow Choosing Researcher to set for Now (Costs Interaction, Slight Reduction) or that night for no interaction, higher cost"
+	#Reset, Disable Buttons, Finish
+	reset_dimcrystal_ability_buttons()
+#	get_node("MainScreen/mansion/dimcrystalpanel/ability_understandsacrifice").set_disabled(true)
+	textnode.set_bbcode(text)
+	textnode.show()
+	
+func _on_dimcrystal_description_pressed():
+	var refCrystal = globals.state.thecrystal
+	var text = ""
+	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/description")
+	text = "The [color=aqua]Dimensional Crystal[/color] is located in the hallways beneath the mansion. It is directly at the center of the mansion and seems to be at exactly an equal distance from each end of the mansion's grounds. It seems to be a massive, perfectly symmetrical prism made out of a material that no one has been able to identify. "
+	if refCrystal.mode == "light" && globals.state.mansionupgrades.dimensionalcrystal > 0:
+		text += "\nIt eminates a bright, violet light that radiates around it warmly. "
+	elif refCrystal.mode == "dark" && globals.state.mansionupgrades.dimensionalcrystal > 0:
+		text += "\nIt eminates a dark, purplish light that is split with shadowy tendrils running through it like writhing cracks. "
+	#Upgrade/Power
+	if globals.state.mansionupgrades.dimensionalcrystal <= 0:
+		text += "\nIt seems to be dull and lifeless, but catches and reflects the occassional candlelight that strikes it."
+	elif globals.state.mansionupgrades.dimensionalcrystal == 1:
+		text += "\n\nThe glow seems to pulse with the rhythm of a weak heart. You occassionally see wisps of the same color radiating off of pregnancy women inside of the mansion."
+	elif globals.state.mansionupgrades.dimensionalcrystal == 2:
+		text += "\n\nThe [color=aqua]Crystal[/color] pulses far more steadily recently and accompanies the glow with a light humming noise. You see wisps of the purplish glow it lets off trailing behind people all throughout the day as it works its strange magic on the Mansion's inhabitants."
+	elif globals.state.mansionupgrades.dimensionalcrystal == 3:
+		text += "\n\nThe [color=aqua]Dimensional Crystal[/color] pulses and hums slightly louder than it once did. You see the occassional flash of light come from it's chamber and feel a sense of peace at knowing that it is there and finally awakening once more."
+	elif globals.state.mansionupgrades.dimensionalcrystal >= 4:
+		text += "\n\nThe [color=aqua]Crystal[/color] pulses violently now and the low hum can be heard throughout the entire Mansion. Though it can grow irritating at times, you find that you quickly came to ignore the background noise. "
+	#Hunger
+	if globals.state.thecrystal.mode == "dark":
+		if globals.state.thecrystal.power + globals.state.thecrystal.hunger >= globals.player.smaf:
+			text += "\nIt is hard to look directly at the [color=aqua]Crystal[/color] without feeling drawn to press your hand against it. It beckons you closer with its dark, shadowy tendrils whipping towards you. A small voice in the back of your mind screams out that if you touch dare to touch it right now, it will drain you of your very soul. "
+		elif globals.state.thecrystal.hunger > 0:
+			text += "\nYou have a sense of unease when gazing into the Crystal. You feel a longing to consume. A growling hunger stirs within the longer you gaze at it. "
+	
+	#Reset, Disable Buttons, Finish
+	reset_dimcrystal_ability_buttons()
+	get_node("MainScreen/mansion/dimcrystalpanel/description_button").set_disabled(true)
+	textnode.set_bbcode(text)
+	textnode.show()
+
+func _on_dimcrystal_ability_attunement_pressed():
+	var refCrystal = globals.state.thecrystal
+	var text = ""
+	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/description")
+	if globals.state.thecrystal.abilities.has('attunement'):
+		text += "You understand the basic properties of the [color=aqua]Crystal[/color] and can feel the pulse within it. "
+		#Color
+		text += "\n    [color=#d1b970]Color[/color]: " + globals.fastif(globals.state.thecrystal.mode == "light", "[color=aqua]Light[/color]", "[color=red]Dark[/color]")
+		if globals.state.thecrystal.mode == "dark":
+			text += "\n\nThe [color=aqua]Crystal[/color] is [color=red]Dark[/color], so there is a chance that it may consume a [color=aqua]Researcher[/color] to sate its [color=aqua]Hunger[/color] by an amount equal to their [color=aqua]Level[/color] and [color=aqua]1 Lifeforce[/color]. If it has no [color=aqua]Hunger[/color] and [color=aqua]0+ Lifeforce[/color], it may repair itself."
+		#Lifeforce
+		text += "\n    [color=#d1b970]Lifeforce[/color]: " + globals.fastif(globals.state.thecrystal.lifeforce >= 0, "[color=lime]" +str(globals.state.thecrystal.lifeforce) + "[/color]", "[color=red]" +str(globals.state.thecrystal.lifeforce) + "[/color]")
+		if globals.state.thecrystal.mode == "light":
+			text += "\n\nThe [color=aqua]Crystal[/color] may grow [color=red]Dark[/color] if it ever has negative [color=aqua]Lifeforce[/color]. It will restore [color=aqua]1 Lifeforce[/color] Daily. If it is still below its [color=aqua]Level[/color], it has a [color=aqua]Chance[/color] to gain [color=aqua]+2[/color] equal to a [color=aqua]Researcher's Wits[/color] as long as they are over a minimum of [color=aqua]40[/color]."
+		else:
+			text += "\n\nThe [color=aqua]Crystal[/color] will not restore any [color=aqua]Lifeforce[/color] Daily and must be fed slaves to recover [color=aqua]Lifeforce[/color]."
+		#Hunger
+		if globals.state.thecrystal.hunger != 0:
+			text += "\n    [color=#d1b970]Hunger[/color]: " + globals.fastif(globals.state.thecrystal.hunger > 0, "[color=red]" +str(globals.state.thecrystal.hunger) + "[/color]", "[color=lime]" +str(globals.state.thecrystal.hunger) + "[/color]")
+			text += "; The [color=aqua]Crystal[/color] will consume [color=aqua]Lifeforce[/color] daily equal to its [color=aqua]Hunger[/color]. "
+			if globals.state.thecrystal.mode == "dark":
+				text += "Its [color=aqua]Hunger[/color] grows by [color=red]1[/color] Daily. It must have a [color=aqua]Hunger[/color] of [color=aqua]0 or less[/color] to turn [color=aqua]Light[/color] again."
+	
+	#Reset, Disable Buttons, Finish
+	reset_dimcrystal_ability_buttons()
+	get_node("MainScreen/mansion/dimcrystalpanel/ability_attune").set_disabled(true)
+	textnode.set_bbcode(text)
+	textnode.show()
+
+func _on_dimcrystal_ability_pregspeed_pressed():
+	var refCrystal = globals.state.thecrystal
+	var text = ""
+	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/description")
+	if refCrystal.abilities.has('pregnancyspeed'):
+		text += "You have learned how to use the magic of the [color=aqua]Crystal[/color] to affect the [color=aqua]Speed of Pregnancies[/color] in the Mansion. You can do this by [color=aqua]Talking[/color] to your [color=aqua]Headgirl[/color] and selecting [color=yellow]'Walk with me to the Crystal'[/color] followed by '[color=yellow]Please alter the Speed of Pregnancies[/color]'."
+	#Reset, Disable Buttons, Finish
+	reset_dimcrystal_ability_buttons()
+	get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed").set_disabled(true)
+	textnode.set_bbcode(text)
+	textnode.show()
+
+func _on_dimcrystal_ability_secondwind_pressed():
+	var refCrystal = globals.state.thecrystal
+	var text = ""
+	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/description")
+	if refCrystal.abilities.has('secondwind'):
+		text += "You have learned how to harness the life-giving magic of the [color=aqua]Crystal[/color] to revive you and your slaves to half-health from a fatal blow in combat [color=aqua]Once per Day[/color]. You also know this will increase the [color=aqua]Crystal's[/color] [color=red]Hunger[/color] and reduce its [color=aqua]Lifeforce[/color]. If the [color=aqua]Lifeforce[/color] is consumed by its [color=red]Hunger[/color], the [color=aqua]Crystal[/color] will grow [color=red]Dark[/color]."
+	#Reset, Disable Buttons, Finish
+	reset_dimcrystal_ability_buttons()
+	get_node("MainScreen/mansion/dimcrystalpanel/ability_secondwind").set_disabled(true)
+	textnode.set_bbcode(text)
+	textnode.show()
+
+func _on_dimcrystal_ability_immortality_pressed():
+	var refCrystal = globals.state.thecrystal
+	var text = ""
+	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/description")
+	if refCrystal.abilities.has('immortality'):
+		text += "You have learned how to use the magic of the [color=aqua]Crystal[/color] to grant temporary [color=aqua]Immortality[/color] to your slaves both inside the Mansion and in combat with you. This is a huge strain on the [color=aqua]Crystal[/color]. It drastically increases the [color=aqua]Crystal's[/color] [color=red]Hunger[/color] and has a high chance of making it grow [color=red]Dark[/color]."
+	#Reset, Disable Buttons, Finish
+	reset_dimcrystal_ability_buttons()
+	get_node("MainScreen/mansion/dimcrystalpanel/ability_immortality").set_disabled(true)
+	
+	#Set Immortality Button Option
+	if refCrystal.preventsdeath == true:
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_immortality_disable").show()
+	else:
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_immortality_enable").show()
+	
+	textnode.set_bbcode(text)
+	textnode.show()
+
+func _on_dimcrystal_ability_immortality_enabled():
+	var refCrystal = globals.state.thecrystal
+	var text = ""
+	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/description")
+
+	text += "You solemnly approach the [color=aqua]Dimensional Crystal[/color]. "
+	if globals.state.thecrystal.mode == "light":
+		text += "The Crystal pulses softly with a deep, calming violet hue eminating out around it. "
+	elif globals.state.thecrystal.mode == "dark":
+		text += "The Crystal pulses harshly with a dark deep-purple light that seems to be filled with shadows. "
+	text += "You place your palm against the humming crystal and feel the raw reserves of power bubbling up from within it. It is the essence of life, death, and all between. So it has mastery over life and death? Good, for you are its master. You focus your will into the [color=aqua]Crystal[/color] and beseech it to reach out its tendrils and protect the lives that you claim as your property. You feel the faint resistance, the tether of entropy and the allure of the natural cycle, begin to crack and relent. You pull back with a deep sigh and feel a certainty that the [color=aqua]Crystal[/color] will sacrifice its own [color=green]Lifeforce[/color] to keep you and yours alive. You understand the weight of your request and that it will certainly have a very heavy cost, but you feel confident that the [color=aqua]Crystal[/color] will pay it for you.\n\nThe tendrils of energy pierce out though the darkness around you. Death is chained and you rise above natural law. The shadows grow brighter, no true harm could befall you. Truth is what you make it, time is of your design. You walk fearless of any end among both Gods and men. As long as the Crystal remains intact, you know that you (and those you deem worthy) do as well."
+	
+	refCrystal.preventsdeath = true
+	refCrystal.power = globals.state.mansionupgrades.dimensionalcrystal
+	
+	reset_dimcrystal_ability_buttons()
+	textnode.set_bbcode(text)
+	textnode.show()
+
+func _on_dimcrystal_ability_immortality_disabled():
+	var refCrystal = globals.state.thecrystal
+	var text = ""
+	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/description")
+
+	text += "You solemnly approach the [color=aqua]Dimensional Crystal[/color]. "
+	if globals.state.thecrystal.mode == "light":
+		text += "The Crystal pulses softly with a deep, calming violet hue eminating out around it. "
+	elif globals.state.thecrystal.mode == "dark":
+		text += "The Crystal pulses harshly with a dark deep-purple light that seems to be filled with shadows. "
+	text += "You place your palm against the humming [color=aqua]Crystal[/color] and feel the raw reserves of power bubbling up from within it. It feels strained, pushed past the limits of natural law, but you feel a raw and unbridled power within. Should you allow yourself to believe there were a will inside, you would feel the dedication to protecting life at the cost of all that remains. You impose your mind into the crystal and bid it to rest. Its vigil is complete, the sacrifices of life and death may resume. It may rest.\n\nWith a dulling hum, you feel the energy pulsing around you soften and relax. The tendrils of energy seem shorter. The room feels darker than before. Unbidden thoughts of futures and pasts, regrets and choices, all return once more. Mortality awaits you, somewhere off in the shadows, to collect its fateful toll. "
+	
+	refCrystal.preventsdeath = false
+	reset_dimcrystal_ability_buttons()
+	textnode.set_bbcode(text)
+	textnode.show()
+
+func _on_dimcrystal_ability_understandsacrifice_pressed():
+	var refCrystal = globals.state.thecrystal
+	var text = ""
+	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/description")
+	if refCrystal.abilities.has('sacrifice'):
+		text += "You know how to sacrifice your slaves sate the hunger of the [color=aqua]Crystal[/color] with their life-force. You understand that each level a slave has will provide more essence for the [color=aqua]Crystal[/color] to consume, and that the [color=aqua]Crystal[/color] can never fully heal while hungry. "
+		if globals.state.thecrystal.hunger > 0:
+			text += "\n\nCrystal's Hunger: [color=aqua]" + str(globals.state.thecrystal.hunger) + "[/color]"
+		if globals.state.thecrystal.abilities.has('understandsacrifice'):
+			text += "\n\nYou have come to understand that sacrificing someone to the [color=aqua]Crystal[/color] will feed it an amount equal to their level (reducing hunger) as well as restoring 1 life-force to the [color=aqua]Crystal[/color], partially healing it. "
+	#Reset, Disable Buttons, Finish
+	reset_dimcrystal_ability_buttons()
+	get_node("MainScreen/mansion/dimcrystalpanel/ability_understandsacrifice").set_disabled(true)
+	textnode.set_bbcode(text)
+	textnode.show()
+
+func _on_dimcrystal_ability_choosesacrifice_pressed():
+	var refCrystal = globals.state.thecrystal
+	var text = ""
+	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/description")
+	if refCrystal.abilities.has('sacrifice'):
+		text += "TEMPORARY TEXT - Will allow Choosing Sacrifice and Proc Scene"
+	#Reset, Disable Buttons, Finish
+	reset_dimcrystal_ability_buttons()
+#	get_node("MainScreen/mansion/dimcrystalpanel/ability_understandsacrifice").set_disabled(true)
+	textnode.set_bbcode(text)
+	textnode.show()
+
+func _on_dimcrystal_closepanel_pressed():
+	get_node("MainScreen/mansion/dimcrystalpanel").hide()
+	
+#---Jail Expanded
 func _on_jailpanel_visibility_changed():
 	var temp = ''
 	var text = ''

@@ -1366,12 +1366,12 @@ func setRaceBonus_Ralph(person, increasestats):
 	for race in person.genealogy:
 		if person.genealogy[race] > 0:
 			count_races += 1
-			fire = globals.races[racedict[race]].elementalmod.fire/float(person.genealogy[race])
-			wind = globals.races[racedict[race]].elementalmod.wind/float(person.genealogy[race])
-			water = globals.races[racedict[race]].elementalmod.water/float(person.genealogy[race])
-			earth = globals.races[racedict[race]].elementalmod.earth/float(person.genealogy[race])
-			nature = globals.races[racedict[race]].elementalmod.nature/float(person.genealogy[race])
-			corruption = globals.races[racedict[race]].elementalmod.corruption/float(person.genealogy[race])
+			fire += globals.races[racedict[race]].elementalmod.fire*float(person.genealogy[race])/10000
+			wind += globals.races[racedict[race]].elementalmod.wind*float(person.genealogy[race])/10000
+			water += globals.races[racedict[race]].elementalmod.water*float(person.genealogy[race])/10000
+			earth += globals.races[racedict[race]].elementalmod.earth*float(person.genealogy[race])/10000
+			nature += globals.races[racedict[race]].elementalmod.nature*float(person.genealogy[race])/10000
+			corruption += globals.races[racedict[race]].elementalmod.corruption*float(person.genealogy[race])/10000
 	
 	corruption -= (float(person.genealogy.slime))/100
 	

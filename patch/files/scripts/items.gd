@@ -1938,7 +1938,7 @@ func bandageeffect():
 ###---Added by Expansion---###
 func hyperlactationpoteffect():
 	var text = ""
-	text += person.dictionary("You order [color=aqua]$name[/color] to drink the bottle of [color=aqua]piss[/color]. ")
+	text += person.dictionary("You order [color=aqua]$name[/color] to drink the bottle of [color=aqua]lactation potion[/color]. ")
 	if rand_range(0,100) <= 50 || person.obed >= 50:
 		text += person.dictionary("$He gulps it down eagerly. ")
 	else:
@@ -1970,7 +1970,7 @@ func hyperlactationpoteffect():
 
 func milkeffect():
 	var text = ""
-	text += person.dictionary("You order [color=aqua]$name[/color] to drink the bottle of [color=aqua]piss[/color]. ")
+	text += person.dictionary("You order [color=aqua]$name[/color] to drink the bottle of [color=aqua]milk[/color]. ")
 	if rand_range(0,100) <= 50 || person.obed >= 50:
 		text += person.dictionary("$He gulps it down eagerly. ")
 	else:
@@ -1988,7 +1988,7 @@ func milkeffect():
 
 func semeneffect():
 	var text = ""
-	text += person.dictionary("You order [color=aqua]$name[/color] to drink the bottle of [color=aqua]piss[/color]. ")
+	text += person.dictionary("You order [color=aqua]$name[/color] to drink the bottle of [color=aqua]semen[/color]. ")
 	if rand_range(0,100) <= 50 || person.obed >= 50:
 		text += person.dictionary("$He gulps it down eagerly. ")
 	else:
@@ -2009,7 +2009,7 @@ func semeneffect():
 
 func lubeeffect():
 	var text = ""
-	text += person.dictionary("You order [color=aqua]$name[/color] to drink the bottle of [color=aqua]piss[/color]. ")
+	text += person.dictionary("You order [color=aqua]$name[/color] to drink the bottle of [color=aqua]lube[/color]. ")
 	if rand_range(0,100) <= 50 || person.obed >= 50:
 		text += person.dictionary("$He gulps it down eagerly. ")
 	else:

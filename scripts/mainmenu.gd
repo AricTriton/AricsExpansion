@@ -126,7 +126,7 @@ var hobbydescription = {
 func _ready():
 	###---Added by Expansion---###
 	globals.useRalphsTweaks = globals.expansionsettings.use_ralphs_tweaks
-	globals.useRalphsTweaks = globals.expansionsettings.use_caps_tweaks
+	globals.useCapsTweaks = globals.expansionsettings.use_caps_tweaks
 	if globals.useRalphsTweaks:
 		globals.expansionsettings.applyRalphsTweaks()
 	if globals.useCapsTweaks:
