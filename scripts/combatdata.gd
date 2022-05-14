@@ -444,10 +444,10 @@ var enemygrouppools = {
 		description = "You spot a number of glowing spirits communing with a suspicious tree. They haven't noticed you yet", 
 		descriptionambush = 'You are attacked by [color=aqua]angry tree spirits[/color]. ', 
 	},
-	''' amberguardguardsmany = {
-		units = [['amberguardpatrol',7,10]], awareness = -10, captured = null, special = null,
-		description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Amberguard. ",
-	}, '''
+	# amberguardguardsmany = {
+	# 	units = [['amberguardpatrol',7,10]], awareness = -10, captured = null, special = null,
+	# 	description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Amberguard. ",
+	# },
 }
 
 var capturespool = {

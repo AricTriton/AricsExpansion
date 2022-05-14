@@ -13,7 +13,7 @@ var database = {
 		enemies = [{value = 'peasant', weight = 2},{value = 'banditseasy', weight = 1},{value = 'thugseasy',weight = 3},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 5,
-		exits = ['wimborn','forest','prairie'],
+		exits = ['wimborn','forest','prairie','farmlands','riversideplains'], #Added Farmlands, RiversidePLains
 		tags = ['wimborn'],
 		races = [{value = 'Taurus', weight = 2}, {value = 'Cat', weight = 1},{value = 'Human', weight = 12}],
 		levelrange = [1,2],
@@ -29,7 +29,7 @@ var database = {
 		enemies = [{value = 'banditsmedium', weight = 20},{value = 'centaur1', weight = 2.6},{value = 'centaurattackers', weight = 4},{value = 'slaverseasy', weight = 10},{value = 'peasant', weight = 20},{value = 'banditseasy', weight = 30},{value = 'noenemyencountered', weight = 40}], #ralphD - added nonenemyencounters #ralphA
 		encounters = [],
 		length = 5,
-		exits = ['wimbornoutskirts','gornoutskirts','sea'],
+		exits = ['wimbornoutskirts','gornoutskirts','sea', 'oasis', 'ruins','forestofrefuge'], #Added Oasis, Ruins, Refuge
 		tags = ['wimborn'],
 		races = [{value = 'Orc', weight = 6},{value = 'Human', weight = 4}, {value = 'Cat', weight = 1}, {value = 'Bunny', weight = 1}],
 		levelrange = [2,4],
@@ -45,7 +45,7 @@ var database = {
 		enemies = [{value = 'wolveswithperson', weight = 0.5},{value = 'fairyattackers', weight = 0.3},{value = 'banditseasy', weight = 3},{value = 'peasant', weight = 3},{value ='solobear', weight = 4},{value = 'wolveseasy', weight = 9},{value = 'treasurechest', weight = 1.35},{value = 'noenemyencountered', weight = 10}], #ralphD - added nonenemyencounters #ralphA
 		encounters = [['chloeforest','globals.state.sidequests.chloe in [0,1] && !globals.state.sidequests.cali in [17,20,21]',10]],
 		length = 5,
-		exits = ['shaliq', 'wimbornoutskirts', 'elvenforest'],
+		exits = ['shaliq', 'wimbornoutskirts', 'elvenforest', 'graveyard','rivercrossing'], #Added Graveyard,Rivercrossing
 		tags = ['wimborn'],
 		races = [{value = 'Elf', weight = 2}, {value = 'Wolf', weight = 1}, {value = 'Bunny', weight = 1}, {value = 'Human', weight = 10}],
 		levelrange = [2,4],
@@ -61,7 +61,7 @@ var database = {
 		enemies = [{value = 'wolveswithperson', weight = 4},{value = 'fairy', weight = 2},{value = 'solobear', weight = 6},{value = 'elfguards',weight = 6},{value = 'plantseasy', weight = 6},{value = 'wolveseasy', weight = 6},{value = 'blockedsection', weight = 1},{value = 'noenemyencountered', weight = 15}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 5,
-		exits = ['amberguard','forest'],
+		exits = ['amberguard','forest','cliffsidefalls','taintedforest'], #BBP-added cliffsidefalls,taintedforest
 		tags = ['amberguard'],
 		races = [{value = 'Dark Elf', weight = 1},{value = 'Elf', weight = 12},{value = 'Bunny', weight = 2},{value = 'Tanuki', weight = 2}],
 		levelrange = [3,6],
@@ -77,7 +77,7 @@ var database = {
 		enemies = [{value = 'solobear',weight = 1}, {value = 'wolveshard', weight = 3}, {value ='direwolveseasy', weight = 5}, {value = 'elfguards',weight = 3},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [['aynerisencounter','globals.state.sidequests.ayneris in [0,1,2]',7]],
 		length = 4,
-		exits = ['amberguard','witchhut','undercityentrance'],
+		exits = ['amberguard','witchhut','undercityentrance','taintedforest'], #Added tainted forest
 		tags = ['amberguard'],
 		races = [{value = "Elf", weight = 100}],
 		levelrange = [5,8],
@@ -109,7 +109,7 @@ var database = {
 		enemies = [{value = 'banditcamp',weight = 1.35},{value = 'monstergirl', weight = 1.35}, {value = 'lizardfolkpatrol', weight = 2}, {value = 'oozesgroup', weight = 2.7}, {value = 'solospider', weight = 5},{value = 'treasurechest', weight = 1.35},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 6,
-		exits = ['frostfordoutskirts','grove'],
+		exits = ['frostfordoutskirts','grove','abandonedvillage','lizardvillage'], #BBP- added abandonedvillage,lizardvillage
 		tags = ['frostford'],
 		races = [{value = 'Arachna', weight = 1},{value = 'Lamia', weight = 2},{value = 'Slime', weight = 2}, {value = 'Demon', weight = 5}],
 		levelrange = [6,11],
@@ -125,7 +125,7 @@ var database = {
 		enemies = [{value = 'slaversmedium', weight = 3},{value = 'seraph1', weight = 0.33},{value = 'harpyattackers', weight = 0.7},{value = 'harpy', weight = 5},{value = 'banditsmedium', weight = 6}, {value = 'fewcougars', weight = 8},{value = 'noenemyencountered', weight = 11}], #ralphD - added nonenemyencounters #ralphA
 		encounters = [],
 		length = 6,
-		exits = ['gornoutskirts','mountaincave'],
+		exits = ['gornoutskirts','mountaincave','thepeaks','skysphere'], #BBP-added thepeaks,skysphere
 		tags = ['gorn'],
 		races = [{value = 'Dragonkin', weight = 1},{value = 'Seraph', weight = 2.5},{value = 'Gnome', weight = 3},{value = 'Centaur', weight = 2},{value = 'Goblin', weight = 4},{value = 'Orc', weight = 8}],
 		levelrange = [4,7],
@@ -157,7 +157,7 @@ var database = {
 		enemies = [{value = 'banditcamp', weight = 1.35},{value = 'nereidgroup', weight = 1.35},{value = 'banditsmedium', weight = 2},{value = 'monstergirl', weight = 4},{value = 'travelersgroup', weight = 2},{value = 'oozesgroup', weight = 5},{value = 'treasurechest', weight = 1.35},{value = 'noenemyencountered', weight = 8}], #ralphD - added nonenemyencounters #ralph4
 		encounters = [],
 		length = 5,
-		exits = ['prairie'],
+		exits = ['prairie','ruins','farsea'], #Added Ruins, farsea
 		tags = ['gorn'],
 		races = [{value = 'Scylla', weight = 1},{value = 'Lamia', weight = 1},{value = 'Nereid', weight = 3}],
 		levelrange = [5,9],
@@ -173,7 +173,7 @@ var database = {
 		enemies = [{value = 'slaverseasy', weight = 1},{value = 'peasant', weight = 1},{value = 'banditseasy', weight = 3},{value = 'thugseasy', weight = 3},{value = 'wolveseasy', weight = 5},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 5,
-		exits = ['gorn','prairie','mountains'],
+		exits = ['gorn','prairie','mountains','oasis','desert'],#Added oasis,desert
 		tags = ['gorn'],
 		races = [{value = 'Centaur', weight = 1},{value = 'Goblin', weight = 4},{value = 'Orc', weight = 12}],
 		levelrange = [2,5],
@@ -190,7 +190,7 @@ var database = {
 		encounters = [],
 		length = 5,
 		locationscript = "frostfordoutskirts",
-		exits = ['frostford','marsh','frostfordclearing'],
+		exits = ['frostford','marsh','frostfordclearing','abandonedvillage','snowplains','snowypeaks'], #BBP-added abandoendvillage, snowplains,snowypeaks
 		tags = ['frostford'],
 		races = [{value = 'Halfkin Fox', weight = 1},{value = 'Beastkin Fox', weight = 1},{value = 'Halfkin Cat', weight = 2},{value = 'Beastkin Cat', weight = 2},{value = 'Halfkin Wolf', weight = 6},{value = 'Beastkin Wolf', weight = 6},{value = 'Human', weight = 5}],
 		levelrange = [3,6],
@@ -321,7 +321,7 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
-		exits = ['forest','grove'],
+		exits = ['lakeside'],
 		tags = [],
 		races = [],
 		levelrange = [9,10],
@@ -353,7 +353,7 @@ var database = {
 		enemies = [{value= 'naturespiritandtree', weight =7},{value= 'naturespiritmany', weight =7},{value= 'naturespirit', weight =7}, {value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
-		exits = ['forest','grove'],
+		exits = ['riversideplains'],
 		tags = [],
 		races = [],
 		levelrange = [10,15],
@@ -385,7 +385,7 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 15,
-		exits = ['forest','crypt'],
+		exits = ['rivercrossing','crypt'],
 		tags = [],
 		races = [{value = 'Dyrad', weight = 12}],
 		levelrange = [7,10],
@@ -419,7 +419,7 @@ var database = {
 		encounters = [],
 		length = 20,
 		locationscript = 'forestofrefuge',
-		exits = ['wimbornoutskirts','prairie','ruins'],
+		exits = ['prairie','ruins'],
 		tags = ['enclosed'],
 		races = [{value = 'Dyrad', weight = 1}],
 		levelrange = [10,15],
@@ -465,11 +465,11 @@ var database = {
 		code = 'desert',
 		name = 'Desert',
 		description = "You are in the desert proper now. There are few plants. The sands are hot and shifting, scalding your feet and messing with your balance. This is a harsh biome. ",
-		enemies = [{value = 'banditcamp', weight = 1.35},{value = 'banditsmedium', weight = 2}{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'banditcamp', weight = 1.35},{value = 'banditsmedium', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
 		locationscript = 'desert',
-		exits = ['prairie','gornoutskirts','deepdesert'],
+		exits = ['oasis','gornoutskirts','deepdesert'],
 		tags = [],
 		races = [{value = 'Centaur', weight = 5}],
 		levelrange = [6,9],
@@ -486,7 +486,7 @@ var database = {
 		encounters = [],
 		length = 20,
 		locationscript = 'deepdesert',
-		exits = ['gornoutskirts','desert'],
+		exits = ['gornoutskirts','desert','sandtomb'],
 		tags = [],
 		races = [{value = 'Centaur', weight = 3}],
 		levelrange = [7,12],
@@ -601,7 +601,7 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
-		exits = ['marsh','frostfordoutskirts'],
+		exits = ['marsh'],
 		tags = [],
 		races = [{value = 'Dyrad', weight = 12}],
 		levelrange = [7,15],
@@ -635,7 +635,7 @@ var database = {
 		enemies = [{value= 'naturespiritandtree', weight =7},{value= 'naturespiritmany', weight =7},{value= 'naturespirit', weight =7}, {value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
-		exits = ['forest','grove'],
+		exits = ['forest','grove','greattreeentrance'],
 		tags = [],
 		races = [{value = 'Dyrad', weight = 12}],
 		levelrange = [7,15],
@@ -748,7 +748,7 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 5,
-		exits = ['skysphere','mountains'],
+		exits = ['thepeaks','skysphere'],
 		tags = [],
 		races = [],
 		levelrange = [5,8],
@@ -780,7 +780,7 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 5,
-		exits = ['mountains', 'skycoliseum'],
+		exits = ['mountains','stormcrown','prairie','gornoutskirts','wimbornoutskirts','frostfordoutskirts','skycoliseum'],
 		tags = [],
 		races = [],
 		levelrange = [5,8],
@@ -796,7 +796,7 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 5,
-		exits = ['colliseumcollapse'],
+		exits = ['colliseumcollapse'], #placeholder
 		tags = ['enclosed'],
 		races = [],
 		levelrange = [50],
@@ -829,7 +829,7 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 5,
-		exits = ['sea'],
+		exits = ['sea','deepseaentrance'],
 		tags = [],
 		races = [],
 		levelrange = [10,15],
@@ -846,7 +846,7 @@ var database = {
 		encounters = [],
 		length = 1,
 		locationscript = 'deepseaentrance', #Remember to add an appropriate script in expliration.gd. Just copy this script and edit to your needs.
-		exits = ['farsea'],
+		exits = [],
 		tags = [],
 		races = [],
 	},
@@ -861,7 +861,7 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 30,
-		exits = ['farsea'],
+		exits = ['deepseaentrance','seafloor'],
 		tags = [],
 		races = [],
 		levelrange = [15,20],
@@ -877,7 +877,7 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 10,
-		exits = ['deepsea'],
+		exits = ['deepsea','underwatercanyon'],
 		tags = [],
 		races = [],
 		levelrange = [20,25],
@@ -893,7 +893,7 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 10,
-		exits = ['seafloor'],
+		exits = ['seafloor','sealairentrance'],
 		tags = [],
 		races = [],
 		levelrange = [25,30],
