@@ -53,8 +53,11 @@ func getzonetraveltext(zone,progress):
 		#	break
 	if rand_range(0,1) > 0.9:
 		array.append("A flock of crows pick at a well scavenged corpse nearby.  Upon examination of the nearly stripped bones and tattered remains of clothing, you figure this poor traveler was likely a poor sword for hire or vagabond.  It's unclear what killed him.  Whatever possessions he might have once had have long been looted or dragged away by vermin.  Unable to determine even their place of origin or likely destination, you decide to move on.")
-	if rand_range(0,1) > 0.975 && globals.expansionsettings.sillymode:
-		array.append("You come across a feminine looking [color=yellow]dragonkin[/color] sitting at an easel and painting the scenery. You get close enough to see the name Rendrassa signed on the canvass before noticing that the painter has turned to look at you with an unnerving smile.  Filled with a strange terror, you quickly compliment the painting and hasten to leave.")
+	if globals.expansionsettings.sillymode:
+		if rand_range(0,1) > 0.975:
+			array.append("You come across a feminine looking [color=yellow]dragonkin[/color] sitting at an easel and painting the scenery. You get close enough to see the name Rendrassa signed on the canvass before noticing that the painter has turned to look at you with an unnerving smile.  Filled with a strange terror, you quickly compliment the painting and hasten to leave.")
+		if rand_range(0,1) > 0.98:
+			array.append("You notice a hunched figure in the shadows softly chanting.\n[color=yellow]-Must get more money. Must get more money. Gold, gold, gold, I need more.[/color]\nTales of the mythological [color=aqua]Money Seeker[/color] surfaces in your mind and you hold your coin purse close. You hurry away before the being can smell your gold.")
 	if rand_range(0,1) > 0.5:
 		for i in teammates:
 			if i.traits.has("Natural Beauty") && i.beauty < 70 && !i.origins in ["noble","rich"] && rand_range(0,1) > 0.3:

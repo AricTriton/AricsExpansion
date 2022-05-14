@@ -2,7 +2,7 @@
 
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
-var modversion = "1.7"
+var modversion = "1.7a"
 
 #---Aric's and Game's Base Values potentially changed by Ralph's
 var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within applyRalphsTweaks as well as the Hybrid system.
@@ -645,7 +645,7 @@ func addConstantsSupport():
 		gratitude_for_all = {descript = "Set this to true so that babies aged up to Child or Teen have as much chance to spawn with the Grateful trait as ones aged up to Adult (Ralph sets this to False, but up to you)", object = self},
 		sillymode = {descript = "Set it to false if you don't abide, so far it only affects random travel event text", object = self},
 
-		basemanafoodconsumption = {descript = "The average capacity that the hole's size adds or subtracts from", min = 0.0, max = 100.0},
-		orgasmmana = {descript = "The average capacity that the hole's size adds or subtracts from", min = 1.0, max = 100.0},
+		basemanafoodconsumption = {descript = "The amount of mana per day required by mana eating races/hybrids. This is multiplied for some based on age, etc. Default: 10", min = 0.0, max = 100.0},
+		orgasmmana = {descript = "The amount of mana produced by a single orgasm. Default: 3", min = 1.0, max = 100.0},
 	}
 	
