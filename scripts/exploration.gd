@@ -1468,7 +1468,7 @@ func sealairentrance():
 #Remember to add the appropriate questtext and add a function that tells the player they can or cannot pass
 #All function names and calls are subject to change at this time.
 func snowypeaks(): #Added so as to check if the player is eligible to enter the snowy peaks. There's probably better ways to do this.
-	var array[]
+	var array=[]
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
 	var accessgranted=false
@@ -1491,6 +1491,7 @@ func snowypeaks(): #Added so as to check if the player is eligible to enter the 
 	
 func forestofrefuge():
 	var accessgranted=false
+	var array=[]
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
 	var accesscounter=0
@@ -1499,7 +1500,7 @@ func forestofrefuge():
 	else:		
 		for i in party:
 			if i.race== "Beastkin Wolf" && i.spec=="ranger":
-				accessgranted true
+				accessgranted=true
 				break
 	if accessgranted== false:
 		array.append({name = 'Turn Back', function = 'zoneenter', args = 'ruins'})
@@ -1512,7 +1513,7 @@ func forestofrefuge():
 
 
 func desert():
-	var array[]
+	var array=[]
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
 	var accessgranted=false
@@ -1530,7 +1531,7 @@ func desert():
 
 
 func deepdesert():
-	var array[]
+	var array=[]
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
 	var accessgranted=false

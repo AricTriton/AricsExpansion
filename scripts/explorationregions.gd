@@ -334,8 +334,8 @@ var database = {
 		code = 'riversideplains',
 		name = 'Riverside Plains',
 		description = "You are surrounded by vast open space, green grass underfoot and a river off in the distance. Wild horses race each other freely, cows and bulls graze peacefully. This is a grazers heaven. ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
-		encounters = [{value = 'banditcamp',weight = 1.35},{value = 'banditsmedium', weight = 2}],
+		enemies = [{value = 'banditcamp',weight = 1.35},{value = 'banditsmedium', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		encounters = [],
 		length = 20,
 		exits = ['wimbornoutskirts','dwarvenfortress'],
 		tags = [],

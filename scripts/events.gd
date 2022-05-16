@@ -526,82 +526,82 @@ func spinebosswin():
 	# 	globals.main.exploration.generaterandomloot([], {number = 0}, rand_range(1,3), [1,3])
 	# 	globals.main.exploration.generateloot([globals.weightedrandom(bossloot), 1], '')
 	# 	globals.main.exploration.generateloot([globals.weightedrandom(bossloot), 1], '')
-	#Sea Lair
-	func seabossenc():
-		var state = false
-		var text = textnode.seabossenc
-		var buttons = []
-		
-		buttons.append({text = 'Fight', function = 'seabossfight'})
-		globals.main.dialogue(state, self, text, buttons)
+#Sea Lair
+func seabossenc():
+	var state = false
+	var text = textnode.seabossenc
+	var buttons = []
 	
-	func seabossfight():
-		closedialogue()
-		globals.main.exploration.buildenemies("bossdragon")
-		globals.main.exploration.launchonwin = 'seabosswin'
-		globals.main.get_node("combat").nocaptures = true
-		globals.main.exploration.enemyfight()
+	buttons.append({text = 'Fight', function = 'seabossfight'})
+	globals.main.dialogue(state, self, text, buttons)
+
+func seabossfight():
+	closedialogue()
+	globals.main.exploration.buildenemies("bossdragon")
+	globals.main.exploration.launchonwin = 'seabosswin'
+	globals.main.get_node("combat").nocaptures = true
+	globals.main.exploration.enemyfight()
+
+func seabosswin():
+	var state = true
+	var text = textnode.seabosswin2
+	var buttons = []
+	globals.main.dialogue(state, self, text, buttons)
+	globals.main.exploration.progress = 9
+	globals.main.exploration.winscreenclear()
+	globals.main.exploration.generaterandomloot([], {number = 0}, rand_range(1,3), [1,3])
+	globals.main.exploration.generateloot([globals.weightedrandom(bossloot), 1], '')
+	globals.main.exploration.generateloot([globals.weightedrandom(bossloot), 1], '')
+#Hellscape
+func hellbossenc():
+	var state = false
+	var text = textnode.hellbossenc
+	var buttons = []
 	
-	func seabosswin():
-		var state = true
-		var text = textnode.seabosswin2
-		var buttons = []
-		globals.main.dialogue(state, self, text, buttons)
-		globals.main.exploration.progress = 9
-		globals.main.exploration.winscreenclear()
-		globals.main.exploration.generaterandomloot([], {number = 0}, rand_range(1,3), [1,3])
-		globals.main.exploration.generateloot([globals.weightedrandom(bossloot), 1], '')
-		globals.main.exploration.generateloot([globals.weightedrandom(bossloot), 1], '')
-	#Hellscape
-	func hellbossenc():
-		var state = false
-		var text = textnode.hellbossenc
-		var buttons = []
-		
-		buttons.append({text = 'Fight', function = 'hellbossfight'})
-		globals.main.dialogue(state, self, text, buttons)
+	buttons.append({text = 'Fight', function = 'hellbossfight'})
+	globals.main.dialogue(state, self, text, buttons)
+
+func hellbossfight():
+	closedialogue()
+	globals.main.exploration.buildenemies("bossdragon")
+	globals.main.exploration.launchonwin = 'hellbosswin'
+	globals.main.get_node("combat").nocaptures = true
+	globals.main.exploration.enemyfight()
+
+func hellbosswin():
+	var state = true
+	var text = textnode.hellbosswin
+	var buttons = []
+	globals.main.dialogue(state, self, text, buttons)
+	globals.main.exploration.progress = 9
+	globals.main.exploration.winscreenclear()
+	globals.main.exploration.generaterandomloot([], {number = 0}, rand_range(1,3), [1,3])
+	globals.main.exploration.generateloot([globals.weightedrandom(bossloot), 1], '')
+	globals.main.exploration.generateloot([globals.weightedrandom(bossloot), 1], '')
+#Colliseum
+func skybossenc():
+	var state = false
+	var text = textnode.skybossenc
+	var buttons = []
 	
-	func hellbossfight():
-		closedialogue()
-		globals.main.exploration.buildenemies("bossdragon")
-		globals.main.exploration.launchonwin = 'hellbosswin'
-		globals.main.get_node("combat").nocaptures = true
-		globals.main.exploration.enemyfight()
-	
-	func hellbosswin():
-		var state = true
-		var text = textnode.hellbosswin
-		var buttons = []
-		globals.main.dialogue(state, self, text, buttons)
-		globals.main.exploration.progress = 9
-		globals.main.exploration.winscreenclear()
-		globals.main.exploration.generaterandomloot([], {number = 0}, rand_range(1,3), [1,3])
-		globals.main.exploration.generateloot([globals.weightedrandom(bossloot), 1], '')
-		globals.main.exploration.generateloot([globals.weightedrandom(bossloot), 1], '')
-	#Colliseum
-	func skybossenc():
-		var state = false
-		var text = textnode.skybossenc
-		var buttons = []
-		
-		buttons.append({text = 'Fight', function = 'skybossfight'})
-		globals.main.dialogue(state, self, text, buttons)
-	
-	func skybossfight():
-		closedialogue()
-		globals.main.exploration.buildenemies("bossdragon")
-		globals.main.exploration.launchonwin = 'skybosswin'
-		globals.main.get_node("combat").nocaptures = true
-		globals.main.exploration.enemyfight()
-	
-	func skybosswin():
-		var state = true
-		var text = textnode.skybosswin
-		var buttons = []
-		globals.main.dialogue(state, self, text, buttons)
-		globals.main.exploration.progress = 9
-		globals.main.exploration.winscreenclear()
-		globals.main.exploration.generaterandomloot([], {number = 0}, rand_range(1,3), [1,3])
-		globals.main.exploration.generateloot([globals.weightedrandom(bossloot), 1], '')
-		globals.main.exploration.generateloot([globals.weightedrandom(bossloot), 1], '')
+	buttons.append({text = 'Fight', function = 'skybossfight'})
+	globals.main.dialogue(state, self, text, buttons)
+
+func skybossfight():
+	closedialogue()
+	globals.main.exploration.buildenemies("bossdragon")
+	globals.main.exploration.launchonwin = 'skybosswin'
+	globals.main.get_node("combat").nocaptures = true
+	globals.main.exploration.enemyfight()
+
+func skybosswin():
+	var state = true
+	var text = textnode.skybosswin
+	var buttons = []
+	globals.main.dialogue(state, self, text, buttons)
+	globals.main.exploration.progress = 9
+	globals.main.exploration.winscreenclear()
+	globals.main.exploration.generaterandomloot([], {number = 0}, rand_range(1,3), [1,3])
+	globals.main.exploration.generateloot([globals.weightedrandom(bossloot), 1], '')
+	globals.main.exploration.generateloot([globals.weightedrandom(bossloot), 1], '')
 ###---Expansion End---###
