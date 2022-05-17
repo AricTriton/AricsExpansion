@@ -1471,9 +1471,13 @@ func snowypeaks(): #Added so as to check if the player is eligible to enter the 
 	var array=[]
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
+	var teammates=[]
 	var accessgranted=false
 	var accesscounter=0
 	for i in party:
+		var j = globals.state.findslave(i)
+		teammates.append(j)
+	for i in teammates:
 		if i.sagi>6 && i.send>6:
 			accesscounter+=1
 	if player.sagi>6 && player.send>6:
@@ -1494,11 +1498,15 @@ func forestofrefuge():
 	var array=[]
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
+	var teammates=[]
 	var accesscounter=0
+	for i in party:
+		var j = globals.state.findslave(i)
+		teammates.append(j)
 	if player.race=="Beastkin Wolf" && globals.state.spec== "Hunter": #This second but may be unnecessary. Ask in server
 		accessgranted = true
 	else:		
-		for i in party:
+		for i in teammates:
 			if i.race== "Beastkin Wolf" && i.spec=="ranger":
 				accessgranted=true
 				break
@@ -1516,10 +1524,14 @@ func desert():
 	var array=[]
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
+	var teammates=[]
 	var accessgranted=false
 	var accesscounter=0
 	for i in party:
-		if i.race== "Centaur" || i.race=="Centaur":
+		var j = globals.state.findslave(i)
+		teammates.append(j)
+	for i in teammates:
+		if i.race== "Centaur" || i.race=="Centaur": #Second Centaur is supposed to be the camel hybrid
 			accessgranted=true
 			break
 	if accessgranted== false:
@@ -1534,9 +1546,13 @@ func deepdesert():
 	var array=[]
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
+	var teammates=[]
 	var accessgranted=false
 	var accesscounter=0
 	for i in party:
+		var j = globals.state.findslave(i)
+		teammates.append(j)
+	for i in teammates:
 		if i.race== "Centaur" || i.race=="Centaur":
 			accessgranted=true
 			break

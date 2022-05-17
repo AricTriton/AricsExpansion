@@ -780,7 +780,7 @@ var database = {
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 5,
-		exits = ['mountains','stormcrown','prairie','gornoutskirts','wimbornoutskirts','frostfordoutskirts','skycoliseum'],
+		exits = ['mountains','stormcrown','prairie','gornoutskirts','wimbornoutskirts','frostfordoutskirts','skycolliseum'],
 		tags = [],
 		races = [],
 		levelrange = [5,8],
