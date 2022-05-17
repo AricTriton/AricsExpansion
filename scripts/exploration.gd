@@ -1482,7 +1482,7 @@ func snowypeaks(): #Added so as to check if the player is eligible to enter the 
 		accessgranted=true
 	if accessgranted== false:
 		array.append({name = 'Turn Back', function = 'zoneenter', args = 'frostford'})
-		outside.buildbuttons(array,self)
+	outside.buildbuttons(array,self)
 	# if accessgranted== true:
 	# 	array.append({name = 'Climb the Mountain', function = 'zoneenter', args = 'snowypeaks'})
 # array.append({name = "Return to Frostford", function = 'zoneenter', args = 'frostford'})
@@ -1504,7 +1504,7 @@ func forestofrefuge():
 				break
 	if accessgranted== false:
 		array.append({name = 'Turn Back', function = 'zoneenter', args = 'ruins'})
-		outside.buildbuttons(array,self)
+	outside.buildbuttons(array,self)
 	# if accessgranted== true:
 	# 	array.append({name = 'Enter the Forest', function = 'zoneenter', args = 'forestofrefuge'})
 # array.append({name = "Return to Frostford", function = 'zoneenter', args = 'frostford'})
@@ -1524,7 +1524,7 @@ func desert():
 			break
 	if accessgranted== false:
 		array.append({name = 'Turn Back', function = 'zoneenter', args = 'gornoutskirts'})
-		outside.buildbuttons(array,self)
+	outside.buildbuttons(array,self)
 		# if accessgranted== true:
 	# 	array.append({name = 'Enter the Desert', function = 'zoneenter', args = 'desert'})
 # array.append({name = "Return to Frostford", function = 'zoneenter', args = 'frostford'})
@@ -1542,7 +1542,7 @@ func deepdesert():
 			break
 	if accessgranted== false:
 		array.append({name = 'Turn Back', function = 'zoneenter', args = 'desert'})
-		outside.buildbuttons(array,self)
+	outside.buildbuttons(array,self)
 	# if accessgranted== true:
 	# 	array.append({name = 'Enter the Desert', function = 'zoneenter', args = 'desert'})
 # array.append({name = "Return to Frostford", function = 'zoneenter', args = 'frostford'})
