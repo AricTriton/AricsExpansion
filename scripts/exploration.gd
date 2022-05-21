@@ -57,7 +57,7 @@ func zoneenter(zone):
 		accessgranted = snowypeaks()
 	if accessgranted== false:
 		var array=[]
-		array.append({name = 'Turn Back', function = 'zoneenter', args = 'frostford'})
+		array.append({name = 'Turn Back', function = 'zoneenter', args = 'frostfordoutskirts'})
 		outside.buildbuttons(array,self)
 		print("accessgranted= "+ str(accessgranted))
 	else: #End of Bubblepot edits
@@ -1598,9 +1598,8 @@ func sealairentrance():
 # 	showlootscreen()
 # 	zoneenter("undercityruins")
 
-#Remember to add the appropriate questtext and add a function that tells the player they can or cannot pass
-#All function names and calls are subject to change at this time.
-func snowypeaks(): #Added so as to check if the player is eligible to enter the snowy peaks. There's probably better ways to do this.
+#Remember to add the appropriate text
+func snowypeaks(): #Check if the player is eligible to enter the snowy peaks. 
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
 	var teammates=[]
@@ -1617,15 +1616,9 @@ func snowypeaks(): #Added so as to check if the player is eligible to enter the 
 		return true
 	else:
 		return false
-	# if accessgranted== true:
-	# 	array.append({name = 'Climb the Mountain', function = 'zoneenter', args = 'snowypeaks'})
-# array.append({name = "Return to Frostford", function = 'zoneenter', args = 'frostford'})
-# outside.buildbuttons(array,self)
 
 	
 func forestofrefuge():
-	var accessgranted=false
-	var array=[]
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
 	var teammates=[]
@@ -1634,65 +1627,49 @@ func forestofrefuge():
 		var j = globals.state.findslave(i)
 		teammates.append(j)
 	if player.race=="Beastkin Wolf" && globals.state.spec== "Hunter": #This second but may be unnecessary. Ask in server
-		accessgranted = true
+		return true
 	else:		
 		for i in teammates:
 			if i.race== "Beastkin Wolf" && i.spec=="ranger":
-				accessgranted=true
-				break
-	if accessgranted== false:
-		array.append({name = 'Turn Back', function = 'zoneenter', args = 'ruins'})
-	outside.buildbuttons(array,self)
-	# if accessgranted== true:
-	# 	array.append({name = 'Enter the Forest', function = 'zoneenter', args = 'forestofrefuge'})
-# array.append({name = "Return to Frostford", function = 'zoneenter', args = 'frostford'})
-# outside.buildbuttons(array,self)
+				return true
+			else:
+				return false
 
 
 
 func desert():
-	var array=[]
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
 	var teammates=[]
-	var accessgranted=false
 	var accesscounter=0
 	for i in party:
 		var j = globals.state.findslave(i)
 		teammates.append(j)
-	for i in teammates:
-		if i.race== "Centaur" || i.race=="Centaur": #Second Centaur is supposed to be the camel hybrid
-			accessgranted=true
-			break
-	if accessgranted== false:
-		array.append({name = 'Turn Back', function = 'zoneenter', args = 'gornoutskirts'})
-	outside.buildbuttons(array,self)
-		# if accessgranted== true:
-	# 	array.append({name = 'Enter the Desert', function = 'zoneenter', args = 'desert'})
-# array.append({name = "Return to Frostford", function = 'zoneenter', args = 'frostford'})
-
+	if player.race=="Centaur": 
+		return true
+	else:
+		for i in teammates:
+			if i.race== "Centaur": #|| i.race=="Centaur": #Second Centaur is supposed to be the camel hybrid
+				return true
+			else:
+				return false
 
 func deepdesert():
-	var array=[]
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
 	var teammates=[]
-	var accessgranted=false
 	var accesscounter=0
 	for i in party:
 		var j = globals.state.findslave(i)
 		teammates.append(j)
-	for i in teammates:
-		if i.race== "Centaur" || i.race=="Centaur":
-			accessgranted=true
-			break
-	if accessgranted== false:
-		array.append({name = 'Turn Back', function = 'zoneenter', args = 'desert'})
-	outside.buildbuttons(array,self)
-	# if accessgranted== true:
-	# 	array.append({name = 'Enter the Desert', function = 'zoneenter', args = 'desert'})
-# array.append({name = "Return to Frostford", function = 'zoneenter', args = 'frostford'})
-# outside.buildbuttons(array,self)
+	if player.race=='Centaur':
+		return true
+	else:
+		for i in teammates:
+			if i.race== "Centaur": #|| i.race=="Centaur":
+				return true
+			else:
+				return false
 
 ###---End Expansion---###
 
