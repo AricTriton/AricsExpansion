@@ -55,10 +55,22 @@ func zoneenter(zone):
 	var accessgranted=true #Added by Bubblepot. Wrapping zone code in an if statement to allow for zones that deny entry
 	if zone.code=='snowypeaks': 
 		accessgranted = snowypeaks()
+	elif zone.code=='forestofrefuge':
+		accessgranted = forestofrefuge()
+	elif zone.code=='desert': 
+		accessgranted = desert()
+	elif zone.code=='deepdesert':
+		accessgranted = deepdesert()
+	elif zone.code=='lakebottom':
+		accessgranted = lakebottom()
+	elif zone.code = 'seafloor':
+		accessgranted = seafloor()
+	elif zone.code=='skysphere':
+		accessgranted = skysphere()
 	if accessgranted== false:
 		mansion.maintext+= "\n\n You realize that you cannot traverse this area safely with your current abilities. Your death would only be a matter of time."
 		var array=[]
-		array.append({name = 'Turn Back', function = 'zoneenter', args = 'frostfordoutskirts'})
+		array.append({name = 'Turn Back', function = 'zoneenter', args = str(lastzone) })
 		outside.buildbuttons(array,self)
 	else: #End of Bubblepot edits
 		var array = []
@@ -1548,11 +1560,33 @@ func hellscapeentrance():
 	outside.buildbuttons(array,self)
 #Sea
 func deepseaentrance():
-	var array = []
-	array.append({name = 'Dive', function = 'zoneenter', args = 'deepsea'})
-	array.append({name = "Return to the Far Sea", function = 'zoneenter', args = 'farsea'})
-	outside.buildbuttons(array,self)
-
+	var player = globals.player
+	var party = globals.state.playergroup.duplicate()
+	var teammates=[]
+	var accesscounter=0
+	var accessgranted
+	for i in party:
+		var j = globals.state.findslave(i)
+		teammates.append(j)
+	if player.race in["Nereid","Scylla"]: 
+		accessgranted= true
+	else:		
+		for i in teammates:
+			if i.race in ["Nereid","Scylla"] :
+				accessgranted= true
+			else:
+				accessgranted= false
+	if accessgranted== false:
+		mansion.maintext+= "\n\n You realize that you cannot traverse this area safely with your current abilities. Your death would only be a matter of time."
+		var array=[]
+		array.append({name = 'Turn Back', function = 'zoneenter', args = "farsea"})
+		outside.buildbuttons(array,self)
+	else:
+		var array = []
+		array.append({name = 'Dive', function = 'zoneenter', args = 'deepsea'})
+		array.append({name = "Return to the Far Sea", function = 'zoneenter', args = 'farsea'})
+		outside.buildbuttons(array,self)
+				
 func sealairentrance():
 	var array = []
 	array.append({name = 'Enter the cave', function = 'zoneenter', args = 'leviathanlair'})
@@ -1603,7 +1637,7 @@ func snowypeaks(): #Check if the player is eligible to enter the snowy peaks.
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
 	var teammates=[]
-	var accesscounter=0
+	var accesscounter=0 #Consider using accesscounter to assign incremental benefits per centaur present
 	for i in party:
 		var j = globals.state.findslave(i)
 		teammates.append(j)
@@ -1625,11 +1659,11 @@ func forestofrefuge():
 	for i in party:
 		var j = globals.state.findslave(i)
 		teammates.append(j)
-	if player.race=="Beastkin Wolf" && globals.state.spec== "Hunter": #This second but may be unnecessary. Ask in server
+	if player.race in["Beastkin Wolf","Halfkin Wolf"] && globals.state.spec== "Hunter": #This second but may be unnecessary. Ask in server
 		return true
 	else:		
 		for i in teammates:
-			if i.race== "Beastkin Wolf" && i.spec=="ranger":
+			if i.race in ["Beastkin Wolf","Halfkin Wolf"] && i.spec=="ranger":
 				return true
 			else:
 				return false
@@ -1646,7 +1680,7 @@ func desert():
 		return true
 	else:
 		for i in teammates:
-			if i.race== "Centaur": #|| i.race=="Centaur": #Second Centaur is supposed to be the camel hybrid
+			if i.race== "Centaur": 
 				return true
 			else:
 				return false
@@ -1663,10 +1697,96 @@ func deepdesert():
 		return true
 	else:
 		for i in teammates:
-			if i.race== "Centaur": #|| i.race=="Centaur":
+			if i.race== "Centaur": 
 				return true
 			else:
 				return false
+
+func lakebottom():
+	var player = globals.player
+	var party = globals.state.playergroup.duplicate()
+	var teammates=[]
+	var accesscounter=0
+	for i in party:
+		var j = globals.state.findslave(i)
+		teammates.append(j)
+	if player.race in["Nereid","Scylla","Otter"]: 
+		return true
+	else:		
+		for i in teammates:
+			if i.race in ["Nereid","Scylla","Otter"] :
+				return true
+			else:
+				return false
+
+func seafloor():
+	var player = globals.player
+	var party = globals.state.playergroup.duplicate()
+	var teammates=[]
+	var accesscounter=0
+	for i in party:
+		var j = globals.state.findslave(i)
+		teammates.append(j)
+	for i in teammates:
+		if i.send>6:
+			accesscounter+=1
+	if player.send>6:
+		accesscounter+=1
+	if accesscounter>=party.size():
+		return true
+	else:
+		if player.race = "Scylla": 
+			accesscounter+=1
+		else:		
+			for i in teammates:
+				if i.race in ["Nereid","Scylla","Otter"] :
+					accesscounter+=1
+		if accesscounter>=party.size():
+			return true
+
+func underwatercanyon():
+	var player = globals.player
+	var party = globals.state.playergroup.duplicate()
+	var teammates=[]
+	var accesscounter=0
+	for i in party:
+		var j = globals.state.findslave(i)
+		teammates.append(j)
+	for i in teammates:
+		if i.send>10:
+			accesscounter+=1
+	if player.send>10:
+		accesscounter+=1
+	if accesscounter>=party.size():
+		return true
+	else:
+		if player.race = "Scylla": 
+			accesscounter+=1
+		else:		
+			for i in teammates:
+				if i.race in ["Nereid","Scylla","Otter"] :
+					accesscounter+=1
+		if accesscounter>=party.size():
+			return true
+
+func skysphere():
+	var player = globals.player
+	var party = globals.state.playergroup.duplicate()
+	var teammates=[]
+	var accesscounter=0
+	for i in party:
+		var j = globals.state.findslave(i)
+		teammates.append(j)
+	if player.wings != null:
+		accesscounter+=1
+	else:
+		for i in teammates:
+			if i.wings != null:
+				accesscounter+=1
+	if accesscounter>=party.size():
+		return true
+	else:
+		return false
 
 ###---End Expansion---###
 
