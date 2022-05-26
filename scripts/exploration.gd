@@ -56,10 +56,10 @@ func zoneenter(zone):
 	if zone.code=='snowypeaks': 
 		accessgranted = snowypeaks()
 	if accessgranted== false:
+		mansion.maintext+= "\n\n You realize that you cannot traverse this area safely with your current abilities. Your death would only be a matter of time."
 		var array=[]
 		array.append({name = 'Turn Back', function = 'zoneenter', args = 'frostfordoutskirts'})
 		outside.buildbuttons(array,self)
-		print("accessgranted= "+ str(accessgranted))
 	else: #End of Bubblepot edits
 		var array = []
 		if zone.combat == true && progress >= zone.length:
@@ -1523,10 +1523,10 @@ func frostford():
 			array.append({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold', disabled = true})
 	outside.buildbuttons(array,self)
 
-	###---Added by Expansion---### LocationScripts for Expanded Areas (Bubblepot)
-	#Important! Grouping Order is: Entrances, Locations, Fights, FightWins Bosses, BossWins, Exits
-	#Entrances
-	#Forest
+###---Added by Expansion---### LocationScripts for Expanded Areas (Bubblepot)
+#Important! Grouping Order is: Entrances, Locations, Fights, FightWins Bosses, BossWins, Exits
+#Entrances
+#Forest
 func greattreeentrance():
 	var array = []
 	array.append({name = 'Enter the doorway', function = 'zoneenter', args = 'greattreetrunk'})
@@ -1616,7 +1616,6 @@ func snowypeaks(): #Check if the player is eligible to enter the snowy peaks.
 		return true
 	else:
 		return false
-
 	
 func forestofrefuge():
 	var player = globals.player
@@ -1634,8 +1633,6 @@ func forestofrefuge():
 				return true
 			else:
 				return false
-
-
 
 func desert():
 	var player = globals.player
