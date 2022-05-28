@@ -66,7 +66,7 @@ func zoneenter(zone):
 	elif zone.code = 'seafloor':
 		accessgranted = seafloor()
 	elif zone.code=='skysphere':
-		accessgranted = skysphere()
+		accessgranted = partycanfly()
 	if accessgranted== false:
 		mansion.maintext+= "\n\n You realize that you cannot traverse this area safely with your current abilities. Your death would only be a matter of time."
 		var array=[]
@@ -1536,8 +1536,8 @@ func frostford():
 	outside.buildbuttons(array,self)
 
 ###---Added by Expansion---### LocationScripts for Expanded Areas (Bubblepot)
-#Important! Grouping Order is: Entrances, Locations, Fights, FightWins Bosses, BossWins, Exits
-#Entrances
+#Important! Grouping Order is: Entrances, Locations, Habitations, Fights, FightWins Bosses, BossWins, Exits
+#ENTRANCES
 #Forest
 func greattreeentrance():
 	var array = []
@@ -1632,6 +1632,7 @@ func sealairentrance():
 # 	showlootscreen()
 # 	zoneenter("undercityruins")
 
+#LOCATIONS
 #Remember to add the appropriate text
 func snowypeaks(): #Check if the player is eligible to enter the snowy peaks. 
 	var player = globals.player
@@ -1641,6 +1642,14 @@ func snowypeaks(): #Check if the player is eligible to enter the snowy peaks.
 	for i in party:
 		var j = globals.state.findslave(i)
 		teammates.append(j)
+	#If the player can cast a spell to enable travel individual checks are unneccesary
+	#if player.hascast:
+	#	manadecrease()  #Mana decrease may have to be implemented in zoneenter function. If not possible we can just make spell cost very high.
+	#	return true 
+	#Scroll through party members and player to see if they have accessgranting item.
+	#if i.hasitem:
+	#	return true
+	#Then we finally check race and stats. I couldn't think of a generalized way to do this so maybe this is trash and you can do better XD
 	for i in teammates:
 		if i.sagi>6 && i.send>6:
 			accesscounter+=1
@@ -1659,6 +1668,14 @@ func forestofrefuge():
 	for i in party:
 		var j = globals.state.findslave(i)
 		teammates.append(j)
+	#If the player can cast a spell to enable travel individual checks are unneccesary
+	#if player.hascast:
+	#	manadecrease()  #Mana decrease may have to be implemented in zoneenter function. If not possible we can just make spell cost very high.
+	#	return true 
+	#Scroll through party members and player to see if they have accessgranting item.
+	#if i.hasitem:
+	#	return true
+	#Then we finally check race and stats. I couldn't think of a generalized way to do this so maybe this is trash and you can do better XD
 	if player.race in["Beastkin Wolf","Halfkin Wolf"] && globals.state.spec== "Hunter": #This second but may be unnecessary. Ask in server
 		return true
 	else:		
@@ -1769,7 +1786,7 @@ func underwatercanyon():
 		if accesscounter>=party.size():
 			return true
 
-func skysphere():
+func partycanfly():
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
 	var teammates=[]
@@ -1787,6 +1804,28 @@ func skysphere():
 		return true
 	else:
 		return false
+
+#HABITATIONS
+func stormvillage():
+	var array = []
+	var entry = partycanfly()
+	main.music_set('frostford')
+#	if globals.state.portals.amberguard.enabled == false:
+#		globals.state.portals.amberguard.enabled = true
+#		mansion.maintext = mansion.maintext + "\n\n[color=yellow]You have unlocked new portal![/color]"
+	array.append({name = "Exit to StormCrown", function = 'zoneenter', args = 'elvenforest'})
+	if entry==true:
+		array.append({name = "Fly Up", function = 'zoneenter', args = 'skysphere'})
+	outside.buildbuttons(array,self)
+
+func lizardvillage():
+	var array = []
+	main.music_set('frostford')
+#	if globals.state.portals.amberguard.enabled == false:
+#		globals.state.portals.amberguard.enabled = true
+#		mansion.maintext = mansion.maintext + "\n\n[color=yellow]You have unlocked new portal![/color]"
+	array.append({name = "Enter Marsh", function = 'zoneenter', args = 'elvenforest'})
+	outside.buildbuttons(array,self)
 
 ###---End Expansion---###
 
