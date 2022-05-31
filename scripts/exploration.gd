@@ -1,6 +1,10 @@
 
 var travel = globals.expansiontravel #ralphD
 
+var accessgranted = true #Added by Bubblepot. Wrapping zone code in an if statement to allow for zones that deny entry
+var isusingmagic = false #Added by Bubblepot. If true, subtract manacost every advance. Not implemented yet
+var manacost = 0 #Added by Bubblepot. How much mana it takes to move through a given zone.
+
 func zoneenter(zone):
 	var text = ''
 	var endofarea = false
@@ -52,7 +56,7 @@ func zoneenter(zone):
 #		else:
 #			main.music_set('explore')
 	
-	var accessgranted=true #Added by Bubblepot. Wrapping zone code in an if statement to allow for zones that deny entry
+	
 	if zone.code=='snowypeaks': 
 		accessgranted = snowypeaks()
 	elif zone.code=='forestofrefuge':
@@ -497,6 +501,19 @@ func chestmouselockpick(person):
 		treasurechestoptions(text)
 	else:
 		showlootscreen(text)
+
+func enemyleave():
+	progress += 1.0
+	if isusingmagic== true:
+		globals.player.mana-= manacost
+	var text = ''
+	globals.player.energy -= max(5-floor((globals.player.sagi+globals.player.send)/2),1)
+	for i in globals.state.playergroup:
+		var person = globals.state.findslave(i)
+		person.energy -= max(5-floor((person.sagi+person.send)/2),1)
+	zoneenter(currentzone.code)
+	if text != '':
+		mansion.maintext = mansion.maintext +'\n[color=yellow]'+text+'[/color]'
 
 func enemydefeated():
 	if launchonwin != null:
