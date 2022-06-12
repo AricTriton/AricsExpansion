@@ -444,6 +444,10 @@ var enemygrouppools = {
 		description = "You spot a number of glowing spirits communing with a suspicious tree. They haven't noticed you yet", 
 		descriptionambush = 'You are attacked by [color=aqua]angry tree spirits[/color]. ', 
 	},
+	sandworm = {units = [['sandworm',1, 1]], awareness = 10, captured = null, special = null,
+		description = 'Your spot a moving ridge in the sand that must surely contain a [color=aqua]giant sand worm[/color].',
+		descriptionambush =  'Amidst a spray of sand and dust, a [color=aqua]giant sand worm[/color] rises out of the ground to attack you..',
+	}
 	# amberguardguardsmany = {
 	# 	units = [['amberguardpatrol',7,10]], awareness = -10, captured = null, special = null,
 	# 	description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Amberguard. ",
@@ -509,6 +513,7 @@ var capturespool = {
 		capturesex = ['any'],
 		faction = 'stranger',
 	},
+	
 }
 
 
@@ -1540,6 +1545,21 @@ var enemypool = {
 	#GORN
 	#Oasis
 	#Desert
+	sandworm = {
+		name = 'Giant Sand Worm',
+		code = 'sandworm',
+		faction = 'animal',
+		icon = globals.loadimage(globals.modfolder + "/Leo/Images/Sandworm.png"),
+		special = null,
+		capture = null,
+		rewardpool = {natureessenceing = 20, magicessenceing = 10},
+		rewardgold = 0,
+		rewardexp = 40,
+		level = 9,
+		stats = {health = 150, power = 15, speed = 18, energy = 50, armor = 0, magic = 0, abilities = ['attack', 'dragunder', 'devour']},
+		skills = [],
+		aiscript = 'trapdevourAI',
+	},
 	#DeepDesert
 	#SandTomb
 	#AMBERGUARD
@@ -1547,6 +1567,20 @@ var enemypool = {
 	#CliffsideFalls
 	#FROSTFORD
 	#Snowy Peaks
+	frozenwisp = {
+		name = 'Frozen Wisp',
+		code = 'frozenwisp',
+		faction = 'animal',
+		icon = globals.loadimage(globals.modfolder + "/Leo/Images/Wisp.png"),
+		special = null,
+		capture = null,
+		rewardpool = {natureessenceing = 20},
+		rewardgold = 0,
+		rewardexp = 20,
+		level = 7,
+		stats = {health = 75, power = 13, speed = 18, energy = 50, armor = 5, magic = 1, abilities = ['attack', 'drainheat']},
+		skills = [],
+	},
 	#Snow Plains
 	#Lizard Village
 	#AbandonedVillage
@@ -1656,6 +1690,21 @@ var enemypool = {
 	},
 	#Desert
 	#Sea
+	drowned = {
+		name = 'Drowned',
+		code = 'drowned',
+		faction = 'animal',
+		icon = globals.loadimage(globals.modfolder + "/Leo/Images/drowned.png"),
+		special = null,
+		capture = null,
+		rewardpool = {taintedessenceing = 5, fluidsubstanceing = 5},
+		rewardgold = 0,
+		rewardexp = 40,
+		level = 9,
+		stats = {health = 70, power = 20, speed = 15, energy = 50, protection = 40, armor = 3, magic = 0, abilities = ['attack', 'spew', 'heavystike', 'rush']},
+		skills = [],
+		aiscript = 'drownedAI',
+	}
 	#Marsh
 	#Mountains	
 }
