@@ -1403,6 +1403,20 @@ var itemlist = {
 		weight = 1,
 		amount = 0
 	},
+	prods = {
+		code = 'prods',
+		name = 'Cattle Prods',
+		icon = load("res://files/aric_expansion_images/potions/rendrassa_sedative_potion_bottle.png"),
+		description = "Used to control cattle", # TODO, placeholder for now
+		effect = 'sedativeeffect',
+		recipe = '',
+		cost = 75,
+		type = 'dummy',
+		toxicity = 15,
+		reqs = true,
+		weight = 1,
+		amount = 0
+	},
 	sexchangepot = {
 		code = 'sexchangepot',
 		name = 'Sexual Conversion Tonic',

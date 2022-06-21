@@ -3011,7 +3011,7 @@ func farminspect(person):
 	for i in globals.expansionfarm.alldailyactions:
 		var refDict = globals.expansionfarm.dailyActionReqDict[i]
 		if refDict.has('farmitems'):
-			if refDict.farmitems.has('prods') && dailyactionCounters.prod >= globals.resources.farmexpanded.farminventory.prods:
+			if refDict.farmitems.has('prods') && dailyactionCounters.prod >= globals.itemdict.prods.amount:
 				nodeDailyaction.set_item_disabled(counter, true)
 				nodeDailyaction.set_item_text(counter, 'Insufficient Prods')
 				counter += 1
@@ -3890,7 +3890,7 @@ func _on_storebutton_pressed():
 	for i in refDict:
 		temp = refDict[i]
 		nodeTemp = nodeFarmStore.get_node("items/" + i)
-		nodeTemp.get_node("current").set_bbcode("[right][color=aqua]" + str(globals.itemdict.aphrodisiac.amount) + "[/color][/right]")
+		nodeTemp.get_node("current").set_bbcode("[right][color=aqua]" + str(globals.itemdict[i].amount) + "[/color][/right]")
 		nodeTemp.get_node("price").set_bbcode("[right][color=yellow]" + str(temp.cost) + "[/color][/right]")
 		if globals.resources.gold >= temp.cost:
 			nodeTemp.get_node("add").set_disabled(false)
