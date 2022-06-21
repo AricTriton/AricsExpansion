@@ -1318,8 +1318,8 @@ func _on_end_pressed():
 
 	if globals.state.sebastianorder.duration > 0:
 		globals.state.sebastianorder.duration -= 1
-		if globals.state.sebastianorder.duration == 0:
-			text0.set_bbcode(text0.get_bbcode() + "[color=green]Sebastian should have your order ready by this time. [/color]\n")
+	if globals.state.sebastianorder.duration == 0:
+		text0.set_bbcode(text0.get_bbcode() + "[color=green]Sebastian should have your order ready by this time. [/color]\n")
 	globals.state.groupsex = true
 
 	var consumption = variables.basefoodconsumption
