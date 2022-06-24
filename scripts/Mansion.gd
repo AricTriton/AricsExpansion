@@ -4491,3 +4491,7 @@ func dialogue(showcloseButton, destination, dialogtext, dialogbuttons = null, sp
 				clearSprites.erase(i[1])
 	for key in clearSprites:
 		nodedict[key].set_texture(null)
+
+func _on_upgradesclose_pressed():
+	get_node("MainScreen/mansion/upgradespanel").hide()
+	get_tree().get_current_scene()._on_mansion_pressed()
