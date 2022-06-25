@@ -213,7 +213,7 @@ func getFarmDescription(tempperson):
 	
 	#Contentment
 	text += "\n\n"
-	if person.displayContentment() in ['Happy','Content']:
+	if person.npcexpanded.contentment >= 0:
 		text += "$He looks up at you and gives you a relaxed smile. "
 	else:
 		if person.cour >= 50:
