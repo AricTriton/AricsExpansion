@@ -1033,6 +1033,8 @@ func breedSnails(cattle):
 
 	cattle.lust = clust
 	cattle.metrics.orgasm += corgasms
+	cattle.lastsexday = globals.resources.day
+
 	return text
 
 
