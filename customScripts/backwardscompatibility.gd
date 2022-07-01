@@ -199,6 +199,15 @@ func backwardsCompatibility(person):
 #		babyTermination(person)
 	
 	person.expansionversion = globals.expansionsettings.modversion
+
+	# Move prods from farminventory to itemdict if necessary
+	if (globals.resources.farmexpanded.has('farminventory') &&
+		globals.resources.farmexpanded.farminventory.has('prods') &&
+		globals.resources.farmexpanded.farminventory.prods > 0 &&
+		globals.itemdict.has('prods')):
+			globals.itemdict.prods = globals.resources.farmexpanded.farminventory.prods
+			globals.resources.farmexpanded.farminventory.prods = 0
+
 	return
 
 func unique_Fullblooded(person):

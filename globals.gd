@@ -202,6 +202,7 @@ class resource:
 		stallbedding = {dirt = -1, hay = 0, cot = 0, bed = 0},
 		extractors = {hand = -1, suction = 0, pump = 0, pressurepump = 0},
 		containers = {cup = 0, bucket = 0, pail = 0, jug = 0, canister = 0, bottle = 0},
+		farminventory = {prods = 0}, #TBK - Remove Later
 		vats = {
 			processingorder = ['milk','semen','lube','piss'],
 			milk = {vat = 0, new = 0, sell = 0, food = 0, refine = 0, bottle2sell = 0, bottle2refine = 0, priceper = 0, foodper = 0, auto = 'vat', autobuybottles = false, basebottlingenergy = 5,},

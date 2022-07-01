@@ -35,6 +35,19 @@ var itemlist = {
 		weight = 2,
 		reqs = true,
 	},
+	#FarmItems
+	prods = {
+		code = 'prods',
+		name = 'Cattle Prods',
+		icon = load("res://files/aric_expansion_images/potions/rendrassa_sedative_potion_bottle.png"), # TBK - Add prods image
+		description = "Used to control cattle", # TBK - Replace placeholder text
+		effect = '',
+		recipe = '',
+		cost = 75,
+		type = 'dummy',
+		amount = 0,
+		reqs = true,
+	},
 	#ExplorationItems
 	rope = {
 		code = 'rope',
@@ -1400,20 +1413,6 @@ var itemlist = {
 		type = 'potion',
 		toxicity = 15,
 		reqs = 'globals.state.mansionupgrades.mansionalchemy >= 1',
-		weight = 1,
-		amount = 0
-	},
-	prods = {
-		code = 'prods',
-		name = 'Cattle Prods',
-		icon = load("res://files/aric_expansion_images/potions/rendrassa_sedative_potion_bottle.png"),
-		description = "Used to control cattle", # TODO, placeholder for now
-		effect = 'sedativeeffect',
-		recipe = '',
-		cost = 75,
-		type = 'dummy',
-		toxicity = 15,
-		reqs = true,
 		weight = 1,
 		amount = 0
 	},
