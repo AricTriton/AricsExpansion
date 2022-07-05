@@ -1055,14 +1055,6 @@ func _on_end_pressed():
 						else:
 							text0.set_bbcode(text0.get_bbcode() + person.dictionary("The beast lunged forward and forced $name onto the floor before mounting $his " + str(globals.expansion.namePenis()) + " and having its way with $him. "))
 			###---End Expansion---###
-			if person.lust >= 90 && person.rules.masturbation == true && !person.traits.has('Sex-crazed') && (rand_range(0,10)>7 || person.effects.has('stimulated')) && globals.resources.day - person.lastsexday >= 5:
-				person.add_trait('Sex-crazed')
-				text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=yellow]Left greatly excited and prohibited from masturbating, $name desperate state led $him to become insanely obsessed with sex.[/color]\n"))
-			elif person.lust >= 75 && globals.resources.day - person.lastsexday >= 5:
-				person.stress += rand_range(10,15)
-				person.obed -= rand_range(10,20)
-				text0.bbcode_text += person.dictionary("[color=red]$name is suffering from unquenched lust.[/color]\n")
-
 			person.health += slavehealing * person.stats.health_max
 
 			if person.skillpoints < 0:
@@ -1261,6 +1253,15 @@ func _on_end_pressed():
 	if farmtext != null && text3 != null && globals.state.farm >= 3:
 		text3.set_bbcode(farmtext)
 	
+	for person in globals.slaves:
+		if person.lust >= 90 && person.rules.masturbation == true && !person.traits.has('Sex-crazed') && (rand_range(0,10)>7 || person.effects.has('stimulated')) && globals.resources.day - person.lastsexday >= 5:
+			person.add_trait('Sex-crazed')
+			text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=yellow]Left greatly excited and prohibited from masturbating, $name desperate state led $him to become insanely obsessed with sex.[/color]\n"))
+		elif person.lust >= 75 && globals.resources.day - person.lastsexday >= 5:
+			person.stress += rand_range(10,15)
+			person.obed -= rand_range(10,20)
+			text0.bbcode_text += person.dictionary("[color=red]$name is suffering from unquenched lust.[/color]\n")
+		
 	###---Added by Expansion---### Ank BugFix v4a
 	for person in globals.slaves:
 		if person.spec == 'housekeeper' && person.away.duration == 0 && person.work in ['headgirl','farmmanager','labassist','jailer']:
@@ -1318,8 +1319,8 @@ func _on_end_pressed():
 
 	if globals.state.sebastianorder.duration > 0:
 		globals.state.sebastianorder.duration -= 1
-		if globals.state.sebastianorder.duration == 0:
-			text0.set_bbcode(text0.get_bbcode() + "[color=green]Sebastian should have your order ready by this time. [/color]\n")
+	if globals.state.sebastianorder.duration == 0:
+		text0.set_bbcode(text0.get_bbcode() + "[color=green]Sebastian should have your order ready by this time. [/color]\n")
 	globals.state.groupsex = true
 
 	var consumption = variables.basefoodconsumption
@@ -3011,7 +3012,7 @@ func farminspect(person):
 	for i in globals.expansionfarm.alldailyactions:
 		var refDict = globals.expansionfarm.dailyActionReqDict[i]
 		if refDict.has('farmitems'):
-			if refDict.farmitems.has('prods') && dailyactionCounters.prod >= globals.resources.farmexpanded.farminventory.prods:
+			if refDict.farmitems.has('prods') && dailyactionCounters.prod >= globals.itemdict.prods.amount:
 				nodeDailyaction.set_item_disabled(counter, true)
 				nodeDailyaction.set_item_text(counter, 'Insufficient Prods')
 				counter += 1
@@ -3890,7 +3891,7 @@ func _on_storebutton_pressed():
 	for i in refDict:
 		temp = refDict[i]
 		nodeTemp = nodeFarmStore.get_node("items/" + i)
-		nodeTemp.get_node("current").set_bbcode("[right][color=aqua]" + str(globals.itemdict.aphrodisiac.amount) + "[/color][/right]")
+		nodeTemp.get_node("current").set_bbcode("[right][color=aqua]" + str(globals.itemdict[i].amount) + "[/color][/right]")
 		nodeTemp.get_node("price").set_bbcode("[right][color=yellow]" + str(temp.cost) + "[/color][/right]")
 		if globals.resources.gold >= temp.cost:
 			nodeTemp.get_node("add").set_disabled(false)
@@ -4491,3 +4492,7 @@ func dialogue(showcloseButton, destination, dialogtext, dialogbuttons = null, sp
 				clearSprites.erase(i[1])
 	for key in clearSprites:
 		nodedict[key].set_texture(null)
+
+func _on_upgradesclose_pressed():
+	get_node("MainScreen/mansion/upgradespanel").hide()
+	get_tree().get_current_scene()._on_mansion_pressed()
