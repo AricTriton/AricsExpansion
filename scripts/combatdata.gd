@@ -405,9 +405,54 @@ var enemygrouppools = {
 	###---Added By Expansion---### Bubblepot grouppool additions for new regions
 	#WIMBORN
 	#Farmlands
+	scarecrowone = {
+		units = [['scarecrow', 1, 1]], awareness = 10, captured = null, special = null,
+		description = 'There is a scarecrow in the fields. You could swear you saw it move briefly.',
+		descriptionambush = 'There is a scarecrow in the fields. As you move past it, it takes a swing at you! ',
+	},
+	scarecrowandcrow = {
+		units = [['scarecrow', 1, 3], ['crow',3,5]], awareness = 5, captured = null, special = null,
+		description = 'There are scarecrows in the fields. A number of crows surround them dodging their swipes.',
+		descriptionambush = 'A murder of crows circles the scarecrows gathered here. One of them attacks you! ',
+	},
 	#RiversidePlains
+	centaurherd = {
+		units = [['plainscentaur', 1, 3], ['centaurraider',0,2]], awareness = 5, captured = null, special = null,
+		description = 'You observe a herd of centaurs patrolling the plains to keep their livestock in check.',
+		descriptionambush = 'A group of centaurs attempt to run you off their turf. ',
+	},
+	centaurraidingparty = {
+		units = [['centaurraider',3,6],['centaurwarlord', 0, 2]], awareness = 30, captured = null, special = null,
+		description = 'A party of armed centaurs are galloping purposefully toward an unknown objective. Their empty sacks suggest pillaging.',
+		descriptionambush = 'You are attacked by a centaur raiding party. ',
+	},
+	companyofwarlords = {
+		units = [['tauruschieftain',1,1],['centaurwarlord', 1, 2]], awareness = 30, captured = null, special = null,
+		description = 'A large and heavily armed Taurus is speaking heatedly with an equally larged and heavily armed Centaur.',
+		descriptionambush = 'You intrude on discussion between a powerful looking Taurus and heavily armed Centaur. They attack you. ',
+	},
+	taurusescort = {
+		units = [['taurus1',3,6],['tauruschieftain', 1, 2]], awareness = -10, captured = null, special = null,
+		description = 'A Taurus Chieftain is leading his people toward more fertile grounds.',
+		descriptionambush = 'You catch a group of Taurus by surprise. Their cries of alarm catch their leaders attention. The way they heft their weapon makes it clear how they seek to solve the problem. ',
+	},
 	#DwarvenFortress
-	#RiverCrossing
+	dwarvendefense = {
+		units = [['dwarvenwarrior',1,2],['dwarvenguard', 1, 2],['dwarvenmage',1,2],['dwarvenengineer',1,2],['dwarvenranger',1,2]], awareness = -10, captured = null, special = null,
+		description = 'A group of armed dwarves appear to be searching for intruders.',
+		descriptionambush = 'A group of armed dwarves attack you.',
+	},
+	dwarventrap = {
+		units = [['dwarvenguard', 1, 2],['dwarvenmage',1,1],['dwarvenengineer',1,3],['dwarvenranger',1,2]], awareness = -10, captured = null, special = null,
+		description = 'A group of armed dwarves appear to be preparing for an engangement.',
+		descriptionambush = 'You find yourself surrounded by angry dwarves. You have walked into an ambush.',
+	},
+	dwarvenassault = {
+		units = [['dwarvenwarrior',1,3],['dwarvenguard', 1, 2],['dwarvenmage',1,2],['dwarvenengineer',1,1],['dwarvenranger',1,2]], awareness = -10, captured = null, special = null,
+		description = 'A group of armed dwarves rush down the corridors.',
+		descriptionambush = 'An assault team of dwarves attacks you on sight.',
+	},
+	#RiverCrossing = Shallow water, freshwater races can go here. Plus Kappa, when added.
 	#Graveyard
 	#Crypt
 	#WIMBORNXGORN
@@ -684,7 +729,6 @@ var enemypool = {
 		gear = 'elfs',
 		skills = [],
 	},
-
 	orcwarrior = {
 		name = 'An Orc Warrior',
 		code = 'orcwarrior',
@@ -1521,7 +1565,7 @@ var enemypool = {
 	#WIMBORN
 	#Farmlands
 	scarecrow = {
-		name = 'Scarecroww',
+		name = 'Scarecrow',
 		code = 'scarecrow',
 		faction = 'monster',
 		icon = null,
@@ -1550,6 +1594,44 @@ var enemypool = {
 		stats = {health = 100, power = 40, speed = 20, energy = 50, armor = 3, magic = 0, abilities = ['attack']},
 		skills = [],
 	},
+	plainscentaur = {
+		name = 'Centaur',
+		code = 'plainscentaur',
+		faction = 'monster',
+		icon = load("res://files/images/enemies/stranger.png"),
+		iconalt = load("res://files/images/enemies/stranger.png"),
+		special = '',
+		capture = true,
+		capturerace = [['Centaur',100]],
+		captureoriginspool = [{value = 'common', weight = 1},{value = 'poor', weight = 1},{value = 'slave', weight = 1}],
+		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 10}, {value = 'adult', weight = 30}],
+		capturesex = ['any'],
+		rewardpool = {gold = 10},
+		rewardgold = [5,20],
+		rewardexp = 20,
+		stats = {health = 100, power = 10, speed = 20, energy = 50, armor = 2, magic = 0, abilities = ['attack']},
+		gear = 'medbandits',
+		skills = [],
+	},
+	centaurraider = {
+		name = 'Centaur Raider',
+		code = 'centaurraider',
+		faction = 'monster',
+		icon = null,
+		iconalt = null,
+		special = '',
+		capture = true,
+		capturerace = [['Centaur',100]],
+		captureoriginspool = [{value = 'common', weight = 1},{value = 'poor', weight = 1},{value = 'slave', weight = 1}],
+		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 10}, {value = 'adult', weight = 30}],
+		capturesex = ['any'],
+		rewardpool = {gold = 10},
+		rewardgold = [5,20],
+		rewardexp = 20,
+		stats = {health = 150, power = 20, speed = 25, energy = 50, armor = 2, magic = 0, abilities = ['attack']},
+		gear = 'guard',
+		skills = [],
+	},
 	centaurwarlord = {#Powerhouse/Capture
 		name = 'Centaur Warlord',
 		code = 'centaurwarlord',
@@ -1559,7 +1641,7 @@ var enemypool = {
 		special = '',
 		capture = true,
 		capturerace = [['Centaur',100]],
-		captureoriginspool = [{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
+		captureoriginspool = [{value = 'noble', weight = 2},{value = 'rich', weight = 3},{value = 'commoner', weight = 1}],
 		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 6}],
 		capturesex = ['any'],
 		rewardpool = {},
@@ -1698,10 +1780,10 @@ var enemypool = {
 		icon = null,
 		special = null,
 		capture = null,
-		rewardpool = {magicessenceing = 65},
+		rewardpool = {},
 		rewardgold = 0,
 		rewardexp = 50,
-		stats = {health = 50, power = 15, speed = 50, energy = 50, armor = 0, magic = 10, abilities = ['attack']},
+		stats = {health = 50, power = 15, speed = 30, energy = 50, armor = 0, magic = 10, abilities = ['attack']},
 		skills = [],
 	},
 	spiritwisp = {
