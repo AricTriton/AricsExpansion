@@ -421,7 +421,7 @@ var database = {
 		locationscript = 'forestofrefuge',
 		exits = ['prairie','ruins'],
 		tags = ['enclosed'],
-		races = [{value = 'Dyrad', weight = 1}],
+		races = [],
 		levelrange = [10,15],
 	},
 	ruins = {
@@ -504,7 +504,7 @@ var database = {
 		length = 10,
 		exits = ['deepdesert'],
 		tags = ['enclosed'],
-		races = [{value = 'Dyrad', weight = 12}],
+		races = [],
 		levelrange = [12,15],
 	},
 	#Amberguard
