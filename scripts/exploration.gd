@@ -1769,7 +1769,7 @@ func seafloor():
 	if accesscounter>=party.size():
 		return true
 	else:
-		if player.race = "Scylla": 
+		if player.race == "Scylla": 
 			accesscounter+=1
 		else:		
 			for i in teammates:
@@ -1794,7 +1794,7 @@ func underwatercanyon():
 	if accesscounter>=party.size():
 		return true
 	else:
-		if player.race = "Scylla": 
+		if player.race == "Scylla": 
 			accesscounter+=1
 		else:		
 			for i in teammates:
@@ -1831,7 +1831,7 @@ func stormvillage():
 #		globals.state.portals.amberguard.enabled = true
 #		mansion.maintext = mansion.maintext + "\n\n[color=yellow]You have unlocked new portal![/color]"
 	array.append({name = "Exit to StormCrown", function = 'zoneenter', args = 'elvenforest'})
-	if entry==true:
+	if entry == true:
 		array.append({name = "Fly Up", function = 'zoneenter', args = 'skysphere'})
 	outside.buildbuttons(array,self)
 
