@@ -1863,6 +1863,25 @@ func dailyCrystal():
 	var refCrystal = globals.state.thecrystal
 	refCrystal.power = globals.state.mansionupgrades.dimensionalcrystal
 
+	#Check for Researcher
+	var researcher = getCrystalResearcher()
+	
+	if researcher == null:
+		if globals.expansionsettings.show_warning_if_missing_researcher == true:
+			text = "[center][color=red]No Researcher was assigned to study the [color=#E389B9]Dimensional Crystal[/color] today.[/color][/center]"
+			if refCrystal.research > 0:
+				text = "\n[center][color=red]Half of the actively completed Research was lost due to the absense of the Researcher[/color][/center]."
+				refCrystal.research = round(refCrystal.research*.5)
+		return text
+	
+	#Set Research if Unassisted
+	if refCrystal.research <= 0:
+		if researcher.smaf >= globals.state.mansionupgrades.dimensionalcrystal:
+			refCrystal.research = round(rand_range(researcher.smaf, researcher.wit))
+		else:
+			text += researcher.dictionary("\n[center][color=red]Your [color=aqua]Crystal Researcher[/color], [color=aqua]$name[/color] comes over to you holding $his head. $He sadly reports $he was unable to even interact with the magical power within the [color=#E389B9]Crystal[/color] and was completely overwhelmed by its power. Either $he needs more [color=aqua]Magical Affinity[/color], you will need to [color=aqua]actively assist[/color] $him from within the [color=aqua]Crystal's panel[/color], or you may need to assign a new [color=aqua]Researcher[/color].[/color][/center]")
+	
+	#Crystal Time
 	if refCrystal.lifeforce < 0 && refCrystal.mode == "light" && rand_range(0,100) <= globals.expansionsettings.crystal_shatter_chance:
 		refCrystal.mode = "dark"
 		text += "\n[center][color=red]At exactly midnight, everyone in the Mansion woke up. Some found that their nose was bleeding, others reported their skin crawling, and still others claimed to have horrific nightmares of being eaten alive. A brief investigation found that the Dimensional Crystal has dark, shadowy veins running through it like deep cracks. The color seems to be a darker purple and the glow seen coming off the Crystal and people seem to have those same dark, shadowy tendrils. Everyone returned to their beds, though sleep came uneasily and was wrought with nightmares.[/color][/center]\n"
@@ -1890,7 +1909,7 @@ func dailyCrystal():
 	if refCrystal.abilities.size() > 0 && !refCrystal.abilities.has('attunement'):
 		if rand_range(50,100) <= refCrystal.research:
 			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
-			text += "You dream deeply. You are standing before the Crystal in your Mansion and staring deeply into the flowing energy within it. As you watch, the energy begins to split and separate itself into understandable forms. You see the [color=aqua]Coloration[/color] of the [color=aqua]Crystal[/color]. You see the latent [color=aqua]Lifeforce[/color] inside it and the [color=red]Hunger[/color] consuming those trapped souls. You feel [color=green]Attuned[/color] to the [color=aqua]Crystal[/color]. "
+			text += "You dream deeply. You are standing before the Crystal in your Mansion and staring deeply into the flowing energy within it. As you watch, the energy begins to split and separate itself into understandable forms. You see the [color=aqua]Coloration[/color] of the [color=#E389B9]Crystal[/color]. You see the latent [color=aqua]Lifeforce[/color] inside it and the [color=red]Hunger[/color] consuming those trapped souls. You feel [color=green]Attuned[/color] to the [color=#E389B9]Crystal[/color]. "
 			refCrystal.abilities.append('attunement')	
 	
 	if globals.state.mansionupgrades.dimensionalcrystal >= 1 && !refCrystal.abilities.has('pregnancyspeed'):
@@ -1929,6 +1948,14 @@ func dailyCrystal():
 	refCrystal.research = 0
 
 	return text
+
+func getCrystalResearcher():
+	var researcher
+	for person in globals.slaves:
+		if person.work == 'crystalresearcher':
+			researcher = person
+			break
+	return researcher
 
 func dailyUpdate(person):
 	#Returns to go into Daily

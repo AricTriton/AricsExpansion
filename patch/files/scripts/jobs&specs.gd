@@ -394,6 +394,19 @@ var jobdict = {
 		location = ['mansion'],
 		tags = ['mansion'],
 	},
+	crystalresearcher = {
+		code = 'crystalresearcher',
+		name = "Crystal Researcher",
+		type = 'basic',
+		description = "$name will spend $his days studying the mystical properties of the [color=#E389B9]Dimensional Crystal[/color] to attempt to discover its secrets and abilities. $He will have a chance between $his Magical Affinity and $his [color=aqua]Total Wits[/color] of success each day (if any further abilities are available at the [color=aqua]Crystal's[/color] current upgrade level. You may actively assist $him within the [color=aqua]Crystal's[/color] panel by spending [color=aqua]1 Non-Sex Interaction[/color] to make the chance equal to $his [color=aqua]Total Wits[/color]\n[color=aqua]High Wits and Magical Affinity Recommended[/color]",
+		workline = "$name is actively studying the Dimensional Crystal.",
+		reqs = "globals.currentslave.smaf >= globals.state.mansionupgrades.dimensionalcrystal",
+		unlockreqs = "globals.state.mansionupgrades.has('dimensionalcrystal')",
+		maxnumber = 1,
+		order = 17,
+		location = ['mansion'],
+		tags = ['mansion'],
+	},
 }
 
 var specs = {
