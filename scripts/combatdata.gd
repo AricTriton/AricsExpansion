@@ -637,7 +637,6 @@ var enemygrouppools = {
 	},
 	#Lizard Village
 	#AbandonedVillage
-
 	#Hidden-FOREST, SEA, MARSH, DESERT, SKIES
 	#The Spine
 	naturespirit = {
