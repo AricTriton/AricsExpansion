@@ -797,7 +797,28 @@ var enemygrouppools = {
 		descriptionambush = '',
 	},
 	#Deep hole
+	demonwandering = {
+		units = [['demon', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
 	#Dark tunnel
+	demonpatrol = {
+		units = [['demon', 2, 4]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	demoncamp = {
+		units = [['demon', 4, 8]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	#Hellscape
+	unholydemon = {
+		units = [['bossdemon', 1, 1]], awareness = -10, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
 	#Mountain Peaks
 	eaglehunt = {
 		units = [['eagle', 1, 1]], awareness = 20, captured = null, special = null,
@@ -2926,6 +2947,27 @@ var enemypool = {
 		stats = {health = 100, power = 40, speed = 80, energy = 50, armor = 25, magic = 10, abilities = ['poisonstrike','alwayshitattack']},
 		skills = [],
 	},
+	#Deep Hole
+	# Dark Tunnel
+	deepdemon = {
+		name = 'Demon',
+		code = 'deepdemon',
+		faction = 'monster',
+		icon = load("res://files/images/enemies/stranger.png"),
+		iconalt = load("res://files/images/enemies/stranger.png"),
+		special = '',
+		capture = true,
+		capturerace = [['Demon',100]],
+		captureoriginspool = [{value = 'noble', weight = 1},{value = 'rich', weight = 3},{value = 'commoner', weight = 1}],
+		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 6}],
+		capturesex = ['any'],
+		rewardpool = {gold = 10},
+		rewardgold = [5,20],
+		rewardexp = 20,
+		stats = {health = 200, power = 80, speed = 40, energy = 50, armor = 2, magic = 0, abilities = ['attack','aimedstrike','heavystike', 'debilitate']},
+		gear = 'guard',
+		skills = [],
+	},
 	#Mountains
 	#Skysphere
 	falcon = {
@@ -3003,7 +3045,7 @@ var enemypool = {
 		rewardpool = {gold = 10},
 		rewardgold = [5,20],
 		rewardexp = 20,
-		stats = {health = 200, power = 80, speed = 45, energy = 100, armor = 7, magic = 5, abilities = ['attack','aimedstrike','heavystike']},
+		stats = {health = 200, power = 80, speed = 45, energy = 100, armor = 7, magic = 5, abilities = ['attack','aimedstrike','heavystike','dragonfirebreath']},
 		gear = 'warlord',
 		skills = [],
 	},
