@@ -792,7 +792,7 @@ var database = {
 		combat = true,
 		code = 'skyisland',
 		name = 'Sky Island',
-		description = "It is unclear how an island rose to the skies, but magic is certainly involved. From the plantlife, to the strange fauna... it is clear that life has evolved differently, all the way up here.",
+		description = "It is unclear how an island rose to the skies, but magic is certainly involved. From the plantlife, to the strange fauna... it is clear that life has evolved differently all the way up here.",
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,

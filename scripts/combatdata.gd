@@ -403,6 +403,7 @@ var enemygrouppools = {
 		description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Amberguard. ",
 	},
 	###---Added By Expansion---### Bubblepot grouppool additions for new regions
+	#Some areas will share enemies. I have only organized my additions in terms of primary spawn locations
 	#WIMBORN
 	#Farmlands
 	scarecrowone = {
@@ -454,30 +455,191 @@ var enemygrouppools = {
 	},
 	#RiverCrossing = Shallow water, freshwater races can go here. Plus Kappa, when added.
 	#Graveyard
+	murderofcrows = {
+		units = [['crow', 3, 5]], awareness = 10, captured = null, special = null,
+		description = 'A murder of oddly hungry looking crows rest upon a headstone.',
+		descriptionambush = 'A murder of crows attacks you.',
+	},
+	zombiesingle = {
+		units = [['zombie', 1, 1]], awareness = 10, captured = null, special = null,
+		description = 'A zombie shambles toward you.',
+		descriptionambush = 'A zombie attacks you out of nowhere.',
+	},
+	skeletonsingle = {
+		units = [['skeleton', 1, 1]], awareness = 10, captured = null, special = null,
+		description = 'One of the graves is open and a skeleton lies in it. You see it move.',
+		descriptionambush = 'A skeleton rises from an open grave with a weapon.',
+	},
 	#Crypt
+	coldspiritsingle = {
+		units = [['coldspirit', 1, 1]], awareness = 40, captured = null, special = null,
+		description = 'There is a ghost ahead of you. Its presence chills the room.',
+		descriptionambush = 'The temperature drops as a ghost swoops toward you.',
+	},
+	coldspiritmultiple = {
+		units = [['coldspirit', 2, 5]], awareness = 40, captured = null, special = null,
+		description = 'You see a number of agitated ghosts swooping about.',
+		descriptionambush = 'You run into a room full of ghosts.',
+	},
+	zombiegroup = {
+		units = [['zombie', 2, 4]], awareness = 20, captured = null, special = null,
+		description = 'You see a a group of zombies shambling about.',
+		descriptionambush = 'A group of zombies rushes you.',
+	},
+	skeletongroup = {
+		units = [['skeleton', 2, 5]], awareness = 20, captured = null, special = null,
+		description = 'A number of open coffins lie before. One of the skeletons moves.',
+		descriptionambush = 'A group of skeletons rise from their coffins to slay you.',
+	},
+	zombieskelly = {
+		units = [['skeleton', 2, 5],['zombie',1,3]], awareness = 20, captured = null, special = null,
+		description = 'Zombies and skeletons have congregated ahead of you.',
+		descriptionambush = 'Zombies and skeletons surround you.',
+	},
+	rigormortis = {
+		units = [['mbosszombie',1,1]], awareness = -10, captured = null, special = null,
+		description = "An unsually large zombie is up ahead. His body reaks of death and decay, and the blood coating his skin suggest that a decent portion of that is not his own musk.",
+	},
+	januslifesipper = {
+		units = [['mbossvampire',1,1]], awareness = -10, captured = null, special = null,
+		description = "A pale person is smiling at you. She possesses fangs. She licks her lips, as if considering how delicious you might be...",
+	},
 	#WIMBORNXGORN
 	#Ruins
+	monkeys = {
+		units = [['monkey', 2, 8]], awareness = 20, captured = null, special = null,
+		description = 'Monkeys have made their home in these ruins',
+		descriptionambush = 'Monkeys surround you in an attempt to drive you off and take your stuff.',
+	},
 	#Forest of Refuge
+	jaguarhunting = {
+		units = [['jaguar',1,1]], awareness = 10, captured = null, special = null,
+		description = "$scoutname spots a [color=aqua]jaguar[/color] searching for prey. ",
+		descriptionambush =  "You are being attacked by a [color=aqua]jaguar[/color]!",
+	},
+	pythonhunting = {
+		units = [['python',1,1]], awareness = 10, captured = null, special = null,
+		description = "$scoutname spots a [color=aqua]python[/color] searching for prey. ",
+		descriptionambush =  "You are being attacked by a [color=aqua]python[/color]!",
+	},
+	refugesolo = {
+		units = [['monstergirlrefuge', 1, 1]], awareness = 30, captured = null, special = null,
+		description = 'An escaped slave prowls the forest.',
+		descriptionambush = 'An escaped slave attacks you.',
+	},
+	refugegroup = {
+		units = [['monstergirlrefuge', 2, 5]], awareness = 25, captured = null, special = null,
+		description = 'You see a group of shabbily dressed people armed with crafted weaponry foraging for food.',
+		descriptionambush = 'A group of escaped attack you.',
+	},
+	refugeambush = {
+		units = [['monstergirlrefuge', 5, 8]], awareness = 35, captured = null, special = null,
+		description = 'You see a group of shabbily dressed people armed with crafted weaponry hiding in wait among the trees.',
+		descriptionambush = 'A group of escaped slaves catch you in an ambush.',
+	},
 	#GORN
-	#Oasis
+	#Oasis = Rest
 	#Desert
-	sandworm = {units = [['sandworm',1, 1]], awareness = 10, captured = null, special = null,
+	cactussingle = {
+		units = [['livingcactus', 1, 1]], awareness = 35, captured = null, special = null,
+		description = 'There is a moving cactus plant ahead',
+		descriptionambush = 'A cactus attacks you.',
+	},
+	rattlesnakesunning = {
+		units = [['rattlesnake',1,1]], awareness = 25, captured = null, special = null,
+		description = "$scoutname spots a [color=aqua]rattlesnake[/color] resting beneath the sands. ",
+		descriptionambush =  "A [color=aqua]rattlesnake[/color] lunges at you.",
+	},
+	mummysingle = {
+		units = [['mummy', 1, 1]], awareness = 35, captured = null, special = null,
+		description = 'There is a lone mummy aimlessly wandering the sands.',
+		descriptionambush = 'A mummy attacks you.',
+	},
+	sandworm = {
+		units = [['sandworm',1, 1]], awareness = 40, captured = null, special = null,
 		description = 'Your spot a moving ridge in the sand that must surely contain a [color=aqua]giant sand worm[/color].',
 		descriptionambush =  'Amidst a spray of sand and dust, a [color=aqua]giant sand worm[/color] rises out of the ground to attack you..',
 	},
-	#DeepDesert
-	#SandTomb
+	desertcentaurpatrol = {
+		units = [['desertcentaur', 1, 1]], awareness = 20, captured = null, special = null,
+		description = 'A centaur from the desert tribe seems to be patrolling the area ahead.',
+		descriptionambush = 'A desert centaur attacks you.',
+	},
+	desertorcscouts = {
+		units = [['desertorc', 2, 3]], awareness = 20, captured = null, special = null,
+		description = 'Some orcs from the desert tribe seem to be scouting the desert for threats.',
+		descriptionambush = 'An orc scouting party attacks you.',
+	},
 	#AMBERGUARD
 	#TaintedForest
-	#CliffsideFalls
+	chickensingle = {
+		units = [['unusualchicken', 1, 1]], awareness = 20, captured = null, special = null,
+		description = 'There is a strangely large chicken foraging for food. How could a mere chicken possibly survive in this hellish forest?',
+		descriptionambush = 'A torso-sized chicken is threatened by your presence.',
+	},
+	unnaturaltoadsingle = {
+		units = [['unnaturaltoad', 1, 1]], awareness = 20, captured = null, special = null,
+		description = 'An unusually large toad rests under a tree.',
+		descriptionambush = 'A giant toad tries to make a meal out of you.',
+	},
+	cobranest = {
+		units = [['kingcobra', 4, 8]], awareness = 20, captured = null, special = null,
+		description = 'There are cobras scattered across the forest floor like a carpet, all laying on one another.',
+		descriptionambush = 'You step into a nest of cobras.',
+	},
+	basilisk = {
+		units = [['bossbasilisk', 1, 1]], awareness = -10, captured = null, special = null,
+		description = 'Hatched by a cockerel from the egg of a toad or snake, the King of Serpents hisses his challenge.',
+	},
+	#CliffsideFalls -Freshwater Races
 	#FROSTFORD
 	#Snowy Peaks
+	frozenwispsingle = {
+		units = [['frozenwisp', 1, 1]], awareness = 30, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	frozenwispsmany = {
+		units = [['frozenwisp', 3, 8]], awareness = 30, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	yetiwander = {
+		units = [['yeti', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	frostgiantwander = {
+		units = [['mbossfrostgiant', 1, 1]], awareness = 25, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
 	#Snow Plains
+	frozenwolfpack = {
+		units = [['frostwolf', 3, 6]], awareness = 25, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	snowleopardhunting = {
+		units = [['snowleopard', 1, 1]], awareness = 30, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	polarbearhunt = {
+		units = [['polarbear', 1, 1]], awareness = 30, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	frozenwispsingle = {
+		units = [['frozenwisp', 1, 1]], awareness = 30, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
 	#Lizard Village
 	#AbandonedVillage
 
-	#Hidden
-	#Forest
+	#Hidden-FOREST, SEA, MARSH, DESERT, SKIES
+	#The Spine
 	naturespirit = {
 		units = [['dryadwarrior',1,1]], awareness = 30, captured = null, special = null, 
 		description = "You spot a glowing plant spirit moving between the trees. It hasn't noticed you yet", 
@@ -493,10 +655,211 @@ var enemygrouppools = {
 		description = "You spot a number of glowing spirits communing with a suspicious tree. They haven't noticed you yet", 
 		descriptionambush = 'You are attacked by [color=aqua]angry tree spirits[/color]. ', 
 	},
-	# amberguardguardsmany = {
-	# 	units = [['amberguardpatrol',7,10]], awareness = -10, captured = null, special = null,
-	# 	description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Amberguard. ",
-	# },
+	#Desert (Deep Desert)
+	desertcentaurhunters = {
+		units = [['desertcentaur', 1, 1]], awareness = 20, captured = null, special = null,
+		description = 'A group of armed centaurs seems to be searching for food.',
+		descriptionambush = 'A group of centaurs attack you.',
+	},
+	desertorchunters = {
+		units = [['desertorc', 2, 3]], awareness = 20, captured = null, special = null,
+		description = 'Some orcs from the desert tribe are hunting for food.',
+		descriptionambush = 'An orc hunting party attacks you.',
+	},
+	deserttribeskirmish = {
+		units = [['desertorc', 2, 3],['centaur', 2, 3]], awareness = 20, captured = null, special = null,
+		description = 'The orc and centaur tribes of the desert are skirmishing up ahead.',
+		descriptionambush = 'You stumble onto a battle between the orc and centaur desert tribes.',
+	},
+	desertorcraiders = {
+		units = [['desertorcwarlord', 1, 2],['desertorc', 2, 6]], awareness = 20, captured = null, special = null,
+		description = 'Some desert orcs appear to be heading to battle, or some kind of raid.',
+		descriptionambush = 'An orc war party attacks you.',
+	},
+	desertcentaurraiders = {
+		units = [['desertcentaurwarlord', 1, 3],['desertcentaur', 2, 6]], awareness = 20, captured = null, special = null,
+		description = 'Some desert centaurs appear to be heading to battle, or some kind of raid.',
+		descriptionambush = 'A centaur war party attacks you.',
+	},
+	apophis = {
+		units = [['bossapophis',1,1]], awareness = -10, captured = null, special = null,
+		description = "The dunes of the desert split as an ocean of sand churns aside to reveal a giant golden cobra. It hisses so loud the vibrations turn the calm desert into a mass of shifting sands.",
+	},
+	#SandTomb
+	mummysingle = {
+		units = [['mummy', 1, 1]], awareness = 35, captured = null, special = null,
+		description = 'There is a mummy up ahead.',
+		descriptionambush = 'A mummy attacks you.',
+	},
+	mummiesgroup = {
+		units = [['mummy', 2, 8]], awareness = 35, captured = null, special = null,
+		description = 'There are mummies up ahead.',
+		descriptionambush = 'A group of mummies attack you',
+	},
+	jehosephat = {
+		units = [['bossjehosephat',1,1]], awareness = -10, captured = null, special = null,
+		description = "An ornately wrapped and dressed mummy stand before his coffin staring at it. He turns his gaze on you and his eyes light aflame.",
+	},
+	#Farsea
+	jellyfishschool = {
+		units = [['jellyfish', 2, 4]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	drownedgroup = {
+		units = [['drowned', 2, 8]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	sharkswim = {
+		units = [['shark', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	orcasolo = {
+		units = [['orca', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	orcapodfew = {
+		units = [['orca', 3, 6]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	nereidscoutparty = {
+		units = [['deepwaternereid', 2, 3],['orca', 2, 3],['jellyfish', 0, 2]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	#Deepsea
+	orcapodmany = {
+		units = [['orca', 4, 8]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	greatwhitehunting = {
+		units = [['greatwhiteshark', 3, 6]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	nereidsolo = {
+		units = [['deepwaternereid', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	scyllasolo = {
+		units = [['scylla', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	#Seafloor
+	nereidpatrol = {
+		units = [['deepwaternereid', 4, 6],['greatwhiteshark', 1, 2]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	nereidguards = {
+		units = [['deepwaternereid', 4, 8]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	scyllascouts = {
+		units = [['scylla', 2, 4]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	#UnderwaterCanyon
+	scyllaguards = {
+		units = [['scylla', 4, 6]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	scyllapatrol = {
+		units = [['scylla', 4, 7],['giantsquid', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	giantsquidswim = {
+		units = [['giantsquid', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	#Leviathan Lair
+	#Poison Swamp
+	poisontoadchilling = {
+		units = [['poisontoad', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	poisonouslashtowreckyourdaay = {
+		units = [['poisonouslash', 3, 6]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	#Deep hole
+	#Dark tunnel
+	#Mountain Peaks
+	eaglehunt = {
+		units = [['eagle', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	falconhunt = {
+		units = [['falcon', 1, 1]], awareness = 30, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	#StormCrown
+	skyharpyflock = {
+		units = [['skyharpy', 3, 5]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	skyharpysolo = {
+		units = [['skyharpy', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	skyseraphhermit = {
+		units = [['skyseraph', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	dragonkinhermit = {
+		units = [['dragonkinbbp', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	#Skysphere
+	wyvernflyby = {
+		units = [['flyingwyvern', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	#Sky Island
+	#The Beyond
+	unknownwbirdflyby = {
+		units = [['unknownbird', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	unknownwyvernflyby = {
+		units = [['unknownwyvern', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	unknownserpentflyby = {
+		units = [['unknownserpent', 1, 1]], awareness = 20, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+	#Skycoliseum
+	holyseraph = {
+		units = [['bossseraph', 1, 1]], awareness = -10, captured = null, special = null,
+		description = '',
+		descriptionambush = '',
+	},
+
 }
 
 var capturespool = {
@@ -1843,7 +2206,20 @@ var enemypool = {
 		stats = {health = 100, power = 500, speed = 50, energy = 50, armor = 0, magic = 10, abilities = ['aoeattack']},
 		skills = [],
 	},
-	mbossvamp = {
+	mbosszombie = {
+		name = 'Rigor Mortis',
+		code = 'mbosszombie',
+		faction = 'boss',
+		icon = null,
+		special = null,
+		capture = null,
+		rewardpool = {},
+		rewardgold = 0,
+		rewardexp = 350,
+		stats = {health = 1000, power = 50, speed = 30, energy = 100, armor = 0, magic = 10, abilities = ['attack', 'poisonstrike','debilitate']},
+		skills = [],
+	},
+	mbossvampire = {
 		name = 'Janus Lifesipper',
 		code = 'mbossvampire',
 		faction = 'boss',
@@ -2120,6 +2496,33 @@ var enemypool = {
 		stats = {health = 75, power = 13, speed = 18, energy = 50, armor = 5, magic = 1, abilities = ['attack', 'drainheat']},
 		skills = [],
 	},
+	yeti = {
+		name = 'Yeti',
+		code = 'yeti',
+		faction = 'animal',
+		icon = null,
+		special = null,
+		capture = null,
+		rewardpool = {bestialessenceing = 50},
+		rewardgold = 0,
+		rewardexp = 20,
+		level = 7,
+		stats = {health = 325, power = 50, speed = 30, energy = 50, armor = 6, magic = 0, abilities = ['attack']},
+		skills = [],
+	},
+	mbossfrostgiant = {
+		name = 'Frost Giant',
+		code = 'mbossfrostgiant',
+		faction = 'boss',
+		icon = null,
+		special = null,
+		capture = null,
+		rewardpool = null,
+		rewardgold = 0,
+		rewardexp = 150,
+		stats = {health = 1000, power = 60, speed = 25, energy = 50, armor = 13, magic = 2, abilities = ['attack','aoeattack','heavystike','stunattack']},
+		skills = [],
+	},
 	#Snow Plains
 	frostwolf = {
 		name = 'Frost Wolf',
@@ -2163,41 +2566,11 @@ var enemypool = {
 		stats = {health = 220, power = 30, speed = 18, energy = 50, armor = 6, magic = 0, abilities = ['attack']},
 		skills = [],
 	},
-	yeti = {
-		name = 'Yeti',
-		code = 'yeti',
-		faction = 'animal',
-		icon = null,
-		special = null,
-		capture = null,
-		rewardpool = {bestialessenceing = 50},
-		rewardgold = 0,
-		rewardexp = 20,
-		level = 7,
-		stats = {health = 325, power = 50, speed = 30, energy = 50, armor = 6, magic = 0, abilities = ['attack']},
-		skills = [],
-	},
-	mbossfrostgiant = {
-		name = 'Frost Giant',
-		code = 'mbossfrostgiant',
-		faction = 'boss',
-		icon = null,
-		special = null,
-		capture = null,
-		rewardpool = null,
-		rewardgold = 0,
-		rewardexp = 150,
-		stats = {health = 1000, power = 60, speed = 25, energy = 50, armor = 13, magic = 2, abilities = ['attack','aoeattack','heavystike','stunattack']},
-		skills = [],
-	},
 	#Lizard Village = Not a combat zone
 	#AbandonedVillage = Saltwater Races
 	
 	
-	
-	
-	
-	#Hidden
+	#HIDDEN
 	#Forest
 	wisp = {
 		name = 'Wisp',
@@ -2554,7 +2927,7 @@ var enemypool = {
 		skills = [],
 	},
 	#Mountains
-	#Skyphere
+	#Skysphere
 	falcon = {
 		name = 'Falcon',
 		code = 'falcon',
@@ -2613,6 +2986,25 @@ var enemypool = {
 		rewardexp = 20,
 		stats = {health = 200, power = 75, speed = 50, energy = 50, armor = 2, magic = 0, abilities = ['attack','aimedstrike','alwayshitattack','heavystike']},
 		gear = 'guard',
+		skills = [],
+	},
+	dragonkinbbp = {
+		name = 'Dragonkin',
+		code = 'dragonkinbbp',
+		faction = 'monster',
+		icon = load("res://files/images/enemies/stranger.png"),
+		iconalt = load("res://files/images/enemies/stranger.png"),
+		special = '',
+		capture = true,
+		capturerace = [['Dragonkin',100]],
+		captureoriginspool = [{value = 'noble', weight = 1},{value = 'rich', weight = 3},{value = 'commoner', weight = 1}],
+		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 6}],
+		capturesex = ['any'],
+		rewardpool = {gold = 10},
+		rewardgold = [5,20],
+		rewardexp = 20,
+		stats = {health = 200, power = 80, speed = 45, energy = 100, armor = 7, magic = 5, abilities = ['attack','aimedstrike','heavystike']},
+		gear = 'warlord',
 		skills = [],
 	},
 	flyingwyvern = {
@@ -2696,7 +3088,7 @@ var enemypool = {
 		rewardpool = {},
 		rewardgold = 0,
 		rewardexp = 1000,
-		stats = {health = 10000, power = 500, speed = 95, energy = 50, armor = 50, magic = 10, abilities = ['attack', 'alwayshitattack','heavystike','aoeattack','aimedstrike','dragonfirebreath'], passives = ['doubleattack50']},
+		stats = {health = 10000, power = 500, speed = 95, energy = 100, armor = 50, magic = 10, abilities = ['attack', 'alwayshitattack','heavystike','aoeattack','aimedstrike','dragonfirebreath'], passives = ['doubleattack50']},
 		skills = [],
 	}
 }
