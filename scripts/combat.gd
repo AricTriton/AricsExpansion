@@ -263,6 +263,7 @@ class combatant:
 	
 	var ai = ''
 	var aimemory = ''
+	var aiscript = null #BBP- Stolen from Leo
 	
 	
 	func createfromdata(data):
@@ -291,6 +292,11 @@ class combatant:
 		armor = data.stats.armor
 		speed = data.stats.speed
 		magic = data.stats.magic
+
+		if data.stats.has('protection'): #Leo enemies created from data (i.e. no items) can have protection
+			protection = data.stats.protection
+		if data.has('aiscript'): #Leo
+			aiscript = data.aiscript
 		
 		if data.stats.has("passives"):
 			for i in data.stats.passives:
@@ -318,6 +324,9 @@ class combatant:
 				portrait = data.iconalt
 		abilities = person.ability.duplicate()
 		activeabilities = person.abilityactive
+		activeabilities = person.abilityactive.duplicate() #Leo: duplicate allows combat changes that preserve global character settings
+		if data != null && data.has('aiscript'): #Leo
+			aiscript = data.aiscript
 		if data != null:
 			for i in data.stats.abilities:
 				abilities.append(i)
@@ -747,7 +756,9 @@ func useskills(skill, caster = null, target = null, retarget = false):
 		#target skills
 		if skill.target == 'one':
 			var infoText = " "
-			if skill.code == 'attack':
+			if skill.has('logtext'): #Leo
+				text += skill.logtext #Leo
+			elif skill.code == 'attack':
 				text += '[color=lime][name1][/color] tries to attack [color=#ec636a][targetname1][/color]. '
 			else:
 				text += '[name1] uses [color=aqua]' + skill.name + "[/color] on [targetname1]. "
@@ -779,8 +790,10 @@ func useskills(skill, caster = null, target = null, retarget = false):
 				targetarray = enemygroup
 			else:
 				targetarray = playergroup
-			
-			text += '[name1] uses [color=aqua]' + skill.name + '[/color]. '
+			if skill.has('logtext'): #Leo
+				text += skill.logtext #Leo
+			else: #Leo
+				text += '[name1] uses [color=aqua]' + skill.name + '[/color]. '
 			var counter = 0
 			for i in targetarray:
 				var infoText = " "
@@ -820,6 +833,8 @@ func useskills(skill, caster = null, target = null, retarget = false):
 				return
 			if skill.code == 'mindread':
 				caster.actionpoints += 1
+			if skill.has('logtext'): #Leo
+				text += skill.logtext #Leo
 		#buffs and effects
 		if skill.attributes.has('noescape') && target.effects.has('escapeeffect'):
 			text += "[targetname1] being held in place! "
@@ -959,6 +974,8 @@ func enemyturn():
 			for i in enemygroup:
 				if i.state == 'normal':
 					targetarray.append(i)
+		if combatant.aiscript != null: #Leo
+			skill = call(combatant.aiscript, combatant, skill, targetarray) #Leo targetarray passed by reference so targets can be changed
 		if targetarray.size() <= 0:
 			return
 		target = targetarray[randi()%targetarray.size()]
@@ -1061,3 +1078,52 @@ func victory():
 	globals.main.get_node("outside").show()
 	globals.main.get_node("ResourcePanel").show()
 	globals.main.get_node("explorationnode").enemydefeated()
+
+func updateactiveabilities(person, ability):  #Leo changes in wider settings now need putting into the combat duplicates
+	var combatant = findcombatantfromslave(person)
+	if !combatant.activeabilities.has(ability): 
+		combatant.activeabilities.append(ability)
+	else:
+		combatant.activeabilities.erase(ability)
+	if combatant.actionpoints > 0:
+		combatant.selectcombatant()
+		combatant.buildabilities()
+
+func trapdevourAI(attacker, skill, targetarray):
+	#Leo very basic, ignores escape and protection for example
+	var trappedarray = []
+	for i in targetarray:
+		if i.effects.has('trappedeffect'):
+			trappedarray.append(i)
+			
+	if trappedarray.size() > 0:
+		skill = globals.abilities.abilitydict['devour']
+		targetarray.clear() #Leo keep the reference
+		for j in trappedarray: 
+			targetarray.append(j)
+	elif attacker.cooldowns.has('dragunder'):
+		skill = globals.abilities.abilitydict['attack']
+	else:	
+		skill = globals.abilities.abilitydict['dragunder']
+	return skill
+
+func foxgloveAI(attacker, skill, targetarray):
+	var target = targetarray[randi()%targetarray.size()]
+	targetarray.clear() #Leo keep the reference
+	targetarray.append(target)
+	if target.effects.has('poisoneffect'):
+		skill = globals.abilities.abilitydict['attack']
+	return skill
+
+func drownedAI(attacker, skill, targetarray):
+	var target = targetarray[randi()%targetarray.size()]
+	targetarray.clear() #Leo keep the reference
+	targetarray.append(target)
+	if attacker.hp < attacker.hpmax/3 && !attacker.cooldowns.has('spew'):
+		skill = globals.abilities.abilitydict['spew']
+	elif attacker.hp > (attacker.hpmax*2)/3 && !attacker.cooldowns.has('rush') && (randi()%4 == 0):
+		skill = globals.abilities.abilitydict['rush']
+	else:
+		skill = globals.abilities.abilitydict['attack']
+	return skill
+	

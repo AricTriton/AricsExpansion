@@ -700,6 +700,248 @@ var abilitydict = {
 		aipriority = 3,
 		castersfx = 'attackanimation',
 	},
+	takeaim = {
+		name = 'Take Aim',
+		code = 'takeaim',
+		iconnorm = globals.loadimage(globals.modfolder + "/Leo/Images/bullseyeblue.png"),
+		iconpressed = globals.loadimage(globals.modfolder + "/Leo/Images/bullseyered.png"),
+		icondisabled = globals.loadimage(globals.modfolder + "/Leo/Images/bullseyeblack.png"),
+		learnable = false,
+		description = 'Take aim for a better attack next turn. ',
+		logtext = '[name1][color=aqua] takes aim [/color]. ',
+		target = 'self',
+		targetgroup = 'ally',
+		effect = 'takeaimeffect',
+		effectself = 'takeaimeffect',
+		can_miss = false,
+		power = 1,
+		cooldown = 3,
+		type = 'physical',
+		price = 0,
+		costenergy = 0,
+		costmana = 0,
+		costother = '',
+		attributes = [],
+		reqs = {level = 0},
+		aipatterns = ['attack'],
+		aitargets = 'self',
+		aipriority = 2,
+	},
+	drainheat = {
+		name = 'Drain Heat',
+		code = 'drainheat',
+		iconnorm = null,
+		iconpressed = null,
+		learnable = false,
+		description = 'Drains the heat from the air.',
+		logtext = '[name1] turns the air [color=aqua]freezing cold [/color]. ',
+		target = 'all',
+		targetgroup = 'enemy',
+		effect = 'frozeneffect',
+		can_miss = false,
+		power = 1.23,
+		cooldown = 3,
+		type = 'spell',
+		price = 0,
+		costenergy = 0,
+		costmana = 0,
+		costother = '',
+		attributes = ['damage','allparty','debuff'],
+		reqs = {level = 0},
+		aipatterns = ['attack'],
+		aitargets = 'enemies',
+		aipriority = 3,
+		castersfx = 'attackanimation',
+	},
+	dragunder = {
+		name = 'Drag Under',
+		code = 'dragunder',
+		iconnorm = null,
+		iconpressed = null,
+		learnable = false,
+		description = 'Drags the target under the surface.',
+		logtext = '[name1][color=aqua] drags [/color][targetname1] under the surface. ',
+		target = 'one',
+		targetgroup = 'enemy',
+		effect = 'trappedeffect',
+		can_miss = true,
+		power = 0.5,
+		cooldown = 2,
+		type = 'physical',
+		price = 0,
+		costenergy = 0,
+		costmana = 0,
+		costother = '',
+		attributes = ['damage','debuff'],
+		reqs = {level = 0},
+		aipatterns = ['attack'],
+		aitargets = '1enemy',
+		aipriority = 3,
+		castersfx = 'attackanimation',
+		script = 'initiatetrapped'
+	},
+	devour = {
+		name = 'Devour',
+		code = 'devour',
+		iconnorm = null,
+		iconpressed = null,
+		learnable = false,
+		description = 'Devours a trapped enemy.',
+		logtext = '[name1][color=aqua] devours [/color][targetname1]. ',
+		target = 'one',
+		targetgroup = 'enemy',
+		effect = null,
+		effectself = 'surfaceprotectioneffect',
+		can_miss = true,
+		power = 1.25,
+		cooldown = 0,
+		type = 'physical',
+		price = 0,
+		costenergy = 0,
+		costmana = 0,
+		costother = '',
+		attributes = ['damage'],
+		reqs = {level = 0},
+		aipatterns = ['attack'],
+		aitargets = '1enemy',
+		aipriority = 4,
+		castersfx = 'attackanimation',
+	},
+	rescue = {
+		name = 'Rescue',
+		code = 'rescue',
+		iconnorm = globals.loadimage(globals.modfolder + "/Leo/Images/under.png"),
+		iconpressed = globals.loadimage(globals.modfolder + "/Leo/Images/underred.png"),
+		icondisabled = globals.loadimage(globals.modfolder + "/Leo/Images/underdark.png"),
+		learnable = false,
+		description = 'Rescue a trapped ally.',
+		logtext = '[name1][color=aqua] helps [/color][targetname1] to get free. ',
+		target = 'one',
+		targetgroup = 'ally',
+		effect = null,
+		can_miss = true,
+		power = 0,
+		cooldown = 1,
+		type = 'physical',
+		price = 0,
+		costenergy = 20,
+		costmana = 0,
+		costother = '',
+		attributes = [],
+		reqs = {level = 0},
+		aipatterns = ['support'],
+		aitargets = '1ally',
+		aipriority = 1,
+		script = 'rescue'
+	},
+	poisonstrike = {
+		name = 'Posion strike',
+		code = 'poisonstrike',
+		iconnorm = null,
+		iconpressed = null,
+		learnable = false,
+		description = 'Attack using posion.',
+		logtext = '[name1] makes a[color=aqua] poisonous strike [/color]at [targetname1]. ',
+		target = 'one',
+		targetgroup = 'enemy',
+		effect = 'poisoneffect',
+		can_miss = true,
+		power = 0.75,
+		cooldown = 2,
+		type = 'physical',
+		costenergy = 0,
+		costmana = 0,
+		costother = '',
+		attributes = ['damage', 'debuff'],
+		reqs = {level = 0},
+		aipatterns = ['attack'],
+		aitargets = '1enemy',
+		aipriority = 3,
+		castersfx = 'attackanimation',
+		script = 'inflictpoison'
+	},
+	spew = {
+		name = 'Spew the guts',
+		code = 'spew',
+		iconnorm = null,
+		iconpressed = null,
+		learnable = false,
+		description = 'Belch out bad water at an enemy.',
+		logtext = '[name1][color=aqua] spews [/color]watery bile over [targetname1] and recovers. ',
+		target = 'one',
+		targetgroup = 'enemy',
+		effect = null,
+		can_miss = false,
+		power = 0.5,
+		cooldown = 5,
+		type = 'physical',
+		costenergy = 0,
+		costmana = 0,
+		costother = '',
+		attributes = ['damage', 'debuff'],
+		reqs = {level = 0},
+		aipatterns = ['attack'],
+		aitargets = '1enemy',
+		aipriority = 2,
+		castersfx = 'attackanimation',
+		script = 'spewbile'
+	},
+	rush = {
+		name = 'Sudden Rush',
+		code = 'rush',
+		iconnorm = null,
+		iconpressed = null,
+		learnable = false,
+		description = 'Rush at an enemy and attack.',
+		logtext = '[name1][color=aqua] rushes  towards [/color][targetname1] with a sudden attack. ',
+		target = 'one',
+		targetgroup = 'enemy',
+		effect = null,
+		can_miss = true,
+		power = 1.0,
+		cooldown = 3,
+		accuracy = 1.2,
+		type = 'physical',
+		costenergy = 0,
+		costmana = 0,
+		costother = '',
+		attributes = ['damage'],
+		reqs = {level = 0},
+		aipatterns = ['attack'],
+		aitargets = '1enemy',
+		aipriority = 2,
+		castersfx = 'attackanimation',
+	},
+	burningblades = {
+		name = 'Burning Blades',
+		code = 'burningblades',
+		iconnorm = globals.loadimage(globals.modfolder + "/Leo/Images/burningblade.png"),
+		iconpressed = globals.loadimage(globals.modfolder + "/Leo/Images/burningbladeoff.png"),
+		icondisabled = globals.loadimage(globals.modfolder + "/Leo/Images/burningbladeoff.png"),
+		learnable = false,
+		description = 'Metal should burn.',
+		logtext = '[name1] casts[color=aqua] burning blades[/color]. ',
+		target = 'all',
+		targetgroup = 'ally',
+		effect = 'burningbladeeffect',
+		can_miss = false,
+		power = 0.01,
+		accuracy = 1,
+		cooldown = 5,
+		type = 'spell',
+		price = 0,
+		costenergy = 0,
+		costmana = 10,
+		costother = '',
+		attributes = ['damage'],
+		reqs = {level = 0},
+		aipatterns = ['support'],
+		aitargets = 'allies',
+		aiselfcond = 'any',
+		aitargetcond = 'any',
+		aipriority = 2,
+	}
+
 	###---End Expansion---###
 }
 
@@ -878,6 +1120,103 @@ var effects = {
 		type = 'passive',
 		stats = [],
 	},
+	#BBP- Added Combat Effects (Stolen from Leo)
+	aciddamageeffect = {
+		icon = load("res://files/buttons/abils/Acid spit.png"),
+		duration = 5,
+		name = "Acid Damage",
+		code = 'aciddamageeffect',
+		description = "Target is taking damage every turn",
+		type = 'onendturn',
+		script = 'applyaciddamage',
+		stats = [],
+	},
+	panic = {
+		icon = globals.loadimage(globals.modfolder + "/Leo/Images/panic.png"),
+		duration = -1,
+		name = "Panic",
+		code = 'panic',
+		type = 'passive',
+		description = 'This character has panicked.',
+		stats = [['speed', '-(5, )']],
+	},
+	takeaimeffect = {
+		icon = globals.loadimage(globals.modfolder + "/Leo/Images/bullseyeblue.png"),
+		duration = 2,
+		name = 'Take Aim',
+		code = 'takeaimeffect',
+		type = 'buff',
+		description = null, #stats will be added to tooltip automatically
+		stats = [['speed', '5'], ['attack', '8']],
+	},
+	firststrikeeffect = {
+		icon = globals.loadimage(globals.modfolder + "/Leo/Images/firststrike.png"),
+		duration = 1,
+		name = 'First Strike',
+		code = 'firststrikeeffect',
+		type = 'buff',
+		description = null, #stats will be added to tooltip[ automatically
+		stats = [['speed', '3'], ['attack', '3']],
+	},
+	monsterescapeeffect = {
+		icon = globals.loadimage(globals.modfolder + "/Leo/Images/wildescape.png"),
+		duration = 1,
+		name = "Monster Escape",
+		code = 'monsterescapeeffect',
+		type = 'buff',
+		description = "Target is hidden in swirling mists",
+		stats = [['protection', '25']],
+	},
+	frozeneffect = {
+		icon = globals.loadimage(globals.modfolder + "/Leo/Images/snow.png"),
+		duration = 2,
+		name = "Frozen",
+		code = 'frozeneffect',
+		description = "Cold enough to freeze",
+		type = 'onendturn',
+		script = 'applyfreeze',
+		stats = [],
+	},
+	trappedeffect = {
+		icon = globals.loadimage(globals.modfolder + "/Leo/Images/under.png"),
+		duration = 9,
+		name = "Trapped",
+		code = 'trappedeffect',
+		description = "Trapped",
+		type = 'buff',
+		stats = [['speed', '-10'], ['attack', '-7']],
+	},
+	surfaceprotectioneffect = {
+		icon = load("res://files/buttons/mainscreen/48.png"),
+		duration = 1,
+		name = "Underneath",
+		code = 'surfaceprotectioneffect',
+		type = 'buff',
+		description = "Target is partly hidden beneath the surface",
+		stats = [['protection', '25']],
+	},
+	poisoneffect = {
+		icon = globals.loadimage(globals.modfolder + "/Leo/Images/poison.png"),
+		duration = 3,
+		name = "Poison",
+		code = 'poisoneffect',
+		description = "Target is poisoned and takes extra damage when health drops",
+		type = 'onendturn',
+		script = 'applypoison',
+		stats = [],
+	},
+	burningbladeeffect = {
+		icon = globals.loadimage(globals.modfolder + "/Leo/Images/burningblade.png"),
+		duration = 4,
+		name = "Burning Blades",
+		code = 'burningbladeeffect',
+		description = "This weapon is burning",
+		type = 'buff',
+		stats = [['attack', '+8']],
+		script = 'applyburningblades',
+	}
+#BBP- End of Leo Effects
+
 }
 
 func restorehealth(caster, target):
@@ -936,3 +1275,96 @@ func darknesscurse(target):
 		target.scene.sendbuff(target,target,"curseeffectatk")
 	else:
 		target.scene.sendbuff(target,target,"curseeffectmgc")
+
+# BBP - More functions stolen from Leo
+#incombat (combat preparation)
+func powerful(combatant, value):
+	combatant.attack += combatant.person.sstr - value
+
+func acceleration(combatant, value):
+	combatant.speed += combatant.person.sstr - value
+
+func firststrike(combatant, value):
+	combatant.scene.sendbuff(combatant, combatant, 'firststrikeeffect')
+
+func addability(combatant, value):
+	if !combatant.activeabilities.has(value):
+		combatant.activeabilities.append(value)
+		
+func takeaim(combatant, value): #Leo for legacy bows only
+	addability(combatant, 'takeaim')
+	
+#ability use
+func aciddamage(caster, target): #Leo The armour reduction is applied as the acid strike debuff, so another method needed for the acid damage over time.
+	var turns = caster.magic/2
+	if globals.state.spec == 'Mage' && caster.group == 'player':
+		turns *= 1.2
+	caster.scene.sendbuff(caster, target, 'aciddamageeffect')
+	target.effects[effects.aciddamageeffect.code].duration = ceil(turns)
+	if target.effects[effects.aciddamageeffect.code].caster.group == 'player':
+		target.effects[effects.aciddamageeffect.code].caster = target #Leo script abilities only called for 'enemy' caster group
+
+func inflictpoison(caster, target):
+	var neweffect = target.effects.poisoneffect
+	neweffect.tracker = target.hp
+
+func initiateflanking(caster, target):
+	caster.scene.removebuff('flankeffect', caster)
+	if target.effects.has('packeffect'):
+		caster.scene.sendbuff(caster, caster, 'flankeffect')
+		caster.effects['flankeffect'].victim = target
+	else:
+		target.scene.sendbuff(caster, target, 'packeffect')
+	
+func initiatetrapped(caster, target): #Leo assume target is in the player group
+	for i in target.scene.playergroup:
+		addability(i, 'rescue')
+	target.cooldowns['rescue'] = 3
+	
+func rescue(caster, target):
+	if target.effects.has('trappedeffect'):
+		target.scene.removebuff('trappedeffect', target)
+
+func spewbile(caster, target):
+	caster.hp += 20
+	caster.scene.sendbuff(caster, target, 'sedationeffect')
+	target.effects[effects.sedationeffect.code].duration = 1
+
+#effects (enemy turn)
+#reminder of enemyturn() order : playergroup autoattacks, process effects of both playerggroup and enemygroup, enemy attacks, enemygroup cooldowns, playergroup cooldowns, end of combat checks
+func applyaciddamage(target):
+	var value = 20
+	if target.person != null && target.person.traits.has("Sturdy"):
+		value = value*0.85
+
+	target.hp -= value
+	return '[name1] suffers [color=green]' + str(value) + '[/color] acid damage.'
+
+func applyfreeze(target):
+	if target.passives.has('coldresist'):
+		return '[name1] is protected from the cold'
+	elif randi() % 3 == 0:
+		target.scene.sendbuff(target, target, 'stun')
+		return '[name1] is frozen'
+
+	return '[name1] endures the cold'
+
+func applypoison(target):
+	var text = ' '
+	var currenteffect = target.effects.poisoneffect
+	var healthchange = target.hp - currenteffect.tracker
+	if healthchange > 0:
+		currenteffect.duration = 1
+		text = '[name1] is cured of posion'
+	elif healthchange < 0:
+		var damage = 10
+		if target.person != null && target.person.traits.has("Sturdy"):
+			damage = damage*0.85
+		target.hp -= damage
+		currenteffect.duration += 2
+		text = 'The poison inside [name1] gets worse'
+	else:
+		text = '[name1] endures the posion'
+	currenteffect.tracker = target.hp
+	return text
+	

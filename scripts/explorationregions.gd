@@ -421,7 +421,7 @@ var database = {
 		locationscript = 'forestofrefuge',
 		exits = ['prairie','ruins'],
 		tags = ['enclosed'],
-		races = [{value = 'Dyrad', weight = 1}],
+		races = [],
 		levelrange = [10,15],
 	},
 	ruins = {
@@ -504,7 +504,7 @@ var database = {
 		length = 10,
 		exits = ['deepdesert'],
 		tags = ['enclosed'],
-		races = [{value = 'Dyrad', weight = 12}],
+		races = [],
 		levelrange = [12,15],
 	},
 	#Amberguard
@@ -792,7 +792,7 @@ var database = {
 		combat = true,
 		code = 'skyisland',
 		name = 'Sky Island',
-		description = "It is unclear how an island rose to the skies, but magic is certainly involved. From the plantlife, to the strange fauna... it is clear that life has evolved differently, all the way up here.",
+		description = "It is unclear how an island rose to the skies, but magic is certainly involved. From the plantlife, to the strange fauna... it is clear that life has evolved differently all the way up here.",
 		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
