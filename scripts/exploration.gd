@@ -929,7 +929,7 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 				text += baddie.dictionary("\nYou take your time savoring $his $race body and enjoy $him immensely.")
 				temp += rand_range(1,2)
 				relations += round(rand_range(-20,20))
- 
+				
 			if friend != null:			### This is the old (slightly modified) code for party members to join in. We will fire it here, instead.
 				friend.asser += rand_range(6,12)
 				friend.lastsexday = globals.resources.day
