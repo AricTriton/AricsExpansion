@@ -57,21 +57,21 @@ func zoneenter(zone):
 #			main.music_set('explore')
 	
 	
-	if zone.code=='snowypeaks': 
+	if zone.code =='snowypeaks': 
 		accessgranted = snowypeaks()
-	elif zone.code=='forestofrefuge':
+	elif zone.code =='forestofrefuge':
 		accessgranted = forestofrefuge()
-	elif zone.code=='desert': 
+	elif zone.code =='desert': 
 		accessgranted = desert()
-	elif zone.code=='deepdesert':
+	elif zone.code =='deepdesert':
 		accessgranted = deepdesert()
-	elif zone.code=='lakebottom':
+	elif zone.code =='lakebottom':
 		accessgranted = lakebottom()
-	elif zone.code = 'seafloor':
+	elif zone.code == 'seafloor':
 		accessgranted = seafloor()
-	elif zone.code=='skysphere':
+	elif zone.code =='skysphere':
 		accessgranted = partycanfly()
-	if accessgranted== false:
+	if accessgranted == false:
 		mansion.maintext+= "\n\n You realize that you cannot traverse this area safely with your current abilities. Your death would only be a matter of time."
 		var array=[]
 		array.append({name = 'Turn Back', function = 'zoneenter', args = str(lastzone) })
