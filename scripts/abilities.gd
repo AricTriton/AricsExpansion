@@ -703,9 +703,9 @@ var abilitydict = {
 	takeaim = {
 		name = 'Take Aim',
 		code = 'takeaim',
-		iconnorm = globals.loadimage(globals.modfolder + "/Leo/Images/bullseyeblue.png"),
-		iconpressed = globals.loadimage(globals.modfolder + "/Leo/Images/bullseyered.png"),
-		icondisabled = globals.loadimage(globals.modfolder + "/Leo/Images/bullseyeblack.png"),
+		iconnorm = load("res://files/aric_expansion_images/Leo/Images/bullseyeblue.png"),
+		iconpressed = load("res://files/aric_expansion_images/Leo/Images/bullseyered.png"),
+		icondisabled = load("res://files/aric_expansion_images/Leo/Images/bullseyeblack.png"),
 		learnable = false,
 		description = 'Take aim for a better attack next turn. ',
 		logtext = '[name1][color=aqua] takes aim [/color]. ',
@@ -810,9 +810,9 @@ var abilitydict = {
 	rescue = {
 		name = 'Rescue',
 		code = 'rescue',
-		iconnorm = globals.loadimage(globals.modfolder + "/Leo/Images/under.png"),
-		iconpressed = globals.loadimage(globals.modfolder + "/Leo/Images/underred.png"),
-		icondisabled = globals.loadimage(globals.modfolder + "/Leo/Images/underdark.png"),
+		iconnorm = load("res://files/aric_expansion_images/Leo/Images/under.png"),
+		iconpressed = load("res://files/aric_expansion_images/Leo/Images/underred.png"),
+		icondisabled = load("res://files/aric_expansion_images/Leo/Images/underdark.png"),
 		learnable = false,
 		description = 'Rescue a trapped ally.',
 		logtext = '[name1][color=aqua] helps [/color][targetname1] to get free. ',
@@ -915,9 +915,9 @@ var abilitydict = {
 	burningblades = {
 		name = 'Burning Blades',
 		code = 'burningblades',
-		iconnorm = globals.loadimage(globals.modfolder + "/Leo/Images/burningblade.png"),
-		iconpressed = globals.loadimage(globals.modfolder + "/Leo/Images/burningbladeoff.png"),
-		icondisabled = globals.loadimage(globals.modfolder + "/Leo/Images/burningbladeoff.png"),
+		iconnorm = load("res://files/aric_expansion_images/Leo/Images/burningblade.png"),
+		iconpressed = load("res://files/aric_expansion_images/Leo/Images/burningbladeoff.png"),
+		icondisabled = load("res://files/aric_expansion_images/Leo/Images/burningbladeoff.png"),
 		learnable = false,
 		description = 'Metal should burn.',
 		logtext = '[name1] casts[color=aqua] burning blades[/color]. ',
@@ -1132,7 +1132,7 @@ var effects = {
 		stats = [],
 	},
 	panic = {
-		icon = globals.loadimage(globals.modfolder + "/Leo/Images/panic.png"),
+		icon = load("res://files/aric_expansion_images/Leo/Images/panic.png"),
 		duration = -1,
 		name = "Panic",
 		code = 'panic',
@@ -1141,7 +1141,7 @@ var effects = {
 		stats = [['speed', '-(5, )']],
 	},
 	takeaimeffect = {
-		icon = globals.loadimage(globals.modfolder + "/Leo/Images/bullseyeblue.png"),
+		icon = load("res://files/aric_expansion_images/Leo/Images/bullseyeblue.png"),
 		duration = 2,
 		name = 'Take Aim',
 		code = 'takeaimeffect',
@@ -1150,7 +1150,7 @@ var effects = {
 		stats = [['speed', '5'], ['attack', '8']],
 	},
 	firststrikeeffect = {
-		icon = globals.loadimage(globals.modfolder + "/Leo/Images/firststrike.png"),
+		icon = load("res://files/aric_expansion_images/Leo/Images/firststrike.png"),
 		duration = 1,
 		name = 'First Strike',
 		code = 'firststrikeeffect',
@@ -1159,7 +1159,7 @@ var effects = {
 		stats = [['speed', '3'], ['attack', '3']],
 	},
 	monsterescapeeffect = {
-		icon = globals.loadimage(globals.modfolder + "/Leo/Images/wildescape.png"),
+		icon = load("res://files/aric_expansion_images/Leo/Images/wildescape.png"),
 		duration = 1,
 		name = "Monster Escape",
 		code = 'monsterescapeeffect',
@@ -1168,7 +1168,7 @@ var effects = {
 		stats = [['protection', '25']],
 	},
 	frozeneffect = {
-		icon = globals.loadimage(globals.modfolder + "/Leo/Images/snow.png"),
+		icon = load("res://files/aric_expansion_images/Leo/Images/snow.png"),
 		duration = 2,
 		name = "Frozen",
 		code = 'frozeneffect',
@@ -1178,7 +1178,7 @@ var effects = {
 		stats = [],
 	},
 	trappedeffect = {
-		icon = globals.loadimage(globals.modfolder + "/Leo/Images/under.png"),
+		icon = load("res://files/aric_expansion_images/Leo/Images/under.png"),
 		duration = 9,
 		name = "Trapped",
 		code = 'trappedeffect',
@@ -1196,7 +1196,7 @@ var effects = {
 		stats = [['protection', '25']],
 	},
 	poisoneffect = {
-		icon = globals.loadimage(globals.modfolder + "/Leo/Images/poison.png"),
+		icon = load("res://files/aric_expansion_images/Leo/Images/poison.png"),
 		duration = 3,
 		name = "Poison",
 		code = 'poisoneffect',
@@ -1206,7 +1206,7 @@ var effects = {
 		stats = [],
 	},
 	burningbladeeffect = {
-		icon = globals.loadimage(globals.modfolder + "/Leo/Images/burningblade.png"),
+		icon = load("res://files/aric_expansion_images/Leo/Images/burningblade.png"),
 		duration = 4,
 		name = "Burning Blades",
 		code = 'burningbladeeffect',
