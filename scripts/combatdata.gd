@@ -630,11 +630,6 @@ var enemygrouppools = {
 		description = '',
 		descriptionambush = '',
 	},
-	frozenwispsingle = {
-		units = [['frozenwisp', 1, 1]], awareness = 30, captured = null, special = null,
-		description = '',
-		descriptionambush = '',
-	},
 	#Lizard Village
 	#AbandonedVillage
 	#Hidden-FOREST, SEA, MARSH, DESERT, SKIES
