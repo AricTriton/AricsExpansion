@@ -550,7 +550,7 @@ var enemygrouppools = {
 		description = "$scoutname spots a [color=aqua]rattlesnake[/color] resting beneath the sands. ",
 		descriptionambush =  "A [color=aqua]rattlesnake[/color] lunges at you.",
 	},
-	mummysingle = {
+	mummydesertwander = {
 		units = [['mummy', 1, 1]], awareness = 35, captured = null, special = null,
 		description = 'There is a lone mummy aimlessly wandering the sands.',
 		descriptionambush = 'A mummy attacks you.',
@@ -2059,7 +2059,7 @@ var enemypool = {
 		rewardgold = 0,
 		rewardexp = 20,
 		level = 7,
-		stats = {health = 1000, power = 100, speed = 50, energy = 100, armor = 7, magic = 0, abilities = ['attack'],['heavystike'],['stunattack']},
+		stats = {health = 1000, power = 100, speed = 50, energy = 100, armor = 7, magic = 0, abilities = ['attack','heavystike','stunattack']},
 		skills = [],
 	},
 	#Lakeside
@@ -2342,25 +2342,6 @@ var enemypool = {
 		stats = {health = 150, power = 15, speed = 18, energy = 50, armor = 0, magic = 0, abilities = ['attack', 'dragunder', 'devour']},
 		skills = [],
 		aiscript = 'trapdevourAI',
-	},
-	centaurwarlord = {#Powerhouse/Capture
-		name = 'Centaur Warlord',
-		code = 'centaurwarlord',
-		faction = 'monster',
-		icon = load("res://files/images/enemies/stranger.png"),
-		iconalt = load("res://files/images/enemies/stranger.png"),
-		special = '',
-		capture = true,
-		capturerace = [['Centaur',100]],
-		captureoriginspool = [{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
-		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 6}],
-		capturesex = ['any'],
-		rewardpool = {},
-		rewardgold = [5,20],
-		rewardexp = 30,
-		stats = {health = 500, power = 60, speed = 50, energy = 100, armor = 7, magic = 3, abilities = ['attack','stunattack']},
-		gear = 'warlord',
-		skills = [],
 	},
 	orcwarlord = {#Powerhouse/Capture
 		name = 'Orc Warlord',
@@ -2867,7 +2848,7 @@ var enemypool = {
 		special = '',
 		capture = true,
 		capturerace = [['Nereid',100]],
-		captureoriginspool = [{value = 'noble', weight = 2},{value = 'rich', weight = 3}{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
+		captureoriginspool = [{value = 'noble', weight = 2},{value = 'rich', weight = 3},{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
 		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 6}],
 		capturesex = ['any'],
 		rewardpool = {},
@@ -2886,7 +2867,7 @@ var enemypool = {
 		special = '',
 		capture = true,
 		capturerace = [['Scylla',100]],
-		captureoriginspool = [{value = 'noble', weight = 2},{value = 'rich', weight = 3}{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
+		captureoriginspool = [{value = 'noble', weight = 2},{value = 'rich', weight = 3},{value = 'commoner', weight = 1},{value = 'poor', weight = 1}],
 		captureagepool = [{value = 'child', weight = 1},{value = 'teen', weight = 3}, {value = 'adult', weight = 6}],
 		capturesex = ['any'],
 		rewardpool = {},
@@ -2910,7 +2891,7 @@ var enemypool = {
 		stats = {health = 70, power = 20, speed = 15, energy = 50, protection = 40, armor = 3, magic = 0, abilities = ['attack', 'spew', 'heavystike', 'rush']},
 		skills = [],
 		aiscript = 'drownedAI',
-	}
+	},
 	#Marsh
 	#poisonswamp
 	poisontoad = {
