@@ -286,7 +286,7 @@ var database = {
 		code = 'farmlands',
 		name = 'Wimborn Farmlands',
 		description = "Cultivated land lays on the left side of the road, stretching out for some distance. You see many workers tending to the crops. ",
-		enemies = [{value = 'banditsmedium', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'scarecrowandcrow', weight = 2},{value = 'scarecrowone', weight = 3},{value = 'banditsmedium', weight = 1},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 5,
 		exits = ['wimbornoutskirts','lakeside'],
@@ -295,7 +295,7 @@ var database = {
 		levelrange = [4,7],
 	},
 	lakeside = {
-		background = 'grove', #Find something appropriate
+		background = 'meadow', #Find something appropriate
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -307,7 +307,7 @@ var database = {
 		length = 5,
 		exits = ['farmlands','lakebottom'],
 		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
+		races = [],
 		levelrange = [7,9],
 	},
 	lakebottom = {
@@ -327,30 +327,30 @@ var database = {
 		levelrange = [9,10],
 	},
 	riversideplains = {
-		background = 'grove',
+		background = 'meadow',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
 		code = 'riversideplains',
 		name = 'Riverside Plains',
 		description = "You are surrounded by vast open space, green grass underfoot and a river off in the distance. Wild horses race each other freely, cows and bulls graze peacefully. This is a grazers heaven. ",
-		enemies = [{value = 'banditcamp',weight = 1.35},{value = 'banditsmedium', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'companyofwarlords',weight = 1},{value = 'taurusescort',weight = 2},{value = 'centaurherd',weight = 2},{value = 'banditcamp',weight = 1.35},{value = 'centaurraidingparty', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 15,
 		exits = ['wimbornoutskirts','dwarvenfortress'],
 		tags = [],
-		races = [{value = 'Centaur', weight = 8}],
+		races = [{value = 'Centaur', weight = 8},{value = 'Taurus', weight = 8}],
 		levelrange = [7,10],
 	},
 	dwarvenfortress = {
-		background = 'grove',
+		background = 'meadow',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
 		code = 'dwarvenfortress',
 		name = 'Dwarven Fortress',
 		description = "The fortress interior ",
-		enemies = [{value= 'naturespiritandtree', weight =7},{value= 'naturespiritmany', weight =7},{value= 'naturespirit', weight =7}, {value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'dwarvenassault',weight = 3},{value = 'dwarventrap',weight = 2},{value = 'dwarvendefense',weight = 3},{value = 'noenemyencountered', weight = 2}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 10,
 		exits = ['riversideplains'],
@@ -374,31 +374,31 @@ var database = {
 		races = [],
 		levelrange = [4,10],
 	},
-	graveyard= {
-		background = 'grove',
+	graveyard = {
+		background = 'darkness',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
 		code = 'graveyard',
 		name = 'Graveyard',
 		description = "Many graves litter the ground, some marked and others not. There is a crypt in the centre of the field of headstones. ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'skeleton', weight = 1},{value = 'zombiesingle', weight = 2},{value = 'murderofcrows', weight = 4},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 5,
 		exits = ['rivercrossing','crypt'],
 		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
+		races = [],
 		levelrange = [7,10],
 	},
 	crypt = {
-		background = 'grove',
+		background = 'undercity',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
 		code = 'crypt',
 		name = 'Crypt',
 		description = "The crypt interior is larger than it originally appeared. Many corridors lead into big rooms. Strange noises permeate the air. Whispers, the scrape of bone, the slithering of cloth... ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'zombieskelly', weight = 1},{value = 'zombiegroup', weight = 2},{value = 'skeletongroup', weight = 2},{value = 'coldspiritmultiple', weight = 1},{value = 'skeleton', weight = 1.5},{value = 'zombiesingle', weight = 1.5},{value = 'coldspiritsingle', weight = 1.5},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 5,
 		exits = ['graveyard'],
@@ -415,24 +415,24 @@ var database = {
 		code = 'forestofrefuge',
 		name = 'Forest of Refuge',
 		description = "The trees are thick and tall here, shaded together as if to form a barrier to all entry. You cannot see very far ahead.  ",
-		enemies = [{value = 'banditcamp',weight = 1.35},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'jaguarhunting', weight = 2},{value = 'pythonhunting', weight = 1.5},{value = 'refugesolo', weight = 1},{value = 'refugegroup', weight = 2},{value = 'refugeambush', weight = 3},{value = 'banditcamp', weight = 1.35},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
 		locationscript = 'forestofrefuge',
 		exits = ['prairie','ruins'],
 		tags = ['enclosed'],
-		races = [],
+		races = ['any'],
 		levelrange = [10,15],
 	},
 	ruins = {
-		background = 'grove',
+		background = 'meadows',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
 		code = 'ruins',
 		name = 'Ancient Ruins',
 		description = "Collapsed structures of stone indicate that this was once a  sea-side city. Now it is merely crumbled stone and roofless rooms. Statues and sculptures rendered unrecognizable by the elements litter the ground. ",
-		enemies = [{value = 'banditcamp',weight = 1.35},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'monkeys', weight = 2},{value = 'banditcamp', weight = 1.35},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 10,
 		exits = ['forestofrefuge','prairie','sea'],
@@ -442,7 +442,7 @@ var database = {
 	},
 	#Gorn
 	oasis = {
-		background = 'grove',
+		background = 'meadows',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -458,14 +458,14 @@ var database = {
 		levelrange = [],
 	},
 	desert = {
-		background = 'grove',
+		background = 'highlands',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
 		code = 'desert',
 		name = 'Desert',
 		description = "You are in the desert proper now. There are few plants. The sands are hot and shifting, scalding your feet and messing with your balance. This is a harsh biome. ",
-		enemies = [{value = 'banditcamp', weight = 1.35},{value = 'banditsmedium', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'rattlesnakesunning', weight = 2},{value = 'cactussingle', weight = 4},{value = 'mummydesertwander', weight = 1},{value = 'sandworm', weight = 2},{value = 'desertcentaurpatrol', weight = 2},{value = 'desertorcscouts', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 10,
 		locationscript = 'desert',
@@ -475,14 +475,14 @@ var database = {
 		levelrange = [6,9],
 	},
 	deepdesert = {
-		background = 'grove',
+		background = 'highlands',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
 		code = 'deepdesert',
 		name = 'Heart of the Desert',
 		description = "The sand dunes here are like fields of scalding misery. Your sweat evaporates off your skin before it can even drip off you. What could possibly live here? ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'desertorcscouts', weight = 2},{value = 'desertcentaurpatrol', weight = 2},{value = 'mummydesertwander', weight = 1},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
 		locationscript = 'deepdesert',
@@ -492,7 +492,7 @@ var database = {
 		levelrange = [7,12],
 	},
 	sandtomb = {
-		background = 'grove',
+		background = 'undercity',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -516,16 +516,16 @@ var database = {
 		code = 'taintedforest',
 		name = 'Tainted Forest',
 		description = "A purple haze chokes the trees, giving them a sickly look. Despite this, they bear fruit and have luscious leaves. The bright purple is not an encouraging colour, especially when the nature seems to be contributing to the acrid smell in the air. ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'unnaturaltoadsingle', weight = 2},{value = 'chickensingle', weight = 2},{value = 'cobranest', weight = 4},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
 		exits = ['amberroad','elvenforest'],
 		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
+		races = [],
 		levelrange = [7,10],
 	},
 	cliffsidefalls = {
-		background = 'grove',
+		background = 'amberroad',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -537,7 +537,7 @@ var database = {
 		length = 5,
 		exits = ['amberroad'],
 		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
+		races = [],
 		levelrange = [4,10],
 	},
 	#Frostford
@@ -558,14 +558,14 @@ var database = {
 	# 	levelrange = [10,15],
 	# },
 	snowypeaks = {
-		background = 'grove',
+		background = 'borealforest',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
 		code = 'snowypeaks',
 		name = 'Snowy Peaks',
 		description = "The freezing air cuts deep into your bones. The wind howls, carrying snow flakes in something just short of a blizzard. ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'snowleopard', weight = 3},{value = 'frostgiantwander', weight = 1},{value = 'yetiwander', weight = 2},{value = 'frozenwispmany', weight = 3},{value = 'frozenwispsingle', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
 		locationscript = 'snowypeaks',
@@ -575,7 +575,7 @@ var database = {
 		levelrange = [10,15],
 	},
 	snowplains = {
-		background = 'grove',
+		background = 'borealforest',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -587,11 +587,11 @@ var database = {
 		length = 20,
 		exits = ['frostfordoutskirts','marsh'],
 		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
+		races = [],
 		levelrange = [6,10],
 	},
 	lizardvillage = {
-		background = 'grove',
+		background = 'marsh',
 		music = 'explore',
 		reqs = "true",
 		combat = false,
@@ -607,7 +607,7 @@ var database = {
 		levelrange = [7,15],
 	},
 	abandonedvillage = {
-		background = 'grove',
+		background = 'marsh',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -619,7 +619,7 @@ var database = {
 		length = 5,
 		exits = ['frostfordoutskirts','marsh'],
 		tags = [],
-		races = [{value = 'Dyrad', weight = 12}],
+		races = [],
 		levelrange = [6,10],
 	},
 	#Hidden Challenge Areas
@@ -729,7 +729,7 @@ var database = {
 		code = 'thepeaks',
 		name = 'The Peaks',
 		description = "This high up in the mountains it is very cold and the air is thin. The sun shines its unmitigated light on you. Everything is very bright. ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'seraph1', weight = 1},{value = 'harpy', weight = 5},{value = 'banditsmedium', weight = 6}, {value = 'fewcougars', weight = 8},{value = 'falconhunt', weight = 3},{value = 'eaglehunt', weight = 3},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 15,
 		exits = ['stormcrown','mountains'],
@@ -745,7 +745,7 @@ var database = {
 		code = 'stormcrown',
 		name = 'Storm Crown',
 		description = "The highest peak of the mountains crowned with dark clouds at all times, as if something at the top agitates them. The cold is bone chilling and the wind is a relentless force determined to toss you off the mountain. ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'dragonkinhermit', weight = 1},{value = 'skyseraphhermit', weight = 2},{value = 'skyharpsolo', weight = 4},{value = 'skyharpflock', weight = 3},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 15,
 		exits = ['thepeaks','skysphere'],
@@ -777,7 +777,7 @@ var database = {
 		code = 'skysphere',
 		name = 'Skysphere',
 		description = "Around you are sun-bathed clouds as far as the eye can see. There seems to be nothing up here. The air seems to roar with it's passage. Or was that something else?",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'falconhunt', weight = 2},{value = 'eaglehunt', weight = 2},{value = 'dragonkinhermit', weight = 1},{value = 'skyseraphhermit', weight = 1},{value = 'wyvernflyby', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
 		exits = ['skyisland','thebeyond','mountains','stormcrown','prairie','gornoutskirts','wimbornoutskirts','frostfordoutskirts'],
@@ -809,13 +809,13 @@ var database = {
 		code = 'thebeyond',
 		name = 'The Beyond',
 		description = "You've climbed so high that you're no longer quite sure where you are. There are clouds, but they are few and far between- and quite unlike any clouds you've ever seen in your life. They twist and swirl before your eyes, seeming to whisper and sneer at you. Stars that once twinkled up above now seem to stare, as if offended. The air has grown thin and breathing is difficult. The very air seems charged with magic. You have the distinct impression that despite the emptiness you are not welcome.  ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'unknownbirdflyby', weight = 3},{value = 'unknownserpentflyby', weight = 2},{value = 'unknownwyvernflyby', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 30,
 		exits = ['mountains','stormcrown','prairie','gornoutskirts','wimbornoutskirts','frostfordoutskirts','skycolliseum'],
 		tags = [],
 		races = [],
-		levelrange = [5,8],
+		levelrange = [8,10],
 	},
 	skycolliseum = {
 		background = 'mountains',
@@ -858,7 +858,7 @@ var database = {
 		code = 'farsea',
 		name = 'Deep Sea',
 		description = "There is no land in sight. The water is dark and unreadable. The heavy waters push and pull at you. ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'nereidscoutparty', weight = 1},{value = 'orcapodfew', weight = 3},{value = 'orcasolo', weight = 2},{value = 'sharkswim', weight = 2},{value = 'drownedgroup', weight = 2},{value = 'jellyfishschool', weight = 6},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 15,
 		exits = ['sea','deepseaentrance'],
@@ -890,7 +890,7 @@ var database = {
 		code = 'deepsea',
 		name = 'Deep Sea',
 		description = "Beneath the water is dark, lit only by your mage light. Unseen shapes twist and move beyond your sight. The water is thick and resistant to your movements. You feel pressure from all around you. ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'nereidscoutparty', weight = 3},{value = 'scyllasolo', weight = 0.5},{value = 'nereidsolo', weight = 1},{value = 'greatwhitehunting', weight = 4},{value = 'orcapodmany', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 20,
 		exits = ['deepseaentrance','seafloor'],
@@ -906,7 +906,7 @@ var database = {
 		code = 'seafloor',
 		name = 'Sea Floor',
 		description = "Oddly, the water is clearer here and the white sand of the depths is clearly visible as far you can see. There are various structures scattered around. Sunken ships, weapons, chests... and settlements. ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'scyllascouts', weight = 2},{value = 'nereidguards', weight = 4},{value = 'nereidpatrol', weight = 3},{value = 'scyllasolo', weight = 1},{value = 'nereidsolo', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 25,
 		exits = ['deepsea','underwatercanyon'],
@@ -922,7 +922,7 @@ var database = {
 		code = 'underwatercanyon',
 		name = 'Underwater Canyon',
 		description = "The walls of the canyon loom around you. This deep it is pitch black and utterly silent. The water is freezing and almost paralyzing with it's weight. Anything could sneak up on you... ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'giantsquidswim', weight = 1},{value = 'scyllapatrol', weight = 2},{value = 'scyllaguards', weight = 4},{value = 'scyllasolo', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 30,
 		exits = ['seafloor','sealairentrance'],
@@ -971,7 +971,7 @@ var database = {
 		code = 'poisonswamp',
 		name = 'Poisonous Swamp',
 		description = "Ugly waterlogged trees dot these twisted lands. Every step squelches in liquids that seem to be melting your shoes. ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'poisonouselashtowreckyourday', weight = 2},{value = 'poisontoadchilling', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 10,
 		exits = ['deephole','marsh'],
@@ -987,7 +987,7 @@ var database = {
 		code = 'deephole',
 		name = 'Deep Hole',
 		description = "There appears to be a fairly large hole in the ground. It would have been rather unremarkable if not for powerful aura of magic it exudes. It is pitch black within, with no bottom in sight. You notice a path curving downward around its circumference. ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'demonwandering', weight = 1},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 15,
 		exits = ['poisonswamp','dark tunnel'],
@@ -996,14 +996,14 @@ var database = {
 		levelrange = [],
 	},
 	darktunnel = {
-		background = 'marsh',
+		background = 'tunnels',
 		music = 'dungeon',
 		reqs = "true",
 		combat = true,
 		code = 'darktunnel',
 		name = 'Dark Tunnel',
 		description = "You have no idea how far down you are now, only that it took ages to get to this tunnel. It is huge. Echoes, screeches and scraping noises fill the void. There are things down here. Some of them sound... big. ",
-		enemies = [{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		enemies = [{value = 'demoncamp', weight = 1},{value = 'demonpatrol', weight = 2},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
 		length = 25,
 		exits = ['deephole', 'hellscapeentrance'],

@@ -529,12 +529,12 @@ var enemygrouppools = {
 	},
 	refugegroup = {
 		units = [['monstergirlrefuge', 2, 5]], awareness = 25, captured = null, special = null,
-		description = 'You see a group of shabbily dressed people armed with crafted weaponry foraging for food.',
+		description = 'You see a group of shabbily dressed people armed with well-crafted weaponry foraging for food.',
 		descriptionambush = 'A group of escaped attack you.',
 	},
 	refugeambush = {
 		units = [['monstergirlrefuge', 5, 8]], awareness = 35, captured = null, special = null,
-		description = 'You see a group of shabbily dressed people armed with crafted weaponry hiding in wait among the trees.',
+		description = 'You see a group of shabbily dressed but well-armed people wielding crafted weaponry hiding in wait among the trees.',
 		descriptionambush = 'A group of escaped slaves catch you in an ambush.',
 	},
 	#GORN
