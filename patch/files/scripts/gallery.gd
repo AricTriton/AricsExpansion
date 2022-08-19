@@ -620,6 +620,23 @@ var backgrounds = {
 	culthideout = load("res://files/backgrounds/culthideout.png"),
 	cavelake = load("res://files/backgrounds/cavelake.png"),
 	darkness = load("res://files/backgrounds/darkness.png"),
+	###---Added by Expansion---### Bubblepot(BBP)
+	amberroadbg = load("res://files/aric_expansion_images/travel_backgrounds/amberroad.png"),
+	rivercrossbg = load("res://files/aric_expansion_images/travel_backgrounds/rivercrossing.jpg"),
+	cliffsidefallsbg = load("res://files/aric_expansion_images/travel_backgrounds/cliffsidefalls.jpg"),
+	cryptbg = load("res://files/aric_expansion_images/travel_backgrounds/crypt.png"),
+	spinebg = load("res://files/aric_expansion_images/travel_backgrounds/spine.png"),
+	forestarchbg = load("res://files/aric_expansion_images/travel_backgrounds/forestarch.png"),
+	desertbg = load("res://files/aric_expansion_images/travel_backgrounds/desert.png"),
+	farseabg = load("res://files/aric_expansion_images/travel_backgrounds/farsea.jpg"),
+	seafloorbg = load("res://files/aric_expansion_images/travel_backgrounds/seafloor.jpg"),
+	underwatercanyonbg = load("res://files/aric_expansion_images/travel_backgrounds/underwatercanyon.jpg"),
+	swampvillagebg = load("res://files/aric_expansion_images/travel_backgrounds/swampvillage.jpg"),
+	snowypeaksbg = load("res://files/aric_expansion_images/travel_backgrounds/snowypeaks.jpg"),
+	seraphvillagebg = load("res://files/aric_expansion_images/travel_backgrounds/seraphvillage.jpg"),
+	thebeyondbg = load("res://files/aric_expansion_images/travel_backgrounds/thebeyond.jpg"),
+	hellscapebg = load("res://files/aric_expansion_images/travel_backgrounds/hellscape.jpg"),
+	###---End Expansion---###
 }
 
 var nakedsprites = {
