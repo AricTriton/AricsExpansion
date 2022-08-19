@@ -295,7 +295,7 @@ var database = {
 		levelrange = [4,7],
 	},
 	lakeside = {
-		background = 'meadow', #Find something appropriate
+		background = 'rivercrossbg', #Find something appropriate
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -311,7 +311,7 @@ var database = {
 		levelrange = [7,9],
 	},
 	lakebottom = {
-		background = 'grove',
+		background = 'seafloorbg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -343,7 +343,7 @@ var database = {
 		levelrange = [7,10],
 	},
 	dwarvenfortress = {
-		background = 'meadow',
+		background = 'crypt',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -359,7 +359,7 @@ var database = {
 		levelrange = [10,15],
 	},
 	rivercrossing = {
-		background = 'grove',
+		background = 'rivercrossbg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -391,7 +391,7 @@ var database = {
 		levelrange = [7,10],
 	},
 	crypt = {
-		background = 'undercity',
+		background = 'cryptbg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -425,7 +425,7 @@ var database = {
 		levelrange = [10,15],
 	},
 	ruins = {
-		background = 'meadows',
+		background = 'undercity',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -458,7 +458,7 @@ var database = {
 		levelrange = [],
 	},
 	desert = {
-		background = 'highlands',
+		background = 'desertbg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -475,7 +475,7 @@ var database = {
 		levelrange = [6,9],
 	},
 	deepdesert = {
-		background = 'highlands',
+		background = 'desertbg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -509,7 +509,7 @@ var database = {
 	},
 	#Amberguard
 	taintedforest = {
-		background = 'grove',
+		background = 'spinebg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -525,7 +525,7 @@ var database = {
 		levelrange = [7,10],
 	},
 	cliffsidefalls = {
-		background = 'amberroad',
+		background = 'cliffsidefallsbg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -558,7 +558,7 @@ var database = {
 	# 	levelrange = [10,15],
 	# },
 	snowypeaks = {
-		background = 'borealforest',
+		background = 'snowypeaksbg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -591,7 +591,7 @@ var database = {
 		levelrange = [6,10],
 	},
 	lizardvillage = {
-		background = 'marsh',
+		background = 'swampvillagebg',
 		music = 'explore',
 		reqs = "true",
 		combat = false,
@@ -607,7 +607,7 @@ var database = {
 		levelrange = [7,15],
 	},
 	abandonedvillage = {
-		background = 'marsh',
+		background = 'swampvillagebg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -625,7 +625,7 @@ var database = {
 	#Hidden Challenge Areas
 	#Forest -(The Spine, Great Tree Roots, Great Tree Trunk, Great Tree Banches, Great Tree Nest [Boss=Roc])
 	thespine = {
-		background = 'grove',
+		background = 'forestarchbg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -641,7 +641,7 @@ var database = {
 		levelrange = [7,15],
 	},
 	greattreeentrance = {
-		background = 'grove',
+		background = 'amberroadbg',
 		music = 'explore',
 		reqs = 'true',
 		combat = false,
@@ -657,7 +657,7 @@ var database = {
 		races = [],
 	},
 	greattreetrunk = {
-		background = 'grove',
+		background = 'amberroadbg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -673,7 +673,7 @@ var database = {
 		levelrange = [15,20],
 	},
 	greattreebranchentrance = {
-		background = 'grove',
+		background = 'amberroadbg',
 		music = 'explore',
 		reqs = 'true',
 		combat = false,
@@ -689,7 +689,7 @@ var database = {
 		races = [],
 	},
 	greattreebranch = {
-		background = 'grove',
+		background = 'amberroadbg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -705,7 +705,7 @@ var database = {
 		levelrange = [15,20],
 	},
 	greattreenest = {
-		background = 'grove',
+		background = 'amberroadbg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -738,7 +738,7 @@ var database = {
 		levelrange = [5,8],
 	},
 	stormcrown = {
-		background = 'mountains',
+		background = 'snowpeaksbg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -754,7 +754,7 @@ var database = {
 		levelrange = [5,8],
 	},
 	stormvillage = {
-		background = 'shaliq',
+		background = 'seraphvillagebg',
 		music = 'explore',
 		reqs = "true",
 		combat = false,
@@ -770,7 +770,7 @@ var database = {
 		levelrange = [15,25],
 	},
 	skysphere = {
-		background = 'mountains',
+		background = 'snowypeaksbg',
 		music = 'explore',
 		reqs = "globals.main.exploration.partycanfly()",
 		combat = true,
@@ -786,7 +786,7 @@ var database = {
 		levelrange = [5,8],
 	},
 	skyisland = {
-		background = 'mountains',
+		background = 'grove',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -802,7 +802,7 @@ var database = {
 		levelrange = [5,8],
 	},
 	thebeyond = {
-		background = 'mountains',
+		background = 'thebeyondbg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -818,7 +818,7 @@ var database = {
 		levelrange = [8,10],
 	},
 	skycolliseum = {
-		background = 'mountains',
+		background = 'seraphvillagebg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -851,7 +851,7 @@ var database = {
 	# },
 	#Sea-Far Sea, Deep Sea, Sea Floor[Town=Mermaidia], Underwater Canyon, Leviathan's Lair[Boss= Leviathan]
 	farsea = {
-		background = 'sea',
+		background = 'farseabg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -867,7 +867,7 @@ var database = {
 		levelrange = [10,15],
 	},
 	deepseaentrance = {
-		background = 'sea',
+		background = 'farseabg',
 		music = 'explore',
 		reqs = 'true',
 		combat = false,
@@ -883,7 +883,7 @@ var database = {
 		races = [],
 	},
 	deepsea = {
-		background = 'sea',
+		background = 'underwatercanyonbg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -899,7 +899,7 @@ var database = {
 		levelrange = [15,20],
 	},
 	seafloor = {
-		background = 'sea',
+		background = 'seafloorbg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -915,7 +915,7 @@ var database = {
 		levelrange = [20,25],
 	},
 	underwatercanyon = {
-		background = 'sea',
+		background = 'underwatercanyonbg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -931,7 +931,7 @@ var database = {
 		levelrange = [25,30],
 	},
 	sealairentrance = {
-		background = 'sea',
+		background = 'cavelake',
 		music = 'dungeon',
 		reqs = 'true',
 		combat = false,
@@ -947,7 +947,7 @@ var database = {
 		races = [],
 	},
 	leviathanlair = {
-		background = 'sea',
+		background = 'cavelake',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -980,7 +980,7 @@ var database = {
 		levelrange = [7,15],
 	},
 	deephole = {
-		background = 'marsh',
+		background = 'tunnels',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
@@ -1012,7 +1012,7 @@ var database = {
 		levelrange = [7,15],
 	},
 	hellscapeentrance = {
-		background = 'sea',
+		background = 'hellscapebg',
 		music = 'dungeon',
 		reqs = 'globals.player.maf >=10',
 		combat = false,
@@ -1028,7 +1028,7 @@ var database = {
 		races = [],
 	},
 	hellscape = {
-		background = 'marsh',
+		background = 'hellscapebg',
 		music = 'explore',
 		reqs = "true",
 		combat = true,
