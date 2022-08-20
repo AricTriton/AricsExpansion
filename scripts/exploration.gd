@@ -1804,11 +1804,11 @@ func partycanfly():
 	for i in party:
 		var j = globals.state.findslave(i)
 		teammates.append(j)
-	if player.wings != null || player.items.:
+	if player.wings != null || player.gear.costume == autowings:
 		accesscounter+=1
 	else:
 		for i in teammates:
-			if i.wings != null:
+			if i.wings != null || i.gear.costume == autowings:
 				accesscounter+=1
 	if accesscounter>=party.size():
 		return true
