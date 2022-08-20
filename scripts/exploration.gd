@@ -1685,15 +1685,8 @@ func forestofrefuge():
 	for i in party:
 		var j = globals.state.findslave(i)
 		teammates.append(j)
-	#If the player can cast a spell to enable travel individual checks are unneccesary
-	#if player.hascast:
-	#	manadecrease()  #Mana decrease may have to be implemented in zoneenter function. If not possible we can just make spell cost very high.
-	#	return true 
-	#Scroll through party members and player to see if they have accessgranting item.
-	#if i.hasitem:
-	#	return true
-	#Then we finally check race and stats. I couldn't think of a generalized way to do this so maybe this is trash and you can do better XD
-	if player.race in["Beastkin Wolf","Halfkin Wolf"] && globals.state.spec== "Hunter": #This second but may be unnecessary. Ask in server
+	
+	if player.race in["Beastkin Wolf","Halfkin Wolf"] && globals.state.spec== "Hunter": 
 		return true
 	else:		
 		for i in teammates:
@@ -1727,7 +1720,7 @@ func deepdesert():
 	for i in party:
 		var j = globals.state.findslave(i)
 		teammates.append(j)
-	if player.race=='Centaur':
+	if player.race=='Centaur':#Camel type centaur that ralph wants to do
 		return true
 	else:
 		for i in teammates:
@@ -1811,7 +1804,7 @@ func partycanfly():
 	for i in party:
 		var j = globals.state.findslave(i)
 		teammates.append(j)
-	if player.wings != null:
+	if player.wings != null || player.items.:
 		accesscounter+=1
 	else:
 		for i in teammates:
