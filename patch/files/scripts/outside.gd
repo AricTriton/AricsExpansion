@@ -2073,7 +2073,7 @@ var shops = {
 		code = 'wimbornmarket',
 		sprite = 'merchant',
 		name = "Wimborn's Market",
-		items = ['teleportwimborn','food','supply','bandage','rope','torch','teleportseal', 'basicsolutioning','hairdye', 'aphrodisiac' ,'beautypot', 'magicessenceing', 'natureessenceing','armorleather','armorchain','weapondagger','weaponserrateddagger','weaponbasicstaff','weaponsword','weaponceremonialsword','clothsundress','clothmaid','clothbutler','underwearlacy','underwearboxers', 'acctravelbag'],
+		items = ['teleportwimborn','food','supply','bandage','rope','torch','teleportseal', 'basicsolutioning','hairdye', 'aphrodisiac' ,'beautypot', 'magicessenceing', 'natureessenceing','armorleather','armorchain','weapondagger','weaponserrateddagger','weaponbasicstaff','weaponsword','weaponceremonialsword','clothsundress','clothmaid','clothbutler','underwearlacy','underwearboxers', 'acctravelbag','divingsuit','autowings','mouthbreather'],
 		selling = true
 	},
 	shaliqshop = {
