@@ -64,11 +64,11 @@ func zoneenter(zone):
 	elif zone.code =='desert': 
 		accessgranted = desert()
 	elif zone.code =='deepdesert':
-		accessgranted = deepdesert()
+		accessgranted = desert()
 	elif zone.code =='lakebottom':
-		accessgranted = lakebottom()
+		accessgranted = partycanswim()
 	elif zone.code == 'seafloor':
-		accessgranted = seafloor()
+		accessgranted = partycanswimdeep()
 	elif zone.code =='skysphere':
 		accessgranted = partycanfly()
 	if accessgranted == false:
@@ -1577,23 +1577,8 @@ func hellscapeentrance():
 	outside.buildbuttons(array,self)
 #Sea
 func deepseaentrance():
-	var player = globals.player
-	var party = globals.state.playergroup.duplicate()
-	var teammates=[]
-	var accesscounter=0
-	var accessgranted
-	for i in party:
-		var j = globals.state.findslave(i)
-		teammates.append(j)
-	if player.race in["Nereid","Scylla"]: 
-		accessgranted= true
-	else:		
-		for i in teammates:
-			if i.race in ["Nereid","Scylla"] :
-				accessgranted= true
-			else:
-				accessgranted= false
-	if accessgranted== false:
+	var access = partycanswimdeep()
+	if access == false:
 		mansion.maintext+= "\n\n You realize that you cannot traverse this area safely with your current abilities. Your death would only be a matter of time."
 		var array=[]
 		array.append({name = 'Turn Back', function = 'zoneenter', args = "farsea"})
@@ -1651,37 +1636,21 @@ func sealairentrance():
 
 #LOCATIONS
 #Remember to add the appropriate text
-func snowypeaks(): #Check if the player is eligible to enter the snowy peaks. 
-	var player = globals.player
-	var party = globals.state.playergroup.duplicate()
-	var teammates=[]
-	var accesscounter=0 #Consider using accesscounter to assign incremental benefits per centaur present
-	for i in party:
-		var j = globals.state.findslave(i)
-		teammates.append(j)
-	#If the player can cast a spell to enable travel individual checks are unneccesary
-	#if player.hascast:
-	#	manadecrease()  #Mana decrease may have to be implemented in zoneenter function. If not possible we can just make spell cost very high.
-	#	return true 
-	#Scroll through party members and player to see if they have accessgranting item.
-	#if i.hasitem:
-	#	return true
-	#Then we finally check race and stats. I couldn't think of a generalized way to do this so maybe this is trash and you can do better XD
-	for i in teammates:
-		if i.sagi>6 && i.send>6:
-			accesscounter+=1
-	if player.sagi>6 && player.send>6:
-		accesscounter+=1
-	if accesscounter>=party.size():
-		return true
-	else:
-		return false
+func snowypeaks(): #This function can be generalized, but I'm drawing a blank atm
+	var teammates = [globals.player]
+	for i in globals.state.playergroup:
+		teammates.append(globals.state.findslave(i))
+	for j in teammates:
+		if j.sagi>6 && j.send>6:
+			continue
+		else:
+			return false 
+	return true
 	
 func forestofrefuge():
 	var player = globals.player
 	var party = globals.state.playergroup.duplicate()
 	var teammates=[]
-	var accesscounter=0
 	for i in party:
 		var j = globals.state.findslave(i)
 		teammates.append(j)
@@ -1695,125 +1664,51 @@ func forestofrefuge():
 			else:
 				return false
 
-func desert():
-	var player = globals.player
-	var party = globals.state.playergroup.duplicate()
-	var teammates=[]
-	var accesscounter=0
-	for i in party:
-		var j = globals.state.findslave(i)
-		teammates.append(j)
-	if player.race=="Centaur": 
-		return true
-	else:
-		for i in teammates:
-			if i.race== "Centaur": 
+func desert(): #BBP to ralph - You can probably duplicate and edit this to suit your need for the Camel Centaur
+	var teammates = [globals.player]
+	for i in globals.state.playergroup:
+		teammates.append(globals.state.findslave(i))	
+		for j in teammates:
+			if j.race== "Centaur": 
 				return true
 			else:
 				return false
-
-func deepdesert():
-	var player = globals.player
-	var party = globals.state.playergroup.duplicate()
-	var teammates=[]
-	var accesscounter=0
-	for i in party:
-		var j = globals.state.findslave(i)
-		teammates.append(j)
-	if player.race=='Centaur':#Camel type centaur that ralph wants to do
-		return true
-	else:
-		for i in teammates:
-			if i.race== "Centaur": 
-				return true
-			else:
-				return false
-
-func lakebottom():
-	var player = globals.player
-	var party = globals.state.playergroup.duplicate()
-	var teammates=[]
-	var accesscounter=0
-	for i in party:
-		var j = globals.state.findslave(i)
-		teammates.append(j)
-	if player.race in["Nereid","Scylla","Otter"]: 
-		return true
-	else:		
-		for i in teammates:
-			if i.race in ["Nereid","Scylla","Otter"] :
-				return true
-			else:
-				return false
-
-func seafloor():
-	var player = globals.player
-	var party = globals.state.playergroup.duplicate()
-	var teammates=[]
-	var accesscounter=0
-	for i in party:
-		var j = globals.state.findslave(i)
-		teammates.append(j)
-	for i in teammates:
-		if i.send>6:
-			accesscounter+=1
-	if player.send>6:
-		accesscounter+=1
-	if accesscounter>=party.size():
-		return true
-	else:
-		if player.race == "Scylla": 
-			accesscounter+=1
-		else:		
-			for i in teammates:
-				if i.race in ["Nereid","Scylla","Otter"] :
-					accesscounter+=1
-		if accesscounter>=party.size():
-			return true
-
-func underwatercanyon():
-	var player = globals.player
-	var party = globals.state.playergroup.duplicate()
-	var teammates=[]
-	var accesscounter=0
-	for i in party:
-		var j = globals.state.findslave(i)
-		teammates.append(j)
-	for i in teammates:
-		if i.send>10:
-			accesscounter+=1
-	if player.send>10:
-		accesscounter+=1
-	if accesscounter>=party.size():
-		return true
-	else:
-		if player.race == "Scylla": 
-			accesscounter+=1
-		else:		
-			for i in teammates:
-				if i.race in ["Nereid","Scylla","Otter"] :
-					accesscounter+=1
-		if accesscounter>=party.size():
-			return true
 
 func partycanfly():
-	var player = globals.player
-	var party = globals.state.playergroup.duplicate()
-	var teammates=[]
-	var accesscounter=0
-	for i in party:
-		var j = globals.state.findslave(i)
-		teammates.append(j)
-	if player.wings != null || player.gear.costume == autowings:
-		accesscounter+=1
-	else:
-		for i in teammates:
-			if i.wings != null || i.gear.costume == autowings:
-				accesscounter+=1
-	if accesscounter>=party.size():
-		return true
-	else:
-		return false
+	var teammates = [globals.player]
+	for i in globals.state.playergroup:
+		teammates.append(globals.state.findslave(i))
+	for j in teammates:
+		if j.wings != null:
+			continue 
+		var temp = globals.state.unstackables.get(j.gear.accessory)
+		if temp == null || temp.code != 'autowings':
+			return false
+	return true
+
+func partycanswim():
+	var teammates = [globals.player]
+	for i in globals.state.playergroup:
+		teammates.append(globals.state.findslave(i))
+	for j in teammates:
+		if j.race in ["Nereid","Scylla","Otter"]:
+			continue 
+		var temp = globals.state.unstackables.get(j.gear.accessory)
+		if temp == null || temp.code != 'mouthbreather':
+			return false
+	return true
+
+func partycanswimdeep():
+	var teammates = [globals.player]
+	for i in globals.state.playergroup:
+		teammates.append(globals.state.findslave(i))
+	for j in teammates:
+		if j.race in ["Nereid","Scylla"]:
+			continue 
+		var temp = globals.state.unstackables.get(j.gear.costume)
+		if temp == null || temp.code != 'divingsuit':
+			return false
+	return true
 
 #HABITATIONS
 func stormvillage():
