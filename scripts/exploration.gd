@@ -1,6 +1,155 @@
 
 var travel = globals.expansiontravel #ralphD
 
+var isusingmagic = false #Added by Bubblepot. If true, subtract manacost every advance. Not implemented yet
+var manacost = 0 #Added by Bubblepot. How much mana it takes to move through a given zone.
+
+func zoneenter(zone):
+	var text = ''
+	var endofarea = false
+	if lastzone == null:
+		lastzone = zones[zone].code
+	else:
+		lastzone = currentzone.code
+	zone = self.zones[zone]
+	if zone.combat == false:
+		progress = 0
+		deeperregion = false
+	if progress == 0:
+		main.background_set(zone.background, true)
+		yield(main, "animfinished")
+	enemyinfoclear()
+	calculateawareness()
+	main.checkplayergroup()
+	outside.playergrouppanel()
+	text = zone.name
+	if deeperregion:
+		text = "+" + text + "+"
+	if outside.get_node('locationname').get_text() != text:
+		outside.get_node('locationname').set_text(text)
+		main.nodeunfade(outside.get_node("locationname"), 0.5, 0.01)
+	text = ''
+	var progressvalue = (progress/max(zone.length,1))*100
+	var progressbar = globals.get_tree().get_current_scene().get_node("outside/exploreprogress")
+	if progress != 0:
+		get_parent().tween.interpolate_property(progressbar, "value", progressbar.value, progressvalue, 0.7, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+		get_parent().tween.start()
+	else:
+		progressbar.set_value(progressvalue)
+	currentzone = zone
+	outside.clearbuttons()
+	showmap(currentzone)
+	text += zone.description
+	if globals.state.marklocation == zone.code:
+		text += "\n\n[color=aqua]You have a mark in this area[/color]"
+	if zone.code in ['wimborn','gorn','amberguard','frostford']:
+		text += "\n\n[color=yellow]You can use public teleport to return to mansion from this location.[/color]"
+	mansion.maintext = text
+	if zone.combat == false:
+		call(zone.locationscript)
+		return
+	else:
+		main.music_set(zone.music)
+#		if zone.code in ['mountaincave','undercitytunnels','undercityruins','undercityhall','redcave','darkness','culthideout','cavelake']:
+#			main.music_set('dungeon')
+#		else:
+#			main.music_set('explore')
+	
+	var accessgranted = true #Added by Bubblepot. Wrapping zone code in an if statement to allow for zones that deny entry
+	
+	if zone.code =='snowypeaks': 
+		accessgranted = snowypeaks()
+	elif zone.code =='forestofrefuge':
+		accessgranted = forestofrefuge()
+	elif zone.code =='desert': 
+		accessgranted = desert()
+	elif zone.code =='deepdesert':
+		accessgranted = desert()
+	elif zone.code =='lakebottom':
+		accessgranted = partycanswim()
+	elif zone.code == 'seafloor':
+		accessgranted = partycanswimdeep()
+	elif zone.code =='skysphere':
+		accessgranted = partycanfly()
+	if accessgranted == false:
+		mansion.maintext+= "\n\n You realize that you cannot traverse this area safely with your current abilities. Your death would only be a matter of time."
+		var array=[]
+		array.append({name = 'Turn Back', function = 'zoneenter', args = str(lastzone) })
+		outside.buildbuttons(array,self)
+	else: #End of Bubblepot edits
+		var array = []
+		if zone.combat == true && progress >= zone.length:
+			for i in zone.exits:
+				var temp = self.zones[i]
+				if globals.evaluate(temp.reqs) == true:
+					array.append({name = 'Move to ' + temp.name, function = 'zoneenter', args = temp.code})
+			if globals.state.backpack.stackables.has('supply') && globals.state.backpack.stackables.supply >= 3 && globals.state.playergroup.size()*5+5 <= globals.resources.food:
+				array.append({name = "Rest and eat", function = 'rest', tooltip = 'Requires 3 units of supplies (in total) and 5 food per party member'})
+			else:
+				array.append({name = "Rest and eat", function = 'rest', disabled = true, tooltip = 'Requires 3 units of supplies (in total) and 5 food per party member'})
+			if globals.state.restday == globals.resources.day:
+				array[array.size()-1].disabled = true
+				array[array.size()-1].tooltip = 'Can only be done once per day'
+			progress = 0
+			endofarea = true
+			if deeperregion == false:
+				array.insert(0,{name = 'Move deeper into the region', function = 'deepzone', args = currentzone.code})
+				array.insert(0,{name = 'Explore this area again', function = 'zoneenter', args = currentzone.code})
+			else:
+				array.insert(0,{name = 'Return to the central region', function = 'zoneenter', args = currentzone.code})
+				array.insert(0,{name = 'Stay in the deeper region', function = 'deepzone', args = currentzone.code})
+			deeperregion = false
+			outside.buildbuttons(array, self)
+		else:
+			inencounter = false
+			array.append({name = "Proceed through area", function = 'enemyencounter'})
+			if globals.developmode == true:
+				array.append({name = "Skip", function = 'areaskip'})
+		
+		if globals.state.sidequests.cali == 19 && zone.code == 'forest':
+			array.append({name = "Look for bandits' camp", function = 'event',args = 'calibanditcamp'})
+		elif (globals.state.sidequests.cali == 23 || globals.state.sidequests.cali == 24) && zone.code == 'wimbornoutskirts':
+			array.append({name = "Visit slaver's camp", function = 'event',args = 'calislavercamp'})
+		elif (globals.state.sidequests.cali == 25) && zone.code == 'wimbornoutskirts':
+			array.append({name = "Find the Bandit",function = 'event',args = 'calistraybandit'})
+		elif (globals.state.sidequests.cali == 26) && zone.code == 'grove':
+			for i in globals.slaves:
+				if i.unique == 'Cali':
+					array.append({name = "Find Cali's village",function = 'event',args = 'calireturnhome'})
+					break
+		elif zone.code == 'dragonnests' && endofarea && globals.state.decisions.has('dragonkilled') == false:
+			array.append({name = "Approach Cave Entrance", function = 'event',args = 'dragonbossenc'})
+		elif zone.code == 'culthideout' && endofarea && globals.state.decisions.has('cultbosskilled') == false:
+			array.append({name = "Approach Central Hall", function = 'event',args = 'cultbossenc'})
+		elif zone.code == 'darkness' && endofarea && globals.state.decisions.has('darknessdefeated') == false:
+			array.append({name = "Approach Bright Passage", function = 'event',args = 'finalbossenc'})
+		if globals.state.mainquest == 13 && zone.code == 'gornoutskirts':
+			array.append({name = "Search for Ivran's location",function = 'event',args = 'gornivran'})
+		if zone.code == 'undercitytunnels' && progress >= 6 && globals.state.lorefound.find('amberguardlog1') < 0:
+			globals.state.lorefound.append('amberguardlog1')
+			mansion.maintext = mansion.maintext + "[color=yellow]\n\nYou've found some old writings in the ruins. Does not look like what you came for, but you can read them later.[/color]"
+		if zone.code == 'undercityruins' && progress >= 5 && globals.state.lorefound.find('amberguardlog2') < 0:
+			globals.state.lorefound.append('amberguardlog2')
+			mansion.maintext = mansion.maintext + "[color=yellow]\n\nYou've found some old writings in the ruins. Does not look like what you came for, but you can read them later.[/color]"
+		if zone.code == 'frostfordoutskirts' && globals.state.mainquest in [27,30,32] && progress >= 5:
+			array.append({name = "Explore hunting grounds to South-East", function = 'event', args = 'frostforddryad'})
+		if zone.code == 'frostfordoutskirts' && globals.state.sidequests.zoe == 1 && progress >= 3:
+			globals.state.sidequests.zoe = 2
+			main.dialogue(true, self, globals.questtext.MainQuestFrostfordBeforeForestZoe, [], [['zoehappy','pos1','opac']])
+		if zone.code == 'mountaincave' && globals.state.mainquest == 39:
+			array.append({name = "Search for Ayda's location",function = 'event',args = 'mountainelfcamp'})
+		if zone.code == 'mountains' && globals.state.mainquest == 40 && globals.state.decisions.has("goodroute"):
+			event('garthorencounter')
+		if zone.code == 'gornoutskirts' && globals.state.mainquest == 40 && globals.state.decisions.has("badroute"):
+			event('davidencounter')
+		if zone.code == 'cavelake' && !globals.state.decisions.has("cultbosskilled") && endofarea:
+			event('cavelakedoor')
+		if progress == 0 && lastzone != zone.code && globals.evaluate(zones[lastzone].reqs) == true && lastzone != 'umbra':
+			array.append({name = "Return to " + zones[lastzone].name, function = "zoneenter", args = lastzone})
+		if zone.code == 'dragonnests' && progress == 0:
+			array.append({name = "Return to Mansion",function = 'mansion'})
+		outside.buildbuttons(array, self)
+
 func enemyencounter():
 	var enc
 	var encmoveto
@@ -352,6 +501,21 @@ func chestmouselockpick(person):
 		treasurechestoptions(text)
 	else:
 		showlootscreen(text)
+
+func enemyleave():
+	progress += 1.0
+	if isusingmagic== true: #BBP edit for spell travel
+		globals.player.mana-= manacost
+		isusingmagic = false
+		#if spell cost > mana cost call zoneenter to exit the zone
+	var text = ''
+	globals.player.energy -= max(5-floor((globals.player.sagi+globals.player.send)/2),1)
+	for i in globals.state.playergroup:
+		var person = globals.state.findslave(i)
+		person.energy -= max(5-floor((person.sagi+person.send)/2),1)
+	zoneenter(currentzone.code)
+	if text != '':
+		mansion.maintext = mansion.maintext +'\n[color=yellow]'+text+'[/color]'
 
 func enemydefeated():
 	if launchonwin != null:
@@ -1389,3 +1553,186 @@ func frostford():
 		else:
 			array.append({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold', disabled = true})
 	outside.buildbuttons(array,self)
+
+###---Added by Expansion---### LocationScripts for Expanded Areas (Bubblepot)
+#Important! Grouping Order is: Entrances, Locations, Habitations, Fights, FightWins Bosses, BossWins, Exits
+#ENTRANCES
+#Forest
+func greattreeentrance():
+	var array = []
+	array.append({name = 'Enter the doorway', function = 'zoneenter', args = 'greattreetrunk'})
+	array.append({name = "Return to The Spine", function = 'zoneenter', args = 'thespine'})
+	outside.buildbuttons(array,self)
+
+func greattreebranchentrance():
+	var array = []
+	array.append({name = 'Enter the opening', function = 'zoneenter', args = 'greattreenest'})
+	array.append({name = "Return to Great Tree Trunk", function = 'zoneenter', args = 'greattreetrunk'})
+	outside.buildbuttons(array,self)
+
+#Prairie
+#Marsh
+func hellscapeentrance():
+	var array = []
+	array.append({name = 'Enter the opening', function = 'zoneenter', args = 'hellscape'})
+	array.append({name = "Return to the Dark Tunnel", function = 'zoneenter', args = 'darktunnel'})
+	outside.buildbuttons(array,self)
+#Sea
+func deepseaentrance():
+	var access = partycanswimdeep()
+	if access == false:
+		mansion.maintext+= "\n\n You realize that you cannot traverse this area safely with your current abilities. Your death would only be a matter of time."
+		var array=[]
+		array.append({name = 'Turn Back', function = 'zoneenter', args = "farsea"})
+		outside.buildbuttons(array,self)
+	else:
+		var array = []
+		array.append({name = 'Dive', function = 'zoneenter', args = 'deepsea'})
+		array.append({name = "Return to the Far Sea", function = 'zoneenter', args = 'farsea'})
+		outside.buildbuttons(array,self)
+				
+func sealairentrance():
+	var array = []
+	array.append({name = 'Enter the cave', function = 'zoneenter', args = 'leviathanlair'})
+	array.append({name = "Return to the Deep Sea", function = 'zoneenter', args = 'deepsea'})
+	outside.buildbuttons(array,self)
+
+#Mountains
+
+# func undercityhall():
+# 	var array = []
+# 	if globals.state.mainquest == 24:
+# 		array.append({name = "Search for documents", function = 'undercityboss'})
+# 	else:
+# 		array.append({name = "Search for valuables", function = 'undercityboss'})
+# 	outside.buildbuttons(array,self)
+
+# func undercityboss():
+# 	main.get_node("combat").nocaptures = true
+# 	if globals.state.mainquest == 24:
+# 		buildenemies("bossgolem")
+# 		launchonwin = 'undercitybosswin'
+# 		enemyfight()
+# 	else:
+# 		buildenemies("bosswyvern")
+# 		launchonwin = 'undercitybosswin'
+# 		enemyfight()
+
+# func undercitylibrary():
+# 	globals.main.maintext = globals.questtext.undercitybookenc
+# 	var array = []
+# 	array.append({name = "Fight", function = 'undercitylibraryfight'})
+# 	outside.buildbuttons(array,self)
+
+# func undercitylibraryfight():
+# 	buildenemies("bookmutants")
+# 	globals.main.get_node("combat").nocaptures = true
+# 	launchonwin = 'undercitylibrarywin'
+# 	enemyfight()
+
+# func undercitylibrarywin():
+# 	winscreenclear()
+# 	generateloot(['zoebook', 1], globals.questtext.undercitybookafterabttle)
+# 	showlootscreen()
+# 	zoneenter("undercityruins")
+
+#LOCATIONS
+#Remember to add the appropriate text
+func snowypeaks(): #This function can be generalized, but I'm drawing a blank atm
+	var teammates = [globals.player]
+	for i in globals.state.playergroup:
+		teammates.append(globals.state.findslave(i))
+	for j in teammates:
+		if j.sagi>6 && j.send>6:
+			continue
+		else:
+			return false 
+	return true
+	
+func forestofrefuge():
+	var player = globals.player
+	var party = globals.state.playergroup.duplicate()
+	var teammates=[]
+	for i in party:
+		var j = globals.state.findslave(i)
+		teammates.append(j)
+	
+	if player.race in["Beastkin Wolf","Halfkin Wolf"] && globals.state.spec== "Hunter": 
+		return true
+	else:		
+		for i in teammates:
+			if i.race in ["Beastkin Wolf","Halfkin Wolf"] && i.spec=="ranger":
+				return true
+			else:
+				return false
+
+func desert(): #BBP to ralph - You can probably duplicate and edit this to suit your need for the Camel Centaur
+	var teammates = [globals.player]
+	for i in globals.state.playergroup:
+		teammates.append(globals.state.findslave(i))	
+		for j in teammates:
+			if j.race== "Centaur": 
+				return true
+			else:
+				return false
+
+func partycanfly():
+	var teammates = [globals.player]
+	for i in globals.state.playergroup:
+		teammates.append(globals.state.findslave(i))
+	for j in teammates:
+		if j.wings != null:
+			continue 
+		var temp = globals.state.unstackables.get(j.gear.costume)
+		if temp == null || temp.code != 'autowings':
+			return false
+	return true
+
+func partycanswim():
+	var teammates = [globals.player]
+	for i in globals.state.playergroup:
+		teammates.append(globals.state.findslave(i))
+	for j in teammates:
+		if j.race in ["Nereid","Scylla","Beastkin Otter"]:
+			continue 
+		var temp = globals.state.unstackables.get(j.gear.accessory)
+		if temp == null || temp.code != 'mouthbreather':
+			return false
+	return true
+
+func partycanswimdeep():
+	var teammates = [globals.player]
+	for i in globals.state.playergroup:
+		teammates.append(globals.state.findslave(i))
+	for j in teammates:
+		if j.race in ["Nereid","Scylla"]:
+			continue 
+		var temp = globals.state.unstackables.get(j.gear.costume)
+		if temp == null || temp.code != 'divingsuit':
+			return false
+	return true
+
+#HABITATIONS
+func stormvillage():
+	var array = []
+	var entry = partycanfly()
+	main.music_set('frostford')
+#	if globals.state.portals.amberguard.enabled == false:
+#		globals.state.portals.amberguard.enabled = true
+#		mansion.maintext = mansion.maintext + "\n\n[color=yellow]You have unlocked new portal![/color]"
+	array.append({name = "Exit to StormCrown", function = 'zoneenter', args = 'elvenforest'})
+	if entry == true:
+		array.append({name = "Fly Up", function = 'zoneenter', args = 'skysphere'})
+	outside.buildbuttons(array,self)
+
+func lizardvillage():
+	var array = []
+	main.music_set('frostford')
+#	if globals.state.portals.amberguard.enabled == false:
+#		globals.state.portals.amberguard.enabled = true
+#		mansion.maintext = mansion.maintext + "\n\n[color=yellow]You have unlocked new portal![/color]"
+	array.append({name = "Enter Marsh", function = 'zoneenter', args = 'elvenforest'})
+	outside.buildbuttons(array,self)
+
+###---End Expansion---###
+
