@@ -1,7 +1,6 @@
 
 var travel = globals.expansiontravel #ralphD
 
-var accessgranted = true #Added by Bubblepot. Wrapping zone code in an if statement to allow for zones that deny entry
 var isusingmagic = false #Added by Bubblepot. If true, subtract manacost every advance. Not implemented yet
 var manacost = 0 #Added by Bubblepot. How much mana it takes to move through a given zone.
 
@@ -56,6 +55,7 @@ func zoneenter(zone):
 #		else:
 #			main.music_set('explore')
 	
+	var accessgranted = true #Added by Bubblepot. Wrapping zone code in an if statement to allow for zones that deny entry
 	
 	if zone.code =='snowypeaks': 
 		accessgranted = snowypeaks()
@@ -504,8 +504,10 @@ func chestmouselockpick(person):
 
 func enemyleave():
 	progress += 1.0
-	if isusingmagic== true:
+	if isusingmagic== true: #BBP edit for spell travel
 		globals.player.mana-= manacost
+		isusingmagic = false
+		#if spell cost > mana cost call zoneenter to exit the zone
 	var text = ''
 	globals.player.energy -= max(5-floor((globals.player.sagi+globals.player.send)/2),1)
 	for i in globals.state.playergroup:
@@ -1681,7 +1683,7 @@ func partycanfly():
 	for j in teammates:
 		if j.wings != null:
 			continue 
-		var temp = globals.state.unstackables.get(j.gear.accessory)
+		var temp = globals.state.unstackables.get(j.gear.costume)
 		if temp == null || temp.code != 'autowings':
 			return false
 	return true
@@ -1691,7 +1693,7 @@ func partycanswim():
 	for i in globals.state.playergroup:
 		teammates.append(globals.state.findslave(i))
 	for j in teammates:
-		if j.race in ["Nereid","Scylla","Otter"]:
+		if j.race in ["Nereid","Scylla","Beastkin Otter"]:
 			continue 
 		var temp = globals.state.unstackables.get(j.gear.accessory)
 		if temp == null || temp.code != 'mouthbreather':

@@ -856,7 +856,7 @@ var database = {
 		reqs = "true",
 		combat = true,
 		code = 'farsea',
-		name = 'Deep Sea',
+		name = 'Far Sea',
 		description = "There is no land in sight. The water is dark and unreadable. The heavy waters push and pull at you. ",
 		enemies = [{value = 'nereidscoutparty', weight = 1},{value = 'orcapodfew', weight = 3},{value = 'orcasolo', weight = 2},{value = 'sharkswim', weight = 2},{value = 'drownedgroup', weight = 2},{value = 'jellyfishschool', weight = 6},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
 		encounters = [],
