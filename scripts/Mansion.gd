@@ -1982,10 +1982,11 @@ func reset_dimcrystal_ability_buttons():
 	if refCrystal.abilities.has('pregnancyspeed'):
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed").set_disabled(false)
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed_enable").set_disabled(false)
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed_enable").hide()
 	else:
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed").set_disabled(true)
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed").set_tooltip("Requires Upgrade Level 1")
-		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed_enable").set_disabled(false)
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed_enable").hide()
 	#Second Wind (1/Day Combat Revive)
 	if refCrystal.abilities.has('secondwind'):
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_secondwind").set_disabled(false)
@@ -2012,6 +2013,9 @@ func reset_dimcrystal_ability_buttons():
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_understandsacrifice").set_disabled(true)
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_choosesacrifice").hide()
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_choosesacrifice").set_disabled(true)
+	
+	#Hide PregSpeed Panel
+	nodeChangePregSpeed.hide()
 
 func _on_dimcrystal_showstats_pressed():
 	var refCrystal = globals.state.thecrystal
@@ -2140,6 +2144,7 @@ func _on_dimcrystal_ability_attunement_pressed():
 	textnode.set_bbcode(text)
 	textnode.show()
 
+#Preg Speed
 func _on_dimcrystal_ability_pregspeed_pressed():
 	var refCrystal = globals.state.thecrystal
 	var text = ""
@@ -2151,19 +2156,137 @@ func _on_dimcrystal_ability_pregspeed_pressed():
 	reset_dimcrystal_ability_buttons()
 	get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed").set_disabled(true)
 	get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed_enable").set_disabled(false)
+	get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed_enable").show()
 	textnode.set_bbcode(text)
 	textnode.show()
 
-###-TBK - Pressed
+onready var nodeChangePregSpeed = get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel")
+
 func _on_dimcrystal_ability_pregspeed_enabled():
-	get_node("MainScreen/mansion/dimcrystalpanel/ability_pregnancyspeed_popup/SpinBox").set_value(globals.state.pregduration)
-	get_node("MainScreen/mansion/dimcrystalpanel/ability_pregnancyspeed_popup").popup()
-	get_node("MainScreen/mansion/dimcrystalpanel/ability_pregnancyspeed_popup").show()
+	refresh_pregspeed_panel()
+	nodeChangePregSpeed.show()
 
 func _on_dimcrystal_ability_pregspeed_panel_closed():
-	globals.state.pregduration = get_node("MainScreen/mansion/dimcrystalpanel/ability_pregnancyspeed_popup/SpinBox").get_line_edit()
-	get_node("MainScreen/mansion/dimcrystalpanel/ability_pregnancyspeed_popup").hide()
+	nodeChangePregSpeed.hide()
 	_on_dimcrystal_ability_pregspeed_pressed()
+
+func refresh_pregspeed_panel():
+	var text = "You have harnessed the power of the [color=#E389B9]Dimensional Crystal[/color] to safely speed up the gestation period for all pregnant women within the mansion past the normal limits their bodies could handle. The [color=#E389B9]Crystal[/color] surpresses the unbearable physical pain and mental horror that the near instantaneous pregnancies cause to the affected women, fortunately preventing their bodies from permanently warping or their minds from snapping from the uncontrollable changes. Instead, the affected women's minds and memories are magically altered into believing that they are growing at only slightly faster than a natural, normal rate.\n\n"
+	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/displaytext")
+	var currentspeed = str(globals.state.pregduration)
+	
+	#Enable All Buttons
+	nodeChangePregSpeed.speed_1.set_disabled(false)
+	nodeChangePregSpeed.speed_3.set_disabled(false)
+	nodeChangePregSpeed.speed_5.set_disabled(false)
+	nodeChangePregSpeed.speed_7.set_disabled(false)
+	nodeChangePregSpeed.speed_10.set_disabled(false)
+	nodeChangePregSpeed.speed_14.set_disabled(false)
+	nodeChangePregSpeed.speed_21.set_disabled(false)
+	nodeChangePregSpeed.speed_30.set_disabled(false)
+	nodeChangePregSpeed.speed_45.set_disabled(false)
+	nodeChangePregSpeed.speed_60.set_disabled(false)
+	nodeChangePregSpeed.speed_180.set_disabled(false)
+	nodeChangePregSpeed.speed_360.set_disabled(false)
+	
+	#Disable Current Choice, Show Text
+	match currentspeed:
+		'1':
+			nodeChangePregSpeed.speed_1.set_disabled(true)
+			text += "Pregnant women will give birth within [color=aqua]1 Day[/color] of getting pregnant. This extreme rate of gestation may still cause potential health and mental health issues, however.\n\n[color=red]This is essentially a Cheat mode and useful for pumping out slaves to sell. However, you will skip over the majority of pregnancy content.[/color]"
+		'3':
+			nodeChangePregSpeed.speed_3.set_disabled(true)
+			text += "Pregnant women will burst to full term, growing at a rate of 1 day per trimester for a total of [color=aqua]3 days[/color]. You can sense that this is the highest speed recommended by the mysterious creators of the [color=#E389B9]Crystal[/color], though it will still have a higher potential of health risks to the pregnant women affected as the [color=#E389B9]Crystal[/color] tries to keep up."
+		'5':
+			nodeChangePregSpeed.speed_5.set_disabled(true)
+			text += "Pregnant women will rapidly grow to full term within [color=aqua]5 days[/color]. You can sense that this rapid speed may still not fully allow enough time to recover from a previous pregnancy for the average breeder before she finds herself in labor once again. The speed of pregnancy almost guarantees that multiple generations of slave offspring will be seen, though the effects of pregnancy on their slave may go so rapidly that an unobservant slave-owner may entirely miss it."
+		'7':
+			nodeChangePregSpeed.speed_7.set_disabled(true)
+			text += "Pregnant women will stretch to full term within [color=aqua]7 days[/color]. You can sense that this speed is the most commonly recommended speed for industrial breeding farms with an intent to pump out new slaves for a tidy profit without a risk of damaging their womb-laden property. The speed of pregnancy almost guarantees that multiple generations of slave offspring will be seen, though the effects of pregnancy on their slave may go so rapidly that an unobservant slave-owner may miss it."
+		'10':
+			nodeChangePregSpeed.speed_10.set_disabled(true)
+			text += "Pregnant women will swell to full term within [color=aqua]10 days[/color]. You can sense that this speed is the most commonly recommended speed for standard farms seeking to produce new slaves, laborers, or cattle without a risk of damaging or stressing out their womb-laden property. Interations with multiple generations of slave offspring are very likely."
+		'14':
+			nodeChangePregSpeed.speed_14.set_disabled(true)
+			text += "Pregnant women will grow to full term within [color=aqua]14 days[/color]. You can sense that this speed is recommended for slave-owners that seek to use breeding for extending family lines without the risk being overrun by unwanted offspring. Interations with multiple generations of slave offspring are very likely.\n\n[color=lime]This is the Default option for AricsExpansion.[/color]"
+		'21':
+			nodeChangePregSpeed.speed_21.set_disabled(true)
+			text += "Pregnant women will grow to full term within [color=aqua]21 days[/color]. You can sense that this speed is recommended for slave-owners that are slightly curious in breeding but may not be fully committed to the concept. They will have plenty of time to enjoy the slow, daily progression of pregnancy and delight in the effects of pregnancy on their slaves. They will likely not see more than two to four generations of their offspring."
+		'30':
+			nodeChangePregSpeed.speed_30.set_disabled(true)
+			text += "Pregnant women will swell to full term within [color=aqua]30 days[/color]. You can sense that this speed is recommended for slave-owners who only have a passing interest in breeding their slaves. They will have plenty of time to enjoy the slow, daily progression of pregnancy and delight in the gradual pregnancy of their slaves. They will likely not see more than one to three generations of offspring."
+		'45':
+			nodeChangePregSpeed.speed_45.set_disabled(true)
+			text += "Pregnant women will slowly swell to full term within [color=aqua]45 days[/color]. You can sense that this speed is recommended for slave-owners who only have a vague interest in breeding their slaves. They will have plenty of time to enjoy the slow, daily progression of pregnancy and delight in the gradual pregnancy of their slaves. They will likely not see more than a one to two generations of their offspring."
+		'60':
+			nodeChangePregSpeed.speed_60.set_disabled(true)
+			text += "Pregnant women will slowly grow to full term within [color=aqua]60 days[/color]. You can sense that this speed is recommended for slave-owners who only have a very mild curiosity in breeding their slaves. They will have plenty of time to enjoy the slow, daily progression of pregnancy and delight in the gradual pregnancy of their slaves. They will likely not see more than one generation, if they see any offspring at all."
+		'90':
+			nodeChangePregSpeed.speed_90.set_disabled(true)
+			text = "You have chosen to allow a slight hold from the [color=#E389B9]Dimensional Crystal[/color] on the wombs of women in your mansion. Gestation will increase at a third of the standard rate. Women will only give birth once the baby is fully grown in [color=aqua]3 Months[/color].\n\n[color=red]This will likely prevent any offspring from being born within your mansion and may severely reduce access to any pregnancy content.[/color]"
+		'180':
+			nodeChangePregSpeed.speed_180.set_disabled(true)
+			text = "You have chosen to minimize the hold the [color=#E389B9]Dimensional Crystal[/color] has on the wombs of women in your mansion. Gestation will increase at a slight increase of the normal rate and women will only give birth once the baby is fully grown in [color=aqua]6 Months[/color].\n\n[color=red]This will likely prevent any offspring from being born within your mansion and essentially disable pregnancy content.[/color]"
+		'270':
+			nodeChangePregSpeed.speed_270.set_disabled(true)
+			text = "You have chosen to release the hold the [color=#E389B9]Dimensional Crystal[/color] has on the wombs of women in your mansion. Gestation will increase at a normal rate and women will only give birth once the baby is fully grown in [color=aqua]9 Months[/color]. At this rate, a slave-owner may never even see the effects of a slave's pregnancy affect her. \n\n[color=red]This will likely prevent any offspring from being born within your mansion and essentially disable pregnancy content.[/color]"
+		_:
+			text = "The current speed of Pregnancy within the mansion is [color=aqua]"+ currentspeed +"[/color]."
+	textnode.set_bbcode(text)
+	return
+
+#PregSpeed Panel Buttons
+func _dimcrystal_pregspeedchange_1():
+	globals.state.pregduration = 1
+	refresh_pregspeed_panel()
+
+func _dimcrystal_pregspeedchange_3():
+	globals.state.pregduration = 3
+	refresh_pregspeed_panel()
+
+func _dimcrystal_pregspeedchange_5():
+	globals.state.pregduration = 5
+	refresh_pregspeed_panel()
+
+func _dimcrystal_pregspeedchange_7():
+	globals.state.pregduration = 7
+	refresh_pregspeed_panel()
+
+func _dimcrystal_pregspeedchange_10():
+	globals.state.pregduration = 10
+	refresh_pregspeed_panel()
+
+func _dimcrystal_pregspeedchange_14():
+	globals.state.pregduration = 14
+	refresh_pregspeed_panel()
+
+func _dimcrystal_pregspeedchange_21():
+	globals.state.pregduration = 21
+	refresh_pregspeed_panel()
+
+func _dimcrystal_pregspeedchange_30():
+	globals.state.pregduration = 30
+	refresh_pregspeed_panel()
+
+func _dimcrystal_pregspeedchange_45():
+	globals.state.pregduration = 45
+	refresh_pregspeed_panel()
+
+func _dimcrystal_pregspeedchange_60():
+	globals.state.pregduration = 60
+	refresh_pregspeed_panel()
+
+func _dimcrystal_pregspeedchange_90():
+	globals.state.pregduration = 90
+	refresh_pregspeed_panel()
+
+func _dimcrystal_pregspeedchange_180():
+	globals.state.pregduration = 180
+	refresh_pregspeed_panel()
+
+func _dimcrystal_pregspeedchange_270():
+	globals.state.pregduration = 270
+	refresh_pregspeed_panel()
 ###TBK - Test
 
 func _on_dimcrystal_ability_secondwind_pressed():

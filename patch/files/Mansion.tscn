@@ -1523,6 +1523,7 @@ custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 text = "Dimensional Crystal"
 
 [node name="dimcrystalpanel" type="Panel" parent="MainScreen/mansion"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = 1.0
@@ -1750,54 +1751,6 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "Master Immortality"
 
-[node name="ability_pregnancyspeed_popup" type="Popup" parent="MainScreen/mansion/dimcrystalpanel"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -620.0
-margin_top = -139.0
-margin_right = -313.0
-margin_bottom = -13.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-
-[node name="TextureRect" type="TextureRect" parent="MainScreen/mansion/dimcrystalpanel/ability_pregnancyspeed_popup"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-texture = ExtResource( 44 )
-expand = true
-
-[node name="Label" type="Label" parent="MainScreen/mansion/dimcrystalpanel/ability_pregnancyspeed_popup"]
-margin_left = 21.1932
-margin_top = -0.940216
-margin_right = 286.193
-margin_bottom = 42.0598
-size_flags_horizontal = 2
-size_flags_vertical = 0
-text = "How many Days does a
- normal Pregnancy last?"
-align = 1
-
-[node name="closepanel" type="Button" parent="MainScreen/mansion/dimcrystalpanel/ability_pregnancyspeed_popup"]
-margin_left = 75.0
-margin_top = 76.0
-margin_right = 234.0
-margin_bottom = 115.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-text = "Confirm"
-
-[node name="SpinBox" type="SpinBox" parent="MainScreen/mansion/dimcrystalpanel/ability_pregnancyspeed_popup"]
-margin_left = 120.635
-margin_top = 41.5805
-margin_right = 198.635
-margin_bottom = 75.5805
-min_value = 1.0
-max_value = 365.0
-value = 14.0
-align = 1
-
 [node name="ability_immortality_enable" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
 visible = false
 anchor_left = 1.0
@@ -1852,7 +1805,261 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "Choose Sacrifice"
 
+[node name="pregspeed_panel" type="Panel" parent="MainScreen/mansion/dimcrystalpanel"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 1.0
+margin_bottom = 1.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="background" type="TextureRect" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+show_behind_parent = true
+margin_top = -0.663503
+margin_right = 940.0
+margin_bottom = 619.337
+texture = ExtResource( 48 )
+expand = true
+stretch_mode = 1
+
+[node name="panel_label" type="RichTextLabel" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+margin_left = 340.0
+margin_top = 20.0
+margin_right = 599.0
+margin_bottom = 50.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/normal_font = ExtResource( 45 )
+bbcode_enabled = true
+bbcode_text = "[center][color=#d1b970]Pregnancy Speed Change[/color][/center]"
+text = "Pregnancy Speed Change"
+scroll_active = false
+
+[node name="displaytext" type="RichTextLabel" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -680.0
+margin_top = 39.0734
+margin_right = -260.0
+margin_bottom = 468.073
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/normal_font = ExtResource( 45 )
+bbcode_enabled = true
+
+[node name="closepanel" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -601.0
+margin_top = -61.0
+margin_right = -338.0
+margin_bottom = -11.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Stop Altering Pregnancy Speed"
+
+[node name="pregspeed_change_text" type="RichTextLabel" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -255.0
+margin_top = 15.0
+margin_right = -15.0
+margin_bottom = 65.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/normal_font = ExtResource( 45 )
+bbcode_enabled = true
+bbcode_text = "
+[center][color=#d1b970]Alter Speed of Pregnancies[/color][/center]"
+text = "
+Alter Speed of Pregnancies"
+
+[node name="speed_1" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -551.0
+margin_right = -16.0
+margin_bottom = -511.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Instant (1 Day)"
+
+[node name="speed_3" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -511.0
+margin_right = -16.0
+margin_bottom = -471.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Almost Instant (3 Days)"
+
+[node name="speed_5" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -471.0
+margin_right = -16.0
+margin_bottom = -431.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Rapid (5 Days)"
+
+[node name="speed_7" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -431.0
+margin_right = -16.0
+margin_bottom = -391.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Weekly (7 Days)"
+
+[node name="speed_10" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -391.0
+margin_right = -16.0
+margin_bottom = -351.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Almost Weekly (10 Days)"
+
+[node name="speed_14" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -242.0
+margin_top = -351.0
+margin_right = -12.0
+margin_bottom = -311.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Default - BiWeekly (14 Days)"
+
+[node name="speed_21" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -311.0
+margin_right = -16.0
+margin_bottom = -271.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Tri-Weekly (21 Days)"
+
+[node name="speed_30" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -271.0
+margin_right = -16.0
+margin_bottom = -231.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Monthly (30 Days)"
+
+[node name="speed_45" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -231.0
+margin_right = -16.0
+margin_bottom = -191.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "15 per Trimester (45 Days)"
+
+[node name="speed_60" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -191.0
+margin_right = -16.0
+margin_bottom = -151.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Bi-Monthly (60 Days)"
+
+[node name="speed_90" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -151.0
+margin_right = -16.0
+margin_bottom = -111.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Tri-Monthly (90 Days)"
+
+[node name="speed_180" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -111.0
+margin_right = -16.0
+margin_bottom = -71.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Half Realistic (180 Days)"
+
+[node name="speed_270" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -71.0
+margin_right = -16.0
+margin_bottom = -31.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Realistic (270 Days)"
+
 [node name="jailpanel" type="Panel" parent="MainScreen/mansion"]
+editor/display_folded = true
 visible = false
 self_modulate = Color( 1, 1, 1, 0.110471 )
 anchor_right = 1.0
@@ -3289,6 +3496,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "Modification types"
 
 [node name="librarypanel" type="Panel" parent="MainScreen/mansion"]
+editor/display_folded = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -3407,6 +3615,7 @@ size_flags_vertical = 2
 texture_normal = ExtResource( 66 )
 
 [node name="farmpanel" type="Panel" parent="MainScreen/mansion"]
+editor/display_folded = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -6390,6 +6599,7 @@ text = "The Farm"
 align = 1
 
 [node name="portalspanel" type="Popup" parent="MainScreen/mansion"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -6506,6 +6716,7 @@ texture = SubResource( 22 )
 expand = true
 
 [node name="upgradespanel" type="Panel" parent="MainScreen/mansion"]
+editor/display_folded = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -8136,8 +8347,8 @@ text = "Luxury Rules"
 align = 1
 
 [node name="contraception" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"prisondisable",
 "slaverules",
+"prisondisable",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -8156,8 +8367,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Herbal contraception"
 
 [node name="aphrodisiac" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"prisondisable",
 "slaverules",
+"prisondisable",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -8176,8 +8387,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Aphrodisiac in food"
 
 [node name="silence" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"slaverules",
 "advrules",
+"slaverules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -8195,8 +8406,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Enforced Silence"
 
 [node name="pet" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"slaverules",
 "advrules",
+"slaverules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -8214,8 +8425,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Pet Behavior"
 
 [node name="masturbation" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"slaverules",
 "advrules",
+"slaverules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -8234,8 +8445,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "No Masturbation"
 
 [node name="nudity" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"slaverules",
 "advrules",
+"slaverules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -8254,8 +8465,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Maintain Nudity"
 
 [node name="betterfood" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"prisondisable",
 "slaverules",
+"prisondisable",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -8274,8 +8485,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Better food"
 
 [node name="personalbath" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"prisondisable",
 "slaverules",
+"prisondisable",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -8294,8 +8505,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Personal Bath"
 
 [node name="cosmetics" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"prisondisable",
 "slaverules",
+"prisondisable",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -8314,8 +8525,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Cosmetics"
 
 [node name="pocketmoney" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"prisondisable",
 "slaverules",
+"prisondisable",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -9333,8 +9544,8 @@ theme = ExtResource( 3 )
 bbcode_enabled = true
 
 [node name="birthpanel" type="Panel" parent="." groups=[
-"blocknextdayevents",
 "blockmaininput",
+"blocknextdayevents",
 ]]
 editor/display_folded = true
 visible = false
@@ -10262,8 +10473,8 @@ custom_fonts/font = ExtResource( 45 )
 text = "Confirm"
 
 [node name="dialogue" type="Popup" parent="." groups=[
-"blocknextdayevents",
 "blockmaininput",
+"blocknextdayevents",
 ]]
 editor/display_folded = true
 anchor_right = 1.0
@@ -10463,8 +10674,8 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 
 [node name="scene" type="Control" parent="." groups=[
-"blocknextdayevents",
 "blockmaininput",
+"blocknextdayevents",
 ]]
 visible = false
 anchor_right = 1.0
@@ -12662,8 +12873,8 @@ expand = true
 stretch_mode = 6
 
 [node name="screenchange" type="TextureRect" parent="." groups=[
-"blockoutsideinput",
 "blockmaininput",
+"blockoutsideinput",
 ]]
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
@@ -12735,11 +12946,24 @@ current = true
 [connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_pregspeed_enable" to="." method="_on_dimcrystal_ability_pregspeed_enabled"]
 [connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_secondwind" to="." method="_on_dimcrystal_ability_secondwind_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_immortality" to="." method="_on_dimcrystal_ability_immortality_pressed"]
-[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_pregnancyspeed_popup/closepanel" to="." method="_on_dimcrystal_ability_pregspeed_panel_closed"]
 [connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_immortality_enable" to="." method="_on_dimcrystal_ability_immortality_enabled"]
 [connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_immortality_disable" to="." method="_on_dimcrystal_ability_immortality_disabled"]
 [connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_understandsacrifice" to="." method="_on_dimcrystal_ability_understandsacrifice_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_choosesacrifice" to="." method="_on_dimcrystal_ability_choosesacrifice_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/closepanel" to="." method="_on_dimcrystal_ability_pregspeed_panel_closed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_1" to="." method="_dimcrystal_pregspeedchange_1"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_3" to="." method="_dimcrystal_pregspeedchange_3"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_5" to="." method="_dimcrystal_pregspeedchange_5"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_7" to="." method="_dimcrystal_pregspeedchange_7"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_10" to="." method="_dimcrystal_pregspeedchange_10"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_14" to="." method="_dimcrystal_pregspeedchange_14"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_21" to="." method="_dimcrystal_pregspeedchange_21"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_30" to="." method="_dimcrystal_pregspeedchange_30"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_45" to="." method="_dimcrystal_pregspeedchange_45"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_60" to="." method="_dimcrystal_pregspeedchange_60"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_90" to="." method="_dimcrystal_pregspeedchange_90"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_180" to="." method="_dimcrystal_pregspeedchange_180"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_270" to="." method="_dimcrystal_pregspeedchange_270"]
 [connection signal="visibility_changed" from="MainScreen/mansion/jailpanel" to="." method="_on_jailpanel_visibility_changed"]
 [connection signal="pressed" from="MainScreen/mansion/jailpanel/jailsettings" to="." method="_on_jailsettings_pressed"]
 [connection signal="visibility_changed" from="MainScreen/mansion/jailpanel/jailsettings/jailsettingspanel" to="." method="_on_jailsettingspanel_visibility_changed"]
