@@ -373,7 +373,7 @@ func dailyFarm():
 
 	#End if No Positions and No Farm Manager
 	
-	text += "[color=#d1b970][center]-----Morning-----[/center][/color]"
+	text += "\n[color=#d1b970][center]-----Morning-----[/center][/color]"
 	if canwork == false:
 		text += "\n[color=red]The Cattle went [color=aqua]unmilked[/color] today.\n[/color]"
 	else:

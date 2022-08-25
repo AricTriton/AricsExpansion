@@ -465,6 +465,12 @@ func _on_end_pressed():
 			elif globals.slaves[i].work == 'farmmanager':
 				farmmanager = globals.slaves[i]
 
+	###---Added by Expansion---### Events
+	#Events
+	if globals.resources.day >= 2 && globals.state.sidequests.dimcrystal == 0:
+		globals.state.upcomingevents.append({code = 'dimcrystalinitiate', duration = 0})
+	###---End Expansion---###
+	
 	globals.resources.day += 1
 	text0.set_bbcode('')
 	text1.set_bbcode('')
@@ -1881,8 +1887,10 @@ func build_mansion_info():
 		get_node("MainScreen/mansion/AE_Headgirl_TextRect").visible = false
 		get_node("MainScreen/mansion/AE_Headgirl_TextRect/portrait").set_texture(globals.loadimage(globals.sexuality_images.unknown))
 	#---Dimensional Crystal
-	get_node("MainScreen/mansion/AE_DimCrystal").visible = true
-	
+	if globals.state.sidequests.dimcrystal == 0:
+		get_node("MainScreen/mansion/AE_DimCrystal").visible = false
+	else:
+		get_node("MainScreen/mansion/AE_DimCrystal").visible = true
 	###---End Expansion---###
 	
 	if (globals.slaves.size() >= 8 && jobdict.headgirl != null) || globals.developmode == true:
@@ -1979,14 +1987,13 @@ func reset_dimcrystal_ability_buttons():
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_attune").set_disabled(true)
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_attune").set_tooltip("Try Researching the Crystal")
 	#Pregnancy Speeds
+	get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed_enable").hide()
 	if refCrystal.abilities.has('pregnancyspeed'):
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed").set_disabled(false)
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed_enable").set_disabled(false)
-		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed_enable").hide()
 	else:
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed").set_disabled(true)
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed").set_tooltip("Requires Upgrade Level 1")
-		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed_enable").hide()
 	#Second Wind (1/Day Combat Revive)
 	if refCrystal.abilities.has('secondwind'):
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_secondwind").set_disabled(false)
@@ -2049,22 +2056,22 @@ func _on_dimcrystal_assistresearcher_pressed():
 	var researcher = globals.expansion.getCrystalResearcher()
 	if researcher == null:
 		print("Invalid, No Researcher Available")
-		return
-	
-	text = researcher.dictionary("You walk to the [color=#E389B9]Dimensional Crystal[/color] where [color=aqua]$name[/color] is diligently focused on studying one of the energy tendrils of the humming, floating [color=#E389B9]Crystal[/color]. $He looks up and smiles at you." + researcher.quirk("\n[color=yellow]-Have you come to assist me, $master? I think we can make a lot of progress together![/color]"))
-	if globals.player.smaf + researcher.smaf >= globals.state.mansionupgrades.dimensionalcrystal:
-		globals.state.nonsexactions -= 1
-		refCrystal.research = researcher.wit
-		text += researcher.dictionary("\n\nYou both study the [color=#E389B9]Crystal[/color] together for some time and believe you are able to understand it. You realize that [color=aqua]$name[/color] is doing the very best $he can to impress you while you are there and that you now have a [color=aqua]" + str(refCrystal.research) + " Percent[/color] chance to make a new Discovery tonight.")
-		researcher.loyal += round(rand_range(1, researcher.smaf))
+		text = "There is no [color=#008BFB]Researcher[/color] currently assigned for you to assist in [color=#008BFB]Researching[/color] the [color=#E389B9]Dimensional Crystal[/color].\n\nYou can assign a suitable candidate via the standard [color=aqua]Jobs[/color] menu on any [color=aqua]slave's[/color] sheet."
 	else:
-		text += researcher.dictionary("\n\nYou and [color=aqua]$name[/color] try your very best to study and understand the [color=#E389B9]Crystal[/color] together, but every time either of you attempts to touch or interact with the mystical tendrils of magic flowing from it, you end up with a searing, overpowering headache. You realize one of you will have to have a greater [color=aqua]affinity[/color] with [color=aqua]magic[/color] to make any real progress or the inherent power of the [color=#E389B9]Crystal[/color] will continue to overpower you. Fortunately, you realize this early enough to not waste too much time on it today.\n[color=aqua]No Interactions were lost.[/color]")
-		###TBK - Add in "Fail Event" later (accidental sacrifice)
+		text = researcher.dictionary("You walk to the [color=#E389B9]Dimensional Crystal[/color] where [color=aqua]$name[/color] is diligently focused on studying one of the energy tendrils of the humming, floating [color=#E389B9]Crystal[/color]. $He looks up and smiles at you." + researcher.quirk("\n[color=yellow]-Have you come to assist me, $master? I think we can make a lot of progress together![/color]"))
+		if globals.player.smaf + researcher.smaf >= globals.state.mansionupgrades.dimensionalcrystal:
+			globals.state.nonsexactions -= 1
+			refCrystal.research = researcher.wit
+			text += researcher.dictionary("\n\nYou both study the [color=#E389B9]Crystal[/color] together for some time and believe you are able to understand it. You realize that [color=aqua]$name[/color] is doing the very best $he can to impress you while you are there and that you now have a [color=aqua]" + str(refCrystal.research) + " Percent[/color] chance to make a new Discovery tonight.")
+			researcher.loyal += round(rand_range(1, researcher.smaf))
+		else:
+			text += researcher.dictionary("\n\nYou and [color=aqua]$name[/color] try your very best to study and understand the [color=#E389B9]Crystal[/color] together, but every time either of you attempts to touch or interact with the mystical tendrils of magic flowing from it, you end up with a searing, overpowering headache. You realize one of you will have to have a greater [color=aqua]affinity[/color] with [color=aqua]magic[/color] to make any real progress or the inherent power of the [color=#E389B9]Crystal[/color] will continue to overpower you. Fortunately, you realize this early enough to not waste too much time on it today.\n[color=aqua]No Interactions were lost.[/color]")
+			get_node("MainScreen/mansion/dimcrystalpanel/assistresearch").set_disabled(true)
+			get_node("MainScreen/mansion/dimcrystalpanel/assistresearch").set_tooltip("You just actively researched the crystal.")
+			###TBK - Add in "Fail Event" later (accidental sacrifice)
 	
 	#Reset, Disable Buttons, Finish
 	reset_dimcrystal_ability_buttons()
-	get_node("MainScreen/mansion/dimcrystalpanel/assistresearch").set_disabled(true)
-	get_node("MainScreen/mansion/dimcrystalpanel/assistresearch").set_tooltip("You just actively researched the crystal.")
 	_on_dimcrystal_showstats_pressed()
 	textnode.set_bbcode(text)
 	textnode.show()
@@ -2150,7 +2157,7 @@ func _on_dimcrystal_ability_pregspeed_pressed():
 	var text = ""
 	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/description")
 	if refCrystal.abilities.has('pregnancyspeed'):
-		text += "You have learned how to use the magic of the [color=#E389B9]Crystal[/color] to affect the [color=aqua]Speed of Pregnancies[/color] in the mansion. The current duration of a woman's pregnancy while living in the mansion is [color=aqua]"+ str(globals.state.pregduration) +"[/color]."
+		text += "You have learned how to use the magic of the [color=#E389B9]Crystal[/color] to affect the [color=aqua]Speed of Pregnancies[/color] in the mansion. The current duration of a woman's pregnancy while living in the mansion is [color=aqua]"+ str(globals.state.pregduration) +" Days[/color]."
 #		text += "You have learned how to use the magic of the [color=#E389B9]Crystal[/color] to affect the [color=aqua]Speed of Pregnancies[/color] in the Mansion. You can do this by [color=aqua]Talking[/color] to your [color=aqua]Headgirl[/color] and selecting [color=yellow]'Walk with me to the Crystal'[/color] followed by '[color=yellow]Please alter the Speed of Pregnancies[/color]'."
 	#Reset, Disable Buttons, Finish
 	reset_dimcrystal_ability_buttons()
@@ -2176,64 +2183,68 @@ func refresh_pregspeed_panel():
 	var currentspeed = str(globals.state.pregduration)
 	
 	#Enable All Buttons
-	nodeChangePregSpeed.speed_1.set_disabled(false)
-	nodeChangePregSpeed.speed_3.set_disabled(false)
-	nodeChangePregSpeed.speed_5.set_disabled(false)
-	nodeChangePregSpeed.speed_7.set_disabled(false)
-	nodeChangePregSpeed.speed_10.set_disabled(false)
-	nodeChangePregSpeed.speed_14.set_disabled(false)
-	nodeChangePregSpeed.speed_21.set_disabled(false)
-	nodeChangePregSpeed.speed_30.set_disabled(false)
-	nodeChangePregSpeed.speed_45.set_disabled(false)
-	nodeChangePregSpeed.speed_60.set_disabled(false)
-	nodeChangePregSpeed.speed_180.set_disabled(false)
-	nodeChangePregSpeed.speed_360.set_disabled(false)
+	get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_1").set_disabled(false)
+	get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_3").set_disabled(false)
+	get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_5").set_disabled(false)
+	get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_7").set_disabled(false)
+	get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_10").set_disabled(false)
+	get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_14").set_disabled(false)
+	get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_21").set_disabled(false)
+	get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_30").set_disabled(false)
+	get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_45").set_disabled(false)
+	get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_60").set_disabled(false)
+	get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_90").set_disabled(false)
+	get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_180").set_disabled(false)
+	get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_270").set_disabled(false)
+	
+	#TBK - Add Images to Image Node at - MainScreen/mansion/dimcrystalpanel/pregspeed_panel/imagepanel/image
+	#Then make MainScreen/mansion/dimcrystalpanel/pregspeed_panel/imagepanel visible
 	
 	#Disable Current Choice, Show Text
 	match currentspeed:
 		'1':
-			nodeChangePregSpeed.speed_1.set_disabled(true)
+			get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_1").set_disabled(true)
 			text += "Pregnant women will give birth within [color=aqua]1 Day[/color] of getting pregnant. This extreme rate of gestation may still cause potential health and mental health issues, however.\n\n[color=red]This is essentially a Cheat mode and useful for pumping out slaves to sell. However, you will skip over the majority of pregnancy content.[/color]"
 		'3':
-			nodeChangePregSpeed.speed_3.set_disabled(true)
+			get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_3").set_disabled(true)
 			text += "Pregnant women will burst to full term, growing at a rate of 1 day per trimester for a total of [color=aqua]3 days[/color]. You can sense that this is the highest speed recommended by the mysterious creators of the [color=#E389B9]Crystal[/color], though it will still have a higher potential of health risks to the pregnant women affected as the [color=#E389B9]Crystal[/color] tries to keep up."
 		'5':
-			nodeChangePregSpeed.speed_5.set_disabled(true)
+			get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_5").set_disabled(true)
 			text += "Pregnant women will rapidly grow to full term within [color=aqua]5 days[/color]. You can sense that this rapid speed may still not fully allow enough time to recover from a previous pregnancy for the average breeder before she finds herself in labor once again. The speed of pregnancy almost guarantees that multiple generations of slave offspring will be seen, though the effects of pregnancy on their slave may go so rapidly that an unobservant slave-owner may entirely miss it."
 		'7':
-			nodeChangePregSpeed.speed_7.set_disabled(true)
+			get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_7").set_disabled(true)
 			text += "Pregnant women will stretch to full term within [color=aqua]7 days[/color]. You can sense that this speed is the most commonly recommended speed for industrial breeding farms with an intent to pump out new slaves for a tidy profit without a risk of damaging their womb-laden property. The speed of pregnancy almost guarantees that multiple generations of slave offspring will be seen, though the effects of pregnancy on their slave may go so rapidly that an unobservant slave-owner may miss it."
 		'10':
-			nodeChangePregSpeed.speed_10.set_disabled(true)
+			get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_10").set_disabled(true)
 			text += "Pregnant women will swell to full term within [color=aqua]10 days[/color]. You can sense that this speed is the most commonly recommended speed for standard farms seeking to produce new slaves, laborers, or cattle without a risk of damaging or stressing out their womb-laden property. Interations with multiple generations of slave offspring are very likely."
 		'14':
-			nodeChangePregSpeed.speed_14.set_disabled(true)
+			get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_14").set_disabled(true)
 			text += "Pregnant women will grow to full term within [color=aqua]14 days[/color]. You can sense that this speed is recommended for slave-owners that seek to use breeding for extending family lines without the risk being overrun by unwanted offspring. Interations with multiple generations of slave offspring are very likely.\n\n[color=lime]This is the Default option for AricsExpansion.[/color]"
 		'21':
-			nodeChangePregSpeed.speed_21.set_disabled(true)
+			get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_21").set_disabled(true)
 			text += "Pregnant women will grow to full term within [color=aqua]21 days[/color]. You can sense that this speed is recommended for slave-owners that are slightly curious in breeding but may not be fully committed to the concept. They will have plenty of time to enjoy the slow, daily progression of pregnancy and delight in the effects of pregnancy on their slaves. They will likely not see more than two to four generations of their offspring."
 		'30':
-			nodeChangePregSpeed.speed_30.set_disabled(true)
+			get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_30").set_disabled(true)
 			text += "Pregnant women will swell to full term within [color=aqua]30 days[/color]. You can sense that this speed is recommended for slave-owners who only have a passing interest in breeding their slaves. They will have plenty of time to enjoy the slow, daily progression of pregnancy and delight in the gradual pregnancy of their slaves. They will likely not see more than one to three generations of offspring."
 		'45':
-			nodeChangePregSpeed.speed_45.set_disabled(true)
+			get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_45").set_disabled(true)
 			text += "Pregnant women will slowly swell to full term within [color=aqua]45 days[/color]. You can sense that this speed is recommended for slave-owners who only have a vague interest in breeding their slaves. They will have plenty of time to enjoy the slow, daily progression of pregnancy and delight in the gradual pregnancy of their slaves. They will likely not see more than a one to two generations of their offspring."
 		'60':
-			nodeChangePregSpeed.speed_60.set_disabled(true)
+			get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_60").set_disabled(true)
 			text += "Pregnant women will slowly grow to full term within [color=aqua]60 days[/color]. You can sense that this speed is recommended for slave-owners who only have a very mild curiosity in breeding their slaves. They will have plenty of time to enjoy the slow, daily progression of pregnancy and delight in the gradual pregnancy of their slaves. They will likely not see more than one generation, if they see any offspring at all."
 		'90':
-			nodeChangePregSpeed.speed_90.set_disabled(true)
+			get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_90").set_disabled(true)
 			text = "You have chosen to allow a slight hold from the [color=#E389B9]Dimensional Crystal[/color] on the wombs of women in your mansion. Gestation will increase at a third of the standard rate. Women will only give birth once the baby is fully grown in [color=aqua]3 Months[/color].\n\n[color=red]This will likely prevent any offspring from being born within your mansion and may severely reduce access to any pregnancy content.[/color]"
 		'180':
-			nodeChangePregSpeed.speed_180.set_disabled(true)
+			get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_180").set_disabled(true)
 			text = "You have chosen to minimize the hold the [color=#E389B9]Dimensional Crystal[/color] has on the wombs of women in your mansion. Gestation will increase at a slight increase of the normal rate and women will only give birth once the baby is fully grown in [color=aqua]6 Months[/color].\n\n[color=red]This will likely prevent any offspring from being born within your mansion and essentially disable pregnancy content.[/color]"
 		'270':
-			nodeChangePregSpeed.speed_270.set_disabled(true)
+			get_node("MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_270").set_disabled(true)
 			text = "You have chosen to release the hold the [color=#E389B9]Dimensional Crystal[/color] has on the wombs of women in your mansion. Gestation will increase at a normal rate and women will only give birth once the baby is fully grown in [color=aqua]9 Months[/color]. At this rate, a slave-owner may never even see the effects of a slave's pregnancy affect her. \n\n[color=red]This will likely prevent any offspring from being born within your mansion and essentially disable pregnancy content.[/color]"
 		_:
 			text = "The current speed of Pregnancy within the mansion is [color=aqua]"+ currentspeed +"[/color]."
+	
 	textnode.set_bbcode(text)
-	return
 
 #PregSpeed Panel Buttons
 func _dimcrystal_pregspeedchange_1():
@@ -2287,7 +2298,6 @@ func _dimcrystal_pregspeedchange_180():
 func _dimcrystal_pregspeedchange_270():
 	globals.state.pregduration = 270
 	refresh_pregspeed_panel()
-###TBK - Test
 
 func _on_dimcrystal_ability_secondwind_pressed():
 	var refCrystal = globals.state.thecrystal

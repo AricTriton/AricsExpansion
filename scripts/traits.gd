@@ -357,7 +357,7 @@ var traits = {
 		"name": "Blemished",
 		"description": "$name's skin is covered in a lot of imperfections. Besides being unappealing to look at, this also makes $him suffer from low self esteem.\n\n[color=aqua]Charm -10. Beauty -10. [/color]",
 		"effect": {
-			"code": "Blemished",
+			"code": "blemished",
 			"charm": -10,
 			"beautybase": -10
 		},
@@ -1148,7 +1148,7 @@ var traits = {
 		"description": "$name is always a little worried about things. \n\n[color=aqua]Fear and stress gain +10%. [/color]",
 		"effect": {
 			"code": "anxious",
-			"fear_mod": 0.1
+			"fear_mod": 0.1,
 			"stress_mod": 0.1
 		},
 		"tags": [
@@ -1173,7 +1173,7 @@ var traits = {
 		],
 		"conflict": [
 			"Dominant",
-			"Fearless"
+			"Fearless",
 			"Stoic"
 		]
 	},
@@ -1195,6 +1195,7 @@ var traits = {
 		"name": "Fearless",
 		"description": "$name is very courageous and isn't easily frightened. \n\n[color=aqua] Fear is much harder to inflict. [/color]",
 		"effect": {
+			"code": "fearless",
 			"fear_mod": -0.3,
 			"cour": 25,
 			"conf": 25
@@ -1214,6 +1215,7 @@ var traits = {
 		"name": "Stoic",
 		"description": "$name's mental state isn't as easily affected. \n\n[color=aqua] Stress and fear accumulates slower. [/color]",
 		"effect": {
+			"code": "stoic",
 			"fear_mod": -0.1,
 			"stress_mod": -0.1
 		},
@@ -1231,6 +1233,7 @@ var traits = {
 		"name": "Composed",
 		"description": "$name doesn't let the strain of things get to $him easily. \n\n[color=aqua]Stress increases slower.[/color]",
 		"effect": {
+			"code": "composed",
 			"stress_mod": -0.1
 		},
 		"tags": [
@@ -1282,7 +1285,7 @@ var traits = {
 			"health_bonus": -10
 		},
 		"tags": [
-			"physical"
+			"physical",
 			"detrimental"
 		],
 		"conflict": [
@@ -1314,7 +1317,7 @@ var traits = {
 			"energy_mod": -10
 		},
 		"tags": [
-			"physical"
+			"physical",
 			"detrimental"
 		],
 		"conflict": [

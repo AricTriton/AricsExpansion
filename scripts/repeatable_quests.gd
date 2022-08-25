@@ -418,7 +418,7 @@ func questarray():
 			code = '034',
 			shortdescription = 'Buy and Release. ',
 			description = 'A local $race group are buying enslaved $race of any type to restore them to freedom. Taming is not required. ',
-			reqs = [['race','eq',race()]],
+			reqs = [['race','eq',commonrace()]],
 			reqstemp = [],
 			time = round(rand_range(3,5)),
 			reward = round(rand_range(20,40))*10,
@@ -438,10 +438,10 @@ func questarray():
 		},
 		quest036 = {
 			code = '036',
-			questreq = globals.rules.child == true,
+			questreq = globals.rules.children == true,
 			shortdescription = 'Older gentleman seeks young heir. ',
 			description = 'An aged man needs to name an heir for his estate. He requires a young $race boy with similar physical features to himself and carry himself fairly well. The boy must be well behaved and quite smart for his age.',
-			reqs = [['race','eq',commonrace()], ['sex', 'eq', 'male'], ['obed','gte', 80], ['origins','gte','common'], ['wit','gte',40], ['haircolor','eq',randhaircolor()], ['eyecolor','eq',randeyecolor()], ['age','eq','child']],
+			reqs = [['race','eq',commonrace()], ['sex', 'eq', 'male'], ['obed','gte', 80], ['origins','gte','common'], ['wit','gte',40], ['haircolor','eq',randhaircolor()], ['eyecolor','eq',randanyeyecolor()], ['age','eq','child']],
 			reqstemp = [],
 			time = round(rand_range(4,7)),
 			reward = round(rand_range(90,120))*10,
@@ -450,7 +450,7 @@ func questarray():
 		},
 		quest037 = {
 			code = '037',
-			questreq = globals.rules.child == true,
+			questreq = globals.rules.children == true,
 			shortdescription = 'Needing a young servant girl. ',
 			description = 'A call for a young girl to act as servant and playmate has been issued by a well off family for their growing daughter. The girl in need must be biddable, quick and submissive.',
 			reqs = [['sex', 'eq', 'female'], ['obed','gte', 80], ['sagi','gte',3], ['cour','lte',40], ['age','eq','child'], ['bodyshape','eq','humanoid']],
@@ -463,7 +463,7 @@ func questarray():
 		quest038 = {
 			code = '038',
 			shortdescription = 'Looking for a suitable mate. ',
-			description = 'A member of the $rare race desires a worthy mate for reproductive purposes. $he must be at least average in appearance and open to $his "mate's" commands. ',
+			description = "A member of the $rare race desires a worthy mate for reproductive purposes. $He must be at least average in appearance and open to $his mate's commands. ",
 			reqs = [['obed','gte', 80],['beauty','gte',50]],
 			reqstemp = [['sex', 'eq', randsex()], ['race','eq',rarerace()]],
 			time = round(rand_range(6,10)),
@@ -474,7 +474,7 @@ func questarray():
 		quest039 = {
 			code = '039',
 			shortdescription = 'Buying Equine Mares. ',
-			description = 'The wealthy owner of quality race horses needs a new female centaur to keep his stallions in good temperment. Taming is not required, and looks aren't important but she should have decent endurance. ',
+			description = "The wealthy owner of quality race horses needs a new female centaur to keep his stallions in good temperment. Taming is not required, and looks aren't important but she should have decent endurance. ",
 			reqs = [['sex', 'eq', 'female'], ['bodyshape','eq','halfhorse'], ['send', 'gte', 2]],
 			reqstemp = [],
 			time = round(rand_range(6,10)),
@@ -529,7 +529,7 @@ func questarray():
 		quest044 = {
 			code = '044',
 			shortdescription = 'Wet Nurse Needed. ',
-			description = 'A rich household needs to acquire a competent wet nurse quickly due to a new mother's poor health. Despite the urgency, there is a strict list of requirements. The new father is willing to pay a high sum for an expedited sale.',
+			description = "A rich household needs to acquire a competent wet nurse quickly due to a new mother's poor health. Despite the urgency, there is a strict list of requirements. The new father is willing to pay a high sum for an expedited sale.",
 			reqs = [['obed','gte', 90],['sex', 'eq', 'female'],['age','eq','adult'], ['bodyshape','eq','humanoid'], ['titssize','gte',4], ['lactation','eq',true]],
 			reqstemp = [],
 			time = round(rand_range(1,2)),
@@ -539,7 +539,7 @@ func questarray():
 		},
 		quest045 = {
 			code = '045',
-			shortdescription = 'I don't want an animal, but... ',
+			shortdescription = "I don't want an animal, but... ",
 			description = 'A note scribbled in rough ink states the following: I think animal fuckers are disgusting and beastkin are just animals walking upright. BUT. I am currently looking for a hot HALFKIN bitch ready to accept orders. ',
 			reqs = [['obed','gte', 80],['sex', 'eq', 'female'],['race','eq','Halfkin Wolf', 'Halfkin Cat', 'Halfkin Fox', 'Halfkin Bunny', 'Halfkin Tanuki'],['beauty','gte',50]],
 			reqstemp = [],

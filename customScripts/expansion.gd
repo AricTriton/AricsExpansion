@@ -1884,6 +1884,7 @@ func dailyCrystal():
 	#Crystal Time
 	if refCrystal.lifeforce < 0 && refCrystal.mode == "light" && rand_range(0,100) <= globals.expansionsettings.crystal_shatter_chance:
 		refCrystal.mode = "dark"
+		globals.state.upcomingevents.append({code = 'dimcrystaldarkened', duration = 0})
 		text += "\n[center][color=red]At exactly midnight, everyone in the Mansion woke up. Some found that their nose was bleeding, others reported their skin crawling, and still others claimed to have horrific nightmares of being eaten alive. A brief investigation found that the Dimensional Crystal has dark, shadowy veins running through it like deep cracks. The color seems to be a darker purple and the glow seen coming off the Crystal and people seem to have those same dark, shadowy tendrils. Everyone returned to their beds, though sleep came uneasily and was wrought with nightmares.[/color][/center]\n"
 	elif refCrystal.lifeforce >= 0 && refCrystal.hunger <= 0 && refCrystal.mode == "dark":
 		refCrystal.mode = "light"
