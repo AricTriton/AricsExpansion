@@ -1909,40 +1909,46 @@ func dailyCrystal():
 	
 	if refCrystal.abilities.size() > 0 && !refCrystal.abilities.has('attunement'):
 		if rand_range(50,100) <= refCrystal.research:
-			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
-			text += "You dream deeply. You are standing before the Crystal in your Mansion and staring deeply into the flowing energy within it. As you watch, the energy begins to split and separate itself into understandable forms. You see the [color=aqua]Coloration[/color] of the [color=#E389B9]Crystal[/color]. You see the latent [color=aqua]Lifeforce[/color] inside it and the [color=red]Hunger[/color] consuming those trapped souls. You feel [color=green]Attuned[/color] to the [color=#E389B9]Crystal[/color]. "
+			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
+			text += "You dream deeply. You are standing before the [color=#E389B9]Crystal[/color] in your Mansion and staring deeply into the flowing energy within it. As you watch, the energy begins to split and separate itself into understandable forms. You see the [color=aqua]Coloration[/color] of the [color=#E389B9]Crystal[/color]. You see the latent [color=aqua]Lifeforce[/color] inside it and the [color=red]Hunger[/color] consuming those trapped souls. You feel [color=green]Attuned[/color] to the [color=#E389B9]Crystal[/color]. "
 			refCrystal.abilities.append('attunement')	
 	
 	if globals.state.mansionupgrades.dimensionalcrystal >= 1 && !refCrystal.abilities.has('pregnancyspeed'):
 		if rand_range(35,100) <= refCrystal.research:
-			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
-			text += "You dream that you are the Crystal. You feel life moving within your walls. Life grows. You love life. You are life. You see the growing sprouts and water them with words. They burst out of their seeds and grow mightily. You bask in their life.\nYou awaken and write down the words uttered in your dream. You have been granted the secret of [color=green]Altering Pregnancy Speeds[/color]. "
+			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
+			text += "You dream that you are the [color=#E389B9]Crystal[/color]. You feel life moving within your walls. Life grows. You love life. You are life. You see the growing sprouts and water them with words. They burst out of their seeds and grow mightily. You bask in their life.\nYou awaken and write down the words uttered in your dream. You have been granted the secret of [color=green]Altering Pregnancy Speeds[/color]. "
 			refCrystal.abilities.append('pregnancyspeed')
+	
+	elif globals.state.mansionupgrades.dimensionalcrystal >= 1 && !refCrystal.abilities.has('empowervirginity'):
+		if rand_range(40,100) <= refCrystal.research:
+			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
+			text += "You dream a dream of ephemeral beauty. You feel yourself in the body of another, feeling spry and treasured. You hold in your hand two flawless jewels. Inside of each radiates the octarine glow of mana, begging to be released. You feel yourself fall enamored with the pristine beauty of these orbs. They are perfect, untarnished, and untouched. You feel your singular focus embuing these objects with a deeper meaning, a deeper magic, as long as they remain untarnished simply on the premise of how fleeting they are. You pull back to feel the power these now only have when in perfect, pristine condition. You feel the power their loss will have, magic pouring out like a flood, these temporal seals are tarnished. Your crystaline mind retreats from the passing fancy, the sentient creature, and you now sense how to ask the [color=#E389B9]Crystal[/color] to actually fulfill it's fascination with real magic.\n\nYou awaken with a start. Apparently the only thing that can fascinate an indistructable, eternal artifact are things that are so temporary. You have been granted the secret of [color=#E389B9]Empowering Virginities[/color]. You may now ask the [color=#E389B9]Crystal[/color] to give a [color=green]stacking multiplier of 5x the normal mana produced[/color] at the end of a sexual encounter in the Mansion for [color=green]any virginities taken[/color], but losing [color=red]half of the mana normally produced[/color] when [color=red]they lose neither vaginal or anal virginities during sex[/color]. "
+			refCrystal.abilities.append('empowervirginity')
 	
 	elif globals.state.mansionupgrades.dimensionalcrystal >= 2 && !refCrystal.abilities.has('secondwind'):
 		if rand_range(50,100) <= refCrystal.research:
-			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
+			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
 			text += "You dream of standing in a great field of combat. You look down and see arrows, blades, and magic blasts have destroyed parts of your body. Despite it all, you feel a resurgence of energy within you. You have been hurt...but you will fight again. You MUST fight on. \n[color=lime]You have been granted the secret of [color=green]Second Wind[/color], allowing you personally to survive 1 fatal blow in combat daily.[/color] "
 			refCrystal.abilities.append('secondwind')
 
 	elif globals.state.mansionupgrades.dimensionalcrystal >= 3 && !refCrystal.abilities.has('immortality'):
 		if rand_range(50,100) <= refCrystal.research:
-			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
-			text += "You dream that you are the Crystal. You feel each soul living within the warmth of your glow. You see a shadowy, skeletal entity sneak within your glow and raise a long scythe above one of your beings. You mutter a series of words and sent a part of your essence to banish the entity.\nWhen you awaken, you write the words down. You have been granted the secret of [color=green]Immortality[/color]. "
+			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
+			text += "You dream that you are the [color=#E389B9]Crystal[/color]. You feel each soul living within the warmth of your glow. You see a shadowy, skeletal entity sneak within your glow and raise a long scythe above one of your beings. You mutter a series of words and sent a part of your essence to banish the entity.\nWhen you awaken, you write the words down. You have been granted the secret of [color=green]Immortality[/color]. "
 			refCrystal.abilities.append('immortality')
 	
 	elif (refCrystal.mode == "dark" || refCrystal.lifeforce <= 0) && !refCrystal.abilities.has('sacrifice'):
 		if rand_range(-25,100) <= refCrystal.research:
-			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
+			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
 			text += "You dream that you are famished. You look down and see your ribs poking through your skin. Hunger. You need hunger. You need LIFE! You sit in a corner and wait. A rat scurries into your view.\nLife. Life for you.\nYou rush forward and snap the creatures neck. You sink your teeth in and feel your hunger subside. "
-			text += "\n\n[color=yellow]-Good. Good. You know hunger too. You know what it is to consume life.[/color]\nThe voice ripples through you and you see teeth. You look up into it's gaping maw and squeak. Your tail squishes back and forth in a panic and you try to move. But the tentacles around you body aren't going to let you escape. As you feel yourself approach the teeth, you feel your rat-like body crumple and you wake up. For better or worse, you now know two things. You know how you can feed the Crystal. And now, you know you must."
+			text += "\n\n[color=yellow]-Good. Good. You know hunger too. You know what it is to consume life.[/color]\nThe voice ripples through you and you see teeth. You look up into it's gaping maw and squeak. Your tail squishes back and forth in a panic and you try to move. But the tentacles around you body aren't going to let you escape. As you feel yourself approach the teeth, you feel your rat-like body crumple and you wake up. For better or worse, you now know two things. You know how you can feed the [color=#E389B9]Crystal[/color]. And now, you know you must."
 			refCrystal.abilities.append('sacrifice')
 	
 	elif refCrystal.abilities.has('sacrifice') && !refCrystal.abilities.has('understandsacrifice'):
 		if rand_range(0,100) <= refCrystal.research:
-			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
-			text += "You dream that you standing in front of the Crystal. It extends a tendril and gently touches the body of a lifeless human beside you. The tendril extends into the body's mouth, slithers through her body, and stands the corpse up like a puppet on a string. It then violently rips its tendril out of the corpse's mouth. The human woman opens her eyes and screams herself back to life. "
-			text += "You look in amazement as the woman turns to walk off. You look at the crystal and see cracks and veins start to appear in it's surface. You see a tendril reach out towards you.\nYou open your mouth to protest 'I am still alive!' and a loud bleating erupts from your lips. It reaches into your open mouth and extends through your body. You sense it draining every one of your levels to restore it's hunger, then finally take your lifeforce back into it. As your soul splits off from your body, you see the cracks and veins healing. "
+			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
+			text += "You dream that you standing in front of the [color=#E389B9]Crystal[/color]. It extends a tendril and gently touches the body of a lifeless human beside you. The tendril extends into the body's mouth, slithers through her body, and stands the corpse up like a puppet on a string. It then violently rips its tendril out of the corpse's mouth. The human woman opens her eyes and screams herself back to life. "
+			text += "You look in amazement as the woman turns to walk off. You look at the [color=#E389B9]Crystal[/color] and see cracks and veins start to appear in it's surface. You see a tendril reach out towards you.\nYou open your mouth to protest 'I am still alive!' and a loud bleating erupts from your lips. It reaches into your open mouth and extends through your body. You sense it draining every one of your levels to restore it's hunger, then finally take your lifeforce back into it. As your soul splits off from your body, you see the cracks and veins healing. "
 			text += "You now understand how the sacrifices work. "
 			refCrystal.abilities.append('understandsacrifice')
 	

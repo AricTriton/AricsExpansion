@@ -1523,10 +1523,11 @@ func nextdayevents():
 		###---Added by Expansion---### Hybrid Support
 		if (i.preg.baby != null || !i.preg.unborn_baby.empty()) && (i.preg.duration > globals.state.pregduration || (i.race.find('Goblin') >= 0 && i.preg.duration > globals.state.pregduration/2)):
 		#if i.preg.baby != null && (i.preg.duration > globals.state.pregduration || (i.race.find('Goblin') >= 0 && i.preg.duration > globals.state.pregduration/2)):
+			var postpartum = 3
 			if i.race.find('Goblin') >= 0:
-				i.away.duration = 2
-			else:
-				i.away.duration = 3
+				postpartum = 2
+			i.away.duration = postpartum
+			
 			i.away.at = 'in labor'
 			childbirth_loop(i)
 			i.cum.pussy = 0 #ralphD - better help npcs keep from being eternally preggers from 1 f%$& too
@@ -1994,6 +1995,14 @@ func reset_dimcrystal_ability_buttons():
 	else:
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed").set_disabled(true)
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed").set_tooltip("Requires Upgrade Level 1")
+	#Empower Virginity
+	get_node("MainScreen/mansion/dimcrystalpanel/ability_empowervirginityenable").hide()
+	get_node("MainScreen/mansion/dimcrystalpanel/ability_empowervirginitydisable").hide()
+	if refCrystal.abilities.has('empowervirginity'):
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_empowervirginity").set_disabled(false)
+	else:
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_empowervirginity").set_disabled(true)
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_empowervirginity").set_tooltip("Requires Upgrade Level 1")	
 	#Second Wind (1/Day Combat Revive)
 	if refCrystal.abilities.has('secondwind'):
 		get_node("MainScreen/mansion/dimcrystalpanel/ability_secondwind").set_disabled(false)
@@ -2151,6 +2160,60 @@ func _on_dimcrystal_ability_attunement_pressed():
 	textnode.set_bbcode(text)
 	textnode.show()
 
+#Empowered Virginities
+func _on_dimcrystal_ability_empoweredvirginity_pressed():
+	var refCrystal = globals.state.thecrystal
+	var text = ""
+	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/description")
+	if refCrystal.abilities.has('empowervirginity'):
+		text += "You have been granted the secret of [color=green]Empowering Virginities[/color] with mana. You may now ask the Crystal to give a [color=green]stacking multiplier of 5x the normal mana produced[/color] at the end of a sexual encounter in the Mansion for [color=green]any virginities taken[/color], but you will lose [color=red]half of the mana normally produced[/color] when [color=red]they lose neither vaginal or anal virginities during sex[/color]. It seems as though activating this is a risk weighted against the quality of dedicated long term sexual partners over the quantity of far more temporary, less experienced ones."
+		if refCrystal.empoweredvirginity == true:
+			text += "\n\nThis ability is currently [color=lime]Enabled[/color]."
+		else:
+			text += "\n\nThis ability is currently [color=red]Disabled[/color]."
+	#Reset, Disable Buttons, Finish
+	reset_dimcrystal_ability_buttons()
+	get_node("MainScreen/mansion/dimcrystalpanel/ability_empowervirginity").set_disabled(true)
+	#Set Toggle
+	if refCrystal.empoweredvirginity == true:
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_empowervirginitydisable").show()
+	else:
+		get_node("MainScreen/mansion/dimcrystalpanel/ability_empowervirginityenable").show()
+	textnode.set_bbcode(text)
+	textnode.show()
+
+func _on_dimcrystal_ability_empoweredvirginityenabled_pressed():
+	var refCrystal = globals.state.thecrystal
+	var text = ""
+	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/description")
+	
+	text += "You solemnly approach the [color=#E389B9]Dimensional Crystal[/color]. "
+	if globals.state.thecrystal.mode == "light":
+		text += "The [color=#E389B9]Crystal[/color] pulses softly with a deep, calming violet hue eminating out around it. "
+	elif globals.state.thecrystal.mode == "dark":
+		text += "The [color=#E389B9]Crystal[/color] pulses harshly with a dark deep-purple light that seems to be filled with shadows. "
+	text += "You place your palm against the humming [color=#E389B9]Crystal[/color] and feel the raw reserves of power bubbling up from within it. It feels strained, pushed past the limits of natural law, but you feel a raw and unbridled power within. You feel that fascination from the dream with the natural, magical power in things that are so temporary and unique. You feel the [color=#E389B9]Crystal's[/color] power flood into these natural seals and barriers, understanding the intentional act over the physical object holds the true power.\n\nYou feel certain that the [color=#E389B9]Crystal[/color] will provide vastly more [color=aqua]mana[/color] when someone's [color=aqua]vaginal[/color] or [color=aqua]anal[/color] virginities are lost, but only [color=red]half as much mana[/color] when [color=aqua]no virginities are taken[/color]."
+	refCrystal.empoweredvirginity = true
+	reset_dimcrystal_ability_buttons()
+	textnode.set_bbcode(text)
+	textnode.show()
+
+func _on_dimcrystal_ability_empoweredvirginitydisabled_pressed():
+	var refCrystal = globals.state.thecrystal
+	var text = ""
+	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/description")
+	
+	text += "You solemnly approach the [color=#E389B9]Dimensional Crystal[/color]. "
+	if globals.state.thecrystal.mode == "light":
+		text += "The [color=#E389B9]Crystal[/color] pulses softly with a deep, calming violet hue eminating out around it. "
+	elif globals.state.thecrystal.mode == "dark":
+		text += "The [color=#E389B9]Crystal[/color] pulses harshly with a dark deep-purple light that seems to be filled with shadows. "
+	text += "You place your palm against the humming [color=#E389B9]Crystal[/color] and feel the raw reserves of power bubbling up from within it. It feels strained, pushed past the limits of natural law, but you feel a raw and unbridled power within. You feel that fascination from the dream with the natural, magical power in things that are so temporary and unique. You intentionally dissuade the interest and revisit an equal desire for all things beautiful. Why place any value over inexperience over the beauty and growing permanence of experience? You feel the [color=#E389B9]Crystal[/color] bend to your will.\n\nYou feel certain that the [color=#E389B9]Crystal[/color] will provide equal [color=aqua]mana[/color] with no concern for anyone's [color=aqua]virginity[/color]."
+	refCrystal.empoweredvirginity = false
+	reset_dimcrystal_ability_buttons()
+	textnode.set_bbcode(text)
+	textnode.show()
+
 #Preg Speed
 func _on_dimcrystal_ability_pregspeed_pressed():
 	var refCrystal = globals.state.thecrystal
@@ -2158,7 +2221,6 @@ func _on_dimcrystal_ability_pregspeed_pressed():
 	var textnode = get_node("MainScreen/mansion/dimcrystalpanel/description")
 	if refCrystal.abilities.has('pregnancyspeed'):
 		text += "You have learned how to use the magic of the [color=#E389B9]Crystal[/color] to affect the [color=aqua]Speed of Pregnancies[/color] in the mansion. The current duration of a woman's pregnancy while living in the mansion is [color=aqua]"+ str(globals.state.pregduration) +" Days[/color]."
-#		text += "You have learned how to use the magic of the [color=#E389B9]Crystal[/color] to affect the [color=aqua]Speed of Pregnancies[/color] in the Mansion. You can do this by [color=aqua]Talking[/color] to your [color=aqua]Headgirl[/color] and selecting [color=yellow]'Walk with me to the Crystal'[/color] followed by '[color=yellow]Please alter the Speed of Pregnancies[/color]'."
 	#Reset, Disable Buttons, Finish
 	reset_dimcrystal_ability_buttons()
 	get_node("MainScreen/mansion/dimcrystalpanel/ability_pregspeed").set_disabled(true)

@@ -877,20 +877,6 @@ var itemlist = {
 		weight = 5,
 		amount = 0,
 	},
-	weaponbasicstaff = {
-        code = 'weaponbasicstaff',
-        name = 'Basic Staff',
-        icon = "res://files/aric_expansion_images/items/weaponbasicstaff.png",
-        description = "A basic staff for the aspiring mage.",
-        effect = [{type = 'incombat', effect = 'damage', effectvalue = 3, effectscale = 'maf', descript = "+3 Damage, Magic Aff Scaling"}],
-        recipe = '',
-        reqs =  null,
-        cost = 50,
-        type = 'gear',
-        subtype = 'weapon',
-        weight = 5,
-        amount = 0,
-    },
 	###---End Expansion---###
 	weaponsword = {
 		code = 'weaponsword',

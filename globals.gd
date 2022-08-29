@@ -667,7 +667,7 @@ class progress:
 	#Debug/Cheat Change Before Release to "Unlockable"
 	var perfectinfo = true
 	#Crystal Prevent's Death
-	var thecrystal = {mode = 'light', research = 0, abilities = [], power = 0, lifeforce = 10, hunger = 0, preventsdeath = false}
+	var thecrystal = {mode = 'light', research = 0, abilities = [], power = 0, lifeforce = 10, hunger = 0, empoweredvirginity = false, preventsdeath = false,}
 	#Milk Economy / globals.state.milkeconomy.currentvalue
 	var milkeconomy = {currentvalue = 1, futurevalue = 1}
 	#Best Slave - Used for Envy Flaw

@@ -1725,15 +1725,56 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "Alter Pregnancy Speed"
 
+[node name="ability_empowervirginity" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -247.0
+margin_top = -450.0
+margin_right = -15.0
+margin_bottom = -410.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Combat: Empower Virginity"
+
+[node name="ability_empowervirginityenable" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -559.487
+margin_top = -151.888
+margin_right = -374.487
+margin_bottom = -101.888
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Empower Virginity"
+
+[node name="ability_empowervirginitydisable" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -559.487
+margin_top = -151.888
+margin_right = -374.487
+margin_bottom = -101.888
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Standard Mana Check"
+
 [node name="ability_secondwind" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -235.0
-margin_top = -450.0
+margin_top = -410.0
 margin_right = -15.0
-margin_bottom = -410.0
+margin_bottom = -370.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "Combat: Second Wind"
@@ -1744,9 +1785,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -235.0
-margin_top = -410.0
+margin_top = -370.0
 margin_right = -15.0
-margin_bottom = -370.0
+margin_bottom = -330.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "Master Immortality"
@@ -8069,10 +8110,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -359.0
-margin_top = -398.0
-margin_right = -52.0
-margin_bottom = -272.0
+margin_left = -595.0
+margin_top = -276.0
+margin_right = -288.0
+margin_bottom = -150.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 
@@ -12970,6 +13011,9 @@ current = true
 [connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_attune" to="." method="_on_dimcrystal_ability_attunement_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_pregspeed" to="." method="_on_dimcrystal_ability_pregspeed_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_pregspeed_enable" to="." method="_on_dimcrystal_ability_pregspeed_enabled"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_empowervirginity" to="." method="_on_dimcrystal_ability_empoweredvirginity_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_empowervirginityenable" to="." method="_on_dimcrystal_ability_empoweredvirginityenabled_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_empowervirginitydisable" to="." method="_on_dimcrystal_ability_empoweredvirginitydisabled_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_secondwind" to="." method="_on_dimcrystal_ability_secondwind_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_immortality" to="." method="_on_dimcrystal_ability_immortality_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_immortality_enable" to="." method="_on_dimcrystal_ability_immortality_enabled"]

@@ -82,10 +82,14 @@ func expandGame():
 			globals.state.mansionupgrades.dimensionalcrystal == 1
 			globals.state.mansionupgrades.mansionnursery == 1
 	
+	#Dim Crystal
+	if !globals.state.thecrystal.has('empoweredvirginity'):
+		globals.state.thecrystal['empoweredvirginity'] = false
+	
 	#Sidequests
 	if !globals.state.sidequests.has('dimcrystal'):
 		globals.state.sidequests['dimcrystal'] = 0
-	
+		
 	#Crystal to Abilities Conversion - TBK Remove?
 #	if globals.state.mansionupgrades.dimensionalcrystal >= 1:
 #		globals.state.thecrystal.abilities.append('pregnancyspeed')

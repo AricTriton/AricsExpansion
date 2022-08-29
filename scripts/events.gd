@@ -546,7 +546,6 @@ func dimcrystaldarkened(stage = 0):
 			globals.main.backgroundinstant('stairs_red')
 			globals.main.clearscreen()
 			text = "You feel it deep within you...something is wrong with the [color=#E389B9]Crystal[/color]. You feel a strange gnawing hunger in the pit of your stomach any time you try to reach out and touch any of the purplish energy you see infused throughout the house.\n\nYou decide to check on it immediately. From the moment your foot strikes the first step of the stairs, the sensation of gnawing hunger increases. The once-steady magical lighting on the stairs seems to flicker slightly, an unsettling and strange change. There are little trails of light from each of the light sources all heading towards the middle of the chamber as though the light is being ever so slightly pulled towards the [color=#E389B9]Crystal[/color]. You force yourself to press on into the massive smooth stone chamber housing the [color=#E389B9]Crystal[/color].\n\n[color=red]Warning: Hitting the Close button will break the game.[/color]"
-			buttons.
 			buttons.append(['Rush Downstairs','dimcrystaldarkened',1])
 		1:
 			globals.main.animationfade(1.5)
