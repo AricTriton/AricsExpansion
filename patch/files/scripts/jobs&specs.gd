@@ -1777,21 +1777,19 @@ func trainer(person):
 	return dict
 
 func trainee(person):
-	var text = ""
-	#Placeholder. Possibly Unnecessary
+	var text = "[color=aqua]$name[/color] spent $his day [color=aqua]training[/color] in the [color=aqua]Training Grounds[/color].\n"
 	var dict = {text = text}
 	return dict
 
 
 func masseuse(person):
 	var text = ""
-	#TBK
+	#TBK - Placeholder
 	var dict = {text = text}
 	return dict
 
 func crystalresearcher(person):
-	var text = ""
-	#TBK
+	var text = "[color=aqua]$name[/color] spent $his day in the hidden stone chamber below [color=aqua]researching[/color] the [color=#E389B9]Crystal[/color].\n"
 	var dict = {text = text}
 	return dict
 

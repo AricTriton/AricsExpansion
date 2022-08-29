@@ -1324,8 +1324,10 @@ func _on_end_pressed():
 
 	if globals.state.sebastianorder.duration > 0:
 		globals.state.sebastianorder.duration -= 1
-		if globals.state.sebastianorder.duration == 0:
+		###---Added by Expansion---### Secondary check for Sebastian Order
+		if globals.state.sebastianorder.duration == 0 && globals.state.sebastianorder.taken == true:
 			text0.set_bbcode(text0.get_bbcode() + "[color=green]Sebastian should have your order ready by this time. [/color]\n")
+		###---End Expansion---###
 	globals.state.groupsex = true
 
 	var consumption = variables.basefoodconsumption
@@ -1936,6 +1938,9 @@ func _on_dimcrystal_button_pressed():
 	#Preg Speed
 	if globals.state.mansionupgrades.dimensionalcrystal >= 1 && !globals.state.thecrystal.abilities.has('pregnancyspeed'):
 		text += "\n[color=green]Inspiration[/color]: You know that the [color=#E389B9]Crystal[/color] can affect the [color=aqua]Speed of Pregnancies[/color], but are not yet sure how to make it work. "
+	#Empower Virginity
+	if globals.state.mansionupgrades.dimensionalcrystal >= 1 && !globals.state.thecrystal.abilities.has('empowervirginity'):
+		text += "\n[color=green]Inspiration[/color]: You know that the [color=#E389B9]Crystal[/color] can affect the [color=aqua]flow of Mana related to Sex Scenes[/color], but are not yet sure how to make it work. "
 	#Second Wind
 	if globals.state.mansionupgrades.dimensionalcrystal >= 2 && !globals.state.thecrystal.abilities.has('secondwind'):
 		text += "\n[color=green]Inspiration[/color]: You think you may be able to learn how to make the [color=#E389B9]Crystal[/color] to revive you and your slaves to half health from a fatal blow in combat once per day."
@@ -1979,7 +1984,22 @@ func reset_dimcrystal_ability_buttons():
 	#Description
 	get_node("MainScreen/mansion/dimcrystalpanel/description_button").set_disabled(false)
 	get_node("MainScreen/mansion/dimcrystalpanel/research_explanation").set_disabled(false)
-	get_node("MainScreen/mansion/dimcrystalpanel/assistresearch").set_disabled(false)
+	
+	#Abilities Test
+	var moreabilitiesexist = false
+	var allabilities = globals.expansion.dimcrystal_abilities_array
+	for abilitycheck in allabilities:
+		if !refCrystal.abilities.has(abilitycheck):
+			moreabilitiesexist = true
+			break
+	if moreabilitiesexist == true && globals.state.nonsexactions > 0:
+		get_node("MainScreen/mansion/dimcrystalpanel/assistresearch").set_disabled(false)
+	else:
+		get_node("MainScreen/mansion/dimcrystalpanel/assistresearch").set_disabled(true)
+		if globals.state.nonsexactions > 0:
+			get_node("MainScreen/mansion/dimcrystalpanel/assistresearch").set_tooltip("Not enough Non-Sex Interactions remaining to Assist Researcher")
+		else:
+			get_node("MainScreen/mansion/dimcrystalpanel/assistresearch").set_tooltip("There are no more Abilities to Research currently")
 	
 	#Attunement
 	if refCrystal.abilities.has('attunement'):
@@ -2066,8 +2086,9 @@ func _on_dimcrystal_assistresearcher_pressed():
 	if researcher == null:
 		print("Invalid, No Researcher Available")
 		text = "There is no [color=#008BFB]Researcher[/color] currently assigned for you to assist in [color=#008BFB]Researching[/color] the [color=#E389B9]Dimensional Crystal[/color].\n\nYou can assign a suitable candidate via the standard [color=aqua]Jobs[/color] menu on any [color=aqua]slave's[/color] sheet."
-	else:
+	elif globals.state.nonsexactions > 0 && researcher.dailyevents.count('assistedresearch') < 0:
 		text = researcher.dictionary("You walk to the [color=#E389B9]Dimensional Crystal[/color] where [color=aqua]$name[/color] is diligently focused on studying one of the energy tendrils of the humming, floating [color=#E389B9]Crystal[/color]. $He looks up and smiles at you." + researcher.quirk("\n[color=yellow]-Have you come to assist me, $master? I think we can make a lot of progress together![/color]"))
+		researcher.dailyevents.append('assistedresearch')
 		if globals.player.smaf + researcher.smaf >= globals.state.mansionupgrades.dimensionalcrystal:
 			globals.state.nonsexactions -= 1
 			refCrystal.research = researcher.wit
@@ -2078,6 +2099,11 @@ func _on_dimcrystal_assistresearcher_pressed():
 			get_node("MainScreen/mansion/dimcrystalpanel/assistresearch").set_disabled(true)
 			get_node("MainScreen/mansion/dimcrystalpanel/assistresearch").set_tooltip("You just actively researched the crystal.")
 			###TBK - Add in "Fail Event" later (accidental sacrifice)
+	else:
+		if globals.state.nonsexactions <= 0:
+			text = "[color=red][center]You do not have enough [color=aqua]Non-Sexual Actions[/color] left today to research the [color=#E389B9]Crystal[/color].[/center][/color]"
+		else:
+			text = "[color=red][center]You already assisted your [color=aqua]Researcher[/color] today.[/center][/color]"
 	
 	#Reset, Disable Buttons, Finish
 	reset_dimcrystal_ability_buttons()

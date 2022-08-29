@@ -1234,7 +1234,7 @@ var traits = {
 		"description": "$name doesn't let the strain of things get to $him easily. \n\n[color=aqua]Stress increases slower.[/color]",
 		"effect": {
 			"code": "composed",
-			"stress_mod": -0.1
+			"stress_mod": -0.25
 		},
 		"tags": [
 			"mental",
@@ -1262,10 +1262,10 @@ var traits = {
 	},
 	"Hearty": {
 		"name": "Hearty",
-		"description": "$name is an incredibly healthy individual. \n\n[color=aqua]+10 HP.[/color]",
+		"description": "$name is an incredibly healthy individual. \n\n[color=aqua]+20 HP.[/color]",
 		"effect": {
 			"code": "hearty",
-			"health_bonus": 10
+			"health_bonus": 20
 		},
 		"tags": [
 			"physical"
@@ -1279,10 +1279,10 @@ var traits = {
 	},
 	"Wimpy": {
 		"name": "Wimpy",
-		"description": "$name is a less healthy individual. \n\n[color=aqua]-10 HP.[/color]",
+		"description": "$name is a less healthy individual. \n\n[color=aqua]-20 HP.[/color]",
 		"effect": {
 			"code": "wimpy",
-			"health_bonus": -10
+			"health_bonus": -20
 		},
 		"tags": [
 			"physical",
@@ -1296,10 +1296,10 @@ var traits = {
 	},
 	"Vigorous": {
 		"name": "Vigorous",
-		"description": "$name is a rather energetic person. \n\n[color=aqua]+10 daily energy.[/color]",
+		"description": "$name is a rather energetic person. \n\n[color=aqua]+25 daily energy.[/color]",
 		"effect": {
 			"code": "vigorous",
-			"energy_mod": 10
+			"energy_mod": 25
 		},
 		"tags": [
 			"physical"
@@ -1311,10 +1311,10 @@ var traits = {
 	},
 	"Torpid": {
 		"name": "Torpid",
-		"description": "$name seems to have trouble with energy. \n\n[color=aqua]-10 daily energy.[/color]",
+		"description": "$name seems to have trouble with energy. \n\n[color=aqua]-25 daily energy.[/color]",
 		"effect": {
 			"code": "torpid",
-			"energy_mod": -10
+			"energy_mod": -25
 		},
 		"tags": [
 			"physical",
@@ -1325,7 +1325,7 @@ var traits = {
 			"Robust"
 		]
 	},
-#Lactation Trait Line
+	#Lactation Trait Line
 	"Lactating": {
 		"name": "Lactating",
 		"description": "$name's breasts are swollen and lactating.\n\n[color=aqua]Primary Trait for Lactation Trait Line.[/color]",

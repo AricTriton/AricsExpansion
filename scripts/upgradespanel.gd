@@ -68,9 +68,12 @@ func categoryselect(button):
 		newbutton.connect("pressed",self,'upgradeselected',[upgrade])
 		###---Added by Expansion---### Disable the buttons until available
 		if upgrade.code == 'dimensionalcrystal':
-			if globals.state.mansionupgrades.mansionnursery < 1:
+			if globals.state.sidequests.dimcrystal == 0:
 				newbutton.set_disabled(true)
-				newbutton.set_tooltip("The nursery needs to be purchased first.")
+				newbutton.set_tooltip("You aren't sure where this even is currently. Maybe time will reveal it?")
+#TBK- remove nursery reqs			if globals.state.mansionupgrades.mansionnursery < 1:
+#				newbutton.set_disabled(true)
+#				newbutton.set_tooltip("The nursery needs to be purchased first.")
 		#Ensure that the number of Vats is less than the VatSpace purchased
 		var vatupgrades = ['vatmilk','vatsemen','vatlube','vatpiss']
 		if upgrade.code in vatupgrades:

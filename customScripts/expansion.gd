@@ -130,6 +130,9 @@ var identitydict = {
 	cowardly = "I am just a coward. I'm not brave like everyone else, I just am too scared of getting hurt! "
 }
 
+#DimCrystal
+var dimcrystal_abilities_array = ['attunement','pregnancyspeed','empowervirginity','secondwind','immortality','sacrifice',]
+
 func updatePerson(person):
 	#Contains the codes to update 1 person specifically during the game
 	#Called from Sex, Interaction, Talk, or End of Day
@@ -1866,9 +1869,17 @@ func dailyCrystal():
 	#Check for Researcher
 	var researcher = getCrystalResearcher()
 	
+	#Check for Abilities
+	var moreabilitiesexist = false
+	var allabilities = globals.expansion.dimcrystal_abilities_array
+	for abilitycheck in allabilities:
+		if !refCrystal.abilities.has(abilitycheck):
+			moreabilitiesexist = true
+			break
+	
 	if researcher == null:
-		if globals.expansionsettings.show_warning_if_missing_researcher == true:
-			text = "[center][color=red]No Researcher was assigned to study the [color=#E389B9]Dimensional Crystal[/color] today.[/color][/center]"
+		if globals.expansionsettings.show_warning_if_missing_researcher == true && globals.state.sidequests.dimcrystal != 0 && moreabilitiesexist == true:
+			text = "\n[center][color=red]No Researcher was assigned to study the [color=#E389B9]Dimensional Crystal[/color] today.[/color][/center]"
 			if refCrystal.research > 0:
 				text = "\n[center][color=red]Half of the actively completed Research was lost due to the absense of the Researcher[/color][/center]."
 				refCrystal.research = round(refCrystal.research*.5)
