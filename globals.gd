@@ -446,7 +446,7 @@ class progress:
 	var mainquestcomplete = false
 	var rank = 0
 	var password = ''
-	var sidequests = {startslave = 0, emily = 0, brothel = 0, cali = 0, caliparentsdead = false, chloe = 0, ayda = 0, ivran = '', yris = 0, zoe = 0, ayneris = 0, sebastianumbra = 0, maple = 0} setget quest_set
+	var sidequests = {startslave = 0, emily = 0, brothel = 0, cali = 0, caliparentsdead = false, chloe = 0, ayda = 0, ivran = '', yris = 0, zoe = 0, ayneris = 0, sebastianumbra = 0, maple = 0, dimcrystal = 0} setget quest_set
 	var repeatables = {wimbornslaveguild = [], frostfordslaveguild = [], gornslaveguild = []}
 	var babylist = []
 	var companion = -1
@@ -667,7 +667,7 @@ class progress:
 	#Debug/Cheat Change Before Release to "Unlockable"
 	var perfectinfo = true
 	#Crystal Prevent's Death
-	var thecrystal = {mode = 'light', research = 0, abilities = [], power = 0, lifeforce = 10, hunger = 0, preventsdeath = false}
+	var thecrystal = {mode = 'light', research = 0, abilities = [], power = 0, lifeforce = 10, hunger = 0, empoweredvirginity = false, preventsdeath = false,}
 	#Milk Economy / globals.state.milkeconomy.currentvalue
 	var milkeconomy = {currentvalue = 1, futurevalue = 1}
 	#Best Slave - Used for Envy Flaw
@@ -1304,6 +1304,7 @@ var expansionsettings = loadModFile("AricsExpansion", "customScripts/expansionse
 var useRalphsTweaks # = expansionsettings.use_ralphs_tweaks
 var useCapsTweaks # = expansionsettings.use_caps_tweaks
 var expansiontravel = loadModFile("AricsExpansion", "customScripts/expansiontravel.gd").new() #ralphD
+var ae_eventtext = loadModFile("AricsExpansion", "customScripts/expansioneventtext.gd").new()
 
 ###---Added by Expansion---### General Arrays
 #Size Arrays

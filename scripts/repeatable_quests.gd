@@ -414,5 +414,150 @@ func questarray():
 			location = ['frostford'],
 			difficulty = 'hard'
 		},
+		quest034 = {
+			code = '034',
+			shortdescription = 'Buy and Release. ',
+			description = 'A local $race group are buying enslaved $race of any type to restore them to freedom. Taming is not required. ',
+			reqs = [['race','eq',commonrace()]],
+			reqstemp = [],
+			time = round(rand_range(3,5)),
+			reward = round(rand_range(20,40))*10,
+			location = ['any'],
+			difficulty = 'easy'
+		},
+		quest035 = {
+			code = '035',
+			shortdescription = 'Adventuring party needs dedicated healer. ',
+			description = 'A varied group of adventurers are in desperate need of a healer for their travels. The healer must have high skills in magic, the courage to not falter even in grim circumstances and be ever loyal to the party. ',
+			reqs = [['obed','gte', 80], ['smaf','gte', 3], ['cour','gte',40]],
+			reqstemp = [['sex', 'eq', randsex()]],
+			time = round(rand_range(6,8)),
+			reward = round(rand_range(80,110))*10,
+			location = ['any'],
+			difficulty = 'medium'
+		},
+		quest036 = {
+			code = '036',
+			questreq = globals.rules.children == true,
+			shortdescription = 'Older gentleman seeks young heir. ',
+			description = 'An aged man needs to name an heir for his estate. He requires a young $race boy with similar physical features to himself and carry himself fairly well. The boy must be well behaved and quite smart for his age.',
+			reqs = [['race','eq',commonrace()], ['sex', 'eq', 'male'], ['obed','gte', 80], ['origins','gte','common'], ['wit','gte',40], ['haircolor','eq',randhaircolor()], ['eyecolor','eq',randanyeyecolor()], ['age','eq','child']],
+			reqstemp = [],
+			time = round(rand_range(4,7)),
+			reward = round(rand_range(90,120))*10,
+			location = ['wimborn'],
+			difficulty = 'hard'
+		},
+		quest037 = {
+			code = '037',
+			questreq = globals.rules.children == true,
+			shortdescription = 'Needing a young servant girl. ',
+			description = 'A call for a young girl to act as servant and playmate has been issued by a well off family for their growing daughter. The girl in need must be biddable, quick and submissive.',
+			reqs = [['sex', 'eq', 'female'], ['obed','gte', 80], ['sagi','gte',3], ['cour','lte',40], ['age','eq','child'], ['bodyshape','eq','humanoid']],
+			reqstemp = [],
+			time = round(rand_range(5,9)),
+			reward = round(rand_range(70,90))*10,
+			location = ['any'],
+			difficulty = 'medium'
+		},
+		quest038 = {
+			code = '038',
+			shortdescription = 'Looking for a suitable mate. ',
+			description = "A member of the $rare race desires a worthy mate for reproductive purposes. $He must be at least average in appearance and open to $his mate's commands. ",
+			reqs = [['obed','gte', 80],['beauty','gte',50]],
+			reqstemp = [['sex', 'eq', randsex()], ['race','eq',rarerace()]],
+			time = round(rand_range(6,10)),
+			reward = round(rand_range(80,110))*10,
+			location = ['any'],
+			difficulty = 'medium'
+		},
+		quest039 = {
+			code = '039',
+			shortdescription = 'Buying Equine Mares. ',
+			description = "The wealthy owner of quality race horses needs a new female centaur to keep his stallions in good temperment. Taming is not required, and looks aren't important but she should have decent endurance. ",
+			reqs = [['sex', 'eq', 'female'], ['bodyshape','eq','halfhorse'], ['send', 'gte', 2]],
+			reqstemp = [],
+			time = round(rand_range(6,10)),
+			reward = round(rand_range(50,80))*10,
+			location = ['gorn'],
+			difficulty = 'medium'
+		},
+		quest040 = {
+			code = '040',
+			shortdescription = 'Exotic pet. ',
+			description = 'A wealthy merchant is seeking a new pet to display during an upcoming social event. He requires a $rare slave of exceptional beauty and grace to delight his guests. ',
+			reqs = [['obed','gte', 80],['beauty','gte',70]],
+			reqstemp = [['sex', 'eq', randsex()], ['race','eq',rarerace()]],
+			time = round(rand_range(4,7)),
+			reward = round(rand_range(80,100))*10,
+			location = ['gorn'],
+			difficulty = 'medium'
+		},
+		quest041 = {
+			code = '041',
+			shortdescription = 'Ritual Help. ',
+			description = 'An influential group of magic enthusiasts are needing a "new member" to join in on an upcoming ceremony. The request stresses that the person meet exact criteria and preferably have no family ties. ',
+			reqs = [],
+			reqstemp = [['sex', 'eq', randsex()],['haircolor','eq',randhaircolor()]],
+			time = round(rand_range(3,5)),
+			reward = round(rand_range(10,20))*10,
+			location = ['wimborn'],
+			difficulty = 'easy'
+		},
+		quest042 = {
+			code = '042',
+			shortdescription = 'Hiring A Real Brute. ',
+			description = 'An eccentric and wealthy man wants a "right and proper ugly brute" to act as a personal bodyguard. Everything about him MUST be huge and intimidating. ',
+			reqs = [['obed','gte', 80],['beauty','lte',30],['sex', 'eq', 'male'],['age','eq','adult'],['sstr','gte',4], ['penis','gte',1]],
+			reqstemp = [],
+			time = round(rand_range(4,7)),
+			reward = round(rand_range(120,150))*10,
+			location = ['gorn'],
+			difficulty = 'hard'
+		},
+		quest043 = {
+			code = '043',
+			shortdescription = 'New Housekeeper. ',
+			description = 'An upperclass household is seeking to buy the contract for a good maid to eventually replace their aging stewardess. She must be very capable in all domestic duties and be able to delegate tasks. The stewardess of the house is quite strict with her underlings and demands perfection of a would-be successor.',
+			reqs = [['obed','gte', 90],['sex', 'eq', 'female'],['age','eq','adult'], ['bodyshape','eq','humanoid'], ['sagi','gte', 4], ['conf','gte',40], ['spec', 'eq', 'housekeeper']],
+			reqstemp = [],
+			time = round(rand_range(6,8)),
+			reward = round(rand_range(80,110))*10,
+			location = ['any'],
+			difficulty = 'hard'
+		},
+		quest044 = {
+			code = '044',
+			shortdescription = 'Wet Nurse Needed. ',
+			description = "A rich household needs to acquire a competent wet nurse quickly due to a new mother's poor health. Despite the urgency, there is a strict list of requirements. The new father is willing to pay a high sum for an expedited sale.",
+			reqs = [['obed','gte', 90],['sex', 'eq', 'female'],['age','eq','adult'], ['bodyshape','eq','humanoid'], ['titssize','gte',4], ['lactation','eq',true]],
+			reqstemp = [],
+			time = round(rand_range(1,2)),
+			reward = round(rand_range(200,230))*10,
+			location = ['any'],
+			difficulty = 'hard'
+		},
+		quest045 = {
+			code = '045',
+			shortdescription = "I don't want an animal, but... ",
+			description = 'A note scribbled in rough ink states the following: I think animal fuckers are disgusting and beastkin are just animals walking upright. BUT. I am currently looking for a hot HALFKIN bitch ready to accept orders. ',
+			reqs = [['obed','gte', 80],['sex', 'eq', 'female'],['race','eq','Halfkin Wolf', 'Halfkin Cat', 'Halfkin Fox', 'Halfkin Bunny', 'Halfkin Tanuki'],['beauty','gte',50]],
+			reqstemp = [],
+			time = round(rand_range(7,12)),
+			reward = round(rand_range(30,50))*10,
+			location = ['wimborn','gorn'],
+			difficulty = 'easy'
+		},
+		quest046 = {
+			code = '046',
+			shortdescription = 'Dairy Delivery. ',
+			description = 'You can faintly see the logo of a well known dairy farm under a thick splotch of ink on a request for a heavily modified taurus.',
+			reqs = [['obed','gte', 80],['sex', 'eq', 'female'],['titsextra','eq',true], ['titssize','gte',4], ['spec','eq','hucow'], ['lactation','eq',true]],
+			reqstemp = [],
+			time = round(rand_range(5,6)),
+			reward = round(rand_range(240,320))*10,
+			location = ['wimborn','gorn'],
+			difficulty = 'hard'
+		},
 	}
 	return questsarray

@@ -75,6 +75,7 @@ class member:
 	var assholesize
 	var vagTorn = false
 	var assTorn = false
+	var virginity_multiplier = 0
 	var actionshad = {addtraits = [], removetraits = [], samesex = 0, samesexorgasms = 0, oppositesex = 0, oppositesexorgasms = 0, punishments = 0, group = 0, incest = 0, incestorgasms = 0}
 	var succubusdraincount = 0 #ralphC
 	###---Expansion End---###
@@ -1651,20 +1652,36 @@ func startscene(scenescript, cont = false, pretext = ''):
 	if scenescript.virginloss == true:
 		for i in givers:
 			if scenescript.giverpart == 'vagina':
-				i.person.vagvirgin = false
+				###---Added by Expansion---### DimCrystal Virginity
+				if i.person.vagvirgin == true:
+					i.person.vagvirgin = false
+					i.virginity_multiplier += 5
+				###---End Expansion---###
 				if i.person.vagina == 'normal':
 					i.person.vagina = globals.randomfromarray(globals.vagsizearray)
 			elif scenescript.giverpart == 'anus':
-				i.person.assvirgin = false
+				###---Added by Expansion---### DimCrystal Virginity
+				if i.person.assvirgin == true:
+					i.person.assvirgin = false
+					i.virginity_multiplier += 5
+				###---End Expansion---###
 				if i.person.asshole == 'normal':
 					i.person.asshole = globals.randomfromarray(globals.assholesizearray)
 		for i in takers:
 			if scenescript.takerpart == 'vagina':
-				i.person.vagvirgin = false
+				###---Added by Expansion---### DimCrystal Virginity
+				if i.person.vagvirgin == true:
+					i.person.vagvirgin = false
+					i.virginity_multiplier += 5
+				###---End Expansion---###
 				if i.person.vagina == 'normal':
 					i.person.vagina = globals.randomfromarray(globals.vagsizearray)
 			elif scenescript.takerpart == 'anus':
-				i.person.assvirgin = false
+				###---Added by Expansion---### DimCrystal Virginity
+				if i.person.assvirgin == true:
+					i.person.assvirgin = false
+					i.virginity_multiplier += 5
+				###---End Expansion---###
 				if i.person.asshole == 'normal':
 					i.person.asshole = globals.randomfromarray(globals.assholesizearray)
 	###---End Expansion---###
@@ -2305,12 +2322,20 @@ func endencounter():
 		if i.requestsdone > 0:
 			mana += i.requestsdone*10
 			###---Added by Expansion---### Removed , added \n
-			text += "\n[color=aqua]Desires fullfiled: " + str(i.requestsdone) + '[/color]'
+			text += "\nDesires fullfiled: [color=aqua]" + str(i.requestsdone) + '[/color]'
 			###---End Expansion---###
 		if i.person.race_display == "Succubus": #ralphC - Succubus orgasms don't produce mana
 			mana = 0  #ralphC
 		###---Added by Expansion---### Person Expanded; Strip/Redress
 		text += i.person.updateClothing()
+		#DimCrystal Ability
+		if globals.state.thecrystal.abilities.has('empowervirginity') && globals.state.thecrystal.empoweredvirginity == true && i.person != globals.player:
+			if i.virginity_multiplier > 0:
+				text += "\n\n[color=lime]Magically Empowered Virginity was Lost![/color]\nMana Multiplier: Personal Produced Amount x[color=aqua]" + str(i.virginity_multiplier) + "[/color]"
+				mana = round(mana * i.virginity_multiplier)
+			else:
+				text += "\n[color=red]No Virginity was Lost. The Crystal's disappointment at the lack of character development drains half of the mana produced.[/color]"
+				mana = round(mana*.5)
 		###---End Expansion---###
 		mana = round(mana)
 		manaDict[i.person] = mana

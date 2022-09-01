@@ -472,3 +472,106 @@ func sssexscene(stage = 0):
 			text = ssnode.sssexignore
 	
 	globals.main.dialogue(state, self, startslave.dictionary(text), buttons, sprites)
+
+###---Added by Expansion---### DimCrystal Events
+var ae_node = globals.ae_eventtext
+
+#Stages = -10: Dark | 0: Intro | 5: IntroComplete
+func dimcrystalinitiate(stage = 0):
+	var state = true
+	var text
+	var buttons = []
+	var sprites = []
+	
+	match stage:
+		0:
+			state = false
+			globals.main.animationfade(1.2)
+			if OS.get_name() != 'HTML5':
+				yield(globals.main, 'animfinished')
+			globals.main.music_set('stop')
+			globals.main.backgroundinstant('mansion')
+			globals.main.clearscreen()
+			text = ae_node.dimcrystal_intro_0
+			buttons.append(['Enter the Opening','dimcrystalinitiate',1])
+		1:
+			state = false
+			globals.main.animationfade(1.2)
+			if OS.get_name() != 'HTML5':
+				yield(globals.main, 'animfinished')
+			globals.main.music_set('start')
+			globals.main.backgroundinstant('stairs')
+			globals.main.clearscreen()
+			text = ae_node.dimcrystal_intro_1
+			buttons.append(['Step Inside','dimcrystalinitiate',2])
+		2:
+			state = false
+			globals.main.animationfade(1.2)
+			if OS.get_name() != 'HTML5':
+				yield(globals.main, 'animfinished')
+			globals.main.music_set('explore')
+			globals.main.backgroundinstant('dimcrystal_dull')
+			globals.main.clearscreen()
+			text = ae_node.dimcrystal_intro_2
+			buttons.append(['Infuse It with Mana','dimcrystalinitiate',3])
+		3:
+			state = false
+			globals.main.animationfade(1.2)
+			if OS.get_name() != 'HTML5':
+				yield(globals.main, 'animfinished')
+			globals.main.music_set('intimate')
+			globals.main.backgroundinstant('dimcrystal_light1')
+			globals.main.clearscreen()
+			text = ae_node.dimcrystal_intro_3
+			buttons.append(['Return Upstairs','dimcrystalinitiate',4])
+		4:
+			globals.state.sidequests.dimcrystal = 5
+			globals.main.animationfade(1.2)
+			closedialogue()
+			if OS.get_name() != "HTML5":
+				yield(globals.main, 'animfinished')
+			globals.main.backgroundinstant('mansion')
+			globals.main._on_mansion_pressed()
+			return
+	
+	globals.main.dialogue(state, self, globals.player.dictionary(text), buttons, sprites)
+
+
+func dimcrystaldarkened(stage = 0):
+	var state = true
+	var text
+	var buttons = []
+	var sprites = []
+	
+	match stage:
+		0:
+			state = false
+			globals.main.animationfade(1.5)
+			if OS.get_name() != 'HTML5':
+				yield(globals.main, 'animfinished')
+			globals.main.music_set('dungeon')
+			globals.main.backgroundinstant('stairs_red')
+			globals.main.clearscreen()
+			text = ae_node.dimcrystal_dark_0
+			buttons.append(['Rush Downstairs','dimcrystaldarkened',1])
+		1:
+			state = false
+			globals.main.animationfade(1.5)
+			if OS.get_name() != 'HTML5':
+				yield(globals.main, 'animfinished')
+			globals.main.music_set('dungeon')
+			globals.main.backgroundinstant('dimcrystal_dark1')
+			globals.main.clearscreen()
+			text = ae_node.dimcrystal_dark_1
+			buttons.append(['Return Upstairs','dimcrystaldarkened',2])
+		2:
+			globals.state.sidequests.dimcrystal = -10
+			globals.main.animationfade(1.5)
+			closedialogue()
+			if OS.get_name() != "HTML5":
+				yield(globals.main, 'animfinished')
+			globals.main.backgroundinstant('mansion')
+			globals.main._on_mansion_pressed()
+			return
+	
+	globals.main.dialogue(state, self, globals.player.dictionary(text), buttons, sprites)

@@ -357,7 +357,7 @@ var traits = {
 		"name": "Blemished",
 		"description": "$name's skin is covered in a lot of imperfections. Besides being unappealing to look at, this also makes $him suffer from low self esteem.\n\n[color=aqua]Charm -10. Beauty -10. [/color]",
 		"effect": {
-			"code": "Blemished",
+			"code": "blemished",
 			"charm": -10,
 			"beautybase": -10
 		},
@@ -1142,7 +1142,190 @@ var traits = {
 			"Sexuality: Mostly Gay"
 		]		
 	},
-#Lactation Trait Line
+#Traits by Rendrassa
+	"Anxious": {
+	"name": "Anxious",
+		"description": "$name is always a little worried about things. \n\n[color=aqua]Fear and stress gain +10%. [/color]",
+		"effect": {
+			"code": "anxious",
+			"fear_mod": 0.1,
+			"stress_mod": 0.1
+		},
+		"tags": [
+			"mental",
+		],
+		"conflict": [
+			"Dominant",
+			"Fearless",
+			"Stoic"
+		]
+	},
+	"Paranoid": {
+		"name": "Paranoid",
+		"description": "$name is always worrying about things. \n\n[color=aqua]Fear and stress gain +20%. [/color]",
+		"effect": {
+			"code": "paranoid",
+			"fear_mod": 0.2,
+			"stress_mod": 0.2
+		},
+		"tags": [
+			"mental"
+		],
+		"conflict": [
+			"Dominant",
+			"Fearless",
+			"Stoic"
+		]
+	},
+	"Observant": {
+		"name": "Observant",
+		"description": "$name has the potential for above average intelligence. \n\n[color=aqua]Increased Wit cap. [/color]",
+		"effect": {
+			"code": "observant",
+			"wit_max": +20,
+		},
+		"tags": [
+			"mental"
+		],
+		"conflict": [
+			"Ditzy"
+		]
+	},
+	"Fearless": {
+		"name": "Fearless",
+		"description": "$name is very courageous and isn't easily frightened. \n\n[color=aqua] Fear is much harder to inflict. [/color]",
+		"effect": {
+			"code": "fearless",
+			"fear_mod": -0.3,
+			"cour": 25,
+			"conf": 25
+		},
+		"tags": [
+			"mental",
+		],
+		"conflict": [
+			"Anxious",
+			"Paranoid",
+			"Coward",
+			"Stoic",
+			"Passive"
+		]
+	},
+	"Stoic": {
+		"name": "Stoic",
+		"description": "$name's mental state isn't as easily affected. \n\n[color=aqua] Stress and fear accumulates slower. [/color]",
+		"effect": {
+			"code": "stoic",
+			"fear_mod": -0.1,
+			"stress_mod": -0.1
+		},
+		"tags": [
+			"mental",
+		],
+		"conflict": [
+			"Anxious",
+			"Paranoid",
+			"Coward",
+			"Fearless"
+		]
+	},
+	"Composed": {
+		"name": "Composed",
+		"description": "$name doesn't let the strain of things get to $him easily. \n\n[color=aqua]Stress increases slower.[/color]",
+		"effect": {
+			"code": "composed",
+			"stress_mod": -0.25
+		},
+		"tags": [
+			"mental",
+		],
+		"conflict": [
+			"Anxious",
+			"Paranoid",
+			"Coward"
+		]
+	},
+	"Natural Cleansing": {
+		"name": "Natural Cleansing",
+		"description": "$name has a very healthy body and is able to detoxify $his body better than others. \n\n[color=aqua]Toxicity recovers 20% faster.[/color]",
+		"effect": {
+			"code": "naturalcleansing",
+			"tox_mod": -1
+		},
+		"tags": [
+			"physical"
+		],
+		"conflict": [
+			"Responsive",
+			"Frail"
+		]
+	},
+	"Hearty": {
+		"name": "Hearty",
+		"description": "$name is an incredibly healthy individual. \n\n[color=aqua]+20 HP.[/color]",
+		"effect": {
+			"code": "hearty",
+			"health_bonus": 20
+		},
+		"tags": [
+			"physical"
+		],
+		"conflict": [
+			"Infirm",
+			"Frail",
+			"Weak",
+			"Wimpy"
+		]
+	},
+	"Wimpy": {
+		"name": "Wimpy",
+		"description": "$name is a less healthy individual. \n\n[color=aqua]-20 HP.[/color]",
+		"effect": {
+			"code": "wimpy",
+			"health_bonus": -20
+		},
+		"tags": [
+			"physical",
+			"detrimental"
+		],
+		"conflict": [
+			"Hearty",
+			"Robust",
+			"Sturdy"
+		]
+	},
+	"Vigorous": {
+		"name": "Vigorous",
+		"description": "$name is a rather energetic person. \n\n[color=aqua]+25 daily energy.[/color]",
+		"effect": {
+			"code": "vigorous",
+			"energy_mod": 25
+		},
+		"tags": [
+			"physical"
+		],
+		"conflict": [
+			"Torpid",
+			"Frail"
+		]
+	},
+	"Torpid": {
+		"name": "Torpid",
+		"description": "$name seems to have trouble with energy. \n\n[color=aqua]-25 daily energy.[/color]",
+		"effect": {
+			"code": "torpid",
+			"energy_mod": -25
+		},
+		"tags": [
+			"physical",
+			"detrimental"
+		],
+		"conflict": [
+			"Vigrous",
+			"Robust"
+		]
+	},
+	#Lactation Trait Line
 	"Lactating": {
 		"name": "Lactating",
 		"description": "$name's breasts are swollen and lactating.\n\n[color=aqua]Primary Trait for Lactation Trait Line.[/color]",

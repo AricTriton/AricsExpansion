@@ -131,6 +131,9 @@ var changecrystalreq = 4
 var crystallifeforcerestorechance = 80
 var crystal_shatter_chance = 80
 
+#Warn on Missing Researcher
+var show_warning_if_missing_researcher = true
+
 
 #------Pregnancy Expanded
 #Set to False to disable Swollen Settings (Pregnancy and Cum Inflation)

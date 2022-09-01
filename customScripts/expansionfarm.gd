@@ -330,6 +330,12 @@ func dailyFarm():
 		'storewimborn' : [],
 		'cow' : [],
 	}
+	
+	#Farm Not Built Check
+	if globals.state.farm < 3:
+		text += "[center]You've always wondered what it would be like to own a [color=aqua]Farm[/color]. Perhaps one day you will?[/center]"
+		return text
+	
 	#---Assign NPC Roles
 	for person in globals.slaves:
 		if person.away.duration == 0:
@@ -373,9 +379,10 @@ func dailyFarm():
 
 	#End if No Positions and No Farm Manager
 	
-	text += "[color=#d1b970][center]-----Morning-----[/center][/color]"
+	text += "\n[color=#d1b970][center]-----Morning-----[/center][/color]"
 	if canwork == false:
-		text += "\n[color=red]The Cattle went [color=aqua]unmilked[/color] today.\n[/color]"
+		if !workersDict.cow.empty():
+			text += "\n[color=red]The Cattle went [color=aqua]unmilked[/color] today.\n[/color]"
 	else:
 		#---Herd Cattle
 		var tempText = PoolStringArray()

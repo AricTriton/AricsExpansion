@@ -252,9 +252,9 @@ func _on_talk_pressed(mode = 'talk'):
 		#Once a Day Convos
 		buttons.append({text = str(globals.randomitemfromarray(["I'd like a quick word.",'Can we talk quickly?',"Let's have a quick chat","One quick thing..."])), function = 'oneperdayconvos', args = 'intro', tooltip = "These conversations that can be held once per day per slave"})
 
-		#Dimensional Crystal Topics
-		if person.work == 'headgirl' || person.sleep != 'jail':
-			buttons.append({text = person.dictionary("Walk with me to the Crystal"), function = 'thecrystal', args = 'intro', tooltip = "Take $him to the Crystal to Research or Use Abilities there."})
+		#Dimensional Crystal Topics - TBK Remove if Unneeded?
+#		if person.work == 'headgirl' || person.sleep != 'jail':
+#			buttons.append({text = person.dictionary("Walk with me to the Crystal"), function = 'thecrystal', args = 'intro', tooltip = "Take $him to the Crystal to Research or Use Abilities there."})
 
 		#Head Girl Topics
 		if person.work == 'headgirl':

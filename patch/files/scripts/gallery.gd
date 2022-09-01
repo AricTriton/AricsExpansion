@@ -620,6 +620,11 @@ var backgrounds = {
 	culthideout = load("res://files/backgrounds/culthideout.png"),
 	cavelake = load("res://files/backgrounds/cavelake.png"),
 	darkness = load("res://files/backgrounds/darkness.png"),
+	stairs = load("res://files/aric_expansion_images/dimensional_crystal/stairs.png"),
+	stairs_red = load("res://files/aric_expansion_images/dimensional_crystal/stairs_red.png"),
+	dimcrystal_dull = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_dull.png"),
+	dimcrystal_light1 = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_light_1.png"),
+	dimcrystal_dark1 = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_dark_1.png"),
 }
 
 var nakedsprites = {
