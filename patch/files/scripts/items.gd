@@ -35,6 +35,19 @@ var itemlist = {
 		weight = 2,
 		reqs = true,
 	},
+	#FarmItems
+	prods = {
+		code = 'prods',
+		name = 'Cattle Prods',
+		icon = load("res://files/aric_expansion_images/potions/rendrassa_sedative_potion_bottle.png"), # TBK - Add prods image
+		description = "Used to control cattle", # TBK - Replace placeholder text
+		effect = '',
+		recipe = '',
+		cost = 75,
+		type = 'dummy',
+		amount = 0,
+		reqs = true,
+	},
 	#ExplorationItems
 	rope = {
 		code = 'rope',
@@ -263,7 +276,7 @@ var itemlist = {
 		code = 'amnesiapot',
 		name = 'Amnesia Potion',
 		icon = load("res://files/images/items/amnesiapot.png"),
-		description = "Erases memories of the past (won't affect backstory or impactful experience). ",
+		description = "Erases memories of the past (won't affect backstory or impactful experience). Removes vices.",
 		effect = 'amnesiapoteffect',
 		recipe = 'recipeamnesiapot',
 		cost = 200,

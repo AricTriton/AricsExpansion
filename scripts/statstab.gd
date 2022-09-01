@@ -421,13 +421,23 @@ func _on_talk_pressed(mode = 'talk'):
 				text += "\nYou get the feeling that $name may feel strongly about [color=aqua]Control[/color]."
 			if person.dailytalk.has('hint_sadism') || person.dailytalk.has('hint_masochism'):
 				text += "\nYou get the feeling that $name may feel strongly about [color=aqua]Pain[/color]."
-		
+
 		if person.cum.pussy > 0 || !person.preg.womb.empty():
 			var cumtrail = str(globals.randomitemfromarray(['a small, white glob of ','a trail of ','something that looks like ','what might be ']))
 			var ooze = str(globals.randomitemfromarray(['ooze','spurt','drip','fall','squelch','trickle']))
 			text += "\n\nYou see " + cumtrail + " of " + str(globals.expansion.nameCum()) + " " + ooze + " onto $his leg from $his " + str(globals.expansion.namePussy()) + ". "
-			buttons.append({text = 'I want you to drain your pussy of that cum.', function = 'eventDrainCum', args = 'intropussy', tooltip = "Order $him to drain the cum from $his pussy -Available Once per Day"})
-		
+			if globals.expansionsettings.perfectinfo == true:
+				text += "\n[color=#d1b970]Loads = " + str(person.cum.pussy) + "[/color]"
+			buttons.append({text = 'I want you to drain your pussy of that cum.', function = 'eventDrainCum', args = 'intropussy', tooltip = person.dictionary("Order $him to drain the cum from $his pussy")})
+
+		if person.cum.ass > 0 :
+			var cumtrail = str(globals.randomitemfromarray(['a small, white glob of ','a trail of ','something that looks like ','what might be ']))
+			var ooze = str(globals.randomitemfromarray(['ooze','spurt','drip','fall','squelch','trickle']))
+			text += "\n\nYou see " + cumtrail + " of " + str(globals.expansion.nameCum()) + " " + ooze + " onto $his leg from $his " + str(globals.expansion.nameAsshole()) + ". "
+			if globals.expansionsettings.perfectinfo == true:
+				text += "\n[color=#d1b970]Loads = " + str(person.cum.ass) + "[/color]"
+			buttons.append({text = 'I want you to drain your ass of that cum.', function = 'eventDrainCum', args = 'introass', tooltip = person.dictionary("Order $him to drain the cum from $his ass")})
+
 		#Unlock Sexuality Knowledge
 		if !person.knowledge.has('sexuality'):
 			buttons.append({text = str(globals.randomitemfromarray(['How do you identify sexually?','What gender turns you on?','What is your sexuality?'])), function = 'oneperdayconvos', args = 'sexuality', tooltip = person.dictionary("Ask about $name's sexuality. -Available Once per Day")})
@@ -1381,8 +1391,6 @@ func eventDrainCum(mode = ''):
 	var landinglocations = ['onto the floor beneath $him.','onto $his squatting thigh before dripping onto the ground below.','all over the ground beneath $his quivering body.']
 	
 	if mode == 'intropussy':
-		person.dailytalk.append('eventDrainCum')
-		puddle = 0
 		text += "[color=aqua]$name[/color] "
 		if person.checkFetish('creampiepussy'):
 			text += "smiles brightly.\n[color=yellow]-"+ person.quirk('Absolutely, I would be happy to $master!') + "[/color]\n\n"
@@ -1397,29 +1405,64 @@ func eventDrainCum(mode = ''):
 			mode = 'pussycum'
 		else:
 			mode = 'pussycumempty'
-		
+
+	if mode == 'introass':
+		text += "[color=aqua]$name[/color] "
+		if person.checkFetish('creampieass'):
+			text += "smiles brightly.\n[color=yellow]-"+ person.quirk('Absolutely, I would be happy to $master!') + "[/color]\n\n"
+		else:
+			text += "turns bright red with embarrassment.\n[color=yellow]-"+ person.quirk('Do...do I have to, $master?') + "[/color]\n\n$He sees your determined face and sighs deeply."
+		#Strip
+		if person.exposed.genitals == false:
+			text += "$He gently removes $his lower garments and places them to the side. "
+		text += "$He squats down and holds $his " + str(globals.expansion.nameAss()) + " cheeks open. "
+		if person.cum.ass > 0:
+			mode = 'asscum'
+		else:
+			mode = 'asscumempty'
+
 	if mode == 'pussycum':
 		if person.cum.pussy > 0:
 			text += str(globals.randomitemfromarray(reactions)) + str(globals.randomitemfromarray(cumdrips)) + " " + str(globals.randomitemfromarray(landinglocations))
 			amount = clamp(round(rand_range(1,person.cum.pussy/2)),1,person.cum.pussy)
 			person.cum.pussy -= amount
 			puddle += amount
+			if globals.expansionsettings.perfectinfo == true:
+				text += "\n[color=#d1b970]Loads = " + str(person.cum.pussy) + " Puddle = " + str(puddle) + "[/color]"
 			buttons.append({text = str(globals.randomitemfromarray(['Keep going...','Continue','Dont stop draining','Did I say to stop?'])), function = 'eventDrainCum', args = 'pussycum', tooltip = person.dictionary("Order $him to continue")})
 		else:
 			mode = 'pussycumempty'
-	
+
+	if mode == 'asscum':
+		if person.cum.ass > 0:
+			text += str(globals.randomitemfromarray(reactions)) + str(globals.randomitemfromarray(cumdrips)) + " " + str(globals.randomitemfromarray(landinglocations))
+			amount = clamp(round(rand_range(1,person.cum.ass/2)),1,person.cum.ass)
+			person.cum.ass -= amount
+			puddle += amount
+			if globals.expansionsettings.perfectinfo == true:
+				text += "\n[color=#d1b970]Loads = " + str(person.cum.ass) + " Puddle = " + str(puddle) + "[/color]"
+			buttons.append({text = str(globals.randomitemfromarray(['Keep going...','Continue','Dont stop draining','Did I say to stop?'])), function = 'eventDrainCum', args = 'asscum', tooltip = person.dictionary("Order $him to continue")})
+		else:
+			mode = 'asscumempty'
+
 	if mode == 'pussycumempty':
 		text += "$name looks up at you, $his legs spread open revealing $his exposed " +str(globals.expansion.namePussy())+ ". $He pushes and squeezes $his pussy until $his face turns red but nothing else drips out of $him. $He looks up at you, seeking your next decision. "
 		if rand_range(0,1) >= .5:
 			text += "You order $him to check with $his fingers. $He thrusts $his fingers into $himself as deep as they will go and digs around. $His cheeks flush with the embarrassment, humiliation, and excitement as $his fingers probe $his most sensitive spots. $He pulls them out of $himself. You look them over carefully. While they are soaking wet, they don't appear to be wet with semen. "
 		else:
 			text += "You tell $him to lean back and expose $his " +str(globals.expansion.namePussy())+ " so you can easily reach it. You thrust your fingers into $him and dig around, not bothering to be gentle. $His breathing near your ear gets heavier as you drag your fingers through $his soaking pussy. After a moment, you pull your fingers out of $his gaping lips. $He breathes a long sigh of relief as $he turns $his head to hide $his shamefully bright cheeks as you check your fingers. Though wet, $he appears to be empty of semen in $his pussy. "
-		
 		if !person.preg.womb.empty():
 			buttons.append({text = str(globals.randomitemfromarray(['Wash out your womb','Clean it all out','Wash it all clean','You are not getting pregnant. Wash it out.'])), function = 'eventDrainCum', args = 'wombwash', tooltip = person.dictionary("Have $him wash all semen out of $his womb")})
 		elif puddle > 0:
 			buttons.append({text = str(globals.randomitemfromarray(['Wash out your womb','Clean it all out','Wash it all clean','You are not getting pregnant. Wash it out.'])), function = 'eventDrainCum', args = 'cleanpuddle', tooltip = person.dictionary("Have $him wash all semen out of $his womb")})
-	
+
+	if mode == 'asscumempty':
+		text += "$name looks up at you, $his legs spread open revealing $his exposed " +str(globals.expansion.nameAss())+ ". $He pushes and squeezes $his ass until $his face turns red but nothing else drips out of $him. $He looks up at you, seeking your next decision. "
+		if rand_range(0,1) >= .5:
+			text += "You order $him to check with $his fingers. $He thrusts $his fingers into $himself as deep as they will go and digs around. $His cheeks flush with the embarrassment, humiliation, and excitement as $his fingers probe $his most sensitive spots. $He pulls them out of $himself. You look them over carefully. While they are soaking wet, they don't appear to be wet with semen. "
+		else:
+			text += "You tell $him to lean back and expose $his " +str(globals.expansion.nameAss())+ " so you can easily reach it. You thrust your fingers into $him and dig around, not bothering to be gentle. $His breathing near your ear gets heavier as you drag your fingers through $his soaking ass. After a moment, you pull your fingers out of $his gaping hole. $He breathes a long sigh of relief as $he turns $his head to hide $his shamefully bright cheeks as you check your fingers. Though wet, $he appears to be empty of semen in $his ass. "
+
 	if mode == 'wombwash':
 		text += "You go and retrieve a womb-washing canister. You have $him lie on $his back in the puddle of semen. You use the provided speculum to spread and stretch open $his pussy until it is completely gaped. You take the nozzle and tube off of the canister and carefully press it against the tiny hole at the back of $his vagina that you recognize as $his cervix. "
 		text += "With the nozzle firmly pressed against $his cervix, you press the small button on the side of the canister. $He audibly squeals as the nozzle extends a tiny tube into $his incredibly tight, almost fully sealed cervix. $He puts $his hand on $his belly, as though that will stop the discomfort deep inside of $him, as the nozzle breaks through into $his womb. "

@@ -166,7 +166,9 @@ func upgradeselected(upgrade):
 
 func _on_cancelupgrade_pressed():
 	get_node("upgradepanel").visible = false
-	get_tree().get_current_scene()._on_mansion_pressed()
+	for upgradeButton in get_node("upgrades/VBoxContainer").get_children():
+		upgradeButton.set_pressed(false)
+		upgradeButton.release_focus()
 
 func purchasconfirm():
 	var upgrade = purchaseupgrade.get_meta("upgrade")
