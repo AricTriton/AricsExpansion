@@ -118,6 +118,8 @@ func getzonetraveltext(zone,progress):
 				array.append(tempteammate.name+" points toward the setting sun and asks how much longer you intend to stay out.")
 			elif globals.state.sexactions > 0:
 				array.append("It'll be dark soon and you've got people to fuck back at the mansion.  You wonder why you're still out here and pick up the pace.")	
+	if globals.expansionsettings.sillymode && rand_range(0,1) > 0.9: #RalphG
+		array.append_array(travelbugs(zone.code)) #RalphG
 	if zone.code == 'wimbornoutskirts':
 		if rand_range(0,1) > 0.5:
 			array.append(randomfromarray(["The road winds along flanked by "+travelcrops()+" fields being tended to by "+randomfromarray(["slaves","peasants","tenant farmers beholden to the guilds","commoners with just enough land to eke out a living"])+".","A "+randomfromarray(["gopher","rabbit","badger","large rodent","giant earthworm"])+" pokes its head up from the soil and seems to sniff the air before retreating into another hole to dig some more, after what you do not know.","Migrating "+randomfromarray(["birds","geese","ducks","gulls","wind squirrels","butterflies","hummingbirds"])+" fly overhead with as much organization as you've come to expect.","A "+randomfromarray(["bunch","mob","parcel","rangale","herd"])+" of deer hops over a farmers fence in twos and threes.","A lone gnarled oak tree casts shade over a crossroads and you take a moment to rest under its branches."]))
@@ -328,6 +330,20 @@ func travelmockery():
 func travelharassment():
 	return randomfromarray(["jostled","shoved","pushed","knocked about","spit upon","gestured at rudely"])
 	
+#RalphG
+func travelbugs(zone): #Ralph's Note: I left this so it can be added to with some more if statements like the one below.  Feel free to add on!
+	var array = []
+	var bugarray = []
+	var bugarray2 = []
+	if zone in ['grove','forest','elvenforest']:
+		bugarray = ["Everything in a small area is dyed varying shades of pink. Every bush, tree, flower and blade of grass. As you stare with disbelief, a [color=yellow]hooded man[/color] exits from the brush, muttering in irritation over the unnatural coloration. He mumbles and grumbles to himself, completely ignoring you. After a minute, he waves his hand and the vegetation returns to normal. The hooded man sighs, notices you and gestures dismissively for you to move on without a word. "]
+		bugarray2 = ["Suddenly, a panicked voice calls out from further in the trees. \n\n[color=yellow]Ank! ANK! Now I'm spawning infinite rusty daggers, help![/color] \n\nThe hooded figure sighs in exasperation, muttering about 'damn kids' before trudging through the underbrush towards the voice. "]
+		array = ["As you round a bend in the rough road you suddenly stop and marvel at an absurd sight. " + randomfromarray(bugarray) + randomfromarray(bugarray2)]
+	else:
+		array = ["You encounter a solemn man with a blank expression standing motionless. \n\nHe turns to you and says in a monotone voice, [color=yellow]'I am ERROR'[/color], then is promptly replaced by a bat that flies away leaving you perplexed and curiously nostalgic."]
+	return randomfromarray(array)
+#/RalphG
+
 func travelrandomperson():
 	var array = ["Centerflag","Pallington","Aric Triton","psychopath","farmer","herder","rancher","artist","traveler","slaver","politician","guardsman","peddler","mage","mercenary","bandit","old man","bard","tax collector","thug","pugilist","strap-on clad dominatrix","hunter","alchemist","breeder"]
 	if globals.expansionsettings.sillymode:
