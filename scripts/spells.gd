@@ -760,7 +760,7 @@ func leakeffect():
 		number = round(rand_range(3,5))
 		text += "\n\n$He steps back in confusion. $He suddenly grimaces and covers $his nipples as though a pain started there. As you watch, $his hand slowly rises as $his " + str(globals.expansion.getChest(person)) + " begins to swell. "
 		if person.checkFetish('lactation', 1) || person.checkFetish('bemilked', 1):
-			text += "$He moans in pleasure at the warm, full sensation filling $his breasts.\n-" + person.quirk("[color=yellow]Ooooh...that feels good.[/color]") + "\n\nHe seems unaware that $he is rubbing $his chest sensually as a droplet of [color=aqua]milk[/color] squeezes out of $his nipple and "
+			text += "$He moans in pleasure at the warm, full sensation filling $his breasts.\n-" + person.quirk("[color=yellow]Ooooh...that feels good.[/color]") + "\n\n$He seems unaware that $he is rubbing $his chest sensually as a droplet of [color=aqua]milk[/color] squeezes out of $his nipple and "
 			person.lust += number
 		else:
 			text += "$He whimpers and moans.\n-" + person.quirk("[color=yellow]Please, no! No! I don't want to lactate! I'm not a cow![/color]") + "\n\n$He gasps in futility as a droplet of [color=aqua]milk[/color] slips out of $his helpless body and "

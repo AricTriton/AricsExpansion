@@ -566,6 +566,7 @@ func dimcrystaldarkened(stage = 0):
 			buttons.append(['Return Upstairs','dimcrystaldarkened',2])
 		2:
 			globals.state.sidequests.dimcrystal = -10
+			globals.player.dailyevents.append('dimcrystaldarkened')
 			globals.main.animationfade(1.5)
 			closedialogue()
 			if OS.get_name() != "HTML5":

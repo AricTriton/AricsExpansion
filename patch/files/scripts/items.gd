@@ -1864,6 +1864,9 @@ func amnesiapoteffect():
 		person.mind.vice = "none"
 		person.mind.vice_removed = true
 		person.mind.vice_known = true
+	if !person.mind.approaches.pushed.empty():
+		text += person.dictionary("\n$He seems to have forgotten about any [color=aqua]Pushed[/color] [color=red]Approaches[/color] also. ")
+		person.mind.approaches.pushed.clear()
 	###---End Expansion---###
 	for i in person.relations:
 		person.relations[i] = 0

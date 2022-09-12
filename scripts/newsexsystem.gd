@@ -831,7 +831,7 @@ class member:
 							if scenedict.takers.size() <= 1:
 								text += "[color=green][name2] {^moans:gasps:spasms:twitches:bites [his2] lip} as [his2] [pussy2] [is2] {^stretched:gaped:spread apart:forced to stretch} by [names1] [penis1].[/color] "
 							var stretch = globals.vagsizearray.find(vaginasize) - globals.vagsizearray.find(person.vagina)
-							if person.sexexpanded.pliability - stretch + rand_range(0,2) < 0:
+							if globals.expansionsettings.disablevaginatearing == false && person.sexexpanded.pliability - stretch + rand_range(0,2) < 0:
 								if vagTorn == false:
 									vagTorn = true
 									person.dailyevents.append('vagTorn')
@@ -892,7 +892,7 @@ class member:
 							if scenedict.takers.size() <= 1:
 								text += "\n[color=green][name2] {^starts:begins} {^moaning:gasping:spasming} as [his2] [anus2] [is2] {^stretched:gaped:spread apart:forced to stretch} by [names1] [penis1].[/color] "
 							var stretch = globals.assholesizearray.find(assholesize) - globals.assholesizearray.find(assholesize)
-							if person.sexexpanded.pliability - stretch + rand_range(0,2) < 0:
+							if globals.expansionsettings.disableanaltearing == false && person.sexexpanded.pliability - stretch + rand_range(0,2) < 0:
 								if assTorn == false:
 									assTorn = true
 									person.dailyevents.append('assTorn')

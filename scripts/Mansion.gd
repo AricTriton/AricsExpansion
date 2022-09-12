@@ -1606,6 +1606,16 @@ func nextdayevents():
 		globals.state.plotsceneseen.append('hademelissa')
 		checkforevents = true
 		return
+	#Dim Crystal
+	if !$scene.is_visible_in_tree() && !$dialogue.is_visible_in_tree() && !globals.state.plotsceneseen.has('dimcrystalinitiate') && globals.resources.day >= 2 && globals.state.sidequests.dimcrystal == 0:
+		globals.events.dimcrystalinitiate()
+		globals.state.plotsceneseen.append('dimcrystalinitiate')
+		checkforevents = true
+		return
+	if !$scene.is_visible_in_tree() && !$dialogue.is_visible_in_tree() && globals.state.thecrystal.lifeforce < 0 && globals.state.thecrystal.mode == "light" && rand_range(0,100) <= globals.expansionsettings.crystal_shatter_chance:
+		globals.events.dimcrystaldarkened()
+		checkforevents = true
+		return
 	###---End Expansion---###
 	if globals.itemdict.zoebook.amount >= 1 && globals.state.sidequests.zoe == 3 && randf() >= 0.5:
 		globals.events.zoebookevent()

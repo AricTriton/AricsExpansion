@@ -177,6 +177,7 @@ var mind = {
 	respect = 0,
 	humiliation = 0,
 	lewd = 0,
+	approaches = {openness = 0, loyal = 0, obed = 0, fear = 0, lust = 0, pushed = []},
 }
 
 #Instinct is the base desired, based on Race. These are the current "Needs"

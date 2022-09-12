@@ -88,8 +88,8 @@ func onceperdayConvos():
 			text += "\n[color=aqua]Ask How Many Kids $He Wants[/color]"
 		elif person.knowledge.has('desiredoffspring') && !person.dailytalk.has('desiredoffspring'):
 			text += "\n[color=aqua]Encourage or Discourage the Number of Kids $He Wants[/color]"
-		#Crystal
-		if !person.dailytalk.has('crystalresearch') && globals.state.thecrystal.power <= person.smaf - 1:
+		#Crystal - TBK REMOVE
+#		if !person.dailytalk.has('crystalresearch') && globals.state.thecrystal.power <= person.smaf - 1:
 			text += "\n[color=aqua]Attempt to Research the Crystal[/color]\n     $His [color=aqua]Wit[/color] equates to $his chance of success to not accidentally make the [color=#E389B9]Crystal[/color] more [color=aqua]Powerful[/color] and harder to [color=aqua]Research[/color]."
 			if globals.state.thecrystal.mode == "dark":
 				text += "\n[color=red]Extreme Failure may result in $his being consumed by the [color=#E389B9]Crystal[/color] to sate its hunger.[/color]"
@@ -509,7 +509,7 @@ var newdescriptions = {
 		shoulder = '$His wavy [color=aqua][haircolor][/color] hair is [color=aqua]shoulder length[/color]. ',
 		waist = '$His gorgeous [color=aqua][haircolor][/color] hair [color=aqua]sways down to $his waist[/color]. [hairstyle]',
 		hips = '$His [color=aqua][haircolor][/color] hair cascades down, [color=aqua]reaching $his hips[/color]. [hairstyle]',
-		bald = '$He is bald. ', #/Capitulize
+		bald = '$He is bald. [hairstyle]', #/Capitulize
 	},
 	hairstyle = {
 		straight = 'It [color=aqua]hangs freely[/color] from their head. ',
@@ -518,6 +518,7 @@ var newdescriptions = {
 		braid = 'It is combed into a single [color=aqua]braid[/color]. ',
 		'two braids' : 'It is combed into [color=aqua]two braids[/color]. ',
 		bun = "It is tied into a neat [color=aqua]bun[/color]. ",
+		bald = '$His head is absent any visible hair. ', #/Capitulize (Aric Added)
 	},
 	eyecolor = {
 		default = '$His eyes are [color=aqua][eyecolor][/color]. ',

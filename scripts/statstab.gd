@@ -508,6 +508,9 @@ func _on_talk_pressed(mode = 'talk'):
 	get_parent().slavetabopen()
 
 ###---Added by Expansion---###
+#Dialogue Expanded - TBK
+
+
 #Master's Name
 func callorder(mode = ''):
 	if mode == 'static':
