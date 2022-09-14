@@ -2198,7 +2198,6 @@ func dailyUpdate(person):
 	if person.lactation == true && person.lactating.milkedtoday == false && person.lactating.milkstorage > 0:
 		getMilkLeak(person,50)
 #		dailyMilking(person,'none',false)
-	else:
 	
 	#Resets it for the next day
 	person.lactating.milkedtoday = false

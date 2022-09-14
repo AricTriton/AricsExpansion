@@ -69,3 +69,10 @@ Added Womb is Sterile text in the description - Ankmairdor
 Fixed any comparisons of person.penis != null to 'none' - Ankmairdor
 Colorized all $name calls
 Fixed "can barely feel" alert text in sex scenes to red
+
+-----------v1.8a-----------
+Fixed IMAGE_PREG for uniques being in the first enum instead of second - Reported by Ankmairdor
+Reverted name colorization in dictionary (will have to think of an alternative method, $name is called by non-BBcode text nodes - Reported by Valcyor and Ankmairdor
+Reverted nightly_womb ovulation order of operations fix - Reported by Ankmairdor
+Moved DaysUnmilked from dailyMilked (apparently it is never called anymore) to dailyLactation - Reported by Ankmairdor
+
