@@ -1613,8 +1613,14 @@ func fertilize_egg(mother, father_id, father_unique):
 		#If Father disappeared from the World
 		if father == null:
 			father = globals.newslave('randomany', 'adult', 'male')
+			#Added per Ank's Notes
+			father.race = globals.getracebygroup("starting")
+			globals.constructor.set_genealogy(father)
 	else:
 		father = globals.newslave('randomany', 'adult', 'male')
+		#Added per Ank's Notes
+		father.race = globals.getracebygroup("starting")
+		globals.constructor.set_genealogy(father)
 		father.id = '-1'
 		
 		if father_unique != null:
@@ -1672,7 +1678,6 @@ func nightly_womb(person):
 
 	person.preg.fertility = clamp(person.preg.fertility + 10 * (person.health / person.stats.health_max - 0.6) + 10 * (0.6 - person.stress / person.stats.stress_max), -20, 50)
 
-	ovulation_day(person)
 	if person.preg.has_womb == false || person.preg.is_preg == true || person.preg.ovulation_type <= 0 || person.preg.ovulation_stage != 1 || person.effects.has('contraceptive'):
 		return text
 
@@ -1686,13 +1691,15 @@ func nightly_womb(person):
 	fertility *= bonus
 	var multiBabyLimitChance = 100 - globals.expansionsettings.multipleBabyChance
 	for i in person.preg.womb:
-		if bonus * i.semen * i.virility > rand_range(0,100):
+		if bonus * round(i.semen) * i.virility > rand_range(0,100):
 			i.day -= 1
 			if fertility > rand_range(0,100):
 				#if person.preg.baby_type == 'birth':
 				fertilize_egg(person,i.id,i.unique)
 				if rand_range(0,100) <= multiBabyLimitChance || person.preg.unborn_baby.size() > 3:
 					break
+	
+	ovulation_day(person)
 	#globals.traceFile('nightly_womb')
 	return text
 
@@ -2996,6 +3003,8 @@ func dailyMilking(person, extraction='', autopump = false):
 	var auto = autopump
 	if extraction == 'none':
 		lact.daysunmilked += 1
+		if lact.daysunmilked >= 1:
+			text += "$name feels growing pressure in $his breasts as $he goes [color=red]unmilked[/color] for [color=aqua]"+ str(lact.daysunmilked) +" Days[/color]. "
 		#Turn .1 of Storage into Pressure
 		transfer = round(lact.milkstorage * milkregenperday)
 		lact.pressure += transfer
@@ -3009,7 +3018,7 @@ func dailyMilking(person, extraction='', autopump = false):
 		if rand_range(0,100) <= ((person.lactating.milkstorage*.25)+person.lactating.pressure) * globals.expansionsettings.beingmilkedacceptancemultiplier:
 			if person.fetish.bemilked != globals.fetishopinion.back():
 				person.fetish.bemilked = globals.fetishopinion[globals.fetishopinion.find(person.fetish.bemilked)+1]
-				text += "$name seems to be more comfortable with lactating now. $He now feels that it is " + str(person.fetish.bemilked) + " to be lactating."
+				text += "$name seems to be more comfortable with lactating now. $He now feels that it is " + str(person.fetish.bemilked) + " to be lactating. "
 		
 		#Stress/Lust based on the Being Milked Fetish
 		
@@ -3158,7 +3167,7 @@ func altereddiet_consumebottle(person):
 		text = "$name drank a bottle of piss for $his dinner."
 	return text
 
-enum {IMAGE_DEFAULT, IMAGE_NAKED}
+enum {IMAGE_DEFAULT, IMAGE_NAKED, IMAGE_PREG}
 enum {LOW_STRESS, MID_STRESS, HIGH_STRESS}
 var typeEnumToString = ['default','naked']
 
@@ -3176,11 +3185,13 @@ var dictUniqueImagePaths = {
 			LOW_STRESS: 'res://files/images/ayneris/aynerisneutral.png',
 			MID_STRESS: 'res://files/images/ayneris/aynerisangry.png',
 			HIGH_STRESS: 'res://files/images/ayneris/aynerispissed.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/preg_uniques/aynerisneutralnaked_preggo.png',
 		},
 		IMAGE_NAKED: {
 			LOW_STRESS: 'res://files/images/ayneris/aynerisneutralnaked.png',
 			MID_STRESS: 'res://files/images/ayneris/aynerisangrynaked.png',
 			HIGH_STRESS: 'res://files/images/ayneris/aynerispissednaked.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/preg_uniques/aynerisneutralnaked_preggo.png',
 		},
 	},
 	'Cali': {
@@ -3200,11 +3211,13 @@ var dictUniqueImagePaths = {
 			LOW_STRESS: 'res://files/images/chloe/chloehappy.png',
 			MID_STRESS: 'res://files/images/chloe/chloeneutral.png',
 			HIGH_STRESS: 'res://files/images/chloe/chloeshy2.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/preg_uniques/chloenaked_preggo.png',
 		},
 		IMAGE_NAKED: {
 			LOW_STRESS: 'res://files/images/chloe/chloenakedhappy.png',
 			MID_STRESS: 'res://files/images/chloe/chloenakedneutral.png',
 			HIGH_STRESS: 'res://files/images/chloe/chloenakedshy.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/preg_uniques/chloenaked_preggo.png',
 		},
 	},
 	'Emily': {
@@ -3212,18 +3225,22 @@ var dictUniqueImagePaths = {
 			LOW_STRESS: 'res://files/images/emily/emily2happy.png',
 			MID_STRESS: 'res://files/images/emily/emily2neutral.png',
 			HIGH_STRESS: 'res://files/images/emily/emily2worried.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/preg_uniques/emilyf_preg.png',
 		},
 		IMAGE_NAKED: {
 			LOW_STRESS: 'res://files/images/emily/emilynakedhappy.png',
 			HIGH_STRESS: 'res://files/images/emily/emilynakedneutral.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/preg_uniques/emilyf_preg.png',
 		},
 	},
 	'Ivrana': {
 		IMAGE_DEFAULT: {
 			HIGH_STRESS: 'res://files/aric_expansion_images/characters/ivranaclothed.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/ivranapregnant.png',
 		},
 		IMAGE_NAKED: {
 			HIGH_STRESS: 'res://files/aric_expansion_images/characters/ivrananaked.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/ivranapregnant.png',
 		},
 	},
 	'Maple': {
@@ -3247,10 +3264,14 @@ var dictUniqueImagePaths = {
 	},
 	'Tia': {
 		IMAGE_DEFAULT: {
-			HIGH_STRESS: 'res://files/aric_expansion_images/characters/tiaclothed.png',
+			MID_STRESS: 'res://files/aric_expansion_images/characters/New Tia/tianeutral.png',
+			HIGH_STRESS: 'res://files/aric_expansion_images/characters/New Tia/tiasad.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/New Tia/tiapregnant.png',
 		},
 		IMAGE_NAKED: {
-			HIGH_STRESS: 'res://files/aric_expansion_images/characters/tianaked.png',
+			MID_STRESS: 'res://files/aric_expansion_images/characters/New Tia/tianudeneutral.png',
+			HIGH_STRESS: 'res://files/aric_expansion_images/characters/New Tia/tianudesad.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/New Tia/tiapregnant.png',
 		},
 	},
 	'Tisha': {
@@ -3258,10 +3279,12 @@ var dictUniqueImagePaths = {
 			LOW_STRESS: 'res://files/images/tisha/tishahappy.png',
 			MID_STRESS: 'res://files/images/tisha/tishaneutral.png',
 			HIGH_STRESS: 'res://files/images/tisha/tishaangry.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/preg_uniques/tisha_preggo.png',
 		},
 		IMAGE_NAKED: {
 			LOW_STRESS: 'res://files/images/tisha/tishanakedhappy.png',
 			HIGH_STRESS: 'res://files/images/tisha/tishanakedneutral.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/preg_uniques/tisha_preggo.png',
 		},
 	},
 	'Yris': {
@@ -3308,13 +3331,16 @@ func updateBodyImage(person):
 			stress = MID_STRESS
 		else:
 			stress = HIGH_STRESS
+		if person.preg.duration > 0 && person.knowledge.append('currentpregnancy') || person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height)/2:
+			if dictUniqueImagePaths[person.unique][imagetype].has(IMAGE_PREG):
+				stress = IMAGE_PREG
 		person.imagetype = typeEnumToString[imagetype]
 		var ref = dictUniqueImagePaths[person.unique][imagetype]
 		person.imagefull = ref[stress] if ref.has(stress) else ref[HIGH_STRESS] 
 	###---End Expansion---###
 	elif person.imagefull != null:
 		var attempt = []
-		if person.preg.duration > 0 || person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height)/2:
+		if person.preg.duration > 0  && person.knowledge.append('currentpregnancy') || person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height)/2:
 			attempt.append('preg')
 		if int(person.exposed.chest) + int(person.exposed.genitals) + int(person.exposed.ass) >= 2:
 			attempt.append('naked')

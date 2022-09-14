@@ -2,11 +2,11 @@
 
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
-var modversion = "1.7b"
+var modversion = "1.8"
 
 #---Aric's and Game's Base Values potentially changed by Ralph's
-var use_ralphs_tweaks = true					# Set this to true if you want to use the settings within applyRalphsTweaks as well as the Hybrid system.
-var unique_trait_generation = true				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
+var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within applyRalphsTweaks as well as the Hybrid system.
+var unique_trait_generation = false				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
 var consolidatebeastDNA = false					# Set this to true if you don't like npcs with a mix of Beastkin/Halfkin race%'s (no half cat half foxes, etc.) #ralphB
 var gratitude_for_all = false					# Set this to true so that babies aged up to Child or Teen have as much chance to spawn with the Grateful trait as ones aged up to Adult (Ralph sets this to False, but up to you) #ralphC
 var sillymode = true							# Set it to false if you don't abide, so far it only affects random travel event text #ralphD
@@ -15,11 +15,11 @@ var sillymode = true							# Set it to false if you don't abide, so far it only 
 var use_caps_tweaks = false						# Set this to true if you want to use Capitulize's tweaks (namely furry shit)
 
 #---Debug Tools (True/False)
-var perfectinfo = true
+var perfectinfo = false
 var enablecheatbutton = false
 
 #-- Use abilities on auto attack, left to right. Hint: reorder/activate abilities in the character info menu when out.
-var autoattackability = true
+var autoattackability = false
 
 #-- New Game Options
 #Control MC and Starting Slave Purebred vs Hybrid
@@ -40,7 +40,7 @@ var unwantedfetishes = []		#Copy/Paste any you don't want into the 'unwantedfeti
 
 #------Player Specific Info
 #Base Bonus or Penalty for Attraction Checks for MCs. Makes others like your MC more.
-var playerattractionmodifier = 40
+var playerattractionmodifier = 20
 
 #Set to True for the Player to follow Slave's Clothing Dress/Redress System
 var player_treats_clothing_like_slave = false
@@ -137,6 +137,7 @@ var crystal_shatter_chance = 80
 
 #Warn on Missing Researcher
 var show_warning_if_missing_researcher = true
+
 
 #------Pregnancy Expanded
 #Set to False to disable Swollen Settings (Pregnancy and Cum Inflation)
@@ -255,7 +256,7 @@ var semenlifespan = 5
 
 #--- Ralph's Tweaks
 #Mage Specialization Manacost Reduction
-var mage_mana_reduction = false
+var mage_mana_reduction = true
 												# Ralph's - [false, "Combat spell deal 20% more damage"]
 
 #Spellcost Changes
@@ -299,10 +300,10 @@ var calculate_price_bonus_divide = 1			# Ralph's - 2, The divider value that mod
 var quicksell_slave_pressed = 0.5				# Ralph's - 0.9, The multiplier value that affects the sellprice of a slave when quicksell is pressed. (Ralph tweaked so you only get docked 10% when you quicksell vs 50% deduction in vanilla) #ralphC
 
 #Capture Changes
-var times_rescued_multiplier = 10				# Ralph's - 10, The multiplicative value that is used with how many times an npc has been rescued when determining whether they will join you willingly after saving them from bandits.
+var times_rescued_multiplier = 0				# Ralph's - 10, The multiplicative value that is used with how many times an npc has been rescued when determining whether they will join you willingly after saving them from bandits.
 
 #Random Awareness
-var random_enemy_awareness = [-3,3]				# Ralph's - [-7,7], This value applies a random awareness negative or positive to determine whether you are ambushed or not. [0,0] means no change.
+var random_enemy_awareness = [0,0]				# Ralph's - [-7,7], This value applies a random awareness negative or positive to determine whether you are ambushed or not. [0,0] means no change.
 
 #Constructor Changes
 var same_type_weight = 2						# Ralph's - 4, The divider value that divides the genealogy of the person's temporary race to determine the sametypeweight used in the constructor.
@@ -310,17 +311,17 @@ var same_type_weight = 2						# Ralph's - 4, The divider value that divides the 
 
 #Ralph's tweaks partial settings, true is default for all settings
 var ralphs_tweaks_partial = {
-	disable_mage_mana_reduction = false,
-	increase_spell_cost = false,
-	tweak_spell_costs = false,
-	increase_black_market_reputation_loss = false,
-	reduce_breeder_profit = false,
-	reduce_slave_price_bonus = false,
-	randomize_travel_awareness = false,
-	increase_food_cost = false,
-	clear_player_racial_bonus = false,
-	tweak_invigorate = false,
-	restrict_convert_to_upgrade_point = false,
+	disable_mage_mana_reduction = true,
+	increase_spell_cost = true,
+	tweak_spell_costs = true,
+	increase_black_market_reputation_loss = true,
+	reduce_breeder_profit = true,
+	reduce_slave_price_bonus = true,
+	randomize_travel_awareness = true,
+	increase_food_cost = true,
+	clear_player_racial_bonus = true,
+	tweak_invigorate = true,
+	restrict_convert_to_upgrade_point = true,
 }
 
 """
@@ -338,7 +339,7 @@ func applyRalphsTweaks():
 	if ralphs_tweaks_partial.increase_spell_cost:
 		spellcost = 2
 
-#	applySpellManacostTweaks()
+	applySpellManacostTweaks()
 
 	#Spell Tweak Effects
 	reduce_rebellion_with_fear = 3
@@ -351,14 +352,14 @@ func applyRalphsTweaks():
 	#Food Tweak Effects
 	food_experience = 1
 	
-#	applyItemMarketCostTweaks()
+	applyItemMarketCostTweaks()
 	
-#	func_forage_tweaks = [3,2,5,1.5,2]
+	func_forage_tweaks = [3,2,5,1.5,2]
 
-#	func_hunt_tweaks = [1,3,8,1.4,1.5,3,5,3]
+	func_hunt_tweaks = [1,3,8,1.4,1.5,3,5,3]
 
 	#Start Slave Hobby Changes
-#	magic_hobby_maf_max = 1
+	magic_hobby_maf_max = 1
 	
 	#Sell Slave Prices
 	if ralphs_tweaks_partial.reduce_breeder_profit:
@@ -382,18 +383,18 @@ func applyRalphsTweaks():
 	secondaryuncommonracialchance = 0
 	
 	#Constructor Changes
-#	same_type_weight = 4
+	same_type_weight = 4
 	
-#	applyConstructorTweaks()
+	applyConstructorTweaks()
 	
-#	applyCombatDataTweaks()
+	applyCombatDataTweaks()
 	
 	applyRaceTweaks()
 
 # Apply variables.gd changes here
 func applyVariableTweaks():
 	#Levelling Changes
-	variables.skillpointsperlevel = 2.0				# Original - 2.0
+	variables.skillpointsperlevel = 1.0				# Original - 2.0
 
 	#Baby Stuff
 	variables.growuptimechild = 1.0					# Original - 2.0, How long it takes a baby to become said thing.
@@ -650,6 +651,7 @@ func addConstantsSupport():
 		consolidatebeastDNA = {descript = "Set this to true if you don't like npcs with a mix of Beastkin/Halfkin race%'s (no half cat half foxes, etc.)", object = self},
 		gratitude_for_all = {descript = "Set this to true so that babies aged up to Child or Teen have as much chance to spawn with the Grateful trait as ones aged up to Adult (Ralph sets this to False, but up to you)", object = self},
 		sillymode = {descript = "Set it to false if you don't abide, so far it only affects random travel event text", object = self},
+
 		basemanafoodconsumption = {descript = "The amount of mana per day required by mana eating races/hybrids. This is multiplied for some based on age, etc. Default: 10", min = 0.0, max = 100.0},
 		orgasmmana = {descript = "The amount of mana produced by a single orgasm. Default: 3", min = 1.0, max = 100.0},
 	}

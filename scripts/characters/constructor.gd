@@ -56,8 +56,6 @@ func newslave(race, age, sex, origins = 'slave', unique = null):
 		person.legs = 'normal'
 		if rand_range(0,1) > 0.4:
 			person.eyeshape = 'normal'
-	if globals.rules.randomcustomportraits == true:
-		randomportrait(person)
 	get_caste(person, origins)
 	for i in person.sexuals.unlocks:
 		var category = globals.sexscenes.categories[i]
@@ -91,13 +89,16 @@ func newslave(race, age, sex, origins = 'slave', unique = null):
 	###---End Expansion---###
 	
 	###---Added by Array---### Person Expanded
-	person.health = 1000
 	globals.expansionsetup.expandPerson(person)
 	###---End Expansion---###
 	
 	###---Added by Expansion---### Pregnancy Expanded
 	person.preg.fertility = rand_range(0,30)
 	set_ovulation(person)
+	#Delayed per Ank's Notes
+	if globals.rules.randomcustomportraits == true:
+		randomportrait(person)
+	person.health = 1000
 	###---End Expansion---###
 	globals.traceFile('newslave')
 	

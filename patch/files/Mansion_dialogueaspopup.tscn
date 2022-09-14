@@ -1350,6 +1350,7 @@ theme = ExtResource( 3 )
 text = "#|#"
 
 [node name="MainScreen" type="Panel" parent="."]
+editor/display_folded = true
 self_modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -1362,6 +1363,7 @@ size_flags_vertical = 2
 theme = ExtResource( 3 )
 
 [node name="mansion" type="Panel" parent="MainScreen"]
+editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = 1.0
@@ -6959,7 +6961,7 @@ size_flags_vertical = 2
 text = "Close"
 
 [node name="slave_tab" type="Control" parent="MainScreen"]
-visible = false
+editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -17.0
@@ -8092,6 +8094,7 @@ She shows some respect to you, but it's clear that she forces herself to do it.
 She is pretty considerate and tries to appeal to you, showing that your opinion is important to her."
 
 [node name="basics" type="Panel" parent="MainScreen/slave_tab/stats"]
+editor/display_folded = true
 margin_left = 190.0
 margin_top = 169.0
 margin_right = 944.0
@@ -8369,8 +8372,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Aphrodisiac in food"
 
 [node name="silence" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"slaverules",
 "advrules",
+"slaverules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -8388,8 +8391,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Enforced Silence"
 
 [node name="pet" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"slaverules",
 "advrules",
+"slaverules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -8407,8 +8410,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Pet Behavior"
 
 [node name="masturbation" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"slaverules",
 "advrules",
+"slaverules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -8427,8 +8430,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "No Masturbation"
 
 [node name="nudity" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"slaverules",
 "advrules",
+"slaverules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -10548,11 +10551,10 @@ size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Confirm"
 
-[node name="dialogue" type="Control" parent="." groups=[
+[node name="dialogue" type="Popup" parent="." groups=[
 "blockmaininput",
 "blocknextdayevents",
 ]]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 1.0
@@ -10562,6 +10564,7 @@ margin_bottom = 7.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
+popup_exclusive = true
 script = ExtResource( 115 )
 
 [node name="TextureRect" type="TextureRect" parent="dialogue"]

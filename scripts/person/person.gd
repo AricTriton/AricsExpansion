@@ -788,7 +788,9 @@ func selfdictionary(text):
 
 func dictionary(text):
 	var string = text
-	string = string.replace('$name', name_short())
+	###---Added by Expansion---### Colorize Names
+	string = string.replace('$name', "[color=aqua]"+name_short()+"[/color]")
+	###---End Expansion---###
 	string = string.replace('$surname', surname)
 	string = string.replace('$sex', sex)
 	if sex == 'male':

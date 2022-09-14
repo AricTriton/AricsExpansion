@@ -133,6 +133,7 @@ func features():
 		#Body
 		text += "\n[color=#d1b970]Body:[/color]\n" + getdescription('skin') + getdescription("skincov") + getdescription("wings") + getdescription("tail") + getdescription("height") + getdescription("asssize")
 		text += "[color=green]" + globals.expansion.getSwollenDescription(person,true) + "\n" + globals.expansion.getCumCoatedDescription(person,'body') + "[/color]"
+		text += "\n\n[color=green]" + globals.expansion.getSwollenDescription(person,false) + "[/color]"
 	###---Expansion End---###
 	else:
 		text += "Omitted. "
@@ -243,6 +244,11 @@ func lowergenitals():
 			text += "You know that you produce [color=aqua]" + str(globals.player.pregexp.cumprod) + "oz[/color] of [color=aqua]" +globals.expansion.nameCum()+ "[/color] per ejaculation. "
 	if person.vagina == 'none' && person.penis == 'none' && person.balls == 'none':
 		text += " For some reason, $his crotch has no visible genitals. "
+	if person.preg.has_womb == false && person.sex != 'male':
+		if person == globals.player:
+			text += "\n\n[color=yellow]Your womb is sterile.[/color]"
+		else:
+			text += "\n\n[color=yellow]$name's womb is sterile.[/color]"
 	if person.asshole != 'none':
 		text += "\n[color=#d1b970]Asshole:[/color]\n"
 		if person.exposed.ass == true && person != globals.player:
@@ -260,7 +266,6 @@ func lowergenitals():
 			text += ' All your life, you have had an ' + globals.expansion.nameAsshole() + ' following you around. It is ' + getdescription('asshole')
 		if person.cum.ass > asscapacity:
 			text += "\nYou " + globals.randomitemfromarray(['spot','notice','glance at','see']) + " a mass of " + globals.randomitemfromarray(['wet','gloopy','moist','damp','dark']) + " spots seeping from $his " + globals.expansion.nameAsshole() + " and sticking to $his " + globals.randomitemfromarray(['ass','thighs','clothing',globals.expansion.nameAsshole()]) + ". " + globals.randomitemfromarray(['Is it still coming out?','How much is oozing out of $him?','Can $he still feel it pouring out?','Is that why $he is flushed?','Interesting...'])
-	text += globals.expansion.getSwollenDescription(person,false)
 	###---Expansion End---###
 	return text
 
@@ -509,7 +514,7 @@ var newdescriptions = {
 		shoulder = '$His wavy [color=aqua][haircolor][/color] hair is [color=aqua]shoulder length[/color]. ',
 		waist = '$His gorgeous [color=aqua][haircolor][/color] hair [color=aqua]sways down to $his waist[/color]. [hairstyle]',
 		hips = '$His [color=aqua][haircolor][/color] hair cascades down, [color=aqua]reaching $his hips[/color]. [hairstyle]',
-		bald = '$He is bald. [hairstyle]', #/Capitulize
+		bald = '', #/Capitulize
 	},
 	hairstyle = {
 		straight = 'It [color=aqua]hangs freely[/color] from their head. ',

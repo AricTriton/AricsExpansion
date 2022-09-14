@@ -4187,7 +4187,7 @@ func _on_storebutton_pressed():
 	for i in refDict:
 		temp = refDict[i]
 		nodeTemp = nodeFarmStore.get_node("items/" + i)
-		nodeTemp.get_node("current").set_bbcode("[right][color=aqua]" + str(globals.itemdict[i].amount) + "[/color][/right]")
+		nodeTemp.get_node("current").set_bbcode("[right][color=aqua]" + str(globals.itemdict[i].amount if globals.itemdict.has(i) else globals.resources.farmexpanded.farminventory[i]) + "[/color][/right]")
 		nodeTemp.get_node("price").set_bbcode("[right][color=yellow]" + str(temp.cost) + "[/color][/right]")
 		if globals.resources.gold >= temp.cost:
 			nodeTemp.get_node("add").set_disabled(false)
@@ -4740,7 +4740,8 @@ func dialogue(showcloseButton, destination, dialogtext, dialogbuttons = null, sp
 	get_node("dialogue/blockinput").hide()
 	get_node("dialogue/background").set_texture(null if background == null else globals.backgrounds[background])
 	if !get_node("dialogue").visible:
-		get_node("dialogue").popup()
+		get_node("dialogue").show()
+#		get_node("dialogue").popup()
 		nodeunfade($dialogue, 0.4)
 		#get_node("dialogue/AnimationPlayer").play("fading")
 	text.set_bbcode('')

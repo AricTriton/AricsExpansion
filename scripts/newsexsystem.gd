@@ -790,7 +790,7 @@ class member:
 			#Penis in Pussy Effects
 			elif scenedict.scene.code in ['missionary','doggy','lotus','revlotus','spitroast','insertinturns']:
 				if scenedict.givers.has(self) && scenedict.takers.has(i):
-					var temppenissize = globals.penissizearray.find(person.penis) if person.penis != null else 4 # handle strapon with default size
+					var temppenissize = globals.penissizearray.find(person.penis) if person.penis != 'none' else 4 # handle strapon with default size
 					difference = temppenissize - globals.vagsizearray.find(i.vaginasize)
 					number = 1+(difference*.1)
 					values.sens *= number
@@ -798,7 +798,7 @@ class member:
 					if difference > 0 && scenedict.givers.size() <= 1:
 						text += "\n[color=green][name1] {^[is1] enjoying:[is1] loving:[is1] relishing:loves} the feeling of [his1] [penis1] stretching [his2] [pussy2].[/color]"
 					elif difference < 0 && scenedict.givers.size() <= 1:
-						text += "\n[color=green][name1] {^can barely feel:can't feel:can't fill} [names2] [pussy2] with [his1] [penis1].[/color]"
+						text += "\n[color=red][name1] {^can barely feel:can't feel:can't fill} [names2] [pussy2] with [his1] [penis1].[/color]"
 					#Display
 					if globals.state.perfectinfo == true:
 						display = difference*10
@@ -807,7 +807,7 @@ class member:
 						elif display < 0 && scenedict.givers.size() <= 1:
 							text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
 				elif scenedict.takers.has(self) && scenedict.givers.has(i):
-					var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != null else 4 # handle strapon with default size
+					var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != 'none' else 4 # handle strapon with default size
 					difference = temppenissize - globals.vagsizearray.find(vaginasize)
 					number = 1+(difference*.1)
 					values.sens *= number
@@ -854,7 +854,7 @@ class member:
 			#Penis in Asshole Effects
 			elif scenedict.scene.code in ['missionaryanal', 'doggyanal','lotusanal','revlotusanal','spitroastass','insertinturnsass']:
 				if scenedict.givers.has(self) && scenedict.takers.has(i):
-					var temppenissize = globals.penissizearray.find(person.penis) if person.penis != null else 4 # handle strapon with default size
+					var temppenissize = globals.penissizearray.find(person.penis) if person.penis != 'none' else 4 # handle strapon with default size
 					difference = temppenissize - globals.assholesizearray.find(i.assholesize)
 					number = 1+(difference*.1)
 					values.sens *= number
@@ -862,7 +862,7 @@ class member:
 					if difference > 0 && scenedict.givers.size() <= 1:
 						text += "\n[color=green][name1] {^[is1] enjoying:[is1] loving:[is1] relishing:loves} the feeling of [his1] [penis1] stretching [his2] [anus2].[/color] "
 					elif difference < 0 && scenedict.givers.size() <= 1:
-						text += "\n[color=green][name1] {^can barely feel:can't feel:can't fill} [names2] [anus2] with [his1] [penis1].[/color] "
+						text += "\n[color=red][name1] {^can barely feel:can't feel:can't fill} [names2] [anus2] with [his1] [penis1].[/color] "
 					#Display
 					if globals.state.perfectinfo == true:
 						display = difference*10
@@ -871,7 +871,7 @@ class member:
 						elif display < 0 && scenedict.givers.size() <= 1:
 							text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
 				elif scenedict.takers.has(self) && scenedict.givers.has(i):
-					var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != null else 4 # handle strapon with default size
+					var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != 'none' else 4 # handle strapon with default size
 					difference = temppenissize - globals.assholesizearray.find(assholesize)
 					number = 1+(difference*.1)
 					values.sens *= number
@@ -2164,7 +2164,7 @@ func endencounter():
 			difference = globals.assholesizearray.find(i.assholesize) - globals.assholesizearray.find(i.person.asshole)
 			sizeup = 0
 			while difference > 0:
-				if rand_range(0,100) <= globals.expansionsettings.stretchchanceanus + (i.person.sexexpanded.elasticity*10):
+				if rand_range(0,100) <= globals.expansionsettings.stretchchanceanus - (i.person.sexexpanded.elasticity*10):
 					clamper = globals.assholesizearray.find(i.person.asshole)+1
 					clamper = clamp(clamper,0,globals.assholesizearray.size()-1)
 					i.person.asshole = globals.assholesizearray[clamper]
@@ -2232,7 +2232,7 @@ func endencounter():
 					shift *= -1
 					text += i.person.quirk("\n[color=yellow]-I can't believe that you actually raped me! I feel so violated! You " + str(globals.player.sex) + "s are disgusting.[/color]")
 			if shift > 0:
-				if globals.kinseyscale.find(i.person.sexuality) + shift > globals.kinseyscale.size():
+				if globals.kinseyscale.find(i.person.sexuality) + shift > globals.kinseyscale.size()+1:
 					i.person.sexuality = 'gay'
 					shift = 0
 				else:
@@ -2265,7 +2265,7 @@ func endencounter():
 					text += i.person.quirk("\n[color=yellow]-I "+globals.randomitemfromarray(['feel','think that I am','can tell that I am','am so much','definitely am','feel much'])+" more attracted to " +sexname+"s now after this experience. I feel " +globals.expansion.getSexuality(i.person)+" now.[/color]")
 		elif i.person == globals.player && globals.expansionsettings.player_sexuality_shift == true && shift != 0:
 			if shift > 0:
-				if globals.kinseyscale.find(i.person.sexuality) + shift > globals.kinseyscale.size():
+				if globals.kinseyscale.find(i.person.sexuality) + shift > globals.kinseyscale.size()+1:
 					i.person.sexuality = 'gay'
 					shift = 0
 				else:
