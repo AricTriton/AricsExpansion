@@ -1569,7 +1569,7 @@ func slimeConversionCheck(mother, father):
 				elif genes == 'slime':
 					baby.genealogy[genes] = 100
 			expansionsetup.setRaceBonus(baby, true)
-			if father.id != ['-1'] && father.id != null:
+			if father.id != '-1' && father.id != null:
 				globals.connectrelatives(father, baby, 'slimesire')
 			
 			rapidpregnancydamage = (globals.state.pregduration-1) - person.preg.duration
