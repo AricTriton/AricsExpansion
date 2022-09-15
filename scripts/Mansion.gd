@@ -2097,7 +2097,7 @@ func _on_dimcrystal_assistresearcher_pressed():
 	if researcher == null:
 		print("Invalid, No Researcher Available")
 		text = "There is no [color=#008BFB]Researcher[/color] currently assigned for you to assist in [color=#008BFB]Researching[/color] the [color=#E389B9]Dimensional Crystal[/color].\n\nYou can assign a suitable candidate via the standard [color=aqua]Jobs[/color] menu on any [color=aqua]slave's[/color] sheet."
-	elif globals.state.nonsexactions > 0 && researcher.dailyevents.count('assistedresearch') < 0:
+	elif globals.state.nonsexactions > 0 && researcher.dailyevents.count('assistedresearch') < 1:
 		text = researcher.dictionary("You walk to the [color=#E389B9]Dimensional Crystal[/color] where [color=aqua]$name[/color] is diligently focused on studying one of the energy tendrils of the humming, floating [color=#E389B9]Crystal[/color]. $He looks up and smiles at you." + researcher.quirk("\n[color=yellow]-Have you come to assist me, $master? I think we can make a lot of progress together![/color]"))
 		researcher.dailyevents.append('assistedresearch')
 		if globals.player.smaf + researcher.smaf >= globals.state.mansionupgrades.dimensionalcrystal:

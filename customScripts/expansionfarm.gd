@@ -635,7 +635,10 @@ func extractMilk(cattle, milkmaid, farmmanager):
 		text += "[color=aqua]" + milkmaid.name_short() + "[/color] spent [color=aqua]" + str(effort) + " Energy[/color] milking [color=aqua]$name[/color]. "
 		extractionmod = clamp(milkmaid.jobskills.milking * .25, 0, effort)
 	
+	#Metrics
+	cattle.lactating.milkedtoday = true
 	cattle.farmexpanded.timesmilked += 1
+	cattle.lactating.daysunmilked = 0
 	
 	#Pressure Production (100% Extraction)
 	milkproduced = cattle.lactating.pressure

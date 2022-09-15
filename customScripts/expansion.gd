@@ -1201,7 +1201,11 @@ func getSwollenDescription(person,short=false):
 				if person.preg.duration > globals.state.pregduration * .8 && person.knowledge.has('currentpregnancy'):
 					text += "[color=#F4A7D0]$His unborn child forces $his " + nameBelly() + " to protrude massively. $He will give birth soon, and it looks like $his body will give out if $he doesn't. [/color]"
 				else:
-					text += "[color=#E0D8C6]The impossible amount of [/color][color=aqua]" + nameCum() + "[/color][color=#E0D8C6] inside of $him has $his " + nameBelly() + " so swollen that $he looks like $he is about to give birth, and $he keeps coughing up and drooling " + nameCum() + " that worked its way through $his " + nameAsshole() + " up to $his mouth.[/color]"
+					text += "[color=#E0D8C6]The impossible amount of [/color][color=aqua]" + nameCum() + "[/color][color=#E0D8C6] inside of $him has $his " + nameBelly() + " so swollen that $he looks like $he is about to give birth"
+					if person.cum.ass > 0:
+						text += ". $He keeps coughing up and occassionally drooling " + nameCum() + " that must have worked its way through $his " + nameAsshole() + " up to $his mouth.[/color]"
+					else:
+						text += ".[/color]"
 		elif person.swollen >= height*1.5:
 			if short == false:
 				text += "$His " + nameBelly() + " is incredibly swollen and "
@@ -1229,7 +1233,7 @@ func getSwollenDescription(person,short=false):
 				if person.preg.duration > globals.state.pregduration * .4 && person.knowledge.has('currentpregnancy'):
 					text += "[color=#F4A7D0]$His advanced pregnancy is clearly evident by the prominent bulge in $his " + nameBelly() + ".[/color]"
 				else:
-					text += "[color=#E0D8C6]$His " + nameBelly() + " is swollen due to the [/color][color=aqua]" + nameCum() + "[/color][color=#E0D8C6] $he is retaining inside of $him.[/color]"
+					text += "[color=#E0D8C6]$His " + nameBelly() + " is swollen due to the [/color][color=aqua]" + nameCum() + "[/color][color=#E0D8C6] $he "+ globals.fastif(person == globals.player, 'are', 'is') +" retaining inside of $him.[/color]"
 		elif person.swollen >= height*.5:
 			if short == false:
 				text += "$His " + nameBelly() + " is swollen. It "
@@ -2954,7 +2958,7 @@ func dailyLactation(person):
 		if lact.daysunmilked >= 1:
 			text += "$name feels growing pressure in $his breasts as $he goes [color=red]unmilked[/color] for [color=aqua]"+ str(lact.daysunmilked) +" Days[/color]. "
 		#Turn Default .25 of Storage into Pressure
-		var transfer = round(lact.milkstorage * globals.expansion.lacation_pressurepermilkstored)
+		var transfer = round(lact.milkstorage * globals.expansionsettings.lacation_pressurepermilkstored)
 		lact.pressure += transfer
 		lact.milkstorage -= transfer
 	
