@@ -486,17 +486,20 @@ func dimcrystalinitiate(stage = 0):
 	match stage:
 		0:
 			state = false
-			globals.main.animationfade(1.2)
+			globals.main.animationfade(1.5)
 			if OS.get_name() != 'HTML5':
 				yield(globals.main, 'animfinished')
 			globals.main.music_set('stop')
 			globals.main.backgroundinstant('mansion')
 			globals.main.clearscreen()
+			globals.main.animationfade(1)
+			if OS.get_name() != 'HTML5':
+				yield(globals.main, 'animfinished')
 			text = ae_node.dimcrystal_intro_0
 			buttons.append(['Enter the Opening','dimcrystalinitiate',1])
 		1:
 			state = false
-			globals.main.animationfade(1.2)
+			globals.main.animationfade(1.5)
 			if OS.get_name() != 'HTML5':
 				yield(globals.main, 'animfinished')
 			globals.main.music_set('start')

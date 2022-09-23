@@ -1408,7 +1408,10 @@ func manageVats(workersDict):
 	var text = "[color=#d1b970][center]\n\n-----Vat Stockpile Changes-----[/center][/color]"
 	for fluid in refVats.processingorder:
 		var sort = refVats[fluid].auto
-		if refVats[fluid].new != 0:
+		var fluidVat = "vat" + fluid
+		if globals.state.mansionupgrades[fluidVat] == 0:
+			text += "\n[center][color=red]No [color=aqua]"+ fluid.capitalize() +" Vat[/color] is installed.[/color][/center]"
+		elif refVats[fluid].new != 0:
 			if sort in ['sell','refine']:
 				text += "\n[color=aqua]" + str(refVats[fluid].new) + " bottles[/color] of [color=aqua]" + fluid.capitalize() + "[/color] were added to the [color=aqua]" + sort + "[/color] queue today. "
 				sort = 'bottle2' + sort
