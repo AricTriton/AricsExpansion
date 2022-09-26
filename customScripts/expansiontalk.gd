@@ -64,10 +64,16 @@ func getMasterName(person):
 			names.append('Madam')
 ###Stats
 	if person.loyal >= 80:
-		names.append('my Master')
-		names.append('beloved Master')
-		names.append('my Hero')
-		names.append('noble Master')
+		if globals.player.sex == 'female':
+			names.append('my Mistress')
+			names.append('beloved Mistress')
+			names.append('my Heroine')
+			names.append('noble Mistress')
+		else:
+			names.append('my Master')
+			names.append('beloved Master')
+			names.append('my Hero')
+			names.append('noble Master')
 	if person.obed > 50:
 		if globals.player.sex == 'male':
 			names.append('Master')
@@ -90,35 +96,61 @@ func getMasterName(person):
 			names.append('Beautiful')
 ###Racial
 	if person.race == 'Taurus' || person.traits.has('Cow'):
-		names.append('Moooster')
-		names.append('Moooo- sorry... mooaaaster')
+		if globals.player.sex == 'female':
+			names.append('Mooostress')
+			names.append('Moooo- sorry...moostress')
+			names.append('Moooster')
+			names.append('Moooo- sorry...mooaaaster')
 	if person.race.find('Cat') >= 0:
-		names.append('Meowster')
-		names.append('Purrfect Moewster')
+		if globals.player.sex == 'female':
+			names.append('Meowstress')
+			names.append('Purrfect Meowstress')
+		else:
+			names.append('Meowster')
+			names.append('Purrfect Moewster')
 	if person.race.find('Wolf') >= 0:
 		names.append('Pack Leader')
 		names.append('Alpha')
 	if person.race.find('Lamia') >= 0:
-		names.append('Masssssster')
-		names.append('Mmmasssssster')
+		if globals.player.sex == 'female':
+			names.append('Misssssstress')
+			names.append('Mmmisssssstress')
+		else:
+			names.append('Masssssster')
+			names.append('Mmmasssssster')
 	if person.race.find('Elf') >= 0:
-		names.append('Sire')
+		if globals.player.sex == 'female':
+			names.append('Dame')
+		else:
+			names.append('Sire')
 		names.append('Your Majesty')
 		names.append('Monarch')
 		names.append('Your Excellency')
 	if person.race.find('Scylla') >= 0 || person.race.find('Nereid') >= 0:
-		names.append('Kingfish')
+		if globals.player.sex == 'female':
+			names.append('Queenfish')
+		else:
+			names.append('Kingfish')
 		names.append('Triton')
 		names.append('Avatar of Poseidon')
 	if person.race.find('Orc') >= 0:
+		if globals.player.sex == 'female':
+			names.append('Chieftess')
+			names.append('Warlady')
+		else:
+			names.append('Chieftain')
+			names.append('Warlord')
 		names.append('Tribe-Leader')
-		names.append('Chieftain')
 		names.append('Shaman')
 		names.append('Master Shaman')
 	if person.race.find('Goblin') >= 0:
-		names.append('Burrow-Master')
+		if globals.player.sex == 'female':
+			names.append('Chieftess')
+			names.append('Burrow-Mistress')
+		else:
+			names.append('Chieftain')
+			names.append('Burrow-Master')
 		names.append('Cave-Leader')
-		names.append('Chieftain')
 	if person.race.find('Arachnid') >= 0:
 		if globals.player.sex == 'male':
 			names.append('Broodfather')
@@ -128,10 +160,19 @@ func getMasterName(person):
 		names.append('Arch-Angel')
 		names.append('Host')
 	if person.race.find('Demon') >= 0:
+		if globals.player.sex == 'female':
+			names.append('Profane Mistress')
+			names.append('Lady of Darkness')
+		else:
+			names.append('Profane Master')
+			names.append('Lord of Darkness')
 		names.append('Unholy Host')
-		names.append('Profane Master')
+		names.append('Profane One')
 	if person.race.find('Dragonkin') >= 0:
-		names.append('Talon-Lord')
+		if globals.player.sex == 'female':
+			names.append('Talon-Lady')
+		else:
+			names.append('Talon-Lord')
 		names.append('Mightybreath')
 		names.append('Dovah')
 		names.append('Dovahkin')
@@ -143,20 +184,30 @@ func getMasterName(person):
 		else:
 			names.append('Matriach')
 	if person.race.find('Slime') >= 0:
-		names.append('Oozemaster')
-		names.append('Slimelord')
-	if person.race.find('Harpy') >= 0:
-		if globals.player.sex == 'male':
-			names.append('Nestfather')
+		if globals.player.sex == 'female':
+			names.append('Oozemistress')
+			names.append('Slimelady')
 		else:
+			names.append('Oozemaster')
+			names.append('Slimelord')
+	if person.race.find('Harpy') >= 0:
+		if globals.player.sex == 'female':
 			names.append('Nestmother')
+			names.append('Talonlady')
+		else:
+			names.append('Nestfather')
+			names.append('Talonlord')
 		names.append('Strongbeak')
-		names.append('Talonlord')
 	if person.race.find('Kobold') >= 0:
+		if globals.player.sex == 'female':
+			names.append('Clan Mistress')
+			names.append('Denmother')
+		else:
+			names.append('Clan Master')
+			names.append('Denfather')
 		names.append('Den Leader')
 		names.append('All Watcher')
-		names.append('Clan Master')
-
+		
 #Statuses
 #"Valued" Statuses
 	if person.mind.status == 'Lover':
@@ -192,6 +243,7 @@ func getMasterName(person):
 			names.append('Prince Charming')
 		else:
 			names.append('my charming Mistress')
+			names.append('Princess Charming')
 			names.append('Dame')
 	if person.mind.status == 'Warrior' && person.consentexp.party == true:
 		if rand_range(0,1) > .25:
@@ -206,6 +258,8 @@ func getMasterName(person):
 		if globals.player.penis != 'none':
 			names.append('Cock-Lord')
 			names.append('you well-endowed Hunk')
+			names.append('Cunt-Lady')
+			names.append('you well-endowed Babe')
 		names.append('Sexy')
 		names.append('Desirable')
 	if person.mind.status == 'Baby-Maker':
@@ -222,15 +276,22 @@ func getMasterName(person):
 	if person.mind.status == 'Laborer':
 		if rand_range(0,1) > .25:
 			names.clear()
+		if globals.player.sex == 'female':
+			names.append('Mistress')
+		else:
+			names.append('Master')
 		names.append('Boss')
 		names.append('Owner')
 		names.append('Slave-Driver')
-		names.append('Master')
 	if person.mind.status == 'Auction Meat':
 		if rand_range(0,1) > .25:
 			names.clear()
-		names.append('Master for now')
-		names.append('temporary Master')
+		if globals.player.sex == 'female':
+			names.append('Mistress for now')
+			names.append('temporary Mistress')
+		else:
+			names.append('Master for now')
+			names.append('temporary Master')
 		names.append('Owner')
 	if person.mind.status == 'Worthless':
 		if rand_range(0,1) > .25:
@@ -344,14 +405,18 @@ func getMasterName(person):
 			captured = true
 	if captured == true:
 		names.clear()
+		if globals.player.sex == 'female':
+			names.append('Mis-monster')
+			names.append('Mistre-Wait, no, Fucker.')
+		else:
+			names.append('Mas-monster')
+			names.append('Maste-Wait, no, Fucker.')
 		names.append('Monster')
 		names.append('Asshole')
 		names.append('Prick')
 		names.append('Cocksucker')
 		names.append('you slaver piece of shit')
 		names.append('Fucker')
-		names.append('Mas-monster')
-		names.append('Maste-Wait, no, Fucker.')
 		names.append('you piece of shit')
 		names.append('god-damned slaver')
 		names.append('slaving bastard')
@@ -407,7 +472,7 @@ func quirkCursing(text):
 
 func quirkDitzy(text):
 	if rand_range(0,1) >= .5:
-		text = ' ' + str(globals.randomitemfromarray(['-like-','-and, uh-','-and, like-','-uh-','-uhhh','... like... '])) + ' '
+		text = ' ' + str(globals.randomitemfromarray(['-like-','-and, uh-','-and, like-','-uh-','-uhhh','...like...'])) + ' '
 	return text
 
 func quirkCat(person,text):
