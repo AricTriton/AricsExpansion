@@ -1904,6 +1904,30 @@ func build_mansion_info():
 	if globals.state.sidequests.dimcrystal == 0:
 		get_node("MainScreen/mansion/AE_DimCrystal").visible = false
 	else:
+		if globals.state.mansionupgrades.dimensionalcrystal >= 6:
+			get_node("MainScreen/mansion/AE_DimCrystal").set_normal_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_6_transparent.png"))
+			get_node("MainScreen/mansion/AE_DimCrystal").set_hover_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_6_transparent.png"))
+			get_node("MainScreen/mansion/AE_DimCrystal").set_pressed_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_6_transparent.png"))
+		elif globals.state.mansionupgrades.dimensionalcrystal == 5:
+			get_node("MainScreen/mansion/AE_DimCrystal").set_normal_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_5_transparent.png"))
+			get_node("MainScreen/mansion/AE_DimCrystal").set_hover_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_5_transparent.png"))
+			get_node("MainScreen/mansion/AE_DimCrystal").set_pressed_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_5_transparent.png"))
+		elif globals.state.mansionupgrades.dimensionalcrystal == 4:
+			get_node("MainScreen/mansion/AE_DimCrystal").set_normal_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_4_transparent.png"))
+			get_node("MainScreen/mansion/AE_DimCrystal").set_hover_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_4_transparent.png"))
+			get_node("MainScreen/mansion/AE_DimCrystal").set_pressed_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_4_transparent.png"))
+		elif globals.state.mansionupgrades.dimensionalcrystal == 3:
+			get_node("MainScreen/mansion/AE_DimCrystal").set_normal_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_3_transparent.png"))
+			get_node("MainScreen/mansion/AE_DimCrystal").set_hover_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_3_transparent.png"))
+			get_node("MainScreen/mansion/AE_DimCrystal").set_pressed_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_3_transparent.png"))
+		elif globals.state.mansionupgrades.dimensionalcrystal == 2:
+			get_node("MainScreen/mansion/AE_DimCrystal").set_normal_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_2_transparent.png"))
+			get_node("MainScreen/mansion/AE_DimCrystal").set_hover_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_2_transparent.png"))
+			get_node("MainScreen/mansion/AE_DimCrystal").set_pressed_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_2_transparent.png"))
+		else:
+			get_node("MainScreen/mansion/AE_DimCrystal").set_normal_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_1_transparent.png"))
+			get_node("MainScreen/mansion/AE_DimCrystal").set_hover_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_1_transparent.png"))
+			get_node("MainScreen/mansion/AE_DimCrystal").set_pressed_texture(globals.loadimage("res://files/aric_expansion_images/dimensional_crystal/button_images/crystal_1_transparent.png"))
 		get_node("MainScreen/mansion/AE_DimCrystal").visible = true
 	###---End Expansion---###
 	
