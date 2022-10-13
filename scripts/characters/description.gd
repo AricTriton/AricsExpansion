@@ -670,7 +670,7 @@ var newdescriptions = {
 		masculine = '$His [color=yellow]chest[/color] is of definitive [color=yellow]' + randomitemfromarray(['masculine','manly']) + '[/color] shape. ',
 		flat = '$His [color=yellow]chest[/color] is barely visible and [color=yellow]' + randomitemfromarray(['flat','nearly nonexistant']) + '[/color]. ',
 		small = '$He has [color=yellow]' + randomitemfromarray(['small','tiny','miniscule','perky']) + '[/color], round [color=yellow]' + nameTits() + '[/color]. ',
-		average= '$His nice, [color=yellow]' + randomitemfromarray(['average','nice','perky','decent']) + '[/color] [color=yellow]' + nameTits() + '[/color] are firm and inviting. ',
+		average= '$His [color=yellow]' + randomitemfromarray(['average','nice','perky','decent']) + '[/color] [color=yellow]' + nameTits() + '[/color] are firm and inviting. ',
 		big = '$His [color=yellow]' + randomitemfromarray(['big','sizable','large']) + '[/color] [color=yellow]' + nameTits() + '[/color] are pleasantly soft, but still have a nice spring to them. ',
 		huge = '$His [color=yellow]' + nameTits() + '[/color] are [color=yellow]' + randomitemfromarray(['huge','well developed','enviable','really big']) + '[/color]. ',
 		incredible = '$His [color=yellow]' + randomitemfromarray(['voluptuous','rather huge','incredible']) + '[/color] [color=yellow]'+ nameTits() + '[/color] are mind-blowingly big. ',

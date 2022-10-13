@@ -335,7 +335,7 @@ func travelrandomperson():
 	return randomfromarray(array)
 
 func travelfucktarget():
-	var array = ["Centerflag","Ralphomayo","Aric Triton","horse","sheep","goat","dog","fencepost","watermelon","prostitute","sack of produce","corpse","farmgirl","farmer's wife","woman","whore","girl you had turned over to the Mage Guild","fairy you had turned over to the Mage Guild","taurus girl you had turned over to the Mage Guild","slave you believe you had sold at some point","bandit","traveling salesman"]
+	var array = ["Centerflag","Ralphomayo","Aric Triton","horse","sheep","goat","dog","fencepost","watermelon","prostitute","sack of produce","corpse","farmgirl","farmer's wife","woman","whore","girl you had turned over to the Mage Guild","oddly familiar fairy","an oddly familiar Taurus girl with multiple leaking breasts","slave you believe you had sold at some point","bandit","traveling salesman"]
 	array.append_array(globals.constructor.humanoid_races_array)
 	array.append_array(globals.constructor.beast_races_array)
 	if globals.expansionsettings.sillymode:

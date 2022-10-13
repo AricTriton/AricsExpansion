@@ -2148,41 +2148,54 @@ func dailyUpdate(person):
 	#---Clothing Status
 	text += person.updateClothing()
 
-	#Chance to Add/Remove Lisp or Mute due to oversized Lips
-	if person.npcexpanded.temptraits.find('vocaltraitdelay') >= 0:
-		person.npcexpanded.temptraits.remove('vocaltraitdelay')
-	elif globals.lipssizearray.find(person.lips) >= 6:
-		var delays = round(rand_range(0,3)) + globals.lipssizearray.find(person.lips)
-		var liparray = globals.lipssizearray
-		var lipincreasechance = globals.expansionsettings.lipstraitbasechance + (10*(liparray.find(person.lips)-6))
-		#Check for Negative
-		if person.traits.has('Mute') == false:
-			if person.traits.has('Lisp') == false:
-				if rand_range(0,100) <= lipincreasechance:
+	#---Vocal Traits (Lisp, Mute)
+	if globals.expansionsettings.vocal_traits_autochange == true:
+		var vocaltraitchanged = false
+		#Timer to Prevent Trait Change Spamming
+		if globals.expansionsettings.vocal_traits_delaytimer == true && person.npcexpanded.temptraits.count('vocaltraitdelay') > 0:
+			person.npcexpanded.temptraits.remove('vocaltraitdelay')
+			if globals.expansionsettings.perfectinfo == true:
+				text += "\n[color=aqua]Perfect Info: "+ str(person.npcexpanded.temptraits.count('vocaltraitdelay')) +" Days Remaining before next possible Vocal Trait change."
+		else:
+			var lipincreasechance = globals.expansionsettings.lipstraitbasechance + (10*(globals.lipssizearray.find(person.lips)-6))
+			var lipdecreasechance = globals.expansionsettings.lipstraitbasechance + (10*(7 - globals.lipssizearray.find(person.lips)))
+			
+			#Repair Speech
+			if person.npcexpanded.temptraits.has('Mute') && person.traits.has('Mute') && person.lips != globals.lipssizearray.back():
+				if rand_range(0,100) <= lipdecreasechance:
+					person.trait_remove('Mute')
+					person.npcexpanded.temptraits.remove('Mute')
 					person.add_trait('Lisp')
 					person.npcexpanded.temptraits.append('Lisp')
-					text += "\n$name has started talking with a [color=red]Lisp[/color] due to the unnaturally swollen size of $his lips."
-			else:
-				if rand_range(0,100) <= lipincreasechance*.5 || person.traits.has('Lisp') && person.npcexpanded.temptraits.has('lisp') && rand_range(0,100) <= lipincreasechance:
-					person.add_trait('Mute')
-					person.npcexpanded.temptraits.append('Mute')
-					text += "\n$name is no longer able to speak due to $his massive lips. $He is now [color=red]Mute[/color]."
-		elif person.npcexpanded.temptraits.has('Mute') && person.traits.has('Mute'):
-			if rand_range(0,100) <= lipincreasechance:
-				person.add_trait('Lisp')
-				person.npcexpanded.temptraits.append('Lisp')
-				person.trait_remove('Mute')
-				person.npcexpanded.temptraits.remove('Mute')
-				text += "\n$name seems to be able to audibly talk through $his massive lips again. $He is no longer [color=red]Mute[/color] and now merely speaks with a heavy [color=red]Lisp[/color]."
-		elif person.npcexpanded.temptraits.has('Lisp') && person.traits.has('Lisp'):
-			if rand_range(0,100) <= lipincreasechance:
-				person.trait_remove('Lisp')
-				person.npcexpanded.temptraits.remove('Lisp')
-				text += "\n$name seems to be able to talk unhindered again. $He no longer seems to have a lisp."
-		#Add a Delay Timer to keep from spamming
-		while delays > 0:
-			person.npcexpanded.temptraits.append('vocaltraitdelay')
-			delays -= 1
+					text += "\n[color=aqua]$name[/color] seems to be able to talk once again. $He is no longer [color=aqua]Mute[/color] and now merely speaks with a heavy [color=red]Lisp[/color]."
+					vocaltraitchanged = true
+			elif person.npcexpanded.temptraits.has('Lisp') && person.traits.has('Lisp') && globals.lipssizearray.find(person.lips) < 8:
+				if rand_range(0,100) <= lipdecreasechance:
+					person.trait_remove('Lisp')
+					person.npcexpanded.temptraits.remove('Lisp')
+					text += "\n[color=aqua]$name[/color] seems to be able to talk normally again. $He no longer seems to have a [color=aqua]Lisp[/color]."
+					vocaltraitchanged = true
+			#Damage Speech
+			if vocaltraitchanged == false:
+				if globals.lipssizearray.find(person.lips) >= 6 && person.traits.has('Mute') == false:
+					if person.traits.has('Lisp') == false:
+						if rand_range(0,100) <= lipincreasechance:
+							person.add_trait('Lisp')
+							person.npcexpanded.temptraits.append('Lisp')
+							text += "\n$name has started talking with a [color=red]Lisp[/color] due to the unnaturally swollen size of $his lips. $He may naturally be able to speak again in time as long as $his lips are not [color=aqua]Monstrous or larger[/color], but $he might also become temporarily [color=aqua]Mute[/color] if $his lips remain larger than [color=aqua]Plump[/color]."
+							vocaltraitchanged = true
+					elif person.npcexpanded.temptraits.has('Lisp') && globals.lipssizearray.find(person.lips) > 6 && rand_range(0,100) <= lipincreasechance:
+							person.add_trait('Mute')
+							person.npcexpanded.temptraits.append('Mute')
+							text += "\n$name is no longer able to speak due to $his massive lips. $He is now [color=red]Mute[/color]. $He may naturally be able to speak again in time as long as $his lips are not the size of a [color=aqua]Facepussy[/color]."
+							vocaltraitchanged = true
+		
+		#Delay Timer between Changes
+		if vocaltraitchanged == true:
+			var delays = clamp(round(rand_range(-3,3) + (globals.lipssizearray.find(person.lips)*.5)), 1, 7)
+			while delays > 0:
+				person.npcexpanded.temptraits.append('vocaltraitdelay')
+				delays -= 1
 	
 	#Clamp Jobskills at 0-100
 	var job = person.work

@@ -463,7 +463,7 @@ func questarray():
 		quest038 = {
 			code = '038',
 			shortdescription = 'Looking for a suitable mate. ',
-			description = "A member of the $rare race desires a worthy mate for reproductive purposes. $He must be at least average in appearance and open to $his mate's commands. ",
+			description = "A member of the $race race desires a worthy mate for reproductive purposes. They must be at least average in appearance and open to their new mate's commands. ",
 			reqs = [['obed','gte', 80],['beauty','gte',50]],
 			reqstemp = [['sex', 'eq', randsex()], ['race','eq',rarerace()]],
 			time = round(rand_range(6,10)),
@@ -485,7 +485,7 @@ func questarray():
 		quest040 = {
 			code = '040',
 			shortdescription = 'Exotic pet. ',
-			description = 'A wealthy merchant is seeking a new pet to display during an upcoming social event. He requires a $rare slave of exceptional beauty and grace to delight his guests. ',
+			description = 'A wealthy merchant is seeking a new pet to display during an upcoming social event. He requires a rare slave of exceptional beauty and grace to delight his guests. ',
 			reqs = [['obed','gte', 80],['beauty','gte',70]],
 			reqstemp = [['sex', 'eq', randsex()], ['race','eq',rarerace()]],
 			time = round(rand_range(4,7)),
