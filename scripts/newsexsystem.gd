@@ -769,6 +769,7 @@ class member:
 			var difference = 0
 			var display = 0
 			var clamper = 0
+			var roughSex = effects.has('resist') || effects.has('forced')
 			#Mouth Effects
 			if scenedict.scene.code in ['blowjob','spitroast','spitroastass','deepthroat']:
 				number = 1+((globals.lipssizearray.find(i.person.lips)-3)*.1)
@@ -834,7 +835,7 @@ class member:
 						values.lust *= number
 						if scenedict.takers.size() <= 1:
 							if difference > 0:
-								if effects.has('resist') || effects.has('forced'):
+								if roughSex:
 									text += "\n[color=green]Despite [his2] best efforts, [name2] can't help but {^enjoy:be excited by:relish} the feeling of [names1] [penis1] stretching [his2] [pussy2].[/color] "
 								else:
 									text += "\n[color=green][names2] {^[is2] enjoying:[is2] loving:[is2] relishing:loves} the feeling of [names1] [penis1] stretching [his2] [pussy2].[/color] "
@@ -850,7 +851,11 @@ class member:
 							if scenedict.takers.size() <= 1:
 								text += "\n[color=green][name2] {^moans:gasps:spasms:twitches:bites [his2] lip} as [his2] [pussy2] [is2] {^stretched:gaped:spread apart:forced to stretch} by [names1] [penis1].[/color] "
 							var stretch = globals.vagsizearray.find(vaginasize) - globals.vagsizearray.find(person.vagina)
-							if globals.expansionsettings.disablevaginatearing == false && person.sexexpanded.pliability - stretch + rand_range(0,2) < 0:
+							# Increased chance to tear if taker is unwilling.
+							number = rand_range(0, 2)
+							if roughSex:
+								number -= 1
+							if globals.expansionsettings.disablevaginatearing == false && person.sexexpanded.pliability - stretch + number < 0:
 								if vagTorn == false:
 									vagTorn = true
 									person.dailyevents.append('vagTorn')
@@ -917,7 +922,7 @@ class member:
 						values.lust *= number
 						if scenedict.takers.size() <= 1:
 							if difference > 0:
-								if effects.has('resist') || effects.has('forced'):
+								if roughSex:
 									text += "\n[color=green]Despite [his2] best efforts, [name2] can't help but {^enjoy:be excited by:relish} the feeling of [names1] [penis1] stretching [his2] [anus2].[/color] "
 								else:
 									text += "\n[color=green][names2] {^[is2] enjoying:[is2] loving:[is2] relishing:loves} the feeling of [names1] [penis1] stretching [his2] [anus2].[/color] "
@@ -933,7 +938,11 @@ class member:
 							if scenedict.takers.size() <= 1:
 								text += "\n[color=green][name2] {^starts:begins} {^moaning:gasping:spasming} as [his2] [anus2] [is2] {^stretched:gaped:spread apart:forced to stretch} by [names1] [penis1].[/color] "
 							var stretch = globals.assholesizearray.find(assholesize) - globals.assholesizearray.find(assholesize)
-							if globals.expansionsettings.disableanaltearing == false && person.sexexpanded.pliability - stretch + rand_range(0,2) < 0:
+							# Increased chance to tear if taker is unwilling.
+							number = rand_range(0, 2)
+							if roughSex:
+								number -= 1
+							if globals.expansionsettings.disableanaltearing == false && person.sexexpanded.pliability - stretch + number < 0:
 								if assTorn == false:
 									assTorn = true
 									person.dailyevents.append('assTorn')
