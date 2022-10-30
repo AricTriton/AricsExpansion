@@ -796,7 +796,7 @@ class member:
 					values.sens *= number
 					values.lust *= number
 					if difference > 0 && scenedict.givers.size() <= 1:
-						text += "\n[color=green][name1] {^[is1] enjoying:[is1] loving:[is1] relishing:loves} the feeling of [his1] [penis1] stretching [his2] [pussy2].[/color]"
+						text += "\n[color=green][name1] {^[is1] enjoying:[is1] loving:[is1] relishing:love[s/1]} the feeling of [his1] [penis1] stretching [names2] [pussy2].[/color]"
 					elif difference < 0 && scenedict.givers.size() <= 1:
 						text += "\n[color=red][name1] {^can barely feel:can't feel:can't fill} [names2] [pussy2] with [his1] [penis1].[/color]"
 					#Display
@@ -809,19 +809,38 @@ class member:
 				elif scenedict.takers.has(self) && scenedict.givers.has(i):
 					var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != 'none' else 4 # handle strapon with default size
 					difference = temppenissize - globals.vagsizearray.find(vaginasize)
-					number = 1+(difference*.1)
-					values.sens *= number
-					values.lust *= number
-					if difference > 0:
-						if vagTorn == true:
-							values.sens = values.sens*.75
-							values.lust = values.lust*.75
+					if vagTorn:
+						# If torn, no pleasure boost from a big penetration. It hurts, regardless of size, but some may like it more than others.
+						if person.traits.has('Masochist'):
+							number = 1.2 if person.traits.has('Likes it rough') else 1.1
+							values.sens *= number
+							values.lust *= number
 							if scenedict.takers.size() <= 1:
-								text += "\n[color=red][names2] [pussy2] is {^stretched out:sore:aching:raw:hurting} and [his2] pleasure has lessened.[/color] "
-						elif scenedict.takers.size() <= 1:
-							text += "\n[color=green][names2] {^[is2] enjoying:[is2] loving:[is2] relishing:loves} the feeling of [names1] [penis1] stretching [his2] [pussy2].[/color] "
-					elif difference < 0:
-						text += "\n[color=red][names2] [pussy2] can barely feel [names1] undersized [penis1].[/color] "
+								text += "\n[color=green][names2] [pussy2] [is2] {^stretched out:sore:aching:raw:hurting}, but [he2] {^seems to get off on it:appears to enjoy it:savours the pain}.[/color] "
+						elif person.traits.has('Likes it rough'):
+							values.sens *= .9
+							values.lust *= .9
+							if scenedict.takers.size() <= 1:
+								text += "\n[color=red][names2] [pussy2] [is2] {^stretched out:sore:aching:raw:hurting}, but [he2] {^does [his2] best to take it:gasps and puts up with it:just squeaks and moans a bit}.[/color] "
+						else:
+							values.sens *= .7
+							values.lust *= .7
+							if scenedict.takers.size() <= 1:
+								text += "\n[color=red][names2] [pussy2] [is2] {^stretched out:sore:aching:raw:hurting} and [his2] pleasure {^has lessened:[is2] reduced:[is2] diminished}.[/color] "
+					else:
+						# Not torn. Adjust pleasure and mood text based on size.
+						number = 1 + (difference * .1)
+						values.sens *= number
+						values.lust *= number
+						if scenedict.takers.size() <= 1:
+							if difference > 0:
+								if effects.has('resist') || effects.has('forced'):
+									text += "\n[color=green]Despite [his2] best efforts, [name2] can't help but {^enjoy:be excited by:relish} the feeling of [names1] [penis1] stretching [his2] [pussy2].[/color] "
+								else:
+									text += "\n[color=green][names2] {^[is2] enjoying:[is2] loving:[is2] relishing:loves} the feeling of [names1] [penis1] stretching [his2] [pussy2].[/color] "
+							elif difference < -1:
+								text += "\n[color=red][names2] [pussy2] can barely feel [names1] undersized [penis1].[/color] "
+
 					#Stretching
 					if difference >= 5 + rand_range(-5,0) + person.sexexpanded.pliability:
 						if globals.vagsizearray.back() != vaginasize:
@@ -829,7 +848,7 @@ class member:
 							clamper = clamp(clamper,0,globals.vagsizearray.size()-1)
 							vaginasize = globals.vagsizearray[clamper]
 							if scenedict.takers.size() <= 1:
-								text += "[color=green][name2] {^moans:gasps:spasms:twitches:bites [his2] lip} as [his2] [pussy2] [is2] {^stretched:gaped:spread apart:forced to stretch} by [names1] [penis1].[/color] "
+								text += "\n[color=green][name2] {^moans:gasps:spasms:twitches:bites [his2] lip} as [his2] [pussy2] [is2] {^stretched:gaped:spread apart:forced to stretch} by [names1] [penis1].[/color] "
 							var stretch = globals.vagsizearray.find(vaginasize) - globals.vagsizearray.find(person.vagina)
 							if globals.expansionsettings.disablevaginatearing == false && person.sexexpanded.pliability - stretch + rand_range(0,2) < 0:
 								if vagTorn == false:
@@ -860,7 +879,7 @@ class member:
 					values.sens *= number
 					values.lust *= number
 					if difference > 0 && scenedict.givers.size() <= 1:
-						text += "\n[color=green][name1] {^[is1] enjoying:[is1] loving:[is1] relishing:loves} the feeling of [his1] [penis1] stretching [his2] [anus2].[/color] "
+						text += "\n[color=green][name1] {^[is1] enjoying:[is1] loving:[is1] relishing:love[s/1]} the feeling of [his1] [penis1] stretching [names2] [anus2].[/color] "
 					elif difference < 0 && scenedict.givers.size() <= 1:
 						text += "\n[color=red][name1] {^can barely feel:can't feel:can't fill} [names2] [anus2] with [his1] [penis1].[/color] "
 					#Display
@@ -873,16 +892,38 @@ class member:
 				elif scenedict.takers.has(self) && scenedict.givers.has(i):
 					var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != 'none' else 4 # handle strapon with default size
 					difference = temppenissize - globals.assholesizearray.find(assholesize)
-					number = 1+(difference*.1)
-					values.sens *= number
-					values.lust *= number
-					if difference > 0 && scenedict.takers.size() <= 1:
-						if assTorn == true:
-							values.sens = values.sens*.75
-							values.lust = values.lust*.75
-							text += "\n[color=red][names2] [anus2] is {^stretched out:sore:aching:raw:hurting} and [his2] pleasure has lessened.[/color]\n "
-					elif difference < 0 && scenedict.takers.size() <= 1:
-						text += "\n[color=red][names2] [anus2] can barely feel [names1] undersized [penis1].[/color] "
+					if assTorn:
+						# If torn, no pleasure boost from a big penetration. It hurts, regardless of size, but some may like it more than others.
+						if person.traits.has('Masochist'):
+							number = 1.2 if person.traits.has('Likes it rough') else 1.1
+							values.sens *= number
+							values.lust *= number
+							if scenedict.takers.size() <= 1:
+								text += "\n[color=green][names2] [anus2] [is2] {^stretched out:sore:aching:raw:hurting}, but [he2] {^seems to get off on it:appears to enjoy it:savours the pain}.[/color] "
+						elif person.traits.has('Likes it rough'):
+							values.sens *= .9
+							values.lust *= .9
+							if scenedict.takers.size() <= 1:
+								text += "\n[color=red][names2] [anus2] [is2] {^stretched out:sore:aching:raw:hurting}, but [he2] {^does [his2] best to take it:gasps and puts up with it:just squeaks and moans a bit}.[/color] "
+						else:
+							values.sens *= .7
+							values.lust *= .7
+							if scenedict.takers.size() <= 1:
+								text += "\n[color=red][names2] [anus2] [is2] {^stretched out:sore:aching:raw:hurting} and [his2] pleasure {^has lessened:[is2] reduced:[is2] diminished}.[/color] "
+					else:
+						# Not torn. Adjust pleasure and mood text based on size.
+						number = 1 + (difference * .1)
+						values.sens *= number
+						values.lust *= number
+						if scenedict.takers.size() <= 1:
+							if difference > 0:
+								if effects.has('resist') || effects.has('forced'):
+									text += "\n[color=green]Despite [his2] best efforts, [name2] can't help but {^enjoy:be excited by:relish} the feeling of [names1] [penis1] stretching [his2] [anus2].[/color] "
+								else:
+									text += "\n[color=green][names2] {^[is2] enjoying:[is2] loving:[is2] relishing:loves} the feeling of [names1] [penis1] stretching [his2] [anus2].[/color] "
+							elif difference < -1:
+								text += "\n[color=red][names2] [anus2] can barely feel [names1] undersized [penis1].[/color] "
+
 					#Stretching
 					if difference >= 5 + rand_range(-5,0) + person.sexexpanded.pliability:
 						if globals.assholesizearray.back() != assholesize:
@@ -1219,15 +1260,15 @@ func rebuildparticipantslist():
 					text += '\n[color=aqua]' + k.name + k.person.dictionary('[/color] feels that being with $his [color=aqua]') + related + '[/color], [color=aqua]' + i.name + '[/color], would be ' + str(k.person.fetish.incest) + '.'
 		#---Wear and Tear
 		if i.vagTorn == true:
-			text += i.person.dictionary("\n[color=red]$name's [color=aqua]pussy[/color] has been stretched beyond it's limit. Penetration Arousal Gains Reduced[/color]")
+			text += i.person.dictionary("\n[color=red]$name's [color=aqua]pussy[/color] has been stretched beyond its limit. Penetration arousal gains reduced.[/color]")
 		if i.assTorn == true:
-			text += i.person.dictionary("\n[color=red]$name's [color=aqua]asshole[/color] has been stretched beyond it's limit. Penetration Arousal Gains Reduced[/color]")
+			text += i.person.dictionary("\n[color=red]$name's [color=aqua]asshole[/color] has been stretched beyond its limit. Penetration arousal gains reduced.[/color]")
 	for i in takers:
 		#---Wear and Tear
 		if i.vagTorn == true:
-			text += i.person.dictionary("\n[color=red]$name's [color=aqua]pussy[/color] has been stretched beyond it's limit. Penetration Arousal Gains Reduced[/color]")
+			text += i.person.dictionary("\n[color=red]$name's [color=aqua]pussy[/color] has been stretched beyond its limit. Penetration arousal gains reduced.[/color]")
 		if i.assTorn == true:
-			text += i.person.dictionary("\n[color=red]$name's [color=aqua]asshole[/color] has been stretched beyond it's limit. Penetration Arousal Gains Reduced[/color]")
+			text += i.person.dictionary("\n[color=red]$name's [color=aqua]asshole[/color] has been stretched beyond its limit. Penetration arousal gains reduced.[/color]")
 #		text += "\n"
 	###---Expansion End---###
 
