@@ -133,6 +133,29 @@ class member:
 		groupSize = float(max(groupSize, 1))
 		return tempShift/groupSize * min(0.9 + 0.1*groupSize, 2.0)
 
+	# Reduce the given person's health by the given amount, subject to a number of limitations:
+	#   1. The healthPenaltyWhenTorn flag can disable the functionality altogether.
+	#   2. If the person is seriously injured, they already have more pressing things to worry about than this, and
+	#      they should not die from just the penetration. Do not let health dip below 50% because of this.
+	#   3. Limit how much damage a person can take in one round to 4. This prevents a group of givers from
+	#      practically killing a taker in one round.
+	# healthLostThisRound states how much health has already been lost this round. The function will return the new
+	# value.
+	func reduceHealthBy(person, amount, healthLostThisRound):
+		var canLose
+
+		if globals.expansionsettings.healthPenaltyWhenTorn:
+			amount = min(amount, 4 - healthLostThisRound)
+
+			canLose = max(person.health - round(.5 * person.stats.health_max), 0)
+			amount = min(amount, canLose)
+
+			person.health = person.health - amount
+			return healthLostThisRound + amount
+		return 0
+
+	func getHPText(person):
+		return "(Health: " + str(person.health) + "/" + str(person.stats.health_max) + ")"
 	###---End of Expansion---###
 
 	func lust_set(value):
@@ -692,6 +715,7 @@ class member:
 		
 		###---Added by Expansion---### Various Sex Action Checks and Text
 		var tempShift = 0
+		var healthLostThisRound = 0
 		for i in scenedict.takers + scenedict.givers:
 			if i == self:
 				continue
@@ -818,13 +842,13 @@ class member:
 							values.sens *= number
 							values.lust *= number
 							if scenedict.takers.size() <= 1:
-								text += "\n[color=green][names2] [pussy2] [is2] {^stretched out:sore:aching:raw:hurting}, but [he2] {^seems to get off on it:appears to enjoy it:savours the pain}.[/color] "
+								text += "\n[color=green][names2] [pussy2] [is2] {^stretched out:sore:aching:raw:hurting}, but [he2] {^seem[s/2] to get off on it:appear[s/2] to enjoy it:savour[s/2] the pain}.[/color] "
 						elif person.traits.has('Likes it rough'):
 							display = -10
 							values.sens *= .9
 							values.lust *= .9
 							if scenedict.takers.size() <= 1:
-								text += "\n[color=red][names2] [pussy2] [is2] {^stretched out:sore:aching:raw:hurting}, but [he2] {^does [his2] best to take it:gasps and puts up with it:just squeaks and moans a bit}.[/color] "
+								text += "\n[color=red][names2] [pussy2] [is2] {^stretched out:sore:aching:raw:hurting}, but [he2] {^do[es/2] [his2] best to take it:gasp[s/2] and put[s/2] up with it:just squeak[s/2] and moan[s/2] a bit}.[/color] "
 						else:
 							display = -30
 							values.sens *= .7
@@ -842,7 +866,7 @@ class member:
 								if roughSex:
 									text += "\n[color=green]Despite [his2] best efforts, [name2] can't help but {^enjoy:be excited by:relish} the feeling of [names1] [penis1] stretching [his2] [pussy2].[/color] "
 								else:
-									text += "\n[color=green][names2] {^[is2] enjoying:[is2] loving:[is2] relishing:loves} the feeling of [names1] [penis1] stretching [his2] [pussy2].[/color] "
+									text += "\n[color=green][names2] {^[is2] enjoying:[is2] loving:[is2] relishing:love[s/2]} the feeling of [names1] [penis1] stretching [his2] [pussy2].[/color] "
 							elif difference < -1:
 								text += "\n[color=red][names2] [pussy2] can barely feel [names1] undersized [penis1].[/color] "
 
@@ -862,15 +886,17 @@ class member:
 							if globals.expansionsettings.disablevaginatearing == false && person.sexexpanded.pliability - stretch + number < 0:
 								if vagTorn == false:
 									vagTorn = true
+									healthLostThisRound = reduceHealthBy(person, 1, healthLostThisRound)
 									person.dailyevents.append('vagTorn')
 									if !person.traits.has('Masochist') && !person.traits.has('Likes it rough'):
 										globals.addrelations(person, i.person, -round(rand_range(difference*5,difference*10)))
 									if scenedict.givers.size() <= 1:
-										text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [pussy2] suddenly {^rips:tears:breaks:starts bleeding}, sending waves of pain through [his2] body.[/color] "
+										text += "\n[color=red][name2] {^shout[s/2]:scream[s/2]:cr[ies/y2]:sob[s/2]:squeal[s/2]:whimper[s/2]} as [his2] [pussy2] suddenly {^rips:tears:breaks:starts bleeding}, sending waves of pain through [his2] body " + getHPText(person) + ".[/color] "
 									person.stress += round(rand_range(difference,temppenissize))
 								else:
+									healthLostThisRound = reduceHealthBy(person, 2, healthLostThisRound)
 									if scenedict.takers.size() <= 1:
-										text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [pussy2] {^rips:tears:breaks} even further, causing [him2] excruciating pain.[/color] "
+										text += "\n[color=red][name2] {^shout[s/2]:scream[s/2]:cr[ies/y2]:sob[s/2]:squeal[s/2]:whimper[s/2]} as [his2] [pussy2] {^rips:tears:breaks} even further, causing [him2] excruciating pain " + getHPText(person) + ".[/color] "
 									person.stress += round(rand_range(difference*2,temppenissize*2))
 					#Display
 					if globals.state.perfectinfo == true && scenedict.takers.size() <= 1:
@@ -909,13 +935,13 @@ class member:
 							values.sens *= number
 							values.lust *= number
 							if scenedict.takers.size() <= 1:
-								text += "\n[color=green][names2] [anus2] [is2] {^stretched out:sore:aching:raw:hurting}, but [he2] {^seems to get off on it:appears to enjoy it:savours the pain}.[/color] "
+								text += "\n[color=green][names2] [anus2] [is2] {^stretched out:sore:aching:raw:hurting}, but [he2] {^seem[s/2] to get off on it:appear[s/2] to enjoy it:savour[s/2] the pain}.[/color] "
 						elif person.traits.has('Likes it rough'):
 							display = -10
 							values.sens *= .9
 							values.lust *= .9
 							if scenedict.takers.size() <= 1:
-								text += "\n[color=red][names2] [anus2] [is2] {^stretched out:sore:aching:raw:hurting}, but [he2] {^does [his2] best to take it:gasps and puts up with it:just squeaks and moans a bit}.[/color] "
+								text += "\n[color=red][names2] [anus2] [is2] {^stretched out:sore:aching:raw:hurting}, but [he2] {^do[es/2] [his2] best to take it:gasp[s/2] and put[s/2] up with it:just squeak[s/2] and moan[s/2] a bit}.[/color] "
 						else:
 							display = -30
 							values.sens *= .7
@@ -933,7 +959,7 @@ class member:
 								if roughSex:
 									text += "\n[color=green]Despite [his2] best efforts, [name2] can't help but {^enjoy:be excited by:relish} the feeling of [names1] [penis1] stretching [his2] [anus2].[/color] "
 								else:
-									text += "\n[color=green][names2] {^[is2] enjoying:[is2] loving:[is2] relishing:loves} the feeling of [names1] [penis1] stretching [his2] [anus2].[/color] "
+									text += "\n[color=green][names2] {^[is2] enjoying:[is2] loving:[is2] relishing:love[s/2]} the feeling of [names1] [penis1] stretching [his2] [anus2].[/color] "
 							elif difference < -1:
 								text += "\n[color=red][names2] [anus2] can barely feel [names1] undersized [penis1].[/color] "
 
@@ -953,15 +979,17 @@ class member:
 							if globals.expansionsettings.disableanaltearing == false && person.sexexpanded.pliability - stretch + number < 0:
 								if assTorn == false:
 									assTorn = true
+									healthLostThisRound = reduceHealthBy(person, 1, healthLostThisRound)
 									person.dailyevents.append('assTorn')
 									if !person.traits.has('Masochist') && !person.traits.has('Likes it rough'):
 										globals.addrelations(person, i.person, -round(rand_range(difference*5,difference*10)))
 									if scenedict.takers.size() <= 1:
-										text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [anus2] suddenly {^rips:tears:breaks:starts bleeding}, sending waves of pain through [his2] body.[/color]"
+										text += "\n[color=red][name2] {^shout[s/2]:scream[s/2]:cr[ies/y2]:sob[s/2]:squeal[s/2]:whimper[s/2]} as [his2] [anus2] suddenly {^rips:tears:breaks:starts bleeding}, sending waves of pain through [his2] body " + getHPText(person) + ".[/color]"
 									person.stress += round(rand_range(difference,temppenissize))
 								else:
+									healthLostThisRound = reduceHealthBy(person, 2, healthLostThisRound)
 									if scenedict.takers.size() <= 1:
-										text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [anus2] {^rips:tears:breaks} even further, causing [him2] excruciating pain.[/color] "
+										text += "\n[color=red][name2] {^shout[s/2]:scream[s/2]:cr[ies/y2]:sob[s/2]:squeal[s/2]:whimper[s/2]} as [his2] [anus2] {^rips:tears:breaks} even further, causing [him2] excruciating pain " + getHPText(person) + ".[/color] "
 									person.stress += round(rand_range(difference*2,temppenissize*2))
 					#Display
 					if globals.state.perfectinfo == true && scenedict.takers.size() <= 1:
