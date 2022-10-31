@@ -801,12 +801,12 @@ class member:
 					elif difference < 0 && scenedict.givers.size() <= 1:
 						text += "\n[color=red][name1] {^can barely feel:can't feel:can't fill} [names2] [pussy2] with [his1] [penis1].[/color]"
 					#Display
-					if globals.state.perfectinfo == true:
-						display = difference*10
-						if display > 0 && scenedict.givers.size() <= 1:
+					if globals.state.perfectinfo == true && scenedict.givers.size() <= 1:
+						display = difference * 10
+						if display > 0:
 							text += " [color=aqua]Arousal increased by " + str(display) + "%[/color]"
-						elif display < 0 && scenedict.givers.size() <= 1:
-							text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
+						elif display < 0:
+							text += " [color=red]Arousal decreased by " + str(-display) + "%[/color]"
 				elif scenedict.takers.has(self) && scenedict.givers.has(i):
 					var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != 'none' else 4 # handle strapon with default size
 					difference = temppenissize - globals.vagsizearray.find(vaginasize)
@@ -814,16 +814,19 @@ class member:
 						# If torn, no pleasure boost from a big penetration. It hurts, regardless of size, but some may like it more than others.
 						if person.traits.has('Masochist'):
 							number = 1.2 if person.traits.has('Likes it rough') else 1.1
+							display = 20 if person.traits.has('Likes it rough') else 10
 							values.sens *= number
 							values.lust *= number
 							if scenedict.takers.size() <= 1:
 								text += "\n[color=green][names2] [pussy2] [is2] {^stretched out:sore:aching:raw:hurting}, but [he2] {^seems to get off on it:appears to enjoy it:savours the pain}.[/color] "
 						elif person.traits.has('Likes it rough'):
+							display = -10
 							values.sens *= .9
 							values.lust *= .9
 							if scenedict.takers.size() <= 1:
 								text += "\n[color=red][names2] [pussy2] [is2] {^stretched out:sore:aching:raw:hurting}, but [he2] {^does [his2] best to take it:gasps and puts up with it:just squeaks and moans a bit}.[/color] "
 						else:
+							display = -30
 							values.sens *= .7
 							values.lust *= .7
 							if scenedict.takers.size() <= 1:
@@ -831,6 +834,7 @@ class member:
 					else:
 						# Not torn. Adjust pleasure and mood text based on size.
 						number = 1 + (difference * .1)
+						display = difference * 10
 						values.sens *= number
 						values.lust *= number
 						if scenedict.takers.size() <= 1:
@@ -869,12 +873,11 @@ class member:
 										text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [pussy2] {^rips:tears:breaks} even further, causing [him2] excruciating pain.[/color] "
 									person.stress += round(rand_range(difference*2,temppenissize*2))
 					#Display
-					if globals.state.perfectinfo == true:
-						display = difference*10
-						if display > 0 && vagTorn == false:
+					if globals.state.perfectinfo == true && scenedict.takers.size() <= 1:
+						if display > 0:
 							text += " [color=aqua]Arousal increased by " + str(display) + "%[/color]"
 						elif display < 0:
-							text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
+							text += " [color=red]Arousal decreased by " + str(-display) + "%[/color]"
 
 			#Penis in Asshole Effects
 			elif scenedict.scene.code in ['missionaryanal', 'doggyanal','lotusanal','revlotusanal','spitroastass','insertinturnsass']:
@@ -889,12 +892,12 @@ class member:
 					elif difference < 0 && scenedict.givers.size() <= 1:
 						text += "\n[color=red][name1] {^can barely feel:can't feel:can't fill} [names2] [anus2] with [his1] [penis1].[/color] "
 					#Display
-					if globals.state.perfectinfo == true:
-						display = difference*10
-						if display > 0 && scenedict.givers.size() <= 1:
+					if globals.state.perfectinfo == true && scenedict.givers.size() <= 1:
+						display = difference * 10
+						if display > 0:
 							text += " [color=aqua]Arousal increased by " + str(display) + "%[/color]"
-						elif display < 0 && scenedict.givers.size() <= 1:
-							text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
+						elif display < 0:
+							text += " [color=red]Arousal decreased by " + str(-display) + "%[/color]"
 				elif scenedict.takers.has(self) && scenedict.givers.has(i):
 					var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != 'none' else 4 # handle strapon with default size
 					difference = temppenissize - globals.assholesizearray.find(assholesize)
@@ -902,16 +905,19 @@ class member:
 						# If torn, no pleasure boost from a big penetration. It hurts, regardless of size, but some may like it more than others.
 						if person.traits.has('Masochist'):
 							number = 1.2 if person.traits.has('Likes it rough') else 1.1
+							display = 20 if person.traits.has('Likes it rough') else 10
 							values.sens *= number
 							values.lust *= number
 							if scenedict.takers.size() <= 1:
 								text += "\n[color=green][names2] [anus2] [is2] {^stretched out:sore:aching:raw:hurting}, but [he2] {^seems to get off on it:appears to enjoy it:savours the pain}.[/color] "
 						elif person.traits.has('Likes it rough'):
+							display = -10
 							values.sens *= .9
 							values.lust *= .9
 							if scenedict.takers.size() <= 1:
 								text += "\n[color=red][names2] [anus2] [is2] {^stretched out:sore:aching:raw:hurting}, but [he2] {^does [his2] best to take it:gasps and puts up with it:just squeaks and moans a bit}.[/color] "
 						else:
+							display = -30
 							values.sens *= .7
 							values.lust *= .7
 							if scenedict.takers.size() <= 1:
@@ -919,6 +925,7 @@ class member:
 					else:
 						# Not torn. Adjust pleasure and mood text based on size.
 						number = 1 + (difference * .1)
+						display = difference * 10
 						values.sens *= number
 						values.lust *= number
 						if scenedict.takers.size() <= 1:
@@ -957,12 +964,11 @@ class member:
 										text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [anus2] {^rips:tears:breaks} even further, causing [him2] excruciating pain.[/color] "
 									person.stress += round(rand_range(difference*2,temppenissize*2))
 					#Display
-					if globals.state.perfectinfo == true:
-						display = difference*10
-						if display > 0 && scenedict.takers.size() <= 1:
+					if globals.state.perfectinfo == true && scenedict.takers.size() <= 1:
+						if display > 0:
 							text += " [color=aqua]Arousal increased by " + str(display) + "%[/color]"
-						elif display < 0 && scenedict.takers.size() <= 1:
-							text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
+						elif display < 0:
+							text += " [color=red]Arousal decreased by " + str(-display) + "%[/color]"
 				
 			#Milking during Sex
 			elif scenedict.scene.code in ['milker','sucknipples']:
