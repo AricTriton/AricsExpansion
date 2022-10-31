@@ -859,7 +859,8 @@ class member:
 								if vagTorn == false:
 									vagTorn = true
 									person.dailyevents.append('vagTorn')
-									globals.addrelations(person, i.person, -round(rand_range(difference*5,difference*10)))
+									if !person.traits.has('Masochist') && !person.traits.has('Likes it rough'):
+										globals.addrelations(person, i.person, -round(rand_range(difference*5,difference*10)))
 									if scenedict.givers.size() <= 1:
 										text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [pussy2] suddenly {^rips:tears:breaks:starts bleeding}, sending waves of pain through [his2] body.[/color] "
 									person.stress += round(rand_range(difference,temppenissize))
@@ -946,7 +947,8 @@ class member:
 								if assTorn == false:
 									assTorn = true
 									person.dailyevents.append('assTorn')
-									globals.addrelations(person, i.person, -round(rand_range(difference*5,difference*10)))
+									if !person.traits.has('Masochist') && !person.traits.has('Likes it rough'):
+										globals.addrelations(person, i.person, -round(rand_range(difference*5,difference*10)))
 									if scenedict.takers.size() <= 1:
 										text += "\n[color=red][name2] {^shouts:screams:cries:sobs:squeals:whimpers} as [his2] [anus2] suddenly {^rips:tears:breaks:starts bleeding}, sending waves of pain through [his2] body.[/color]"
 									person.stress += round(rand_range(difference,temppenissize))
