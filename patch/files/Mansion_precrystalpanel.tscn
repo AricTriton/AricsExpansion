@@ -10740,7 +10740,7 @@ margin_right = 258.0
 margin_bottom = 503.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-text = "save"
+text = "Save"
 
 [node name="loadbutton" type="Button" parent="menucontrol/menupanel/SavePanel"]
 margin_left = 278.0
@@ -10749,7 +10749,7 @@ margin_right = 398.0
 margin_bottom = 503.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-text = "load"
+text = "Load"
 
 [node name="cancelsaveload" type="Button" parent="menucontrol/menupanel/SavePanel"]
 margin_left = 679.0
@@ -10758,7 +10758,7 @@ margin_right = 799.0
 margin_bottom = 503.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-text = "cancel"
+text = "Cancel"
 
 [node name="saveloadfolder" type="Button" parent="menucontrol/menupanel/SavePanel"]
 margin_left = 609.0
@@ -10777,7 +10777,7 @@ margin_right = 659.0
 margin_bottom = 503.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-text = "delete"
+text = "Delete"
 
 [node name="saveline" type="LineEdit" parent="menucontrol/menupanel/SavePanel"]
 margin_left = 86.0
@@ -11517,7 +11517,7 @@ margin_bottom = -68.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-text = "Issue Cleaning"
+text = "Order Cleaning"
 
 [node name="cleaningtext" type="RichTextLabel" parent="mansionsettings/Panel"]
 margin_left = 624.0

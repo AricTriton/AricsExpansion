@@ -542,6 +542,8 @@ func buttonTextSloth(person):
 func introGeneral(person):
 	var text = ""
 	var choice = []
+	var partName
+	var looks
 	###---Add Vices later
 
 	if person.mood == 'playful':
@@ -550,20 +552,23 @@ func introGeneral(person):
 		choice.append("Well, I didn't know you came here too! *giggle*")
 	if person.mood == 'happy':
 		choice.append("Hey, $master! Good to see you!")
-		choice.append("How is it going, $master?")
+		choice.append("How's it going, $master?")
 		choice.append("How are you on this great day, $master?")
 		choice.append("How are you on this lovely day, $master?")
 	if person.mood == 'respectful':
-		choice.append("$master, how can I help you?")
+		choice.append("$master? How can I help you?")
 		choice.append("What can I do for you, $master?")
 		choice.append("$master?")
 	if person.mood == 'horny':
 		choice.append("Mmm... looking good today, $master...")
 		choice.append("You... you are looking good, $master...")
-		choice.append("$master, do you... think my " +str(globals.expansion.nameAss())+" looks good?")
-		choice.append("$master, do you... think my " +str(globals.expansion.getGenitals(person))+" look good... enough to fuck?")
+		# This won't catch new terms that might be added later. It's still be better than nothing.
+		partName = globals.expansion.nameAss()
+		looks = " look" if "ass cheeks" in partName else " looks"
+		choice.append("$master, do you... think my " + str(partName) + looks + " good?")
+		choice.append("$master, do you... think my " + str(globals.expansion.getGenitals(person)) + " looks good... enough to fuck?")
 	if person.mood == 'obediant':
-		choice.append("It is my pleasure to serve you, $master")
+		choice.append("It is my pleasure to serve you, $master.")
 		choice.append("I will serve, $master, however I can.")
 		choice.append("How may I serve, $master?")
 	if person.mood == 'indifferent':
@@ -571,8 +576,8 @@ func introGeneral(person):
 		choice.append("Yeah? What's up, $master?")
 		choice.append("Mmhmm?")
 	if person.mood == 'scared':
-		choice.append("W...w...what do you want, $master?")
-		choice.append("D-do you...need me for something?")
+		choice.append("W... w... what do you want, $master?")
+		choice.append("D-do you... need me for anything?")
 		choice.append("What did I do, $master?")
 	if person.mood == 'angry':
 		choice.append("Yeah? What do you want?")
@@ -580,8 +585,9 @@ func introGeneral(person):
 		choice.append("What do you want?")
 		choice.append("I'm not going to call you $master. What do you want?")
 
-	choice.append("What's up?")
-	choice.append("What is going on?")
+	if choice.size() <= 0:
+		choice.append("What's up?")
+		choice.append("What's going on?")
 
 	text = globals.randomitemfromarray(choice)
 	return text
