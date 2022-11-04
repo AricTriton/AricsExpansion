@@ -598,10 +598,10 @@ func _on_end_pressed():
 					if person.work == 'rest':
 						if jobRestore != 'rest':
 						###---Added by Expansion---### Added Event
-							text = "$name almost collapsed from exhaustion and was forced to rest instead of work today. \n"
+							text += "$name almost collapsed from exhaustion and was forced to rest instead of work today. \n"
 							person.dailyevents.append('exhaustion')
 						else:
-							text = '$name has spent most of the day relaxing.\n'
+							text += '$name has spent most of the day relaxing.\n'
 						###---End Expansion---###
 						slavehealing += 0.15
 						person.stress -= 20
