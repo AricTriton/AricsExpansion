@@ -1468,7 +1468,7 @@ func manageVats(workersDict):
 			else:
 				var perworker = ceil(float(totalbottlesneeded) / bottlers.size())
 				for worker in bottlers:
-					if worker.jobskills.has('bottler'):
+					if !worker.jobskills.has('bottler'):
 						worker.jobskills['bottler'] = 0
 					var workerEnergyCost = energycost*(1 - worker.jobskills.bottler*.01)
 					var goalMake = min(totalbottlesneeded, perworker)
