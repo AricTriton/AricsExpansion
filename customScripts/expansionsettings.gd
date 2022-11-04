@@ -395,6 +395,7 @@ func applyRalphsTweaks():
 	applyCombatDataTweaks()
 	
 	applyRaceTweaks()
+	globals.racefile.buildGroups()
 
 # Apply variables.gd changes here
 func applyVariableTweaks():
