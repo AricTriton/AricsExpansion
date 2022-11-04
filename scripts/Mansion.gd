@@ -505,13 +505,6 @@ func _on_end_pressed():
 
 	###---Added by Expansion---### Category: Daily Update | Management First | Spacing
 	var first_slave_processed = true
-	for person in globals.slaves:
-		if person.work in ['headgirl','farmmanager']:
-			if first_slave_processed == true:
-				first_slave_processed = false
-			else:
-				text += "\n"
-			text += globals.expansion.dailyUpdate(person)
 	###---Expansion End---###
 
 	for person in globals.slaves:
@@ -538,12 +531,11 @@ func _on_end_pressed():
 		text = ''
 
 		###---Added by Expansion---### Update Player, Towns, and People
-		if !person.work in ['headgirl','farmmanager']:
-			if first_slave_processed == true:
-				first_slave_processed = false
-			else:
-				text += "\n"
-			text += globals.expansion.dailyUpdate(person) + "\n"
+		if first_slave_processed == true:
+			first_slave_processed = false
+		else:
+			text += "\n"
+		text += globals.expansion.dailyUpdate(person) + "\n"
 		###---End Expansion---###
 	
 		var jobRestore = person.work
