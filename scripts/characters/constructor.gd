@@ -917,7 +917,7 @@ func set_race_secondary(person):
 
 	if person.race != 'Beastkin Squirrel' && person.race != 'Halfkin Squirrel' && person.genealogy.squirrel > race_secondary_percent && person.genealogy.squirrel > 0:
 		race_secondary = 'Halfkin Squirrel'
-		race_secondary_percent = person.genealogy.Squirrel
+		race_secondary_percent = person.genealogy.squirrel
 
 	if person.race != 'Beastkin Otter' && person.race != 'Halfkin Otter' && person.genealogy.otter > race_secondary_percent && person.genealogy.otter > 0:
 		race_secondary = 'Halfkin Otter'

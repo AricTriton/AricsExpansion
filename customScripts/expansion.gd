@@ -2155,7 +2155,7 @@ func dailyUpdate(person):
 		if globals.expansionsettings.vocal_traits_delaytimer == true && person.npcexpanded.temptraits.count('vocaltraitdelay') > 0:
 			person.npcexpanded.temptraits.remove('vocaltraitdelay')
 			if globals.expansionsettings.perfectinfo == true:
-				text += "\n[color=aqua]Perfect Info: "+ str(person.npcexpanded.temptraits.count('vocaltraitdelay')) +" Days Remaining before next possible Vocal Trait change."
+				text += "\n[color=aqua]Perfect Info: "+ str(person.npcexpanded.temptraits.count('vocaltraitdelay')) +" Days Remaining before next possible Vocal Trait change.[/color]"
 		else:
 			var lipincreasechance = globals.expansionsettings.lipstraitbasechance + (10*(globals.lipssizearray.find(person.lips)-6))
 			var lipdecreasechance = globals.expansionsettings.lipstraitbasechance + (10*(7 - globals.lipssizearray.find(person.lips)))
@@ -2629,7 +2629,7 @@ func dailyTownGuard():
 						reason = globals.randomitemfromarray(['panhandling','robbery','highway robbery','misdemenours','poaching','loitering','violence','murder','murder most foul','rape','burglery'])
 					else:
 						reason = globals.randomitemfromarray(['being barbaric','inexcusable nonsense','inopportune flatuelance','rude gesturing'])
-					text += "\n" + source + " from [color=aqua]" + location.capitalize() + "[/color]. [color=aqua]" + str(baddie.name_long()) + "[/color] has been brought to justice by the " + capturers + " for " + reason + ". "
+					text += "\n" + source + " from [color=aqua]" + location.capitalize() + "[/color]. [color=aqua]" + str(baddie.name_long()) + "[/color] has been brought to justice by " + capturers + " for " + reason + ". "
 					if baddie.sellprice(true) >= rand_range(50,100):
 						if location == 'amberguard':
 							text += baddie.dictionary("$He has been taken outside of the city and donated to local slavers on their way to ")
@@ -2905,7 +2905,7 @@ func dailyLactation(person):
 	if rand_range(0,100) <= person.lactating.duration*globals.expansionsettings.lactationacceptancemultiplier:
 		if person.fetish.lactation != globals.fetishopinion.back():
 			person.fetish.lactation = globals.fetishopinion[globals.fetishopinion.find(person.fetish.lactation)+1]
-			text += "$name seems to be more comfortable with lactating now. $He now feels that it is " + str(person.fetish.lactation) + " to be lactating."
+			text += "$name seems to be more comfortable with lactating now. $He now feels that it is " + str(person.fetish.lactation) + " to be lactating. "
 
 	#Permanent Swelling
 	if person.titssize == "masculine":

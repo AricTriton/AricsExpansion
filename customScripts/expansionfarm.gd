@@ -696,7 +696,7 @@ func extractMilk(cattle, milkmaid, farmmanager):
 	if cattle.checkFetish('bemilked', 1.5) == true || cattle.spec == 'hucow':
 		if milkmaid != null && (rand_range(0,100) <= (cattle.obed-100) + (milkmaid.charm + milkmaid.jobskills.milking)):
 			globals.addrelations(cattle, milkmaid, rand_range(20,40))
-			text += "[color=aqua]" + milkmaid.name_short() + "[/color] made it enjoyable for [color=aqua]$name[/color] to be milked today. $He has gained [color=green]" + str(gain) + " Lust[/color] "
+			text += "[color=aqua]" + milkmaid.name_short() + "[/color] made it enjoyable for [color=aqua]$name[/color] to be milked today. $He has gained [color=green]" + str(gain) + " Lust[/color]. "
 			cattle.farmexpanded.extractmilk.opinion.append('accepted')
 			cattle.lust += gain
 		else:
@@ -1374,7 +1374,7 @@ func manageSnails(workersDict):
 			merchantcounter -= 1
 		refSnails.sell = snailresults
 		var gold = snailresults * refSnails.goldperegg
-		text += "\nYour merchants were able to sell [color=green]" +str(snailresults)+ " eggs [/color] today for [color=green]" +str(gold)+ " gold[/color]. "
+		text += "\nYour merchants were able to sell [color=green]" +str(snailresults)+ " eggs [/color] today for [color=yellow]" +str(gold)+ "[/color] gold. "
 		globals.resources.gold += snailresults
 	
 	#Incubate & Hatch
@@ -1541,7 +1541,7 @@ func manageVats(workersDict):
 		
 	#Wrap-Up Text
 	if bottlespurchased > 0:
-		text += "\nToday, your farm manager automatically purchased [color=aqua]" + str(bottlespurchased) + " Bottles[/color] for [color=aqua]" + str(bottlespurchased * containerdict.bottle.cost) + "[/color] to fulfill the outstanding requests to bottle the fluids for refinement or sales. "		
+		text += "\nToday, your farm manager automatically purchased [color=aqua]" + str(bottlespurchased) + " Bottles[/color] for [color=yellow]" + str(bottlespurchased * containerdict.bottle.cost) + "[/color] gold to fulfill the outstanding requests to bottle the fluids for refinement or sales. "		
 	return text
 
 
@@ -1562,7 +1562,7 @@ func sellFluids(workersDict):
 		var sellresult = refVats[fluid].sell - remainingSell
 		refVats[fluid].sell = remainingSell
 		var gold = round(sellresult * globals.itemdict['bottled'+fluid].cost * rand_range(.5,1.5))
-		text += "\nYour merchants were able to sell [color=green]" +str(sellresult)+ " bottles of "+fluid.capitalize()+" [/color] today for [color=green]" +str(gold)+ " gold[/color]. "
+		text += "\nYour merchants were able to sell [color=green]" +str(sellresult)+ " bottles of "+fluid.capitalize()+" [/color] today for [color=yellow]" +str(gold)+ "[/color] gold. "
 		globals.resources.gold += gold
 	return text
 
@@ -1615,7 +1615,7 @@ func milkMarket(person, town, bottles):
 	var value = round(refExpandedTown.milkvalue)
 	var interest = round(refExpandedTown.milkinterest)
 	
-	text += "\n[color=aqua]$name[/color] took [color=aqua]" + str(bottles) + "[/color] of Milk to [color=aqua]" + str(town).capitalize() + "[/color]. "
+	text += "\n[color=aqua]$name[/color] took [color=aqua]" + str(bottles) + "[/color] bottles of Milk to [color=aqua]" + str(town).capitalize() + "[/color]. "
 	
 	#Sale = Bottles > Interest * 2
 	if bottles >= interest * 2:
@@ -1685,7 +1685,7 @@ func milkMarket(person, town, bottles):
 	if profit <= bottlessold * containerdict.bottle.cost:
 		profit = bottlessold * (containerdict.bottle.cost + 1)
 	
-	text += "$He made a total profit of [color=aqua]" +str(profit)+ " Gold[/color] today. "
+	text += "$He made a total profit of [color=yellow]" +str(profit)+ "[/color] Gold today. "
 	
 	globals.resources.gold += profit
 	globals.resources.farmexpanded.vats.milk.sell -= bottlessold

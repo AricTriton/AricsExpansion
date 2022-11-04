@@ -543,7 +543,7 @@ func _on_end_pressed():
 				first_slave_processed = false
 			else:
 				text += "\n"
-			text += globals.expansion.dailyUpdate(person)
+			text += globals.expansion.dailyUpdate(person) + "\n"
 		###---End Expansion---###
 	
 		var jobRestore = person.work

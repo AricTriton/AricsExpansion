@@ -646,7 +646,7 @@ func addConstantsSupport():
 		baselivestockconsentchance = {descript = "Livestock Consent Base Chance (+ 50% loyalty, 25% obediance, + various factors)", min = 0.0, max = 100.0, object = self},
 		chancetokillsnail = {descript = "", min = 0.0, max = 100.0, object = self},
 		snailegglaborbadresult = {descript = "", object = self},
-		snailegglabordetails = {descript = "Set this to false if you don't wamt to see the details", object = self},
+		snailegglabordetails = {descript = "Set this to false if you don't want to see the details", object = self},
 		livestockautoconsentchance = {descript = "", min = 0.0, max = 100.0, object = self},
 		livestockcanloseconsent = {descript = "", min = 0.0, max = 100.0, object = self},
 		livestockloseconsentchance = {descript = "", min = 0.0, max = 100.0, object = self},
