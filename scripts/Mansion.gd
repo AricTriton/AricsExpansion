@@ -3906,8 +3906,7 @@ func _on_vatsbutton_pressed():
 		bottlecount -= refVats[fluid].bottle2refine + refVats[fluid].bottle2sell
 
 	#Bottler
-	var bottlerLevel = globals.state.mansionupgrades.bottler
-	globals.resources.farmexpanded.bottler.level = bottlerLevel
+	var bottlerLevel = globals.resources.farmexpanded.bottler.level
 	text = "[center][color=#d1b970]Bottler Level:[/color] [color=aqua]" + str(bottlerLevel) + "[/color][/center]"
 	text += "\n[color=#d1b970]Energy Cost per Bottle Created: [/color]\nMilk: [color=aqua]" + str(refVats.milk.basebottlingenergy - bottlerLevel) + "[/color]\nSemen: [color=aqua]" + str(refVats.semen.basebottlingenergy - bottlerLevel)
 	text += "[/color]\nLube: [color=aqua]" + str(refVats.lube.basebottlingenergy - bottlerLevel) + "[/color]\nPiss: [color=aqua]" + str(refVats.piss.basebottlingenergy - bottlerLevel) + "[/color]"

@@ -178,10 +178,8 @@ func purchasconfirm():
 	globals.state.mansionupgrades[upgrade.code] += 1
 	if upgrade.code == 'mansionlab':
 		globals.main.get_node("Navigation/laboratory").set_disabled(false)
+	if upgrade.code == 'bottler':
+		globals.resources.farmexpanded.bottler.level = globals.state.mansionupgrades.bottler
 	categoryselect(selectedcategory)
 	upgradeselected(upgrade)
 	get_node("upgradepoints").set_text("Free upgrade points:"+str(globals.resources.upgradepoints))
-
-
-
-
