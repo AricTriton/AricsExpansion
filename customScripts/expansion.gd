@@ -1322,7 +1322,7 @@ func getMovement(person):
 	var weight = swollencarry - (person.swollen + titweight)
 	weight = clamp(weight, -20, 20)
 
-	if weight < 0 || person.restrained in ['shackled','fully','fullyexposed'] || person.energy-weight <= 0:
+	if weight < 0 || person.restrained in ['shackled','fully','fullyexposed'] || person.energy + weight <= 0:
 		if person.movement != 'none':
 			#Essentially any but 'livestock','breeder','object'
 #			if person.mind.identity.has('self')
@@ -1344,13 +1344,13 @@ func getMovement(person):
 					person.movementreasons.append('[color=red]\nIs not Strong enough to stand up under the weight of $his oversized Tits.[/color] ')
 			if person.restrained in ['shackled','fully','fullyexposed']:
 				person.movementreasons.append('[color=red]\nIs currently restrained.[/color] ')
-			if person.energy-weight < 0:
+			if person.energy + weight < 0:
 				person.movementreasons.append('[color=red]\nIs too tired, Energy is too low.[/color] ')
 			person.movement = "none"
 			return "$name is now [color=aqua]immobilized[/color]\n"
 #		elif !person.traits.has('Movement: Immobilized'):
 #			person.add_trait('Movement: Immobilized')
-	elif weight < 3 || person.restrained in ['cuffed'] || person.energy-weight < 15 || person.rules.pet == true && rand_range(0,150) <= person.obed+person.loyal:
+	elif weight < 3 || person.restrained in ['cuffed'] || person.energy + weight < 15 || person.rules.pet == true && rand_range(0,150) <= person.obed+person.loyal:
 		if person.movement != 'crawl':
 			#Essentially any but 'livestock','breeder','object'
 #			if person.mind.identity.has('self'):
@@ -1373,7 +1373,7 @@ func getMovement(person):
 					person.movementreasons.append('[color=red]\nIs not Strong enough to stand up under the weight of $his oversized Tits.[/color] ')
 			if person.restrained in ['cuffed']:
 				person.movementreasons.append('[color=red]\nIs currently restrained.[/color] ')
-			if person.energy-weight < 15:
+			if person.energy + weight < 15:
 				person.movementreasons.append('[color=red]\nIs too tired, Energy is too low.[/color] ')
 			if person.rules.pet == true:
 				person.movementreasons.append('[color=red]\nIs required to crawl per your orders.[/color] ')
