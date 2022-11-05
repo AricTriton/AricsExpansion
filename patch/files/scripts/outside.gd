@@ -2562,8 +2562,11 @@ func brothel(person = null):
 	###---Added by Expansion---### Colorize Text
 	var text = "Doorman greets you and shows you the way around [color=aqua]brothel[/color] until you meet with the [color=aqua]Madam[/color].\n[color=yellow]—Greetings. How can we pleasure you today?[/color]\n"
 	for person in globals.slaves:
-		if person.away.duration == 0 && (person.work == 'whorewimborn' || person.work == 'escortwimborn' || person.work == 'fucktoywimborn'):
-			text += person.dictionary('\nYou can see [url=id' + str(person.id) + '][color=yellow]$name[/color][/url] ' + str(globals.expansion.nameBrothelWorking()))
+		if person.away.duration == 0:
+			if person.work == 'whorewimborn' || person.work == 'escortwimborn':
+				text += person.dictionary(globals.expansion.getBrothelWhoreDescription(person.id))
+			elif person.work == 'fucktoywimborn':
+				text += person.dictionary(globals.expansion.getBrothelFucktoyDescription(person.id))
 	mansion.maintext = text
 	var array = [{name = 'Return', function = 'backstreets'}]
 	#---Brothel Services
