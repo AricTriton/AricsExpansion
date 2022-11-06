@@ -918,7 +918,12 @@ class member:
 				if scenedict.takers.has(self):
 					if person.lactation == true:
 						if person.lactating.milkstorage > 0 || person.lactating.pressure > 0:
-							number = round(rand_range(person.lactating.milkstorage*.1,person.lactating.milkstorage))
+							number = ceil(rand_range(person.lactating.milkstorage * 0.1, person.lactating.milkstorage * 0.3))
+							if person.lactating.pressure > 0:
+								number += person.lactating.pressure
+								person.lactating.pressure = 0
+							number = clamp(number, 0, person.lactating.milkstorage)
+							person.lactating.milkstorage -= number
 							person.lactating.milkedtoday = true
 							person.lactating.daysunmilked = 0
 							person.dailyevents.append('lactation')
@@ -930,10 +935,7 @@ class member:
 								values.sens *= 1+(number*.1)
 								values.lust *= 1+(number*.1)
 								globals.addrelations(person, i.person, round(rand_range(number,number*2)))
-							if person.lactating.pressure > 0:
-								number += person.lactating.pressure
-							person.lactating.milkstorage -= number
-						text += "\n[color=green]{^[name2] moaned as:[name2] enjoyed} {^[his2]} {^boobs:tits:udders:breasts} lactated "+str(number)+" milk while {^being sucked:being pumped:being milked:being fucked}.[/color]"
+								text += "\n[color=green][name2] {^moans:gasps:spasms:twitches} as {^[his2]} {^boobs:tits:udders:breasts} lactated "+str(number)+" milk while {^being sucked:being pumped:being milked:being fucked}.[/color]"
 
 			text = globals.fastif(person==globals.player, text.replace("[doesn't]","don't"), text.replace("[doesn't]","doesn't"))
 			text = globals.fastif(person==globals.player, text.replace("[seems]","seem"), text.replace("[seems]","seems"))
