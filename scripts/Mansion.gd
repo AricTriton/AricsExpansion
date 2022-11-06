@@ -3658,6 +3658,8 @@ func _on_releasefromfarm_pressed():
 	person.farmexpanded.dailyaction = 'none'
 	person.farmexpanded.workstation = 'free'
 	person.farmexpanded.stallbedding = 'dirt'
+	person.farmexpanded.breeding.status = 'none'
+	person.farmexpanded.breeding.snails = false
 	for i in ['extractmilk','extractcum','extractpiss']:
 		person.farmexpanded[i].enabled = false
 		person.farmexpanded[i].method = 'leak'
