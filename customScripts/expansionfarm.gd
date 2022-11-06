@@ -1574,7 +1574,6 @@ func sellFluids(workersDict):
 var genericLocations = ["none","any"]
 func sellMilk(workersDict):
 	var milkforsale = refVats.milk.sell
-	var bottlesperperson = 0
 	var townmarkets = globals.expandedtowns.duplicate()
 	var text = ""
 
@@ -1582,7 +1581,7 @@ func sellMilk(workersDict):
 		text += "\n\n[color=red]There are no [color=aqua]Milk Merchants[/color] assigned. No fluids can be sold.[/color]\n"
 	else:
 		if milkforsale > 0:
-			bottlesperperson = milkforsale / workersDict.milkmerchant.size()
+			var workers_left = min(workersDict.milkmerchant.size(), townmarkets.size())
 			for milkmerchant in workersDict.milkmerchant:
 				#Location Change
 				var location = milkmerchant.jobsexpanded.location
@@ -1590,11 +1589,17 @@ func sellMilk(workersDict):
 					if !townmarkets.empty():
 						location = globals.randomitemfromarray(townmarkets)
 					else:
-						text += milkmerchant.dictionary("[color=aqua]$name[/color] wasn't able to go and sell milk today as all the city markets were being sold to by your other merchants.\n")
+						text += milkmerchant.dictionary("\n[color=aqua]$name[/color] wasn't able to go and sell milk today as all the city markets were being sold to by your other merchants.")
 						continue
+				if milkforsale <= 0 or workers_left <= 0:
+					text += milkmerchant.dictionary("\nThere were no milk bottles left for [color=aqua]$name[/color] to take to market.")
+					continue
+				var bottles_to_take = ceil(milkforsale / workers_left)
+				milkforsale -= bottles_to_take
+				workers_left -= 1
 				#Selling to the Town
-				townmarkets.remove(location)
-				text += milkMarket(milkmerchant, location, bottlesperperson)
+				townmarkets.erase(location)
+				text += milkMarket(milkmerchant, location, bottles_to_take)
 		else:
 			text += "\n\n[color=red]All of the available milk bottles were reserved for mansion use, so there were none available for the milk merchants to sell today.[/color]\n"
 	return text
