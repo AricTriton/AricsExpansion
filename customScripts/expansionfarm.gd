@@ -409,7 +409,9 @@ func dailyFarm():
 			
 			if cattle.farmexpanded.breeding.status in ["both","breeder"]:
 				if cattle.vagina != 'none':
-					text += breedCattle(cattle, studs)
+					var valid_studs = studs.duplicate()
+					valid_studs.erase(cattle)
+					text += breedCattle(cattle, valid_studs)
 
 			if cattle.farmexpanded.breeding.status == 'snails' || cattle.farmexpanded.breeding.snails == true:
 				text += breedSnails(cattle)
