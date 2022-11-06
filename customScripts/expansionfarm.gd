@@ -1468,10 +1468,12 @@ func manageVats(workersDict):
 			else:
 				var perworker = ceil(float(totalbottlesneeded) / bottlers.size())
 				for worker in bottlers:
+					var goalMake = min(totalbottlesneeded, perworker)
+					if goalMake == 0:
+						continue
 					if !worker.jobskills.has('bottler'):
 						worker.jobskills['bottler'] = 0
 					var workerEnergyCost = energycost*(1 - worker.jobskills.bottler*.01)
-					var goalMake = min(totalbottlesneeded, perworker)
 					var canMake = goalMake if workerEnergyCost == 0 else floor(worker.energy / workerEnergyCost)
 					if canMake >= goalMake:
 						text += worker.dictionary("\n[color=aqua]$name[/color] spent [color=red]" + str(ceil(workerEnergyCost*goalMake)) + " Energy[/color] to create [color=green]" + str(goalMake) + " Bottles of " + fluid + "[/color] today. ")
