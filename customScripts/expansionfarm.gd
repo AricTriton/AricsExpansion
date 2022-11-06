@@ -1703,10 +1703,13 @@ func calcUnspilled(refContainer, worker, totalFluid):
 		return totalFluid
 	var trips = ceil(totalFluid / refContainer.size)
 	var workerMod = worker.sagi*2
+	var remaining_fluid = totalFluid
 	while trips > 0:
+		var fluid_this_trip = min(remaining_fluid, refContainer.size)
 		if rand_range(0,100) <= rand_range(chances.min, chances.max) - workerMod:
-			totalFluid -= round(refContainer.size * rand_range(.1,.5))
+			totalFluid -= round(fluid_this_trip * rand_range(.1,.5))
 		trips -= 1
+		remaining_fluid -= fluid_this_trip
 	return totalFluid
 
 
