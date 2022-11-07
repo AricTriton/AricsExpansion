@@ -1494,6 +1494,8 @@ func manageVats(workersDict):
 							continue
 						if rand_range(0,100) <= round((worker.obed + worker.loyal)/2) + worker.energy:
 							var extrabottles = totalbottlesneeded if workerEnergyCost == 0 else min(floor(worker.energy / workerEnergyCost), totalbottlesneeded)
+							if extrabottles == 0:
+								continue
 							worker.energy -= ceil(extrabottles * workerEnergyCost)
 							bottlesproduced += extrabottles
 							totalbottlesneeded -= extrabottles
