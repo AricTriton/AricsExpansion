@@ -497,7 +497,7 @@ func _on_end_pressed():
 	#Player
 	temptext = globals.expansion.dailyUpdate(globals.player)
 	if temptext != null:
-		text += temptext
+		text += temptext + "\n\n"
 	#slaves
 	if !text.empty():
 		text0.set_bbcode(text0.get_bbcode() + text + "")

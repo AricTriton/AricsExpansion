@@ -2890,7 +2890,7 @@ func dailyLactation(person):
 			person.lactation = false
 			person.lactating.duration = 0
 			if person.knowledge.has('lactating'):
-				text = "[center][color=red]$name's "+str(getChest(person))+" has gone unmilked for too long and $his lactation has dried up.[/color][/center]\n "
+				text = "[center][color=red]$name's "+str(getChest(person))+" have gone unmilked for too long and $his lactation has dried up.[/color][/center]\n "
 				person.knowledge.erase('lactating')
 
 	if person.lactation == false:
