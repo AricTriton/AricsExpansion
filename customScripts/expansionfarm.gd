@@ -121,7 +121,7 @@ var reactiondict = {
 		impregnated = {
 			horny = "$He is laying back with a little smile. $He seems to have fully accepted the situation.",
 			pleading = "$He looks over at you and pouts. [color=yellow]\n-Its not too late, right? It...it can be stopped?[/color]",
-			horrified = "$He seems to be in shock still. [color=yellow]\n-Wh-what's happening to me?/color]"
+			horrified = "$He seems to be in shock still. [color=yellow]\n-Wh-what's happening to me?[/color]"
 		},
 		swollen = {
 			horny = "$He seems to be enjoying the feeling of the mass inside of $him. $He is slowly rubbing $his [pussy] while touching $his belly fondly.",
