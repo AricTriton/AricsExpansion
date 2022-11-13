@@ -1637,6 +1637,9 @@ func fertilize_egg(mother, father_id, father_unique):
 		elif father_unique == 'dog':
 			father.genealogy.dog = 100
 			father.race = 'Beastkin Wolf'
+		elif father_unique == 'hyena':
+			father.genealogy.hyena = 100
+			father.race = 'Gnoll'
 		elif father_unique == 'cow':
 			father.genealogy.cow = 100
 			father.race = 'Taurus'
@@ -1652,6 +1655,18 @@ func fertilize_egg(mother, father_id, father_unique):
 		elif father_unique == 'raccoon':
 			father.genealogy.raccoon = 100
 			father.race = 'Beastkin Tanuki'
+		elif father_unique == 'mouse':
+			father.genealogy.mouse = 100
+			father.race = 'Beastkin Mouse'
+		elif father_unique == 'squirrel':
+			father.genealogy.squirrel = 100
+			father.race = 'Beastkin Squirrel'
+		elif father_unique == 'otter':
+			father.genealogy.otter = 100
+			father.race = 'Beastkin Otter'
+		elif father_unique == 'bird':
+			father.genealogy.bird = 100
+			father.race = 'Beastkin Bird'
 		else:
 			father.race = globals.getracebygroup("starting")
 			globals.constructor.set_genealogy(father)
