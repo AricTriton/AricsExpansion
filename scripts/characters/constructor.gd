@@ -349,6 +349,10 @@ func newbaby(mother,father):
 		mother.knowledge.append('currentpregnancy')
 	globals.state.babylist.append(person)
 	
+	# Random portrait again, since primary race may have changed in setRaceDisplay
+	if globals.rules.randomcustomportraits == true:
+		randomportrait(person)
+
 	globals.traceFile('newbaby')
 	
 	return person
