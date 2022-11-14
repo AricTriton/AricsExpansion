@@ -476,7 +476,7 @@ func sssexscene(stage = 0):
 ###---Added by Expansion---### DimCrystal Events
 var ae_node = globals.ae_eventtext
 
-#Stages = -10: Dark | 0: Intro | 5: IntroComplete
+#Stages = | 0: Intro | 5: IntroComplete | 100: Dark
 func dimcrystalinitiate(stage = 0):
 	var state = true
 	var text
@@ -556,6 +556,7 @@ func dimcrystaldarkened(stage = 0):
 			globals.main.backgroundinstant('stairs_red')
 			globals.main.clearscreen()
 			text = ae_node.dimcrystal_dark_0
+			globals.state.thecrystal.mode = "dark"
 			buttons.append(['Rush Downstairs','dimcrystaldarkened',1])
 		1:
 			state = false
@@ -568,7 +569,7 @@ func dimcrystaldarkened(stage = 0):
 			text = ae_node.dimcrystal_dark_1
 			buttons.append(['Return Upstairs','dimcrystaldarkened',2])
 		2:
-			globals.state.sidequests.dimcrystal = -10
+			globals.state.sidequests.dimcrystal = 100
 			globals.player.dailyevents.append('dimcrystaldarkened')
 			globals.main.animationfade(1.5)
 			closedialogue()

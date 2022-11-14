@@ -121,6 +121,7 @@ var abilitydict = {
 		usetext = '$name goes for a deadly blow. ',
 		target = 'one',
 		targetgroup = 'enemy',
+		effect = null,
 		can_miss = true,
 		learncost = 35,
 		power = 2,
