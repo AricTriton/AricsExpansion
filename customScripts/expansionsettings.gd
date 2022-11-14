@@ -62,7 +62,7 @@ var use_nickname_plus_first_name = false
 var show_onceperday_notification = true
 
 #Automated choice for captives 0 = leave, 1 = rape, 2 = kill
-var capturedSelect = 2
+var capturedSelect = 1
 var rescuedSelect = 0
 var foundSelect = 0
 

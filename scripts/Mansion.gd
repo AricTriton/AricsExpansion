@@ -3720,7 +3720,7 @@ func _on_extractpiss_pressed():
 func _on_breeding_option_selected( ID ):
 	selectedfarmslave.farmexpanded.breeding.status = globals.expansionfarm.breedingoptions[ID]
 	if ID == 0:
-		selectedfarmslave.unassignPartner()
+		selectedfarmslave.unassignPartner()		
 #Tried to get it to check consent first
 #	person.assignBreedingJob(breeding[ID])
 	farminspect(selectedfarmslave)
