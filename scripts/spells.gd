@@ -292,7 +292,7 @@ func mindreadeffect():
 	text += "\nBase Beauty: " + str(person.beautybase) + ', Temporal (Temporary) Beauty: ' + str(person.beautytemp)
 	text += "\nObedience: " + str(round(person.obed)) + ", Fear: " + str(person.fear) + ', Stress: '+ str(round(person.stress)) + ', Loyalty: ' + str(round(person.loyal)) + ', Lust: '+ str(round(person.lust)) + ', Courage: ' + str(round(person.cour)) + ', Confidence: ' + str(round(person.conf)) + ', Wit: '+ str(round(person.wit)) + ', Charm: ' + str(round(person.charm)) + ", Toxicity: " + str(floor(person.toxicity)) + ", Lewdness: " + str(floor(person.lewdness)) + ", Role Preference: " + str(floor(person.asser))
 	if person.traits.size() >= 0:
-		text += '\n\n$name has corresponding traits: [color=aqua]'
+		text += '\n\n$name has these traits: [color=aqua]'
 		for i in person.traits:
 			text += '\n' + i
 		text += '[/color]'
@@ -336,7 +336,7 @@ func mindreadeffect():
 			if person.mind.vice_presented == true:
 				vice_discoverychance += globals.expansionsettings.vices_discovery_presentation_bonus
 			if vice_text == "":
-				text += "\n\nYou sense $him resisting your mental probing. It seems there is an internal weakness or [color=aqua]Vice[/color] that $he is subconsciousnessly desparate to hide from you. You feel you may be able to break this resistance down if you continued to cast this on $him.\n\nYou currently have a [color=aqua]" + str(vice_discoverychance) + " Percent[/color] to break this resistance."
+				text += "\n\nYou sense $him resisting your mental probing. It seems there is an internal weakness or [color=aqua]Vice[/color] that $he is subconsciously desparate to hide from you. You feel you may be able to break this resistance down if you continued to cast this on $him.\n\nYou currently have a [color=aqua]" + str(vice_discoverychance) + "%[/color] chance to break this resistance."
 			else:
 				text += "\n" + vice_text
 				if person.checkVice('envy'):

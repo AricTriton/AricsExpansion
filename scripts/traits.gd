@@ -785,7 +785,7 @@ var traits = {
 	},
 	"Grateful": {
 		"name": "Grateful",
-		"description": "Due to your actions, $name will overlook certain hardships to stick close to you.\n\n [color=aqua]No luxury requirements. [/color]",
+		"description": "Due to your actions, $name will overlook certain hardships in order to stay close to you.\n\n [color=aqua]No luxury requirements. [/color]",
 		"effect": {
 			
 		},
@@ -800,7 +800,7 @@ var traits = {
 #Physical Traits
 	"Fertile": {
 		"name": "Fertile",
-		"description": "$name's body seems to crave baring children. $He is far more likely to get pregnant than most.\n\n[color=aqua]Impregnation chance greatly improved. [/color]",
+		"description": "$name's body seems to crave bearing children. $He is far more likely to get pregnant than most.\n\n[color=aqua]Impregnation chance greatly improved. [/color]",
 		"effect": {
 			"code": "fertile",
 		},
@@ -1881,7 +1881,7 @@ var traits = {
 	},
 	"Pliability 1": {
 		"name": "Pliability 1",
-		"description": "[color=aqua]Firm[/color]: $name's holes are barely yielding, lessening the chance of tearing.\n\n [color=green]20% lower chance to Tear during Penetration[/color]",
+		"description": "[color=aqua]Firm[/color]: $name's holes are very slightly yielding, lessening the chance of tearing.\n\n [color=green]20% lower chance to Tear during Penetration[/color]",
 		"effect": {
 			
 		},
@@ -1903,7 +1903,7 @@ var traits = {
 	},
 	"Pliability 2": {
 		"name": "Pliability 2",
-		"description": "[color=aqua]Yielding[/color]: $name's holes are very slightly yielding, lessening the chance of tearing.\n\n [color=green]40% lower chance to Tear during Penetration[/color]",
+		"description": "[color=aqua]Yielding[/color]: $name's holes are somewhat yielding, lessening the chance of tearing.\n\n [color=green]40% lower chance to Tear during Penetration[/color]",
 		"effect": {
 			
 		},
@@ -1947,7 +1947,7 @@ var traits = {
 	},
 	"Pliability 4": {
 		"name": "Pliability 4",
-		"description": "[color=aqua]Stretchy[/color]: $name's holes are very yielding, lessening the chance of tearing greatly.\n\n [color=green]80% lower chance to Tear during Penetration[/color]",
+		"description": "[color=aqua]Stretchy[/color]: $name's holes are quite yielding, greatly lessening the chance of tearing.\n\n [color=green]80% lower chance to Tear during Penetration[/color]",
 		"effect": {
 			
 		},
@@ -1969,7 +1969,7 @@ var traits = {
 	},
 	"Pliability 5": {
 		"name": "Pliability 5",
-		"description": "[color=aqua]Super Stretchy[/color]: $name's holes are completely stretchy, almost eliminating the chance of tearing.\n\n [color=green]100% lower chance to Tear during Penetration[/color]",
+		"description": "[color=aqua]Super Stretchy[/color]: $name's holes are very stretchy, almost eliminating the chance of tearing.\n\n [color=green]100% lower chance to Tear during Penetration[/color]",
 		"effect": {
 			
 		},
