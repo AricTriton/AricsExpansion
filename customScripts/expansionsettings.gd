@@ -96,6 +96,7 @@ var vices_discovery_presentation_bonus = 20
 #Disable Tearing System
 var disablevaginatearing = false
 var disableanaltearing = false
+var healthPenaltyWhenTorn = true
 
 #Chance of Holes staying Stretched during Sex. Chance + (Elasticity*10)
 var stretchchancevagina = 50
