@@ -404,6 +404,10 @@ class member:
 								for i in scene.takers:
 									i.person.cum.ass += person.pregexp.cumprod
 									i.person.checkFetish('creampieass')
+							elif scene.scene.takerpart == 'mouth':
+								for i in scene.takers:
+									i.person.cum.mouth += person.pregexp.cumprod
+									i.person.checkFetish('creampiemouth')
 							###---End Expansion---###
 						if scene.scene.code in ['doublepen','triplepen']: # Capitulize
 							for i in scene.takers:
