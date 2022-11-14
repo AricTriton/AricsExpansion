@@ -1,4 +1,5 @@
 
+# Valid values for mode are "default" and "compact".
 func getslavedescription(tempperson, mode = 'default'):
 	showmode = mode
 	person = tempperson
@@ -55,7 +56,7 @@ func getslavedescription(tempperson, mode = 'default'):
 ###---Added by Expansion---### Once Per Day Notifications
 func onceperdayConvos():
 	var text = '\n'
-	if globals.expansionsettings.show_onceperday_notification == true && person != globals.player:
+	if globals.expansionsettings.show_onceperday_notification && person != globals.player && showmode == 'default':
 		text += "\n[center][color=#d1b970]---Once Per Day Talk Subjects Still Available Today---[/color][/center]"
 		#Consent
 		if !person.dailytalk.has('consentparty') && person.consentexp.party == false:
