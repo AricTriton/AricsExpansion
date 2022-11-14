@@ -1108,13 +1108,59 @@ func nameHelplessOrgasmPreface():
 func nameHelplessOrgasm():
 	return globals.randomitemfromarray(['came','orgasmed','came so hard that $he squirted','relentlessly orgasmed','moaned in orgasm','responded instinctually','gave in to $his animalistic urges','responded helplessly','grunted like a bitch in heat','squealed as $he orgasmed','gushed in esctasy','drenched $himself'])
 
-func nameBrothelWorking():
-	var array = ["waiting for clients.","sitting on a couch","talking to another whore.","sitting with $his legs spread open.","posing on the stage."] 
-	var client_tasks = globals.randomitemfromarray(['leading $him to a room.','being led to a room by $him.','kissing $his neck.','and is fingering her openly.','kissing $him.','getting a blowjob from $him.','sucking $his nipples.'])
-	var text = " with a " + globals.randomitemfromarray(['Human','Human','Human','Human','Human','Elf','Dark Elf','Tribal Elf','Orc','Gnome']) + " " + client_tasks + "."
-	array.append(text)
+func getBrothelWhoreDescription(id):
+	var name = "[url=id" + str(id) + "][color=yellow]$name[/color][/url]"
+	var races = ["a human", "a human", "a human", "a human", "a human", "an elf", "a dark elf", "a tribal elf", "an orc", "a gnome"]
+	var intros = [
+		"You can see " + name,
+		"You see " + name,
+		"You notice " + name,
+		"You spot " + name,
+		name + " is"
+	]
+	var awayWithClientTasks = [
+		"$He is probably in a private room with a client.",
+		"$He is probably serving a client.",
+		"$He is most likely in a private room, serving a client.",
+		"However, you hear a series of muffled squeals from a nearby room that sort of sound like $him.",
+	]
+	var loungingTasks = [
+		".",
+		", catching her breath.",
+		", trying to look enticing.",
+		", glancing seductively at " + globals.randomitemfromarray(races),
+		", waving coquettishly at " + globals.randomitemfromarray(races) + ", who seems rather interested in $him."
+	]
+	# Clients are assumed to be male, so some of the pronouns have no $ prefix. This is intentional.
+	var servingClientTasks = [
+		", taking him to a room.",
+		", who is holding $his arm firmly, leading $him to a room.",
+		", who is kissing $his neck.",
+		", who is fingering $him openly.",
+		", kissing him lovingly.",
+		", giving him a blowjob.",
+		", who is busily sucking $his nipples."
+	]
+
+	var activities = [
+		name + " is nowhere to be seen. " + globals.randomitemfromarray(awayWithClientTasks),
+		"You can't see " + name + " anywhere. " + globals.randomitemfromarray(awayWithClientTasks),
+		"You fail to spot " + name + ". " + globals.randomitemfromarray(awayWithClientTasks),
+		globals.randomitemfromarray(intros) + " waiting for clients.",
+		globals.randomitemfromarray(intros) + " sitting on a couch" + globals.randomitemfromarray(loungingTasks),
+		globals.randomitemfromarray(intros) + " on a couch, flirting with " + globals.randomitemfromarray(races) + ".",
+		globals.randomitemfromarray(intros) + " on a couch, entertaining " + globals.randomitemfromarray(races) + ".",
+		globals.randomitemfromarray(intros) + " talking to another whore.",
+		globals.randomitemfromarray(intros) + " sitting with $his legs spread open.",
+		globals.randomitemfromarray(intros) + " posing on the stage."
+	]
+	for i in 4:
+		activities.append(globals.randomitemfromarray(intros) + " with " + globals.randomitemfromarray(races) + globals.randomitemfromarray(servingClientTasks))
 	
-	return globals.randomitemfromarray(array)
+	return "\n" + globals.randomitemfromarray(activities)
+
+func getBrothelFucktoyDescription(id):
+	return getBrothelWhoreDescription(id)
 
 #Non-Generic Description Names for Body Parts
 func getChest(person):
