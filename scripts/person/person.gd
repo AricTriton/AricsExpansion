@@ -1089,11 +1089,11 @@ func sellprice(alternative = false):
 	if npcexpanded.mansionbred == true && globals.state.spec == 'Breeder':
 		price *= globals.expansionsettings.mansion_bred_and_breeder
 	elif npcexpanded.mansionbred == true:
-		price = round(price*1.25)
+		price = price*1.25
 	###---End Expansion---###
 	if globals.state.spec == 'Slaver' && fromguild == false:
 		price *= 2
-	return price
+	return round(price)
 
 func death():
 	if globals.slaves.has(self):

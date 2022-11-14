@@ -1002,7 +1002,7 @@ func _on_slavesellbutton_pressed():
 	racepricemod = clamp(racepricemod - racepricemodchange,0.5,5)
 	globals.state.racemarketsat[selectedslave.race] = racepricemod
 	#/ralph5
-	if selectedslave.obed >= 90 && selectedslave.fromguild == false && selectedslave.effects.has('captured') == false:
+	if selectedslave.obed >= 80 && selectedslave.fromguild == false && selectedslave.effects.has('captured') == false:
 		upgradefromslave = true
 		###---Added by Expansion---###
 		globals.expansion.updatePerson(selectedslave)

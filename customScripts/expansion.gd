@@ -1368,7 +1368,7 @@ func getMovement(person):
 	var weight = swollencarry - (person.swollen + titweight)
 	weight = clamp(weight, -20, 20)
 
-	if weight < 0 || person.restrained in ['shackled','fully','fullyexposed'] || person.energy-weight <= 0:
+	if weight < 0 || person.restrained in ['shackled','fully','fullyexposed'] || person.energy + weight <= 0:
 		if person.movement != 'none':
 			#Essentially any but 'livestock','breeder','object'
 #			if person.mind.identity.has('self')
@@ -1390,13 +1390,13 @@ func getMovement(person):
 					person.movementreasons.append('[color=red]\nIs not Strong enough to stand up under the weight of $his oversized Tits.[/color] ')
 			if person.restrained in ['shackled','fully','fullyexposed']:
 				person.movementreasons.append('[color=red]\nIs currently restrained.[/color] ')
-			if person.energy-weight < 0:
+			if person.energy + weight < 0:
 				person.movementreasons.append('[color=red]\nIs too tired, Energy is too low.[/color] ')
 			person.movement = "none"
 			return "$name is now [color=aqua]immobilized[/color]\n"
 #		elif !person.traits.has('Movement: Immobilized'):
 #			person.add_trait('Movement: Immobilized')
-	elif weight < 3 || person.restrained in ['cuffed'] || person.energy-weight < 15 || person.rules.pet == true && rand_range(0,150) <= person.obed+person.loyal:
+	elif weight < 3 || person.restrained in ['cuffed'] || person.energy + weight < 15 || person.rules.pet == true && rand_range(0,150) <= person.obed+person.loyal:
 		if person.movement != 'crawl':
 			#Essentially any but 'livestock','breeder','object'
 #			if person.mind.identity.has('self'):
@@ -1419,7 +1419,7 @@ func getMovement(person):
 					person.movementreasons.append('[color=red]\nIs not Strong enough to stand up under the weight of $his oversized Tits.[/color] ')
 			if person.restrained in ['cuffed']:
 				person.movementreasons.append('[color=red]\nIs currently restrained.[/color] ')
-			if person.energy-weight < 15:
+			if person.energy + weight < 15:
 				person.movementreasons.append('[color=red]\nIs too tired, Energy is too low.[/color] ')
 			if person.rules.pet == true:
 				person.movementreasons.append('[color=red]\nIs required to crawl per your orders.[/color] ')
@@ -1683,6 +1683,9 @@ func fertilize_egg(mother, father_id, father_unique):
 		elif father_unique == 'dog':
 			father.genealogy.dog = 100
 			father.race = 'Beastkin Wolf'
+		elif father_unique == 'hyena':
+			father.genealogy.hyena = 100
+			father.race = 'Gnoll'
 		elif father_unique == 'cow':
 			father.genealogy.cow = 100
 			father.race = 'Taurus'
@@ -1698,6 +1701,18 @@ func fertilize_egg(mother, father_id, father_unique):
 		elif father_unique == 'raccoon':
 			father.genealogy.raccoon = 100
 			father.race = 'Beastkin Tanuki'
+		elif father_unique == 'mouse':
+			father.genealogy.mouse = 100
+			father.race = 'Beastkin Mouse'
+		elif father_unique == 'squirrel':
+			father.genealogy.squirrel = 100
+			father.race = 'Beastkin Squirrel'
+		elif father_unique == 'otter':
+			father.genealogy.otter = 100
+			father.race = 'Beastkin Otter'
+		elif father_unique == 'bird':
+			father.genealogy.bird = 100
+			father.race = 'Beastkin Bird'
 		else:
 			father.race = globals.getracebygroup("starting")
 			globals.constructor.set_genealogy(father)
@@ -2201,7 +2216,7 @@ func dailyUpdate(person):
 		if globals.expansionsettings.vocal_traits_delaytimer == true && person.npcexpanded.temptraits.count('vocaltraitdelay') > 0:
 			person.npcexpanded.temptraits.remove('vocaltraitdelay')
 			if globals.expansionsettings.perfectinfo == true:
-				text += "\n[color=aqua]Perfect Info: "+ str(person.npcexpanded.temptraits.count('vocaltraitdelay')) +" Days Remaining before next possible Vocal Trait change."
+				text += "\n[color=aqua]Perfect Info: "+ str(person.npcexpanded.temptraits.count('vocaltraitdelay')) +" Days Remaining before next possible Vocal Trait change.[/color]"
 		else:
 			var lipincreasechance = globals.expansionsettings.lipstraitbasechance + (10*(globals.lipssizearray.find(person.lips)-6))
 			var lipdecreasechance = globals.expansionsettings.lipstraitbasechance + (10*(7 - globals.lipssizearray.find(person.lips)))
@@ -2675,7 +2690,7 @@ func dailyTownGuard():
 						reason = globals.randomitemfromarray(['panhandling','robbery','highway robbery','misdemenours','poaching','loitering','violence','murder','murder most foul','rape','burglery'])
 					else:
 						reason = globals.randomitemfromarray(['being barbaric','inexcusable nonsense','inopportune flatuelance','rude gesturing'])
-					text += "\n" + source + " from [color=aqua]" + location.capitalize() + "[/color]. [color=aqua]" + str(baddie.name_long()) + "[/color] has been brought to justice by the " + capturers + " for " + reason + ". "
+					text += "\n" + source + " from [color=aqua]" + location.capitalize() + "[/color]. [color=aqua]" + str(baddie.name_long()) + "[/color] has been brought to justice by " + capturers + " for " + reason + ". "
 					if baddie.sellprice(true) >= rand_range(50,100):
 						if location == 'amberguard':
 							text += baddie.dictionary("$He has been taken outside of the city and donated to local slavers on their way to ")
@@ -2936,7 +2951,7 @@ func dailyLactation(person):
 			person.lactation = false
 			person.lactating.duration = 0
 			if person.knowledge.has('lactating'):
-				text = "[center][color=red]$name's "+str(getChest(person))+" has gone unmilked for too long and $his lactation has dried up.[/color][/center]\n "
+				text = "[center][color=red]$name's "+str(getChest(person))+" have gone unmilked for too long and $his lactation has dried up.[/color][/center]\n "
 				person.knowledge.erase('lactating')
 
 	if person.lactation == false:
@@ -2951,7 +2966,7 @@ func dailyLactation(person):
 	if rand_range(0,100) <= person.lactating.duration*globals.expansionsettings.lactationacceptancemultiplier:
 		if person.fetish.lactation != globals.fetishopinion.back():
 			person.fetish.lactation = globals.fetishopinion[globals.fetishopinion.find(person.fetish.lactation)+1]
-			text += "$name seems to be more comfortable with lactating now. $He now feels that it is " + str(person.fetish.lactation) + " to be lactating."
+			text += "$name seems to be more comfortable with lactating now. $He now feels that it is " + str(person.fetish.lactation) + " to be lactating. "
 
 	#Permanent Swelling
 	if person.titssize == "masculine":

@@ -497,7 +497,7 @@ func _on_end_pressed():
 	#Player
 	temptext = globals.expansion.dailyUpdate(globals.player)
 	if temptext != null:
-		text += temptext
+		text += temptext + "\n\n"
 	#slaves
 	if !text.empty():
 		text0.set_bbcode(text0.get_bbcode() + text + "")
@@ -505,13 +505,6 @@ func _on_end_pressed():
 
 	###---Added by Expansion---### Category: Daily Update | Management First | Spacing
 	var first_slave_processed = true
-	for person in globals.slaves:
-		if person.work in ['headgirl','farmmanager']:
-			if first_slave_processed == true:
-				first_slave_processed = false
-			else:
-				text += "\n"
-			text += globals.expansion.dailyUpdate(person)
 	###---Expansion End---###
 
 	for person in globals.slaves:
@@ -538,12 +531,11 @@ func _on_end_pressed():
 		text = ''
 
 		###---Added by Expansion---### Update Player, Towns, and People
-		if !person.work in ['headgirl','farmmanager']:
-			if first_slave_processed == true:
-				first_slave_processed = false
-			else:
-				text += "\n"
-			text += globals.expansion.dailyUpdate(person)
+		if first_slave_processed == true:
+			first_slave_processed = false
+		else:
+			text += "\n"
+		text += globals.expansion.dailyUpdate(person) + "\n"
 		###---End Expansion---###
 	
 		var jobRestore = person.work
@@ -598,10 +590,10 @@ func _on_end_pressed():
 					if person.work == 'rest':
 						if jobRestore != 'rest':
 						###---Added by Expansion---### Added Event
-							text = "$name almost collapsed from exhaustion and was forced to rest instead of work today. \n"
+							text += "$name almost collapsed from exhaustion and was forced to rest instead of work today. \n"
 							person.dailyevents.append('exhaustion')
 						else:
-							text = '$name has spent most of the day relaxing.\n'
+							text += '$name has spent most of the day relaxing.\n'
 						###---End Expansion---###
 						slavehealing += 0.15
 						person.stress -= 20
@@ -3658,6 +3650,8 @@ func _on_releasefromfarm_pressed():
 	person.farmexpanded.dailyaction = 'none'
 	person.farmexpanded.workstation = 'free'
 	person.farmexpanded.stallbedding = 'dirt'
+	person.farmexpanded.breeding.status = 'none'
+	person.farmexpanded.breeding.snails = false
 	for i in ['extractmilk','extractcum','extractpiss']:
 		person.farmexpanded[i].enabled = false
 		person.farmexpanded[i].method = 'leak'
@@ -3906,8 +3900,7 @@ func _on_vatsbutton_pressed():
 		bottlecount -= refVats[fluid].bottle2refine + refVats[fluid].bottle2sell
 
 	#Bottler
-	var bottlerLevel = globals.state.mansionupgrades.bottler
-	globals.resources.farmexpanded.bottler.level = bottlerLevel
+	var bottlerLevel = globals.resources.farmexpanded.bottler.level
 	text = "[center][color=#d1b970]Bottler Level:[/color] [color=aqua]" + str(bottlerLevel) + "[/color][/center]"
 	text += "\n[color=#d1b970]Energy Cost per Bottle Created: [/color]\nMilk: [color=aqua]" + str(refVats.milk.basebottlingenergy - bottlerLevel) + "[/color]\nSemen: [color=aqua]" + str(refVats.semen.basebottlingenergy - bottlerLevel)
 	text += "[/color]\nLube: [color=aqua]" + str(refVats.lube.basebottlingenergy - bottlerLevel) + "[/color]\nPiss: [color=aqua]" + str(refVats.piss.basebottlingenergy - bottlerLevel) + "[/color]"

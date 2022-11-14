@@ -409,7 +409,9 @@ func dailyFarm():
 			
 			if cattle.farmexpanded.breeding.status in ["both","breeder"]:
 				if cattle.vagina != 'none':
-					text += breedCattle(cattle, studs)
+					var valid_studs = studs.duplicate()
+					valid_studs.erase(cattle)
+					text += breedCattle(cattle, valid_studs)
 
 			if cattle.farmexpanded.breeding.status == 'snails' || cattle.farmexpanded.breeding.snails == true:
 				text += breedSnails(cattle)
@@ -696,7 +698,7 @@ func extractMilk(cattle, milkmaid, farmmanager):
 	if cattle.checkFetish('bemilked', 1.5) == true || cattle.spec == 'hucow':
 		if milkmaid != null && (rand_range(0,100) <= (cattle.obed-100) + (milkmaid.charm + milkmaid.jobskills.milking)):
 			globals.addrelations(cattle, milkmaid, rand_range(20,40))
-			text += "[color=aqua]" + milkmaid.name_short() + "[/color] made it enjoyable for [color=aqua]$name[/color] to be milked today. $He has gained [color=green]" + str(gain) + " Lust[/color] "
+			text += "[color=aqua]" + milkmaid.name_short() + "[/color] made it enjoyable for [color=aqua]$name[/color] to be milked today. $He has gained [color=green]" + str(gain) + " Lust[/color]. "
 			cattle.farmexpanded.extractmilk.opinion.append('accepted')
 			cattle.lust += gain
 		else:
@@ -1374,7 +1376,7 @@ func manageSnails(workersDict):
 			merchantcounter -= 1
 		refSnails.sell = snailresults
 		var gold = snailresults * refSnails.goldperegg
-		text += "\nYour merchants were able to sell [color=green]" +str(snailresults)+ " eggs [/color] today for [color=green]" +str(gold)+ " gold[/color]. "
+		text += "\nYour merchants were able to sell [color=green]" +str(snailresults)+ " eggs [/color] today for [color=yellow]" +str(gold)+ "[/color] gold. "
 		globals.resources.gold += snailresults
 	
 	#Incubate & Hatch
@@ -1468,10 +1470,12 @@ func manageVats(workersDict):
 			else:
 				var perworker = ceil(float(totalbottlesneeded) / bottlers.size())
 				for worker in bottlers:
-					if worker.jobskills.has('bottler'):
+					var goalMake = min(totalbottlesneeded, perworker)
+					if goalMake == 0:
+						continue
+					if !worker.jobskills.has('bottler'):
 						worker.jobskills['bottler'] = 0
 					var workerEnergyCost = energycost*(1 - worker.jobskills.bottler*.01)
-					var goalMake = min(totalbottlesneeded, perworker)
 					var canMake = goalMake if workerEnergyCost == 0 else floor(worker.energy / workerEnergyCost)
 					if canMake >= goalMake:
 						text += worker.dictionary("\n[color=aqua]$name[/color] spent [color=red]" + str(ceil(workerEnergyCost*goalMake)) + " Energy[/color] to create [color=green]" + str(goalMake) + " Bottles of " + fluid + "[/color] today. ")
@@ -1490,6 +1494,8 @@ func manageVats(workersDict):
 							continue
 						if rand_range(0,100) <= round((worker.obed + worker.loyal)/2) + worker.energy:
 							var extrabottles = totalbottlesneeded if workerEnergyCost == 0 else min(floor(worker.energy / workerEnergyCost), totalbottlesneeded)
+							if extrabottles == 0:
+								continue
 							worker.energy -= ceil(extrabottles * workerEnergyCost)
 							bottlesproduced += extrabottles
 							totalbottlesneeded -= extrabottles
@@ -1541,7 +1547,7 @@ func manageVats(workersDict):
 		
 	#Wrap-Up Text
 	if bottlespurchased > 0:
-		text += "\nToday, your farm manager automatically purchased [color=aqua]" + str(bottlespurchased) + " Bottles[/color] for [color=aqua]" + str(bottlespurchased * containerdict.bottle.cost) + "[/color] to fulfill the outstanding requests to bottle the fluids for refinement or sales. "		
+		text += "\nToday, your farm manager automatically purchased [color=aqua]" + str(bottlespurchased) + " Bottles[/color] for [color=yellow]" + str(bottlespurchased * containerdict.bottle.cost) + "[/color] gold to fulfill the outstanding requests to bottle the fluids for refinement or sales. "		
 	return text
 
 
@@ -1562,7 +1568,7 @@ func sellFluids(workersDict):
 		var sellresult = refVats[fluid].sell - remainingSell
 		refVats[fluid].sell = remainingSell
 		var gold = round(sellresult * globals.itemdict['bottled'+fluid].cost * rand_range(.5,1.5))
-		text += "\nYour merchants were able to sell [color=green]" +str(sellresult)+ " bottles of "+fluid.capitalize()+" [/color] today for [color=green]" +str(gold)+ " gold[/color]. "
+		text += "\nYour merchants were able to sell [color=green]" +str(sellresult)+ " bottles of "+fluid.capitalize()+" [/color] today for [color=yellow]" +str(gold)+ "[/color] gold. "
 		globals.resources.gold += gold
 	return text
 
@@ -1570,7 +1576,6 @@ func sellFluids(workersDict):
 var genericLocations = ["none","any"]
 func sellMilk(workersDict):
 	var milkforsale = refVats.milk.sell
-	var bottlesperperson = 0
 	var townmarkets = globals.expandedtowns.duplicate()
 	var text = ""
 
@@ -1578,7 +1583,7 @@ func sellMilk(workersDict):
 		text += "\n\n[color=red]There are no [color=aqua]Milk Merchants[/color] assigned. No fluids can be sold.[/color]\n"
 	else:
 		if milkforsale > 0:
-			bottlesperperson = milkforsale / workersDict.milkmerchant.size()
+			var workers_left = min(workersDict.milkmerchant.size(), townmarkets.size())
 			for milkmerchant in workersDict.milkmerchant:
 				#Location Change
 				var location = milkmerchant.jobsexpanded.location
@@ -1586,11 +1591,17 @@ func sellMilk(workersDict):
 					if !townmarkets.empty():
 						location = globals.randomitemfromarray(townmarkets)
 					else:
-						text += milkmerchant.dictionary("[color=aqua]$name[/color] wasn't able to go and sell milk today as all the city markets were being sold to by your other merchants.\n")
+						text += milkmerchant.dictionary("\n[color=aqua]$name[/color] wasn't able to go and sell milk today as all the city markets were being sold to by your other merchants.")
 						continue
+				if milkforsale <= 0 or workers_left <= 0:
+					text += milkmerchant.dictionary("\nThere were no milk bottles left for [color=aqua]$name[/color] to take to market.")
+					continue
+				var bottles_to_take = ceil(milkforsale / workers_left)
+				milkforsale -= bottles_to_take
+				workers_left -= 1
 				#Selling to the Town
-				townmarkets.remove(location)
-				text += milkMarket(milkmerchant, location, bottlesperperson)
+				townmarkets.erase(location)
+				text += milkMarket(milkmerchant, location, bottles_to_take)
 		else:
 			text += "\n\n[color=red]All of the available milk bottles were reserved for mansion use, so there were none available for the milk merchants to sell today.[/color]\n"
 	return text
@@ -1615,7 +1626,7 @@ func milkMarket(person, town, bottles):
 	var value = round(refExpandedTown.milkvalue)
 	var interest = round(refExpandedTown.milkinterest)
 	
-	text += "\n[color=aqua]$name[/color] took [color=aqua]" + str(bottles) + "[/color] of Milk to [color=aqua]" + str(town).capitalize() + "[/color]. "
+	text += "\n[color=aqua]$name[/color] took [color=aqua]" + str(bottles) + "[/color] bottles of Milk to [color=aqua]" + str(town).capitalize() + "[/color]. "
 	
 	#Sale = Bottles > Interest * 2
 	if bottles >= interest * 2:
@@ -1685,7 +1696,7 @@ func milkMarket(person, town, bottles):
 	if profit <= bottlessold * containerdict.bottle.cost:
 		profit = bottlessold * (containerdict.bottle.cost + 1)
 	
-	text += "$He made a total profit of [color=aqua]" +str(profit)+ " Gold[/color] today. "
+	text += "$He made a total profit of [color=yellow]" +str(profit)+ "[/color] Gold today. "
 	
 	globals.resources.gold += profit
 	globals.resources.farmexpanded.vats.milk.sell -= bottlessold
@@ -1701,10 +1712,13 @@ func calcUnspilled(refContainer, worker, totalFluid):
 		return totalFluid
 	var trips = ceil(totalFluid / refContainer.size)
 	var workerMod = worker.sagi*2
+	var remaining_fluid = totalFluid
 	while trips > 0:
+		var fluid_this_trip = min(remaining_fluid, refContainer.size)
 		if rand_range(0,100) <= rand_range(chances.min, chances.max) - workerMod:
-			totalFluid -= round(refContainer.size * rand_range(.1,.5))
+			totalFluid -= round(fluid_this_trip * rand_range(.1,.5))
 		trips -= 1
+		remaining_fluid -= fluid_this_trip
 	return totalFluid
 
 
