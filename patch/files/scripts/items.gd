@@ -1273,7 +1273,7 @@ var itemlist = {
         subtype = 'weapon',
         weight = 5,
         amount = 0,
-    },
+	},
 	armortentacle = {
 		code = 'armortentacle',
 		name = 'Living Armor',
@@ -1334,7 +1334,7 @@ var itemlist = {
         weight = 5,
         amount = 0,
         enchant = 'unique',
-    },
+	},
 	weaponhammer = {
 		code = 'weaponhammer',
 		name = "Great Hammer",
