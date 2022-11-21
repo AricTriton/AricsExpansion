@@ -2126,7 +2126,7 @@ var shops = {
 	blackmarket = {
 		code = 'blackmarket',
 		name = 'Black Market',
-		items = ['aydabook','lockpick','accslavecollar','acchandcuffs','armorleather','armorchain','weaponsword','weaponhammer','armortentacle','clothchainbikini','oblivionpot'],
+		items = ['aydabook','lockpick','accslavecollar','acchandcuffs','armorleather','armorchain','weaponsword','weaponhammer','armortentacle','armorruneset','clothchainbikini','oblivionpot'],
 		selling = true
 	},
 }
