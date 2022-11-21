@@ -660,7 +660,65 @@ func showskilltooltip(skill):
 		text += '\n\nCooldown: ' + str(selectedcharacter.cooldowns[skill.code])
 	globals.showtooltip(text)
 
+###---New addon to physdamage---###
+func physdamage(caster, target, skill):
+	var damage = 0
+	var power = (caster.attack * skill.power)
+	var protection = float(float(100-target.protection)/100)
+	var armor = target.armor
+	if skill.attributes.has('physpen'):
+		protection = 1
+		armor = 0
+	for i in caster.geareffects:
+		if i.type == 'incombatphyattack':
+			if i.effect == 'protpenetration':
+				protection = 1
+			if i.effect == 'fullpenetration':
+				armor = 0
+				protection = 1
+	if target.passives.has('defenseless'):
+		armor = 0
+		protection = 1
+	if caster.passives.has("armorbreaker"):
+		armor = max(0, armor-8)
+	if caster.passives.has('exhaust'):
+		power = power * 0.66
+	if caster.passives.has('rejuvenate'):
+		caster.hp += 15
+
+	damage = power * protection - armor
+	if target.person != null && target.person.traits.has("Sturdy"):
+		damage = damage*0.85
+	damage = max(damage, 1)
+	
+	if skill.attributes.has('lifesteal'):
+		caster.hp = caster.hp + damage/4
+	
+	return ceil(damage)
+
+###---New addons to spell damage---###
+func spelldamage(caster, target, skill):
+	var damage = 0
+	damage = max(1,(caster.magic * 4)) * skill.power
+	if skill.code == 'mindblast':
+		if target.faction == 'boss':
+			damage += target.hpmax/15
+		else:
+			damage += target.hpmax/5
+	if globals.state.spec == 'Mage' && caster.group == 'player':
+		damage *= 1.2
+	if caster.passives.has('rank1spelldamage'):
+		damage *= 1.1
+	if caster.passives.has('rank2spelldamage'): 
+		damage *= 1.2
+	if target.person != null && target.person.traits.has("Sturdy"):
+		damage = damage*0.85
+	return ceil(damage)
+
 func pressskill(skill):
+#---patch ankmairdor made, fix softlock bug from vanilla game.
+	if period != 'base' && period != 'skilltarget':
+		return
 	var cost = globals.spells.spellCostCalc(skill.costmana)
 	if (cost > 0 && globals.resources.mana < cost) || (skill.costenergy > 0 && selectedcharacter.energy < skill.costenergy):
 		return
@@ -681,7 +739,7 @@ func pressskill(skill):
 	else:
 		period = 'skilluse'
 		useskills(skill, selectedcharacter, selectedcharacter)
-	
+
 func hitChance(caster,target,skill):
 	var hitchance = 80
 	if caster.speed >= target.speed:
