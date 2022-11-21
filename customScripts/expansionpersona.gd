@@ -110,6 +110,12 @@ func createpersona(name):
 				person.fetish[i] = refChar.fetish[i]
 			elif i in person.npcexpanded:
 				person.npcexpanded[i] = refChar[i]
+			elif i in person.pregexp:
+				person.npcexpanded[i] = refChar[i]
+			elif i in person.lactating:
+				person.lactating[i] = refChar[i]
+			elif i in person.consentexp:
+				person.consentexp[i] = refChar[i]
 			elif i != 'basics':
 				globals.printErrorCode("Persona character improper attribute: " + str(i) + " on " + name)
 		###---Added by Expansion---### Unique Genealogy Fixer
