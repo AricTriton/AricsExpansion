@@ -1346,7 +1346,7 @@ var enemypool = {
 		icon = load("res://files/images/enemies/dragonwhelp.png"),
 		special = null,
 		capture = null,
-		rewardpool = {gold = 50},
+		rewardpool = {gold = 50, weapondraconiclance = 3},
 		rewardgold = [15,75],
 		level = 20,
 		rewardexp = 75,
@@ -1471,24 +1471,24 @@ var enemypool = {
 var enemyequips = {
 	weakbandits = {
 		armor = [['nothing', 10], ['armorleather',10], ['armorchain', 1], ['armorleather+', 1],['armorpadded', 5]],
-		weapon = [['weapondagger',10], ['weaponbasicstaff',5], ['weaponserrateddagger', 2], ['weaponsword', 2], ['weapondagger+', 2], ['weaponbasicstaff+',2]],
+		weapon = [['weapondagger',10], ['weaponbasicstaff',5], ['weaponserrateddagger', 2], ['weaponsword', 2], ['weapondagger+', 2], ['weaponbasicstaff+',2],['weaponlongbow', 2],['weaponbattleaxe', 2]],
 		abilities = [],
 	},
 	medbandits = {
 		armor = [['armorleather+',3], ['armorchain', 3], ['armorchain+', 1], ['armorninja', 0.5], ['armorrogue', 0.1],['armorpadded', 5],['armorpadded+', 1],['armorhalfplate',1]],
-		weapon = [['weaponsword', 4], ['weaponsword+', 1], ['weaponbasicstaff+',2], ['weaponserrateddagger', 4], ['weapondagger+', 2], ['weaponserrateddagger+', 1], ['weaponhammer', 0.1]],
+		weapon = [['weaponsword', 4], ['weaponsword+', 1], ['weaponbasicstaff+',2], ['weaponserrateddagger', 4], ['weapondagger+', 2], ['weaponserrateddagger+', 1],['weaponhammer', 0.1],['weaponmace', 1],['weaponlongbow', 4],['weaponlongbow+', 1],['weaponbattleaxe', 4],['weaponbattleaxe+', 1]],
 		accessory = [['accamuletruby', 1], ['nothing',10]],
 		abilities = [],
 	},
 	strongbandits = {
 		armor = [['armorchain', 8], ['armorchain+', 2], ['armorninja', 1], ['armorninja+', 0.1], ['armorrogue', 0.2], ['armorplate', 0.5], ['armorplate+', 0.1],['armorhalfplate',1]],
-		weapon = [['weaponsword', 4], ['weaponsword+', 1], ['weaponbasicstaff+',2], ['weaponserrateddagger', 4], ['weaponserrateddagger+', 1], ['weaponclaymore', 2], ['weaponclaymore+', 0.3], ['weaponhammer', 1], ['weaponhammer+', 0.2]],
+		weapon = [['weaponsword', 4], ['weaponsword+', 1], ['weaponbasicstaff+',2], ['weaponserrateddagger', 4], ['weaponserrateddagger+', 1], ['weaponclaymore', 2], ['weaponclaymore+', 0.3], ['weaponhammer', 1], ['weaponhammer+', 0.2],['weaponmace', 2],['weaponmace', 0.8],['weaponlongbow', 4], ['weaponlongbow+', 1],['weaponbattleaxe', 4],['weaponbattleaxe+', 1]],
 		accessory = [['accamuletruby', 1], ['accamuletemerald',1], ['accamuletruby+', 0.3], ['accamuletemerald+',0.3]],
 		abilities = [],
 	},
 	elfs = {
 		armor = [['armorchain', 3], ['armorchain+', 1], ['armorelvenchain', 10], ['armorelvenchain+', 2],['armorelvenhalfplate', 0.25], ['armorelvenhalfplate+', 0.1]],
-		weapon = [['weaponelvensword', 4], ['weaponelvensword+', 1], ['weapondagger+', 2], ['weaponserrateddagger+', 2], ['weaponancientsword', 4], ['weaponancientsword+',0.5]],
+		weapon = [['weaponelvensword', 4], ['weaponelvensword+', 1], ['weapondagger+', 2], ['weaponserrateddagger+', 2], ['weaponancientsword', 4], ['weaponancientsword+',0.5], ['weaponlongbow+', 2]],
 		accessory = [['accamuletemerald', 1], ['accamuletemerald+', 1],['accelvenboots', 1],['nothing',10]],
 		abilities = [],
 	},
@@ -1511,7 +1511,7 @@ var enemyequips = {
 	},
 	guard = {
 		armor = [ ['armorchain', 10], ['armorchain+', 3], ['armorplate',1], ['armorhalfplate',1], ['armorplate+', 0.3]],
-		weapon = [['weaponsword', 5], ['weaponsword+', 1],  ['weaponhammer', 1], ['weaponhammer+', 0.2], ['weaponceremonialsword', 1], ['weapongreatsword', 1], ['weapongreatsword+', 0.25]],
+		weapon = [['weaponsword', 5], ['weaponsword+', 1],  ['weaponhammer', 1], ['weaponhammer+', 0.2], ['weaponceremonialsword', 1], ['weapongreatsword', 1], ['weapongreatsword+', 0.25],['weaponmace', 2],['weaponmace', 0.8]],
 		accessory = [['accgoldring', 1], ['nothing',10]],
 		abilities = [],
 	},
