@@ -36,7 +36,7 @@
 
 var persona = {
 	Alice = {
-		basics = ['Human', 'adult', 'female', 'Common'],
+		basics = ['Human', 'adult', 'female', 'commoner'],
 		name = 'Alice',
 		surname = '',
 		skin = 'fair',
