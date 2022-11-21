@@ -1305,6 +1305,7 @@ var useRalphsTweaks # = expansionsettings.use_ralphs_tweaks
 var useCapsTweaks # = expansionsettings.use_caps_tweaks
 var expansiontravel = loadModFile("AricsExpansion", "customScripts/expansiontravel.gd").new() #ralphD
 var ae_eventtext = loadModFile("AricsExpansion", "customScripts/expansioneventtext.gd").new()
+var expansionpersona = loadModFile("AricsExpansion", "customScripts/expansionpersona.gd").new() #bbp
 
 ###---Added by Expansion---### General Arrays
 #Size Arrays

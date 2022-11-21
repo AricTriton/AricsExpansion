@@ -62,8 +62,8 @@ var persona = {
 		skillpoints = 0,
 		lewdness = 60,
 		skin = 'fair',
-		traits = ['Submissive'],
-		ability = ['attack', 'protect'],
+		traits = ['Submissive','Likes it rough'],
+		ability = ['attack'],
 		#Expansion Added Attributes
 		#Sexuality
 		sexuality = 'bi',
