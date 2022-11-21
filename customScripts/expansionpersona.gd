@@ -102,12 +102,13 @@ func createpersona(name):
 			if i == 'traits':
 				for j in refChar[i]:
 					person.add_trait(j)
+			elif i == fetish:
+				for j in refChar[i]:
+					person.fetish[j] = refChar.fetish[j]
 			elif i in person:
 				person[i] = refChar[i]
 			elif i in person.stats:
 				person.stats[i] = refChar[i]
-			elif i in person.fetish:
-				person.fetish[i] = refChar.fetish[i]
 			elif i in person.npcexpanded:
 				person.npcexpanded[i] = refChar[i]
 			elif i in person.pregexp:
