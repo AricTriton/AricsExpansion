@@ -183,6 +183,49 @@ func slaves_set(person):
 	if globals.get_tree().get_current_scene().has_node("infotext"):
 		globals.get_tree().get_current_scene().infotext("New Character acquired: " + person.name_long(),'green')
 
+<RemoveFrom 6 6>
+func canloadimage(path):
+	# if Image.new().load(path) != OK:
+
+<AddTo 6>
+func canloadimage(path):
+	if doLoadImage(path) == null:
+
+var showLoadImageNotFound = false  # change to false to hide errors when image files are not found
+
+<RemoveFrom 9 17>
+func loadimage(path):
+	# var image = Image.new()
+	# var retVal = image.load(path)
+	# if retVal != OK:
+	# 		printErrorCode("loadimage("+str(path)+")", retVal)
+	# 		return null
+	# var temptexture = ImageTexture.new()
+	# temptexture.create_from_image(image)
+	# return temptexture
+
+<AddTo 9>
+func loadimage(path):
+	var image = doLoadImage(path)
+	if image == null:
+		return null
+	return image
+
+# Cache images for performance
+var image_cache = {}
+func doLoadImage(path):
+	if !image_cache.has(path):
+		var image = Image.new()
+		var retVal = image.load(path)
+		if retVal != OK:
+			printErrorCode("loadimage("+str(path)+")", retVal)
+			image_cache[path] = null
+		else:
+			var temptexture = ImageTexture.new()
+			temptexture.create_from_image(image)
+			image_cache[path] = temptexture
+	return image_cache[path]
+
 class resource:
 	var day = 1 setget day_set
 	var gold = 0 setget gold_set
