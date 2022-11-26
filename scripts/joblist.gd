@@ -172,6 +172,8 @@ func jobtooltipshow(button):
 
 func confirmjob():
 	var job = chosenbutton.get_meta('job')
+	if takenjobs[job].away.duration > 0:
+		takenjobs[job].away.prev_work = takenjobs[job].work
 	takenjobs[job].work = 'rest'
 	takenjobs.erase(job)
 	choosejob(chosenbutton)

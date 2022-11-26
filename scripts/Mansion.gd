@@ -1361,6 +1361,9 @@ func _on_end_pressed():
 							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] has been transported to the mansion. You are out of free jail cells and $he was assigned to the communal area. \n"))
 					else:
 						text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] " + awayReturnText.get(person.away.at, awayReturnText.default) + "\n"))
+						if person.away.get("prev_work", "") != "":
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] was [color=red]removed[/color] from $his previous job (" + globals.jobs.jobdict[person.away.prev_work].name + ") while away, so will now be resting.\n"))
+							person.away.erase("prev_work")
 						###---End Expansion---###
 						var sleepChange = false
 						if person.sleep != 'communal':
