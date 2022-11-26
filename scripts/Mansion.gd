@@ -118,6 +118,19 @@ func _ready():
 	_on_mansion_pressed()
 	#startending()
 
+var awayReturnText = {
+	'travel back': 'returned to the mansion and went back to $his duty.',
+	'transported back': 'transported back to the mansion and went back to $his duty.',
+	'in labor': 'recovered from labor and went back to $his duty.',
+	'training': 'completed $his training and went back to $his duty.',
+	'nurture': 'has finished being nurtured and went back to $his duty.',
+	'growing': 'has matured and is now ready to serve you.',
+	'lab': 'successfully recovered from laboratory modification and went back to $his duty.',
+	'rest': 'finished resting and went back to $his duty.',
+	'vacation': 'returned from vacation and went back to $his duty.',
+	'default': 'returned to the mansion and went back to $his duty.',
+}
+
 func rebuild_slave_list():
 	var personList = get_node("charlistcontrol/CharList/scroll_list/slave_list")
 	var categoryButtons = [personList.get_node("mansionCategory"), personList.get_node("prisonCategory"), personList.get_node("farmCategory"), personList.get_node("awayCategory")]
@@ -1347,7 +1360,7 @@ func _on_end_pressed():
 							person.sleep = 'communal'
 							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] has been transported to the mansion. You are out of free jail cells and $he was assigned to the communal area. \n"))
 					else:
-						text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] returned to the mansion and went back to $his duty. \n"))
+						text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] " + awayReturnText.get(person.away.at, awayReturnText.default) + "\n"))
 						###---End Expansion---###
 						var sleepChange = false
 						if person.sleep != 'communal':
