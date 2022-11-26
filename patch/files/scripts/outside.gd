@@ -300,7 +300,7 @@ func buildbars(parentnode, person):
 	parentnode.get_node("hp").value = (person.health/person.stats.health_max)*100
 	parentnode.get_node("hp").hint_tooltip = "Health: " + str(person.health) + "/" + str(person.stats.health_max)
 	parentnode.get_node("en").value = (float(person.energy)/person.stats.energy_max)*100
-	parentnode.get_node("en").hint_tooltip = "Energy: " + str(person.energy) + "/" + str(person.stats.energy_max)
+	parentnode.get_node("en").hint_tooltip = "Energy: " + str(round(person.energy)) + "/" + str(person.stats.energy_max)
 	parentnode.get_node("portait").set_texture(globals.loadimage(person.imageportait))
 	if parentnode.get_parent() == $playergrouppanel/VBoxContainer:
 		parentnode.get_node("xp").value = person.xp
@@ -2734,7 +2734,7 @@ func _on_details_pressed(empty = null):
 		get_node("playergroupdetails/TabContainer/Party/HBoxContainer/").add_child(newbutton)
 		newbutton.visible = true
 		newbutton.set_meta("person", person)
-		newbutton.set_text(person.dictionary("$name, HP: ") + str(person.health) + '/' + str(person.stats.health_max)  + ", EN: " + str(person.energy) + '/' + str(person.stats.energy_max))
+		newbutton.set_text(person.dictionary("$name, HP: ") + str(person.health) + '/' + str(person.stats.health_max)  + ", EN: " + str(round(person.energy)) + '/' + str(person.stats.energy_max))
 		newbutton.connect("mouse_entered", globals, 'slavetooltip', [person])
 		newbutton.connect("mouse_exited", globals, 'slavetooltiphide')
 		newbutton.connect("pressed",self,'selectpartymember',[person])
@@ -3268,7 +3268,7 @@ func chosepartymember(includeplayer = true, targetfunc = [null,null], reqs = 'tr
 		newbutton.get_node("stats/hp").value = (i.health/i.stats.health_max)*100
 		newbutton.get_node("stats/hp").hint_tooltip = "Health: " + str(i.health) + "/" + str(i.stats.health_max)
 		newbutton.get_node("stats/en").value = (float(i.energy)/i.stats.energy_max)*100
-		newbutton.get_node("stats/en").hint_tooltip = "Energy: " + str(i.energy) + "/" + str(i.stats.energy_max)
+		newbutton.get_node("stats/en").hint_tooltip = "Energy: " + str(round(i.energy)) + "/" + str(i.stats.energy_max)
 		newbutton.get_node("Label").text = i.name_short()
 		newbutton.connect("mouse_entered", self, "partychoicebuttonenter", [newbutton])
 		newbutton.connect("mouse_exited", self, "partychoicebuttonexit", [newbutton])

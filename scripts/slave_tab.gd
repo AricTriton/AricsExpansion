@@ -667,7 +667,7 @@ func updatestats():
 	get_node("stats/statspanel/hp").set_value((person.stats.health_cur/float(person.stats.health_max))*100)
 	get_node("stats/statspanel/en").set_value((person.stats.energy_cur/float(person.stats.energy_max))*100)
 	get_node("stats/statspanel/xp").set_value(person.xp)
-	text = "Health: " + str(person.stats.health_cur) + "/" + str(person.stats.health_max) + "\nEnergy: " + str(person.stats.energy_cur) + "/" + str(person.stats.energy_max) + "\nExperience: " + str(person.xp) 
+	text = "Health: " + str(person.stats.health_cur) + "/" + str(person.stats.health_max) + "\nEnergy: " + str(round(person.stats.energy_cur)) + "/" + str(person.stats.energy_max) + "\nExperience: " + str(person.xp) 
 	get_node("stats/statspanel/hptooltip").set_tooltip(text)
 	get_node("stats/statspanel/grade").set_texture(gradeimages[person.origins])
 	###---Added by Expansion---### Jail Images
