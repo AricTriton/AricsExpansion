@@ -123,6 +123,19 @@ func _ready():
 	_on_mansion_pressed()
 	#startending()
 
+var awayReturnText = {
+	'travel back': 'returned to the mansion and went back to $his duties.',
+	'transported back': 'transported back to the mansion and went back to $his duties.',
+	'in labor': 'recovered from labor and went back to $his duties.',
+	'training': 'completed $his training and went back to $his duties.',
+	'nurture': 'has finished being nurtured and went back to $his duties.',
+	'growing': 'has matured and is now ready to serve you.',
+	'lab': 'successfully recovered from laboratory modification and went back to $his duties.',
+	'rest': 'finished resting and went back to $his duties.',
+	'vacation': 'returned from vacation and went back to $his duties.',
+	'default': 'returned to the mansion and went back to $his duties.',
+}
+
 func rebuild_slave_list():
 	var personList = get_node("charlistcontrol/CharList/scroll_list/slave_list")
 	var categoryButtons = [personList.get_node("mansionCategory"), personList.get_node("prisonCategory"), personList.get_node("farmCategory"), personList.get_node("awayCategory")]
@@ -1119,75 +1132,6 @@ func _on_end_pressed():
 						elif luxurycheck.vice_modifier < 0:
 							text1.set_bbcode(text1.get_bbcode() + person.dictionary("[color=red]negatively[/color] today. \n"))
 				###---End Expansion---###
-		elif person.away.duration > 0:
-			person.away.duration -= 1
-			###---Added by Expansion---### Hybrid Support && Ankmairdor's BugFix v4
-			if person.away.at == 'lab' && person.health < 5:
-				temptext = "$name has not survived the laboratory operation due to poor health.\n"
-				deads_array.append({number = count, reason = temptext})
-				person.removefrommansion()
-				continue
-			else:
-				if person.away.at in ['rest','vacation']:
-					slavehealing += 0.15
-					person.stress -= 20
-				if person.race.find('Orc') >= 0:
-					slavehealing += 0.15
-				if person.traits.has("Infirm"):
-					slavehealing = slavehealing/3
-				person.health += slavehealing * person.stats.health_max
-				if person.race.find('Fairy') >= 0:
-					person.stress -= rand_range(10,20)
-				else:
-					person.stress -= rand_range(5,10)
-				person.energy += rand_range(20,30) + person.send*6
-
-				if person.away.duration == 0:
-					if person.away.at == 'transported back':
-						globals.itemdict['rope'].amount += globals.state.calcRecoverRope(1)
-						if globals.count_sleepers().jail < globals.state.mansionupgrades.jailcapacity:
-							person.sleep = 'jail'
-							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] has been transported to the mansion and placed in the jail. \n"))
-						else:
-							person.sleep = 'communal'
-							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] has been transported to the mansion. You are out of free jail cells and $he was assigned to the communal area. \n"))
-					else:
-						text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] returned to the mansion and went back to $his duty. \n"))
-						###---End Expansion---###
-						var sleepChange = false
-						if person.sleep != 'communal':
-							match person.sleep:
-								'personal':
-									sleepChange = globals.count_sleepers().personal > globals.state.mansionupgrades.mansionpersonal
-								'your':
-									sleepChange = globals.count_sleepers().your_bed > globals.state.mansionupgrades.mansionbed
-								'jail':
-									sleepChange = globals.count_sleepers().jail > globals.state.mansionupgrades.jailcapacity
-								'farm':
-									if globals.count_sleepers().farm > variables.resident_farm_limit[globals.state.mansionupgrades.farmcapacity]:
-										sleepChange = true
-										person.job = 'rest'
-						if sleepChange:
-							person.sleep = 'communal'
-							###---Added by Expansion---### Colorized
-							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name's[/color] sleeping place is no longer available so $he has moved to the communal area. \n"))
-							###---End Expansion---###
-					person.away.at = ''
-				for i in person.effects.values():
-					if i.has('duration') && i.code != 'captured':
-						###---Added by Expansion---### Hybrid Support && Ank BugFix v4
-						if person.race.find('Tribal Elf') < 0 || i.code in ['bandaged','sedated', 'drunk'] || randf() > 0.5:
-							i.duration -= 1
-						###---End Expansion---###
-						if i.duration <= 0:
-							person.add_effect(i, true)
-					elif i.code == 'captured':
-						if i.duration <= 0:
-							if i.code == 'captured':
-								text0.set_bbcode(text0.get_bbcode() + person.dictionary('$name grew accustomed to your ownership.\n'))
-							person.add_effect(i, true)
-					if i.has("ondayend"):
-						globals.effects.call(i.ondayend, person)
 		person.work = jobRestore
 		count+=1
 	if headgirl != null && globals.state.headgirlbehavior != 'none':
@@ -1384,6 +1328,82 @@ func _on_end_pressed():
 	if globals.state.mansionupgrades.foodpreservation == 0 && globals.resources.food >= globals.resources.foodcaparray[globals.state.mansionupgrades.foodcapacity]*0.80:
 		globals.resources.food -= globals.resources.food*0.03
 		text0.set_bbcode(text0.get_bbcode() + '[color=yellow]Some of your food reserves have spoiled.[/color]\n')
+
+	# Process away slaves now
+	for person in globals.slaves:
+		if person.away.duration > 0:
+			person.away.duration -= 1
+			###---Added by Expansion---### Hybrid Support && Ankmairdor's BugFix v4
+			if person.away.at == 'lab' && person.health < 5:
+				temptext = "$name has not survived the laboratory operation due to poor health.\n"
+				deads_array.append({number = count, reason = temptext})
+				person.removefrommansion()
+				continue
+			else:
+				var slavehealing = person.send * 0.03 + 0.02
+				if person.away.at in ['rest','vacation']:
+					slavehealing += 0.15
+					person.stress -= 20
+				if person.race.find('Orc') >= 0:
+					slavehealing += 0.15
+				if person.traits.has("Infirm"):
+					slavehealing = slavehealing/3
+				person.health += slavehealing * person.stats.health_max
+				if person.race.find('Fairy') >= 0:
+					person.stress -= rand_range(10,20)
+				else:
+					person.stress -= rand_range(5,10)
+				person.energy += rand_range(20,30) + person.send*6
+
+				if person.away.duration == 0:
+					if person.away.at == 'transported back':
+						globals.itemdict['rope'].amount += globals.state.calcRecoverRope(1)
+						if globals.count_sleepers().jail < globals.state.mansionupgrades.jailcapacity:
+							person.sleep = 'jail'
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] has been transported to the mansion and placed in the jail. \n"))
+						else:
+							person.sleep = 'communal'
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] has been transported to the mansion. You are out of free jail cells and $he was assigned to the communal area. \n"))
+					else:
+						text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] " + awayReturnText.get(person.away.at, awayReturnText.default) + "\n"))
+						if person.away.get("prev_work", "") != "":
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] was [color=red]removed[/color] from $his previous job (" + globals.jobs.jobdict[person.away.prev_work].name + ") while away, so will now be resting.\n"))
+							person.away.erase("prev_work")
+						###---End Expansion---###
+						var sleepChange = false
+						if person.sleep != 'communal':
+							match person.sleep:
+								'personal':
+									sleepChange = globals.count_sleepers().personal > globals.state.mansionupgrades.mansionpersonal
+								'your':
+									sleepChange = globals.count_sleepers().your_bed > globals.state.mansionupgrades.mansionbed
+								'jail':
+									sleepChange = globals.count_sleepers().jail > globals.state.mansionupgrades.jailcapacity
+								'farm':
+									if globals.count_sleepers().farm > variables.resident_farm_limit[globals.state.mansionupgrades.farmcapacity]:
+										sleepChange = true
+										person.job = 'rest'
+						if sleepChange:
+							person.sleep = 'communal'
+							###---Added by Expansion---### Colorized
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name's[/color] sleeping place is no longer available so $he has moved to the communal area. \n"))
+							###---End Expansion---###
+					person.away.at = ''
+				for i in person.effects.values():
+					if i.has('duration') && i.code != 'captured':
+						###---Added by Expansion---### Hybrid Support && Ank BugFix v4
+						if person.race.find('Tribal Elf') < 0 || i.code in ['bandaged','sedated', 'drunk'] || randf() > 0.5:
+							i.duration -= 1
+						###---End Expansion---###
+						if i.duration <= 0:
+							person.add_effect(i, true)
+					elif i.code == 'captured':
+						if i.duration <= 0:
+							if i.code == 'captured':
+								text0.set_bbcode(text0.get_bbcode() + person.dictionary('$name grew accustomed to your ownership.\n'))
+							person.add_effect(i, true)
+					if i.has("ondayend"):
+						globals.effects.call(i.ondayend, person)
 
 	###---Added by Expansion---### Ovulation System
 	text0.set_bbcode(text0.get_bbcode()+globals.expansion.nightly_womb(globals.player))
