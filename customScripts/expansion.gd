@@ -1825,29 +1825,28 @@ func nightly_womb(person):
 
 	person.preg.fertility = clamp(person.preg.fertility + 10 * (person.health / person.stats.health_max - 0.6) + 10 * (0.6 - person.stress / person.stats.stress_max), -20, 50)
 
+	# Check if valid for impregnation
+	if person.preg.has_womb && !person.preg.is_preg && person.preg.ovulation_type > 0 && person.preg.ovulation_stage == 1 && !person.effects.has('contraceptive'):
+		var bonus = 1.25 if globals.state.spec == "Breeder" else 1
+		var fertility = round(5 + max(person.preg.fertility + person.preg.bonus_fertility, 0) * person.pregexp.eggstr)
+		if person.traits.has("Fertile"):
+			fertility *= 1.5
+		elif person.traits.has("Infertile"):
+			fertility *= 0.5
+
+		fertility *= bonus
+		var multiBabyLimitChance = 100 - globals.expansionsettings.multipleBabyChance
+		for i in person.preg.womb:
+			if bonus * round(i.semen) * i.virility > rand_range(0,100):
+				i.day -= 1
+				if fertility > rand_range(0,100):
+					#if person.preg.baby_type == 'birth':
+					fertilize_egg(person,i.id,i.unique)
+					if rand_range(0,100) <= multiBabyLimitChance || person.preg.unborn_baby.size() > 3:
+						break
+
 	ovulation_day(person)
-	if person.preg.has_womb == false || person.preg.is_preg == true || person.preg.ovulation_type <= 0 || person.preg.ovulation_stage != 1 || person.effects.has('contraceptive'):
-		return text
-
-	var bonus = 1.25 if globals.state.spec == "Breeder" else 1
-	var fertility = round(5 + max(person.preg.fertility + person.preg.bonus_fertility, 0) * person.pregexp.eggstr)
-	if person.traits.has("Fertile"):
-		fertility *= 1.5
-	elif person.traits.has("Infertile"):
-		fertility *= 0.5
-
-	fertility *= bonus
-	var multiBabyLimitChance = 100 - globals.expansionsettings.multipleBabyChance
-	for i in person.preg.womb:
-		if bonus * round(i.semen) * i.virility > rand_range(0,100):
-			i.day -= 1
-			if fertility > rand_range(0,100):
-				#if person.preg.baby_type == 'birth':
-				fertilize_egg(person,i.id,i.unique)
-				if rand_range(0,100) <= multiBabyLimitChance || person.preg.unborn_baby.size() > 3:
-					break
-
-
+	
 	#globals.traceFile('nightly_womb')
 	return text
 
@@ -3502,7 +3501,7 @@ func updateBodyImage(person):
 			stress = MID_STRESS
 		else:
 			stress = HIGH_STRESS
-		if person.preg.duration > 0 && person.knowledge.append('currentpregnancy') || person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height)/2:
+		if person.preg.duration > 0 && person.knowledge.has('currentpregnancy') || person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height)/2:
 			if dictUniqueImagePaths[person.unique][imagetype].has(IMAGE_PREG):
 				stress = IMAGE_PREG
 		person.imagetype = typeEnumToString[imagetype]
@@ -3511,7 +3510,7 @@ func updateBodyImage(person):
 	###---End Expansion---###
 	elif person.imagefull != null:
 		var attempt = []
-		if person.preg.duration > 0  && person.knowledge.append('currentpregnancy') || person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height)/2:
+		if person.preg.duration > 0 && person.knowledge.has('currentpregnancy') || person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height)/2:
 			attempt.append('preg')
 		if int(person.exposed.chest) + int(person.exposed.genitals) + int(person.exposed.ass) >= 2:
 			attempt.append('naked')

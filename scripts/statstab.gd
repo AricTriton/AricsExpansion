@@ -582,7 +582,6 @@ func eventPregnancyReveal(mode=''):
 	if mode == 'introdiscovered':
 		text += "$He looks shocked and touches $his "+expansion.nameBelly()+" reflexively.\n\n[color=yellow]" + person.quirk("-I...um...I think I may be pregnant. I was just scared to say anything...")
 		person.knowledge.append('currentpregnancy')
-		person.metrics.preg += 1
 		if person.mind.secrets.has('currentpregnancy'):
 			person.mind.secrets.erase('currentpregnancy')
 	
@@ -595,7 +594,6 @@ func eventPregnancyReveal(mode=''):
 	if mode == 'introtold':
 		text += "$He gently rubs $his swollen "+expansion.nameBelly()+" and smiles.\n\n[color=yellow]" + person.quirk("-I am pregnant, $master! Isn't that exciting?")
 		person.knowledge.append('currentpregnancy')
-		person.metrics.preg += 1
 		person.dailytalk.erase('currentpregnancy')
 		
 		text += "\n\n[color=aqua]Discovered $name is Pregnant[/color]"

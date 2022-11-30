@@ -344,9 +344,11 @@ func newbaby(mother,father):
 	person.preg.baby_type == ''
 	set_ovulation(person)
 
-	if globals.state.perfectinfo == true && globals.state.mansionupgrades.dimensionalcrystal >= 3:
+	# Only want to run once even if twins/triplets/...
+	if !mother.preg.is_preg:
 		mother.metrics.preg += 1
-		mother.knowledge.append('currentpregnancy')
+		if globals.state.perfectinfo == true && globals.state.mansionupgrades.dimensionalcrystal >= 3:
+			mother.knowledge.append('currentpregnancy')
 	globals.state.babylist.append(person)
 	
 	# Random portrait again, since primary race may have changed in setRaceDisplay

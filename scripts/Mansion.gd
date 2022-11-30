@@ -2662,9 +2662,6 @@ func childbirth(person,baby_id):
 	get_node("birthpanel").show()
 	baby = globals.state.findbaby(baby_id)
 	var text = ''
-	###---Added by Expansion---### Add Metrics
-	if person.mind.secrets.has('currentpregnancy') && !person.knowledge.has('currentpregnancy'):
-		person.metrics.preg += 1
 	if globals.state.mansionupgrades.mansionnursery >= 1:
 		if globals.player == person:
 			text = person.dictionary('[color=aqua]You[/color] gave birth to a ')
