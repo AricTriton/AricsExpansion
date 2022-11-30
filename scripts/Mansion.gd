@@ -119,16 +119,16 @@ func _ready():
 	#startending()
 
 var awayReturnText = {
-	'travel back': 'returned to the mansion and went back to $his duty.',
-	'transported back': 'transported back to the mansion and went back to $his duty.',
-	'in labor': 'recovered from labor and went back to $his duty.',
-	'training': 'completed $his training and went back to $his duty.',
-	'nurture': 'has finished being nurtured and went back to $his duty.',
+	'travel back': 'returned to the mansion and went back to $his duties.',
+	'transported back': 'transported back to the mansion and went back to $his duties.',
+	'in labor': 'recovered from labor and went back to $his duties.',
+	'training': 'completed $his training and went back to $his duties.',
+	'nurture': 'has finished being nurtured and went back to $his duties.',
 	'growing': 'has matured and is now ready to serve you.',
-	'lab': 'successfully recovered from laboratory modification and went back to $his duty.',
-	'rest': 'finished resting and went back to $his duty.',
-	'vacation': 'returned from vacation and went back to $his duty.',
-	'default': 'returned to the mansion and went back to $his duty.',
+	'lab': 'successfully recovered from laboratory modification and went back to $his duties.',
+	'rest': 'finished resting and went back to $his duties.',
+	'vacation': 'returned from vacation and went back to $his duties.',
+	'default': 'returned to the mansion and went back to $his duties.',
 }
 
 func rebuild_slave_list():
