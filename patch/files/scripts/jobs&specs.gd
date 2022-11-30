@@ -99,7 +99,7 @@ var jobdict = {
 		code = 'whorewimborn',
 		name = "W - Prostitution",
 		type = 'sexual',
-		description = "$name will be assigned to the town's brothel as a common whore.\n\n[color=yellow]Efficiency grows with Charm, Endurance, Beauty and basic sexual actions. \n\nRequires unlocked sex actions for sufficient performance.[/color]\n[color=aqua]Enjoyed by Lustful slaves[/color]",
+		description = "$name will be assigned to the town's brothel as a common whore. $He will have to perform most normal sex acts, but nothing too depraved or painful. The advantage of working for a reputable brothel is that the bouncers will intervene to protect $him from harm, and ensure that the customers pay for $his services.\n\n[color=yellow]Efficiency grows with Charm, Endurance, Beauty and basic sexual actions. \n\nRequires unlocked sex actions for sufficient performance.[/color]\n[color=aqua]Enjoyed by Lustful slaves[/color]",
 		workline = "$name will whore $himself at the brothel.",
 		reqs = "true",
 		unlockreqs = 'globals.state.sidequests.brothel >= 2',
@@ -112,7 +112,7 @@ var jobdict = {
 		code = 'escortwimborn',
 		name = "W - Escort",
 		type = 'sexual',
-		description = "$name will be assigned to the town's brothel as a high class whore for rich men. \n\n[color=yellow]Requires grade of a [color=aqua]Commoner[/color] or higher. \n\nEfficiency grows with Charm, Confidence, Beauty and your reputation. [/color]\n[color=aqua]Enjoyed by Lustful slaves[/color]",
+		description = "$name will be assigned to the town's brothel as a high class prostitute for the nobles of Wimborn. $He will attend parties and partygoers, and ensure their every need is met. The brothel staff will see that $he gets paid, and that the clients do not indulge in their less noble fantasies to a harmful extent.\n\n[color=yellow]Requires grade of a [color=aqua]Commoner[/color] or higher. \n\nEfficiency grows with Charm, Confidence, Beauty and your reputation. [/color]\n[color=aqua]Enjoyed by Lustful slaves[/color]",
 		workline = "$name will be earning money as an escort for rich people.",
 		reqs = "globals.originsarray.find(globals.currentslave.origins) >= 2",
 		unlockreqs = 'globals.state.sidequests.brothel >= 2',
@@ -125,7 +125,7 @@ var jobdict = {
 		code = 'fucktoywimborn',
 		name = "W - Exotic Whore",
 		type = 'sexual',
-		description = "$name will be used by the most deviant men in the brothel. \n\n[color=yellow]Efficiency grows with Courage, Endurance, Beauty, and advanced sex actions. \n\nRequires unlocked advanced sex actions for sufficient performance. [/color]\n[color=aqua]Enjoyed by Lustful slaves[/color]",
+		description = "$name will be used by the most deviant people in Wimborn. $He will fulfil their deepest fantasies, which will likely prove to be painful, humiliating, or both. On the positive side, the bouncers will ensure generous payment and, unless they get too turned on by the proceedings, protect $him from permanent harm.\n\n[color=yellow]Efficiency grows with Courage, Endurance, Beauty, and advanced sex actions. \n\nRequires unlocked advanced sex actions for sufficient performance. [/color]\n[color=aqua]Enjoyed by Lustful slaves[/color]",
 		workline = "$name will be earning money by offering $his body for all sorts of deviant plays.",
 		reqs = "true",
 		unlockreqs = 'globals.state.sidequests.brothel >= 2',
@@ -320,7 +320,7 @@ var jobdict = {
 		code = 'farmhand',
 		name = "Farmhand",
 		type = 'basic',
-		description = "$name will be helping take care of cattle in the farm, including cleaning up after them and helping them to their milking stalls.\n\nSkill is learned over time.\nStrength determines ability to restrain resisting cattle.\n\n[color=yellow]Requires milking fetish of [color=aqua]Acceptable[/color] or higher.[/color]",
+		description = "$name will be helping take care of cattle in the farm, including cleaning up after them and helping them to their milking stalls.\n\nSkill is learned over time.\nStrength determines ability to restrain resisting cattle.",
 		workline = "$name will be milking cattle in the farm.",
 		reqs = 'true',
 		unlockreqs = 'globals.state.farm >= 3',
@@ -333,7 +333,7 @@ var jobdict = {
 		code = 'milkmerchant',
 		name = "Milk Merchant",
 		type = 'social',
-		description = "$name will be taking the milk to the local towns to sell it.\n\nSkill is learned over time.\nWits increases the chance of them raising interest and price in town for your milk.\nCharm increases the chance of a good reaction to each bottle of milk sold.\n\n[color=yellow]Requires milking fetish of [color=aqua]Acceptable[/color] or higher and a speaking voice.[/color]",
+		description = "$name will be taking the milk to the local towns to sell it.\n\nSkill is learned over time.\nWits increases the chance of them raising interest and price in town for your milk.\nCharm increases the chance of a good reaction to each bottle of milk sold.\n\n[color=yellow]Requires a speaking voice.[/color]",
 		workline = "$name will be milking cattle in the farm.",
 		reqs = "globals.currentslave.traits.has('Mute') == false",
 		unlockreqs = 'globals.state.farm >= 3',
@@ -669,8 +669,8 @@ func multitem(person):
 		itemnumber = clamp(randi() % 4 + int(person.level / 2) - 2 , 1, 5)
 		itemtext += item.name + ': ' + str(itemnumber) + ", "
 		array2.append({item.code : itemnumber})
-		
-	
+
+
 	var text = person.dictionary(leveluprequests.multitem.speech)
 	text = text.replace('$item', itemtext)
 	var descript = person.dictionary(leveluprequests.multitem.descript).replace('$item', itemtext)
@@ -724,7 +724,7 @@ func ingreditem(person):
 		item = globals.itemdict[i]
 		temptext += item.name + ": " + str(finalitems[i]) + ", "
 	temptext = temptext.substr(0, temptext.length() -2)+ ' '
-	text = person.dictionary(leveluprequests.ingreditem.speech.replace('$item', temptext)) 
+	text = person.dictionary(leveluprequests.ingreditem.speech.replace('$item', temptext))
 	var descript = person.dictionary(leveluprequests.ingreditem.descript).replace('$item', temptext)
 	person.levelupreqs = {code = 'ingreditem', value = [finalitems], speech = text, descript = descript , button = person.dictionary('Provide $name with $item').replace('$item', temptext), effect = 'multitemlevelup', activate = 'fromtalk'}
 	return text
@@ -796,7 +796,7 @@ func forage(person):
 	text += '$He brought back [color=aqua]'+ str(food) + '[/color] units of food.\n'
 	person.xp += food/globals.expansionsettings.func_forage_tweaks[4]
 	var dict = {text = text, food = food}
-	
+
 	return dict
 
 func hunt(person):#agility, strength, endurance, courage
@@ -822,10 +822,10 @@ func hunt(person):#agility, strength, endurance, courage
 	if person.smaf * 3 + 3 >= rand_range(0,100):
 		text += "$name has found bestial essence. \n"
 		globals.itemdict.bestialessenceing.amount += 1
-	
+
 	var dict = {text = text, food = food}
 	return dict
-	
+
 func gnollhunt(person):#agility, strength, endurance, courage
 	var text = "After finishing their duties, $name went to the forest to search for wild animals.\n"
 	var food = person.awareness(true)*rand_range(globals.expansionsettings.func_hunt_tweaks[0],4) + max(0,person.send*rand_range(globals.expansionsettings.func_hunt_tweaks[1],globals.expansionsettings.func_hunt_tweaks[2]))
@@ -883,7 +883,7 @@ func nurse(person):
 				i.health += (person.wit/(25-avalinurse)+person.smaf*3) + round(person.jobskills.nurse/2)
 	person.xp += count * 8
 	###---End Expansion---###
-	
+
 	var dict = {text = text}
 	return dict
 
@@ -991,7 +991,7 @@ func ffprostitution(person):
 		person.stress += 25 - min(counter*5, 20)
 	if person.spec == 'geisha':
 		gold = gold*1.25
-	###---Added by Expansion---### 
+	###---Added by Expansion---###
 	#Job Skills
 	var bonusgold = round(clamp(globals.expansion.sexWorkBonus(person), -100, gold))
 	if bonusgold > 0:
@@ -1008,7 +1008,7 @@ func ffprostitution(person):
 	gold = round(gold)
 	person.xp += gold/5
 	text += "By the end of the day $he earned [color=yellow]"+ str(gold) + "[/color] gold.\n"
-	
+
 	var dict = {text = text, gold = gold}
 	return dict
 
@@ -1203,7 +1203,7 @@ func storewimborn(person):
 	var gold = rand_range(1,5) + (person.charm + person.wit) / 2
 	gold = round(gold * min(0.10 * (globals.originsarray.find(person.origins) + 7), 1) * bonus)
 	var xp = gold / 4
-	
+
 	###---Added by Expansion---###
 	#Job Skills
 	person.add_jobskill('merchant', 1)
@@ -1313,11 +1313,11 @@ func artistwimborn(person):
 	#Job Skills
 	person.add_jobskill('entertainer', 1)
 	var chance = clamp(person.jobskills.entertainer + (person.charm*.1), 1, 50)
-	var bonus = person.charm *.2
+	var bonus = round(person.charm *.2)
 	if rand_range(0,100) <= chance:
-		text += "$He was exceptionally charming today and knew just how to delivery what the crowd wanted. $He earned [color=green]" + str(bonus) + " Extra Gold[/color] "
+		text += "$He was exceptionally charming today and knew just how to deliver what the crowd wanted. $He earned [color=green]" + str(bonus) + " Extra Gold[/color]. "
 		if globals.expansionsettings.perfectinfo == true:
-			text += "- " + str(chance) + "% Chance"
+			text += " (" + str(chance) + "% Chance) "
 		gold += bonus
 	#Towns Expanded - Public Nudity
 	if globals.expansionsettings.enable_public_nudity_system == true:
@@ -1415,7 +1415,7 @@ func whorewimborn(person):
 	gold = round(gold)
 	person.xp += gold/5
 	text += "By the end of the day $he earned [color=yellow]"+ str(gold) + "[/color] gold.\n"
-	
+
 	var dict = {text = text, gold = gold}
 	return dict
 
@@ -1492,7 +1492,7 @@ func escortwimborn(person):
 	person.metrics.sex += sexactstoday
 	#/ralphC
 	text += "By the end of the day $he earned [color=yellow]"+ str(gold) + "[/color] gold.\n"
-	
+
 	var dict = {text = text, gold = gold}
 	return dict
 
@@ -1551,12 +1551,12 @@ func fucktoywimborn(person):
 			text += "$He drained [color=green]" + str(manameal) + "[/color] total mana from $his customers.\n"
 			sexactstoday += extrasexactstoday
 		person.metrics.sex += sexactstoday
-		#/ralphC	
+		#/ralphC
 	if person.lewdness < 50:
 		person.lewdness = min(person.lewdness + rand_range(3,5), 50)
 	else:
 		person.lewdness += rand_range(0,1)
-	
+
 	if person.race.find('Bunny') >= 0 || person.spec == 'nympho':
 		person.stress += 25 - min(counter*4, 20)
 	else:
@@ -1642,7 +1642,7 @@ func housepet(person):
 				person.mana_hunger -= manameal
 				if extrasexactstoday > 0:
 					text += "$name presented to nearly every hound in the kennel and spent the day being pumped full of dog cum while being dragged around by knotted cock and absorbed [color=green]"+str(manameal)+"[/color] mana (less than $he would have gotten from sentient partners).\n"
-				else: 
+				else:
 					text += "$name behaved like a bitch in heat and enticed one of the kennel hounds to mount and fuck her.\n"
 				person.cum.pussy += 5 * sexactstoday
 			else:
@@ -1683,28 +1683,28 @@ func housepet(person):
 				globals.impregnation(person, null, 'dog')
 			text += "\n"
 			count += 1
-	
+
 	var relief = clamp(round(person.loyal*.2)+round(person.obed*.1), 1, round(person.energy*.3))
-	
+
 	for i in ['Submissive','Masochist','Deviant']:
 		if person.traits.has(i):
 			relief += round(rand_range(1,3))
-	
+
 	#Beastkin/Halfkin Bonus
 	if person.race.find('Beastkin') >= 0:
 		relief = round(relief*1.5)
 	elif person.race.find('Halfkin') >= 0:
 		relief = round(relief*1.25)
-	
+
 	for i in globals.slaves:
 		if i.sleep != 'jail' && i.sleep != 'farm' && i.away.duration == 0:
 			i.stress -= relief
 			count += 1
-	
+
 	if count > person.jobskills.pet:
 		person.energy -= (count-person.jobskills.pet)*3
 		person.stress += count
-	
+
 	var dict = {text = text}
 	return dict
 
@@ -1720,15 +1720,15 @@ func trainer(person):
 	var lptotal = 0
 	var critrewards = ['xp','learningpoints','wit','cour','conf','charm','energy']
 	var reward = ''
-	
+
 	#Gain bonus per Training Ground level
 	if globals.state.mansionupgrades.traininggrounds > 4:
 		bonuslpchance = 20
 	elif globals.state.mansionupgrades.traininggrounds > 2:
 		bonuslpchance = 10
-	
+
 	text += "[color=aqua]$name[/color] worked in the training fields as a [color=aqua]Trainer[/color] today.\n "
-	
+
 	for trainee in globals.slaves:
 		if trainee.work == "trainee" && trainee.away.duration == 0:
 			text += trainee.dictionary("[color=aqua]$name[/color] was assigned as a [color=aqua]Trainee[/color] and came to learn from ") + "$him. "
@@ -1759,7 +1759,7 @@ func trainer(person):
 					reward = globals.randomitemfromarray(critrewards)
 					trainee[reward] += globals.state.mansionupgrades.traininggrounds * 2
 					text += "\n[color=aqua]$name[/color] had an incredible day learning today. $He ended up gaining an additional [color=green]" + str(globals.state.mansionupgrades.traininggrounds*2) + " " + str(reward).capitalize() + "[/color] as a bonus as $he simply excelled today. "
-	
+
 	if traineestaught == 0:
 		text += "\nNo suitable [color=aqua]Trainees[/color] were available today. $He was able to take the day off and rest instead. $He recovered [color=green]20 Stress[/color] and healed [color=green]15 Health[/color] today."
 		person.health += 15
@@ -1772,7 +1772,7 @@ func trainer(person):
 			reward = globals.randomitemfromarray(critrewards)
 			person[reward] += traineestaught
 			text += "\n[color=aqua]$name had a great day training $his students. $He ended up gaining [color=green]" + str(traineestaught) + " " + str(reward).capitalize() + "[/color] as a bonus for $his excellent work. "
-	
+
 	var dict = {text = text}
 	return dict
 
@@ -1841,7 +1841,7 @@ func public_nudity_law(person, gold):
 				text += "This decision did not meaningfully impact $his wages. "
 			if globals.expansionsettings.perfectinfo == true:
 				text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Bonus Gold Chance[/color] of [color=aqua]" + str(person.beauty) + "[/color] and [color=aqua]Critical Failure Penalty[/color] at [color=aqua]" + str(person.beauty + 50) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color] || "
-			
+
 			#Guard Fine Chance
 			if towndict.laws.public_nudity == false:
 				d100 = round(rand_range(0,100))
@@ -1850,7 +1850,7 @@ func public_nudity_law(person, gold):
 					text += "\n[color=aqua]$name[/color] was stopped by the local guards in [color=aqua]" + str(joblocation).capitalize() + "[/color]. [color=red]$He was informed that $he was breaking the local [color=aqua]Public Nudity[/color] law and would receive a fine of [color=yellow]50[/color] for public indecency.[/color] "
 					if globals.expansionsettings.perfectinfo == true:
 						text += " || [color=yellow]Perfect Info[/color] - [color=aqua]Public Indecency Fine Chance[/color] of [color=aqua]" + str(towndict.guardskill) + "[/color]; Rolled [color=aqua]" + str(d100) + "[/color] || "
-					
+
 					#Reduced due to Charm
 					d100 = round(rand_range(0,100))
 					if d100 <= person.charm:

@@ -33,21 +33,21 @@ func my_gotoslave_next():
 
 func slavegear(person):
 	var text = ''
-	text += person.name_short() + "\nHealth: " + str(person.health) + "/" + str(person.stats.health_max) + '\nEnergy: ' + str(person.energy) + '/' + str(person.stats.energy_max) + '\n'
+	text += person.name_short() + "\nHealth: " + str(person.health) + "/" + str(person.stats.health_max) + '\nEnergy: ' + str(round(person.energy)) + '/' + str(person.stats.energy_max) + '\n'
 	###---Added by Expansion---### Minor Tweaks by Dabros Integration
 	## CHANGED - 25/5/19 - expanded slave summary in gear/equip screen
 	## NOTE - 27/5/19 - since max varies a lot (uncivilised, rebellious, ect), decided no color for obed now, maybe after i look into this more
-	text += "Obedience: " + str(person.obed) + "/" + str(person.stats.obed_max)+"\n"
+	text += "Obedience: " + str(round(person.obed)) + "/" + str(person.stats.obed_max)+"\n"
 
 	if person.lust >= person.stats.lust_max:
 		text += "[color=yellow]"
-	text += "Lust: " + str(person.lust) + "/" + str(person.stats.lust_max)+"\n"
+	text += "Lust: " + str(round(person.lust)) + "/" + str(person.stats.lust_max)+"\n"
 	if person.lust >= person.stats.lust_max:
 		text += "[/color]"
 
 	if person.stress >= person.stats.stress_max:
 		text += "[color=yellow]"
-	text += "Stress: " + str(person.stress) + "/" + str(person.stats.stress_max)+"\n"
+	text += "Stress: " + str(round(person.stress)) + "/" + str(person.stats.stress_max)+"\n"
 	if person.stress >= person.stats.stress_max:
 		text += "[/color]"
 

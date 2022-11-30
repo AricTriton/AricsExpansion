@@ -673,6 +673,12 @@ class progress:
 	#Best Slave - Used for Envy Flaw
 	var bestslave
 	###---Expansion End---###
+	var daily_reports = {
+		global = "",
+		job = "",
+		secondary = "",
+		farm = "",
+	}
 	
 	func quest_set(value):
 		sidequests = value

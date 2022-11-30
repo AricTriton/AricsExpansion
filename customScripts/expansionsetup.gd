@@ -509,8 +509,14 @@ func setLactation(person):
 		traitchance = round(traitchance)
 		if traitchance >= 1:
 			while traitchance > 0:
+				var choices = []
+				if hasregentrait == false:
+					choices.append('regen')
+				if hasstoragetrait == false:
+					choices.append('storage')
 				variable = rand_range(0,1)
-				if hasregentrait == false && variable > .5:
+				var choice = globals.randomitemfromarray(choices)
+				if choice == 'regen' && variable > .5:
 					variable = rand_range(0,1)
 					if variable > .8:
 						person.add_trait("Milk Flow 2")
@@ -518,7 +524,7 @@ func setLactation(person):
 						person.add_trait("Weak Milk Flow")
 					else:
 						person.add_trait("Milk Flow 1")
-				elif hasstoragetrait == false && variable > .5:
+				elif choice == 'storage' && variable > .5:
 					variable = rand_range(0,1)
 					if variable > .8:
 						person.add_trait("Milk Storage 2")
