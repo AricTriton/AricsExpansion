@@ -1785,11 +1785,11 @@ func build_mansion_info():
 					text += "[color=lime]" + str(round(person.stress)) + "[/color] | [color=aqua]" + str(person.stats.stress_max) + "[/color]"
 				text += "  |  Energy: "
 				if person.energy >= person.stats.energy_max*.8:
-					text += "[color=lime]" + str(person.energy) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
+					text += "[color=lime]" + str(round(person.energy)) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
 				elif person.energy >= person.stats.energy_max*.4:
-					text += "[color=green]" + str(person.energy) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
+					text += "[color=green]" + str(round(person.energy)) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
 				else:
-					text += "[color=red]" + str(person.energy) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
+					text += "[color=red]" + str(round(person.energy)) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
 				if person.ability.size() > 2:
 					text += "\nAbilities Known: [color=aqua]" + str(person.ability.size() -2) + "[/color]" 
 					if person.learningpoints > 0:
@@ -2967,7 +2967,7 @@ func updatestats(person):
 	get_node("MainScreen/mansion/selfinspect/statspanel/hp").set_value((person.stats.health_cur/float(person.stats.health_max))*100)
 	get_node("MainScreen/mansion/selfinspect/statspanel/en").set_value((person.stats.energy_cur/float(person.stats.energy_max))*100)
 	get_node("MainScreen/mansion/selfinspect/statspanel/xp").set_value(person.xp)
-	text = "Health: " + str(person.stats.health_cur) + "/" + str(person.stats.health_max) + "\nEnergy: " + str(person.stats.energy_cur) + "/" + str(person.stats.energy_max) + "\nExperience: " + str(person.xp)
+	text = "Health: " + str(person.stats.health_cur) + "/" + str(person.stats.health_max) + "\nEnergy: " + str(round(person.stats.energy_cur)) + "/" + str(person.stats.energy_max) + "\nExperience: " + str(person.xp)
 	get_node("MainScreen/mansion/selfinspect/statspanel/hptooltip").set_tooltip(text)
 	if person.imageportait != null && globals.loadimage(person.imageportait):
 		$MainScreen/mansion/selfinspect/statspanel/TextureRect/portrait.set_texture(globals.loadimage(person.imageportait))
@@ -4079,7 +4079,7 @@ func _on_workersbutton_pressed():
 	#Farm Manager
 	text += "\n\n\n[color=#d1b970][center]Farm Manager[/center][/color]"
 	for person in workersDict.farmmanager:
-		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(person.energy) + "[/color] - Job Experience: " + str(person.jobskills.farmmanager)
+		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(round(person.energy)) + "[/color] - Job Experience: " + str(person.jobskills.farmmanager)
 		text += "\n\n[color=yellow]Your Farm Manager will serve as a substitute Farm Hand, Milk Maid, or Bottler if none are assigned.[/color]"
 	if workersDict.farmmanager.empty():
 		text += "\n[color=red]None Assigned[/color]"
@@ -4087,7 +4087,7 @@ func _on_workersbutton_pressed():
 	#Farmhands
 	text += "\n\n[color=#d1b970][center]Farm Hands[/center][/color]"
 	for person in workersDict.farmhand:
-		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(person.energy) + "[/color] - Job Experience: " + str(person.jobskills.farmhand)
+		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(round(person.energy)) + "[/color] - Job Experience: " + str(person.jobskills.farmhand)
 		if person.traits.has('Sadist'):
 			text += " - [color=aqua]Sadist[/color]"
 		if person.traits.has('Dominant'):
@@ -4098,7 +4098,7 @@ func _on_workersbutton_pressed():
 	#Milk-Maids
 	text += "\n\n[color=#d1b970][center]Milk Maids[/center][/color]"
 	for person in workersDict.milkmaid:
-		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(person.energy) + "[/color] - Job Experience: " + str(person.jobskills.milking)
+		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(round(person.energy)) + "[/color] - Job Experience: " + str(person.jobskills.milking)
 		if person.traits.has('Sadist'):
 			text += " - [color=aqua]Sadist[/color]"
 		if person.traits.has('Dominant'):
@@ -4109,14 +4109,14 @@ func _on_workersbutton_pressed():
 	#Milk Merchant
 	text += "\n\n[color=#d1b970][center]Milk Merchants[/center][/color]"
 	for person in workersDict.milkmerchant:
-		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(person.energy) + "[/color] - Job Experience: " + str(person.jobskills.milkmerchant)
+		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(round(person.energy)) + "[/color] - Job Experience: " + str(person.jobskills.milkmerchant)
 	if workersDict.milkmerchant.empty():
 		text += "\n[color=red]None Assigned[/color]"
 
 	#Bottlers
 	text += "\n\n[color=#d1b970][center]Bottlers[/center][/color]"
 	for person in workersDict.bottler:
-		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(person.energy) + "[/color] - Job Experience: " + str(person.jobskills.bottler)
+		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(round(person.energy)) + "[/color] - Job Experience: " + str(person.jobskills.bottler)
 	if workersDict.bottler.empty():
 		text += "\n[color=red]None Assigned[/color]"
 	

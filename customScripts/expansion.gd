@@ -1197,7 +1197,7 @@ func getCumCoatedDescription(person,part):
 	var text = ""
 	#Cum on Face
 	if person.cum.face > 0 && part == 'face':
-		text += "\n$His " + globals.randomitemfromarray(['','',' ' +str(person.race)+ ' '])
+		text += "\n$His " + globals.randomitemfromarray(['','',str(person.race)+ ' '])
 		if person.cum.face >= 10:
 			text += 'face is ' + globals.randomitemfromarray(['undiscernable underneath the ','completely coated in the ','unrecognizable in the ','concealed beneath ','hidden under ']) + "layers of "
 		elif person.cum.face > 5:
@@ -1209,7 +1209,7 @@ func getCumCoatedDescription(person,part):
 		text += '[color=#E0D8C6]' + nameCum() + '[/color].\n'
 	#Cum on Body
 	if person.cum.body > 0 && part == 'body':
-		text += "$His " + globals.randomitemfromarray(['','',' ' +str(person.race)+ ' ']) + str(getChest(person)) + ' are '
+		text += "$His " + globals.randomitemfromarray(['','',str(person.race)+ ' ']) + str(getChest(person)) + ' are '
 		if person.exposed.chest == true:
 			if person.cum.body >= 10:
 				text += globals.randomitemfromarray(['undiscernable underneath the ','completely coated in the ','unrecognizable in the ','concealed beneath ','hidden under ']) + "layers of "
@@ -1221,7 +1221,7 @@ func getCumCoatedDescription(person,part):
 				text += globals.randomitemfromarray(['streaked with ','dotted with ','speckled with '])
 			text += '[color=#E0D8C6]' + nameCum() + '[/color].\n'
 		else:
-			text += ' covered by clothing, but you see a series of ' + globals.randomitemfromarray(['wet','gloopy','moist','damp','dark']) + ' spots on $his clothing that seem to be sticking to $his ' + str(getChest(person)) + '. ' + globals.randomitemfromarray(['Maybe it is just water?','Could it be water?','Maybe they spilled milk?','What it could be?','Interesting...'])
+			text += 'covered by clothing, but you see a series of ' + globals.randomitemfromarray(['wet','gloopy','moist','damp','dark']) + ' spots on $his clothing that seem to be sticking to $his ' + str(getChest(person)) + '. ' + globals.randomitemfromarray(['Maybe it is just water?','Could it be water?','Maybe they spilled milk?','What it could be?','Interesting...'])
 	return text
 
 func getSwollenDescription(person,short=false):
@@ -3047,7 +3047,7 @@ func dailyLactation(person):
 					text += "$name's "+ str(person.titssize) +" "+nameTits()+ " were so filled and full of pressure that $his body could only handle it by "+nameStretching()
 					person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)+1]
 					var hpdamage = round(rand_range(pressure,pressure*2.5))
-					text += " to "+ str(person.titssize) +".\nThis caused damage to $his health. [color=red]" +str(hpdamage)+ " Health Lost[color]"
+					text += " to "+ str(person.titssize) +".\nThis caused damage to $his health. [color=red]" +str(hpdamage)+ " Health Lost[/color]"
 					#Inflict Damage. They won't die from it though.
 					if person.health - hpdamage <= 0:
 						person.health = 1
@@ -3055,7 +3055,7 @@ func dailyLactation(person):
 							person.energy -= hpdamage
 						else:
 							person.energy = 0
-						text += "Due to $his extremely poor health condition, $his energy has been drastically reduced as well by the incident.\n[color=red]" +str(hpdamage)+ "Energy Lost[color]\n"
+						text += "Due to $his extremely poor health condition, $his energy has been drastically reduced as well by the incident.\n[color=red]" +str(hpdamage)+ "Energy Lost[/color]\n"
 					else:
 						text += "\n"
 						person.health -= hpdamage

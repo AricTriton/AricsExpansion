@@ -1506,8 +1506,10 @@ func generaterequest(member):
 	rval.erase('stop')
 
 	#Vanilla with Additions
-	if member.person.vagvirgin == true:
+	if member.person.vagina == 'none' || member.person.vagvirgin == true:
 		rval.erase('fuck')
+	if member.person.vagina == 'none':
+		rval.erase('pussy')
 	if member.person.assvirgin == true:
 		rval.erase('anal')
 	if member.person.penis == 'none':

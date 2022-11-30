@@ -320,7 +320,7 @@ var jobdict = {
 		code = 'farmhand',
 		name = "Farmhand",
 		type = 'basic',
-		description = "$name will be helping take care of cattle in the farm, including cleaning up after them and helping them to their milking stalls.\n\nSkill is learned over time.\nStrength determines ability to restrain resisting cattle.\n\n[color=yellow]Requires milking fetish of [color=aqua]Acceptable[/color] or higher.[/color]",
+		description = "$name will be helping take care of cattle in the farm, including cleaning up after them and helping them to their milking stalls.\n\nSkill is learned over time.\nStrength determines ability to restrain resisting cattle.",
 		workline = "$name will be milking cattle in the farm.",
 		reqs = 'true',
 		unlockreqs = 'globals.state.farm >= 3',
@@ -333,7 +333,7 @@ var jobdict = {
 		code = 'milkmerchant',
 		name = "Milk Merchant",
 		type = 'social',
-		description = "$name will be taking the milk to the local towns to sell it.\n\nSkill is learned over time.\nWits increases the chance of them raising interest and price in town for your milk.\nCharm increases the chance of a good reaction to each bottle of milk sold.\n\n[color=yellow]Requires milking fetish of [color=aqua]Acceptable[/color] or higher and a speaking voice.[/color]",
+		description = "$name will be taking the milk to the local towns to sell it.\n\nSkill is learned over time.\nWits increases the chance of them raising interest and price in town for your milk.\nCharm increases the chance of a good reaction to each bottle of milk sold.\n\n[color=yellow]Requires a speaking voice.[/color]",
 		workline = "$name will be milking cattle in the farm.",
 		reqs = "globals.currentslave.traits.has('Mute') == false",
 		unlockreqs = 'globals.state.farm >= 3',
@@ -1313,11 +1313,11 @@ func artistwimborn(person):
 	#Job Skills
 	person.add_jobskill('entertainer', 1)
 	var chance = clamp(person.jobskills.entertainer + (person.charm*.1), 1, 50)
-	var bonus = person.charm *.2
+	var bonus = round(person.charm *.2)
 	if rand_range(0,100) <= chance:
-		text += "$He was exceptionally charming today and knew just how to delivery what the crowd wanted. $He earned [color=green]" + str(bonus) + " Extra Gold[/color] "
+		text += "$He was exceptionally charming today and knew just how to deliver what the crowd wanted. $He earned [color=green]" + str(bonus) + " Extra Gold[/color]. "
 		if globals.expansionsettings.perfectinfo == true:
-			text += "- " + str(chance) + "% Chance"
+			text += " (" + str(chance) + "% Chance) "
 		gold += bonus
 	#Towns Expanded - Public Nudity
 	if globals.expansionsettings.enable_public_nudity_system == true:
