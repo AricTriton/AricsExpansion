@@ -113,6 +113,11 @@ func _ready():
 	###---Added by Expansion---###
 	prepareFarmOptionButtons()
 	###---End Expansion---###
+	get_node("FinishDayPanel/alise").hide()
+	get_node("FinishDayPanel/FinishDayScreen/Global Report").set_bbcode(globals.state.daily_reports.global)
+	get_node("FinishDayPanel/FinishDayScreen/Job Report").set_bbcode(globals.state.daily_reports.job)
+	get_node("FinishDayPanel/FinishDayScreen/Secondary Report").set_bbcode(globals.state.daily_reports.secondary)
+	get_node("FinishDayPanel/FinishDayScreen/Farm Report").set_bbcode(globals.state.daily_reports.farm)
 	if get_node("FinishDayPanel/FinishDayScreen/Global Report").get_bbcode().empty():
 		get_node("Navigation/endlog").disabled = true
 	_on_mansion_pressed()
@@ -1502,6 +1507,11 @@ func _on_end_pressed():
 		text0.set_bbcode(text0.get_bbcode()+"[color=#ff4949]You have expended your supplies and some of the actions couldn't be finished. [/color]\n")
 	get_node("Navigation/endlog").disabled = false
 	nextdayevents()
+
+	globals.state.daily_reports.global = text0.get_bbcode()
+	globals.state.daily_reports.job = text1.get_bbcode()
+	globals.state.daily_reports.secondary = text2.get_bbcode()
+	globals.state.daily_reports.farm = text3.get_bbcode()
 
 func nextdayevents():
 	get_node("FinishDayPanel").hide()
@@ -2940,6 +2950,7 @@ func _on_selfbutton_pressed():
 		$MainScreen/mansion/selfinspect/selftattoo.set_tooltip("Unlock Beauty Parlor to access Tattoo options. ")
 		$MainScreen/mansion/selfinspect/selfpierce.set_tooltip("Unlock Beauty Parlor to access Piercing options. ")
 	$MainScreen/mansion/selfinspect/Contraception.pressed = person.effects.has("contraceptive")
+	$MainScreen/mansion/selfinspect/defaultMasterNoun.text = globals.state.defaultmasternoun
 
 func updatestats(person):
 	var text = ''
