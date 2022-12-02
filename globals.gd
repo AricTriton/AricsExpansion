@@ -183,6 +183,12 @@ func slaves_set(person):
 	if globals.get_tree().get_current_scene().has_node("infotext"):
 		globals.get_tree().get_current_scene().infotext("New Character acquired: " + person.name_long(),'green')
 
+<RemoveFrom 6 7>
+func canloadimage(path):
+	# if Image.new().load(path) != OK:
+	# 	return false
+
+
 class resource:
 	var day = 1 setget day_set
 	var gold = 0 setget gold_set

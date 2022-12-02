@@ -4774,8 +4774,14 @@ func updateSlaveListNode(node, person, visible):
 	node.find_node('healthvalue').set_text( str(round(person.health)))
 	node.find_node('obedience').set_normal_texture( person.obed_icon())
 	node.find_node('stress').set_normal_texture( person.stress_icon())
-	if person.imageportait != null:
-		node.find_node('portait').set_texture( globals.loadimage(person.imageportait))
+	# Don't reload the image if it didn't change, since it can be slow to reload images for a large slave list
+	var portrait_node = node.find_node('portait')
+	if !portrait_node.has_meta('imageportait') || (portrait_node.get_meta('imageportait') != person.imageportait):
+		if person.imageportait != null:
+			portrait_node.set_texture(globals.loadimage(person.imageportait))
+		else:
+			portrait_node.set_texture(null)
+		portrait_node.set_meta('imageportait', person.imageportait)
 
 func dialogue(showcloseButton, destination, dialogtext, dialogbuttons = null, sprites = null, background = null): #for arrays: 0 - boolean to show close button or not. 1 - node to return connection back. 2 - text to show 3+ - arrays of buttons and functions in those
 	var text = get_node("dialogue/dialoguetext")
