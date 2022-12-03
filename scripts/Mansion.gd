@@ -1070,6 +1070,7 @@ func _on_end_pressed():
 							text0.set_bbcode(text0.get_bbcode() + person.dictionary("The beast lunged forward and violently thrust its throbbing member into the wimpering $name's " + str(globals.expansion.namePussy()) + ". "))
 						else:
 							text0.set_bbcode(text0.get_bbcode() + person.dictionary("The beast lunged forward and forced $name onto the floor before mounting $his " + str(globals.expansion.namePenis()) + " and having its way with $him. "))
+					text0.set_bbcode(text0.get_bbcode() + "\n")
 			###---End Expansion---###
 			person.health += slavehealing * person.stats.health_max
 
@@ -3869,7 +3870,7 @@ func _on_snailbutton_pressed():
 			counter += 1
 			temptext += "\n" + incubators[i].name + ": [color=aqua]Level " +str(incubators[i].level)+"[/color] - "
 			if incubators[i].filled == true:
-				temptext += "[color=green]Incubating Egg Growth (" +str(incubators[i].growth)+"/10) "
+				temptext += "[color=green]Incubating Egg Growth (" +str(incubators[i].growth)+"/10)[/color] "
 			else:
 				temptext += "[color=red]Empty[/color]"
 	text += "\n\n[center]Incubators[/center]\n[center]Total Incubators: [color=aqua]" +str(counter)+ " / 10[/color][/center]\n" + temptext
