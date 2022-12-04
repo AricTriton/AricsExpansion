@@ -78,6 +78,12 @@ class member:
 	var virginity_multiplier = 0
 	var actionshad = {addtraits = [], removetraits = [], samesex = 0, samesexorgasms = 0, oppositesex = 0, oppositesexorgasms = 0, punishments = 0, group = 0, incest = 0, incestorgasms = 0}
 	var succubusdraincount = 0 #ralphC
+	# Some characters can be embarrassed for some reason or other during sex, giving a penalty.
+	# Valid values:
+	#   0  Not been embarrassed yet
+	#   1  Currently embarrassed
+	#   2  Has been embarrassed, and penalty applied. It won't happen again.
+	var embarrassedStatus = 0
 	###---Expansion End---###
 	
 	func _init(source, fileref, isAnimal = false):
