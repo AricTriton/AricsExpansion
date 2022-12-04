@@ -1497,7 +1497,7 @@ func eventDrainCum(mode = ''):
 		puddle = 0
 	
 	if mode == 'leavepuddle':
-		globals.state.condition -= round(puddle/2)
+		globals.state.condition = -round(puddle/2)
 		puddle = 0
 	
 	if puddle <= 0:
