@@ -1809,7 +1809,7 @@ func public_nudity_law(person, gold):
 	if person.rules.nudity == true || count_nakedness >= 2:
 		text += "\n$name arrived in town [color=aqua]naked[/color]. "
 		isnaked = true
-	elif person.obed < globals.fetishesarray.find(person.fetish.exhibitionism) * 20 && globals.fetishesarray.find(person.fetish.exhibitionism) > 3:
+	elif person.obed < globals.fetishopinion.find(person.fetish.exhibitionism) * 20 && globals.fetishopinion.find(person.fetish.exhibitionism) > 3:
 		text += "\n$name decided to expose $himself in town due to $his [color=aqua]exhibitionism[/color] fetish. "
 		isnaked = true
 
