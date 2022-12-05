@@ -36,7 +36,10 @@ func show():
 		elif person.sleep == 'jail':
 			newbutton.set_disabled(true)
 			newbutton.set_tooltip(person.dictionary('It would be hard for $name to come with you from inside the jail.'))
-		elif person.away.duration != 0 || person.consentexp.party == false && (person.unique == null || globals.expansionsettings.uniqueslavesautopartyconsent == false):
+		elif person.away.duration != 0:
+			newbutton.set_disabled(true)
+			newbutton.set_tooltip(person.dictionary('$name is currently away from the mansion.'))
+		elif person.consentexp.party == false && (person.unique == null || globals.expansionsettings.uniqueslavesautopartyconsent == false):
 			newbutton.set_disabled(true)
 			newbutton.set_tooltip(person.dictionary('$name has never agreed to accompany you (Consent: Talk>Consent>Travel With).'))
 		elif person.movement == 'none':
