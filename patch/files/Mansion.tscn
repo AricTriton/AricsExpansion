@@ -11119,6 +11119,22 @@ margin_left = -844.0
 margin_top = 11.0
 margin_right = -708.0
 margin_bottom = 151.0
+rect_pivot_offset = Vector2( 174, 43 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+expand = true
+stretch_mode = 6
+
+[node name="portrait2" type="TextureRect" parent="dailyevents/textpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -285.0
+margin_top = 11.0
+margin_right = -149.0
+margin_bottom = 151.0
+rect_pivot_offset = Vector2( 174, 43 )
 size_flags_horizontal = 2
 size_flags_vertical = 2
 expand = true
@@ -11132,6 +11148,19 @@ anchor_bottom = 1.0
 margin_left = -851.0
 margin_top = 6.0
 margin_right = -703.0
+margin_bottom = 156.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/panel = SubResource( 54 )
+
+[node name="Panel2" type="Panel" parent="dailyevents/textpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -292.0
+margin_top = 6.0
+margin_right = -144.0
 margin_bottom = 156.0
 size_flags_horizontal = 2
 size_flags_vertical = 2

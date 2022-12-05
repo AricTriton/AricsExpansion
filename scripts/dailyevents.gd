@@ -9,6 +9,46 @@ func succubuscheck(npc,minorgasms,maxorgasms):
 	return succubusfed
 #/ralphC
 
+func showevent():
+	var button
+	self.showntext = showntext
+	get_node("textpanel/dailyeventtext").set_bbcode(showntext)
+	for i in get_node("buttonpanel/buttonscroll/buttoncontainer").get_children():
+		if i.name != 'Button':
+			i.visible = false
+			i.queue_free()
+	if buttons == null:
+		button = $buttonpanel/buttonscroll/buttoncontainer/Button.duplicate()
+		get_node("buttonpanel/buttonscroll/buttoncontainer").add_child(button)
+		button.visible = true
+		button.set_text("Continue")
+		button.connect("pressed", self, 'finishevent')
+		return
+	for i in buttons:
+		button = get_node("buttonpanel/buttonscroll/buttoncontainer/Button").duplicate()
+		get_node("buttonpanel/buttonscroll/buttoncontainer").add_child(button)
+		button.visible = true
+		button.set_text(dictionary(i[0]))
+		button.connect("pressed", self, currentevent, [i[1]])
+	if person.imageportait != null:
+		if globals.canloadimage(person.imageportait):
+			get_node("textpanel/Panel").visible = true
+			get_node("textpanel/portrait").set_texture(globals.loadimage(person.imageportait))
+		else:
+			person.imageportait = null
+			get_node("textpanel/Panel").visible = false
+			get_node("textpanel/portrait").set_texture(null)
+	else:
+		get_node("textpanel/Panel").visible = false
+		get_node("textpanel/portrait").set_texture(null)
+	###---Added by Expansion---### Show second slaves portrait too
+	get_node("textpanel/Panel2").visible = false
+	get_node("textpanel/portrait2").set_texture(null)
+	if slave2 != null && slave2.imageportait != null && globals.canloadimage(slave2.imageportait):
+		get_node("textpanel/Panel2").visible = true
+		get_node("textpanel/portrait2").set_texture(globals.loadimage(slave2.imageportait))
+	###---End Expansion---###
+
 func play(stage = 0):
 	var tempbuttons
 	showntext = eventstext[currentevent][stage]
