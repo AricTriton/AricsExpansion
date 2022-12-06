@@ -1370,13 +1370,13 @@ func manageSnails(workersDict):
 	#Sell Snails
 	if refSnails.sell > 0:
 		merchantcounter += workersDict.milkmerchant.size()
-		var snailssold = 0
+		snailresults = refSnails.sell
 		while merchantcounter > 0 && refSnails.sell > 0:
-			snailssold += round(rand_range(0, refSnails.sell))
-			refSnails.sell -= snailssold
+			refSnails.sell -= round(rand_range(0, refSnails.sell))
 			merchantcounter -= 1
-		var gold = snailssold * refSnails.goldperegg
-		text += "\nYour merchants were able to sell [color=green]" +str(snailssold)+ " eggs [/color] today for [color=yellow]" +str(gold)+ "[/color] gold. "
+		snailresults = snailresults - refSnails.sell
+		var gold = snailresults * refSnails.goldperegg
+		text += "\nYour merchants were able to sell [color=green]" +str(snailresults)+ " eggs [/color] today for [color=yellow]" +str(gold)+ "[/color] gold. "
 		globals.resources.gold += gold
 	
 	#Incubate & Hatch
