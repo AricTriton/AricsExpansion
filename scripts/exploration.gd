@@ -235,6 +235,187 @@ func buildenemies(enemyname = null):
 			buildslave(i,true)
 			###---End Expansion---###
 
+################### #ralph_alice
+
+func alice():
+	var array = []
+	if globals.state.decisions.has("aliceinfinite") || globals.state.decisions.has("aliceoneofeach") || globals.state.decisions.has("aliceonlyone"):
+		aliceknown = true
+		mansion.maintext = "You bump into a confused looking [color=yellow]$race $child Alice[/color] wandering alone without weapons, tools, or provisions of any kind that you can see. "
+	else:
+		mansion.maintext = "You bump into a [color=yellow]$race $child[/color] wandering the wilderness, completely lost. "
+	array.append({name = "Talk", function = 'talkalice', args = 1})
+	array.append({name = 'Capture', function = 'talkalice', args = 0})
+	array.append({name = "Leave", function = 'enemyleave'})
+	outside.buildbuttons(array, self)
+
+func talkalice(stage = 1): #future plans - tie in player stats: charm, good/evil, wit, beauty etc.
+	var state = false
+	var buttons = []
+	var image
+	var sprites = []
+	var captives = false
+	var AliceSuspicion = 1
+	var AlicesOwned = 0
+	var AlicesWith = 0
+	var party = globals.state.playergroup.duplicate()
+	var partycount = 0
+	AlicesOwned = 0 #bubblepot - can you set up a formula to count how many first name == Alice's are in the mansion roster here?
+	for i in party:
+		var j = globals.state.findslave(i)
+		if globals.player != j:
+			partycount += 1
+		if j.persona == ['Alice']:
+			AlicesWith += 1
+	if globals.state.capturedgroup.size() > 0:
+		captives = true
+	print("Ralph Test - Enemy Unit Size:"+str(enemygroup.units.size()))
+	if captives:
+		AliceSuspicion += 2 + int(round(globals.state.capturedgroup.size()/3))
+	if stage == 0:
+		enemyfight()
+		return
+	elif stage == 1:
+		print("Ralph Test: stage 1 entered.")
+		if globals.player.givenname != 'Alice':
+			mansion.maintext = "You hail the lone $race $child.\n\n[color=yellow]I'm sorry, but do we know each other?[/color]"
+			buttons.append({name = "Sort of (Truth)" , function = 'talkalice', args = 2})
+			buttons.append({name = "No (Flirt)",function = 'talkalice',args = 3})
+			buttons.append({name = "Yes (Lie)",function = 'talkalice',args = 4})
+		else:
+			mansion.maintext = "You greet the familiar figure.\n\nHer eyes widen in surprise.[color=yellow]  You have the same face as me![/color]"
+	elif stage == 2:
+		if globals.player.givenname != 'Alice':
+			if AlicesOwned > 0:
+				mansion.maintext = 'You explain that you happen to live with her "sister" and that she bears a striking resembalance.\n\n[color=yellow]I have family?  I cannot seem to remember much of anything besides being out here by myself.[/color]' 
+				AliceSuspicion -= 3
+			else:
+				mansion.maintext = 'You explain that you have met her "family" as it goes.\n\n[color=yellow]I have a family then?  I cannot seem to remember much of anything besides being out here by myself.[/color]' 
+				AliceSuspicion -= 1
+			buttons.append({name = "Offer Help" , function = 'talkalice', args = 3})
+			buttons.append({name = "Manipulate",function = 'talkalice',args = 99})
+		else:
+			mansion.maintext = 'You explain that you are sisters, twins in a way.\n\n[color=yellow]I can see that.  I cannot seem to remember much of anything besides being out here by myself though.[/color]' 
+			buttons.append({name = "Offer Home" , function = 'talkalice', args = 99})
+		buttons.append({name = "Leave",function = 'talkalice',args = 12})
+	elif stage == 3:
+		mansion.maintext = "You offer to spare some supplies for her or guide her to town.\n\n[color=yellow]But... you don't even know me, I haven't done anything to deserve your help. I couldn't possibly accept. [/color]\n\n"
+		buttons.append({name = "Offer Escort",function = 'talkalice', args = 4})
+		buttons.append({name = "Trade Escort",function = 'talkalice',args = 6})
+		if globals.state.backpack.stackables.has('supply') && globals.state.backpack.stackables.supply >= 1:
+			buttons.append({name = "Offer Supplies",function = 'talkalice',args = 5})
+			buttons.append({name = "Trade Supplies",function = 'talkalice',args = 7})
+		buttons.append({name = "Leave",function = 'talkalice',args = 12})
+	elif stage == 4:
+		if AliceSuspicion > 5:
+			mansion.maintext = "You wave off her objections and beckon her to follow along.\n\n[color=yellow]Uh... I don't know[/color]\n\nShe glances at the bound captives with you.\n\n[color=yellow]I'm so sorry.  Thank you, but I really, really must be going.  I apologize for wasting your time.  S-sorry about that.  Goodbye.[/color]"
+			buttons.append({name = 'Capture', function = 'talkalice', args = 0})
+			buttons.append({name = "Leave",function = 'talkalice',args = 12})
+		elif AliceSuspicion > 2:
+			mansion.maintext = "You wave off her objections and beckon her to follow along.\n\n[color=yellow]But... I don't even know you, I don't deserve your help. I couldn't possibly accept.[/color]\n\n"
+			buttons.append({name = 'Capture', function = 'talkalice', args = 0})
+			buttons.append({name = "Leave",function = 'talkalice',args = 12})
+		else:
+			mansion.maintext = "You wave off her objections and beckon her to follow along.[color=yellow]But... I don't even know you, I don't deserve your help. I... Thank you, I'll try not to be any trouble.[/color]"
+			buttons.append({name = "Leave",function = 'talkalice', args = 13})
+	elif stage == 5:
+		if AliceSuspicion > 6:
+			mansion.maintext = "You dismiss her protests and fetch a pack of basic supplies for her.\n\nShe eyes the pack warily.  [color=yellow]Uh... I don't know[/color]\n\nShe glances at the bound captives with you nervously.\n\n[color=yellow]I'm so sorry.  Thank you, but I really, really must be going.  I apologize for wasting your time.  S-sorry about that.  Goodbye.[/color]"
+			buttons.append({name = 'Capture', function = 'talkalice', args = 0})
+		else:
+			mansion.maintext = "You dismiss her protests and fetch a pack of basic supplies for her.\n\n[color=yellow]Um... oh.  This would be very useful.  I really don't want to be a burden, but... thank you.[/color]"
+			buttons.append({name = "Offer Escort",function = 'talkalice', args = 4})
+			buttons.append({name = "Trade Escort",function = 'talkalice',args = 6})
+			AliceSuspicion -= 2
+		buttons.append({name = "Leave",function = 'talkalice',args = 12})
+	elif stage == 6:
+		mansion.maintext = "You wave off her objections and offer to allow her to follow along back to town for a price.\n\n[color=yellow]I'm very sorry for wasting your time, but I don't have anything of value to trade.[/color]\n\nYou contemplate what she could give you."
+		buttons.append({name = "Her Friendship",function = 'talkalice',args = 8})
+		buttons.append({name = "Her Debt",function = 'talkalice',args = 9})
+		buttons.append({name = "Her Clothes",function = 'talkalice',args = 10})
+		buttons.append({name = 'Ask for Sex', function = 'talkalice', args = 11})
+		buttons.append({name = "Leave",function = 'talkalice', args = 12})
+	elif stage == 7:
+		mansion.maintext = "You offer her some supplies to help her survive the wilderness, but for a price.\n\n[color=yellow]But... This would be very useful, but I don't have any money or anything else to trade.[/color]\n\nYou think for a bit and decide there are a few things she could give you."
+		buttons.append({name = "Her Friendship",function = 'talkalice',args = 14})
+		buttons.append({name = "Her Debt",function = 'talkalice',args = 15})
+		buttons.append({name = "Her Clothes",function = 'talkalice',args = 16})
+		buttons.append({name = 'Ask for Sex', function = 'talkalice', args = 17})
+	elif stage == 8:
+		if AliceSuspicion > 6:
+			mansion.maintext = "[color=yellow]You'll take me out of here... if I'll be your friend?[/color]She glances at the bound captives with you.\n\n[color=yellow]I'm so sorry.  Thank you, but I really, really must be going.  I apologize for wasting your time.  S-sorry about that.  Goodbye.[/color]"
+			buttons.append({name = 'Capture', function = 'talkalice', args = 0})
+			buttons.append({name = "Leave",function = 'talkalice', args = 12})
+		elif AliceSuspicion > 2:
+			mansion.maintext = "[color=yellow]You'll take me out of here... if I'll be your friend?[/color]\n\nShe looks at you with disbelief.\n\n[color=yellow]But... you don't even know me, I haven't done anything to deserve your help. I couldn't possibly accept. [/color]"
+			buttons.append({name = 'Capture', function = 'talkalice', args = 0})
+			buttons.append({name = "Leave",function = 'talkalice', args = 12})
+		else:
+			mansion.maintext = "[color=yellow]You'll take me out of here... if I'll be your friend?[/color]\n\nShe looks at you with disbelief, but nods her head meekly and falls into line with your party."
+			buttons.append({name = "Leave",function = 'talkalice', args = 13})
+	elif stage == 9:
+		if AliceSuspicion > 7:
+			mansion.maintext = "[color=yellow]You'll take me out of here... but I'll be in your debt?[/color]She glances at the bound captives with you.\n\n[color=yellow]I'm so sorry.  Thank you, but I really, really must be going.  I apologize for wasting your time.  S-sorry about that.  Goodbye.[/color]"
+			buttons.append({name = 'Capture', function = 'talkalice', args = 0})
+			buttons.append({name = "Leave",function = 'talkalice', args = 12})
+		elif AliceSuspicion > 4:
+			mansion.maintext = "[color=yellow]You'll take me out of here... but I'll be in your debt?[/color]\n\nShe looks at you with disbelief.\n\n[color=yellow]But... you don't even know me, I haven't done anything to deserve this chance. I couldn't possibly accept. [/color]"
+			buttons.append({name = 'Capture', function = 'talkalice', args = 0})
+			buttons.append({name = "Leave",function = 'talkalice', args = 12})
+		else:
+			mansion.maintext = "[color=yellow]You'll take me out of here... but I'll be in your debt?[/color]\n\nWith a cute little frown of concentration she considers.\n\n[color=yellow]O-Ok, but you better not be joking.  I will pay you back, I promise.[/color]"
+			buttons.append({name = "Leave",function = 'talkalice', args = 13})
+	elif stage == 10:
+		if AliceSuspicion > 6:
+			mansion.maintext = "[color=yellow]You'll get me out of here... but you want my clothes?  They're pretty worn out.  I don't think they're worth as much as you might think.[/color]She glances at the bound captives with you.\n\n[color=yellow]I'm so sorry.  Thank you, but I really, really must be going.  I apologize for wasting your time.  S-sorry about that.  Goodbye.[/color]"
+			buttons.append({name = 'Capture', function = 'talkalice', args = 0})
+			buttons.append({name = "Leave",function = 'talkalice', args = 12})
+		elif AliceSuspicion > 4:
+			mansion.maintext = "[color=yellow]You'll get me out of here... but you want my clothes?[/color]\n\nHer cheeks flush in embarrassment, but for a moment it looks like she might agree.\n\n[color=yellow]I'm very sorry but I can't... I... I'm sorry![/color]\n\nShe turns and heads back into the wilderness."
+			buttons.append({name = 'Capture', function = 'talkalice', args = 0})
+			buttons.append({name = "Leave",function = 'talkalice', args = 12})
+		else:
+			mansion.maintext = "[color=yellow]You'll take me out of here... but you want my clothes?  But... then I'll be naked... everyone will see me.[/color]\n\nShe blushes hard and stares at the ground for several moments while clasping her hands before her and finally speaks.\n[color=yellow]I guess it's only fair.[/color]\n\nShe begins to strips off her clothes one piece at a time, baring her supple flesh in the process.  She bends to stack them in a neat pile, all the while her nipples harden and her breaths maintain a quick shallow rhythm.  Finally she profers the pile to you, eyes downcast, and blush extending from forehead all the way down her chest."
+			buttons.append({name = "Leave",function = 'talkalice', args = 13})
+	elif stage == 11:
+		if AliceSuspicion > 8:
+			mansion.maintext = "[color=yellow]What?  You'll help me, but I have to pay with my... with my...\n\n[/color]She shudders and let's out an almost inaudible moan.  Then she glances at the bound captives with you and regains some of her composure.\n\n[color=yellow]I n-no I'm very sorry, but I... I, s-sorry.  I have to go![/color]\n\nShe hurries off back into the wilderness."
+			buttons.append({name = 'Capture', function = 'talkalice', args = 0})
+			buttons.append({name = "Leave",function = 'talkalice', args = 12})
+		elif AliceSuspicion > 4:
+			mansion.maintext = "[color=yellow]What?  You'll help me, but I have to pay with my... with my...\n\n[/color]She shudders and let's out an almost inaudible moan.  Her cheeks flush but seemingly in excitement rather than embarrassment.  For a moment it looks like she might agree.\n\n[color=yellow]I'm very sorry but I can't... I... I'm sorry![/color]\n\nShe turns and heads back into the wilderness."
+			buttons.append({name = 'Capture', function = 'talkalice', args = 0})
+			buttons.append({name = "Leave",function = 'talkalice', args = 12})
+		else:
+			mansion.maintext = "[color=yellow]What?  You'll help me, but I have to pay with my... with my...\n\n[/color]She shudders and let's out an almost inaudible moan.  Her cheeks flush but seemingly in excitement rather than embarrassment and nods meekly."
+			buttons.append({name = "Leave",function = 'AliceSexForHelp', args = 0}) #ralph-note: needs function and sex scene
+	elif stage == 12:
+		progress += 1
+		zoneenter(currentzone.code)
+	elif stage == 13:
+		#ralph-note: add Alice to combat group here		
+		progress += 1
+		zoneenter(currentzone.code)
+	elif stage == 13:
+		outside.get_node("playergrouppanel/VBoxContainer").visible = false
+		globals.main.get_node("outside").slavearray = enemygroup.captured
+		globals.main.get_node("outside").slaveguildslaves('slavers')
+	elif stage == 14:
+		mansion.maintext = "[color=yellow] A ... Alice.[/color] she looks down and away from you as she answers."
+	elif stage == 30:
+		mansion.maintext = "You look Alice up and down and smile.\n\n[color=yellow] I'm sorry, do we know each other?[/color] "
+		buttons.append({name = "",function = 'talkalice',args = 22})
+		buttons.append({name = "",function = 'talkalice',args = 23})
+		buttons.append({name = "",function = 'talkalice',args = 24})
+	elif stage == 40:
+		mansion.maintext = "Yes, as a matter of fact I've been looking everywhere for you.\n\n"
+		mansion.maintext = "[color=yellow] I'm sorry, do we know each other?[/color]"
+		buttons.append({name = "" , function = 'talkalice', args = 32})
+		buttons.append({name = "",function = 'talkalice',args = 33})
+		buttons.append({name = "",function = 'talkalice',args = 34})
+	outside.buildbuttons(buttons,self)
+#/ralph_alice
+
 ##############ralphD - space out combats through new noncombat enemyencounter
 func noenemyencountered():
 	var array = []

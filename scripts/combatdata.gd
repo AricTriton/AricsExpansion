@@ -402,6 +402,13 @@ var enemygrouppools = {
 		units = [['amberguardpatrol',7,10]], awareness = -10, captured = null, special = null,
 		description = "You have been spotted by a [color=aqua]large patrolling militia[/color] group from Amberguard. ",
 	},
+	#ralph_alice
+	alice = {
+		units = [['alice',1,1]], awareness = -10, captured = null, special = 'alice', escape = 12,
+		description = "You spot a lone [color=aqua]Alice[/color] that seems somehow familiar. $He seems to be unaware of your presence as of yet. ",
+		descriptionescape = "The [color=aqua]girl[/color] runs and hides before you get close to them. ",
+	},
+	#/ralph_alice
 }
 
 var capturespool = {
@@ -463,6 +470,15 @@ var capturespool = {
 		capturesex = ['any'],
 		faction = 'stranger',
 	},
+	#ralph_alice
+	alicecaptured = {
+		capturerace = ['any'],
+		captureoriginspool = [{value = 'commoner', weight = 4},{value = 'poor', weight = 10}],
+		captureagepool = [{value = 'child', weight = 2},{value = 'teen', weight = 5}, {value = 'adult', weight = 3}],
+		capturesex = ['female'],
+		faction = 'stranger',
+	}
+	#/ralph_alice
 }
 
 
@@ -1229,7 +1245,25 @@ var enemypool = {
 		gear = 'guard',
 		skills = [],
 	},
-
+	#ralph_alice
+	alice = {
+		name = 'Alice',
+		code = 'alice',
+		faction = 'stranger',
+		icon = load("res://files/images/enemies/stranger.png"), #to update
+		special = null,
+		capture = true,
+		capturerace = ['area'], #to update
+		captureoriginspool = [{value = 'commoner', weight = 5},{value = 'poor', weight = 20}],
+		captureagepool = [{value = 'child', weight = 2},{value = 'teen', weight = 5}, {value = 'adult', weight = 3}],
+		capturesex = ['female'],
+		rewardpool = {gold = 5, supply = 5},
+		rewardgold = [1,5],
+		rewardexp = 10,
+		stats = {health = 40, power = 1, speed = 20, energy = 50, armor = 2, magic = 1, abilities = ['attack']},
+		gear = 'alice',
+		skills = [],
+	#/ralph_alice
 
 
 	ivran = {
@@ -1515,5 +1549,12 @@ var enemyequips = {
 		accessory = [['accgoldring', 1], ['nothing',10]],
 		abilities = [],
 	},
+	#ralph_alice
+	alice = {
+		armor = [['nothing', 25],['armorleather',1], ['armorleather+', 1],['armorpadded', 1]],
+		weapon = [['nothing', 7],['weapondagger',1], ['weapondagger+', 1]],
+		abilities = [],
+	},
+	#/ralph_alice
 }
 
