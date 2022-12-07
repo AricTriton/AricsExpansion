@@ -2015,6 +2015,52 @@ func isencountersamesex(givers, takers, actor = null):
 		score += 1 if ispairsamesex(actor.person, i.person) else -1
 	return score > 0
 
+func stopongoingaction(meta, rebuild = false):
+	var action
+	if typeof(meta) == TYPE_STRING:
+		action = ongoingactions[int(meta)]
+	elif typeof(meta) == TYPE_DICTIONARY:
+		action = meta
+	if !action.scene.giverpart.empty():
+		for i in action.givers:
+			i[action.scene.giverpart] = null
+	if !action.scene.takerpart.empty():
+		for i in action.takers:
+			i[action.scene.takerpart] = null
+	if action.scene.get("takerpart2") != null && !action.scene.get("takerpart2").empty():
+		for i in action.takers:
+			i[action.scene.takerpart2] = null
+	if action.scene.code == 'strapon' && action.givers[0].penis != null:
+		stopongoingaction(action.givers[0].penis)
+	elif action.scene.code == 'ringgag':
+		var isResist = false
+		for t in action.takers:
+			if !t.effects.has('resist'):
+				continue
+			for a in t.activeactions:
+				if a.scene.code == 'deepthroat':
+					stopongoingaction(a)
+					break
+	elif action.scene.code == 'rope':
+		for i in action.takers:
+			i.effects.erase('tied')
+		#globals.itemdict['rope'].amount += globals.state.calcRecoverRope(action.takers.size(), 'sex') #ralph_Alice - bug fix: was generating new ropes before
+	elif action.scene.code == 'subdue':
+		for taker in action.takers:
+			for giver in action.givers:
+				giver.subduing = null
+				taker.subduedby.erase(giver)
+	for i in action.givers + action.takers:
+		i.activeactions.erase(action)
+	if action.scene.code in ['rope','subdue']:
+		for taker in action.takers:
+			if taker.effects.has('resist') && !taker.effects.has('tied') && taker.subduedby.empty():
+				for a in taker.activeactions.duplicate():
+					stopongoingaction(a)
+	ongoingactions.erase(action)
+	if rebuild == true:
+		rebuildparticipantslist()
+
 func endencounter():
 	var mana = 0
 	var totalmana = 0

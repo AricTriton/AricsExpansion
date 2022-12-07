@@ -1,4 +1,82 @@
 
+#ralph_alice
+func alice(state = 1):
+	var buttons = []
+	var text = ''
+	var sprites = null
+	var main = globals.main
+	
+	if state == 1:
+		#globals.charactergallery.alice.unlocked = true
+		text = textnode.AliceGreeterMeet
+		buttons.append(['Who is Alice?', 'alice', 2])
+		buttons.append(['How can I help?', 'alice', 3])
+		#buttons.append(["Take a walk around her and get a good look.", 'alice', 5])
+		if !globals.state.townsexpanded.wimborn.laws.public_nudity:
+			sprites = [['alicenormal','pos1','opac']]
+		else:
+			sprites = [['alicenude','pos1','opac']]
+		main.dialogue(false, self, text, buttons, sprites)		
+	elif state == 2:
+		text = textnode.AliceExplains
+		buttons.append(['How can I help?', 'alice', 3])
+		if !globals.state.townsexpanded.wimborn.laws.public_nudity:
+			sprites = [['alicenormal','pos1','opac']]
+		else:
+			sprites = [['alicenude','pos1','opac']]
+		main.dialogue(false, self, text, buttons, sprites)
+	elif state == 3:
+		main.popup('[color=green]Alice: Proper Care and Use Guide[/color] that will now appear the next time you visit the library.')
+		text = textnode.AliceDonation
+		if !globals.state.townsexpanded.wimborn.laws.public_nudity:
+			sprites = [['alicenormal','pos1','opac']]
+		else:
+			sprites = [['alicenude','pos1','opac']]
+		#globals.state.upcomingevents.append({code = 'bubblepotappearance',duration =7})
+		globals.state.sidequests.alice = 1
+		buttons.append(["Infinite Alice (Unlimited Alices may appear in game)", 'alice', 4])
+		buttons.append([" Gotta Catch 'Em All (Only one Alice of each type may exist)", 'alice', 5])
+		buttons.append([" There Can Only Be One (Only one recruitable Alice will exist)", 'alice', 6])
+		buttons.append([" Leave (No Alice Content; Don't do it, the donation is cheap!)", 'alice', 7]) #may add a bubblepot out on the street who can give the player another try
+		main.dialogue(true, self, text, buttons, sprites)
+	elif state == 4:
+		globals.state.decisions.append("aliceinfinite")
+		text = textnode.AliceInfinite
+		buttons.append(["Leave", 'alice', 0])
+		if !globals.state.townsexpanded.wimborn.laws.public_nudity:
+			sprites = [['alicenormal','pos1','opac']]
+		else:
+			sprites = [['alicenude','pos1','opac']]
+		main.dialogue(false, self, text, buttons, sprites)
+	elif state == 5:
+		globals.state.decisions.append("alicecatchemall")
+		text = textnode.AliceCatchEmAll
+		buttons.append(["Leave", 'alice', 0])
+		if !globals.state.townsexpanded.wimborn.laws.public_nudity:
+			sprites = [['alicenormal','pos1','opac']]
+		else:
+			sprites = [['alicenude','pos1','opac']]
+		main.dialogue(false, self, text, buttons, sprites)
+	elif state == 6:
+		globals.state.decisions.append("aliceonlyone")
+		text = textnode.AliceOnlyOne
+		buttons.append(["Leave", 'alice', 0])
+		if !globals.state.townsexpanded.wimborn.laws.public_nudity:
+			sprites = [['alicenormal','pos1','opac']]
+		else:
+			sprites = [['alicenude','pos1','opac']]
+		main.dialogue(false, self, text, buttons, sprites)
+	elif state == 7:
+		#globals.state.upcomingevents.append({code = 'bubblepotappearance',duration =1})
+		outside.backstreets()
+		main.close_dialogue()
+		globals.state.sidequests.alice = 0
+	elif state == 0:
+		#add BJ event segway
+		outside.backstreets()
+		main.close_dialogue()
+#/ralph_alice
+
 func gornpalaceivran(stage):
 	var text
 	var state = true
