@@ -37,6 +37,7 @@
 var persona = {
 	Alice = {
 		basics = ['Human', 'adult', 'female', 'commoner'],
+		persona = 'Alice',
 		name = 'Alice',
 		surname = '',
 		skin = 'fair',
@@ -71,7 +72,7 @@ var persona = {
 		asshole = 'tight',
 		vagina = 'tight',
 		#fetishes
-		var fetish = {
+		fetish = {
 			exhibitionism = "acceptable",
 			drinkcum = "acceptable",
 			wearcum = "uncertain",
@@ -102,7 +103,7 @@ func createpersona(name):
 			if i == 'traits':
 				for j in refChar[i]:
 					person.add_trait(j)
-			elif i == fetish:
+			elif i == 'fetish':
 				for j in refChar[i]:
 					person.fetish[j] = refChar.fetish[j]
 			elif i in person:
@@ -128,4 +129,13 @@ func createpersona(name):
 	else:
 		globals.printErrorCode("Persona character not found: " + name)
 		return null
+
+func countpersona(persona):
+	var counter = 0
+	for i in globals.slaves:
+		if i.persona == persona:
+			counter += 1
+	return counter
+		
+	
 #---End---#

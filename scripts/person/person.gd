@@ -1,3 +1,5 @@
+var persona = null #BBP-persona tag for counts and stuff
+
 var scalecolor = ''
 var feathercolor = ''
 
