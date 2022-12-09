@@ -1116,16 +1116,14 @@ func startsequence(actors, mode = null, secondactors = [], otheractors = []):
 		turns += variables.bonustimeperslavefororgy * actors.size()
 		for person in actors:
 			person.metrics.orgy += 1
+	initializeparticipantslist()
 	changecategory('caress')
 	clearstate()
 	rebuildparticipantslist()
 
-func rebuildparticipantslist():
+func initializeparticipantslist():
 	var newnode
-	var effects
-	if selectmode == 'ai':
-		clearstate()
-	for i in get_node("Panel/ScrollContainer/VBoxContainer").get_children() + get_node("Panel/GridContainer/GridContainer").get_children() + get_node("Panel/givetakepanel/ScrollContainer/VList").get_children() + $Panel/GridContainer2/GridContainer.get_children():
+	for i in get_node("Panel/ScrollContainer/VBoxContainer").get_children() + get_node("Panel/givetakepanel/ScrollContainer/VList").get_children():
 		if !i.get_name() in ['Panel', 'Button', 'ControlLine']:
 			i.hide()
 			i.queue_free()
@@ -1135,18 +1133,50 @@ func rebuildparticipantslist():
 		get_node("Panel/ScrollContainer/VBoxContainer").add_child(newnode)
 		newnode.get_node("name").set_text(i.person.dictionary('$name'))
 		newnode.get_node("name").connect("pressed",self,"slavedescription",[i])
-		newnode.set_meta("person", i)
 		newnode.get_node("sex").set_texture(globals.sexicon[i.person.sex])
 		newnode.get_node("sex").set_tooltip(i.person.sex)
-		newnode.get_node('arousal').value = i.sens
 		newnode.get_node("portrait").texture = globals.loadimage(i.person.imageportait)
 		newnode.get_node("portrait").connect("mouse_entered",self,'showbody',[i])
 		newnode.get_node("portrait").connect("mouse_exited",self,'hidebody')
 		
+		
+		newnode = get_node("Panel/givetakepanel/ScrollContainer/VList/ControlLine").duplicate()
+		var giveNode = newnode.get_node("ButtonGiver")
+		var takeNode = newnode.get_node("ButtonReceiver")
+		giveNode.text = i.person.name_short()
+		takeNode.text = i.person.name_short()
+		giveNode.connect("pressed",self,'switchsides',[i, 'give'])
+		takeNode.connect("pressed",self,'switchsides',[i, 'take'])
+		newnode.visible = true
+		get_node("Panel/givetakepanel/ScrollContainer/VList").add_child(newnode)
+
+
+func rebuildparticipantslist():
+	var newnode
+	var effects
+	if selectmode == 'ai':
+		clearstate()
+	for i in get_node("Panel/GridContainer/GridContainer").get_children() + $Panel/GridContainer2/GridContainer.get_children():
+		if !i.get_name() in ['Panel', 'Button', 'ControlLine']:
+			i.hide()
+			i.queue_free()
+	var index = 0
+	for i in participants:
+		index += 1 # Skip index 0, which is the hidden base line
+		newnode = get_node("Panel/ScrollContainer/VBoxContainer").get_child(index)
+		newnode.get_node('arousal').value = i.sens
+		
 		if i.request != null:
 			newnode.get_node('desire').show()
 			newnode.get_node('desire').hint_tooltip = i.person.dictionary(requests[i.request])
+		else:
+			newnode.get_node('desire').hide()
 		
+		newnode.get_node('tied').hide()
+		newnode.get_node('sexcrazed').hide()
+		newnode.get_node('drunk').hide()
+		newnode.get_node('resist').hide()
+		newnode.get_node('forced').hide()
 		for k in i.effects:
 			###---Added by Expansion---### Ank BugFix v4a
 			if newnode.has_node(k):
@@ -1157,17 +1187,11 @@ func rebuildparticipantslist():
 #			newnode.get_node('name').set('custom_colors/font_color', Color(1,0.2,0.8))
 #			newnode.get_node('name').hint_tooltip = 'Leads'
 		
-		newnode = get_node("Panel/givetakepanel/ScrollContainer/VList/ControlLine").duplicate()
+		newnode = get_node("Panel/givetakepanel/ScrollContainer/VList").get_child(index)
 		var giveNode = newnode.get_node("ButtonGiver")
 		var takeNode = newnode.get_node("ButtonReceiver")
 		giveNode.set_pressed(givers.has(i))
 		takeNode.set_pressed(takers.has(i))
-		giveNode.text = i.person.name_short()
-		takeNode.text = i.person.name_short()
-		giveNode.connect("pressed",self,'switchsides',[i, 'give'])
-		takeNode.connect("pressed",self,'switchsides',[i, 'take'])
-		newnode.visible = true
-		get_node("Panel/givetakepanel/ScrollContainer/VList").add_child(newnode)
 
 	
 	#check for double dildo scenes between participants
