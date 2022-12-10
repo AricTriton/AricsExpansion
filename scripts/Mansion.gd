@@ -1528,11 +1528,6 @@ func _on_end_pressed():
 	get_node("Navigation/endlog").disabled = false
 	nextdayevents()
 
-	globals.state.daily_reports.global = text0.get_bbcode()
-	globals.state.daily_reports.job = text1.get_bbcode()
-	globals.state.daily_reports.secondary = text2.get_bbcode()
-	globals.state.daily_reports.farm = text3.get_bbcode()
-
 func nextdayevents():
 	get_node("FinishDayPanel").hide()
 	var player = globals.player
@@ -1644,6 +1639,30 @@ func nextdayevents():
 		checkforevents = true
 		return
 	startnewday()
+
+func startnewday():
+	rebuild_slave_list()
+	###---Added by Expansion---### Save daily reports
+	globals.state.daily_reports.global = get_node("FinishDayPanel/FinishDayScreen/Global Report").get_bbcode()
+	globals.state.daily_reports.job = get_node("FinishDayPanel/FinishDayScreen/Job Report").get_bbcode()
+	globals.state.daily_reports.secondary = get_node("FinishDayPanel/FinishDayScreen/Secondary Report").get_bbcode()
+	globals.state.daily_reports.farm = get_node("FinishDayPanel/FinishDayScreen/Farm Report").get_bbcode()
+	###---End Expansion---###
+	get_node("FinishDayPanel").show()
+	autosave()
+	if globals.rules.enddayalise == 0:
+		alisebuild(aliseresults)
+	elif globals.rules.enddayalise == 1 && dailyeventhappend:
+		alisebuild(aliseresults)
+		dailyeventhappend = false
+	else:
+		alisehide()
+	_on_mansion_pressed()
+	
+	enddayprocess = false
+#	if globals.state.supporter == false && int(globals.resources.day)%100 == 0:
+#		get_node("sellout").show()
+
 
 func _on_headgirlbehavior_item_selected( ID ):
 	var text = ''
