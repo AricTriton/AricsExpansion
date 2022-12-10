@@ -1473,7 +1473,7 @@ func eventDrainCum(mode = ''):
 	if mode == 'wombinflate':
 		text += "You hit the button labeled 'Clean' and feel the hose come alive. $He moans loudly as a thick, viscious liquid begins to pour directly into $his womb. $He writhes as you watch $his belly begin to rise and rise from the liquid swelling inside of $him. After you are satisfied, you click the 'Off' button and wait. "
 		if person.checkFetish('pregnancy'):
-			text += "$name holds $his belly and moans softly, but then whispers to you.\n[color=yellow]- " + person.quirk("I feel bloated, like I'm pregnant! Oh, it feels so good!")
+			text += "$name holds $his belly and moans softly, but then whispers to you.\n[color=yellow]- " + person.quirk("I feel bloated, like I'm pregnant! Oh, it feels so good![/color]")
 		else:
 			text += "$name can simply hold $his swollen belly and helplessly moan in discomfort. "
 		mode = 'wombdrain'
@@ -1497,7 +1497,7 @@ func eventDrainCum(mode = ''):
 		puddle = 0
 	
 	if mode == 'leavepuddle':
-		globals.state.condition -= round(puddle/2)
+		globals.state.condition = -round(puddle/2)
 		puddle = 0
 	
 	if puddle <= 0:
