@@ -734,6 +734,9 @@ func _on_slaveconfirm_pressed():
 		globals.resources.gold += 250
 		globals.resources.food += 200
 		globals.resources.mana += 10
+		###---Added by Expansion---### Bubblepot's Grade Increase
+		globals.player.origins = 'poor'
+		###---End Expansion---###
 	else:
 		for i in globals.state.portals:
 			var temp = globals.state.portals[i]
@@ -752,6 +755,9 @@ func _on_slaveconfirm_pressed():
 		globals.itemdict.youthingpot.unlocked = true
 		globals.itemdict.maturingpot.unlocked = true
 		globals.state.sidequests.sebastianumbra = 2
+		###---Added by Expansion---### Bubblepot's Grade Increase
+		globals.player.origins = 'noble'
+		###---End Expansion---###
 		globals.state.sandbox = true #Added this in case it used somewhere in the future?
 
 	###---Added by Expansion---### Reset resources

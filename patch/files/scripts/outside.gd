@@ -1798,6 +1798,9 @@ func mageorderquest1(person = null):
 		globals.state.mainquest = 7
 		globals.state.removeStackableItem('youthingpot',1,'backpack')
 		globals.state.rank = 3
+		####--Added by Expansion---### BBP
+		globals.player.origins = 'rich'
+		###---Expansion End---###
 		sprites = [['melissafriendly','pos1','opac']]
 		text = ("— You got it?” she inquires, “Splendid!\n\nAs you pass her the potion, she quickly puts it inside the desk.\n\n— Yeah, I've done the paperwork. Here's your new badge; you'll need it. You remind me of myself, back when I joined  the guild...\n\n— I was actually sold into slavery to one of the mages in my youth. Not gonna complain about my position back then much. *giggles* Eventually, I asked him to teach me, as I wanted to be something more than just another plaything. He agreed. I guess I wasn’t a disappointment, as in the end I inherited his manor in this city and have made it this far.\n\n— Anyway, come see me later. I still have business to take care of today.\n\n[color=yellow]You are now a Journeyman in the Mage guild.[/color]")
 	elif globals.state.mainquest == 6:
@@ -1915,7 +1918,7 @@ func givecompanion():
 	if globals.state.mainquest == 1:
 		if person != null:
 			globals.state.mainquest = 2
-			text = ("— Now that you are a member of the guild, I trust you’ll keep in mind that with status comes responsibility, and that you will not besmirch the guild’s name with your actions. As a neophyte, we have a variety of simple spells you may pay to learn. And, to repay an old debt to the fool you’re succeeding, I’ll teach you something basic for free. Mind Read is fairly simple and straightforward, allowing you limited insight into the subject’s thoughts and feelings. Much more informative than simply reading one’s expression and body language, but somewhat draining.\n\n[color=green]You are now a Neophyte in Mage guild.[/color]\n\n[color=green]You've learned a new spell: Mind Read. [/color]\n\n[color=green]Your main quest has been updated. [/color]")
+			text = ("— Now that you are a member of the guild, I trust you’ll keep in mind that with status comes responsibility, and that you will not besmirch the guild’s name with your actions. As a neophyte, we have a variety of simple spells you may pay to learn. And, to repay an old debt to the fool you’re succeeding, I’ll teach you something basic for free. Mind Read is fairly simple and straightforward, allowing you limited insight into the subject’s thoughts and feelings. Much more informative than simply reading one’s expression and body language, but somewhat draining.\n\n[color=green]You are now a Neophyte in Mage guild.[/color]\n\n[color=green]You've learned a new spell: Mind Read. [/color]\n\n[color=green]Your main quest has been updated. [/color]\n[color=yellow]Your grade has increased to Commoner.[/color]")
 			main.currentslave = globals.slaves.find(person)
 			globals.spelldict.mindread.learned = true
 			if globals.abilities.abilitydict.has('mindread') == true:
@@ -1923,6 +1926,9 @@ func givecompanion():
 				globals.player.abilityactive.append('mindread')
 			globals.state.branding = 1
 			globals.state.rank = 1
+			####--Added by Expansion---### BBP
+			globals.player.origins = 'commoner'
+			###---Expansion End---###
 			globals.resources.upgradepoints += 5
 			main.getridof()
 	elif str(globals.state.mainquest) in ['3','3.1']:
@@ -1940,8 +1946,11 @@ func givecompanion():
 	elif globals.state.mainquest == 10:
 		globals.state.mainquest = 11
 		sprites = [['melissafriendly','pos1']]
-		text = ("— Splendid! You really are not held back by puny morals. I hope this will provide you with some useful information regarding the utilization of your servants. Now, if you’ll excuse me...\n\nWith that, your companion is taken away and you are promoted.[color=green] You are now an Adept in the Mage's Order.\n\nReceived 750 gold. [/color]\n[color=yellow]You have gained an extra level.[/color]")
+		text = ("— Splendid! You really are not held back by puny morals. I hope this will provide you with some useful information regarding the utilization of your servants. Now, if you’ll excuse me...\n\nWith that, your companion is taken away and you are promoted.[color=green] You are now an Adept in the Mage's Order.\n\nReceived 750 gold. [/color]\n[color=yellow]You have gained an extra level.[/color]\n[color=yellow]You are now a recognized Noble.[/color]")
 		globals.state.rank = 4
+		####--Added by Expansion---### BBP
+		globals.player.origins = 'noble'
+		###---Expansion End---###
 		globals.resources.gold += 750
 		main.currentslave = globals.slaves.find(person)
 		globals.player.levelup()
