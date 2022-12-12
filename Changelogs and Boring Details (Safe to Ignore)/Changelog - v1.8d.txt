@@ -1,6 +1,7 @@
 #---New Features---#
 <Dimensional Crystal>
 The Crystal button in the Mansion now visually reflects the Crystal's power level from 0-6. Art provided by Rendrassa.
+The Crystal doesn't show if the crystal hasn't been upgraded at least once to minimize confusion.
 
 #---Feature Fixes---#
 Banner resized to be more legible on all but the smallest screen sizes - Art Provided by Rendrassa

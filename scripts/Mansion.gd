@@ -1943,7 +1943,7 @@ func build_mansion_info():
 		get_node("MainScreen/mansion/AE_Headgirl_TextRect").visible = false
 		get_node("MainScreen/mansion/AE_Headgirl_TextRect/portrait").set_texture(globals.loadimage(globals.sexuality_images.unknown))
 	#---Dimensional Crystal
-	if globals.state.sidequests.dimcrystal == 0:
+	if globals.state.sidequests.dimcrystal == 0 || globals.state.mansionupgrades.dimensionalcrystal == 0:
 		get_node("MainScreen/mansion/AE_DimCrystal").visible = false
 	else:
 		if globals.state.mansionupgrades.dimensionalcrystal >= 6:
