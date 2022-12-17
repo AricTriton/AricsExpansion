@@ -155,8 +155,7 @@ func _on_talk_pressed(mode = 'talk'):
 
 		#Discover Lactation
 		if !person.dailytalk.has('lactating') && !person.knowledge.has('lactating') && person.lactation == true:
-			expansion.getMilkLeak(person,person.lactating.pressure*10)
-			if person.lactating.leaking > 0:
+			if rand_range(0, 100) < person.lactating.leaking * 10:
 				if person.exposed.chest == true:
 					text += "[color=aqua]You notice a drizzle of milk trickle out of $his nipple and start to trace down $his " +expansion.nameBelly()+".[/color]\n"
 				else:

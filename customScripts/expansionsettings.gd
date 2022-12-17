@@ -2,7 +2,7 @@
 
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
-var modversion = "1.8d"
+var modversion = "1.8d-lact"
 
 #---Aric's and Game's Base Values potentially changed by Ralph's
 var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within applyRalphsTweaks as well as the Hybrid system.
@@ -161,9 +161,6 @@ var leakcauseslactationchance = 50
 
 #Turn off to disable Lactation Stress
 var lactationstressenabled = true
-
-#Increase/Decrease Milk Storage to Pressure
-var lacation_pressurepermilkstored = .25
 
 #------Farm Expanded
 #Livestock Consent Base Chance (+ 50% loyalty, 25% obediance, + various factors)

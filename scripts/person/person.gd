@@ -291,14 +291,15 @@ var pregexp = {
 #Tracks Milk Storage and Milking Factors
 var lactating = {
 	hyperlactation = false,
+	hyperlactation_duration = 0,
 	milkedtoday = false,
 	daysunmilked = 0,
 	duration = 0,
-	regen = 0,
-	milkmax = 0,
-	milkstorage = 0,
-	pressure = 0,
-	leaking = 0
+	regen = 0, # Amount of milk generated in a day
+	milkmax = 0, # Maximum amount of milk (and pressure) that can be stored
+	milkstorage = 0, # Amount of milk currently stored
+	pressure = 0, # Extra milk stored beyond normal capacity
+	leaking = 0 # Milk leaked out the previous day
 }
 
 #Not Implimented Yet

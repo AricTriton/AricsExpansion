@@ -1015,11 +1015,11 @@ class member:
 					if person.lactation == true:
 						if person.lactating.milkstorage > 0 || person.lactating.pressure > 0:
 							number = ceil(rand_range(person.lactating.milkstorage * 0.1, person.lactating.milkstorage * 0.3))
-							if person.lactating.pressure > 0:
-								number += person.lactating.pressure
-								person.lactating.pressure = 0
-							number = clamp(number, 0, person.lactating.milkstorage)
 							person.lactating.milkstorage -= number
+							if person.lactating.pressure > 0:
+								var pressure_bonus = min(10, person.lactating.pressure)
+								person.lactating.pressure -= pressure_bonus
+								number += pressure_bonus
 							person.lactating.milkedtoday = true
 							person.lactating.daysunmilked = 0
 							person.dailyevents.append('lactation')

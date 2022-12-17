@@ -69,6 +69,8 @@ func backwardsCompatibility(person):
 		person.lactating['daysunmilked'] = 0
 	if !person.lactating.has('hyperlactation'):
 		person.lactating['hyperlactation'] = false
+	if !person.lactating.has('hyperlactation_duration'):
+		person.lactating['hyperlactation_duration'] = 0
 
 	#Sex Expanded
 	if !person.sexexpanded.has('pressure'):
