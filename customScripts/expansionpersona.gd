@@ -34,12 +34,16 @@
 # 		ability = ['attack', 'shackle', 'sedation', 'mindblast'],
 # 	},
 
+#For access to names
+var namefile = load("res://files/scripts/characters/names.gd").new()
+var names = namefile.names
+
 var persona = {
-	Alice = {
+	AliceClassic = {
 		basics = ['Human', 'adult', 'female', 'commoner'],
-		persona = 'Alice',
+		persona = 'AliceClassic',
 		name = 'Alice',
-		surname = '',
+		surname = 'Bunny',
 		skin = 'fair',
 		titssize = 'big',
 		asssize = 'average',
@@ -56,11 +60,6 @@ var persona = {
 		wit = 50,
 		charm = 50,
 		asser = 20,
-		level = 4,
-		str_base = 1,
-		agi_base = 3,
-		maf_base = 2,
-		end_base = 2,
 		skillpoints = 0,
 		lewdness = 60,
 		traits = ['Submissive','Likes it rough'],
@@ -73,6 +72,256 @@ var persona = {
 		vagina = 'tight',
 		#fetishes
 		fetish = {
+			exhibitionism = "acceptable",
+			drinkcum = "acceptable",
+			wearcum = "uncertain",
+			wearcumface = "uncertain",
+			creampiemouth = "mindblowing",
+			creampiepussy = "mindblowing",
+			pregnancy = "unacceptable",
+			oviposition = "taboo",
+			bondage = "enjoyable",
+			dominance = "uncertain",
+			submission = "mindblowing",
+			sadism = "taboo",
+			masochism = "uncertain",
+			transformation = "dirty"
+		}
+	},
+	AliceBunny = {
+		basics = ['Halfkin Bunny', 'adult', 'female', 'commoner'],
+		persona = 'AliceBunny',
+		name = 'Alice',
+		surname = 'Bunny',
+		skin = 'fair',
+		titssize = 'big',
+		asssize = 'average',
+		beautybase = 50,
+		hairlength = 'shoulder',
+		height = 'short',
+		haircolor = 'brown',
+		eyecolor = 'green',
+		hairstyle = 'straight',
+		vagvirgin = false,
+		obed = 100,
+		cour = 10,
+		conf = 20,
+		wit = 50,
+		charm = 50,
+		asser = 20,
+		lewdness = 60,
+		traits = ['Submissive','Likes it rough'],
+		ability = ['attack'],
+		#Expansion Added Attributes
+		#Sexuality
+		sexuality = 'bi',
+		#npcexpandedstuff- body
+		asshole = 'tight',
+		vagina = 'tight',
+		#fetishes
+		fetish = {
+			exhibitionism = "mindblowing",
+			drinkcum = "acceptable",
+			wearcum = "uncertain",
+			wearcumface = "uncertain",
+			creampiemouth = "mindblowing",
+			creampiepussy = "mindblowing",
+			pregnancy = "mindblowing",
+			oviposition = "taboo",
+			bondage = "enjoyable",
+			dominance = "uncertain",
+			submission = "mindblowing",
+			sadism = "taboo",
+			masochism = "uncertain",
+			transformation = "dirty"
+		}
+	},
+	AliceMeow = {
+		basics = ['Halfkin Cat', 'adult', 'female', 'commoner'],
+		persona = 'AliceMeow',
+		name = 'Alice',
+		surname = 'Meow',
+		skin = 'fair',
+		titssize = 'big',
+		asssize = 'average',
+		beautybase = 50,
+		hairlength = 'shoulder',
+		height = 'short',
+		haircolor = 'brown',
+		eyecolor = 'green',
+		hairstyle = 'straight',
+		vagvirgin = false,
+		obed = 100,
+		cour = 10,
+		conf = 20,
+		wit = 50,
+		charm = 50,
+		asser = 20,
+		lewdness = 60,
+		traits = ['Submissive','Likes it rough'],
+		ability = ['attack'],
+		#Expansion Added Attributes
+		#Sexuality
+		sexuality = 'bi',
+		#npcexpandedstuff- body
+		asshole = 'tight',
+		vagina = 'tight',
+		#fetishes
+		fetish = {
+			drinkmilk = "mindblowing",
+			exhibitionism = "acceptable",
+			drinkcum = "acceptable",
+			wearcum = "uncertain",
+			wearcumface = "uncertain",
+			creampiemouth = "mindblowing",
+			creampiepussy = "mindblowing",
+			pregnancy = "unacceptable",
+			oviposition = "taboo",
+			bondage = "enjoyable",
+			dominance = "uncertain",
+			submission = "mindblowing",
+			sadism = "taboo",
+			masochism = "uncertain",
+			transformation = "dirty"
+		}
+	},
+	AlicePuppy = {
+		basics = ['Halfkin Wolf', 'adult', 'female', 'commoner'],
+		persona = 'AlicePuppy',
+		name = 'Alice',
+		surname = 'Puppy',
+		skin = 'fair',
+		titssize = 'big',
+		asssize = 'average',
+		beautybase = 50,
+		hairlength = 'shoulder',
+		height = 'short',
+		haircolor = 'brown',
+		eyecolor = 'green',
+		hairstyle = 'straight',
+		vagvirgin = false,
+		obed = 100,
+		cour = 10,
+		conf = 20,
+		wit = 50,
+		charm = 50,
+		asser = 20,
+		skillpoints = 0,
+		lewdness = 60,
+		traits = ['Submissive','Likes it rough'],
+		ability = ['attack'],
+		#Expansion Added Attributes
+		#Sexuality
+		sexuality = 'bi',
+		#npcexpandedstuff- body
+		asshole = 'tight',
+		vagina = 'tight',
+		#fetishes
+		fetish = {
+			pissing = "mindblowing",
+			drinkpiss = "enjoyable",
+			wearpiss = "mindblowing",
+			otherspissing = "enjoyable",
+			exhibitionism = "acceptable",
+			drinkcum = "acceptable",
+			wearcum = "uncertain",
+			wearcumface = "uncertain",
+			creampiemouth = "mindblowing",
+			creampiepussy = "mindblowing",
+			pregnancy = "unacceptable",
+			oviposition = "taboo",
+			bondage = "enjoyable",
+			dominance = "uncertain",
+			submission = "mindblowing",
+			sadism = "taboo",
+			masochism = "uncertain",
+			transformation = "dirty"
+		}
+	},
+	AliceFoxy = {
+		basics = ['Halfkin Fox', 'adult', 'female', 'commoner'],
+		persona = 'AliceFoxy',
+		name = 'Alice',
+		surname = 'Foxxy',
+		skin = 'fair',
+		titssize = 'big',
+		asssize = 'average',
+		beautybase = 50,
+		hairlength = 'shoulder',
+		height = 'short',
+		haircolor = 'brown',
+		eyecolor = 'green',
+		hairstyle = 'straight',
+		vagvirgin = false,
+		obed = 100,
+		cour = 10,
+		conf = 20,
+		wit = 50,
+		charm = 50,
+		asser = 20,
+		maf_base = 2,
+		skillpoints = 0,
+		lewdness = 60,
+		traits = ['Submissive','Likes it rough'],
+		ability = ['attack'],
+		#Expansion Added Attributes
+		#Sexuality
+		sexuality = 'bi',
+		#npcexpandedstuff- body
+		asshole = 'tight',
+		vagina = 'tight',
+		#fetishes
+		fetish = {
+			exhibitionism = "acceptable",
+			drinkcum = "acceptable",
+			wearcum = "uncertain",
+			wearcumface = "uncertain",
+			creampiemouth = "mindblowing",
+			creampiepussy = "mindblowing",
+			pregnancy = "unacceptable",
+			oviposition = "taboo",
+			bondage = "uncertain",
+			dominance = "uncertain",
+			submission = "mindblowing",
+			sadism = "taboo",
+			masochism = "uncertain",
+			transformation = "dirty"
+		}
+	},
+	AliceMilker = {
+		basics = ['Taurus', 'adult', 'female', 'commoner'],
+		persona = 'AliceMilker',
+		name = 'Alice',
+		surname = 'Milker',
+		skin = 'fair',
+		titssize = 'big',
+		asssize = 'average',
+		beautybase = 50,
+		hairlength = 'shoulder',
+		height = 'short',
+		haircolor = 'brown',
+		eyecolor = 'green',
+		hairstyle = 'straight',
+		vagvirgin = false,
+		obed = 100,
+		cour = 10,
+		conf = 20,
+		wit = 50,
+		charm = 50,
+		asser = 20,
+		lewdness = 60,
+		traits = ['Submissive','Likes it rough'],
+		ability = ['attack'],
+		#Expansion Added Attributes
+		#Sexuality
+		sexuality = 'bi',
+		#npcexpandedstuff- body
+		asshole = 'tight',
+		vagina = 'tight',
+		#fetishes
+		fetish = {
+			bemilked = "bemilked",
+			lactation = "mindblowing",
 			exhibitionism = "acceptable",
 			drinkcum = "acceptable",
 			wearcum = "uncertain",
@@ -129,6 +378,15 @@ func createpersona(name):
 	else:
 		globals.printErrorCode("Persona character not found: " + name)
 		return null
+
+func aliceinfinite(alice): #This function can be further generalized I think but this will do for now.
+	if alice.race in ["Human", "Halfkin Bunny", "Halfkin Cat", "Halfkin Wolf", "Halfkin Fox"]:
+		alice.surname = names.humansurname
+	elif alice.race == "Taurus":
+		alice.surname = names.taurussurname
+	else globals.printErrorCode("Alice: Unrecognized Race on" + alice.name)
+	return alice
+
 
 func countpersona(persona):
 	var counter = 0
