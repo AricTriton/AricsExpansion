@@ -1,0 +1,78 @@
+<---1.8 Changelog--->
+New Features
+<Dimensional Crystal>
+Created new Dimensional Crystal panel. It's new, shiny, and should hopefully make everything make far more sense regarding the Dimensional Crystal system.
+Added Dimensional Crystal images (created by Rendrassa)
+Added Dimensional Crystal Introduction & Darkening Events (created by Rendrassa, Text Edit by Aric)
+Added new Dimensional Crystal ability: Empowered Virginity. It allows a trade of sorts, allowing 5x 
+
+<Entrancement>
+In Vanilla, Entrancement just ensures the slave will gain Masochist and Enjoys Anal. I've tied it in so that it guarantees the next encouragement, whether Fetish, Consent, or Number of Kids.
+Also added a minor text detail to indicate entrancement on talking as well as on removal.
+>Initial Want/More/Less Kids: Reduced both to a 75% chance (if successful) to eliminate the impossible to fail check. Added Entrancement to Auto-Succeed then remove.
+>Fetishes: The Discovery is guaranteed. Encouraging or Discouraging is guaranteed then removes.
+>Consent: Guarantees then removes.
+Entrancement only costs mana if successful (why spend for no result?)
+
+<Fetishes>
+Eliminated the Encourage/Discourage options for Fetishes at Mindblowing/Taboo respectively.
+
+<Mansion Changes>
+Added Headgirl portrait to Mansion main screen (You gotta give the Headgirl some love)
+
+<Names>
+Expanded Names list for most races - Rendrassa
+
+<Traits>
+Added new mental Traits - Rendrassa
+
+<Images>
+Added functionality for pregnant unique images.
+Added updated Tia images - Rendrassa
+Added Pregnant Images for Ayneris, Chloe, Emily, Irvana, and Tisha
+Added an Aric's Expansion Banner to Main Screen
+
+<Tearing System>
+Added new Disables to the Vaginal/Anal Tearing system so those specifically can be disabled.
+Search for "#Disable Tearing System"
+
+<Repeatable Quests>
+Added 12 new repeatable quests - Rendrassa
+
+<End of Day>
+Added Days Unmilked prompt
+
+BugFix and Misc Stuff
+Colorized a comparison for the Luxury display in MindRead
+Fixed Vices EOD Alerts showing in Global instead of Job reports
+Fixed Vices breaking Player Inspect
+Changed the Jail Text alert to once per day for the Player instead of per Slave
+Removed Talk Quick-Strip (unneeded with Toggle)
+Colorized the Fetish Text in Talk Sexuality
+Fixed the Raise Child hybrid option from the incorrect showing 100 Gold to 250 on the button to make the cost and tooltip
+Fixed "Rename" option for Master's Name showing up behind full images
+Fixed Sebastian Order Ready result when no order placed
+Fixed can "Assist Researcher" forever loop with No More Abilities check and No More Non-Sex Interactions check - Reported by Fabian
+Fixed Researcher Job Text not showing anything in Job Panel - Reported by Fabian
+Fixed Sebastian Order Ready result when no order placed - Reported by Abel
+Tweaked Ren's Trait results from +/-10 to 20 - Fabian
+Fixed "Close" button showing on DimCrystal Panel (have to disable state)
+Fixed Farm displaying text when no Farm was built
+Fixed color = yellow issue in expansiontravel - Reported by Abel
+Fixed Hairstyle missing for Bald
+Removed Crystal Research convo from Once per Day
+Fixed the Swollen Belly description coming after the Privates section
+Removed popup addition to Dialogue as no one could remember why it was added (fixed layer issue)
+Fixed Ovulation updating before pregnancy leading to pregnancy when they weren't ovulating in the player's perspective
+Fixed the Bald descriptions in Inspect panels
+Added Womb is Sterile text in the description - Ankmairdor
+Fixed any comparisons of person.penis != null to 'none' - Ankmairdor
+Colorized all $name calls
+Fixed "can barely feel" alert text in sex scenes to red
+
+-----------v1.8a-----------
+Fixed IMAGE_PREG for uniques being in the first enum instead of second - Reported by Ankmairdor
+Reverted name colorization in dictionary (will have to think of an alternative method, $name is called by non-BBcode text nodes - Reported by Valcyor and Ankmairdor
+Reverted nightly_womb ovulation order of operations fix - Reported by Ankmairdor
+Moved DaysUnmilked from dailyMilked (apparently it is never called anymore) to dailyLactation - Reported by Ankmairdor
+

@@ -2,7 +2,7 @@
 
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
-var modversion = "1.7"
+var modversion = "1.8d"
 
 #---Aric's and Game's Base Values potentially changed by Ralph's
 var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within applyRalphsTweaks as well as the Hybrid system.
@@ -49,7 +49,10 @@ var player_treats_clothing_like_slave = false
 #If set to true, Unique Slaves will join your party without having to ask for consent first
 var uniqueslavesautopartyconsent = false
 
+#---Vocal Traits
 #Lip Size Increase Change (Chance is array-5*10, ie: plump and bigger give 10)
+var vocal_traits_autochange = true
+var vocal_traits_delaytimer = true
 var lipstraitbasechance = 20
 
 #Default to Nickname + First Name (Function from MinorTweaks, Renamed for Clarity)
@@ -90,6 +93,10 @@ var vices_discovery_has_to_present_first = false
 var vices_discovery_presentation_bonus = 20
 
 #---Genitals Expanded
+#Disable Tearing System
+var disablevaginatearing = false
+var disableanaltearing = false
+
 #Chance of Holes staying Stretched during Sex. Chance + (Elasticity*10)
 var stretchchancevagina = 50
 var stretchchanceanus = 50
@@ -131,6 +138,9 @@ var changecrystalreq = 4
 var crystallifeforcerestorechance = 80
 var crystal_shatter_chance = 80
 
+#Warn on Missing Researcher
+var show_warning_if_missing_researcher = true
+
 
 #------Pregnancy Expanded
 #Set to False to disable Swollen Settings (Pregnancy and Cum Inflation)
@@ -151,6 +161,8 @@ var leakcauseslactationchance = 50
 #Turn off to disable Lactation Stress
 var lactationstressenabled = true
 
+#Increase/Decrease Milk Storage to Pressure
+var lacation_pressurepermilkstored = .25
 
 #------Farm Expanded
 #Livestock Consent Base Chance (+ 50% loyalty, 25% obediance, + various factors)
@@ -257,7 +269,7 @@ var spellcost = 1 								# Ralph's - 2, This is a multiplicative that applies t
 
 #Spell Tweak Effects
 var reduce_rebellion_with_fear = 1				# Ralph's - 3, This divides by the players magic affinity to determine how much rebellion is reduced.
-var summontentacle_lewdness = 0					# Ralph's - 5, Make... them... lewd...
+var summontentacle_lewdness = 5					# Ralph's - 5, Make... them... lewd...
 
 #Reputation Tweak
 var reputation_loss = -4						# Ralph's - -18, How much your reputation suffers when you sell a bad slave to Sebastian.
@@ -588,6 +600,8 @@ func addConstantsSupport():
 		ihavebloodygoodtaste = {descript = "Set this to true to include British themed descriptions", object = self},
 		vices_luxury_effects = {descript = "Vice Effects (Adds Penalties and Bonuses to End of Day Luxury Calculations", object = self},
 		uniqueslavesautopartyconsent = {descript = "If set to true, Unique Slaves will join your party without having to ask for consent first", object = self},
+		vocal_traits_autochange = {descript = "Enable or Disable the Vocal Traits system (allowing Lisp or Mute to be added or removed based on Lip sizes).", object = self},
+		vocal_traits_delaytimer = {descript = "Enable or Disable the Vocal Traits Delay Timer (Sets a minimum of 1-7 days between automatic changes).", object = self},
 		lipstraitbasechance = {descript = "Lip Size Increase Change (Chance is array-5*10, ie: plump and bigger give 10)", min = 0.0, max = 50.0, object = self},
 		playerattractionmodifier = {descript = "Base Bonus or Penalty for Attraction Checks for PCs", min = -100.0, max = 100.0, object = self},
 		use_nickname_plus_first_name = {descript = "Default to Nickname + First Name (Function from MinorTweaks, Renamed for Clarity)", object = self},
@@ -645,7 +659,7 @@ func addConstantsSupport():
 		gratitude_for_all = {descript = "Set this to true so that babies aged up to Child or Teen have as much chance to spawn with the Grateful trait as ones aged up to Adult (Ralph sets this to False, but up to you)", object = self},
 		sillymode = {descript = "Set it to false if you don't abide, so far it only affects random travel event text", object = self},
 
-		basemanafoodconsumption = {descript = "The average capacity that the hole's size adds or subtracts from", min = 0.0, max = 100.0},
-		orgasmmana = {descript = "The average capacity that the hole's size adds or subtracts from", min = 1.0, max = 100.0},
+		basemanafoodconsumption = {descript = "The amount of mana per day required by mana eating races/hybrids. This is multiplied for some based on age, etc. Default: 10", min = 0.0, max = 100.0},
+		orgasmmana = {descript = "The amount of mana produced by a single orgasm. Default: 3", min = 1.0, max = 100.0},
 	}
 	

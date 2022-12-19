@@ -8,7 +8,7 @@ var magic_races_array = ['Slime']
 var races_beastfree_darkelf_free = ['Human','Elf','Dark Elf','Orc','Ogre','Giant','Gnome','Goblin','Demon','Dragonkin','Kobold','Lizardfolk','Fairy','Seraph','Dryad','Lamia','Harpy','Arachna','Nereid','Scylla','Slime','Avali']
 var genealogies = ['human','gnome','elf','tribal_elf','dark_elf','orc','ogre','giant','goblin','kobold','dragonkin','lizardfolk','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime','bunny','dog','cow','cat','fox','horse','hyena','raccoon','mouse','squirrel','otter','bird','avali']
 var genealogies_beastfree = ['human','gnome','elf','tribal_elf','dark_elf','orc','ogre','giant','goblin','kobold','dragonkin','lizardfolk','dryad','arachna','lamia','fairy','harpy','seraph','demon','nereid','scylla','slime','avali']
-var genealogies_beastkin_only = ['bunny','dog','cat','fox','raccoon'] #ralphB - for breeding race consolidation - needs to include all races to be consolidated
+var genealogies_beastkin_only = ['bunny','dog','cat','fox','raccoon','mouse','squirrel','otter','bird'] #ralphB - for breeding race consolidation - needs to include all races to be consolidated
 ###---End Expansion---###
 
 ###---Added by Expansion---### centerflag982 - dickgirls can generate in world
@@ -56,8 +56,6 @@ func newslave(race, age, sex, origins = 'slave', unique = null):
 		person.legs = 'normal'
 		if rand_range(0,1) > 0.4:
 			person.eyeshape = 'normal'
-	if globals.rules.randomcustomportraits == true:
-		randomportrait(person)
 	get_caste(person, origins)
 	for i in person.sexuals.unlocks:
 		var category = globals.sexscenes.categories[i]
@@ -91,13 +89,16 @@ func newslave(race, age, sex, origins = 'slave', unique = null):
 	###---End Expansion---###
 	
 	###---Added by Array---### Person Expanded
-	person.health = 1000
 	globals.expansionsetup.expandPerson(person)
 	###---End Expansion---###
 	
 	###---Added by Expansion---### Pregnancy Expanded
 	person.preg.fertility = rand_range(0,30)
 	set_ovulation(person)
+	#Delayed per Ank's Notes
+	if globals.rules.randomcustomportraits == true:
+		randomportrait(person)
+	person.health = 1000
 	###---End Expansion---###
 	globals.traceFile('newslave')
 	

@@ -92,6 +92,8 @@ func backwardsCompatibility(person):
 		person.mind['secretslog'] = ""
 	if !person.mind.has('willpower'):
 		person.mind['willpower'] = 100
+	if !person.mind.has('approaches'):
+		person.mind['approaches'] = {openness = 0, loyal = 0, obed = 0, fear = 0, lust = 0, pushed = []}
 
 	#Farm Expanded
 	if !person.farmexpanded.has('container'):
@@ -135,9 +137,13 @@ func backwardsCompatibility(person):
 	if person.vagina != "none" && person.lubrication == -1:
 		person.lubrication = round(rand_range(1,4))
 
+	#Add Stomach
+	if !person.cum.has('stomach'):
+		person.cum.stomach = 0
+
 	if !person.consentexp.has('livestock'):
 		person.consentexp['livestock'] = false
-	
+
 	#Racial Bonuses
 	if !person.stats.has('cour_racial'):
 		person.stats['cour_racial'] = 0
@@ -195,6 +201,15 @@ func backwardsCompatibility(person):
 #		babyTermination(person)
 	
 	person.expansionversion = globals.expansionsettings.modversion
+
+	# Move prods from farminventory to itemdict if necessary
+	if (globals.resources.farmexpanded.has('farminventory') &&
+		globals.resources.farmexpanded.farminventory.has('prods') &&
+		globals.resources.farmexpanded.farminventory.prods > 0 &&
+		globals.itemdict.has('prods')):
+			globals.itemdict.prods = globals.resources.farmexpanded.farminventory.prods
+			globals.resources.farmexpanded.farminventory.prods = 0
+
 	return
 
 func unique_Fullblooded(person):

@@ -407,7 +407,7 @@ var enemygrouppools = {
 		units = [['alice',1,1]], awareness = -10, captured = null, special = 'alice', escape = 12,
 		description = "You spot a lone [color=aqua]Alice[/color] that seems somehow familiar. $He seems to be unaware of your presence as of yet. ",
 		descriptionescape = "The [color=aqua]girl[/color] runs and hides before you get close to them. ",
-	},
+	}
 	#/ralph_alice
 }
 
@@ -1263,8 +1263,8 @@ var enemypool = {
 		stats = {health = 40, power = 1, speed = 20, energy = 50, armor = 2, magic = 1, abilities = ['attack']},
 		gear = 'alice',
 		skills = [],
+	},
 	#/ralph_alice
-
 
 	ivran = {
 		name = 'An Elf Leader',
@@ -1554,7 +1554,7 @@ var enemyequips = {
 		armor = [['nothing', 25],['armorleather',1], ['armorleather+', 1],['armorpadded', 1]],
 		weapon = [['nothing', 7],['weapondagger',1], ['weapondagger+', 1]],
 		abilities = [],
-	},
+	}
 	#/ralph_alice
 }
 

@@ -202,7 +202,7 @@ class resource:
 		stallbedding = {dirt = -1, hay = 0, cot = 0, bed = 0},
 		extractors = {hand = -1, suction = 0, pump = 0, pressurepump = 0},
 		containers = {cup = 0, bucket = 0, pail = 0, jug = 0, canister = 0, bottle = 0},
-		farminventory = {prods = 0},
+		farminventory = {prods = 0}, #TBK - Remove Later
 		vats = {
 			processingorder = ['milk','semen','lube','piss'],
 			milk = {vat = 0, new = 0, sell = 0, food = 0, refine = 0, bottle2sell = 0, bottle2refine = 0, priceper = 0, foodper = 0, auto = 'vat', autobuybottles = false, basebottlingenergy = 5,},
@@ -446,7 +446,7 @@ class progress:
 	var mainquestcomplete = false
 	var rank = 0
 	var password = ''
-	var sidequests = {startslave = 0, emily = 0, brothel = 0, cali = 0, caliparentsdead = false, chloe = 0, ayda = 0, ivran = '', yris = 0, zoe = 0, ayneris = 0, sebastianumbra = 0, maple = 0} setget quest_set
+	var sidequests = {startslave = 0, emily = 0, brothel = 0, cali = 0, caliparentsdead = false, chloe = 0, ayda = 0, ivran = '', yris = 0, zoe = 0, ayneris = 0, sebastianumbra = 0, maple = 0, dimcrystal = 0} setget quest_set
 	var repeatables = {wimbornslaveguild = [], frostfordslaveguild = [], gornslaveguild = []}
 	var babylist = []
 	var companion = -1
@@ -667,7 +667,7 @@ class progress:
 	#Debug/Cheat Change Before Release to "Unlockable"
 	var perfectinfo = true
 	#Crystal Prevent's Death
-	var thecrystal = {mode = 'light', research = 0, abilities = [], power = 0, lifeforce = 10, hunger = 0, preventsdeath = false}
+	var thecrystal = {mode = 'light', research = 0, abilities = [], power = 0, lifeforce = 10, hunger = 0, empoweredvirginity = false, preventsdeath = false,}
 	#Milk Economy / globals.state.milkeconomy.currentvalue
 	var milkeconomy = {currentvalue = 1, futurevalue = 1}
 	#Best Slave - Used for Envy Flaw
@@ -1304,6 +1304,8 @@ var expansionsettings = loadModFile("AricsExpansion", "customScripts/expansionse
 var useRalphsTweaks # = expansionsettings.use_ralphs_tweaks
 var useCapsTweaks # = expansionsettings.use_caps_tweaks
 var expansiontravel = loadModFile("AricsExpansion", "customScripts/expansiontravel.gd").new() #ralphD
+var ae_eventtext = loadModFile("AricsExpansion", "customScripts/expansioneventtext.gd").new()
+var expansionpersona = loadModFile("AricsExpansion", "customScripts/expansionpersona.gd").new() #bbp
 
 ###---Added by Expansion---### General Arrays
 #Size Arrays
@@ -1396,6 +1398,17 @@ var sexuality_images = {
 	futa_1 = load("res://files/aric_expansion_images/sexuality_icons/futa_1.png"),
 	futa_2 = load("res://files/aric_expansion_images/sexuality_icons/futa_2.png"),
 	futa_3 = load("res://files/aric_expansion_images/sexuality_icons/futa_3.png"),
+}
+
+var dimcrystal_images = {
+	Null = null,
+	dull = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_dull.png"),
+	light1 = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_light_1.png"),
+	light2 = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_light_2.png"),
+	light3 = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_light_3.png"),
+	dark1 = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_dark_1.png"),
+	dark2 = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_dark_2.png"),
+	dark3 = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_dark_3.png"),
 }
 
 <AddTo 0>
@@ -1557,7 +1570,7 @@ func slimeConversionCheck(mother, father):
 				elif genes == 'slime':
 					baby.genealogy[genes] = 100
 			expansionsetup.setRaceBonus(baby, true)
-			if father.id != ['-1'] && father.id != null:
+			if father.id != '-1' && father.id != null:
 				globals.connectrelatives(father, baby, 'slimesire')
 			
 			rapidpregnancydamage = (globals.state.pregduration-1) - person.preg.duration

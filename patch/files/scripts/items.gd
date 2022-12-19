@@ -35,6 +35,19 @@ var itemlist = {
 		weight = 2,
 		reqs = true,
 	},
+	#FarmItems
+	prods = {
+		code = 'prods',
+		name = 'Cattle Prods',
+		icon = load("res://files/aric_expansion_images/potions/rendrassa_sedative_potion_bottle.png"), # TBK - Add prods image
+		description = "Used to control cattle", # TBK - Replace placeholder text
+		effect = '',
+		recipe = '',
+		cost = 75,
+		type = 'dummy',
+		amount = 0,
+		reqs = true,
+	},
 	#ExplorationItems
 	rope = {
 		code = 'rope',
@@ -263,7 +276,7 @@ var itemlist = {
 		code = 'amnesiapot',
 		name = 'Amnesia Potion',
 		icon = load("res://files/images/items/amnesiapot.png"),
-		description = "Erases memories of the past (won't affect backstory or impactful experience). ",
+		description = "Erases memories of the past (won't affect backstory or impactful experience). Removes vices.",
 		effect = 'amnesiapoteffect',
 		recipe = 'recipeamnesiapot',
 		cost = 200,
@@ -1109,19 +1122,19 @@ var itemlist = {
 		amount = 0,
 	},
 	weaponnaturestaff = {
-		code = 'weaponnaturestaff',
-		name = 'Staff of Nature',
-		icon = "res://files/images/items/naturestaff.png",
-		description = "A twisted branch infused with Nature's power. Strengthens wielder but is not a very effective weapon.\n[color=yellow]Requirements: 1 Magic Affinity[/color]",
-		effect = [{type = 'incombat', effect = 'damage', effectvalue = 4, effectscale = "maf", descript = "+4 Damage, Maf Scaling"},{type = 'onequip', effect = 'health', effectvalue = 25, descript = "+25 Health"},{type = 'onequip', effect = 'maf', effectvalue = 1, descript = "+1 Magic Affinity"}],
-		recipe = '',
-		reqs =  [{reqstat = 'smaf', oper = 'gte', reqvalue = 1}],
-		cost = 200,
-		type = 'gear',
-		subtype = 'weapon',
-		weight = 5,
-		amount = 0,
-	},
+        code = 'weaponnaturestaff',
+        name = 'Staff of Nature',
+        icon = "res://files/images/items/naturestaff.png",
+        description = "A twisted branch infused with Nature's power. Strengthens wielder but is not a very effective weapon.\n[color=yellow]Requirements: 1 Magic Affinity[/color]",
+        effect = [{type = 'incombat', effect = 'damage', effectvalue = 4, effectscale = "maf", descript = "+4 Damage, Magic Aff Scaling"},{type = 'onequip', effect = 'health', effectvalue = 25, descript = "+25 Health"},{type = 'onequip', effect = 'maf', effectvalue = 1, descript = "+1 Magic Affinity"}],
+        recipe = '',
+        reqs =  [{reqstat = 'smaf', oper = 'gte', reqvalue = 1}],
+        cost = 200,
+        type = 'gear',
+        subtype = 'weapon',
+        weight = 5,
+        amount = 0,
+    },
 	armortentacle = {
 		code = 'armortentacle',
 		name = 'Living Armor',
@@ -1168,20 +1181,20 @@ var itemlist = {
 		enchant = 'unique',
 	},
 	weaponcursedsword = {
-		code = 'weaponcursedsword',
-		name = "Cursed Blade",
-		icon = "res://files/images/items/weaponcursedsword.png",
-		description = "An ancient mystical blade. Strong magic keeps it sharp even to this day, but all power comes with a price... ",
-		effect = [{type = 'incombat', effect = 'damage', effectvalue = 15, effectscale = "maf", descript = "+15 Damage, Maf Scaling"}, {type = 'passive', effect = 'doubleattack', effectvalue = 20, descript = '20% chance to attack twice'}, {type = 'passive', effect = 'defenseless', descript = "Wielder's armor is useless"}],
-		recipe = '',
-		reqs = null,
-		cost = 800,
-		type = 'gear',
-		subtype = 'weapon',
-		weight = 5,
-		amount = 0,
-		enchant = 'unique',
-	},
+        code = 'weaponcursedsword',
+        name = "Cursed Blade",
+        icon = "res://files/images/items/weaponcursedsword.png",
+        description = "An ancient mystical blade. Strong magic keeps it sharp even to this day, but all power comes with a price... ",
+        effect = [{type = 'incombat', effect = 'damage', effectvalue = 15, effectscale = "maf", descript = "+15 Damage, Magic Aff Scaling"}, {type = 'passive', effect = 'doubleattack', effectvalue = 20, descript = '20% chance to attack twice'}, {type = 'passive', effect = 'defenseless', descript = "Wielder's armor is useless"}],
+        recipe = '',
+        reqs = null,
+        cost = 800,
+        type = 'gear',
+        subtype = 'weapon',
+        weight = 5,
+        amount = 0,
+        enchant = 'unique',
+    },
 	weaponhammer = {
 		code = 'weaponhammer',
 		name = "Great Hammer",
@@ -1851,6 +1864,9 @@ func amnesiapoteffect():
 		person.mind.vice = "none"
 		person.mind.vice_removed = true
 		person.mind.vice_known = true
+	if !person.mind.approaches.pushed.empty():
+		text += person.dictionary("\n$He seems to have forgotten about any [color=aqua]Pushed[/color] [color=red]Approaches[/color] also. ")
+		person.mind.approaches.pushed.clear()
 	###---End Expansion---###
 	for i in person.relations:
 		person.relations[i] = 0
@@ -1938,7 +1954,7 @@ func bandageeffect():
 ###---Added by Expansion---###
 func hyperlactationpoteffect():
 	var text = ""
-	text += person.dictionary("You order [color=aqua]$name[/color] to drink the bottle of [color=aqua]piss[/color]. ")
+	text += person.dictionary("You order [color=aqua]$name[/color] to drink the bottle of [color=aqua]lactation potion[/color]. ")
 	if rand_range(0,100) <= 50 || person.obed >= 50:
 		text += person.dictionary("$He gulps it down eagerly. ")
 	else:
@@ -1970,7 +1986,7 @@ func hyperlactationpoteffect():
 
 func milkeffect():
 	var text = ""
-	text += person.dictionary("You order [color=aqua]$name[/color] to drink the bottle of [color=aqua]piss[/color]. ")
+	text += person.dictionary("You order [color=aqua]$name[/color] to drink the bottle of [color=aqua]milk[/color]. ")
 	if rand_range(0,100) <= 50 || person.obed >= 50:
 		text += person.dictionary("$He gulps it down eagerly. ")
 	else:
@@ -1988,7 +2004,7 @@ func milkeffect():
 
 func semeneffect():
 	var text = ""
-	text += person.dictionary("You order [color=aqua]$name[/color] to drink the bottle of [color=aqua]piss[/color]. ")
+	text += person.dictionary("You order [color=aqua]$name[/color] to drink the bottle of [color=aqua]semen[/color]. ")
 	if rand_range(0,100) <= 50 || person.obed >= 50:
 		text += person.dictionary("$He gulps it down eagerly. ")
 	else:
@@ -2009,7 +2025,7 @@ func semeneffect():
 
 func lubeeffect():
 	var text = ""
-	text += person.dictionary("You order [color=aqua]$name[/color] to drink the bottle of [color=aqua]piss[/color]. ")
+	text += person.dictionary("You order [color=aqua]$name[/color] to drink the bottle of [color=aqua]lube[/color]. ")
 	if rand_range(0,100) <= 50 || person.obed >= 50:
 		text += person.dictionary("$He gulps it down eagerly. ")
 	else:

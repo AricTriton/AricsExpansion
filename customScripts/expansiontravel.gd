@@ -53,8 +53,11 @@ func getzonetraveltext(zone,progress):
 		#	break
 	if rand_range(0,1) > 0.9:
 		array.append("A flock of crows pick at a well scavenged corpse nearby.  Upon examination of the nearly stripped bones and tattered remains of clothing, you figure this poor traveler was likely a poor sword for hire or vagabond.  It's unclear what killed him.  Whatever possessions he might have once had have long been looted or dragged away by vermin.  Unable to determine even their place of origin or likely destination, you decide to move on.")
-	if rand_range(0,1) > 0.975 && globals.expansionsettings.sillymode:
-		array.append("You come across a feminine looking [color=yellow]dragonkin[/color] sitting at an easel and painting the scenery. You get close enough to see the name Rendrassa signed on the canvass before noticing that the painter has turned to look at you with an unnerving smile.  Filled with a strange terror, you quickly compliment the painting and hasten to leave.")
+	if globals.expansionsettings.sillymode:
+		if rand_range(0,1) > 0.975:
+			array.append("You come across a feminine looking [color=yellow]dragonkin[/color] sitting at an easel and painting the scenery. You get close enough to see the name Rendrassa signed on the canvass before noticing that the painter has turned to look at you with an unnerving smile.  Filled with a strange terror, you quickly compliment the painting and hasten to leave.")
+		if rand_range(0,1) > 0.98:
+			array.append("You notice a hunched figure in the shadows softly chanting.\n[color=yellow]-Must get more money. Must get more money. Gold, gold, gold, I need more.[/color]\nTales of the mythological [color=aqua]Money Seeker[/color] surfaces in your mind and you hold your coin purse close. You hurry away before the being can smell your gold.")
 	if rand_range(0,1) > 0.5:
 		for i in teammates:
 			if i.traits.has("Natural Beauty") && i.beauty < 70 && !i.origins in ["noble","rich"] && rand_range(0,1) > 0.3:
@@ -178,7 +181,7 @@ func getzonetraveltext(zone,progress):
 				var tempbunny = randomfromarray(bunnyteammates)
 				array.append("As your party walks through the forest, it appears that a group of bunnies has started to gather around "+str(tempbunny.name)+".  As the party continues, more and more bunnies begin to gather around "+str(tempbunny.name)+" to the point that it's hard to walk without stepping on one.  "+str(he(tempbunny))+" pleads with you for help, but this is actually quite amusing and you outdistance "+him(tempbunny)+", perhaps to leave "+him(tempbunny)+" to "+his(tempbunny)+" bunny fate.") #by Fibian
 			else:
-				array.append_array(["In the brush you can barely see a bunny nibbling on something.  Seizing the moment you very stealthily creep up on the animal.  Slowly.  Slower.  You reach out and very gently put your hand on the animal.  It turns around very methodically and gazes upon a creature 20 times it's size.\n\n[color = yellow]Boo![/color]\n\nThe bunny panics and bolts deeper into the brush.  Got him.", "The numerous squeaking bunnies can be heard in the nearby brush as the party moves along a portion of the trail.  Better not upset the bunny god today.  You and your party continue without a moments delay."]) #by Fibian
+				array.append_array(["In the brush you can barely see a bunny nibbling on something.  Seizing the moment you very stealthily creep up on the animal.  Slowly.  Slower.  You reach out and very gently put your hand on the animal.  It turns around very methodically and gazes upon a creature 20 times it's size.\n\n[color=yellow]Boo![/color]\n\nThe bunny panics and bolts deeper into the brush.  Got him.", "The numerous squeaking bunnies can be heard in the nearby brush as the party moves along a portion of the trail.  Better not upset the bunny god today.  You and your party continue without a moments delay."]) #by Fibian
 	elif zone.code == 'elvenforest':
 		array.append_array(["There's a clearing here, likely used to allow carts or wagons to pass one another given the narrow forest road.","This patch of trees is especially tranquil.","You pass forest animals that show no particular concern for your presence.","You enjoy a peaceful walk through the woods.","The forest here is meticulously maintained.","The path meanders wide and flat enough for a cart and yet twisting around trees, many ancient, suggesting none were removed to form this forest road."])
 		if globals.state.reputation.amberguard <= -20 && rand_range(0,1) > 0.5:
@@ -332,7 +335,7 @@ func travelrandomperson():
 	return randomfromarray(array)
 
 func travelfucktarget():
-	var array = ["Centerflag","Ralphomayo","Aric Triton","horse","sheep","goat","dog","fencepost","watermelon","prostitute","sack of produce","corpse","farmgirl","farmer's wife","woman","whore","girl you had turned over to the Mage Guild","fairy you had turned over to the Mage Guild","taurus girl you had turned over to the Mage Guild","slave you believe you had sold at some point","bandit","traveling salesman"]
+	var array = ["Centerflag","Ralphomayo","Aric Triton","horse","sheep","goat","dog","fencepost","watermelon","prostitute","sack of produce","corpse","farmgirl","farmer's wife","woman","whore","girl you had turned over to the Mage Guild","oddly familiar fairy","an oddly familiar Taurus girl with multiple leaking breasts","slave you believe you had sold at some point","bandit","traveling salesman"]
 	array.append_array(globals.constructor.humanoid_races_array)
 	array.append_array(globals.constructor.beast_races_array)
 	if globals.expansionsettings.sillymode:

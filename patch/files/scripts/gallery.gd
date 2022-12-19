@@ -254,8 +254,8 @@ var characters = {
 		name = 'Tia',
 		unique = 'Tia',
 		surname = '',
-		imageportait = 'res://files/aric_expansion_images/characters/tiaportrait.png',
-		beautybase = 75,
+		imageportait = 'res://files/aric_expansion_images/characters/New Tia/tiaportrait.png',
+		beautybase = 80,
 		haircolor = 'brown',
 		hairlength = 'waist',
 		hairstyle = 'straight',
@@ -543,10 +543,22 @@ var sprites = {
 	brothelhost = load("res://files/images/brothelhost.png"),
 	
 	###---Added by Expansion---###
+	#Preg Uniques
+	aynerisneutralnaked_preg = load("res://files/aric_expansion_images/characters/preg_uniques/aynerisneutralnaked_preggo.png"),
+	chloenaked_preg = load("res://files/aric_expansion_images/characters/preg_uniques/chloenaked_preggo.png"),
+	emilyf_preg = load("res://files/aric_expansion_images/characters/preg_uniques/emilyf_preg.png"),
+	tisha_preggo = load("res://files/aric_expansion_images/characters/preg_uniques/tisha_preggo.png"),
 	#Tia Images
-	tiaportrait = load("res://files/aric_expansion_images/characters/tiaportrait.png"),
-	tiaclothed = load("res://files/aric_expansion_images/characters/tiaclothed.png"),
-	tianaked = load("res://files/aric_expansion_images/characters/tianaked.png"),
+	tiaportrait = load("res://files/aric_expansion_images/characters/New Tia/tiaportrait.png"),
+	tiaclothed = load("res://files/aric_expansion_images/characters/New Tia/tianeutral.png"),
+	tiaclothedsad = load("res://files/aric_expansion_images/characters/New Tia/tiasad.png"),
+	tianaked = load("res://files/aric_expansion_images/characters/New Tia/tianudeneutral.png"),
+	tianakedsad = load("res://files/aric_expansion_images/characters/New Tia/tianudesad.png"),
+	tiapregnant = load("res://files/aric_expansion_images/characters/New Tia/tiapregnant.png"),
+	#Old Tia Images
+	tiaportrait_old = load("res://files/aric_expansion_images/characters/tiaportrait.png"),
+	tiaclothed_old = load("res://files/aric_expansion_images/characters/tiaclothed.png"),
+	tianaked_old = load("res://files/aric_expansion_images/characters/tianaked.png"),
 	#Bunny Boy in Aydas Shop
 	adya_assist_neutral = load("res://files/aric_expansion_images/characters/bunnyboy_neutral.png"),
 	adya_assist_nervous = load("res://files/aric_expansion_images/characters/bunnyboy_nervous.png"),
@@ -556,6 +568,17 @@ var sprites = {
 	ivrana_clothed = load("res://files/aric_expansion_images/characters/ivranaclothed.png"),
 	ivrana_naked = load("res://files/aric_expansion_images/characters/ivrananaked.png"),
 	ivrana_portrait = load("res://files/aric_expansion_images/characters/ivranaportrait.png"),
+	ivrana_pregnant = load("res://files/aric_expansion_images/characters/ivranapregnant.png"),
+	#Shuriya
+	shuriya = load("res://files/aric_expansion_images/characters/shuriya.png"),
+	#Halfkin Slaver
+	halfkin_slaver_icon = load("res://files/aric_expansion_images/characters/Halfkin Slaver/halfkin_slaver_icon.png"),
+	halfkin_slaver_smug = load("res://files/aric_expansion_images/characters/Halfkin Slaver/halfkin_slaver_smug.png"),
+	halfkin_slaver_angry = load("res://files/aric_expansion_images/characters/Halfkin Slaver/halfkin_slaver_angry.png"),
+	#Jason
+	jasonfrown = load("res://files/aric_expansion_images/characters/Jason/jasonfrown.png"),
+	jasonneutral = load("res://files/aric_expansion_images/characters/Jason/jasonneutral.png"),
+	jasonsmirk = load("res://files/aric_expansion_images/characters/Jason/jasonsmirk.png"),
 	###---End Expansion---###
 }
 var scenes = {
@@ -620,6 +643,11 @@ var backgrounds = {
 	culthideout = load("res://files/backgrounds/culthideout.png"),
 	cavelake = load("res://files/backgrounds/cavelake.png"),
 	darkness = load("res://files/backgrounds/darkness.png"),
+	stairs = load("res://files/aric_expansion_images/dimensional_crystal/stairs.png"),
+	stairs_red = load("res://files/aric_expansion_images/dimensional_crystal/stairs_red.png"),
+	dimcrystal_dull = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_dull.png"),
+	dimcrystal_light1 = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_light_1.png"),
+	dimcrystal_dark1 = load("res://files/aric_expansion_images/dimensional_crystal/dimcrystal_dark_1.png"),
 }
 
 var nakedsprites = {
@@ -634,7 +662,7 @@ var nakedsprites = {
 	Melissa = {cons = "melissanakedfriendly", rape = 'melissanakedneutral', clothcons = 'melissafriendly', clothrape = 'melissaneutral'},
 	Ayda = {cons = 'aydanaked',rape = 'aydanaked', clothcons = 'aydanormal',clothrape = 'aydanormal'},
 	###---Added by Expansion---### Tia
-	Tia = {cons = 'tianaked', rape = 'tianaked', clothcons = 'tiaclothed', clothrape = 'tiaclothed'},
+	Tia = {cons = 'tianaked', rape = 'tianakedsad', clothcons = 'tiaclothed', clothrape = 'tiaclothedsad'},
 	Ivrana = {cons = 'ivrana_naked', rape = 'ivrana_naked', clothcons = 'ivrana_clothed', clothrape = 'ivrana_clothed'},
 	###---End Expansion---###
 }

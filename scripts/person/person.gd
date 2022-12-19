@@ -1,3 +1,5 @@
+var persona = null #BBP-persona tag for counts and stuff
+
 var scalecolor = ''
 var feathercolor = ''
 
@@ -177,6 +179,7 @@ var mind = {
 	respect = 0,
 	humiliation = 0,
 	lewd = 0,
+	approaches = {openness = 0, loyal = 0, obed = 0, fear = 0, lust = 0, pushed = []},
 }
 
 #Instinct is the base desired, based on Race. These are the current "Needs"
@@ -787,7 +790,10 @@ func selfdictionary(text):
 
 func dictionary(text):
 	var string = text
+	###---Added by Expansion---### Colorize Names (Removed for now)
 	string = string.replace('$name', name_short())
+#	string = string.replace('$name', "[color=aqua]"+name_short()+"[/color]")
+	###---End Expansion---###
 	string = string.replace('$surname', surname)
 	string = string.replace('$sex', sex)
 	if sex == 'male':

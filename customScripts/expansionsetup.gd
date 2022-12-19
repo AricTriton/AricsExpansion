@@ -81,9 +81,20 @@ func expandGame():
 		else:
 			globals.state.mansionupgrades.dimensionalcrystal == 1
 			globals.state.mansionupgrades.mansionnursery == 1
-	#Crystal to Abilities Conversion
-	if globals.state.mansionupgrades.dimensionalcrystal >= 1:
-		globals.state.thecrystal.abilities.append('pregnancyspeed')
+	
+	#Dim Crystal
+	if !globals.state.thecrystal.has('empoweredvirginity'):
+		globals.state.thecrystal['empoweredvirginity'] = false
+	
+	#Sidequests
+	if !globals.state.sidequests.has('dimcrystal'):
+		globals.state.sidequests['dimcrystal'] = 0
+		
+	#Crystal to Abilities Conversion - TBK Remove?
+#	if globals.state.mansionupgrades.dimensionalcrystal >= 1:
+#		globals.state.thecrystal.abilities.append('pregnancyspeed')
+	
+	
 	
 	#---Farm Expanded
 	#Resources
@@ -1366,14 +1377,14 @@ func setRaceBonus_Ralph(person, increasestats):
 	for race in person.genealogy:
 		if person.genealogy[race] > 0:
 			count_races += 1
-			fire = (globals.races[racedict[race]].elementalmod.fire/100)/(person.genealogy[race]/100)
-			wind = (globals.races[racedict[race]].elementalmod.wind/100)/(person.genealogy[race]/100)
-			water = (globals.races[racedict[race]].elementalmod.water/100)/(person.genealogy[race]/100)
-			earth = (globals.races[racedict[race]].elementalmod.earth/100)/(person.genealogy[race]/100)
-			nature = (globals.races[racedict[race]].elementalmod.nature/100)/(person.genealogy[race]/100)
-			corruption = (globals.races[racedict[race]].elementalmod.corruption/100)/(person.genealogy[race]/100)
+			fire += globals.races[racedict[race]].elementalmod.fire*float(person.genealogy[race])/10000
+			wind += globals.races[racedict[race]].elementalmod.wind*float(person.genealogy[race])/10000
+			water += globals.races[racedict[race]].elementalmod.water*float(person.genealogy[race])/10000
+			earth += globals.races[racedict[race]].elementalmod.earth*float(person.genealogy[race])/10000
+			nature += globals.races[racedict[race]].elementalmod.nature*float(person.genealogy[race])/10000
+			corruption += globals.races[racedict[race]].elementalmod.corruption*float(person.genealogy[race])/10000
 	
-	corruption -= (person.genealogy.slime)/100
+	corruption -= (float(person.genealogy.slime))/100
 	
 	var elements = {'fire':fire, 'wind':wind, 'water':water, 'earth':earth}
 

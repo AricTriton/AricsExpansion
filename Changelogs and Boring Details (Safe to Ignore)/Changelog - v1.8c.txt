@@ -1,0 +1,12 @@
+Added DaysUnmilked and MilkedToday to track when being milked in the Farm. It previously only was tracking when they were milked duing a sex scene. - Reported by Tawna 
+Fixed Cum Bloated description to not show "coughing up cum" unless there is actually cum in someone's ass.
+Added a checked on the "gut is swollen" to be "are" instead of "is" for players. - Reported by Clopblop
+Assist Researcher was looking for < 0 interactions instead of < 1 preventing assisting researchers. - Reported by Kkaiy and Rendrassa
+End of Day bug related to new Lactation settings - Reported by Abel, Resolved by Ankmairdor
+Added Irvana's Pregnant .import file into the patch folder - Reported by Eventide
+Added typo corrections to expansioneventtext - Provided by Rendrassa
+Added delay between showing the intro event background and the text box - Reported by Rendrassa and Clopblop
+Added alert for No Vat Installed
+Fixed the Dictionary error line 92 from nursery to mansionnursery - Reported & Fixed by Eventide
+Added Aqua coloring to the Tier 1 portion of the green alert text at the end of the Crystal intro event.
+Added in Mistress titles for female PCs - Provided by Clopblop

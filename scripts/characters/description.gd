@@ -88,11 +88,11 @@ func onceperdayConvos():
 			text += "\n[color=aqua]Ask How Many Kids $He Wants[/color]"
 		elif person.knowledge.has('desiredoffspring') && !person.dailytalk.has('desiredoffspring'):
 			text += "\n[color=aqua]Encourage or Discourage the Number of Kids $He Wants[/color]"
-		#Crystal
-		if !person.dailytalk.has('crystalresearch') && globals.state.thecrystal.power <= person.smaf - 1:
-			text += "\n[color=aqua]Attempt to Research the Crystal[/color]\n     $His [color=aqua]Wit[/color] equates to $his chance of success to not accidentally make the [color=aqua]Crystal[/color] more [color=aqua]Powerful[/color] and harder to [color=aqua]Research[/color]."
+		#Crystal - TBK REMOVE
+#		if !person.dailytalk.has('crystalresearch') && globals.state.thecrystal.power <= person.smaf - 1:
+			text += "\n[color=aqua]Attempt to Research the Crystal[/color]\n     $His [color=aqua]Wit[/color] equates to $his chance of success to not accidentally make the [color=#E389B9]Crystal[/color] more [color=aqua]Powerful[/color] and harder to [color=aqua]Research[/color]."
 			if globals.state.thecrystal.mode == "dark":
-				text += "\n[color=red]Extreme Failure may result in $his being consumed by the [color=aqua]Crystal[/color] to sate its hunger.[/color]"
+				text += "\n[color=red]Extreme Failure may result in $his being consumed by the [color=#E389B9]Crystal[/color] to sate its hunger.[/color]"
 		
 	return text
 
@@ -133,6 +133,7 @@ func features():
 		#Body
 		text += "\n[color=#d1b970]Body:[/color]\n" + getdescription('skin') + getdescription("skincov") + getdescription("wings") + getdescription("tail") + getdescription("height") + getdescription("asssize")
 		text += "[color=green]" + globals.expansion.getSwollenDescription(person,true) + "\n" + globals.expansion.getCumCoatedDescription(person,'body') + "[/color]"
+		text += "\n\n[color=green]" + globals.expansion.getSwollenDescription(person,false) + "[/color]"
 	###---Expansion End---###
 	else:
 		text += "Omitted. "
@@ -243,6 +244,11 @@ func lowergenitals():
 			text += "You know that you produce [color=aqua]" + str(globals.player.pregexp.cumprod) + "oz[/color] of [color=aqua]" +globals.expansion.nameCum()+ "[/color] per ejaculation. "
 	if person.vagina == 'none' && person.penis == 'none' && person.balls == 'none':
 		text += " For some reason, $his crotch has no visible genitals. "
+	if person.preg.has_womb == false && person.sex != 'male':
+		if person == globals.player:
+			text += "\n\n[color=yellow]Your womb is sterile.[/color]"
+		else:
+			text += "\n\n[color=yellow]$name's womb is sterile.[/color]"
 	if person.asshole != 'none':
 		text += "\n[color=#d1b970]Asshole:[/color]\n"
 		if person.exposed.ass == true && person != globals.player:
@@ -260,7 +266,6 @@ func lowergenitals():
 			text += ' All your life, you have had an ' + globals.expansion.nameAsshole() + ' following you around. It is ' + getdescription('asshole')
 		if person.cum.ass > asscapacity:
 			text += "\nYou " + globals.randomitemfromarray(['spot','notice','glance at','see']) + " a mass of " + globals.randomitemfromarray(['wet','gloopy','moist','damp','dark']) + " spots seeping from $his " + globals.expansion.nameAsshole() + " and sticking to $his " + globals.randomitemfromarray(['ass','thighs','clothing',globals.expansion.nameAsshole()]) + ". " + globals.randomitemfromarray(['Is it still coming out?','How much is oozing out of $him?','Can $he still feel it pouring out?','Is that why $he is flushed?','Interesting...'])
-	text += globals.expansion.getSwollenDescription(person,false)
 	###---Expansion End---###
 	return text
 
@@ -318,7 +323,7 @@ func getbeauty(justtext = false):
 	else:
 		calculate = 'gorgeous'
 
-	text = descriptions['beauty'][calculate]
+	text = newdescriptions['beauty'][calculate]
 	if justtext == false:
 		text += "("
 		if tempappeal != 0:
@@ -509,7 +514,7 @@ var newdescriptions = {
 		shoulder = '$His wavy [color=aqua][haircolor][/color] hair is [color=aqua]shoulder length[/color]. ',
 		waist = '$His gorgeous [color=aqua][haircolor][/color] hair [color=aqua]sways down to $his waist[/color]. [hairstyle]',
 		hips = '$His [color=aqua][haircolor][/color] hair cascades down, [color=aqua]reaching $his hips[/color]. [hairstyle]',
-		bald = '$He is bald. ', #/Capitulize
+		bald = '', #/Capitulize
 	},
 	hairstyle = {
 		straight = 'It [color=aqua]hangs freely[/color] from their head. ',
@@ -518,6 +523,7 @@ var newdescriptions = {
 		braid = 'It is combed into a single [color=aqua]braid[/color]. ',
 		'two braids' : 'It is combed into [color=aqua]two braids[/color]. ',
 		bun = "It is tied into a neat [color=aqua]bun[/color]. ",
+		bald = '$His head is absent any visible hair. ', #/Capitulize (Aric Added)
 	},
 	eyecolor = {
 		default = '$His eyes are [color=aqua][eyecolor][/color]. ',
@@ -664,7 +670,7 @@ var newdescriptions = {
 		masculine = '$His [color=yellow]chest[/color] is of definitive [color=yellow]' + randomitemfromarray(['masculine','manly']) + '[/color] shape. ',
 		flat = '$His [color=yellow]chest[/color] is barely visible and [color=yellow]' + randomitemfromarray(['flat','nearly nonexistant']) + '[/color]. ',
 		small = '$He has [color=yellow]' + randomitemfromarray(['small','tiny','miniscule','perky']) + '[/color], round [color=yellow]' + nameTits() + '[/color]. ',
-		average= '$His nice, [color=yellow]' + randomitemfromarray(['average','nice','perky','decent']) + '[/color] [color=yellow]' + nameTits() + '[/color] are firm and inviting. ',
+		average= '$His [color=yellow]' + randomitemfromarray(['average','nice','perky','decent']) + '[/color] [color=yellow]' + nameTits() + '[/color] are firm and inviting. ',
 		big = '$His [color=yellow]' + randomitemfromarray(['big','sizable','large']) + '[/color] [color=yellow]' + nameTits() + '[/color] are pleasantly soft, but still have a nice spring to them. ',
 		huge = '$His [color=yellow]' + nameTits() + '[/color] are [color=yellow]' + randomitemfromarray(['huge','well developed','enviable','really big']) + '[/color]. ',
 		incredible = '$His [color=yellow]' + randomitemfromarray(['voluptuous','rather huge','incredible']) + '[/color] [color=yellow]'+ nameTits() + '[/color] are mind-blowingly big. ',

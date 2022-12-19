@@ -1,4 +1,4 @@
-[gd_scene load_steps=214 format=2]
+[gd_scene load_steps=217 format=2]
 
 [ext_resource path="res://files/scripts/Mansion.gd" type="Script" id=1]
 [ext_resource path="res://files/backgrounds/mansion.png" type="Texture" id=2]
@@ -45,101 +45,104 @@
 [ext_resource path="res://files/buttongrouptheme.tres" type="Theme" id=43]
 [ext_resource path="res://files/buttons/mainscreen/3.png" type="Texture" id=44]
 [ext_resource path="res://mainfont.tres" type="DynamicFont" id=45]
-[ext_resource path="res://files/paneltexturebland.tres" type="StyleBox" id=46]
-[ext_resource path="res://files/buttons/mainscreen/7.png" type="Texture" id=47]
-[ext_resource path="res://files/buttons/menupanel.png" type="Texture" id=48]
-[ext_resource path="res://files/images/items/aphrodisiacpot.png" type="Texture" id=49]
-[ext_resource path="res://files/buttons/chek.png" type="Texture" id=50]
-[ext_resource path="res://files/buttons/mainscreen/6.png" type="Texture" id=51]
-[ext_resource path="res://files/buttons/levelup.png" type="Texture" id=52]
-[ext_resource path="res://files/buttons/levelupdown.png" type="Texture" id=53]
-[ext_resource path="res://files/buttons/mainscreen/8.png" type="Texture" id=54]
-[ext_resource path="res://files/buttons/mainscreen/9.png" type="Texture" id=55]
-[ext_resource path="res://files/buttons/mainscreen/10.png" type="Texture" id=56]
-[ext_resource path="res://files/buttons/mainscreen/11.png" type="Texture" id=57]
-[ext_resource path="res://Roundo-Medium.otf" type="DynamicFontData" id=58]
-[ext_resource path="res://files/scripts/laboratory.gd" type="Script" id=59]
-[ext_resource path="res://files/buttons/book/librarybook.png" type="Texture" id=60]
-[ext_resource path="res://files/buttons/book/spellpressed.png" type="Texture" id=61]
-[ext_resource path="res://files/buttons/book/spell.png" type="Texture" id=62]
-[ext_resource path="res://files/buttons/book/close.png" type="Texture" id=63]
-[ext_resource path="res://files/aric_expansion_images/farm_field.png" type="Texture" id=64]
-[ext_resource path="res://files/aric_expansion_images/farm_vats.png" type="Texture" id=65]
-[ext_resource path="res://files/aric_expansion_images/farm_vats_disabled.png" type="Texture" id=66]
-[ext_resource path="res://files/aric_expansion_images/giantsnail.png" type="Texture" id=67]
-[ext_resource path="res://files/aric_expansion_images/giantsnail_disabled.png" type="Texture" id=68]
-[ext_resource path="res://files/aric_expansion_images/farm_workers.png" type="Texture" id=69]
-[ext_resource path="res://files/aric_expansion_images/farm_workers_disabled.png" type="Texture" id=70]
-[ext_resource path="res://files/aric_expansion_images/farm_store.png" type="Texture" id=71]
-[ext_resource path="res://files/aric_expansion_images/farm_store_disabled.png" type="Texture" id=72]
-[ext_resource path="res://files/buttons/portraits/1.png" type="Texture" id=73]
-[ext_resource path="res://files/aric_expansion_images/stables.png" type="Texture" id=74]
-[ext_resource path="res://files/buttons/inventory/2 (1).png" type="Texture" id=75]
-[ext_resource path="res://files/aric_expansion_images/vats.png" type="Texture" id=76]
-[ext_resource path="res://files/aric_expansion_images/slugpit.png" type="Texture" id=77]
-[ext_resource path="res://files/aric_expansion_images/farm_store_large.png" type="Texture" id=78]
-[ext_resource path="res://files/backgrounds/town.png" type="Texture" id=79]
-[ext_resource path="res://files/scripts/upgradespanel.gd" type="Script" id=80]
-[ext_resource path="res://files/scripts/slave_tab.gd" type="Script" id=81]
-[ext_resource path="res://files/scripts/statstab.gd" type="Script" id=82]
-[ext_resource path="res://files/aric_expansion_images/jail/cellportrait.png" type="Texture" id=83]
-[ext_resource path="res://files/buttons/mainscreen/40.png" type="Texture" id=84]
-[ext_resource path="res://files/buttons/mainscreen/49.png" type="Texture" id=85]
-[ext_resource path="res://files/buttons/mainscreen/50.png" type="Texture" id=86]
-[ext_resource path="res://files/buttons/mainscreen/51.png" type="Texture" id=87]
-[ext_resource path="res://files/buttons/mainscreen/52.png" type="Texture" id=88]
-[ext_resource path="res://files/aric_expansion_images/jail/cellbody.png" type="Texture" id=89]
-[ext_resource path="res://files/buttons/img-backG-popup.png" type="Texture" id=90]
-[ext_resource path="res://files/buttons/textfield.png" type="Texture" id=91]
-[ext_resource path="res://files/buttons/textfieldinact.png" type="Texture" id=92]
-[ext_resource path="res://files/bigpanel.tres" type="StyleBox" id=93]
-[ext_resource path="res://files/buttons/inventory/1.png" type="Texture" id=94]
-[ext_resource path="res://files/outside.tscn" type="PackedScene" id=95]
-[ext_resource path="res://files/combat.tscn" type="PackedScene" id=96]
-[ext_resource path="res://files/scripts/characterglossary.gd" type="Script" id=97]
-[ext_resource path="res://files/buttons/speechpanel.png" type="Texture" id=98]
-[ext_resource path="res://files/buttons/book/control.png" type="Texture" id=99]
-[ext_resource path="res://files/interactionpanel.tscn" type="PackedScene" id=100]
-[ext_resource path="res://files/date.tscn" type="PackedScene" id=101]
-[ext_resource path="res://files/inventory.tscn" type="PackedScene" id=102]
-[ext_resource path="res://files/scripts/exploration.gd" type="Script" id=103]
-[ext_resource path="res://files/buttons/itemactive.png" type="Texture" id=104]
-[ext_resource path="res://files/buttons/noimage.png" type="Texture" id=105]
-[ext_resource path="res://files/buttons/inventory/enchant.png" type="Texture" id=106]
-[ext_resource path="res://files/buttons/explorebar2.png" type="Texture" id=107]
-[ext_resource path="res://files/buttons/explorebar.png" type="Texture" id=108]
-[ext_resource path="res://files/buttons/arrows/right.png" type="Texture" id=109]
-[ext_resource path="res://files/buttons/arrows/right-press.png" type="Texture" id=110]
-[ext_resource path="res://files/buttons/arrows/right-hl.png" type="Texture" id=111]
-[ext_resource path="res://files/scripts/inputnode.gd" type="Script" id=112]
-[ext_resource path="res://files/buttons/effects/blur.shader" type="Shader" id=113]
-[ext_resource path="res://files/buttons/effects/white.png" type="Texture" id=114]
-[ext_resource path="res://files/buttons/tex-popup.png" type="Texture" id=115]
-[ext_resource path="res://files/buttons/scenes/0.png" type="Texture" id=116]
-[ext_resource path="res://files/buttons/scenes/2.png" type="Texture" id=117]
-[ext_resource path="res://files/buttons/scenes/5.png" type="Texture" id=118]
-[ext_resource path="res://files/buttons/scenes/4.png" type="Texture" id=119]
-[ext_resource path="res://files/buttons/scenes/7.png" type="Texture" id=120]
-[ext_resource path="res://files/buttons/scenes/6.png" type="Texture" id=121]
-[ext_resource path="res://files/buttons/scenes/3.png" type="Texture" id=122]
-[ext_resource path="res://files/buttons/scenes/1.png" type="Texture" id=123]
-[ext_resource path="res://files/scripts/dailyevents.gd" type="Script" id=124]
-[ext_resource path="res://files/buttons/panelempty.png" type="Texture" id=125]
-[ext_resource path="res://files/theme slavetab.tres" type="Theme" id=126]
-[ext_resource path="res://files/options.tscn" type="PackedScene" id=127]
-[ext_resource path="res://files/scripts/groupselectpanel.gd" type="Script" id=128]
-[ext_resource path="res://files/buttons/paneltransperent.png" type="Texture" id=129]
-[ext_resource path="res://files/imageselect.tscn" type="PackedScene" id=130]
-[ext_resource path="res://files/scripts/tutorial.gd" type="Script" id=131]
-[ext_resource path="res://files/images/alise/033.png" type="Texture" id=132]
-[ext_resource path="res://files/scripts/joblist.gd" type="Script" id=133]
-[ext_resource path="res://files/buttons/inventory/24(for_slave).png" type="Texture" id=134]
-[ext_resource path="res://files/buttons/inventory/37.png" type="Texture" id=135]
-[ext_resource path="res://files/buttons/sexicons/male.png" type="Texture" id=136]
-[ext_resource path="res://files/buttons/mainscreen/30.png" type="Texture" id=137]
-[ext_resource path="res://files/aric_expansion_images/pregnancy_icons/pregnancy_icon.png" type="Texture" id=138]
-[ext_resource path="res://files/buttons/inventory/33.png" type="Texture" id=139]
-[ext_resource path="res://files/buttons/mainscreen/1.png" type="Texture" id=140]
+[ext_resource path="res://files/buttons/mainscreen/7.png" type="Texture" id=46]
+[ext_resource path="res://files/aric_expansion_images/dimensional_crystal/dimcrystal_transparency.png" type="Texture" id=47]
+[ext_resource path="res://files/aric_expansion_images/dimensional_crystal/dimcrystal_dull.png" type="Texture" id=48]
+[ext_resource path="res://files/aric_expansion_images/dimensional_crystal/scroll.png" type="Texture" id=49]
+[ext_resource path="res://files/buttons/inventory/2 (1).png" type="Texture" id=50]
+[ext_resource path="res://files/paneltexturebland.tres" type="StyleBox" id=51]
+[ext_resource path="res://files/buttons/menupanel.png" type="Texture" id=52]
+[ext_resource path="res://files/images/items/aphrodisiacpot.png" type="Texture" id=53]
+[ext_resource path="res://files/buttons/chek.png" type="Texture" id=54]
+[ext_resource path="res://files/buttons/mainscreen/6.png" type="Texture" id=55]
+[ext_resource path="res://files/buttons/levelup.png" type="Texture" id=56]
+[ext_resource path="res://files/buttons/levelupdown.png" type="Texture" id=57]
+[ext_resource path="res://files/buttons/mainscreen/8.png" type="Texture" id=58]
+[ext_resource path="res://files/buttons/mainscreen/9.png" type="Texture" id=59]
+[ext_resource path="res://files/buttons/mainscreen/10.png" type="Texture" id=60]
+[ext_resource path="res://files/buttons/mainscreen/11.png" type="Texture" id=61]
+[ext_resource path="res://Roundo-Medium.otf" type="DynamicFontData" id=62]
+[ext_resource path="res://files/scripts/laboratory.gd" type="Script" id=63]
+[ext_resource path="res://files/buttons/book/librarybook.png" type="Texture" id=64]
+[ext_resource path="res://files/buttons/book/spellpressed.png" type="Texture" id=65]
+[ext_resource path="res://files/buttons/book/spell.png" type="Texture" id=66]
+[ext_resource path="res://files/buttons/book/close.png" type="Texture" id=67]
+[ext_resource path="res://files/aric_expansion_images/farm_field.png" type="Texture" id=68]
+[ext_resource path="res://files/aric_expansion_images/farm_vats.png" type="Texture" id=69]
+[ext_resource path="res://files/aric_expansion_images/farm_vats_disabled.png" type="Texture" id=70]
+[ext_resource path="res://files/aric_expansion_images/giantsnail.png" type="Texture" id=71]
+[ext_resource path="res://files/aric_expansion_images/giantsnail_disabled.png" type="Texture" id=72]
+[ext_resource path="res://files/aric_expansion_images/farm_workers.png" type="Texture" id=73]
+[ext_resource path="res://files/aric_expansion_images/farm_workers_disabled.png" type="Texture" id=74]
+[ext_resource path="res://files/aric_expansion_images/farm_store.png" type="Texture" id=75]
+[ext_resource path="res://files/aric_expansion_images/farm_store_disabled.png" type="Texture" id=76]
+[ext_resource path="res://files/buttons/portraits/1.png" type="Texture" id=77]
+[ext_resource path="res://files/aric_expansion_images/stables.png" type="Texture" id=78]
+[ext_resource path="res://files/aric_expansion_images/vats.png" type="Texture" id=79]
+[ext_resource path="res://files/aric_expansion_images/slugpit.png" type="Texture" id=80]
+[ext_resource path="res://files/aric_expansion_images/farm_store_large.png" type="Texture" id=81]
+[ext_resource path="res://files/backgrounds/town.png" type="Texture" id=82]
+[ext_resource path="res://files/scripts/upgradespanel.gd" type="Script" id=83]
+[ext_resource path="res://files/scripts/slave_tab.gd" type="Script" id=84]
+[ext_resource path="res://files/scripts/statstab.gd" type="Script" id=85]
+[ext_resource path="res://files/aric_expansion_images/jail/cellportrait.png" type="Texture" id=86]
+[ext_resource path="res://files/buttons/mainscreen/40.png" type="Texture" id=87]
+[ext_resource path="res://files/buttons/mainscreen/49.png" type="Texture" id=88]
+[ext_resource path="res://files/buttons/mainscreen/50.png" type="Texture" id=89]
+[ext_resource path="res://files/buttons/mainscreen/51.png" type="Texture" id=90]
+[ext_resource path="res://files/buttons/mainscreen/52.png" type="Texture" id=91]
+[ext_resource path="res://files/aric_expansion_images/jail/cellbody.png" type="Texture" id=92]
+[ext_resource path="res://files/buttons/img-backG-popup.png" type="Texture" id=93]
+[ext_resource path="res://files/buttons/textfield.png" type="Texture" id=94]
+[ext_resource path="res://files/buttons/textfieldinact.png" type="Texture" id=95]
+[ext_resource path="res://files/bigpanel.tres" type="StyleBox" id=96]
+[ext_resource path="res://files/buttons/inventory/1.png" type="Texture" id=97]
+[ext_resource path="res://files/outside.tscn" type="PackedScene" id=98]
+[ext_resource path="res://files/combat.tscn" type="PackedScene" id=99]
+[ext_resource path="res://files/scripts/characterglossary.gd" type="Script" id=100]
+[ext_resource path="res://files/buttons/speechpanel.png" type="Texture" id=101]
+[ext_resource path="res://files/buttons/book/control.png" type="Texture" id=102]
+[ext_resource path="res://files/interactionpanel.tscn" type="PackedScene" id=103]
+[ext_resource path="res://files/date.tscn" type="PackedScene" id=104]
+[ext_resource path="res://files/inventory.tscn" type="PackedScene" id=105]
+[ext_resource path="res://files/scripts/exploration.gd" type="Script" id=106]
+[ext_resource path="res://files/buttons/itemactive.png" type="Texture" id=107]
+[ext_resource path="res://files/buttons/noimage.png" type="Texture" id=108]
+[ext_resource path="res://files/buttons/inventory/enchant.png" type="Texture" id=109]
+[ext_resource path="res://files/buttons/explorebar2.png" type="Texture" id=110]
+[ext_resource path="res://files/buttons/explorebar.png" type="Texture" id=111]
+[ext_resource path="res://files/buttons/arrows/right.png" type="Texture" id=112]
+[ext_resource path="res://files/buttons/arrows/right-press.png" type="Texture" id=113]
+[ext_resource path="res://files/buttons/arrows/right-hl.png" type="Texture" id=114]
+[ext_resource path="res://files/scripts/inputnode.gd" type="Script" id=115]
+[ext_resource path="res://files/buttons/effects/blur.shader" type="Shader" id=116]
+[ext_resource path="res://files/buttons/effects/white.png" type="Texture" id=117]
+[ext_resource path="res://files/buttons/tex-popup.png" type="Texture" id=118]
+[ext_resource path="res://files/buttons/scenes/0.png" type="Texture" id=119]
+[ext_resource path="res://files/buttons/scenes/2.png" type="Texture" id=120]
+[ext_resource path="res://files/buttons/scenes/5.png" type="Texture" id=121]
+[ext_resource path="res://files/buttons/scenes/4.png" type="Texture" id=122]
+[ext_resource path="res://files/buttons/scenes/7.png" type="Texture" id=123]
+[ext_resource path="res://files/buttons/scenes/6.png" type="Texture" id=124]
+[ext_resource path="res://files/buttons/scenes/3.png" type="Texture" id=125]
+[ext_resource path="res://files/buttons/scenes/1.png" type="Texture" id=126]
+[ext_resource path="res://files/scripts/dailyevents.gd" type="Script" id=127]
+[ext_resource path="res://files/buttons/panelempty.png" type="Texture" id=128]
+[ext_resource path="res://files/theme slavetab.tres" type="Theme" id=129]
+[ext_resource path="res://files/options.tscn" type="PackedScene" id=130]
+[ext_resource path="res://files/scripts/groupselectpanel.gd" type="Script" id=131]
+[ext_resource path="res://files/buttons/paneltransperent.png" type="Texture" id=132]
+[ext_resource path="res://files/imageselect.tscn" type="PackedScene" id=133]
+[ext_resource path="res://files/scripts/tutorial.gd" type="Script" id=134]
+[ext_resource path="res://files/images/alise/033.png" type="Texture" id=135]
+[ext_resource path="res://files/scripts/joblist.gd" type="Script" id=136]
+[ext_resource path="res://files/buttons/inventory/24(for_slave).png" type="Texture" id=137]
+[ext_resource path="res://files/buttons/inventory/37.png" type="Texture" id=138]
+[ext_resource path="res://files/buttons/sexicons/male.png" type="Texture" id=139]
+[ext_resource path="res://files/buttons/mainscreen/30.png" type="Texture" id=140]
+[ext_resource path="res://files/aric_expansion_images/pregnancy_icons/pregnancy_icon.png" type="Texture" id=141]
+[ext_resource path="res://files/buttons/inventory/33.png" type="Texture" id=142]
+[ext_resource path="res://files/buttons/mainscreen/1.png" type="Texture" id=143]
 
 [sub_resource type="StyleBoxTexture" id=1]
 texture = ExtResource( 40 )
@@ -160,7 +163,7 @@ texture = ExtResource( 44 )
 region_rect = Rect2( 0, 0, 1317, 830 )
 
 [sub_resource type="StyleBoxTexture" id=8]
-texture = ExtResource( 48 )
+texture = ExtResource( 52 )
 region_rect = Rect2( 0, 0, 500, 500 )
 margin_left = 10.0
 margin_right = 10.0
@@ -168,7 +171,7 @@ margin_top = 10.0
 margin_bottom = 10.0
 
 [sub_resource type="StyleBoxTexture" id=9]
-texture = ExtResource( 50 )
+texture = ExtResource( 54 )
 region_rect = Rect2( 0, 0, 20, 20 )
 margin_left = 10.0
 margin_right = 10.0
@@ -176,39 +179,39 @@ margin_top = 10.0
 margin_bottom = 10.0
 
 [sub_resource type="StyleBoxTexture" id=10]
-texture = ExtResource( 52 )
+texture = ExtResource( 56 )
 region_rect = Rect2( 0, 0, 26, 25 )
 
 [sub_resource type="StyleBoxTexture" id=11]
-texture = ExtResource( 53 )
+texture = ExtResource( 57 )
 region_rect = Rect2( 0, 0, 26, 25 )
 
 [sub_resource type="DynamicFont" id=12]
 size = 15
 use_filter = true
 extra_spacing_top = 1
-font_data = ExtResource( 58 )
+font_data = ExtResource( 62 )
 
 [sub_resource type="DynamicFont" id=13]
 use_filter = true
 extra_spacing_top = 1
-font_data = ExtResource( 58 )
+font_data = ExtResource( 62 )
 
 [sub_resource type="StyleBoxTexture" id=14]
 content_margin_left = 20.0
-texture = ExtResource( 61 )
+texture = ExtResource( 65 )
 region_rect = Rect2( 0, 0, 750, 87 )
 
 [sub_resource type="StyleBoxTexture" id=15]
 content_margin_left = 20.0
-texture = ExtResource( 61 )
+texture = ExtResource( 65 )
 region_rect = Rect2( 0, 0, 750, 87 )
 
 [sub_resource type="StyleBoxTexture" id=16]
 
 [sub_resource type="StyleBoxTexture" id=17]
 content_margin_left = 20.0
-texture = ExtResource( 62 )
+texture = ExtResource( 66 )
 region_rect = Rect2( 0, 0, 750, 87 )
 
 [sub_resource type="StreamTexture" id=18]
@@ -225,7 +228,7 @@ load_path = "res://.import/1.png-dbfd755d3aa5fd0dc51c158016c10926.stex"
 
 [sub_resource type="DynamicFont" id=21]
 size = 18
-font_data = ExtResource( 58 )
+font_data = ExtResource( 62 )
 
 [sub_resource type="StreamTexture" id=22]
 flags = 4
@@ -237,13 +240,13 @@ load_path = "res://.import/4.png-5a5e035178ff7ad07f7ffe85f5523d04.stex"
 size = 13
 use_filter = true
 extra_spacing_top = 1
-font_data = ExtResource( 58 )
+font_data = ExtResource( 62 )
 
 [sub_resource type="DynamicFont" id=25]
 size = 14
 use_filter = true
 extra_spacing_top = 1
-font_data = ExtResource( 58 )
+font_data = ExtResource( 62 )
 
 [sub_resource type="StyleBoxTexture" id=26]
 texture = ExtResource( 9 )
@@ -265,10 +268,10 @@ region_rect = Rect2( 0, 0, 229, 229 )
 size = 32
 use_filter = true
 extra_spacing_top = 3
-font_data = ExtResource( 58 )
+font_data = ExtResource( 62 )
 
 [sub_resource type="StyleBoxTexture" id=34]
-texture = ExtResource( 90 )
+texture = ExtResource( 93 )
 region_rect = Rect2( 0, 0, 860, 682 )
 margin_left = 4.0
 margin_right = 4.0
@@ -276,7 +279,7 @@ margin_top = 4.0
 margin_bottom = 4.0
 
 [sub_resource type="StyleBoxTexture" id=35]
-texture = ExtResource( 91 )
+texture = ExtResource( 94 )
 region_rect = Rect2( 0, 0, 50, 50 )
 margin_left = 10.0
 margin_right = 10.0
@@ -284,7 +287,7 @@ margin_top = 10.0
 margin_bottom = 10.0
 
 [sub_resource type="StyleBoxTexture" id=36]
-texture = ExtResource( 92 )
+texture = ExtResource( 95 )
 region_rect = Rect2( 0, 0, 50, 50 )
 margin_left = 10.0
 margin_right = 10.0
@@ -292,19 +295,19 @@ margin_top = 10.0
 margin_bottom = 10.0
 
 [sub_resource type="StyleBoxTexture" id=37]
-texture = ExtResource( 48 )
+texture = ExtResource( 52 )
 region_rect = Rect2( 0, 0, 500, 500 )
 
 [sub_resource type="StyleBoxTexture" id=38]
-texture = ExtResource( 98 )
+texture = ExtResource( 101 )
 region_rect = Rect2( 0, 0, 500, 294 )
 
 [sub_resource type="StyleBoxTexture" id=39]
-texture = ExtResource( 48 )
+texture = ExtResource( 52 )
 region_rect = Rect2( 0, 0, 500, 500 )
 
 [sub_resource type="StyleBoxTexture" id=40]
-texture = ExtResource( 107 )
+texture = ExtResource( 110 )
 region_rect = Rect2( 0, 0, 150, 18 )
 margin_left = 5.0
 margin_right = 5.0
@@ -312,7 +315,7 @@ margin_top = 5.0
 margin_bottom = 5.0
 
 [sub_resource type="StyleBoxTexture" id=41]
-texture = ExtResource( 108 )
+texture = ExtResource( 111 )
 region_rect = Rect2( 0, 0, 150, 18 )
 margin_left = 5.0
 margin_right = 5.0
@@ -321,11 +324,11 @@ margin_bottom = 5.0
 
 [sub_resource type="ShaderMaterial" id=42]
 render_priority = 1
-shader = ExtResource( 113 )
+shader = ExtResource( 116 )
 shader_param/blurSize = 7
 
 [sub_resource type="StyleBoxTexture" id=43]
-texture = ExtResource( 115 )
+texture = ExtResource( 118 )
 region_rect = Rect2( 0, 0, 60, 60 )
 margin_left = 10.0
 margin_right = 10.0
@@ -336,48 +339,48 @@ margin_bottom = 10.0
 size = 18
 use_filter = true
 extra_spacing_top = 3
-font_data = ExtResource( 58 )
+font_data = ExtResource( 62 )
 
 [sub_resource type="StyleBoxTexture" id=45]
-texture = ExtResource( 116 )
+texture = ExtResource( 119 )
 region_rect = Rect2( 0, 0, 183, 183 )
 
 [sub_resource type="StyleBoxTexture" id=46]
-texture = ExtResource( 117 )
+texture = ExtResource( 120 )
 region_rect = Rect2( 0, 0, 601, 822 )
 
 [sub_resource type="StyleBoxTexture" id=47]
-texture = ExtResource( 118 )
-region_rect = Rect2( 0, 0, 604, 60 )
-
-[sub_resource type="StyleBoxTexture" id=48]
-texture = ExtResource( 119 )
-region_rect = Rect2( 0, 0, 610, 64 )
-
-[sub_resource type="StyleBoxTexture" id=49]
-texture = ExtResource( 120 )
-region_rect = Rect2( 0, 0, 604, 60 )
-
-[sub_resource type="StyleBoxTexture" id=50]
 texture = ExtResource( 121 )
 region_rect = Rect2( 0, 0, 604, 60 )
 
-[sub_resource type="StyleBoxTexture" id=51]
+[sub_resource type="StyleBoxTexture" id=48]
 texture = ExtResource( 122 )
+region_rect = Rect2( 0, 0, 610, 64 )
+
+[sub_resource type="StyleBoxTexture" id=49]
+texture = ExtResource( 123 )
+region_rect = Rect2( 0, 0, 604, 60 )
+
+[sub_resource type="StyleBoxTexture" id=50]
+texture = ExtResource( 124 )
+region_rect = Rect2( 0, 0, 604, 60 )
+
+[sub_resource type="StyleBoxTexture" id=51]
+texture = ExtResource( 125 )
 region_rect = Rect2( 0, 0, 1235, 212 )
 
 [sub_resource type="StyleBoxTexture" id=52]
-texture = ExtResource( 123 )
+texture = ExtResource( 126 )
 region_rect = Rect2( 0, 0, 1235, 822 )
 
 [sub_resource type="DynamicFont" id=53]
 size = 17
 use_filter = true
 extra_spacing_top = 3
-font_data = ExtResource( 58 )
+font_data = ExtResource( 62 )
 
 [sub_resource type="StyleBoxTexture" id=54]
-texture = ExtResource( 125 )
+texture = ExtResource( 128 )
 region_rect = Rect2( 0, 0, 500, 500 )
 margin_left = 8.0
 margin_right = 8.0
@@ -405,7 +408,7 @@ flags = 4
 load_path = "res://.import/2.png-4cf966d13a2c7ebfca9f08501bafd5bd.stex"
 
 [sub_resource type="StyleBoxTexture" id=60]
-texture = ExtResource( 129 )
+texture = ExtResource( 132 )
 region_rect = Rect2( 0, 0, 500, 500 )
 margin_left = 10.0
 margin_right = 10.0
@@ -413,7 +416,7 @@ margin_top = 10.0
 margin_bottom = 10.0
 
 [sub_resource type="StyleBoxTexture" id=61]
-texture = ExtResource( 115 )
+texture = ExtResource( 118 )
 region_rect = Rect2( 0, 0, 60, 60 )
 margin_left = 20.0
 margin_right = 20.0
@@ -431,7 +434,7 @@ margin_bottom = 20.0
 [sub_resource type="StyleBoxTexture" id=66]
 
 [sub_resource type="StyleBoxTexture" id=67]
-texture = ExtResource( 48 )
+texture = ExtResource( 52 )
 region_rect = Rect2( 0, 0, 500, 500 )
 margin_left = 10.0
 margin_right = 10.0
@@ -439,15 +442,15 @@ margin_top = 10.0
 margin_bottom = 10.0
 
 [sub_resource type="StyleBoxTexture" id=68]
-texture = ExtResource( 48 )
+texture = ExtResource( 52 )
 region_rect = Rect2( 0, 0, 500, 500 )
 
 [sub_resource type="StyleBoxTexture" id=69]
-texture = ExtResource( 48 )
+texture = ExtResource( 52 )
 region_rect = Rect2( 0, 0, 500, 500 )
 
 [sub_resource type="StyleBoxTexture" id=70]
-texture = ExtResource( 115 )
+texture = ExtResource( 118 )
 region_rect = Rect2( 0, 0, 60, 60 )
 margin_left = 10.0
 margin_right = 10.0
@@ -727,6 +730,7 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Menu"
 
 [node name="Navigation" type="TextureRect" parent="."]
+editor/display_folded = true
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -1101,6 +1105,7 @@ custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 text = "Z"
 
 [node name="charlistcontrol" type="Control" parent="."]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -1470,7 +1475,660 @@ size_flags_vertical = 2
 theme = ExtResource( 3 )
 text = "Mansion Upgrades"
 
+[node name="AE_Headgirl_TextRect" type="TextureRect" parent="MainScreen/mansion"]
+visible = false
+margin_left = 751.0
+margin_top = 3.0
+margin_right = 926.0
+margin_bottom = 178.0
+texture = ExtResource( 46 )
+expand = true
+stretch_mode = 1
+
+[node name="portrait" type="TextureRect" parent="MainScreen/mansion/AE_Headgirl_TextRect"]
+show_behind_parent = true
+margin_right = 175.0
+margin_bottom = 175.0
+expand = true
+stretch_mode = 6
+
+[node name="AE_DimCrystal" type="TextureButton" parent="MainScreen/mansion"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -189.0
+margin_top = -423.0
+margin_right = -14.0
+margin_bottom = -223.0
+hint_tooltip = "Alchemy Room"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 47 )
+texture_pressed = ExtResource( 47 )
+texture_hover = ExtResource( 47 )
+texture_disabled = ExtResource( 47 )
+texture_focused = ExtResource( 47 )
+expand = true
+
+[node name="Label" type="Label" parent="MainScreen/mansion/AE_DimCrystal"]
+margin_left = 2.0
+margin_top = 175.0
+margin_right = 171.0
+margin_bottom = 195.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_colors/font_color = Color( 0.761719, 0.660181, 0.261841, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "Dimensional Crystal"
+
+[node name="dimcrystalpanel" type="Panel" parent="MainScreen/mansion"]
+editor/display_folded = true
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 1.0
+margin_bottom = 1.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="background" type="TextureRect" parent="MainScreen/mansion/dimcrystalpanel"]
+show_behind_parent = true
+margin_top = -2.05338
+margin_right = 940.0
+margin_bottom = 617.947
+texture = ExtResource( 48 )
+expand = true
+stretch_mode = 1
+
+[node name="label" type="RichTextLabel" parent="MainScreen/mansion/dimcrystalpanel"]
+margin_left = 370.0
+margin_top = 20.0
+margin_right = 579.0
+margin_bottom = 50.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/normal_font = ExtResource( 45 )
+bbcode_enabled = true
+bbcode_text = "[color=#d1b970]The Dimensional Crystal[/color]"
+text = "The Dimensional Crystal"
+scroll_active = false
+
+[node name="scroll_text" type="RichTextLabel" parent="MainScreen/mansion/dimcrystalpanel"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -918.0
+margin_top = 60.0
+margin_right = -723.0
+margin_bottom = 220.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/normal_font = ExtResource( 45 )
+bbcode_enabled = true
+bbcode_text = "[color=#d1b970]Upgrade Level[/color]      #
+[color=#008BFB]Research %[/color]            #
+[color=#65CD72]Lifeforce[/color]                 #
+[color=#AE0000]Hunger[/color]                    #
+
+[center][color=#d1b970]Status[/color][/center]
+[center][color=#1CB4B0]Light[/color][/center]"
+text = "Upgrade Level      #
+Research %            #
+Lifeforce                 #
+Hunger                    #
+
+Status
+Light"
+
+[node name="stats_scroll" type="TextureRect" parent="MainScreen/mansion/dimcrystalpanel"]
+show_behind_parent = true
+margin_top = -5.0
+margin_right = 250.0
+margin_bottom = 270.0
+texture = ExtResource( 49 )
+expand = true
+stretch_mode = 1
+
+[node name="description" type="RichTextLabel" parent="MainScreen/mansion/dimcrystalpanel"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -680.0
+margin_top = 40.0
+margin_right = -260.0
+margin_bottom = 469.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/normal_font = ExtResource( 45 )
+bbcode_enabled = true
+
+[node name="closepanel" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -560.0
+margin_top = -60.0
+margin_right = -375.0
+margin_bottom = -10.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Leave the Crystal"
+
+[node name="research_text" type="RichTextLabel" parent="MainScreen/mansion/dimcrystalpanel"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -926.027
+margin_top = 254.487
+margin_right = -686.027
+margin_bottom = 514.487
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/normal_font = ExtResource( 45 )
+bbcode_enabled = true
+bbcode_text = "Research Panel"
+text = "Research Panel"
+
+[node name="research_explanation" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -925.0
+margin_top = -100.0
+margin_right = -735.0
+margin_bottom = -55.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Explain Researching"
+
+[node name="assistresearch" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -925.0
+margin_top = -55.0
+margin_right = -685.0
+margin_bottom = -10.0
+hint_tooltip = "Spend 1 Non-Sex Interaction to set the Researcher's Total Wits as today's Research Chance"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Assist Researcher (1/Interaction)"
+
+[node name="description_button" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -540.0
+margin_top = -100.0
+margin_right = -390.0
+margin_bottom = -60.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Description"
+
+[node name="abilities_text" type="RichTextLabel" parent="MainScreen/mansion/dimcrystalpanel"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -255.0
+margin_top = 15.0
+margin_right = -15.0
+margin_bottom = 95.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/normal_font = ExtResource( 45 )
+bbcode_enabled = true
+bbcode_text = "[center]Abilities[/center]
+
+Temp (pending Toggles)"
+text = "Abilities
+
+Temp (pending Toggles)"
+
+[node name="ability_attune" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -235.0
+margin_top = -530.0
+margin_right = -15.0
+margin_bottom = -490.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Explain Attunement"
+
+[node name="ability_pregspeed" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -235.0
+margin_top = -490.0
+margin_right = -15.0
+margin_bottom = -450.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Alter Pregnancy Speed"
+
+[node name="ability_pregspeed_enable" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -560.487
+margin_top = -151.888
+margin_right = -366.487
+margin_bottom = -101.888
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Alter Pregnancy Speed"
+
+[node name="ability_empowervirginity" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -247.0
+margin_top = -450.0
+margin_right = -15.0
+margin_bottom = -410.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Combat: Empower Virginity"
+
+[node name="ability_empowervirginityenable" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -559.487
+margin_top = -151.888
+margin_right = -374.487
+margin_bottom = -101.888
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Empower Virginity"
+
+[node name="ability_empowervirginitydisable" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -559.487
+margin_top = -151.888
+margin_right = -374.487
+margin_bottom = -101.888
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Standard Mana Check"
+
+[node name="ability_secondwind" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -235.0
+margin_top = -410.0
+margin_right = -15.0
+margin_bottom = -370.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Combat: Second Wind"
+
+[node name="ability_immortality" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -235.0
+margin_top = -370.0
+margin_right = -15.0
+margin_bottom = -330.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Master Immortality"
+
+[node name="ability_immortality_enable" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -559.487
+margin_top = -151.888
+margin_right = -374.487
+margin_bottom = -101.888
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Enable Immortality"
+
+[node name="ability_immortality_disable" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -559.487
+margin_top = -151.888
+margin_right = -374.487
+margin_bottom = -101.888
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Disable Immortality"
+
+[node name="ability_understandsacrifice" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -235.0
+margin_top = -90.0
+margin_right = -15.0
+margin_bottom = -50.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Understand Sacrifice"
+
+[node name="ability_choosesacrifice" type="Button" parent="MainScreen/mansion/dimcrystalpanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -235.0
+margin_top = -50.0
+margin_right = -15.0
+margin_bottom = -10.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Choose Sacrifice"
+
+[node name="pregspeed_panel" type="Panel" parent="MainScreen/mansion/dimcrystalpanel"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 1.0
+margin_bottom = 1.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="background" type="TextureRect" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+show_behind_parent = true
+margin_top = -0.663503
+margin_right = 940.0
+margin_bottom = 619.337
+texture = ExtResource( 48 )
+expand = true
+stretch_mode = 1
+
+[node name="panel_label" type="RichTextLabel" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+margin_left = 340.0
+margin_top = 20.0
+margin_right = 599.0
+margin_bottom = 50.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/normal_font = ExtResource( 45 )
+bbcode_enabled = true
+bbcode_text = "[center][color=#d1b970]Pregnancy Speed Change[/color][/center]"
+text = "Pregnancy Speed Change"
+scroll_active = false
+
+[node name="displaytext" type="RichTextLabel" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -680.0
+margin_top = 39.0734
+margin_right = -260.0
+margin_bottom = 468.073
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/normal_font = ExtResource( 45 )
+bbcode_enabled = true
+
+[node name="closepanel" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -601.0
+margin_top = -61.0
+margin_right = -338.0
+margin_bottom = -11.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Stop Altering Pregnancy Speed"
+
+[node name="pregspeed_change_text" type="RichTextLabel" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -255.0
+margin_top = 15.0
+margin_right = -15.0
+margin_bottom = 65.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/normal_font = ExtResource( 45 )
+bbcode_enabled = true
+bbcode_text = "
+[center][color=#d1b970]Alter Speed of Pregnancies[/color][/center]"
+text = "
+Alter Speed of Pregnancies"
+
+[node name="speed_1" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -551.0
+margin_right = -16.0
+margin_bottom = -511.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Instant (1 Day)"
+
+[node name="speed_3" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -511.0
+margin_right = -16.0
+margin_bottom = -471.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Almost Instant (3 Days)"
+
+[node name="speed_5" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -471.0
+margin_right = -16.0
+margin_bottom = -431.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Rapid (5 Days)"
+
+[node name="speed_7" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -431.0
+margin_right = -16.0
+margin_bottom = -391.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Weekly (7 Days)"
+
+[node name="speed_10" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -391.0
+margin_right = -16.0
+margin_bottom = -351.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Almost Weekly (10 Days)"
+
+[node name="speed_14" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -242.0
+margin_top = -351.0
+margin_right = -12.0
+margin_bottom = -311.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Default - BiWeekly (14 Days)"
+
+[node name="speed_21" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -311.0
+margin_right = -16.0
+margin_bottom = -271.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Tri-Weekly (21 Days)"
+
+[node name="speed_30" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -271.0
+margin_right = -16.0
+margin_bottom = -231.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Monthly (30 Days)"
+
+[node name="speed_45" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -231.0
+margin_right = -16.0
+margin_bottom = -191.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "15 per Trimester (45 Days)"
+
+[node name="speed_60" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -191.0
+margin_right = -16.0
+margin_bottom = -151.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Bi-Monthly (60 Days)"
+
+[node name="speed_90" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -151.0
+margin_right = -16.0
+margin_bottom = -111.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Tri-Monthly (90 Days)"
+
+[node name="speed_180" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -111.0
+margin_right = -16.0
+margin_bottom = -71.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Half Realistic (180 Days)"
+
+[node name="speed_270" type="Button" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -236.0
+margin_top = -71.0
+margin_right = -16.0
+margin_bottom = -31.0
+rect_pivot_offset = Vector2( -37, 33 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Realistic (270 Days)"
+
+[node name="imagepanel" type="Panel" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel"]
+visible = false
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -921.0
+margin_top = 56.0
+margin_right = -681.0
+margin_bottom = -195.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="image" type="TextureRect" parent="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/imagepanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 14.0
+margin_top = 12.0
+margin_right = -14.0
+margin_bottom = -12.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 50 )
+expand = true
+stretch_mode = 6
+
 [node name="jailpanel" type="Panel" parent="MainScreen/mansion"]
+editor/display_folded = true
 visible = false
 self_modulate = Color( 1, 1, 1, 0.110471 )
 anchor_right = 1.0
@@ -1479,7 +2137,7 @@ margin_top = 1.0
 margin_right = -1.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="jailtext" type="RichTextLabel" parent="MainScreen/mansion/jailpanel"]
 margin_left = 175.0
@@ -1504,7 +2162,7 @@ margin_left = 30.0
 margin_top = 5.0
 margin_right = 155.0
 margin_bottom = 130.0
-texture = ExtResource( 47 )
+texture = ExtResource( 46 )
 expand = true
 
 [node name="portrait" type="TextureRect" parent="MainScreen/mansion/jailpanel/TextureRect"]
@@ -1663,7 +2321,7 @@ margin_right = 418.0
 margin_bottom = 330.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="Control" type="Control" parent="MainScreen/mansion/jailpanel/jailsettings/jailsettingspanel"]
 margin_left = -249.0
@@ -1727,7 +2385,7 @@ margin_right = -3.0
 margin_bottom = -4.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="alchemytext" type="RichTextLabel" parent="MainScreen/mansion/alchemypanel"]
 anchor_right = 1.0
@@ -1842,7 +2500,7 @@ margin_right = 28.0
 margin_bottom = 26.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 49 )
+texture = ExtResource( 53 )
 expand = true
 
 [node name="Label" type="Label" parent="MainScreen/mansion/alchemypanel"]
@@ -1963,11 +2621,12 @@ margin_right = 211.0
 margin_bottom = 211.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 49 )
+texture = ExtResource( 53 )
 expand = true
 stretch_mode = 6
 
 [node name="selfinspect" type="Panel" parent="MainScreen/mansion"]
+editor/display_folded = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -1985,7 +2644,7 @@ margin_right = 940.0
 margin_bottom = 173.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 51 )
+texture = ExtResource( 55 )
 expand = true
 stretch_mode = 5
 
@@ -2246,8 +2905,8 @@ margin_bottom = 119.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 value = 59.0
-texture_under = ExtResource( 54 )
-texture_progress = ExtResource( 55 )
+texture_under = ExtResource( 58 )
+texture_progress = ExtResource( 59 )
 
 [node name="en" type="TextureProgress" parent="MainScreen/mansion/selfinspect/statspanel"]
 margin_left = 162.0
@@ -2257,8 +2916,8 @@ margin_bottom = 135.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 value = 59.0
-texture_under = ExtResource( 54 )
-texture_progress = ExtResource( 56 )
+texture_under = ExtResource( 58 )
+texture_progress = ExtResource( 60 )
 
 [node name="xp" type="TextureProgress" parent="MainScreen/mansion/selfinspect/statspanel"]
 margin_left = 162.0
@@ -2268,15 +2927,15 @@ margin_bottom = 151.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 value = 59.0
-texture_under = ExtResource( 54 )
-texture_progress = ExtResource( 57 )
+texture_under = ExtResource( 58 )
+texture_progress = ExtResource( 61 )
 
 [node name="TextureRect" type="TextureRect" parent="MainScreen/mansion/selfinspect/statspanel"]
 margin_left = 14.0
 margin_top = 13.0
 margin_right = 154.0
 margin_bottom = 153.0
-texture = ExtResource( 47 )
+texture = ExtResource( 46 )
 expand = true
 
 [node name="portrait" type="TextureRect" parent="MainScreen/mansion/selfinspect/statspanel/TextureRect"]
@@ -2619,6 +3278,7 @@ hint_tooltip = "Prevents pregnancy and impregnation"
 text = "Contraceptives"
 
 [node name="labpanel" type="Panel" parent="MainScreen/mansion"]
+editor/display_folded = true
 visible = false
 self_modulate = Color( 1, 1, 1, 0.209961 )
 anchor_right = 1.0
@@ -2627,8 +3287,8 @@ margin_left = 5.0
 margin_top = -2.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
-script = ExtResource( 59 )
+custom_styles/panel = ExtResource( 51 )
+script = ExtResource( 63 )
 
 [node name="labinfo" type="RichTextLabel" parent="MainScreen/mansion/labpanel"]
 anchor_right = 1.0
@@ -2680,7 +3340,7 @@ margin_right = 277.0
 margin_bottom = -3.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="modificationtext" type="RichTextLabel" parent="MainScreen/mansion/labpanel/labmodpanel"]
 margin_left = 530.0
@@ -2905,6 +3565,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "Modification types"
 
 [node name="librarypanel" type="Panel" parent="MainScreen/mansion"]
+editor/display_folded = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -2962,7 +3623,7 @@ margin_right = 321.0
 margin_bottom = 40.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 60 )
+texture = ExtResource( 64 )
 expand = true
 stretch_mode = 6
 
@@ -3020,22 +3681,23 @@ margin_right = -34.0
 margin_bottom = -57.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture_normal = ExtResource( 63 )
+texture_normal = ExtResource( 67 )
 
 [node name="farmpanel" type="Panel" parent="MainScreen/mansion"]
+editor/display_folded = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="TextureFarmBack" type="TextureRect" parent="MainScreen/mansion/farmpanel"]
 margin_left = 10.0
 margin_top = 49.0
 margin_right = 930.0
 margin_bottom = 585.0
-texture = ExtResource( 64 )
+texture = ExtResource( 68 )
 expand = true
 
 [node name="farminfo_panel" type="Panel" parent="MainScreen/mansion/farmpanel"]
@@ -3078,10 +3740,10 @@ margin_bottom = -34.0
 hint_tooltip = "Open the Vats Panel. You will need Vats to store excess Milk/Piss/Cum to be able to Bottle, Refine, or Sell it."
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture_normal = ExtResource( 65 )
-texture_pressed = ExtResource( 65 )
-texture_hover = ExtResource( 65 )
-texture_disabled = ExtResource( 66 )
+texture_normal = ExtResource( 69 )
+texture_pressed = ExtResource( 69 )
+texture_hover = ExtResource( 69 )
+texture_disabled = ExtResource( 70 )
 expand = true
 
 [node name="Label" type="Label" parent="MainScreen/mansion/farmpanel/vatsbutton"]
@@ -3117,10 +3779,10 @@ margin_bottom = -34.0
 hint_tooltip = "Manage any Snails you've caught, breed them, sell them, or cook them."
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture_normal = ExtResource( 67 )
-texture_pressed = ExtResource( 67 )
-texture_hover = ExtResource( 67 )
-texture_disabled = ExtResource( 68 )
+texture_normal = ExtResource( 71 )
+texture_pressed = ExtResource( 71 )
+texture_hover = ExtResource( 71 )
+texture_disabled = ExtResource( 72 )
 expand = true
 
 [node name="Label" type="Label" parent="MainScreen/mansion/farmpanel/snailsbutton"]
@@ -3156,10 +3818,10 @@ margin_bottom = -34.0
 hint_tooltip = "See who all is working in the farm currently."
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture_normal = ExtResource( 69 )
-texture_pressed = ExtResource( 69 )
-texture_hover = ExtResource( 69 )
-texture_disabled = ExtResource( 70 )
+texture_normal = ExtResource( 73 )
+texture_pressed = ExtResource( 73 )
+texture_hover = ExtResource( 73 )
+texture_disabled = ExtResource( 74 )
 expand = true
 
 [node name="Label" type="Label" parent="MainScreen/mansion/farmpanel/workersbutton"]
@@ -3195,10 +3857,10 @@ margin_bottom = -34.0
 hint_tooltip = "Buy Farm Equipment or Upgrade Incubators to Hatch Snail Eggs"
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture_normal = ExtResource( 71 )
-texture_pressed = ExtResource( 71 )
-texture_hover = ExtResource( 71 )
-texture_disabled = ExtResource( 72 )
+texture_normal = ExtResource( 75 )
+texture_pressed = ExtResource( 75 )
+texture_hover = ExtResource( 75 )
+texture_disabled = ExtResource( 76 )
 expand = true
 
 [node name="Label" type="Label" parent="MainScreen/mansion/farmpanel/storebutton"]
@@ -3301,7 +3963,7 @@ margin_top = -565.0
 margin_right = 6.10352e-005
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="addcowforce" type="Button" parent="MainScreen/mansion/farmpanel/slavetofarm"]
 margin_left = 20.0
@@ -3340,7 +4002,7 @@ margin_right = 320.0
 margin_bottom = 300.0
 rect_min_size = Vector2( 180, 180 )
 mouse_filter = 2
-texture = ExtResource( 73 )
+texture = ExtResource( 77 )
 expand = true
 stretch_mode = 6
 
@@ -3372,14 +4034,14 @@ margin_right = 929.0
 margin_bottom = 609.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="TextureBackground" type="TextureRect" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
 margin_left = -4.0
 margin_top = -9.0
 margin_right = 923.0
 margin_bottom = 550.0
-texture = ExtResource( 74 )
+texture = ExtResource( 78 )
 expand = true
 
 [node name="TextureRectBorder" type="TextureRect" parent="MainScreen/mansion/farmpanel/slavefarminspect"]
@@ -3414,7 +4076,7 @@ margin_bottom = -12.0
 mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 75 )
+texture = ExtResource( 50 )
 expand = true
 stretch_mode = 6
 
@@ -3750,14 +4412,14 @@ margin_right = -9.99994
 margin_bottom = -10.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="TextureBackground" type="TextureRect" parent="MainScreen/mansion/farmpanel/vatspanel"]
 margin_left = -4.0
 margin_top = -9.0
 margin_right = 923.0
 margin_bottom = 550.0
-texture = ExtResource( 76 )
+texture = ExtResource( 79 )
 expand = true
 
 [node name="TextureRectBorder" type="TextureRect" parent="MainScreen/mansion/farmpanel/vatspanel"]
@@ -3960,7 +4622,7 @@ margin_right = -39.0
 margin_bottom = -70.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="TextureRectBackground" type="TextureRect" parent="MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel"]
 margin_right = 840.0
@@ -4239,7 +4901,7 @@ margin_top = -565.0
 margin_right = 6.10352e-005
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="textbody" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/workerspanel"]
 margin_left = 30.0
@@ -4273,14 +4935,14 @@ margin_right = -9.99994
 margin_bottom = -10.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="TextureBackground" type="TextureRect" parent="MainScreen/mansion/farmpanel/snailpanel"]
 margin_left = -4.0
 margin_top = -9.0
 margin_right = 923.0
 margin_bottom = 550.0
-texture = ExtResource( 77 )
+texture = ExtResource( 80 )
 expand = true
 
 [node name="TextureRectBorder" type="TextureRect" parent="MainScreen/mansion/farmpanel/snailpanel"]
@@ -4520,14 +5182,14 @@ margin_right = -9.99994
 margin_bottom = -10.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="TextureFarm" type="TextureRect" parent="MainScreen/mansion/farmpanel/storepanel"]
 margin_left = -4.0
 margin_top = -9.0
 margin_right = 923.0
 margin_bottom = 550.0
-texture = ExtResource( 78 )
+texture = ExtResource( 81 )
 expand = true
 
 [node name="TextureRectBorder" type="TextureRect" parent="MainScreen/mansion/farmpanel/storepanel"]
@@ -5325,7 +5987,7 @@ margin_right = -5.0
 margin_bottom = -10.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="TextureRectBackground" type="TextureRect" parent="MainScreen/mansion/farmpanel/storepanel/incubatorspanel"]
 margin_left = 1.0
@@ -5945,7 +6607,7 @@ margin_right = 1.0
 margin_bottom = -35.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="farmhelptext" type="RichTextLabel" parent="MainScreen/mansion/farmpanel/farmhelppanel"]
 margin_left = 20.395
@@ -6006,6 +6668,7 @@ text = "The Farm"
 align = 1
 
 [node name="portalspanel" type="Popup" parent="MainScreen/mansion"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -6084,7 +6747,7 @@ margin_left = 424.0
 margin_top = 51.0
 margin_right = 726.0
 margin_bottom = 254.0
-texture = ExtResource( 79 )
+texture = ExtResource( 82 )
 expand = true
 
 [node name="namelocation" type="Label" parent="MainScreen/mansion/portalspanel/imagelocation"]
@@ -6122,12 +6785,13 @@ texture = SubResource( 22 )
 expand = true
 
 [node name="upgradespanel" type="Panel" parent="MainScreen/mansion"]
+editor/display_folded = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-script = ExtResource( 80 )
+script = ExtResource( 83 )
 
 [node name="categories" type="ScrollContainer" parent="MainScreen/mansion/upgradespanel"]
 anchor_right = 1.0
@@ -6304,7 +6968,7 @@ mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-script = ExtResource( 81 )
+script = ExtResource( 84 )
 
 [node name="stats" type="Panel" parent="MainScreen/slave_tab"]
 anchor_right = 1.0
@@ -6316,16 +6980,17 @@ margin_bottom = 12.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/panel = SubResource( 23 )
-script = ExtResource( 82 )
+script = ExtResource( 85 )
 
 [node name="statspanel" type="TextureRect" parent="MainScreen/slave_tab/stats"]
+editor/display_folded = true
 margin_left = 4.0
 margin_top = 5.0
 margin_right = 943.0
 margin_bottom = 174.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 51 )
+texture = ExtResource( 55 )
 expand = true
 stretch_mode = 5
 
@@ -6770,8 +7435,8 @@ margin_bottom = 119.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 value = 59.0
-texture_under = ExtResource( 54 )
-texture_progress = ExtResource( 55 )
+texture_under = ExtResource( 58 )
+texture_progress = ExtResource( 59 )
 
 [node name="en" type="TextureProgress" parent="MainScreen/slave_tab/stats/statspanel"]
 margin_left = 162.0
@@ -6781,8 +7446,8 @@ margin_bottom = 135.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 value = 59.0
-texture_under = ExtResource( 54 )
-texture_progress = ExtResource( 56 )
+texture_under = ExtResource( 58 )
+texture_progress = ExtResource( 60 )
 
 [node name="xp" type="TextureProgress" parent="MainScreen/slave_tab/stats/statspanel"]
 margin_left = 162.0
@@ -6792,15 +7457,15 @@ margin_bottom = 151.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 value = 59.0
-texture_under = ExtResource( 54 )
-texture_progress = ExtResource( 57 )
+texture_under = ExtResource( 58 )
+texture_progress = ExtResource( 61 )
 
 [node name="TextureRect" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
 margin_left = 14.0
 margin_top = 13.0
 margin_right = 154.0
 margin_bottom = 153.0
-texture = ExtResource( 47 )
+texture = ExtResource( 46 )
 expand = true
 
 [node name="portrait" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel/TextureRect"]
@@ -6816,7 +7481,7 @@ margin_left = 14.0
 margin_top = 13.0
 margin_right = 154.0
 margin_bottom = 153.0
-texture = ExtResource( 83 )
+texture = ExtResource( 86 )
 expand = true
 
 [node name="info" type="RichTextLabel" parent="MainScreen/slave_tab/stats/statspanel"]
@@ -6834,7 +7499,7 @@ margin_left = 305.0
 margin_top = 14.0
 margin_right = 345.0
 margin_bottom = 54.0
-texture = ExtResource( 84 )
+texture = ExtResource( 87 )
 expand = true
 stretch_mode = 6
 
@@ -6849,7 +7514,7 @@ expand = true
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
-texture = ExtResource( 47 )
+texture = ExtResource( 46 )
 expand = true
 
 [node name="movement" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
@@ -6863,7 +7528,7 @@ expand = true
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
-texture = ExtResource( 47 )
+texture = ExtResource( 46 )
 expand = true
 
 [node name="sexuality_base" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
@@ -6877,7 +7542,7 @@ expand = true
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
-texture = ExtResource( 47 )
+texture = ExtResource( 46 )
 expand = true
 
 [node name="sexuality_male" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
@@ -6891,7 +7556,7 @@ expand = true
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
-texture = ExtResource( 47 )
+texture = ExtResource( 46 )
 expand = true
 
 [node name="sexuality_female" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
@@ -6905,7 +7570,7 @@ expand = true
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
-texture = ExtResource( 47 )
+texture = ExtResource( 46 )
 expand = true
 
 [node name="sexuality_futa" type="TextureRect" parent="MainScreen/slave_tab/stats/statspanel"]
@@ -6919,7 +7584,7 @@ expand = true
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
-texture = ExtResource( 47 )
+texture = ExtResource( 46 )
 expand = true
 
 [node name="attribute" type="Label" parent="MainScreen/slave_tab/stats/statspanel"]
@@ -7071,6 +7736,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "Talk"
 
 [node name="trainingabilspanel" type="Popup" parent="MainScreen/slave_tab/stats"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -7207,7 +7873,7 @@ margin_left = -75.0
 margin_top = -11.0
 margin_right = -35.0
 margin_bottom = 29.0
-texture = ExtResource( 85 )
+texture = ExtResource( 88 )
 expand = true
 
 [node name="conf" type="Label" parent="MainScreen/slave_tab/stats/trainingabilspanel"]
@@ -7237,7 +7903,7 @@ margin_left = -75.0
 margin_top = -11.0
 margin_right = -35.0
 margin_bottom = 29.0
-texture = ExtResource( 86 )
+texture = ExtResource( 89 )
 expand = true
 
 [node name="wit" type="Label" parent="MainScreen/slave_tab/stats/trainingabilspanel"]
@@ -7267,7 +7933,7 @@ margin_left = -75.0
 margin_top = -11.0
 margin_right = -35.0
 margin_bottom = 29.0
-texture = ExtResource( 87 )
+texture = ExtResource( 90 )
 expand = true
 
 [node name="charm" type="Label" parent="MainScreen/slave_tab/stats/trainingabilspanel"]
@@ -7297,7 +7963,7 @@ margin_left = -75.0
 margin_top = -11.0
 margin_right = -35.0
 margin_bottom = 29.0
-texture = ExtResource( 88 )
+texture = ExtResource( 91 )
 expand = true
 
 [node name="learncost" type="Label" parent="MainScreen/slave_tab/stats/trainingabilspanel"]
@@ -7325,6 +7991,7 @@ hint_tooltip = "Spend Attribute points for mansion Upgrade points"
 text = "+1"
 
 [node name="selectspellpanel" type="Popup" parent="MainScreen/slave_tab/stats"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -7343,6 +8010,7 @@ texture = ExtResource( 44 )
 expand = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MainScreen/slave_tab/stats/selectspellpanel"]
+editor/display_folded = true
 margin_left = 17.0
 margin_top = 15.0
 margin_right = 242.0
@@ -7395,98 +8063,6 @@ margin_right = 529.0
 margin_bottom = 320.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-
-[node name="callorder" type="Popup" parent="MainScreen/slave_tab/stats"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -359.0
-margin_top = -398.0
-margin_right = -52.0
-margin_bottom = -272.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-
-[node name="TextureRect" type="TextureRect" parent="MainScreen/slave_tab/stats/callorder"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-texture = ExtResource( 44 )
-expand = true
-
-[node name="Label" type="Label" parent="MainScreen/slave_tab/stats/callorder"]
-margin_left = 33.0
-margin_top = 16.0
-margin_right = 283.0
-margin_bottom = 32.0
-size_flags_horizontal = 2
-size_flags_vertical = 0
-text = "How $name should call you?"
-align = 1
-
-[node name="callconfirm" type="Button" parent="MainScreen/slave_tab/stats/callorder"]
-margin_left = 75.0
-margin_top = 76.0
-margin_right = 234.0
-margin_bottom = 115.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-text = "Confirm"
-
-[node name="LineEdit" type="LineEdit" parent="MainScreen/slave_tab/stats/callorder"]
-margin_left = 50.0
-margin_top = 42.0
-margin_right = 261.0
-margin_bottom = 72.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-caret_blink = true
-
-[node name="slaverename" type="Popup" parent="MainScreen/slave_tab/stats"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -359.0
-margin_top = -398.0
-margin_right = -52.0
-margin_bottom = -272.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-
-[node name="TextureRect" type="TextureRect" parent="MainScreen/slave_tab/stats/slaverename"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-texture = ExtResource( 44 )
-expand = true
-
-[node name="Label" type="Label" parent="MainScreen/slave_tab/stats/slaverename"]
-margin_left = 33.0
-margin_top = 16.0
-margin_right = 283.0
-margin_bottom = 32.0
-size_flags_horizontal = 2
-size_flags_vertical = 0
-text = "What is their new name?"
-align = 1
-
-[node name="slaverename" type="Button" parent="MainScreen/slave_tab/stats/slaverename"]
-margin_left = 75.0
-margin_top = 76.0
-margin_right = 234.0
-margin_bottom = 115.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-text = "Confirm"
-
-[node name="LineEdit" type="LineEdit" parent="MainScreen/slave_tab/stats/slaverename"]
-margin_left = 50.0
-margin_top = 42.0
-margin_right = 261.0
-margin_bottom = 72.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-caret_blink = true
 
 [node name="statustext" type="RichTextLabel" parent="MainScreen/slave_tab/stats"]
 anchor_top = 1.0
@@ -7620,9 +8196,9 @@ bbcode_enabled = true
 [node name="slavedescript" type="RichTextLabel" parent="MainScreen/slave_tab/stats/basics"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 22.0
+margin_left = 23.1376
 margin_top = 15.0
-margin_right = -19.0
+margin_right = -17.8624
 margin_bottom = -172.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -7651,7 +8227,7 @@ margin_bottom = -12.0
 mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 75 )
+texture = ExtResource( 50 )
 expand = true
 stretch_mode = 6
 
@@ -7666,7 +8242,7 @@ margin_bottom = -54.0
 mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 89 )
+texture = ExtResource( 92 )
 expand = true
 stretch_mode = 6
 
@@ -7685,6 +8261,7 @@ hint_tooltip = "Show full body image if available"
 text = "Show Full Body"
 
 [node name="customization" type="Panel" parent="MainScreen/slave_tab/stats"]
+editor/display_folded = true
 visible = false
 margin_left = 190.0
 margin_top = 169.0
@@ -7792,8 +8369,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Aphrodisiac in food"
 
 [node name="silence" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"advrules",
 "slaverules",
+"advrules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -7811,8 +8388,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Enforced Silence"
 
 [node name="pet" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"advrules",
 "slaverules",
+"advrules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -7830,8 +8407,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "Pet Behavior"
 
 [node name="masturbation" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"advrules",
 "slaverules",
+"advrules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -7850,8 +8427,8 @@ custom_colors/font_color_pressed = Color( 0.0921321, 0.644531, 0.0453186, 1 )
 text = "No Masturbation"
 
 [node name="nudity" type="CheckBox" parent="MainScreen/slave_tab/stats/customization/rules" groups=[
-"advrules",
 "slaverules",
+"advrules",
 ]]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -8568,6 +9145,7 @@ bbcode_text = "ahdh [url=1]kahhd[/url]"
 text = "ahdh kahhd"
 
 [node name="statisticpanel" type="Panel" parent="MainScreen/slave_tab/stats"]
+editor/display_folded = true
 visible = false
 anchor_left = 1.0
 anchor_top = 1.0
@@ -8579,7 +9157,7 @@ margin_right = -4.0
 margin_bottom = -4.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 93 )
+custom_styles/panel = ExtResource( 96 )
 
 [node name="statstext" type="RichTextLabel" parent="MainScreen/slave_tab/stats/statisticpanel"]
 margin_left = 40.0
@@ -8631,13 +9209,107 @@ margin_bottom = 45.0
 text = "Relations"
 align = 1
 
+[node name="callorder" type="Popup" parent="MainScreen/slave_tab/stats"]
+editor/display_folded = true
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -359.0
+margin_top = -398.0
+margin_right = -52.0
+margin_bottom = -272.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="MainScreen/slave_tab/stats/callorder"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 44 )
+expand = true
+
+[node name="Label" type="Label" parent="MainScreen/slave_tab/stats/callorder"]
+margin_left = 33.0
+margin_top = 16.0
+margin_right = 283.0
+margin_bottom = 32.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "How $name should call you?"
+align = 1
+
+[node name="callconfirm" type="Button" parent="MainScreen/slave_tab/stats/callorder"]
+margin_left = 75.0
+margin_top = 76.0
+margin_right = 234.0
+margin_bottom = 115.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Confirm"
+
+[node name="LineEdit" type="LineEdit" parent="MainScreen/slave_tab/stats/callorder"]
+margin_left = 50.0
+margin_top = 42.0
+margin_right = 261.0
+margin_bottom = 72.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+caret_blink = true
+
+[node name="slaverename" type="Popup" parent="MainScreen/slave_tab/stats"]
+editor/display_folded = true
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -595.0
+margin_top = -276.0
+margin_right = -288.0
+margin_bottom = -150.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="MainScreen/slave_tab/stats/slaverename"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 44 )
+expand = true
+
+[node name="Label" type="Label" parent="MainScreen/slave_tab/stats/slaverename"]
+margin_left = 33.0
+margin_top = 16.0
+margin_right = 283.0
+margin_bottom = 32.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "What is their new name?"
+align = 1
+
+[node name="slaverename" type="Button" parent="MainScreen/slave_tab/stats/slaverename"]
+margin_left = 75.0
+margin_top = 76.0
+margin_right = 234.0
+margin_bottom = 115.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Confirm"
+
+[node name="LineEdit" type="LineEdit" parent="MainScreen/slave_tab/stats/slaverename"]
+margin_left = 50.0
+margin_top = 42.0
+margin_right = 261.0
+margin_bottom = 72.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+caret_blink = true
+
 [node name="TextureRect" type="TextureRect" parent="MainScreen/slave_tab"]
 margin_left = 189.0
 margin_top = 170.0
 margin_right = 940.0
 margin_bottom = 619.0
 mouse_filter = 2
-texture = ExtResource( 94 )
+texture = ExtResource( 97 )
 expand = true
 __meta__ = {
 "_edit_lock_": true
@@ -8670,7 +9342,7 @@ theme = ExtResource( 3 )
 custom_fonts/font = ExtResource( 45 )
 text = "Hide UI"
 
-[node name="outside" parent="." instance=ExtResource( 95 )]
+[node name="outside" parent="." instance=ExtResource( 98 )]
 visible = false
 margin_left = 2.0
 margin_top = 2.0
@@ -8678,7 +9350,7 @@ margin_right = 8.0
 margin_bottom = 8.0
 mouse_filter = 2
 
-[node name="combat" parent="." instance=ExtResource( 96 )]
+[node name="combat" parent="." instance=ExtResource( 99 )]
 visible = false
 margin_left = -5.0
 margin_top = 8.0
@@ -8686,6 +9358,7 @@ margin_right = 14.0
 margin_bottom = 1.0
 
 [node name="gallery" type="Panel" parent="."]
+editor/display_folded = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -8696,7 +9369,7 @@ margin_bottom = -48.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-script = ExtResource( 97 )
+script = ExtResource( 100 )
 
 [node name="charlist" type="ScrollContainer" parent="gallery"]
 anchor_bottom = 1.0
@@ -8822,6 +9495,7 @@ size_flags_vertical = 2
 bbcode_enabled = true
 
 [node name="FinishDayPanel" type="Panel" parent="."]
+editor/display_folded = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -8962,7 +9636,7 @@ margin_bottom = -183.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="Control" type="Control" parent="birthpanel"]
 anchor_right = 1.0
@@ -9024,7 +9698,7 @@ margin_right = -379.0
 margin_bottom = -28.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-text = "Raise Baby (100G + 25M)"
+text = "Raise Baby (250G + 25M)"
 
 [node name="raisemana" type="Button" parent="birthpanel"]
 anchor_left = 1.0
@@ -9075,7 +9749,7 @@ margin_bottom = -12.0
 mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 75 )
+texture = ExtResource( 50 )
 expand = true
 stretch_mode = 6
 
@@ -9173,6 +9847,7 @@ size_flags_vertical = 2
 text = "Give child your surname"
 
 [node name="questnode" type="Popup" parent="."]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -9308,6 +9983,7 @@ custom_fonts/font = ExtResource( 45 )
 text = "Close"
 
 [node name="spellbooknode" type="Popup" parent="."]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -9331,7 +10007,7 @@ margin_right = -14.0
 margin_bottom = 44.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 99 )
+texture = ExtResource( 102 )
 expand = true
 stretch_mode = 6
 
@@ -9452,26 +10128,27 @@ margin_right = -86.0
 margin_bottom = -101.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture_normal = ExtResource( 63 )
+texture_normal = ExtResource( 67 )
 
-[node name="interactions" parent="." instance=ExtResource( 100 )]
+[node name="interactions" parent="." instance=ExtResource( 103 )]
 visible = false
 margin_left = 1.0
 margin_top = 6.0
 margin_right = -12.0
 margin_bottom = -121.0
 
-[node name="date" parent="." instance=ExtResource( 101 )]
+[node name="date" parent="." instance=ExtResource( 104 )]
 visible = false
 
 [node name="inventory" parent="." groups=[
 "blockmaininput",
-] instance=ExtResource( 102 )]
+] instance=ExtResource( 105 )]
 visible = false
 margin_right = 16.0
 margin_bottom = 16.0
 
 [node name="explorationnode" type="Control" parent="."]
+editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -1074.0
@@ -9480,7 +10157,7 @@ mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-script = ExtResource( 103 )
+script = ExtResource( 106 )
 __meta__ = {
 "_edit_lock_": true
 }
@@ -9540,8 +10217,8 @@ margin_bottom = 50.0
 rect_min_size = Vector2( 50, 50 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
-texture_pressed = ExtResource( 104 )
-texture_hover = ExtResource( 104 )
+texture_pressed = ExtResource( 107 )
+texture_hover = ExtResource( 107 )
 expand = true
 
 [node name="image" type="TextureRect" parent="explorationnode/winningpanel/lootpanel/backpack/VBoxContainer/Button"]
@@ -9550,7 +10227,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 105 )
+texture = ExtResource( 108 )
 expand = true
 
 [node name="amount" type="Label" parent="explorationnode/winningpanel/lootpanel/backpack/VBoxContainer/Button"]
@@ -9570,7 +10247,7 @@ show_behind_parent = true
 margin_right = 52.0
 margin_bottom = 53.0
 mouse_filter = 2
-texture = ExtResource( 106 )
+texture = ExtResource( 109 )
 expand = true
 
 [node name="enemyloot" type="ScrollContainer" parent="explorationnode/winningpanel/lootpanel"]
@@ -9599,8 +10276,8 @@ margin_bottom = 50.0
 rect_min_size = Vector2( 50, 50 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
-texture_pressed = ExtResource( 104 )
-texture_hover = ExtResource( 104 )
+texture_pressed = ExtResource( 107 )
+texture_hover = ExtResource( 107 )
 expand = true
 
 [node name="image" type="TextureRect" parent="explorationnode/winningpanel/lootpanel/enemyloot/VBoxContainer/Button"]
@@ -9609,7 +10286,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 105 )
+texture = ExtResource( 108 )
 expand = true
 
 [node name="amount" type="Label" parent="explorationnode/winningpanel/lootpanel/enemyloot/VBoxContainer/Button"]
@@ -9629,7 +10306,7 @@ show_behind_parent = true
 margin_right = 52.0
 margin_bottom = 53.0
 mouse_filter = 2
-texture = ExtResource( 106 )
+texture = ExtResource( 109 )
 expand = true
 
 [node name="weightmeter" type="ProgressBar" parent="explorationnode/winningpanel/lootpanel"]
@@ -9688,9 +10365,9 @@ margin_top = 292.0
 margin_right = 218.0
 margin_bottom = 332.0
 hint_tooltip = "Take all"
-texture_normal = ExtResource( 109 )
-texture_pressed = ExtResource( 110 )
-texture_hover = ExtResource( 111 )
+texture_normal = ExtResource( 112 )
+texture_pressed = ExtResource( 113 )
+texture_hover = ExtResource( 114 )
 expand = true
 
 [node name="Panel" type="Panel" parent="explorationnode/winningpanel"]
@@ -9824,7 +10501,7 @@ margin_right = 961.0
 margin_bottom = 515.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="RichTextLabel" type="RichTextLabel" parent="explorationnode/winningpanel/sellpanel"]
 margin_left = 29.0
@@ -9885,7 +10562,7 @@ margin_bottom = 7.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-script = ExtResource( 112 )
+script = ExtResource( 115 )
 
 [node name="TextureRect" type="TextureRect" parent="dialogue"]
 material = SubResource( 42 )
@@ -9893,7 +10570,7 @@ margin_left = -1.0
 margin_top = -1.0
 margin_right = 1378.0
 margin_bottom = 774.0
-texture = ExtResource( 114 )
+texture = ExtResource( 117 )
 expand = true
 
 [node name="Panel 2" type="Panel" parent="dialogue"]
@@ -9985,7 +10662,7 @@ margin_right = -419.0
 margin_bottom = -184.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 93 )
+custom_styles/panel = ExtResource( 96 )
 
 [node name="buttonpanel" type="Panel" parent="dialogue"]
 anchor_left = 1.0
@@ -10085,7 +10762,7 @@ margin_bottom = 8.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-script = ExtResource( 112 )
+script = ExtResource( 115 )
 
 [node name="Panel 2" type="Panel" parent="scene"]
 anchor_right = 1.0
@@ -10282,80 +10959,6 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/panel = SubResource( 52 )
 
-[node name="entertext" type="Control" parent="." groups=[
-"blockmaininput",
-]]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 1.0
-margin_top = 1.0
-margin_right = 7.0
-margin_bottom = 7.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-theme = ExtResource( 3 )
-
-[node name="Panel" type="Panel" parent="entertext"]
-margin_left = 461.0
-margin_top = 200.0
-margin_right = 991.0
-margin_bottom = 516.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-
-[node name="Panel 2" type="Panel" parent="entertext"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -19.0
-margin_top = -24.0
-margin_right = 30.0
-margin_bottom = 31.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-theme = ExtResource( 3 )
-
-[node name="dialoguetext" type="RichTextLabel" parent="entertext"]
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -809.0
-margin_top = 236.0
-margin_right = -468.0
-margin_bottom = -405.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-custom_fonts/normal_font = ExtResource( 45 )
-bbcode_enabled = true
-bbcode_text = "Choose name for..."
-text = "Choose name for..."
-
-[node name="LineEdit" type="LineEdit" parent="entertext"]
-margin_left = 616.0
-margin_top = 379.0
-margin_right = 846.0
-margin_bottom = 417.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-
-[node name="confirmentertext" type="Button" parent="entertext"]
-margin_left = 502.0
-margin_top = 440.0
-margin_right = 711.0
-margin_bottom = 490.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-text = "Confirm"
-
-[node name="cancelentertext" type="Button" parent="entertext"]
-margin_left = 752.0
-margin_top = 441.0
-margin_right = 961.0
-margin_bottom = 491.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-text = "Cancel"
-
 [node name="popupmessage" type="Popup" parent="." groups=[
 "blocknextdayevents",
 ]]
@@ -10378,7 +10981,7 @@ margin_right = -161.0
 margin_bottom = 9.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="popupmessagetext" type="RichTextLabel" parent="popupmessage"]
 anchor_right = 1.0
@@ -10418,7 +11021,7 @@ margin_bottom = 1.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-script = ExtResource( 124 )
+script = ExtResource( 127 )
 
 [node name="Panel" type="Panel" parent="dailyevents"]
 anchor_right = 1.0
@@ -10443,7 +11046,7 @@ margin_right = -465.0
 margin_bottom = -34.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-script = ExtResource( 112 )
+script = ExtResource( 115 )
 
 [node name="buttonscroll" type="ScrollContainer" parent="dailyevents/buttonpanel"]
 anchor_left = 1.0
@@ -10544,7 +11147,7 @@ margin_left = -338.0
 margin_top = -246.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="Label" type="RichTextLabel" parent="yesnopopup"]
 anchor_left = 1.0
@@ -10769,7 +11372,7 @@ margin_right = 731.0
 margin_bottom = 428.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-theme = ExtResource( 126 )
+theme = ExtResource( 129 )
 text = "Open folder"
 
 [node name="deletebutton" type="Button" parent="menucontrol/menupanel/SavePanel"]
@@ -10875,7 +11478,7 @@ stretch_mode = 6
 
 [node name="options" parent="." groups=[
 "blockmaininput",
-] instance=ExtResource( 127 )]
+] instance=ExtResource( 130 )]
 visible = false
 margin_left = -371.0
 margin_top = -250.0
@@ -10913,7 +11516,7 @@ margin_right = -399.0
 margin_bottom = -297.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 46 )
+custom_styles/panel = ExtResource( 51 )
 
 [node name="over" type="Button" parent="gameover/Panel"]
 anchor_left = 1.0
@@ -10960,7 +11563,7 @@ margin_bottom = -35.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-script = ExtResource( 128 )
+script = ExtResource( 131 )
 
 [node name="Control" type="Control" parent="groupselectnode"]
 margin_left = -27.0
@@ -11041,7 +11644,7 @@ bbcode_enabled = true
 
 [node name="imageselect" parent="." groups=[
 "blockmaininput",
-] instance=ExtResource( 130 )]
+] instance=ExtResource( 133 )]
 visible = false
 margin_left = -1033.0
 margin_top = -562.0
@@ -11673,7 +12276,7 @@ margin_right = 8.0
 margin_bottom = 3.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-script = ExtResource( 131 )
+script = ExtResource( 134 )
 
 [node name="Panel" type="Panel" parent="tutorialnode"]
 modulate = Color( 1, 1, 1, 0.580118 )
@@ -11698,7 +12301,7 @@ margin_right = -39.0
 margin_bottom = -4.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 132 )
+texture = ExtResource( 135 )
 expand = true
 stretch_mode = 6
 
@@ -11855,6 +12458,7 @@ size_flags_vertical = 0
 [node name="music" type="AudioStreamPlayer" parent="."]
 
 [node name="joblist" type="Popup" parent="."]
+editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 103.0
@@ -11864,7 +12468,7 @@ margin_bottom = -69.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 theme = ExtResource( 3 )
-script = ExtResource( 133 )
+script = ExtResource( 136 )
 
 [node name="Panel" type="Panel" parent="joblist"]
 anchor_right = 1.0
@@ -11892,7 +12496,7 @@ margin_right = 263.0
 margin_bottom = -52.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_styles/panel = ExtResource( 93 )
+custom_styles/panel = ExtResource( 96 )
 
 [node name="jobs" type="ScrollContainer" parent="joblist"]
 anchor_bottom = 1.0
@@ -11942,6 +12546,7 @@ size_flags_vertical = 2
 bbcode_enabled = true
 
 [node name="chooseslavepanel" type="Panel" parent="."]
+editor/display_folded = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11975,9 +12580,9 @@ margin_right = 350.0
 margin_bottom = 65.0
 rect_min_size = Vector2( 350, 65 )
 toggle_mode = true
-texture_normal = ExtResource( 134 )
-texture_pressed = ExtResource( 135 )
-texture_hover = ExtResource( 135 )
+texture_normal = ExtResource( 137 )
+texture_pressed = ExtResource( 138 )
+texture_hover = ExtResource( 138 )
 expand = true
 
 [node name="portrait" type="TextureRect" parent="chooseslavepanel/ScrollContainer/chooseslavelist/Button"]
@@ -11985,7 +12590,7 @@ margin_left = 7.0
 margin_top = 7.0
 margin_right = 57.0
 margin_bottom = 57.0
-texture = ExtResource( 73 )
+texture = ExtResource( 77 )
 expand = true
 stretch_mode = 6
 
@@ -11995,7 +12600,7 @@ margin_left = 7.0
 margin_top = 7.0
 margin_right = 57.0
 margin_bottom = 57.0
-texture = ExtResource( 83 )
+texture = ExtResource( 86 )
 expand = true
 stretch_mode = 6
 
@@ -12030,6 +12635,7 @@ margin_bottom = 670.0
 text = "Cancel"
 
 [node name="traitselect" type="Popup" parent="."]
+editor/display_folded = true
 margin_left = 412.0
 margin_top = 86.0
 margin_right = 913.0
@@ -12075,6 +12681,7 @@ margin_bottom = 103.0
 bbcode_enabled = true
 
 [node name="tooltip" type="Popup" parent="."]
+editor/display_folded = true
 margin_left = 483.0
 margin_top = 181.0
 margin_right = 852.0
@@ -12104,6 +12711,7 @@ bbcode_text = "A text test"
 text = "A text test"
 
 [node name="slavetooltip" type="Popup" parent="."]
+editor/display_folded = true
 margin_left = 484.0
 margin_top = 181.0
 margin_right = 1048.0
@@ -12154,7 +12762,7 @@ margin_right = 193.0
 margin_bottom = 196.0
 rect_min_size = Vector2( 180, 180 )
 mouse_filter = 2
-texture = ExtResource( 73 )
+texture = ExtResource( 77 )
 expand = true
 stretch_mode = 6
 
@@ -12166,7 +12774,7 @@ margin_right = 193.0
 margin_bottom = 196.0
 rect_min_size = Vector2( 180, 180 )
 mouse_filter = 2
-texture = ExtResource( 83 )
+texture = ExtResource( 86 )
 expand = true
 stretch_mode = 6
 
@@ -12185,7 +12793,7 @@ margin_top = 4.0
 margin_right = 560.0
 margin_bottom = 44.0
 mouse_filter = 2
-texture = ExtResource( 136 )
+texture = ExtResource( 139 )
 expand = true
 stretch_mode = 7
 
@@ -12195,7 +12803,7 @@ margin_top = 160.0
 margin_right = 248.0
 margin_bottom = 200.0
 mouse_filter = 2
-texture = ExtResource( 84 )
+texture = ExtResource( 87 )
 expand = true
 stretch_mode = 6
 
@@ -12205,7 +12813,7 @@ margin_top = 160.0
 margin_right = 288.0
 margin_bottom = 200.0
 mouse_filter = 2
-texture = ExtResource( 137 )
+texture = ExtResource( 140 )
 expand = true
 stretch_mode = 6
 
@@ -12215,7 +12823,7 @@ margin_top = 160.0
 margin_right = 335.0
 margin_bottom = 200.0
 mouse_filter = 2
-texture = ExtResource( 137 )
+texture = ExtResource( 140 )
 expand = true
 stretch_mode = 6
 
@@ -12225,11 +12833,12 @@ margin_top = 160.0
 margin_right = 380.0
 margin_bottom = 200.0
 mouse_filter = 2
-texture = ExtResource( 138 )
+texture = ExtResource( 141 )
 expand = true
 stretch_mode = 6
 
 [node name="itemtooltip" type="Popup" parent="."]
+editor/display_folded = true
 margin_left = 484.0
 margin_top = 181.0
 margin_right = 1094.0
@@ -12242,7 +12851,7 @@ size_flags_vertical = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-texture = ExtResource( 139 )
+texture = ExtResource( 142 )
 expand = true
 
 [node name="text" type="RichTextLabel" parent="itemtooltip"]
@@ -12266,9 +12875,94 @@ margin_right = 202.0
 margin_bottom = 197.0
 rect_min_size = Vector2( 200, 200 )
 mouse_filter = 2
-texture = ExtResource( 73 )
+texture = ExtResource( 77 )
 expand = true
 stretch_mode = 6
+
+[node name="entertext" type="Control" parent="." groups=[
+"blockmaininput",
+]]
+editor/display_folded = true
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1.0
+margin_top = 1.0
+margin_right = 7.0
+margin_bottom = 7.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 3 )
+
+[node name="Panel" type="Panel" parent="entertext"]
+margin_left = 461.0
+margin_top = 200.0
+margin_right = 991.0
+margin_bottom = 516.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="Panel 2" type="Panel" parent="entertext"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -19.0
+margin_top = -24.0
+margin_right = 30.0
+margin_bottom = 31.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 3 )
+
+[node name="Label" type="Label" parent="entertext"]
+margin_left = 596.767
+margin_top = 234.141
+margin_right = 846.767
+margin_bottom = 254.141
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "What is their new name?"
+align = 1
+
+[node name="dialoguetext" type="RichTextLabel" parent="entertext"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -809.0
+margin_top = 288.0
+margin_right = -468.0
+margin_bottom = -405.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/normal_font = ExtResource( 45 )
+bbcode_enabled = true
+bbcode_text = "Choose name for..."
+text = "Choose name for..."
+
+[node name="LineEdit" type="LineEdit" parent="entertext"]
+margin_left = 616.0
+margin_top = 379.0
+margin_right = 846.0
+margin_bottom = 417.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="confirmentertext" type="Button" parent="entertext"]
+margin_left = 502.0
+margin_top = 440.0
+margin_right = 711.0
+margin_bottom = 490.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Confirm"
+
+[node name="cancelentertext" type="Button" parent="entertext"]
+margin_left = 752.0
+margin_top = 441.0
+margin_right = 961.0
+margin_bottom = 491.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Cancel"
 
 [node name="screenchange" type="TextureRect" parent="." groups=[
 "blockmaininput",
@@ -12283,7 +12977,7 @@ margin_right = 25.0
 margin_bottom = 21.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 90 )
+texture = ExtResource( 93 )
 expand = true
 __meta__ = {
 "_edit_lock_": true
@@ -12302,7 +12996,7 @@ margin_bottom = 8.0
 mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
-texture = ExtResource( 140 )
+texture = ExtResource( 143 )
 expand = true
 __meta__ = {
 "_edit_lock_": true
@@ -12334,6 +13028,37 @@ current = true
 [connection signal="pressed" from="MainScreen/mansion/mansionsettings" to="." method="_on_mansionsettings_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/sexbutton" to="." method="_on_sexbutton_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/ugrades" to="." method="_on_ugrades_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/AE_DimCrystal" to="." method="_on_dimcrystal_button_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/closepanel" to="." method="_on_dimcrystal_closepanel_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/research_explanation" to="." method="_on_dimcrystal_explainresearch_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/assistresearch" to="." method="_on_dimcrystal_assistresearcher_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/description_button" to="." method="_on_dimcrystal_description_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_attune" to="." method="_on_dimcrystal_ability_attunement_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_pregspeed" to="." method="_on_dimcrystal_ability_pregspeed_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_pregspeed_enable" to="." method="_on_dimcrystal_ability_pregspeed_enabled"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_empowervirginity" to="." method="_on_dimcrystal_ability_empoweredvirginity_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_empowervirginityenable" to="." method="_on_dimcrystal_ability_empoweredvirginityenabled_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_empowervirginitydisable" to="." method="_on_dimcrystal_ability_empoweredvirginitydisabled_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_secondwind" to="." method="_on_dimcrystal_ability_secondwind_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_immortality" to="." method="_on_dimcrystal_ability_immortality_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_immortality_enable" to="." method="_on_dimcrystal_ability_immortality_enabled"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_immortality_disable" to="." method="_on_dimcrystal_ability_immortality_disabled"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_understandsacrifice" to="." method="_on_dimcrystal_ability_understandsacrifice_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/ability_choosesacrifice" to="." method="_on_dimcrystal_ability_choosesacrifice_pressed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/closepanel" to="." method="_on_dimcrystal_ability_pregspeed_panel_closed"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_1" to="." method="_dimcrystal_pregspeedchange_1"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_3" to="." method="_dimcrystal_pregspeedchange_3"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_5" to="." method="_dimcrystal_pregspeedchange_5"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_7" to="." method="_dimcrystal_pregspeedchange_7"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_10" to="." method="_dimcrystal_pregspeedchange_10"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_14" to="." method="_dimcrystal_pregspeedchange_14"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_21" to="." method="_dimcrystal_pregspeedchange_21"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_30" to="." method="_dimcrystal_pregspeedchange_30"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_45" to="." method="_dimcrystal_pregspeedchange_45"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_60" to="." method="_dimcrystal_pregspeedchange_60"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_90" to="." method="_dimcrystal_pregspeedchange_90"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_180" to="." method="_dimcrystal_pregspeedchange_180"]
+[connection signal="pressed" from="MainScreen/mansion/dimcrystalpanel/pregspeed_panel/speed_270" to="." method="_dimcrystal_pregspeedchange_270"]
 [connection signal="visibility_changed" from="MainScreen/mansion/jailpanel" to="." method="_on_jailpanel_visibility_changed"]
 [connection signal="pressed" from="MainScreen/mansion/jailpanel/jailsettings" to="." method="_on_jailsettings_pressed"]
 [connection signal="visibility_changed" from="MainScreen/mansion/jailpanel/jailsettings/jailsettingspanel" to="." method="_on_jailsettingspanel_visibility_changed"]
@@ -12498,8 +13223,6 @@ current = true
 [connection signal="pressed" from="MainScreen/slave_tab/stats/trainingabilspanel/abilityconfirm" to="MainScreen/slave_tab/stats" method="_on_abilityconfirm_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/selectspellpanel/spellusebutton" to="MainScreen/slave_tab/stats" method="_on_spellusebutton_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/selectspellpanel/spellcancelbutton" to="MainScreen/slave_tab/stats" method="_on_spellcancelbutton_pressed"]
-[connection signal="pressed" from="MainScreen/slave_tab/stats/callorder/callconfirm" to="MainScreen/slave_tab/stats" method="_on_callconfirm_pressed"]
-[connection signal="pressed" from="MainScreen/slave_tab/stats/slaverename/slaverename" to="MainScreen/slave_tab/stats" method="_on_slaverename_pressed"]
 [connection signal="meta_clicked" from="MainScreen/slave_tab/stats/basics/slavedescript" to="MainScreen/slave_tab" method="_on_slavedescript_meta_clicked"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/basics/fullbodycheck" to="MainScreen/slave_tab" method="_on_fullbodycheck_pressed"]
 [connection signal="item_selected" from="MainScreen/slave_tab/stats/customization/hairstyle" to="MainScreen/slave_tab" method="_on_hairstyle_item_selected"]
@@ -12524,6 +13247,8 @@ current = true
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/descriptpopup/confirmdescript" to="MainScreen/slave_tab" method="_on_confirmdescript_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/customization/relativespanel/relativesclose" to="MainScreen/slave_tab" method="_on_relativesclose_pressed"]
 [connection signal="pressed" from="MainScreen/slave_tab/stats/statisticpanel/statsclose" to="MainScreen/slave_tab" method="_on_statsclose_pressed"]
+[connection signal="pressed" from="MainScreen/slave_tab/stats/callorder/callconfirm" to="MainScreen/slave_tab/stats" method="_on_callconfirm_pressed"]
+[connection signal="pressed" from="MainScreen/slave_tab/stats/slaverename/slaverename" to="MainScreen/slave_tab/stats" method="_on_slaverename_pressed"]
 [connection signal="pressed" from="debug" to="." method="_on_debug_pressed"]
 [connection signal="pressed" from="hideui" to="." method="_on_hideui_pressed"]
 [connection signal="pressed" from="gallery/close" to="gallery" method="_on_close_pressed"]
@@ -12543,8 +13268,6 @@ current = true
 [connection signal="pressed" from="explorationnode/winningpanel/confirmwinning" to="explorationnode" method="_on_confirmwinning_pressed"]
 [connection signal="pressed" from="explorationnode/winningpanel/sellpanel/sellconfirm" to="explorationnode" method="_on_sellconfirm_pressed"]
 [connection signal="pressed" from="scene/Panel/scenepicture" to="." method="_on_scenepicture_pressed"]
-[connection signal="pressed" from="entertext/confirmentertext" to="." method="_on_confirmentertext_pressed"]
-[connection signal="pressed" from="entertext/cancelentertext" to="." method="_on_cancelentertext_pressed"]
 [connection signal="meta_clicked" from="popupmessage/popupmessagetext" to="." method="_on_popupmessagetext_meta_clicked"]
 [connection signal="pressed" from="popupmessage/popupclosebutton" to="." method="_on_popupclosebutton_pressed"]
 [connection signal="pressed" from="yesnopopup/HBoxContainer/yesbutton" to="." method="_on_yesbutton_pressed"]
@@ -12586,3 +13309,5 @@ current = true
 [connection signal="pressed" from="joblist/jobcancel" to="joblist" method="_on_jobcancel_pressed"]
 [connection signal="pressed" from="chooseslavepanel/choseslavecancel" to="." method="_on_choseslavecancel_pressed"]
 [connection signal="pressed" from="traitselect/traitselectclose" to="." method="_on_traitselectclose_pressed"]
+[connection signal="pressed" from="entertext/confirmentertext" to="." method="_on_confirmentertext_pressed"]
+[connection signal="pressed" from="entertext/cancelentertext" to="." method="_on_cancelentertext_pressed"]

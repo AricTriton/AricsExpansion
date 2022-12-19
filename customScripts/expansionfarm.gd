@@ -213,7 +213,7 @@ func getFarmDescription(tempperson):
 	
 	#Contentment
 	text += "\n\n"
-	if person.displayContentment() in ['Happy','Content']:
+	if person.npcexpanded.contentment >= 0:
 		text += "$He looks up at you and gives you a relaxed smile. "
 	else:
 		if person.cour >= 50:
@@ -330,6 +330,12 @@ func dailyFarm():
 		'storewimborn' : [],
 		'cow' : [],
 	}
+	
+	#Farm Not Built Check
+	if globals.state.farm < 3:
+		text += "[center]You've always wondered what it would be like to own a [color=aqua]Farm[/color]. Perhaps one day you will?[/center]"
+		return text
+	
 	#---Assign NPC Roles
 	for person in globals.slaves:
 		if person.away.duration == 0:
@@ -373,9 +379,10 @@ func dailyFarm():
 
 	#End if No Positions and No Farm Manager
 	
-	text += "[color=#d1b970][center]-----Morning-----[/center][/color]"
+	text += "\n[color=#d1b970][center]-----Morning-----[/center][/color]"
 	if canwork == false:
-		text += "\n[color=red]The Cattle went [color=aqua]unmilked[/color] today.\n[/color]"
+		if !workersDict.cow.empty():
+			text += "\n[color=red]The Cattle went [color=aqua]unmilked[/color] today.\n[/color]"
 	else:
 		#---Herd Cattle
 		var tempText = PoolStringArray()
@@ -628,7 +635,10 @@ func extractMilk(cattle, milkmaid, farmmanager):
 		text += "[color=aqua]" + milkmaid.name_short() + "[/color] spent [color=aqua]" + str(effort) + " Energy[/color] milking [color=aqua]$name[/color]. "
 		extractionmod = clamp(milkmaid.jobskills.milking * .25, 0, effort)
 	
+	#Metrics
+	cattle.lactating.milkedtoday = true
 	cattle.farmexpanded.timesmilked += 1
+	cattle.lactating.daysunmilked = 0
 	
 	#Pressure Production (100% Extraction)
 	milkproduced = cattle.lactating.pressure
@@ -1033,6 +1043,8 @@ func breedSnails(cattle):
 
 	cattle.lust = clust
 	cattle.metrics.orgasm += corgasms
+	cattle.lastsexday = globals.resources.day
+
 	return text
 
 
@@ -1396,7 +1408,10 @@ func manageVats(workersDict):
 	var text = "[color=#d1b970][center]\n\n-----Vat Stockpile Changes-----[/center][/color]"
 	for fluid in refVats.processingorder:
 		var sort = refVats[fluid].auto
-		if refVats[fluid].new != 0:
+		var fluidVat = "vat" + fluid
+		if globals.state.mansionupgrades[fluidVat] == 0:
+			text += "\n[center][color=red]No [color=aqua]"+ fluid.capitalize() +" Vat[/color] is installed.[/color][/center]"
+		elif refVats[fluid].new != 0:
 			if sort in ['sell','refine']:
 				text += "\n[color=aqua]" + str(refVats[fluid].new) + " bottles[/color] of [color=aqua]" + fluid.capitalize() + "[/color] were added to the [color=aqua]" + sort + "[/color] queue today. "
 				sort = 'bottle2' + sort

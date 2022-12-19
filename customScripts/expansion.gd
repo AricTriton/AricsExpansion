@@ -130,6 +130,9 @@ var identitydict = {
 	cowardly = "I am just a coward. I'm not brave like everyone else, I just am too scared of getting hurt! "
 }
 
+#DimCrystal
+var dimcrystal_abilities_array = ['attunement','pregnancyspeed','empowervirginity','secondwind','immortality','sacrifice',]
+
 func updatePerson(person):
 	#Contains the codes to update 1 person specifically during the game
 	#Called from Sex, Interaction, Talk, or End of Day
@@ -1198,7 +1201,11 @@ func getSwollenDescription(person,short=false):
 				if person.preg.duration > globals.state.pregduration * .8 && person.knowledge.has('currentpregnancy'):
 					text += "[color=#F4A7D0]$His unborn child forces $his " + nameBelly() + " to protrude massively. $He will give birth soon, and it looks like $his body will give out if $he doesn't. [/color]"
 				else:
-					text += "[color=#E0D8C6]The impossible amount of [/color][color=aqua]" + nameCum() + "[/color][color=#E0D8C6] inside of $him has $his " + nameBelly() + " so swollen that $he looks like $he is about to give birth, and $he keeps coughing up and drooling " + nameCum() + " that worked its way through $his " + nameAsshole() + " up to $his mouth.[/color]"
+					text += "[color=#E0D8C6]The impossible amount of [/color][color=aqua]" + nameCum() + "[/color][color=#E0D8C6] inside of $him has $his " + nameBelly() + " so swollen that $he looks like $he is about to give birth"
+					if person.cum.ass > 0:
+						text += ". $He keeps coughing up and occassionally drooling " + nameCum() + " that must have worked its way through $his " + nameAsshole() + " up to $his mouth.[/color]"
+					else:
+						text += ".[/color]"
 		elif person.swollen >= height*1.5:
 			if short == false:
 				text += "$His " + nameBelly() + " is incredibly swollen and "
@@ -1226,7 +1233,7 @@ func getSwollenDescription(person,short=false):
 				if person.preg.duration > globals.state.pregduration * .4 && person.knowledge.has('currentpregnancy'):
 					text += "[color=#F4A7D0]$His advanced pregnancy is clearly evident by the prominent bulge in $his " + nameBelly() + ".[/color]"
 				else:
-					text += "[color=#E0D8C6]$His " + nameBelly() + " is swollen due to the [/color][color=aqua]" + nameCum() + "[/color][color=#E0D8C6] $he is retaining inside of $him.[/color]"
+					text += "[color=#E0D8C6]$His " + nameBelly() + " is swollen due to the [/color][color=aqua]" + nameCum() + "[/color][color=#E0D8C6] $he "+ globals.fastif(person == globals.player, 'are', 'is') +" retaining inside of $him.[/color]"
 		elif person.swollen >= height*.5:
 			if short == false:
 				text += "$His " + nameBelly() + " is swollen. It "
@@ -1610,8 +1617,14 @@ func fertilize_egg(mother, father_id, father_unique):
 		#If Father disappeared from the World
 		if father == null:
 			father = globals.newslave('randomany', 'adult', 'male')
+			#Added per Ank's Notes
+			father.race = globals.getracebygroup("starting")
+			globals.constructor.set_genealogy(father)
 	else:
 		father = globals.newslave('randomany', 'adult', 'male')
+		#Added per Ank's Notes
+		father.race = globals.getracebygroup("starting")
+		globals.constructor.set_genealogy(father)
 		father.id = '-1'
 		
 		if father_unique != null:
@@ -1683,13 +1696,15 @@ func nightly_womb(person):
 	fertility *= bonus
 	var multiBabyLimitChance = 100 - globals.expansionsettings.multipleBabyChance
 	for i in person.preg.womb:
-		if bonus * i.semen * i.virility > rand_range(0,100):
+		if bonus * round(i.semen) * i.virility > rand_range(0,100):
 			i.day -= 1
 			if fertility > rand_range(0,100):
 				#if person.preg.baby_type == 'birth':
 				fertilize_egg(person,i.id,i.unique)
 				if rand_range(0,100) <= multiBabyLimitChance || person.preg.unborn_baby.size() > 3:
 					break
+	
+	
 	#globals.traceFile('nightly_womb')
 	return text
 
@@ -1863,7 +1878,34 @@ func dailyCrystal():
 	var refCrystal = globals.state.thecrystal
 	refCrystal.power = globals.state.mansionupgrades.dimensionalcrystal
 
-	if refCrystal.lifeforce < 0 && refCrystal.mode == "light" && rand_range(0,100) <= globals.expansionsettings.crystal_shatter_chance:
+	#Check for Researcher
+	var researcher = getCrystalResearcher()
+	
+	#Check for Abilities
+	var moreabilitiesexist = false
+	var allabilities = globals.expansion.dimcrystal_abilities_array
+	for abilitycheck in allabilities:
+		if !refCrystal.abilities.has(abilitycheck):
+			moreabilitiesexist = true
+			break
+	
+	if researcher == null:
+		if globals.expansionsettings.show_warning_if_missing_researcher == true && globals.state.sidequests.dimcrystal != 0 && moreabilitiesexist == true:
+			text = "\n[center][color=red]No Researcher was assigned to study the [color=#E389B9]Dimensional Crystal[/color] today.[/color][/center]"
+			if refCrystal.research > 0:
+				text = "\n[center][color=red]Half of the actively completed Research was lost due to the absense of the Researcher[/color][/center]."
+				refCrystal.research = round(refCrystal.research*.5)
+		return text
+	
+	#Set Research if Unassisted
+	if refCrystal.research <= 0:
+		if researcher.smaf >= globals.state.mansionupgrades.dimensionalcrystal:
+			refCrystal.research = round(rand_range(researcher.smaf, researcher.wit))
+		else:
+			text += researcher.dictionary("\n[center][color=red]Your [color=aqua]Crystal Researcher[/color], [color=aqua]$name[/color] comes over to you holding $his head. $He sadly reports $he was unable to even interact with the magical power within the [color=#E389B9]Crystal[/color] and was completely overwhelmed by its power. Either $he needs more [color=aqua]Magical Affinity[/color], you will need to [color=aqua]actively assist[/color] $him from within the [color=aqua]Crystal's panel[/color], or you may need to assign a new [color=aqua]Researcher[/color].[/color][/center]")
+	
+	#Crystal Time
+	if globals.player.dailyevents.count('dimcrystaldarkened') > 0:
 		refCrystal.mode = "dark"
 		text += "\n[center][color=red]At exactly midnight, everyone in the Mansion woke up. Some found that their nose was bleeding, others reported their skin crawling, and still others claimed to have horrific nightmares of being eaten alive. A brief investigation found that the Dimensional Crystal has dark, shadowy veins running through it like deep cracks. The color seems to be a darker purple and the glow seen coming off the Crystal and people seem to have those same dark, shadowy tendrils. Everyone returned to their beds, though sleep came uneasily and was wrought with nightmares.[/color][/center]\n"
 	elif refCrystal.lifeforce >= 0 && refCrystal.hunger <= 0 && refCrystal.mode == "dark":
@@ -1889,46 +1931,60 @@ func dailyCrystal():
 	
 	if refCrystal.abilities.size() > 0 && !refCrystal.abilities.has('attunement'):
 		if rand_range(50,100) <= refCrystal.research:
-			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
-			text += "You dream deeply. You are standing before the Crystal in your Mansion and staring deeply into the flowing energy within it. As you watch, the energy begins to split and separate itself into understandable forms. You see the [color=aqua]Coloration[/color] of the [color=aqua]Crystal[/color]. You see the latent [color=aqua]Lifeforce[/color] inside it and the [color=red]Hunger[/color] consuming those trapped souls. You feel [color=green]Attuned[/color] to the [color=aqua]Crystal[/color]. "
+			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
+			text += "You dream deeply. You are standing before the [color=#E389B9]Crystal[/color] in your Mansion and staring deeply into the flowing energy within it. As you watch, the energy begins to split and separate itself into understandable forms. You see the [color=aqua]Coloration[/color] of the [color=#E389B9]Crystal[/color]. You see the latent [color=aqua]Lifeforce[/color] inside it and the [color=red]Hunger[/color] consuming those trapped souls. You feel [color=green]Attuned[/color] to the [color=#E389B9]Crystal[/color]. "
 			refCrystal.abilities.append('attunement')	
 	
 	if globals.state.mansionupgrades.dimensionalcrystal >= 1 && !refCrystal.abilities.has('pregnancyspeed'):
 		if rand_range(35,100) <= refCrystal.research:
-			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
-			text += "You dream that you are the Crystal. You feel life moving within your walls. Life grows. You love life. You are life. You see the growing sprouts and water them with words. They burst out of their seeds and grow mightily. You bask in their life.\nYou awaken and write down the words uttered in your dream. You have been granted the secret of [color=green]Altering Pregnancy Speeds[/color]. "
+			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
+			text += "You dream that you are the [color=#E389B9]Crystal[/color]. You feel life moving within your walls. Life grows. You love life. You are life. You see the growing sprouts and water them with words. They burst out of their seeds and grow mightily. You bask in their life.\nYou awaken and write down the words uttered in your dream. You have been granted the secret of [color=green]Altering Pregnancy Speeds[/color]. "
 			refCrystal.abilities.append('pregnancyspeed')
+	
+	elif globals.state.mansionupgrades.dimensionalcrystal >= 1 && !refCrystal.abilities.has('empowervirginity'):
+		if rand_range(40,100) <= refCrystal.research:
+			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
+			text += "You dream a dream of ephemeral beauty. You feel yourself in the body of another, feeling spry and treasured. You hold in your hand two flawless jewels. Inside of each radiates the octarine glow of mana, begging to be released. You feel yourself fall enamored with the pristine beauty of these orbs. They are perfect, untarnished, and untouched. You feel your singular focus embuing these objects with a deeper meaning, a deeper magic, as long as they remain untarnished simply on the premise of how fleeting they are. You pull back to feel the power these now only have when in perfect, pristine condition. You feel the power their loss will have, magic pouring out like a flood, these temporal seals are tarnished. Your crystaline mind retreats from the passing fancy, the sentient creature, and you now sense how to ask the [color=#E389B9]Crystal[/color] to actually fulfill it's fascination with real magic.\n\nYou awaken with a start. Apparently the only thing that can fascinate an indistructable, eternal artifact are things that are so temporary. You have been granted the secret of [color=#E389B9]Empowering Virginities[/color]. You may now ask the [color=#E389B9]Crystal[/color] to give a [color=green]stacking multiplier of 5x the normal mana produced[/color] at the end of a sexual encounter in the Mansion for [color=green]any virginities taken[/color], but losing [color=red]half of the mana normally produced[/color] when [color=red]they lose neither vaginal or anal virginities during sex[/color]. "
+			refCrystal.abilities.append('empowervirginity')
 	
 	elif globals.state.mansionupgrades.dimensionalcrystal >= 2 && !refCrystal.abilities.has('secondwind'):
 		if rand_range(50,100) <= refCrystal.research:
-			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
+			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
 			text += "You dream of standing in a great field of combat. You look down and see arrows, blades, and magic blasts have destroyed parts of your body. Despite it all, you feel a resurgence of energy within you. You have been hurt...but you will fight again. You MUST fight on. \n[color=lime]You have been granted the secret of [color=green]Second Wind[/color], allowing you personally to survive 1 fatal blow in combat daily.[/color] "
 			refCrystal.abilities.append('secondwind')
 
 	elif globals.state.mansionupgrades.dimensionalcrystal >= 3 && !refCrystal.abilities.has('immortality'):
 		if rand_range(50,100) <= refCrystal.research:
-			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
-			text += "You dream that you are the Crystal. You feel each soul living within the warmth of your glow. You see a shadowy, skeletal entity sneak within your glow and raise a long scythe above one of your beings. You mutter a series of words and sent a part of your essence to banish the entity.\nWhen you awaken, you write the words down. You have been granted the secret of [color=green]Immortality[/color]. "
+			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
+			text += "You dream that you are the [color=#E389B9]Crystal[/color]. You feel each soul living within the warmth of your glow. You see a shadowy, skeletal entity sneak within your glow and raise a long scythe above one of your beings. You mutter a series of words and sent a part of your essence to banish the entity.\nWhen you awaken, you write the words down. You have been granted the secret of [color=green]Immortality[/color]. "
 			refCrystal.abilities.append('immortality')
 	
 	elif (refCrystal.mode == "dark" || refCrystal.lifeforce <= 0) && !refCrystal.abilities.has('sacrifice'):
 		if rand_range(-25,100) <= refCrystal.research:
-			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
+			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
 			text += "You dream that you are famished. You look down and see your ribs poking through your skin. Hunger. You need hunger. You need LIFE! You sit in a corner and wait. A rat scurries into your view.\nLife. Life for you.\nYou rush forward and snap the creatures neck. You sink your teeth in and feel your hunger subside. "
-			text += "\n\n[color=yellow]-Good. Good. You know hunger too. You know what it is to consume life.[/color]\nThe voice ripples through you and you see teeth. You look up into it's gaping maw and squeak. Your tail squishes back and forth in a panic and you try to move. But the tentacles around you body aren't going to let you escape. As you feel yourself approach the teeth, you feel your rat-like body crumple and you wake up. For better or worse, you now know two things. You know how you can feed the Crystal. And now, you know you must."
+			text += "\n\n[color=yellow]-Good. Good. You know hunger too. You know what it is to consume life.[/color]\nThe voice ripples through you and you see teeth. You look up into it's gaping maw and squeak. Your tail squishes back and forth in a panic and you try to move. But the tentacles around you body aren't going to let you escape. As you feel yourself approach the teeth, you feel your rat-like body crumple and you wake up. For better or worse, you now know two things. You know how you can feed the [color=#E389B9]Crystal[/color]. And now, you know you must."
 			refCrystal.abilities.append('sacrifice')
 	
 	elif refCrystal.abilities.has('sacrifice') && !refCrystal.abilities.has('understandsacrifice'):
 		if rand_range(0,100) <= refCrystal.research:
-			text += "\n[center][color=yellow]The Crystal grants you a Secret[/color][/center]\n"
-			text += "You dream that you standing in front of the Crystal. It extends a tendril and gently touches the body of a lifeless human beside you. The tendril extends into the body's mouth, slithers through her body, and stands the corpse up like a puppet on a string. It then violently rips its tendril out of the corpse's mouth. The human woman opens her eyes and screams herself back to life. "
-			text += "You look in amazement as the woman turns to walk off. You look at the crystal and see cracks and veins start to appear in it's surface. You see a tendril reach out towards you.\nYou open your mouth to protest 'I am still alive!' and a loud bleating erupts from your lips. It reaches into your open mouth and extends through your body. You sense it draining every one of your levels to restore it's hunger, then finally take your lifeforce back into it. As your soul splits off from your body, you see the cracks and veins healing. "
+			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
+			text += "You dream that you standing in front of the [color=#E389B9]Crystal[/color]. It extends a tendril and gently touches the body of a lifeless human beside you. The tendril extends into the body's mouth, slithers through her body, and stands the corpse up like a puppet on a string. It then violently rips its tendril out of the corpse's mouth. The human woman opens her eyes and screams herself back to life. "
+			text += "You look in amazement as the woman turns to walk off. You look at the [color=#E389B9]Crystal[/color] and see cracks and veins start to appear in it's surface. You see a tendril reach out towards you.\nYou open your mouth to protest 'I am still alive!' and a loud bleating erupts from your lips. It reaches into your open mouth and extends through your body. You sense it draining every one of your levels to restore it's hunger, then finally take your lifeforce back into it. As your soul splits off from your body, you see the cracks and veins healing. "
 			text += "You now understand how the sacrifices work. "
 			refCrystal.abilities.append('understandsacrifice')
 	
 	refCrystal.research = 0
 
 	return text
+
+func getCrystalResearcher():
+	var researcher
+	for person in globals.slaves:
+		if person.work == 'crystalresearcher':
+			researcher = person
+			break
+	return researcher
 
 func dailyUpdate(person):
 	#Returns to go into Daily
@@ -2092,41 +2148,54 @@ func dailyUpdate(person):
 	#---Clothing Status
 	text += person.updateClothing()
 
-	#Chance to Add/Remove Lisp or Mute due to oversized Lips
-	if person.npcexpanded.temptraits.find('vocaltraitdelay') >= 0:
-		person.npcexpanded.temptraits.remove('vocaltraitdelay')
-	elif globals.lipssizearray.find(person.lips) >= 6:
-		var delays = round(rand_range(0,3)) + globals.lipssizearray.find(person.lips)
-		var liparray = globals.lipssizearray
-		var lipincreasechance = globals.expansionsettings.lipstraitbasechance + (10*(liparray.find(person.lips)-6))
-		#Check for Negative
-		if person.traits.has('Mute') == false:
-			if person.traits.has('Lisp') == false:
-				if rand_range(0,100) <= lipincreasechance:
+	#---Vocal Traits (Lisp, Mute)
+	if globals.expansionsettings.vocal_traits_autochange == true:
+		var vocaltraitchanged = false
+		#Timer to Prevent Trait Change Spamming
+		if globals.expansionsettings.vocal_traits_delaytimer == true && person.npcexpanded.temptraits.count('vocaltraitdelay') > 0:
+			person.npcexpanded.temptraits.remove('vocaltraitdelay')
+			if globals.expansionsettings.perfectinfo == true:
+				text += "\n[color=aqua]Perfect Info: "+ str(person.npcexpanded.temptraits.count('vocaltraitdelay')) +" Days Remaining before next possible Vocal Trait change."
+		else:
+			var lipincreasechance = globals.expansionsettings.lipstraitbasechance + (10*(globals.lipssizearray.find(person.lips)-6))
+			var lipdecreasechance = globals.expansionsettings.lipstraitbasechance + (10*(7 - globals.lipssizearray.find(person.lips)))
+			
+			#Repair Speech
+			if person.npcexpanded.temptraits.has('Mute') && person.traits.has('Mute') && person.lips != globals.lipssizearray.back():
+				if rand_range(0,100) <= lipdecreasechance:
+					person.trait_remove('Mute')
+					person.npcexpanded.temptraits.remove('Mute')
 					person.add_trait('Lisp')
 					person.npcexpanded.temptraits.append('Lisp')
-					text += "\n$name has started talking with a [color=red]Lisp[/color] due to the unnaturally swollen size of $his lips."
-			else:
-				if rand_range(0,100) <= lipincreasechance*.5 || person.traits.has('Lisp') && person.npcexpanded.temptraits.has('lisp') && rand_range(0,100) <= lipincreasechance:
-					person.add_trait('Mute')
-					person.npcexpanded.temptraits.append('Mute')
-					text += "\n$name is no longer able to speak due to $his massive lips. $He is now [color=red]Mute[/color]."
-		elif person.npcexpanded.temptraits.has('Mute') && person.traits.has('Mute'):
-			if rand_range(0,100) <= lipincreasechance:
-				person.add_trait('Lisp')
-				person.npcexpanded.temptraits.append('Lisp')
-				person.trait_remove('Mute')
-				person.npcexpanded.temptraits.remove('Mute')
-				text += "\n$name seems to be able to audibly talk through $his massive lips again. $He is no longer [color=red]Mute[/color] and now merely speaks with a heavy [color=red]Lisp[/color]."
-		elif person.npcexpanded.temptraits.has('Lisp') && person.traits.has('Lisp'):
-			if rand_range(0,100) <= lipincreasechance:
-				person.trait_remove('Lisp')
-				person.npcexpanded.temptraits.remove('Lisp')
-				text += "\n$name seems to be able to talk unhindered again. $He no longer seems to have a lisp."
-		#Add a Delay Timer to keep from spamming
-		while delays > 0:
-			person.npcexpanded.temptraits.append('vocaltraitdelay')
-			delays -= 1
+					text += "\n[color=aqua]$name[/color] seems to be able to talk once again. $He is no longer [color=aqua]Mute[/color] and now merely speaks with a heavy [color=red]Lisp[/color]."
+					vocaltraitchanged = true
+			elif person.npcexpanded.temptraits.has('Lisp') && person.traits.has('Lisp') && globals.lipssizearray.find(person.lips) < 8:
+				if rand_range(0,100) <= lipdecreasechance:
+					person.trait_remove('Lisp')
+					person.npcexpanded.temptraits.remove('Lisp')
+					text += "\n[color=aqua]$name[/color] seems to be able to talk normally again. $He no longer seems to have a [color=aqua]Lisp[/color]."
+					vocaltraitchanged = true
+			#Damage Speech
+			if vocaltraitchanged == false:
+				if globals.lipssizearray.find(person.lips) >= 6 && person.traits.has('Mute') == false:
+					if person.traits.has('Lisp') == false:
+						if rand_range(0,100) <= lipincreasechance:
+							person.add_trait('Lisp')
+							person.npcexpanded.temptraits.append('Lisp')
+							text += "\n$name has started talking with a [color=red]Lisp[/color] due to the unnaturally swollen size of $his lips. $He may naturally be able to speak again in time as long as $his lips are not [color=aqua]Monstrous or larger[/color], but $he might also become temporarily [color=aqua]Mute[/color] if $his lips remain larger than [color=aqua]Plump[/color]."
+							vocaltraitchanged = true
+					elif person.npcexpanded.temptraits.has('Lisp') && globals.lipssizearray.find(person.lips) > 6 && rand_range(0,100) <= lipincreasechance:
+							person.add_trait('Mute')
+							person.npcexpanded.temptraits.append('Mute')
+							text += "\n$name is no longer able to speak due to $his massive lips. $He is now [color=red]Mute[/color]. $He may naturally be able to speak again in time as long as $his lips are not the size of a [color=aqua]Facepussy[/color]."
+							vocaltraitchanged = true
+		
+		#Delay Timer between Changes
+		if vocaltraitchanged == true:
+			var delays = clamp(round(rand_range(-3,3) + (globals.lipssizearray.find(person.lips)*.5)), 1, 7)
+			while delays > 0:
+				person.npcexpanded.temptraits.append('vocaltraitdelay')
+				delays -= 1
 	
 	#Clamp Jobskills at 0-100
 	var job = person.work
@@ -2146,9 +2215,9 @@ func dailyUpdate(person):
 	if person.lactation == true && person.lactating.milkedtoday == false && person.lactating.milkstorage > 0:
 		getMilkLeak(person,50)
 #		dailyMilking(person,'none',false)
-	else:
-		#Resets it for the next day
-		person.lactating.milkedtoday = false
+	
+	#Resets it for the next day
+	person.lactating.milkedtoday = false
 
 	#Reset the Tracked Events for Tomorrow
 	person.dailyevents.clear()
@@ -2897,6 +2966,16 @@ func dailyLactation(person):
 	text += "$name's "+str(getChest(person))+ " produced [color=aqua]"+str(regen)+" milk[/color] today. "
 
 	#Pressure Stress and Swelling
+	if lact.milkedtoday == false && lact.milkstorage >= 1:
+		lact.daysunmilked += 1
+		if lact.daysunmilked >= 1:
+			text += "$name feels growing pressure in $his breasts as $he goes [color=red]unmilked[/color] for [color=aqua]"+ str(lact.daysunmilked) +" Days[/color]. "
+		#Turn Default .25 of Storage into Pressure
+		var transfer = round(lact.milkstorage * globals.expansionsettings.lacation_pressurepermilkstored)
+		lact.pressure += transfer
+		lact.milkstorage -= transfer
+	
+	#Hyperlactation
 	if person.lactating.hyperlactation == true:
 		pressure = person.lactating.milkstorage - person.lactating.milkmax
 		pressure = clamp(pressure, -10, 10)
@@ -2952,6 +3031,8 @@ func dailyMilking(person, extraction='', autopump = false):
 	var auto = autopump
 	if extraction == 'none':
 		lact.daysunmilked += 1
+		if lact.daysunmilked >= 1:
+			text += "$name feels growing pressure in $his breasts as $he goes [color=red]unmilked[/color] for [color=aqua]"+ str(lact.daysunmilked) +" Days[/color]. "
 		#Turn .1 of Storage into Pressure
 		transfer = round(lact.milkstorage * milkregenperday)
 		lact.pressure += transfer
@@ -2965,7 +3046,7 @@ func dailyMilking(person, extraction='', autopump = false):
 		if rand_range(0,100) <= ((person.lactating.milkstorage*.25)+person.lactating.pressure) * globals.expansionsettings.beingmilkedacceptancemultiplier:
 			if person.fetish.bemilked != globals.fetishopinion.back():
 				person.fetish.bemilked = globals.fetishopinion[globals.fetishopinion.find(person.fetish.bemilked)+1]
-				text += "$name seems to be more comfortable with lactating now. $He now feels that it is " + str(person.fetish.bemilked) + " to be lactating."
+				text += "$name seems to be more comfortable with lactating now. $He now feels that it is " + str(person.fetish.bemilked) + " to be lactating. "
 		
 		#Stress/Lust based on the Being Milked Fetish
 		
@@ -3115,7 +3196,7 @@ func altereddiet_consumebottle(person):
 	return text
 
 enum {IMAGE_DEFAULT, IMAGE_NAKED}
-enum {LOW_STRESS, MID_STRESS, HIGH_STRESS}
+enum {LOW_STRESS, MID_STRESS, HIGH_STRESS, IMAGE_PREG}
 var typeEnumToString = ['default','naked']
 
 var dictUniqueImagePaths = {
@@ -3132,11 +3213,13 @@ var dictUniqueImagePaths = {
 			LOW_STRESS: 'res://files/images/ayneris/aynerisneutral.png',
 			MID_STRESS: 'res://files/images/ayneris/aynerisangry.png',
 			HIGH_STRESS: 'res://files/images/ayneris/aynerispissed.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/preg_uniques/aynerisneutralnaked_preggo.png',
 		},
 		IMAGE_NAKED: {
 			LOW_STRESS: 'res://files/images/ayneris/aynerisneutralnaked.png',
 			MID_STRESS: 'res://files/images/ayneris/aynerisangrynaked.png',
 			HIGH_STRESS: 'res://files/images/ayneris/aynerispissednaked.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/preg_uniques/aynerisneutralnaked_preggo.png',
 		},
 	},
 	'Cali': {
@@ -3156,11 +3239,13 @@ var dictUniqueImagePaths = {
 			LOW_STRESS: 'res://files/images/chloe/chloehappy.png',
 			MID_STRESS: 'res://files/images/chloe/chloeneutral.png',
 			HIGH_STRESS: 'res://files/images/chloe/chloeshy2.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/preg_uniques/chloenaked_preggo.png',
 		},
 		IMAGE_NAKED: {
 			LOW_STRESS: 'res://files/images/chloe/chloenakedhappy.png',
 			MID_STRESS: 'res://files/images/chloe/chloenakedneutral.png',
 			HIGH_STRESS: 'res://files/images/chloe/chloenakedshy.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/preg_uniques/chloenaked_preggo.png',
 		},
 	},
 	'Emily': {
@@ -3168,18 +3253,22 @@ var dictUniqueImagePaths = {
 			LOW_STRESS: 'res://files/images/emily/emily2happy.png',
 			MID_STRESS: 'res://files/images/emily/emily2neutral.png',
 			HIGH_STRESS: 'res://files/images/emily/emily2worried.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/preg_uniques/emilyf_preg.png',
 		},
 		IMAGE_NAKED: {
 			LOW_STRESS: 'res://files/images/emily/emilynakedhappy.png',
 			HIGH_STRESS: 'res://files/images/emily/emilynakedneutral.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/preg_uniques/emilyf_preg.png',
 		},
 	},
 	'Ivrana': {
 		IMAGE_DEFAULT: {
 			HIGH_STRESS: 'res://files/aric_expansion_images/characters/ivranaclothed.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/ivranapregnant.png',
 		},
 		IMAGE_NAKED: {
 			HIGH_STRESS: 'res://files/aric_expansion_images/characters/ivrananaked.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/ivranapregnant.png',
 		},
 	},
 	'Maple': {
@@ -3203,10 +3292,14 @@ var dictUniqueImagePaths = {
 	},
 	'Tia': {
 		IMAGE_DEFAULT: {
-			HIGH_STRESS: 'res://files/aric_expansion_images/characters/tiaclothed.png',
+			MID_STRESS: 'res://files/aric_expansion_images/characters/New Tia/tianeutral.png',
+			HIGH_STRESS: 'res://files/aric_expansion_images/characters/New Tia/tiasad.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/New Tia/tiapregnant.png',
 		},
 		IMAGE_NAKED: {
-			HIGH_STRESS: 'res://files/aric_expansion_images/characters/tianaked.png',
+			MID_STRESS: 'res://files/aric_expansion_images/characters/New Tia/tianudeneutral.png',
+			HIGH_STRESS: 'res://files/aric_expansion_images/characters/New Tia/tianudesad.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/New Tia/tiapregnant.png',
 		},
 	},
 	'Tisha': {
@@ -3214,10 +3307,12 @@ var dictUniqueImagePaths = {
 			LOW_STRESS: 'res://files/images/tisha/tishahappy.png',
 			MID_STRESS: 'res://files/images/tisha/tishaneutral.png',
 			HIGH_STRESS: 'res://files/images/tisha/tishaangry.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/preg_uniques/tisha_preggo.png',
 		},
 		IMAGE_NAKED: {
 			LOW_STRESS: 'res://files/images/tisha/tishanakedhappy.png',
 			HIGH_STRESS: 'res://files/images/tisha/tishanakedneutral.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/characters/preg_uniques/tisha_preggo.png',
 		},
 	},
 	'Yris': {
@@ -3264,13 +3359,16 @@ func updateBodyImage(person):
 			stress = MID_STRESS
 		else:
 			stress = HIGH_STRESS
+		if person.preg.duration > 0 && person.knowledge.append('currentpregnancy') || person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height)/2:
+			if dictUniqueImagePaths[person.unique][imagetype].has(IMAGE_PREG):
+				stress = IMAGE_PREG
 		person.imagetype = typeEnumToString[imagetype]
 		var ref = dictUniqueImagePaths[person.unique][imagetype]
 		person.imagefull = ref[stress] if ref.has(stress) else ref[HIGH_STRESS] 
 	###---End Expansion---###
 	elif person.imagefull != null:
 		var attempt = []
-		if person.preg.duration > 0 || person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height)/2:
+		if person.preg.duration > 0  && person.knowledge.append('currentpregnancy') || person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height)/2:
 			attempt.append('preg')
 		if int(person.exposed.chest) + int(person.exposed.genitals) + int(person.exposed.ass) >= 2:
 			attempt.append('naked')

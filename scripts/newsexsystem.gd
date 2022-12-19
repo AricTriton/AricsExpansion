@@ -75,6 +75,7 @@ class member:
 	var assholesize
 	var vagTorn = false
 	var assTorn = false
+	var virginity_multiplier = 0
 	var actionshad = {addtraits = [], removetraits = [], samesex = 0, samesexorgasms = 0, oppositesex = 0, oppositesexorgasms = 0, punishments = 0, group = 0, incest = 0, incestorgasms = 0}
 	var succubusdraincount = 0 #ralphC
 	###---Expansion End---###
@@ -789,7 +790,7 @@ class member:
 			#Penis in Pussy Effects
 			elif scenedict.scene.code in ['missionary','doggy','lotus','revlotus','spitroast','insertinturns']:
 				if scenedict.givers.has(self) && scenedict.takers.has(i):
-					var temppenissize = globals.penissizearray.find(person.penis) if person.penis != null else 4 # handle strapon with default size
+					var temppenissize = globals.penissizearray.find(person.penis) if person.penis != 'none' else 4 # handle strapon with default size
 					difference = temppenissize - globals.vagsizearray.find(i.vaginasize)
 					number = 1+(difference*.1)
 					values.sens *= number
@@ -797,7 +798,7 @@ class member:
 					if difference > 0 && scenedict.givers.size() <= 1:
 						text += "\n[color=green][name1] {^[is1] enjoying:[is1] loving:[is1] relishing:loves} the feeling of [his1] [penis1] stretching [his2] [pussy2].[/color]"
 					elif difference < 0 && scenedict.givers.size() <= 1:
-						text += "\n[color=green][name1] {^can barely feel:can't feel:can't fill} [names2] [pussy2] with [his1] [penis1].[/color]"
+						text += "\n[color=red][name1] {^can barely feel:can't feel:can't fill} [names2] [pussy2] with [his1] [penis1].[/color]"
 					#Display
 					if globals.state.perfectinfo == true:
 						display = difference*10
@@ -806,7 +807,7 @@ class member:
 						elif display < 0 && scenedict.givers.size() <= 1:
 							text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
 				elif scenedict.takers.has(self) && scenedict.givers.has(i):
-					var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != null else 4 # handle strapon with default size
+					var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != 'none' else 4 # handle strapon with default size
 					difference = temppenissize - globals.vagsizearray.find(vaginasize)
 					number = 1+(difference*.1)
 					values.sens *= number
@@ -830,7 +831,7 @@ class member:
 							if scenedict.takers.size() <= 1:
 								text += "[color=green][name2] {^moans:gasps:spasms:twitches:bites [his2] lip} as [his2] [pussy2] [is2] {^stretched:gaped:spread apart:forced to stretch} by [names1] [penis1].[/color] "
 							var stretch = globals.vagsizearray.find(vaginasize) - globals.vagsizearray.find(person.vagina)
-							if person.sexexpanded.pliability - stretch + rand_range(0,2) < 0:
+							if globals.expansionsettings.disablevaginatearing == false && person.sexexpanded.pliability - stretch + rand_range(0,2) < 0:
 								if vagTorn == false:
 									vagTorn = true
 									person.dailyevents.append('vagTorn')
@@ -853,7 +854,7 @@ class member:
 			#Penis in Asshole Effects
 			elif scenedict.scene.code in ['missionaryanal', 'doggyanal','lotusanal','revlotusanal','spitroastass','insertinturnsass']:
 				if scenedict.givers.has(self) && scenedict.takers.has(i):
-					var temppenissize = globals.penissizearray.find(person.penis) if person.penis != null else 4 # handle strapon with default size
+					var temppenissize = globals.penissizearray.find(person.penis) if person.penis != 'none' else 4 # handle strapon with default size
 					difference = temppenissize - globals.assholesizearray.find(i.assholesize)
 					number = 1+(difference*.1)
 					values.sens *= number
@@ -861,7 +862,7 @@ class member:
 					if difference > 0 && scenedict.givers.size() <= 1:
 						text += "\n[color=green][name1] {^[is1] enjoying:[is1] loving:[is1] relishing:loves} the feeling of [his1] [penis1] stretching [his2] [anus2].[/color] "
 					elif difference < 0 && scenedict.givers.size() <= 1:
-						text += "\n[color=green][name1] {^can barely feel:can't feel:can't fill} [names2] [anus2] with [his1] [penis1].[/color] "
+						text += "\n[color=red][name1] {^can barely feel:can't feel:can't fill} [names2] [anus2] with [his1] [penis1].[/color] "
 					#Display
 					if globals.state.perfectinfo == true:
 						display = difference*10
@@ -870,7 +871,7 @@ class member:
 						elif display < 0 && scenedict.givers.size() <= 1:
 							text += " [color=red]Arousal decreased by " + str(display) + "%[/color]"
 				elif scenedict.takers.has(self) && scenedict.givers.has(i):
-					var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != null else 4 # handle strapon with default size
+					var temppenissize = globals.penissizearray.find(i.person.penis) if i.person.penis != 'none' else 4 # handle strapon with default size
 					difference = temppenissize - globals.assholesizearray.find(assholesize)
 					number = 1+(difference*.1)
 					values.sens *= number
@@ -891,7 +892,7 @@ class member:
 							if scenedict.takers.size() <= 1:
 								text += "\n[color=green][name2] {^starts:begins} {^moaning:gasping:spasming} as [his2] [anus2] [is2] {^stretched:gaped:spread apart:forced to stretch} by [names1] [penis1].[/color] "
 							var stretch = globals.assholesizearray.find(assholesize) - globals.assholesizearray.find(assholesize)
-							if person.sexexpanded.pliability - stretch + rand_range(0,2) < 0:
+							if globals.expansionsettings.disableanaltearing == false && person.sexexpanded.pliability - stretch + rand_range(0,2) < 0:
 								if assTorn == false:
 									assTorn = true
 									person.dailyevents.append('assTorn')
@@ -1651,20 +1652,36 @@ func startscene(scenescript, cont = false, pretext = ''):
 	if scenescript.virginloss == true:
 		for i in givers:
 			if scenescript.giverpart == 'vagina':
-				i.person.vagvirgin = false
+				###---Added by Expansion---### DimCrystal Virginity
+				if i.person.vagvirgin == true:
+					i.person.vagvirgin = false
+					i.virginity_multiplier += 5
+				###---End Expansion---###
 				if i.person.vagina == 'normal':
 					i.person.vagina = globals.randomfromarray(globals.vagsizearray)
 			elif scenescript.giverpart == 'anus':
-				i.person.assvirgin = false
+				###---Added by Expansion---### DimCrystal Virginity
+				if i.person.assvirgin == true:
+					i.person.assvirgin = false
+					i.virginity_multiplier += 5
+				###---End Expansion---###
 				if i.person.asshole == 'normal':
 					i.person.asshole = globals.randomfromarray(globals.assholesizearray)
 		for i in takers:
 			if scenescript.takerpart == 'vagina':
-				i.person.vagvirgin = false
+				###---Added by Expansion---### DimCrystal Virginity
+				if i.person.vagvirgin == true:
+					i.person.vagvirgin = false
+					i.virginity_multiplier += 5
+				###---End Expansion---###
 				if i.person.vagina == 'normal':
 					i.person.vagina = globals.randomfromarray(globals.vagsizearray)
 			elif scenescript.takerpart == 'anus':
-				i.person.assvirgin = false
+				###---Added by Expansion---### DimCrystal Virginity
+				if i.person.assvirgin == true:
+					i.person.assvirgin = false
+					i.virginity_multiplier += 5
+				###---End Expansion---###
 				if i.person.asshole == 'normal':
 					i.person.asshole = globals.randomfromarray(globals.assholesizearray)
 	###---End Expansion---###
@@ -2193,7 +2210,7 @@ func endencounter():
 			difference = globals.assholesizearray.find(i.assholesize) - globals.assholesizearray.find(i.person.asshole)
 			sizeup = 0
 			while difference > 0:
-				if rand_range(0,100) <= globals.expansionsettings.stretchchanceanus + (i.person.sexexpanded.elasticity*10):
+				if rand_range(0,100) <= globals.expansionsettings.stretchchanceanus - (i.person.sexexpanded.elasticity*10):
 					clamper = globals.assholesizearray.find(i.person.asshole)+1
 					clamper = clamp(clamper,0,globals.assholesizearray.size()-1)
 					i.person.asshole = globals.assholesizearray[clamper]
@@ -2261,7 +2278,7 @@ func endencounter():
 					shift *= -1
 					text += i.person.quirk("\n[color=yellow]-I can't believe that you actually raped me! I feel so violated! You " + str(globals.player.sex) + "s are disgusting.[/color]")
 			if shift > 0:
-				if globals.kinseyscale.find(i.person.sexuality) + shift > globals.kinseyscale.size():
+				if globals.kinseyscale.find(i.person.sexuality) + shift > globals.kinseyscale.size()+1:
 					i.person.sexuality = 'gay'
 					shift = 0
 				else:
@@ -2294,7 +2311,7 @@ func endencounter():
 					text += i.person.quirk("\n[color=yellow]-I "+globals.randomitemfromarray(['feel','think that I am','can tell that I am','am so much','definitely am','feel much'])+" more attracted to " +sexname+"s now after this experience. I feel " +globals.expansion.getSexuality(i.person)+" now.[/color]")
 		elif i.person == globals.player && globals.expansionsettings.player_sexuality_shift == true && shift != 0:
 			if shift > 0:
-				if globals.kinseyscale.find(i.person.sexuality) + shift > globals.kinseyscale.size():
+				if globals.kinseyscale.find(i.person.sexuality) + shift > globals.kinseyscale.size()+1:
 					i.person.sexuality = 'gay'
 					shift = 0
 				else:
@@ -2351,12 +2368,20 @@ func endencounter():
 		if i.requestsdone > 0:
 			mana += i.requestsdone*10
 			###---Added by Expansion---### Removed , added \n
-			text += "\n[color=aqua]Desires fullfiled: " + str(i.requestsdone) + '[/color]'
+			text += "\nDesires fullfiled: [color=aqua]" + str(i.requestsdone) + '[/color]'
 			###---End Expansion---###
 		if i.person.race_display == "Succubus": #ralphC - Succubus orgasms don't produce mana
 			mana = 0  #ralphC
 		###---Added by Expansion---### Person Expanded; Strip/Redress
 		text += i.person.updateClothing()
+		#DimCrystal Ability
+		if globals.state.thecrystal.abilities.has('empowervirginity') && globals.state.thecrystal.empoweredvirginity == true && i.person != globals.player:
+			if i.virginity_multiplier > 0:
+				text += "\n\n[color=lime]Magically Empowered Virginity was Lost![/color]\nMana Multiplier: Personal Produced Amount x[color=aqua]" + str(i.virginity_multiplier) + "[/color]"
+				mana = round(mana * i.virginity_multiplier)
+			else:
+				text += "\n[color=red]No Virginity was Lost. The Crystal's disappointment at the lack of character development drains half of the mana produced.[/color]"
+				mana = round(mana*.5)
 		###---End Expansion---###
 		mana = round(mana)
 		manaDict[i.person] = mana
