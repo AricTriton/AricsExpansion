@@ -64,7 +64,7 @@ var cont_shared_finalHighSens = [
 ]
 
 # Two givers keep sucking one nipple each. This presumes there are several givers and one taker.
-func getSharedContinuation():
+func getSharedContinuation(givers, takers):
 	if takers[0].sens < 500:
 		return globals.randomitemfromarray(cont_shared_initial) + globals.randomitemfromarray(cont_shared_finalLowSens)
 	return globals.randomitemfromarray(cont_shared_initial) + globals.randomitemfromarray(cont_shared_finalHighSens)
@@ -108,7 +108,7 @@ var cont_careless_final = [
 
 # A careless giver continues to do what he wants, regardless of taker's excitement. The action can
 # be slightly rough. This presumes there is only one giver and one taker.
-func getCarelessContinuation():
+func getCarelessContinuation(givers, takers):
 	return globals.randomitemfromarray(cont_careless_initial) + globals.randomitemfromarray(cont_careless_final)
 
 # --------------------------------------------------------------------------------------------------
@@ -192,7 +192,7 @@ var cont_rough_finalHighSens = [
 
 # The giver adapts slightly to the taker's excitement. The action can be rough. This presumes there
 # is only one giver and one taker.
-func getRoughContinuation():
+func getRoughContinuation(givers, takers):
 	if takers[0].sens < 500:
 		return globals.randomitemfromarray(cont_rough_initialLowSens) + globals.randomitemfromarray(cont_rough_finalLowSens)
 	return globals.randomitemfromarray(cont_rough_initialHighSens) + globals.randomitemfromarray(cont_rough_finalHighSens)
@@ -267,21 +267,22 @@ var cont_gentle_finalHighSens = [
 
 # The giver adapts slightly to the taker's excitement. The action is gentle and loving. This
 # presumes there is only one giver and one taker.
-func getGentleContinuation():
+func getGentleContinuation(givers, takers):
 	if takers[0].sens < 500:
 		return globals.randomitemfromarray(cont_gentle_initialLowSens) + globals.randomitemfromarray(cont_gentle_finalLowSens)
 	return globals.randomitemfromarray(cont_gentle_initialHighSens) + globals.randomitemfromarray(cont_gentle_finalHighSens)
 
 # --------------------------------------------------------------------------------------------------
-
+# The givers and takers arrays hold the people that were selected when the action was initiated. The
+# currently selected set of givers and takers might have changed since then.
 func getongoingdescription(givers, takers):
 	if givers.size() > 1:
-		return getSharedContinuation()
+		return getSharedContinuation(givers, takers)
 	if givers[0].person.traits.has("Uncivilized"):
-		return getCarelessContinuation()
+		return getCarelessContinuation(givers, takers)
 	if isRough(givers[0]):
-		return getRoughContinuation()
-	return getGentleContinuation()
+		return getRoughContinuation(givers, takers)
+	return getGentleContinuation(givers, takers)
 
 
 # Return true if the action can take place.
