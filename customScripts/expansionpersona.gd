@@ -44,6 +44,7 @@ var persona = {
 		persona = 'AliceClassic',
 		name = 'Alice',
 		surname = 'Bunny',
+		imageportait = 'res://files/aric_expansion_images/KK/Alice Portraits/A_Base_portrait.png' ,
 		skin = 'fair',
 		titssize = 'big',
 		asssize = 'average',
@@ -93,6 +94,7 @@ var persona = {
 		persona = 'AliceBunny',
 		name = 'Alice',
 		surname = 'Bunny',
+		imageportait = 'res://files/aric_expansion_images/KK/Alice Portraits/A_bunny_portrait.png', 
 		skin = 'fair',
 		titssize = 'big',
 		asssize = 'average',
@@ -141,6 +143,7 @@ var persona = {
 		persona = 'AliceMeow',
 		name = 'Alice',
 		surname = 'Meow',
+		imageportait = 'res://files/aric_expansion_images/KK/Alice Portraits/A_cat_portrait.png', 
 		skin = 'fair',
 		titssize = 'big',
 		asssize = 'average',
@@ -190,6 +193,7 @@ var persona = {
 		persona = 'AlicePuppy',
 		name = 'Alice',
 		surname = 'Puppy',
+		imageportait = 'res://files/aric_expansion_images/KK/Alice Portraits/A_dog_portrait.png',
 		skin = 'fair',
 		titssize = 'big',
 		asssize = 'average',
@@ -243,6 +247,7 @@ var persona = {
 		persona = 'AliceFoxy',
 		name = 'Alice',
 		surname = 'Foxxy',
+		imageportait = 'res://files/aric_expansion_images/KK/Alice Portraits/A_fox_portrait.png',
 		skin = 'fair',
 		titssize = 'big',
 		asssize = 'average',
@@ -338,6 +343,32 @@ var persona = {
 			transformation = "dirty"
 		}
 	}
+}
+# imageportait = 'res://files/aric_expansion_images/characters/ivranaportrait.png', Portrait addition template to persona data
+#sprites is also supposed to contain portrait images. If the above doesn't work try adding them here. This is just to see what happens.
+var sprites = {
+	#Alices
+	#classic
+	alice_classic = load("res://files/aric_expansion_images/KK/Alice Portraits/A_Base.png"),
+	alice_classic_naked = load("res://files/aric_expansion_images/KK/Alice Portraits/A_base_naked.png"),
+	alice_classic_preg = load("res://files/aric_expansion_images/KK/Alice Portraits/A_base_preg.png"),
+	#bunny
+	alice_bunny = load("res://files/aric_expansion_images/KK/Alice Portraits/A_bunny.png"),
+	alice_bunny_naked = load("res://files/aric_expansion_images/KK/Alice Portraits/A_bunny_naked.png"),
+	alice_bunny_preg = load("res://files/aric_expansion_images/KK/Alice Portraits/A_bunny_preg.png"),
+	#meow
+	alice_meow = load("res://files/aric_expansion_images/KK/Alice Portraits/A_cat.png"),
+	alice_meow_naked = load("res://files/aric_expansion_images/KK/Alice Portraits/A_cat_naked.png"),
+	alice_meow_preg = load("res://files/aric_expansion_images/KK/Alice Portraits/A_cat_preg.png"),
+	#puppy
+	alice_puppy = load("res://files/aric_expansion_images/KK/Alice Portraits/A_dog.png"),
+	alice_puppy_naked = load("res://files/aric_expansion_images/KK/Alice Portraits/A_dog_naked.png"),
+	alice_puppy_preg = load("res://files/aric_expansion_images/KK/Alice Portraits/A_dog_preg.png"),
+	#foxy
+	alice_foxy = load("res://files/aric_expansion_images/KK/Alice Portraits/A_fox.png"),
+	alice_foxy_naked = load("res://files/aric_expansion_images/KK/Alice Portraits/A_fox_naked.png"),
+	alice_foxy_preg = load("res://files/aric_expansion_images/KK/Alice Portraits/A_fox_preg.png")
+	#milker
 }
 
 func createpersona(name):
