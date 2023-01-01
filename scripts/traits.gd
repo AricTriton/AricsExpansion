@@ -889,7 +889,7 @@ var traits = {
 	},
 	"Sadist": {
 		"name": "Sadist",
-		"description": "$name enjoys inflicting pain far more than $he should and it makes $him really turned on. \n\n[color=aqua]May request to punish $his sexual parners. [/color]",
+		"description": "$name enjoys inflicting pain far more than $he should and it makes $him really turned on. \n\n[color=aqua]May request to punish $his sexual partners. [/color]",
 		"effect": {
 			
 		},

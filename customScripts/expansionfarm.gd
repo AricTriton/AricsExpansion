@@ -982,7 +982,7 @@ func breedSnails(cattle):
 					elif effort == 2:
 						text += "$He grunted and pushed hard, even holding $his breath as $he tried to force the foreign entity from $his body. "
 					else:
-						text += "$He screamed and pushed as hard as $he could. $He held $his breath as $he gave it his all, only breathing again after $his face was completely flushed and sweat glistened off of $him. "
+						text += "$He screamed and pushed as hard as $he could. $He held $his breath as $he gave it $his all, only breathing again after $his face was completely flushed and sweat glistened off of $him. "
 				cattle.energy -= clamp(cattle.sstr * effort, 1, 10)
 				laborresult += clamp(cattle.sstr * effort, 1, 10)
 				#Layed
