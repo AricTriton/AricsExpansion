@@ -4814,6 +4814,57 @@ func dialogue(showcloseButton, destination, dialogtext, dialogbuttons = null, sp
 	for key in clearSprites:
 		nodedict[key].set_texture(null)
 
+#bbp_player
+func video_scene(target, vid, scenetext, scenebuttons = null):
+	if !get_node("scene").visible:
+		get_node("scene").visible = true
+		nodeunfade($scene, 0.4)
+		#get_node("scene/AnimationPlayer").play("fading")
+	get_node("scene").show()
+	get_node("infotext").hide()
+	get_node("scene/Panel/sceneeffects").set_texture(null)
+	
+	if vid != null:
+		#make video player visible
+		get_node("scene/Panel/bbp_player").show()
+		#play video - I used autoplay in the editor
+		get_node("scene/Panel/bbp_player").stream(vid)
+		#add a replay button - This is done outside this function
+		#get_node("scene/Panel/scenepicture").set_normal_texture(globals.scenes[image])
+	else:
+		$scene/Panel/bbp_player.stream(null)
+
+
+	get_node("scene/textpanel/scenetext").set_bbcode(globals.player.dictionary(scenetext))
+	get_node("scene/textpanel/scenetext").scroll_to_line(0)
+	get_node("scene/resources/gold").set_text(str(globals.resources.gold))
+	get_node("scene/resources/food").set_text(str(globals.resources.food))
+	get_node("scene/resources/mana").set_text(str(globals.resources.mana))
+	get_node("scene/resources/energy").set_text(str(globals.player.energy))
+	
+	for i in $scene/buttonscroll/buttoncontainer.get_children():
+		if i.get_name() != 'Button':
+			i.hide()
+			i.queue_free()
+	var counter = 1
+	for i in scenebuttons:
+		newbuttonscene(i, target, counter)
+		counter += 1
+
+func replayvideo(): #target function for the replay button
+	get_node("scene/Panel/bbp_player").play()
+
+func closevideoscene():
+	#get_node("scene/AnimationPlayer").play_backwards("fading")
+	nodefade($scene, 0.4)
+	get_node("infotext").show()
+	if $music.stream == globals.musicdict.intimate:
+		music_set(savedtrack)
+	if globals.rules.fadinganimation == true:
+		yield(tween, 'tween_completed')
+	get_node("scene/Panel/bbp_player").hide()
+	get_node("scene").hide()
+
 func _on_upgradesclose_pressed():
 	get_node("MainScreen/mansion/upgradespanel").hide()
 	get_tree().get_current_scene()._on_mansion_pressed()

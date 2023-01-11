@@ -371,6 +371,10 @@ var sprites = {
 	#milker
 }
 
+var persona_videos = { #store persona-related videos here
+	nothing = 'nothing to see here'
+}
+
 func createpersona(name):
 	var refChar = persona.get(name)
 	if persona.has(name):
