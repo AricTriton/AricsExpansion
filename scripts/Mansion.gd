@@ -1,9 +1,37 @@
+### Mansion - Main
+extends Control
 
 ###---Added by Expansion---### Deviate
 var corejobs = ['rest','forage','hunt','cooking','library','nurse','maid','storewimborn','artistwimborn','assistwimborn','whorewimborn','escortwimborn','fucktoywimborn', 'lumberer', 'ffprostitution','guardian', 'research', 'slavecatcher','fucktoy','housepet','trainer','crystalresearcher']
-var manaeaters = ['Succubus','Golem'] #ralphC - used in food consumption calcs, etc.
-###---End Expansion---###
-var outOfMansionJobs = ['storewimborn','artistwimborn','assistwimborn','whorewimborn','escortwimborn','fucktoywimborn', 'lumberer', 'ffprostitution','guardian', 'research', 'slavecatcher','fucktoy'] # /Capitulize - Jobs outside of the mansion.
+
+var test = File.new()
+var testslaverace = globals.racefile.groups.all
+var testslaveage = 'random'
+var testslavegender = 'male'
+var testslaveorigin = ['slave','poor','commoner','rich','noble']
+var currentslave = 0 setget currentslave_set
+var selectedslave = -1
+var texture = null
+var startcombatzone = "darkness"
+var nameportallocation
+var enddayprocess = false
+onready var maintext = '' setget maintext_set, maintext_get
+onready var exploration = get_node("explorationnode")
+onready var slavepanel = get_node("MainScreen/slave_tab")
+onready var outside = $outside
+
+onready var tween = $Tween
+
+onready var minimap = $outside/minimappanel/map/Control
+
+signal animfinished
+
+
+var checkforevents = false
+var debug = false
+
+#QMod - Variables
+onready var mansionStaff = get_node("joblist").mansionStaff
 
 func _ready():
 	###---Added by Expansion---### Minor Tweaks by Dabros Mod Integration
@@ -123,18 +151,392 @@ func _ready():
 	_on_mansion_pressed()
 	#startending()
 
-var awayReturnText = {
-	'travel back': 'returned to the mansion and went back to $his duties.',
-	'transported back': 'transported back to the mansion and went back to $his duties.',
-	'in labor': 'recovered from labor and went back to $his duties.',
-	'training': 'completed $his training and went back to $his duties.',
-	'nurture': 'has finished being nurtured and went back to $his duties.',
-	'growing': 'has matured and is now ready to serve you.',
-	'lab': 'successfully recovered from laboratory modification and went back to $his duties.',
-	'rest': 'finished resting and went back to $his duties.',
-	'vacation': 'returned from vacation and went back to $his duties.',
-	'default': 'returned to the mansion and went back to $his duties.',
+var sexanimals = {dog = 0, horse = 0}
+
+func on_resize_screen():
+	var node = get_node("MainScreen/mansion/mansioninfo")
+	if node != null && node.visible:
+		call_deferred("build_mansion_info")
+
+func _process(delta):
+	$screenchange.visible = (float($screenchange.modulate.a) > 0)
+	if self.checkforevents == true && !$screenchange.visible:
+		for i in get_tree().get_nodes_in_group("blocknextdayevents"):
+			if i.is_visible_in_tree():
+				return
+		checkforevents = false
+		nextdayevents()
+	for i in get_tree().get_nodes_in_group("messages"):
+		if i.modulate.a > 0:
+			i.modulate.a = (i.modulate.a - delta)
+	
+	if shaking == true && _timer >= 0:
+		var shake_amount = 10
+		$Camera2D.set_offset(Vector2(rand_range(-1.0, 1.0) * shake_amount, rand_range(-1.0, 1.0) * shake_amount))
+		_timer -= delta
+	elif shaking == true && _timer < 0:
+		$Camera2D.set_offset(Vector2(0,0))
+		shaking = false
+		_timer = 0.0
+	
+	if musicfading == true && get_node("music").get_volume_db() != 0 && get_node("music").playing:
+		get_node("music").set_volume_db(get_node('music').get_volume_db() - delta*20)
+		if get_node("music").get_volume_db() <= 0:
+			musicfading = false
+			get_node("music").set_volume_db(0)
+			musicvalue = $music.get_playback_position()
+			get_node("music").playing = false
+	if musicraising == true && get_node("music").volume_db < globals.rules.musicvol && get_node("music").playing:
+		get_node("music").set_volume_db(get_node('music').get_volume_db() + delta*20)
+		if get_node("music").get_volume_db() >= globals.rules.musicvol:
+			musicraising = false
+			get_node("music").set_volume_db(globals.rules.musicvol)
+
+var shaking = false
+var _timer = 0.0
+
+func shake(duration):
+	shaking = true
+	_timer = duration
+
+
+var musicfading = false
+var musicraising = false
+var musicvalue = 0
+
+func maintext_set(value):
+	var wild = $explorationnode.zones[$explorationnode.currentzone.code].combat == true
+	$outside/textpanel.visible = !wild
+	$outside/exploreprogress.visible = wild
+	$outside/textpanelexplore.visible = wild
+	$outside/textpanel/outsidetextbox.bbcode_text = value
+	$outside/textpanelexplore/outsidetextbox2.bbcode_text = value
+
+
+func maintext_get():
+	var wild = $explorationnode.zones[$explorationnode.currentzone.code].combat == true
+	var text = ''
+	if wild == false:
+		text = $outside/textpanel/outsidetextbox.bbcode_text
+	else:
+		text = $outside/textpanelexplore/outsidetextbox2.bbcode_text
+	return text
+
+func currentslave_set(value):
+	currentslave = value
+	globals.items.person = globals.slaves[currentslave]
+	globals.spells.person = globals.slaves[currentslave]
+
+func _input(event):
+	###---Added by Expansion---### Minor Tweaks by Dabros Integration
+	## CHANGED NEW - 26/5/19 - for allowing prev/next keys for slave selection
+	if event.is_action_pressed("ui_page_up") && get_node("charlistcontrol/CharList/scroll_list/slave_list").is_visible_in_tree():
+		my_gotoslave_mansion_prev()
+	if event.is_action_pressed("ui_page_down") && get_node("charlistcontrol/CharList/scroll_list/slave_list").is_visible_in_tree(): ## charlistcontrol/slavelist
+		my_gotoslave_mansion_next()
+	## END OF CHANGED
+	###---End Expansion---###
+	var anythingvisible = false
+	for i in get_tree().get_nodes_in_group("blockmaininput"):
+		if i.is_visible_in_tree() == true:
+			anythingvisible = true
+			break
+	if event.is_echo() == true || event.is_pressed() == false || anythingvisible:
+		if event.is_action_pressed("escape") == true && get_node("tutorialnode").visible == true:
+			get_node("tutorialnode").close()
+		return
+	if event.is_action_pressed("escape") == true && $ResourcePanel/menu.visible == true && $ResourcePanel/menu.disabled == false:
+		if get_node("FinishDayPanel").is_visible_in_tree():
+			get_node("FinishDayPanel").hide()
+			return
+		if !get_node("menucontrol").is_visible_in_tree():
+			_on_menu_pressed()
+		else:
+			if get_node("menucontrol/menupanel/SavePanel").is_visible_in_tree():
+				get_node("menucontrol/menupanel/SavePanel").hide()
+			_on_closemenu_pressed()
+	
+	if get_focus_owner() == get_node("MainScreen/mansion/selfinspect/defaultMasterNoun") && get_node("MainScreen").is_visible_in_tree():
+		return
+	if event.is_action_pressed("F") && get_node("Navigation/end").is_visible_in_tree():
+		_on_end_pressed()
+	elif event.is_action_pressed("Q") && get_node("MainScreen").is_visible_in_tree():
+		mansion()
+	elif event.is_action_pressed("W") && get_node("MainScreen").is_visible_in_tree():
+		jail()
+	elif event.is_action_pressed("E") && get_node("MainScreen").is_visible_in_tree():
+		libraryopen()
+	elif event.is_action_pressed("A") && get_node("MainScreen").is_visible_in_tree() && !get_node("Navigation/alchemy").is_disabled():
+		alchemy()
+	elif event.is_action_pressed("S") && get_node("MainScreen").is_visible_in_tree() && !get_node("Navigation/laboratory").is_disabled():
+		laboratory()
+	elif event.is_action_pressed("Z") && get_node("MainScreen").is_visible_in_tree() && !get_node("Navigation/farm").is_disabled():
+		farm()
+	elif event.is_action_pressed("X") && get_node("MainScreen").is_visible_in_tree() && !$MainScreen/mansion/portals.is_disabled():
+		portals()
+	elif event.is_action_pressed("C") && get_node("MainScreen").is_visible_in_tree():
+		leave()
+	elif event.is_action_pressed("B") && get_node("MainScreen").is_visible_in_tree():
+		_on_inventory_pressed()
+	elif event.is_action_pressed("R") && get_node("MainScreen").is_visible_in_tree():
+		_on_personal_pressed()
+	elif event.is_action_pressed("V") && get_node("MainScreen").is_visible_in_tree():
+		_on_combatgroup_pressed()
+	elif event.is_action_pressed("L") && get_node("MainScreen").is_visible_in_tree():
+		_on_questlog_pressed()
+
+func clearscreen():
+	$Navigation.visible = false
+	$MainScreen.visible = false
+	$charlistcontrol.visible = false
+	#$FinishDayPanel.visible = false
+
+
+
+func slavehover(meta):
+	if meta.find('id') >= 0:
+		globals.slavetooltip( globals.state.findslave( meta.replace('id','')))
+
+func slaveclicked(meta):
+	globals.slavetooltiphide()
+	if meta.find('id') >= 0:
+		globals.openslave( globals.state.findslave( meta.replace('id','')))
+
+func sound(value):
+	$soundeffect.set_volume_db(globals.rules.soundvol)
+	if globals.rules.soundvol > 0:
+		$soundeffect.stream = globals.sounddict[value]
+		$soundeffect.playing = true
+		$soundeffect.autoplay = false
+
+func startending():
+	var name = globals.saveDir + globals.player.name + " - Main Quest Completed"
+	var scene = load("res://files/ending.tscn").instance()
+	close_dialogue()
+	animationfade(3)
+	
+	yield(self, 'animfinished')
+	scene.add_to_group('blockmaininput')
+	scene.add_to_group('blockoutsideinput')
+	add_child_below_node($tooltip, scene)
+	scene.launch()
+	music_set('ending')
+	if globals.developmode == false:
+		globals.save_game(name)
+	if globals.state.decisions.has('hadekeep'):
+		globals.slaves = globals.characters.create("Melissa")
+	globals.state.mainquestcomplete = true
+
+
+func _on_new_slave_button_pressed():
+	
+	globals.resources.day = 2
+	for i in globals.state.tutorial:
+		globals.state.tutorial[i] = true
+	#music_set('mansion')
+	get_node("music").play(100)
+	#globals.state.capturedgroup.append(globals.newslave(testslaverace[rand_range(0,testslaverace.size())], testslaveage, testslavegender, testslaveorigin[rand_range(0,testslaveorigin.size())]))
+	var person = globals.newslave( globals.randomfromarray(testslaverace), testslaveage, testslavegender, globals.randomfromarray(testslaveorigin))
+	person.obed += 100
+	person.loyal += 100
+	person.xp += 9990
+	person.consent = false
+	person.lust = 100
+	person.spec = 'merchant'
+	globals.connectrelatives(globals.player, person, 'sibling')
+	globals.impregnation(person, globals.player)
+
+	person.attention = 70
+	person.skillpoints = 100
+	for i in ['conf','cour','charm','wit']:
+		person[i] = 100
+	person.ability.append('heavystike')
+	for i in globals.state.portals.values():
+		i.enabled = true
+	for i in globals.spelldict.values():
+		i.learned = true
+	for i in globals.itemdict.values():
+		if !i.type in ['gear','dummy']:
+			i.amount += 10
+	globals.itemdict.zoebook.amount = 0
+	for i in ['armorchain','weaponaynerisrapier','clothpet','clothkimono','underwearlacy','armortentacle','accamuletemerald','accamuletemerald','clothtentacle']:
+		var tmpitem = globals.items.createunstackable(i)
+		globals.state.unstackables[str(tmpitem.id)] = tmpitem
+		globals.items.enchantrand(tmpitem)
+	globals.slaves = person
+	person.unique = 'startslave'
+	globals.player.stats.agi_mod = 5
+	person.stats.health_cur = 100
+	globals.state.reputation.wimborn = 41
+	globals.state.sidequests.ivran = 'potionreceived'
+	globals.state.mansionupgrades.mansionnursery = 1
+	globals.state.mansionupgrades.mansionkennels = 1
+	globals.player.ability.append("leechingstrike")
+	globals.player.ability.append('heal')
+	#globals.player.stats.maf_cur = 3
+	globals.state.branding = 2
+	globals.resources.gold += 5000
+	globals.resources.food += 1000
+	globals.resources.mana += 5
+	globals.player.energy += 100
+	globals.player.xp += 50
+	globals.resources.upgradepoints += 100
+	globals.state.mainquest = 0
+	#globals.state.sidequests.ayda = 15
+	globals.state.sidequests.emily = 14
+	#globals.state.decisions.append('')
+	globals.state.rank = 3
+	#globals.state.plotsceneseen = ['garthorscene','hade1','hade2','frostfordscene']#,'slaverguild']
+	globals.resources.mana = 200
+	globals.state.farm = 3
+	globals.state.mansionupgrades.mansionlab = 1
+	globals.state.mansionupgrades.mansionalchemy = 1
+	globals.state.mansionupgrades.mansionparlor = 1
+	globals.state.backpack.stackables.teleportseal = 2
+	globals.state.reputation.frostford = 50
+	globals.state.condition -= 100
+	globals.state.decisions = ['tishaemilytricked','chloebrothel','ivrantaken','goodroute','mainquestelves']
+	#globals.player.relations.a = 1
+	#globals.player.relations.b = globals.player.relations.get('b', 0) + 2\
+	#buildtestcombatgroup()
+	if true:
+		for i in globals.characters.characters:
+			person = globals.characters.create(i)
+			globals.addrelations(globals.slaves[0], person, -800)
+			person.loyal = 100
+			person.health = 20
+			person.stress = 0
+			person.obed = 100
+			person.lust = 0
+			person.consent = true
+			person.asser = 100
+			person.lewdness = 100
+			person.attention = 100
+			person.learningpoints = 50
+			globals.slaves = person
+	#globals.events.zoepassitems()
+
+func buildtestcombatgroup():
+	var x = 3
+	var array = [globals.player]
+	while x > 0:
+		var person = globals.newslave( globals.randomfromarray(testslaverace), testslaveage, testslavegender, globals.randomfromarray(testslaveorigin))
+		globals.slaves = person
+		x -= 1
+		array.append(person)
+	for i in array:
+		i.level = 25
+		i.mods['augmentscales'] = 'augmentscales'
+		i.add_effect(globals.effectdict.augmentscales)
+		i.mods['augmentstr'] = 'augmentstr'
+		i.add_effect(globals.effectdict.augmentstr)
+		i.mods['augmentagi'] = 'augmentagi'
+		i.add_effect(globals.effectdict.augmentagi)
+		i.mods['augmenthearing'] = 'augmenthearing'
+		for k in ['str','agi','maf','end']:
+			i.stats[k + '_base'] = i.stats[k+"_max"]
+		if i != globals.player:
+			globals.state.playergroup.append(i.id)
+		for k in ['armorrogue','weaponelvensword','accamuletemerald']:
+			var tmpitem = globals.items.createunstackable(k)
+			globals.state.unstackables[str(tmpitem.id)] = tmpitem
+			globals.items.enchantrand(tmpitem)
+			globals.items.equipitem(tmpitem.id, i)
+		i.health = i.stats.health_max
+		i.energy = i.stats.energy_max
+		for k in globals.abilities.abilitydict.values():
+			if i.ability.has(k.code) || k.learnable == false:
+				continue
+			i.ability.append(k.code)
+
+
+func mansion():
+	_on_mansion_pressed()
+
+func jail():
+	_on_jailbutton_pressed()
+
+func libraryopen():
+	_on_library_pressed()
+
+func alchemy():
+	_on_alchemy_pressed()
+
+func laboratory():
+	get_node("MainScreen/mansion/labpanel")._on_lab_pressed()
+
+func farm():
+	_on_farm_pressed()
+
+func portals():
+	_on_portals_pressed()
+
+func leave():
+	get_node("outside")._on_leave_pressed()
+
+func _on_combatgroup_pressed():
+	get_node("groupselectnode").show()
+
+
+
+func getridof():
+	var person = globals.slaves[get_tree().get_current_scene().currentslave]
+	person.removefrommansion()
+	if get_node("dialogue").is_visible_in_tree() && $MainScreen/slave_tab.is_visible_in_tree():
+		close_dialogue()
+	rebuild_slave_list()
+	if get_node("MainScreen").visible:
+		_on_nobutton_pressed()
+		_on_mansion_pressed()
+
+var listinstance = load("res://files/listline.tscn")
+var awayText = {
+	'travel back': 'will return back in ',
+	'transported back': 'will be transported back in ',
+	'in labor': 'will be resting after labor for ',
+	'training': 'will be undergoing training for ',
+	'nurture': 'will be undergoing nurturing for ',
+	'growing': 'will keep maturing for ',
+	'lab': 'will be undergoing modification for ',
+	'rest': 'will be taking a rest for ',
+	'vacation': 'will be on vacation for ',
+	'default': 'will be unavailable for ',
 }
+
+func createSlaveListNode(personlist, person, nodeIndex, visible):
+	var node = listinstance.instance()
+	node.set_meta('id', person.id)
+	personlist.add_child(node)
+	personlist.move_child(node, nodeIndex)
+	var nameNode = node.find_node('name')
+	nameNode.connect("mouse_entered", globals, 'slavetooltip', [person])
+	nameNode.connect("mouse_exited", globals, 'slavetooltiphide')
+	nameNode.connect('pressed', self, 'openslavetab', [person])
+	node.find_node('levelup').connect('pressed', self, 'openslavetab', [person, true])
+	updateSlaveListNode(node, person, visible)
+
+func updateSlaveListNode(node, person, visible):
+	node.visible = visible
+	node.find_node('name').set_text(person.name_long())
+	#Whims -- change text color
+	node.find_node('name').set('custom_colors/font_color', ColorN(person.namecolor))
+	if person.xp >= 100:
+		node.find_node('name').rect_min_size.x = 208 # manual resize since auto glitched
+		node.find_node('levelup').visible = true
+		node.find_node('levelup').hint_tooltip = person.dictionary("Talk to $him to investigate unlocking $his potential." if person.levelupreqs.empty() else "Check requirements for unlocking $his potential.")
+	else:
+		node.find_node('levelup').visible = false
+		node.find_node('name').rect_min_size.x = 235 # manual resize since auto glitched
+	node.find_node('health').set_normal_texture( person.health_icon())
+	node.find_node('healthvalue').set_text( str(round(person.health)))
+	node.find_node('obedience').set_normal_texture( person.obed_icon())
+	node.find_node('stress').set_normal_texture( person.stress_icon())
+	if person.imageportait != null:
+		node.find_node('portait').set_texture( globals.loadimage(person.imageportait))
+
+# awayLabel.get_content_height() will not give the correct value until it has rendered a frame, so call_deferred is used to fix the size after that
+func fixAwayLabel(awayLabel):
+	awayLabel.rect_min_size.y = awayLabel.get_content_height()
 
 func rebuild_slave_list():
 	var personList = get_node("charlistcontrol/CharList/scroll_list/slave_list")
@@ -215,219 +617,21 @@ func rebuild_slave_list():
 	###---End Expansion---###
 	_on_orderbutton_pressed()
 
-func _input(event):
-	###---Added by Expansion---### Minor Tweaks by Dabros Integration
-	## CHANGED NEW - 26/5/19 - for allowing prev/next keys for slave selection
-	if event.is_action_pressed("ui_page_up") && get_node("charlistcontrol/CharList/scroll_list/slave_list").is_visible_in_tree():
-		my_gotoslave_mansion_prev()
-	if event.is_action_pressed("ui_page_down") && get_node("charlistcontrol/CharList/scroll_list/slave_list").is_visible_in_tree(): ## charlistcontrol/slavelist
-		my_gotoslave_mansion_next()
-	## END OF CHANGED
-	###---End Expansion---###
-	var anythingvisible = false
-	for i in get_tree().get_nodes_in_group("blockmaininput"):
-		if i.is_visible_in_tree() == true:
-			anythingvisible = true
-			break
-	if event.is_echo() == true || event.is_pressed() == false || anythingvisible:
-		if event.is_action_pressed("escape") == true && get_node("tutorialnode").visible == true:
-			get_node("tutorialnode").close()
-		return
-	if event.is_action_pressed("escape") == true && $ResourcePanel/menu.visible == true && $ResourcePanel/menu.disabled == false:
-		if get_node("FinishDayPanel").is_visible_in_tree():
-			get_node("FinishDayPanel").hide()
-			return
-		if !get_node("menucontrol").is_visible_in_tree():
-			_on_menu_pressed()
-		else:
-			if get_node("menucontrol/menupanel/SavePanel").is_visible_in_tree():
-				get_node("menucontrol/menupanel/SavePanel").hide()
-			_on_closemenu_pressed()
-	
-	if get_focus_owner() == get_node("MainScreen/mansion/selfinspect/defaultMasterNoun") && get_node("MainScreen").is_visible_in_tree():
-		return
-	if event.is_action_pressed("F") && get_node("Navigation/end").is_visible_in_tree():
-		_on_end_pressed()
-	elif event.is_action_pressed("Q") && get_node("MainScreen").is_visible_in_tree():
-		mansion()
-	elif event.is_action_pressed("W") && get_node("MainScreen").is_visible_in_tree():
-		jail()
-	elif event.is_action_pressed("E") && get_node("MainScreen").is_visible_in_tree():
-		libraryopen()
-	elif event.is_action_pressed("A") && get_node("MainScreen").is_visible_in_tree() && !get_node("Navigation/alchemy").is_disabled():
-		alchemy()
-	elif event.is_action_pressed("S") && get_node("MainScreen").is_visible_in_tree() && !get_node("Navigation/laboratory").is_disabled():
-		laboratory()
-	elif event.is_action_pressed("Z") && get_node("MainScreen").is_visible_in_tree() && !get_node("Navigation/farm").is_disabled():
-		farm()
-	elif event.is_action_pressed("X") && get_node("MainScreen").is_visible_in_tree() && !$MainScreen/mansion/portals.is_disabled():
-		portals()
-	elif event.is_action_pressed("C") && get_node("MainScreen").is_visible_in_tree():
-		leave()
-	elif event.is_action_pressed("B") && get_node("MainScreen").is_visible_in_tree():
-		_on_inventory_pressed()
-	elif event.is_action_pressed("R") && get_node("MainScreen").is_visible_in_tree():
-		_on_personal_pressed()
-	elif event.is_action_pressed("V") && get_node("MainScreen").is_visible_in_tree():
-		_on_combatgroup_pressed()
-	elif event.is_action_pressed("L") && get_node("MainScreen").is_visible_in_tree():
-		_on_questlog_pressed()
-
-###---Added by Expansion---### Minor Tweaks by Dabros Integration
-func my_gotoslave_mansion_prev():
-	## CHANGED NEW - 28/5/19 - for allowing prev/next keys for slave selection in mansion slave panel on right
-	## NOTE - current_slave is index position (defaults at 0), globals.current_slave is an object reference (which may or may not be valid)
-	##		- so sanity check is for whether youve selected a slave at all yet
-	if globals.slaves.size() < 1:
-		return
-	if !currentslave && (!globals.currentslave || !('id' in globals.currentslave)):
-		openslave(globals.slaves[0])
-		return
+func openslavetab(person, islevelup = false):
+	if person.sleep == 'farm':
+		_on_farm_pressed()
+		farminspect(person)
 	else:
-		var prevslave
-		## DEBUG
-		#### var debug_text = ''
-		#### var debug_rows = []
-		## END DEBUG
-		for i in get_node("charlistcontrol/CharList/scroll_list/slave_list").get_children():
-			## DEBUG
-			#### debug_rows.append({
-			#### 'i': i
-			#### ,'i.get_meta(\'id\')': (str(i.get_meta('id')) if i.has_meta('id') else '-error-')
-			#### ,'currentslave': currentslave
-			#### ,'globals.currentslave': (globals.currentslave if globals.currentslave else '-empty-')
-			#### ,'globals.currentslave.id': (globals.currentslave.id if globals.currentslave && "id" in globals.currentslave else '-empty-')
-			#### ,'prevslave': (prevslave if prevslave else '-empty-')
-			#### ,'prevslave.id': (prevslave.id if prevslave && "id" in prevslave else '-empty-')
-			#### ,'globals.slaves[currentslave]': (globals.slaves[currentslave] if globals.slaves[currentslave] else '-error-')
-			#### ,'globals.state.findslave(i.get_meta(\'id\'))': (globals.state.findslave(i.get_meta('id')) if globals.state.findslave(i.get_meta('id')) else '-error-')
-			#### ,'globals.state.findslave(i.get_meta(\'id\')).id': (globals.state.findslave(i.get_meta('id')).id if globals.state.findslave(i.get_meta('id')) && "id" in globals.state.findslave(#### globals.currentslave.id) else '-error-')
-			#### })
-			## END DEBUG
-			if i.has_meta('id') && globals.currentslave && i.get_meta('id') == globals.currentslave.id:
-				if prevslave && prevslave.has_meta('id'):
-					openslave(globals.state.findslave(prevslave.get_meta('id')))
-					return
-			prevslave = i
-		## DEBUG
-		#### debug_text += to_json(debug_rows)
-		#### OS.set_clipboard(debug_text)
-		#### get_tree().get_current_scene().infotext('copied debug to clipboard','orange')
-		## END DEBUG
-	## END OF CHANGED
+		currentslave = globals.slaves.find(person)
+		get_tree().get_current_scene().hide_everything()
+		$MainScreen/slave_tab.slavetabopen()
+		if islevelup:
+			$MainScreen/slave_tab._on_inspect_pressed()
+			if person.levelupreqs.empty():
+				get_node("MainScreen/slave_tab/stats")._on_talk_pressed()
 
-func my_gotoslave_mansion_next():
-	## CHANGED NEW - 28/5/19 - for allowing prev/next keys for slave selection in mansion slave panel on right
-	if globals.slaves.size() < 1:
-		return
-	if !currentslave && (!globals.currentslave || !('id' in globals.currentslave)):
-		openslave(globals.slaves[0])
-		return
-	else:
-		var found = false
-		for i in get_node("charlistcontrol/CharList/scroll_list/slave_list").get_children():
-			if found && i.has_meta('id'):
-				openslave(globals.state.findslave(i.get_meta('id')))
-				return
-			elif i.has_meta('id') && globals.currentslave && i.get_meta('id') == globals.currentslave.id:
-				found = true
-	## END OF CHANGED
-
-func doExportSlaveStats():
-	#TBK - Needs to have Stats Updated to Current Person
-	## CHANGED NEW - 24/05/19 - export function for slave stats
-	var text = ''
-
-	# var slaves = [] setget slaves_set
-	var dict = {}
-	dict.slaves = []
-	##dict.babylist = []
-	##for i in globals.state.babylist:
-	##dict.babylist.append(inst2dict(i))
-	##dict.player = inst2dict(globals.player) 
-	# NOTE - define here so we can optionally print header column
-	var tmpkeys = []
-	var pos = 0
-	for i in globals.slaves:
-		pos += 1
-		var pname = ''
-		if(i.nickname):
-			pname += "\""+i.nickname+"\" "
-		pname += i.name
-		if(i.surname):
-			pname += " "+i.surname
-		##pname = pname.substr(0,20)
-		var numrules = 0
-		for value in i.rules.values():
-			if(value):
-				numrules += 1
-		##dict.slaves.append(inst2dict(i))
-		##var text = ''
-		##text += temp+"\t"
-		##var prettyvars = {
-		var temp = {
-		'pos': pos
-		,'stub':str("{name} -{beauty} {sex}{age} {race} {origins} -{sstr}{sagi}{smaf}{send}{cour}{conf}{wit}{charm} -{sp}{spec} {traits}").format({'name':"%-15s"%pname.substr(0,15),'sex':i.sex.substr(0,2).capitalize(),'age':i.age.substr(0,1).capitalize(),'race':"%-5s"%i.race.replacen('halfkin ','H-').replacen('beastkin ','B-').replacen('dark ','D-').substr(0,5),'origins':i.origins.substr(0,1),'spec':' spec-'+i.spec.substr(0,5).to_upper() if i.spec else '','traits':PoolStringArray(i.traits).join("_").replacen(" ","-").replacen("_"," "),'beauty':"%3d"%i.beauty,'sstr':"%3d"%i.sstr,'sagi':"%3d"%i.sagi,'smaf':"%3d"%i.smaf,'send':"%3d"%i.send,'cour':"%3d"%i.cour,'conf':"%3d"%i.conf,'wit':"%3d"%i.wit,'charm':"%3d"%i.charm,'sp':' +'+str(i.skillpoints)+'free' if i.skillpoints else ''})
-		,'name':pname
-		,'namef':"'"+pname ## str("{name}").format({'name':"%s"%pname})
-		,'sex':i.sex.substr(0,2).capitalize() ##((i.sex=='futa')?'x':i.sex.substr(0,1))
-		,'age':i.age.substr(0,1).capitalize()
-		,'race':i.race.replacen('halfkin ','H-').replacen('beastkin ','B-').replacen('dark ','D-').substr(0,10)
-		,'origins':i.origins.substr(0,1) if (i.origins != 'poor' && i.origins != 'slave') else ' '
-		,'beauty':i.beauty
-		,'stats1':str("{sstr} {sagi} {smaf} {send} {cour} {conf} {wit} {charm}").format({'sstr':"%3d"%i.sstr,'sagi':"%3d"%i.sagi,'smaf':"%3d"%i.smaf,'send':"%3d"%i.send,'cour':"%3d"%i.cour,'conf':"%3d"%i.conf,'wit':"%3d"%i.wit,'charm':"%3d"%i.charm})
-		,'stats2':str("{sstr} {sagi} {smaf} {send}").format({'sstr':"%3d"%i.sstr,'sagi':"%3d"%i.sagi,'smaf':"%3d"%i.smaf,'send':"%3d"%i.send})
-		,'stats3':str("{cour} {conf} {wit} {charm}").format({'cour':"%3d"%i.cour,'conf':"%3d"%i.conf,'wit':"%3d"%i.wit,'charm':"%3d"%i.charm})
-		,'str':i.sstr
-		,'agi':i.sagi
-		,'mag':i.smaf
-		,'end':i.send
-		,'cour':i.cour
-		,'conf':i.conf
-		,'wit':i.wit
-		,'charm':i.charm
-		,'spec':i.spec.substr(0,4) if i.spec else ''
-		,'specialisation':i.spec if i.spec else ''
-		,'obd':int(round(i.obed))
-		,'lp':i.learningpoints if i.learningpoints else ''
-		,'sp':i.skillpoints if i.skillpoints else ''
-		,'traits':to_json(i.traits) # NOTE - to_json for nested now we using csv approach
-		,'rules':numrules if numrules else ''
-		,'work':i.work
-		,'preg':i.preg.duration if i.preg.duration else ''
-		,'fert': int(round(i.preg.fertility)) if i.preg.has_womb else ''
-		,'stress':int(round(i.stress))
-		,'loyal':int(round(i.loyal))
-		,'fear':int(round(i.fear))
-		,'lewd':int(round(i.lewdness))
-		,'energy':int(round(i.energy))
-		,'level':i.level
-		,'consent':'y' if i.consent else ''
-		,'lactation':1 if i.lactation else ''
-		,'lust':int(round(i.lust))
-		## ,'naked':1 if i.naked else '' ## Aricsmod
-		,'xp':i.xp
-		}
-
-		##dict.slaves.append(temp)
-		tmpkeys = temp.keys();
-		for tmpkey in tmpkeys: 
-		   text += str(temp[tmpkey])+"\t";
-		text += "\n"
-	# NOTE - print header row
-	var toprow = ''
-	for tmpkey in tmpkeys: 
-		toprow += tmpkey+"\t";
-	text = toprow+"\n"+text
-	##text = to_json(dict)
-	##text = to_json(person)
-
-	OS.set_clipboard(text)
-
-	get_tree().get_current_scene().infotext("Stats for ALL slaves copied to clipboard",'green')
-
-	## END OF CHANGED
-###---End Expansion---###
+func _on_category_pressed():
+	rebuild_slave_list()
 
 func _on_end_pressed():
 	if globals.state.mainquest == 41:
@@ -1529,6 +1733,11 @@ func _on_end_pressed():
 	get_node("Navigation/endlog").disabled = false
 	nextdayevents()
 
+var aliseresults
+
+static func sortEvents(a, b):
+	return a.duration < b.duration
+
 func nextdayevents():
 	get_node("FinishDayPanel").hide()
 	var player = globals.player
@@ -1641,6 +1850,60 @@ func nextdayevents():
 		return
 	startnewday()
 
+var dailyeventhappend = false
+
+func launchrandomevent():
+	var rval
+	var personlist = []
+	for i in globals.slaves:
+		if i.away.duration == 0 && i.sleep != 'jail' && i.sleep != 'farm' && i.attention >= 50:
+			personlist.append(i)
+	while personlist.size() > 0:
+		var number = floor(rand_range(0,personlist.size()))
+		if personlist[number].attention >= rand_range(30,150):
+			get_node("dailyevents").person = personlist[number]
+			rval = get_node("dailyevents").getrandomevent(personlist[number])
+			#rval = $dailyevents.getfixedevent('assaultevent')
+			personlist[number].attention = 0
+			break
+		else:
+			personlist.remove(number)
+	return rval
+
+
+var alisesprite = {
+	good = ['happy1','happy2',"wink1",'wink2','side'],
+	med = ["neutral",'side'],
+	bad = ["neutral",'side'],
+	worst = ["neutral"]
+}
+var alisetext = {
+	good = ['Nice job! Income is currently on the rise!', 'Great work, $name, We are currently getting wealthier!', 'Things are doing well, $name!', 'If we keep gaining like this, could I get a vacation one day?', 'Another great day, high-five!', 'Remarkable work! Income outlook at this time is positive.', 'A well known artist once stated, "Making money is art and working is art and business is the best art."', 'They say money talks... what does yours say?', 'We are doing great!  Please keep this up $name!'],
+	med = ['We might need to start making money soon.', 'Things are steady... but should be better financially', "Well we aren't losing money... but we aren't really gaining any either", 'We have added next to nothing to our coffers.  We need a stronger income.', 'I believe it is about time we gain some money.', 'Time waits for no man, neither does good commerce.'],
+	bad = ['We are losing money $name!', 'Things are not going too well.', 'We should do something about this cash loss.', 'Oh dear! We are bleeding gold.', 'This funding loss needs to be addressed.', 'You must be scaring the gold away, it is disappearing!', 'A financial analysis of assets states a net loss by my calculations.', '$name, do something about this funding leak before you end up poor!', 'Did I miss a memo as to why there is a loss in funds?'],
+	worst = ["Well... looks like we lost one of our workers. Don't let that to discourage you though!", "So we lost a worker... Let's move on and fix issues for the future.", 'This is an unfortunate situation', "The outlook is unfavorable, let's change that!", "It's just one bad day out of how many other days.", "Don't get discouraged, learn from these failures and fix the issues.", 'I am very sorry about your bad day, let us proceed to fix this.']
+}
+
+func alisebuild(state):
+	get_node("FinishDayPanel/alise").show()
+	if globals.resources.gold > 5000 && state in ['bad','med']:
+		state = 'good'
+	
+	var truesprite = globals.randomfromarray(alisesprite[state])
+	var showtext = globals.player.dictionary( globals.randomfromarray(alisetext[state]))
+	if state == 'good':
+		showtext = '[color=#19ec1c]' + showtext + '[/color]'
+	elif state == 'med':
+		showtext = '[color=yellow]' + showtext + '[/color]'
+	elif state in ['bad','worst']:
+		showtext = '[color=#ff4949]' + showtext + '[/color]'
+	get_node("FinishDayPanel/alise/speech/RichTextLabel").set_bbcode(showtext)
+	get_node("tutorialnode").buildbody(get_node("FinishDayPanel/alise"), truesprite)
+
+func alisehide():
+	get_node("FinishDayPanel/alise").hide()
+
+
 func startnewday():
 	rebuild_slave_list()
 	###---Added by Expansion---### Save daily reports
@@ -1665,38 +1928,404 @@ func startnewday():
 #		get_node("sellout").show()
 
 
-func _on_headgirlbehavior_item_selected( ID ):
-	var text = ''
-	if ID == 0:
-		globals.state.headgirlbehavior = 'none'
-		text += "Headgirl will not interfere with others' business. "
-	if ID == 1:
-		globals.state.headgirlbehavior = 'kind'
-		text += 'The Headgirl will focus on a kind approach and reduce the stress of others, trying to endorse acceptance of their master. '
-	if ID == 2:
-		globals.state.headgirlbehavior = 'strict'
-		text += "Headgirl will focus on putting other servants in line at the cost of their stress. "
-	var headgirl = null
-	for i in globals.slaves:
-		if i.work == 'headgirl':
-			headgirl = i
-	if headgirl == null:
-		text += "\nCurrently you have no headgirl assigned. "
+func autosave():
+	var dir = Directory.new()
+	if !dir.dir_exists(globals.saveDir):
+		dir.make_dir_recursive(globals.saveDir)
+	var filearray = globals.dir_contents()
+	var path1 = globals.saveDir + 'autosave1'
+	var path2 = globals.saveDir + 'autosave2'
+	var path3 = globals.saveDir + 'autosave3'
+	if filearray.has(path2):
+		dir.rename(path2, path3)
+		if globals.savelist.has(path2):
+			globals.savelist[path3] = globals.savelist[path2]
+		else:
+			globals.savelistentry(path3)
+	if filearray.has(path1):
+		dir.rename(path1, path2)
+		if globals.savelist.has(path1):
+			globals.savelist[path2] = globals.savelist[path1]
+		else:
+			globals.savelistentry(path2)
+	globals.save_game(path1)
+
+
+
+func rebuildrepeatablequests():
+	var quests
+	var idx
+	var town
+	for guild in globals.state.repeatables:
+		quests = globals.state.repeatables[guild]
+		idx = 0
+		while idx < quests.size():
+			if quests[idx].taken:
+				idx += 1
+			else:
+				quests.remove(idx)
+		town = guild.replace("slaveguild", "")
+		for ii in range(-1, randi() % 2):
+			globals.repeatables.generatequest(town, 'easy')
+		for ii in range(-1, randi() % 2):
+			globals.repeatables.generatequest(town, 'medium')
+		for ii in range(-1, randi() % 1):
+			globals.repeatables.generatequest(town, 'hard')
+
+
+
+func _on_FinishDayCloseButton_pressed():
+	get_node("FinishDayPanel").hide()
+
+#####GUI ELEMENTS
+
+func popup(text):
+	get_node("popupmessage").popup()
+	get_node("popupmessage/popupmessagetext").set_bbcode(globals.player.dictionary(text))
+
+
+func _on_popupmessagetext_meta_clicked( meta ):
+	if meta == 'patreon':
+		OS.shell_open('https://www.patreon.com/maverik')
+	if meta == 'race':
+		get_tree().get_current_scene().showracedescript(get_node("MainScreen/slave_tab").person)
+		_on_popupclosebutton_pressed()
+
+var spritedict = globals.spritedict
+onready var nodedict = {
+	'pos1' : get_node("dialogue/charactersprite1"),
+	'pos2' : get_node("dialogue/charactersprite2"),
+	'slave' : get_node("dialogue/slavesprite"),
+	'player' : get_node("dialogue/playersprite"),
+}
+
+func dialogue(showcloseButton, destination, dialogtext, dialogbuttons = null, sprites = null, background = null): #for arrays: 0 - boolean to show close button or not. 1 - node to return connection back. 2 - text to show 3+ - arrays of buttons and functions in those
+	var text = get_node("dialogue/dialoguetext")
+	var buttons = $dialogue/buttonscroll/buttoncontainer
+	var newbutton
+	var counter = 1
+	get_node("dialogue/blockinput").hide()
+	get_node("dialogue/background").set_texture(null if background == null else globals.backgrounds[background])
+	if !get_node("dialogue").visible:
+		get_node("dialogue").show()
+#		get_node("dialogue").popup()
+		nodeunfade($dialogue, 0.4)
+		#get_node("dialogue/AnimationPlayer").play("fading")
+	text.set_bbcode('')
+	for i in buttons.get_children():
+		if i.name != "Button":
+			i.hide()
+			i.queue_free()
+	if dialogtext == "":
+		dialogtext = var2str(dialogtext)
+	text.set_bbcode(globals.player.dictionary(dialogtext))
+	text.scroll_to_line(0)
+	if dialogbuttons != null:
+		for i in dialogbuttons:
+			dialoguebuttons(dialogbuttons[counter-1], destination, counter)
+			counter += 1
+	if showcloseButton == true:
+		newbutton = $dialogue/buttonscroll/buttoncontainer/Button.duplicate()
+		newbutton.show()
+		newbutton.set_text('Close')
+		newbutton.connect('pressed',self,'close_dialogue')
+		newbutton.get_node("Label").set_text(str(counter))
+		buttons.add_child(newbutton)
+	
+	var clearSprites = []
+	for key in nodedict:
+		if nodedict[key].get_texture() != null:
+			clearSprites.append(key)
+	
+	if sprites != null && globals.rules.spritesindialogues == true:
+		for i in sprites:
+			if !spritedict.has(i[0]) && globals.loadimage(i[0]) == null:
+				var temp = "WARNING: Dialogue cannot display sprite '%s'." %[i[0]]
+				print(temp)
+				globals.traceFile(temp)
+				continue
+			else:
+				if spritedict.has(i[0]):
+					if i.size() > 2 && (i[2] != 'opac' || spritedict[i[0]] != nodedict[i[1]].get_texture()):
+						tweenopac(nodedict[i[1]])
+					nodedict[i[1]].set_texture(spritedict[i[0]])
+				else:
+					if i.size() > 2 && (i[2] != 'opac' || globals.loadimage(i[0]) != nodedict[i[1]].get_texture()):
+						tweenopac(nodedict[i[1]])
+					nodedict[i[1]].set_texture(globals.loadimage(i[0]))
+				clearSprites.erase(i[1])
+	for key in clearSprites:
+		nodedict[key].set_texture(null)
+
+func tweenopac(node):
+	var tween = $Tween
+	tween.interpolate_property(node, 'modulate', Color(1,1,1,0), Color(1,1,1,1), 0.5, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	tween.start()
+
+func dialoguebuttons(array, destination, counter):
+	var newbutton = $dialogue/buttonscroll/buttoncontainer/Button.duplicate()
+	newbutton.get_node("Label").set_text(str(counter))
+	newbutton.show()
+	if typeof(array) == TYPE_DICTIONARY:
+		newbutton.set_text(array.text) #QMod - Handles args = [var1, var2, ...]
+		if array.has('args'):
+			if typeof(array.args) == TYPE_ARRAY:
+				newbutton.connect("pressed", destination, array.function, array.args)
+			else:
+				newbutton.connect("pressed", destination, array.function, [array.args])
+		else:
+			newbutton.connect("pressed", destination, array.function)
+		if array.has('disabled') && array.disabled == true:
+			newbutton.set_disabled(true)
+		if array.has('tooltip'):
+			newbutton.set_tooltip(array.tooltip)
 	else:
-		text += headgirl.dictionary("\n$name is your current headgirl. ")
-	get_node("mansionsettings/Panel/headgirldescript").set_bbcode(text)
-	get_node("mansionsettings/Panel/foodbuy").set_value(globals.state.foodbuy)
-	get_node("mansionsettings/Panel/manastock").set_value(globals.state.manastock)
-	get_node("mansionsettings/Panel/manastock/manabuy").set_pressed(globals.state.manabuy)
-	get_node("mansionsettings/Panel/supplykeep").set_value(globals.state.supplykeep)
-	get_node("mansionsettings/Panel/supplykeep/supplybuy").set_pressed(globals.state.supplybuy)
+		newbutton.set_text(array[0])
+		if array.size() < 3:
+			newbutton.connect('pressed',destination,array[1])
+		else:
+			newbutton.connect('pressed',destination,array[1],[array[2]])
+	$dialogue/buttonscroll/buttoncontainer.add_child(newbutton)
 
-func _on_manastock_value_changed(value):
-	globals.state.manastock = get_node("mansionsettings/Panel/manastock").get_value()
+func close_dialogue(mode = 'normal'):
+
+	nodefade($dialogue, 0.4)
+	get_node("dialogue/blockinput").show()
+	if mode != 'instant':
+		yield(tween, 'tween_completed')
+	get_node("dialogue").hide()
+	for i in nodedict.values():
+		i.set_texture(null)
 
 
-func _on_manabuy_pressed():
-	globals.state.manabuy = get_node("mansionsettings/Panel/manastock/manabuy").is_pressed()
+var savedtrack
+
+
+func scene(target, image, scenetext, scenebuttons = null):
+	if !get_node("scene").visible:
+		get_node("scene").visible = true
+		nodeunfade($scene, 0.4)
+		#get_node("scene/AnimationPlayer").play("fading")
+	get_node("scene").show()
+	get_node("infotext").hide()
+	get_node("scene/Panel/sceneeffects").set_texture(null)
+	
+	if globals.scenes.has(image):
+		get_node("scene/Panel/scenepicture").set_normal_texture(globals.scenes[image])
+	else:
+		$scene/Panel/scenepicture.set_normal_texture(null)
+	get_node("scene/textpanel/scenetext").set_bbcode(globals.player.dictionary(scenetext))
+	get_node("scene/textpanel/scenetext").scroll_to_line(0)
+	get_node("scene/resources/gold").set_text(str(globals.resources.gold))
+	get_node("scene/resources/food").set_text(str(globals.resources.food))
+	get_node("scene/resources/mana").set_text(str(globals.resources.mana))
+	get_node("scene/resources/energy").set_text(str(globals.player.energy))
+	if !(image in ['finale', 'finale2']):
+		savedtrack = $music.get_meta("currentsong")
+		music_set("intimate")
+	for i in $scene/buttonscroll/buttoncontainer.get_children():
+		if i.get_name() != 'Button':
+			i.hide()
+			i.queue_free()
+	var counter = 1
+	for i in scenebuttons:
+		newbuttonscene(i, target, counter)
+		counter += 1
+
+func newbuttonscene(button, target, counter):
+	var newbutton = $scene/buttonscroll/buttoncontainer/Button.duplicate()
+	$scene/buttonscroll/buttoncontainer.add_child(newbutton)
+	newbutton.show()
+	newbutton.set_text(button.text)
+	newbutton.get_node("Label").set_text(str(counter))
+	if button.has('args'):
+		if typeof(button['args']) == TYPE_ARRAY: #QMod - Tweaked to handle arg array
+			newbutton.connect("pressed", target, button.function , button.args)
+		else:
+			newbutton.connect("pressed", target, button.function , [button.args])
+	else:
+		newbutton.connect("pressed", target, button.function)
+
+func _on_scenepicture_pressed():
+	if get_node("scene/Panel/scenepicture").is_pressed():
+		get_node("scene/Panel/scenepicture").set_size(get_node("scene/Panel/Panel2").get_size())
+		$scene/Panel/scenepicture.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+		get_node("scene/Panel/coverpanel").hide()
+	else:
+		get_node("scene/Panel/scenepicture").set_size(get_node("scene/Panel").get_size())
+		$scene/Panel/scenepicture.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_COVERED
+		get_node("scene/Panel/coverpanel").show()
+
+func closescene():
+	#get_node("scene/AnimationPlayer").play_backwards("fading")
+	nodefade($scene, 0.4)
+	get_node("infotext").show()
+	if $music.stream == globals.musicdict.intimate:
+		music_set(savedtrack)
+	if globals.rules.fadinganimation == true:
+		yield(tween, 'tween_completed')
+	get_node("scene").hide()
+
+func _on_menu_pressed():
+	#music_set('pause')
+	get_node("menucontrol").popup()
+
+func _on_closemenu_pressed():
+	#music_set('start')
+	get_node("menucontrol").hide()
+
+func _on_closegamebuttonm_pressed():
+	yesnopopup("Are you leaving us?", "quit")
+
+
+func quit():
+	get_tree().quit()
+
+func _on_savebutton_pressed():
+	get_node("menucontrol/menupanel/SavePanel").show()
+
+func _on_optionsbutton_pressed():
+	get_node("options").show()
+	get_node("menucontrol").hide()
+
+
+func _on_mainmenubutton_pressed():
+	yesnopopup('Exit to main menu? Make sure to save', 'mainmenu')
+
+func mainmenu():
+	get_tree().change_scene("res://files/mainmenu.scn")
+	globals.main = null
+
+func _on_cancelsaveload_pressed():
+	get_node("menucontrol/menupanel/SavePanel").hide()
+
+var yesbutton = {target = null, function = null}
+
+func yesnopopup(text, yesfunc, target = self):
+	if yesbutton.target != null && get_node("yesnopopup/HBoxContainer/yesbutton").is_connected("pressed",yesbutton.target, yesbutton.function):
+		get_node("yesnopopup/HBoxContainer/yesbutton").disconnect("pressed",yesbutton.target,yesbutton.function)
+	get_node("yesnopopup/HBoxContainer/yesbutton").connect('pressed',target,yesfunc,[],4)
+	yesbutton.target = target
+	yesbutton.function = yesfunc
+	get_node("yesnopopup/Label").set_bbcode(text)
+	get_node("yesnopopup").popup()
+
+
+func _on_yesbutton_pressed():
+	get_node("yesnopopup").hide()
+
+
+func _on_nobutton_pressed():
+	get_node("yesnopopup").hide()
+
+##### Saveload
+
+var savefilename = globals.saveDir + 'autosave'
+
+func _on_SavePanel_visibility_changed():
+	if get_node("menucontrol/menupanel/SavePanel").visible == false:
+		return
+	var node
+	var pressedsave
+	var moddedtext
+	for i in get_node("menucontrol/menupanel/SavePanel/ScrollContainer/savelist").get_children():
+		if i != get_node("menucontrol/menupanel/SavePanel/ScrollContainer/savelist/Button"):
+			i.hide()
+			i.queue_free()
+	var dir = Directory.new()
+	if !dir.dir_exists(globals.saveDir):
+		dir.make_dir_recursive(globals.saveDir)
+	var savefiles = globals.dir_contents()
+	for i in globals.savelist.duplicate():
+		if savefiles.find(i) < 0:
+			globals.savelist.erase(i)
+
+	pressedsave = get_node("menucontrol/menupanel/SavePanel//saveline").text
+	for i in savefiles:
+		node = get_node("menucontrol/menupanel/SavePanel/ScrollContainer/savelist/Button").duplicate()
+		node.show()
+		if !globals.savelist.has(i):
+			if globals.saveListNewEntry(i):
+				node.get_node("date").set_text(globals.savelist[i].get('date'))
+		else:
+			node.get_node("date").set_text(globals.savelist[i].get('date'))
+		node.get_node("name").set_text(i.replace(globals.saveDir,''))
+		get_node("menucontrol/menupanel/SavePanel/ScrollContainer/savelist").add_child(node)
+		node.set_meta("name", i)
+		node.connect('pressed', self, 'loadchosen', [node])
+
+
+
+func loadchosen(node):
+	var savename = node.get_meta('name')
+	var text
+	savefilename = savename
+	for i in $menucontrol/menupanel/SavePanel/ScrollContainer/savelist.get_children():
+		i.pressed = (i== node)
+	get_node("menucontrol/menupanel/SavePanel/saveline").set_text(savefilename.replace(globals.saveDir,''))
+	if globals.savelist.has(savename):
+		if globals.savelist[savename].has('portrait') && globals.canloadimage(globals.savelist[savename].portrait):
+			$menucontrol/menupanel/SavePanel/saveimage.set_texture(globals.loadimage(globals.savelist[savename].portrait))
+		else:
+			$menucontrol/menupanel/SavePanel/saveimage.set_texture(null)
+		text = globals.savelist[savename].name
+	else:
+		text = "This save has no info stored."
+		$menucontrol/menupanel/SavePanel/saveimage.set_texture(null)
+	$menucontrol/menupanel/SavePanel/RichTextLabel.bbcode_text = text
+	#_on_SavePanel_visibility_changed()
+
+func _on_deletebutton_pressed():
+	var dir = Directory.new()
+	if dir.file_exists(savefilename):
+		yesnopopup('Delete this file?', 'deletefile')
+	else:
+		popup('No file with such name')
+
+func deletefile():
+	var dir = Directory.new()
+	if dir.file_exists(savefilename):
+		dir.remove(savefilename)
+	_on_nobutton_pressed()
+	_on_SavePanel_visibility_changed()
+
+
+func _on_loadbutton_pressed():
+	if Directory.new().file_exists(savefilename):
+		yesnopopup('Load this file?', 'loadfile')
+	else:
+		popup('No file with such name')
+
+func loadfile():
+	globals.main = null
+	globals.load_game(savefilename)
+	_on_SavePanel_visibility_changed()
+	get_node("menucontrol").hide()
+	get_node("music").playing = true
+	
+
+func _on_saveline_text_changed( text ):
+	savefilename = globals.saveDir + text
+
+func _on_savefilebutton_pressed():
+	var dir = Directory.new()
+	if dir.file_exists(savefilename) == true:
+		yesnopopup('This file already exists. Overwrite?', 'savefile')
+	else:
+		savefile()
+
+func savefile():
+	globals.save_game(savefilename)
+	_on_SavePanel_visibility_changed()
+	_on_nobutton_pressed()
+	get_node("menucontrol/menupanel/SavePanel").hide()
+	get_node("menucontrol").hide()
+	music_set('mansion')
+
+
+func _on_saveloadfolder_pressed():
+	globals.shellOpenFolder(globals.saveDir)
+
 
 func hide_everything():
 	for i in get_tree().get_nodes_in_group("mansioncontrols"):
@@ -1720,6 +2349,124 @@ func hide_everything():
 	get_node("MainScreen/mansion/dimcrystalpanel").hide()
 	###---End Expansion---###
 	globals.hidetooltip()
+
+var background setget background_set, background_get
+
+#edited by Futur Planet [Start] | BG
+var fpm_altVariant = ""
+
+#edited by Futur Planet [Start] | BG
+func fpm_lookForInKey(var inString = "", var dic = {}):
+	for key in dic:
+		if key in inString:
+			fpm_altVariant = key
+			return true
+	return false
+
+#edited by Futur Planet [Start] | BG
+var fpm_BG_Data = load("user://mods/AricsExpansion/scripts/fpm_BG_Data.gd").new()
+
+#edited by Futur Planet [Start] | BG
+func background_set(text, forcefade = false, variant = "default"):
+	var curTexture = get_node("TextureFrame").get_texture()
+	var zoneChanged = false
+	
+	if !fpm_BG_Data.picturesLoaded:
+		fpm_BG_Data.picturesLoaded = true
+		fpm_BG_Data.initiatePictureLoad()
+	if text in fpm_BG_Data.backgrounds.keys():
+		if variant in fpm_BG_Data.backgrounds[text].keys():
+			texture = globals.randomfromarray(fpm_BG_Data.backgrounds[text][variant])
+			zoneChanged = (curTexture in fpm_BG_Data.backgrounds.values())
+		elif fpm_lookForInKey(variant, fpm_BG_Data.backgrounds[text]):
+			texture = globals.randomfromarray(fpm_BG_Data.backgrounds[text][fpm_altVariant])
+			zoneChanged = (curTexture in fpm_BG_Data.backgrounds.values())
+		elif "default" in fpm_BG_Data.backgrounds[text].keys():
+			texture = globals.randomfromarray(fpm_BG_Data.backgrounds[text]["default"])
+			zoneChanged = (curTexture in fpm_BG_Data.backgrounds.values())
+		else:
+			texture = globals.backgrounds[text]#Dublicate Line
+			zoneChanged = (curTexture == texture)
+	else:
+		texture = globals.backgrounds[text]#Dublicate Line
+		zoneChanged = (curTexture == texture)
+	if globals.rules.fadinganimation == true && (forcefade || zoneChanged):
+		animationfade()
+		yield(self, "animfinished")
+#edited by Futur Planet [End] | BG
+	get_node("TextureFrame").set_texture(texture)
+	yield(get_tree(), "idle_frame")
+	emit_signal('animfinished')
+
+func background_get():
+	return 
+
+func backgroundinstant(text):
+	get_node("TextureFrame").set_texture(globals.backgrounds[text])
+
+func fadefinished():
+	emit_signal("animfinished")
+
+func animationfade(value = 0.4, duration = 0.05):
+	nodeunfade($screenchange, value)
+	tween.interpolate_callback(self,value,'fadefinished')
+	nodefade($screenchange, value, value+duration)
+
+
+
+var musicdict = globals.musicdict
+var musicvolume = 0
+
+
+func music_set(text):
+	var music = get_node("music")
+	if music.is_playing() == false && globals.rules.musicvol > 0:
+		music.playing = true
+	if text == 'stop':
+		musicfading = true
+		return
+	elif text == 'pause':
+		musicfading = true
+		return
+	elif text == 'start':
+		musicraising = true
+		music.play(musicvalue)
+		return
+	if globals.rules.musicvol == 0 || (music.get_meta("currentsong") == text && music.playing == true):
+		return
+	var path = ''
+	musicraising = true
+	music.set_autoplay(true)
+	if text == 'combat':
+		path = musicdict[globals.randomfromarray(['combat1', 'combat3'])]
+	elif text == 'mansion':
+		music.set_autoplay(false)
+		path = musicdict[globals.randomfromarray(['mansion1','mansion2','mansion3','mansion4'])]
+	else:
+		path = musicdict[text]
+	music.set_meta('currentsong', text)
+	music.set_stream(path)
+	music.play(0)
+	music.set_volume_db(globals.rules.musicvol)
+
+
+func _on_music_finished():
+	if get_node("music").get_meta("currentsong") == 'mansion':
+		get_node("music").set_meta("currentsong", 'over')
+		music_set("mansion")
+	elif get_node("music").get_meta("currentsong") == 'combat':
+		return
+		get_node("music").set_meta("currentsong", 'over')
+		music_set("combat")
+	else:
+		music_set(get_node("music").get_meta("currentsong"))
+
+
+
+func _on_mansionbutton_pressed():
+	_on_mansion_pressed()
+
+var selftexture = load("res://files/buttons/mainscreen/53(2).png")
 
 #---Keeping to have the "X is following you" for pet groups
 func _on_mansion_pressed():
@@ -1777,6 +2524,59 @@ func _on_mansion_pressed():
 		popup(text)
 	build_mansion_info()
 	rebuild_slave_list()
+
+var colordict = {high = '[color=green]', med = '[color=yellow]', low = '[color=#ff4949]'}
+var stateRangeDict = {
+	health = [[0.4, colordict.low +'Wounded[/color]'], [0.75, colordict.med +'Injured[/color]'], [1.0, colordict.high +'Healthy[/color]']],
+	energy = [[0.2, colordict.low +'Wasted[/color]'], [0.5, colordict.med +'Tired[/color]'], [1.0, colordict.high +'Lively[/color]']],
+	stress = [[50, colordict.high +"Content[/color]"], [80, colordict.med +'Stressed[/color]'], [120, colordict.low +"On verge[/color]"]],
+}
+var conditionRanges = [
+	[20, "[color=#ff4949]in a complete mess"],
+	[40, "[color=#FFA500]very dirty"],
+	[60, "[color=yellow]quite unclean"],
+	[80, "[color=lime]passably clean"],
+	[100, "[color=green]immaculate"],
+]
+
+# custom case format string handling, formatStr must have the following fields in order: color, count, capacity, pluralStr
+func fillRoomText(formatStr, count, capacity, pluralStr):
+	var color
+	if count < capacity:
+		color = colordict.high
+	elif count == capacity:
+		color = colordict.med
+	else:
+		color = colordict.low
+	return formatStr % [color, count, capacity, pluralStr if (count != 1) else '']
+
+# if person is not away, creates colored link to open information screen for person, else provides simple colored text
+func createPersonURL(person):
+	if person == null:
+		return "[color=yellow]Unassigned[/color]"
+	if person.away.duration != 0:
+		return "[color=aqua]" + person.name_short() + "[/color] [color=yellow](away)[/color]"
+	return "[color=aqua][url=id" + person.id + "]" + person.name_short() + "[/url][/color]"
+
+# takes an array of paired values(the first being the high end(not included) of the range, and the second is the returned value) and a key
+# iterates across the array to find the first pair with a range containing the given key, and returns the pair's second value, else the last pair is returned
+# format:   [[60, 'F'], [70, 'D'], [80, 'C'], [90, 'B'], [100, 'A']]
+# example:   findLowestRange(format, 70) -> 'C'
+func findLowestRange(arrayRanges, key):
+	for pair in arrayRanges:
+		if key < pair[0]:
+			return pair[1]
+	return arrayRanges.back()[1]
+
+#convenience function for adding cells to table in RichTextLabel
+func addTableCell(label, text, align=RichTextLabel.ALIGN_LEFT):
+	label.push_cell()
+	if align != RichTextLabel.ALIGN_LEFT:
+		label.push_align(align)
+	label.append_bbcode(text)
+	if align != RichTextLabel.ALIGN_LEFT:
+		label.pop()
+	label.pop()
 
 func build_mansion_info():
 	var textnode = get_node("MainScreen/mansion/mansioninfo")
@@ -1977,6 +2777,2723 @@ func build_mansion_info():
 		get_node("charlistcontrol/slavelist").show()
 	else:
 		get_node("charlistcontrol/slavelist").hide()
+
+
+
+#jail settings
+
+func _on_jailbutton_pressed():
+	background_set('jail')
+	yield(self, 'animfinished')
+	hide_everything()
+	get_node("MainScreen/mansion/jailpanel").show()
+	if globals.state.tutorial.jail == false:
+		get_node("tutorialnode").jail()
+
+#---Jail Expanded
+func _on_jailpanel_visibility_changed():
+	var temp = ''
+	var text = ''
+	var count = 0
+	var prisoners = []
+	var jailer
+	
+	for i in get_node("MainScreen/mansion/jailpanel/ScrollContainer/prisonerlist").get_children():
+		i.hide()
+		i.queue_free()
+	###---Added by Expansion---### Prisoner Release Panel
+	for i in get_node("MainScreen/mansion/jailpanel/Scroll_Release/ready_prisonerlist").get_children():
+		i.hide()
+		i.queue_free()
+	for i in get_node("MainScreen/mansion/jailpanel/jailer_button").get_children():
+		i.hide()
+		i.queue_free()
+	###---End Expansion---###
+	
+	if get_node("MainScreen/mansion/jailpanel").visible == false:
+		return
+	for i in globals.slaves:
+		if i.sleep == 'jail' && i.away.duration == 0:
+			temp = temp + i.name
+			prisoners.append(i)
+			var button = Button.new()
+			var node = get_node("MainScreen/mansion/jailpanel/ScrollContainer/prisonerlist")
+			node.add_child(button)
+			button.set_text(i.name_long())
+			button.set_name(str(count))
+			button.connect('pressed', self, 'prisonertab', [count])
+			###---Added by Expansion---### Prisoner Release Panel
+			var rebelling = false
+			for check_captured in i.effects.values():
+				if check_captured.code == 'captured':
+					rebelling = true
+					break
+			if rebelling == false:
+				button = Button.new()
+				node = get_node("MainScreen/mansion/jailpanel/Scroll_Release/ready_prisonerlist")
+				node.add_child(button)
+				button.set_text(i.name_long())
+				button.set_name(str(count))
+				button.connect('pressed', self, 'prisonertab', [count])
+			###---End Expansion---###
+		if i.work == 'jailer' && i.away.duration == 0:
+			jailer = i
+			
+		count += 1
+	###---Added by Expansion---### Jail Expanded
+	if temp == '':
+		text = 'There are no prisoners currently in the Dungeon.'
+	else:
+		#Colorized Text
+		text = 'There are a total of [color=aqua] '+str(prisoners.size()) + '[/color] prisoner(s) in the Dungeon.\nThere are currently [color=aqua]' + str(globals.state.mansionupgrades.jailcapacity-prisoners.size()) + '[/color] free cell(s).\nPrisoners can be disciplined via [color=aqua]Interactions > Meet[/color]. '
+	if globals.state.mansionupgrades.jailtreatment:
+		text += "\n[color=lime]Your jail is decently furnished and tiled. [/color]"
+	if globals.state.mansionupgrades.jailincenses:
+		text += "\n[color=lime]You can smell soft burning incenses in the air.[/color]"
+	if jailer == null:
+		get_node("MainScreen/mansion/jailpanel/jailer_text").set_bbcode('[color=#d1b970]Current Jailer[/color]\n[color=red]No [color=aqua]Jailer[/color] is assigned to manage the Dungeon.[/color]')
+		get_node("MainScreen/mansion/jailpanel/TextureRect").visible = false
+	else:
+		get_node("MainScreen/mansion/jailpanel/jailer_text").set_bbcode('[color=#d1b970]Current Jailer[/color]')
+		#Add Button
+		var button = Button.new()
+		var node = get_node("MainScreen/mansion/jailpanel/jailer_button")
+		node.add_child(button)
+		button.set_text(jailer.name_long())
+		button.set_name(str(jailer.id))
+		button.connect('pressed', self, 'openslavetab', [jailer])
+		#Assign Portrait
+		if jailer.imageportait != null && globals.loadimage(jailer.imageportait):
+			get_node("MainScreen/mansion/jailpanel/TextureRect").visible = true
+			get_node("MainScreen/mansion/jailpanel/TextureRect/portrait").set_texture(globals.loadimage(jailer.imageportait))
+		else:
+			jailer.imageportait = null
+			#TBK - Debating on leaving Hidden or not
+			get_node("MainScreen/mansion/jailpanel/TextureRect").visible = true
+			get_node("MainScreen/mansion/jailpanel/TextureRect/portrait").set_texture(globals.loadimage(globals.sexuality_images.unknown))
+		#text = text + jailer.dictionary('\n$name is assigned as jailer.')
+	###---End Expansion---###
+	
+	get_node("MainScreen/mansion/jailpanel/jailtext").set_bbcode(text)
+
+func _on_jailsettingspanel_visibility_changed(inputslave = null):
+	var jailer = inputslave
+	for i in globals.slaves:
+		if i.work == 'jailer':
+			jailer = i
+	var text = ''
+	if jailer == null:
+		text = 'You have no assigned jailer. '
+		get_node("MainScreen/mansion/jailpanel/jailsettings/jailsettingspanel/jailerchange").set_text('Change')
+	else:
+		text = 'Your current jailer is - ' + jailer.name_long()
+		jailer.work = 'jailer'
+		get_node("MainScreen/mansion/jailpanel/jailsettings/jailsettingspanel/jailerchange").set_text('Unassign')
+	get_node("MainScreen/mansion/jailpanel/jailsettings/jailsettingspanel/currentjailertext").set_bbcode(text)
+	if globals.slaves.size() < 1:
+		get_node("MainScreen/mansion/jailpanel/jailsettings/jailsettingspanel/jailerchange").set_disabled(true)
+	else:
+		get_node("MainScreen/mansion/jailpanel/jailsettings/jailsettingspanel/jailerchange").set_disabled(false)
+	_on_jailpanel_visibility_changed()
+
+func prisonertab(number):
+	self.currentslave = number
+	###---Added by Expansion---### Jail Expanded
+	background_set('jail')
+	yield(self, 'animfinished')
+	hide_everything()
+	###---End Expansion---###
+	get_node("MainScreen/slave_tab").tab = 'prison'
+	get_node("MainScreen/slave_tab").slavetabopen()
+
+func _on_jailerchange_pressed():
+	if get_node("MainScreen/mansion/jailpanel/jailsettings/jailsettingspanel/jailerchange").get_text() != 'Unassign':
+		selectslavelist(false, '_on_jailsettingspanel_visibility_changed', self, 'globals.currentslave.loyal >= 20 && globals.currentslave.conf >= 50')
+	else:
+		for i in globals.slaves:
+			if i.work == 'jailer':
+				i.work = 'rest'
+		_on_jailsettingspanel_visibility_changed()
+
+
+func _on_jailsettings_pressed():
+	get_node("MainScreen/mansion/jailpanel/jailsettings/jailsettingspanel").show()
+
+func _on_jailerclose_pressed():
+	get_node("MainScreen/mansion/jailpanel/jailsettings/jailsettingspanel").hide()
+
+var potselected
+
+func _on_alchemy_pressed():
+	background_set('alchemy' + str(globals.state.mansionupgrades.mansionalchemy))
+	yield(self, 'animfinished')
+	hide_everything()
+	get_node("MainScreen/mansion/alchemypanel").show()
+	if globals.state.tutorial.alchemy == false:
+		get_node("tutorialnode").alchemy()
+	if globals.state.sidequests.chloe == 8 && globals.state.mansionupgrades.mansionalchemy >= 1:
+		globals.events.chloealchemy()
+	potselected = null
+	var potlist = get_node("MainScreen/mansion/alchemypanel/ScrollContainer/selectpotionlist")
+	var potline = get_node("MainScreen/mansion/alchemypanel/ScrollContainer/selectpotionlist/selectpotionline")
+	var maintext = get_node("MainScreen/mansion/alchemypanel/alchemytext")
+	if globals.state.mansionupgrades.mansionalchemy == 0:
+		maintext.set_bbcode("Your alchemy room lacks sufficient tools to craft your own potions. You have to unlock it from [color=yellow]Mansion Upgrades[/color] first.")
+		for i in get_node("MainScreen/mansion/alchemypanel").get_children():
+			i.hide()
+		maintext.show()
+		return
+	else:
+		get_node("MainScreen/mansion/alchemypanel/alchemytext").set_bbcode("This is your alchemy room. Chemistry equipment is ready to use and shelves contain your fresh ingredients.")
+		get_node("MainScreen/mansion/alchemypanel/potdescription").set_bbcode('')
+		for i in get_node("MainScreen/mansion/alchemypanel").get_children():
+			i.show()
+	for i in potlist.get_children():
+		if i != potline:
+			i.hide()
+			i.queue_free()
+	var array = []
+	for i in globals.itemdict.values():
+		if i.recipe != '' && globals.evaluate(i.reqs):
+			array.append(i)
+	array.sort_custom(globals.items,'sortitems')
+	for i in array:
+		var newpotline = potline.duplicate()
+		potlist.add_child(newpotline)
+		if i.icon != null:
+			newpotline.get_node("potbutton/icon").set_texture(i.icon)
+		newpotline.show()
+		newpotline.get_node("potnumber").set_text(str(i.amount))
+		newpotline.get_node("potbutton").set_text(i.name)
+		newpotline.get_node("potbutton").connect('pressed', self, 'brewlistpressed', [i])
+		newpotline.set_name(i.name)
+	alchemyclear()
+	get_node("MainScreen/mansion/alchemypanel/brewbutton").set_disabled(true)
+
+func alchemyclear():
+	get_node("MainScreen/mansion/alchemypanel/Panel 2").hide()
+	get_node("MainScreen/mansion/alchemypanel/Label").hide()
+	get_node("MainScreen/mansion/alchemypanel/Label1").hide()
+	for i in get_node("MainScreen/mansion/alchemypanel/VBoxContainer").get_children():
+		if i.get_name() != 'Panel':
+			i.hide()
+			i.queue_free()
+	
+
+func brewlistpressed(potion):
+	potselected = potion
+	var counter = get_node("MainScreen/mansion/alchemypanel/brewcounter").get_value()
+	var text = ''
+	var recipedict = {}
+	var brewable = true
+	recipedict = globals.items[potion.recipe]
+	var array = []
+	for i in recipedict:
+		array.append(i)
+	array.sort_custom(globals.items,'sortbytype')
+	alchemyclear()
+	if potselected.icon != null:
+		get_node("MainScreen/mansion/alchemypanel/Panel 2").show()
+		get_node("MainScreen/mansion/alchemypanel/Panel 2/bigicon").set_texture(potselected.icon)
+	get_node("MainScreen/mansion/alchemypanel/Label").show()
+	get_node("MainScreen/mansion/alchemypanel/Label1").show()
+	for i in array:
+		var item = globals.itemdict[i]
+		var newpanel = get_node("MainScreen/mansion/alchemypanel/VBoxContainer/Panel").duplicate()
+		get_node("MainScreen/mansion/alchemypanel/VBoxContainer/").add_child(newpanel)
+		newpanel.show()
+		newpanel.get_node("icon").set_texture(item.icon)
+		newpanel.get_node("icon").connect("mouse_entered",globals, 'showtooltip', [item.description])
+		newpanel.get_node("icon").connect("mouse_exited",globals, 'hidetooltip')
+		newpanel.get_node('name').set_text(item.name)
+		newpanel.get_node("number").set_text(str(recipedict[i]*counter))
+		newpanel.get_node("totalnumber").set_text(str(item.amount))
+		if item.amount < recipedict[i]*counter:
+			newpanel.get_node("totalnumber").set('custom_colors/font_color', Color(1,0.29,0.29))
+			brewable = false
+	text = text + '\n[center][color=aqua]'+ potselected.name + '[/color][/center]\n' + '' + potselected.description + '\n'
+	for i in get_tree().get_nodes_in_group('alchemypot'):
+		if i.get_text() != potion.name && i.is_pressed() == true:
+			i.set_pressed(false)
+	get_node("MainScreen/mansion/alchemypanel/potdescription").set_bbcode(text)
+	if counter == 0:
+		brewable = false
+	if brewable == false:
+		get_node("MainScreen/mansion/alchemypanel/brewbutton").set_disabled(true)
+	else:
+		get_node("MainScreen/mansion/alchemypanel/brewbutton").set_disabled(false)
+
+
+func _on_brewbutton_pressed():
+	if potselected == null:
+		return
+	var counter = get_node("MainScreen/mansion/alchemypanel/brewcounter").get_value()
+	while counter > 0:
+		counter -= 1
+		globals.items.recipemake(potselected)
+	brewlistpressed(potselected)
+	_on_alchemy_pressed()
+	get_node("MainScreen/mansion/alchemypanel/brewbutton").set_disabled(true)
+
+func _on_brewcounter_value_changed( value ):
+	if potselected != null:
+		brewlistpressed(potselected)
+
+func chloealchemy():
+	globals.events.chloealchemy()
+
+var loredict = globals.dictionary.loredict
+
+func _on_library_pressed():
+	if globals.state.mansionupgrades.mansionlibrary == 0:
+		background_set('library1')
+	else:
+		background_set('library2')
+	yield(self, 'animfinished')
+	hide_everything()
+	get_node("MainScreen/mansion/librarypanel").show()
+	var text = ''
+	if globals.state.mansionupgrades.mansionlibrary == 0:
+		text = "Tucked away in a large room off the main passage in the mansion is the library. Bookshelves line every wall leaving only spaces for long narrow windows and the door. The shelves are mostly empty a few scarce books from your days studying you've brought with you. "
+	else:
+		text = "Tucked away in a large room off the main passage in the mansion is the library. Bookshelves line every wall leaving only spaces for long narrow windows and the door. Your collection of books grew bigger since your earlier days, and you are fairly proud of it."
+	var list = get_node("MainScreen/mansion/librarypanel/TextureFrame/ScrollContainer/VBoxContainer")
+	for i in list.get_children():
+		if i.get_name() != "Button":
+			i.hide()
+			i.queue_free()
+	
+	var array = []
+	for i in loredict.values():
+		if globals.evaluate(i.reqs) == false:
+			continue
+		var newbutton = get_node("MainScreen/mansion/librarypanel/TextureFrame/ScrollContainer/VBoxContainer/Button").duplicate()
+		list.add_child(newbutton)
+		newbutton.show()
+		newbutton.set_text(i.name)
+		newbutton.set_meta('lore', i)
+		newbutton.connect('pressed',self,'lorebutton', [i])
+	
+	var personarray = []
+	for person in globals.slaves:
+		if person.work == 'library':
+			personarray.append(person)
+	if personarray.size() > 0:
+		text += '\n\nYou can see '
+		for i in personarray:
+			text += i.dictionary('$name')
+			if i != personarray.back() && personarray.find(i) != personarray.size()-2:
+				text += ', '
+			elif personarray.find(i) == personarray.size()-2:
+				text += ' and '
+		text += " studying here."
+	get_node("MainScreen/mansion/librarypanel/libraryinfo").set_bbcode(text)
+
+func lorebutton(lore):
+	for i in get_node("MainScreen/mansion/librarypanel/TextureFrame/ScrollContainer/VBoxContainer").get_children():
+		if i.get_name() != 'Button' && i.get_meta('lore') != lore:
+			i.set_pressed(false)
+		else:
+			i.set_pressed(true)
+	sound('page')
+	get_node("MainScreen/mansion/librarypanel/TextureFrame/librarytext").set_bbcode(lore.text)
+	get_node("MainScreen/mansion/librarypanel/TextureFrame/librarytext").get_v_scroll().set_value(0)
+
+func _on_lorebutton_pressed():
+	get_node("MainScreen/mansion/librarypanel/TextureFrame").show()
+
+func _on_libraryclose_pressed():
+	get_node("MainScreen/mansion/librarypanel/TextureFrame").hide()
+###########QUEST LOG
+
+func _on_questlog_pressed():
+	get_node("questnode").popup()
+
+
+func _on_questsclosebutton_pressed():
+	get_node("questnode").hide()
+
+var mainquestdict = {
+	'0' : "You should try joining Mage Order in town to get access to better stuff and start your career.",
+	'1' : "Old chancellor at Mage Order wants me to bring him a girl before I can join. She must be: \nFemale\nHuman \nAverage look (40) or better \nHigh obedience \n\nI can probably take a look at Slavers's Guild or explore outsides. ",
+	'2' : "Visit Mage Order again and seek for further promotions.",
+	'3' : "Melissa from Mage Order wants you to bring them captured Fairy. ",
+	'3.1' : "Melissa from Mage Order wants you to bring them captured Fairy, I should be able to find them in far forests around Wimborn. ",
+	'4' : "Return to Melissa for further information.",
+	'5' : "Melissa told you to find Sebastian at the market and get her 'delivery'.",
+	'6' : "Acquire alchemical station, brew Elixir of Youth and return it to Melissa.",
+	'7' : "Visit Melissa for your next task.",
+	'8' : "Set up a Laboratory through Mansion Upgrades tab. Then return to Melissa.",
+	'9' : "Return to Melissa.",
+	'10': "Bring Melissa a Taurus girl with giant lactating tits and at least three additional pairs of tits.\nSize and lactation can be altered with certain potions.\nThe laboratory lets you add extra nipples and develop the rudimentary nipples into tits. ",
+	'11': "Visit Melissa for your next mission. ",
+	'12': "Melissa told you to travel to Gorn and find the Orc named Garthor. ",
+	'13': "Garthor from Gorn ordered you to capture and bring Tribal Elf Ivran who you can find at Gorn's outskirts.",
+	'14': "Wait for next day until returning to Garthor. ",
+	'15': "Return to Garthor and decide what should be done with Ivran. ",
+	'16': "Return back to Melissa for your next task. ",
+	'17': "Get to the Amberguard through the Deep Elven Grove. ",
+	'18': "Get to the Tunnel Entrance which lays after the Amber Road. ",
+	'19': "Search through Amberguard for a way to get into Tunnel Entrance. ",
+	'20': "Purchase the information from stranger in Amberguard. ",
+	'21': "Locate Witch's Hut at the Amber Road. ",
+	'22': "Ask Shuriya in the Hut near Amber Road how to get into tunnels",
+	'23': "Bring 2 slaves to the Shuriya: an elf and a dark elf. ",
+	'24': "Search through Undercity ruins for any remaining documents. ",
+	'25': "Return to Melissa with your findings. ",
+	'26': "Visit Melissa for your next assignement. ",
+	'27': "Visit Capital. ",
+	'28': "Visit Frostford's City Hall. ",
+	'28.1': "Investigate suspicious hunting grounds at Frostford's outskirts. ",
+	'29': "Report back to Theron about your findings. ",
+	'30': "Decide on the solution for Frostford's issue. ",
+	'31': "Let Theron know about Zoe's decision.",
+	'32': "Return to Zoe while having total 500 units of food, 15 Nature Essences and 5 Fluid Substances.",
+	'33': "Return to Theron.",
+	'34': "Return to Theron.",
+	'35': "Return to Theron.",
+	'36': "Visit Melissa",
+	'37': "Visit Garthor at Gorn",
+	'38': "Search for Ayda at her shop",
+	'39': "Search for Ayda at Gorn's Mountain region",
+	'40': "Return to Wimborn's Mage Order",
+	'41': "Return to Wimborn's Mage Order",
+	'42': "Main story quest Finished",
+}
+var chloequestdict = {
+	'3':"Chloe from Shaliq wants you to get 25 mana and visit her to trade it for a spell.",
+	'5':"Visit Chloe in the Shaliq.",
+	'6':"Chloe seems to be missing from her hut. You should try looking for her in the woods.",
+	'7':"Check on Chloe's condition in Shaliq. ",
+	'8':"Chloe asked you to brew an antidote for her. ",
+	'9':"Return with potion to [color=green]Chloe in Shaliq[/color].",
+}
+var caliquestdict = {
+	'12':"Talk to Cali about her parents",
+	'13':"Talk to Cali",
+	'14':"Ask around Wimborn for potential clues of Cali's origins",
+	'15':"Get information from Jason in Wimborn's Bar",
+	'16':"Pay up rest of the cash to the Jason for information",
+	'17':"Search Shaliq village in the Wimborn forest for clues",
+	'18':"Search forest bandits for clues",
+	'19':"Defeat bandits in camp in Wimborn forest",
+	'20':"Return to Shaliq for reward",
+	'21':"Return to Shaliq for reward",
+	'22':"Talk to Cali",
+	'23':"Locate slavers camp in Wimborn outskirts",
+	'24':"Locate slavers camp in Wimborn outskirts",
+	'25':"Locate bandit responsible for Cali's kidnap",
+	'26':"Locate Cali's house in Eerie woods",
+}
+var emilyquestdict = {
+	'12':"Search for Tisha at the Wimborn's Mage Order",
+	'13':"Search for suspicious person at the backstreets",
+	'14':"Your investigation tells you Tisha might be at Gorn.",
+	'15':"Get Tisha out of Gorn's Slavers Guild",
+}
+var yrisquestdict = {
+	"1":"Accept Yris's challenge at Gorn's bar",
+	"2":"Find a way to win Yris's challenge at Gorn's bar. Perhaps, you could bring some potion to help with the challenge.",
+	"3":"Talk to Yris at Gorn's Bar",
+	"4":"Find a way to secure your bet with Yris. Perhaps, some alchemist might shine some light upon your findings. You'll also need 1000 gold and 1 Deterrent potion.",
+	"5":"Beat Yris at her challenge at Gorn's Bar. You'll also need to bring 1000 gold and Deterrent potion. ",
+}
+var zoequestdict = {
+	"5":"Deliver to Zoe 10 Teleport Seals, 5 Magic Essences, 5 Tainted Essences.",
+}
+var aydaquestdict = {
+	"5": "Visit Ayda at her shop in Gorn",
+	"7": "Visit Ayda's shop to find out more about her",
+	"8": "Find an Ice Brandy for Ayda",
+	"9": "Talk to Ayda",
+	"10": "Visit Ayda's shop to find out what else you can do for her",
+	"11": "Find book ‘Fairies and Their Many Uses’",
+	"12": "Talk to Ayda",
+	"13": "Visit Ayda's shop",
+	"14": "Find the Ayda's necklace around Gorn.",
+	"15": "Talk to Ayda",
+}
+var questtype = {slaverequest = 'Slave Request'}
+var selectedrepeatable
+
+func _on_questnode_visibility_changed():
+	if get_node("questnode").visible == false:
+		return
+	var maintext = get_node("questnode/TabContainer/Main Quest/mainquesttext")
+	var sidetext = get_node("questnode/TabContainer/Side Quests/sidequesttext")
+	var repeattext = get_node("questnode/TabContainer/Repeatable Quests/repetablequesttext")
+	maintext.set_bbcode(mainquestdict[str(globals.state.mainquest)])
+	sidetext.set_bbcode('')
+	repeattext.set_bbcode('')
+	#sidequests
+	if globals.state.sidequests.brothel == 1:
+		sidetext.set_bbcode(sidetext.get_bbcode() + "—To let your slaves work at prostitution, you'll have to bring [color=green]Elf girl[/color] to the brothel. \n\n")
+	if globals.state.farm == 2:
+		sidetext.set_bbcode(sidetext.get_bbcode()+ "—Sebastian proposed you to purchase to set up your own human farm for 1000 gold.\n\n")
+	if chloequestdict.has(str(globals.state.sidequests.chloe)):
+		sidetext.set_bbcode(sidetext.get_bbcode() + "—"+ chloequestdict[str(globals.state.sidequests.chloe)]+"\n\n")
+	if caliquestdict.has(str(globals.state.sidequests.cali)):
+		sidetext.set_bbcode(sidetext.get_bbcode() + "—"+ caliquestdict[str(globals.state.sidequests.cali)]+"\n\n")
+	if emilyquestdict.has(str(globals.state.sidequests.emily)):
+		sidetext.set_bbcode(sidetext.get_bbcode() + "—"+ emilyquestdict[str(globals.state.sidequests.emily)]+"\n\n")
+	if yrisquestdict.has(str(globals.state.sidequests.yris)):
+		sidetext.set_bbcode(sidetext.get_bbcode() + "—"+ yrisquestdict[str(globals.state.sidequests.yris)]+"\n\n")
+	if aydaquestdict.has(str(globals.state.sidequests.ayda)):
+		sidetext.set_bbcode(sidetext.get_bbcode() + "—"+ aydaquestdict[str(globals.state.sidequests.ayda)]+"\n\n")
+	if zoequestdict.has(str(globals.state.sidequests.zoe)):
+		sidetext.set_bbcode(sidetext.get_bbcode() + "—"+ zoequestdict[str(globals.state.sidequests.zoe)]+"\n\n")
+	#repeatables
+	for i in get_node("questnode/TabContainer/Repeatable Quests/ScrollContainer/VBoxContainer").get_children():
+		if i != get_node("questnode/TabContainer/Repeatable Quests/ScrollContainer/VBoxContainer/Button"):
+			i.hide()
+			i.queue_free()
+	selectedrepeatable = null
+	get_node("questnode/TabContainer/Repeatable Quests/questforfeit").set_disabled(true)
+	for i in globals.state.repeatables:
+		for ii in globals.state.repeatables[i]:
+			if ii.taken == true:
+				var newbutton = get_node("questnode/TabContainer/Repeatable Quests/ScrollContainer/VBoxContainer/Button").duplicate()
+				get_node("questnode/TabContainer/Repeatable Quests/ScrollContainer/VBoxContainer").add_child(newbutton)
+				newbutton.show()
+				newbutton.set_text(ii.location.capitalize() + ' - ' + questtype[ii.type])
+				newbutton.connect("pressed",self,'repeatableselect', [ii])
+				newbutton.set_meta('quest', ii)
+	
+	
+	if sidetext.get_bbcode() == '':
+		sidetext.set_bbcode('You have no active sidequests.')
+	if get_node("questnode/TabContainer/Repeatable Quests/ScrollContainer/VBoxContainer").get_children().size() <= 1:
+		repeattext.set_bbcode('You have no active repeatable quests.')
+	else:
+		repeattext.set_bbcode('Choose repeatable quest to see detailed info.')
+
+func repeatableselect(quest):
+	selectedrepeatable = quest
+	get_node("questnode/TabContainer/Repeatable Quests/questforfeit").set_disabled(false)
+	var text = ''
+	for i in get_node("questnode/TabContainer/Repeatable Quests/ScrollContainer/VBoxContainer").get_children():
+		if i.has_meta('quest') == true:
+			i.set_pressed(i.get_meta('quest') == quest)
+	text = get_node("outside").slavequesttext(quest)
+	text = text.replace('Time Limit:', 'Time Remained:')
+	get_node("questnode/TabContainer/Repeatable Quests/repetablequesttext").set_bbcode(text)
+
+func _on_questforfeit_pressed():
+	if selectedrepeatable != null:
+		yesnopopup("Cancel this quest?", 'removequest')
+
+func removequest():
+	for i in globals.state.repeatables:
+		for ii in globals.state.repeatables[i]:
+			if ii == selectedrepeatable:
+				globals.state.repeatables[i].remove(globals.state.repeatables[i].find(ii))
+	_on_questnode_visibility_changed()
+
+var spellscategory = 'control'
+var spellbookimages = {
+	control = load("res://files/buttons/book/control.png"),
+	offensive = load("res://files/buttons/book/offensive.png"),
+	defensive = load("res://files/buttons/book/defensive.png"),
+	utility = load("res://files/buttons/book/utility.png"),
+}
+
+func _on_spellbook_pressed():
+	get_node("spellbooknode").popup()
+	sound('page')
+	var spelllist = get_node("spellbooknode/spellbooklist/ScrollContainer/spellist")
+	var spellbutton = get_node("spellbooknode/spellbooklist/ScrollContainer/spellist/spellbutton")
+	get_node("spellbooknode/spellbooklist").set_texture(spellbookimages[spellscategory])
+	for i in spelllist.get_children():
+		if i != spellbutton:
+			i.hide()
+			i.queue_free()
+	var array = []
+	for i in globals.spelldict.values():
+		array.append(i)
+	array.sort_custom(globals.spells,'sortspells')
+	get_node("spellbooknode/spellbooklist/spelldescription").set_bbcode('')
+	for i in array:
+		if i.learned == true && i.type == spellscategory:
+			var newbutton = spellbutton.duplicate()
+			spelllist.add_child(newbutton)
+			newbutton.set_text(i.name)
+			newbutton.show()
+			newbutton.connect('pressed',self,'spellbookselected',[i])
+	#get_node("screenchange/AnimationPlayer").play("fadetoblack")
+
+func spellbookselected(spell):
+	var text = ''
+	sound('page')
+	for i in get_tree().get_nodes_in_group("spellbutton"):
+		if i.get_text() != spell.name: i.set_pressed(false)
+	text = '[center]'+ spell.name + '[/center]\n\n' + spell.description + '\n\nType: ' + spell.type.capitalize() + '\n\nMana: ' + str(globals.spells.spellcost(spell))
+	if spell.combat == true:
+		text += '\n\nCan be used in combat'
+	get_node("spellbooknode/spellbooklist/spelldescription").set_bbcode(text)
+
+func spellbookcategory(button):
+	spellscategory = button.get_name()
+	_on_spellbook_pressed()
+
+func _on_spellbookclose_pressed():
+	get_node("spellbooknode").hide()
+
+
+func _on_debug_pressed():
+	get_node("options").show()
+	get_node("options")._on_cheats_pressed()
+
+var baby
+
+###---Added by Expansion---### Added by Deviate - Minor modifications to add multiple births
+func childbirth(person,baby_id):
+	person.preg.offspring_count += 1
+	get_node("birthpanel").show()
+	baby = globals.state.findbaby(baby_id)
+	var text = ''
+	if globals.state.mansionupgrades.mansionnursery >= 1:
+		if globals.player == person:
+			text = person.dictionary('[color=aqua]You[/color] gave birth to a ')
+		else:
+			text = person.dictionary('[color=aqua]$name[/color] gave birth to a ')
+		text += baby.dictionary('healthy [color=aqua]$race $child[/color]. ') + globals.description.getBabyDescription(baby)
+		if globals.state.mansionupgrades.dimensionalcrystal >= 2:
+			text += baby.dictionary("\nYou see the octomarine remnants of magic slowly fading from $his skin. The Dimensional Crystal may have unlocked parts of $his DNA and given $him greater possible abilities than $his parents. ")
+		###---Added by Expansion---###
+		#Change the "0,5" to Lust/Orgasms,Stress+Pain*.5 ?
+		if person.pregexp.desiredoffspring - person.metrics.birth - rand_range(0,5) > 0:
+			#Randomize Dialogue - TBK
+			text += person.dictionary("\n\n[color=aqua]$name[/color] " + str(globals.randomitemfromarray(['whimpers','pants','moans','says','meekly says'])) + "\n" + person.quirk("[color=yellow]-I need time to recover, of course, but I don't mind having another baby "))
+			if globals.expansion.relatedCheck(globals.player,baby) == 'father':
+				text += "with you.[/color]\n"
+			else:
+				text += "for you.[/color]\n"	
+		else:
+			#Randomize Dialogue - TBK
+			text += person.dictionary("\n\n[color=aqua]$name[/color] " + str(globals.randomitemfromarray(['whimpers','pants','moans','says','meekly says'])) + "\n" + person.quirk("[color=yellow]-I really don't want to have another baby. Please don't make me have another baby...[/color]\n"))
+			person.consentexp.pregnancy = false
+			person.consentexp.breeder = false
+			person.consentexp.incestbreeder = false
+		var acceptsacrifice = round(rand_range(0,100))
+		if person.knowledge.has('currentpregnancywanted') || person.pregexp.wantedpregnancy == true:
+			text += person.dictionary(person.quirk("[color=yellow]Will you keep my baby? Please? I want to be able to be in ")) + baby.dictionary("$his") + person.dictionary(person.quirk(" life.[/color]\n"))
+		elif globals.state.thecrystal.abilities.has('sacrifice') && (acceptsacrifice < (person.loyal+person.obed)*.5 || acceptsacrifice <= person.fear):
+			person.dailytalk.append('acceptedsacrifice')
+			text += person.dictionary(person.quirk("[color=yellow]I understand if you...have to do what you do with the [color=#E389B9]Crystal[/color]. I would rather you not, obviously, but if you have absolutely have to get rid of to keep the rest of us from being eaten or sacrificed...I won't hold it against you. If it is between me and the baby I didn't want to have...well, you understand.[/color]\n"))
+		#---Modified Text and Raising Cost
+		text += "\nThe power of the [color=#E389B9]Dimensional Crystal[/color] will help accelerate it's growth allowing for it to experience entire years in a matter of days as it rests in the [color=aqua]Nursery[/color] next to the [color=#E389B9]Crystal[/color]."
+		text += "\nWould you like to [color=aqua]Raise[/color] it? This will cost you either [color=aqua]500 Gold[/color], [color=aqua]25 Mana and 250 Gold[/color], or [color=aqua]50 Mana[/color] to allow it to grow up healthy.\nYou may also [color=aqua]Give the Baby Away[/color] for no cost or penalty. "
+		if globals.state.thecrystal.abilities.has('sacrifice'):
+			text += "\nYou can also [color=red]Sacrifice[/color] the baby to the [color=#E389B9]Crystal[/color]. This will kill the baby but embue the [color=#E389B9]Crystal[/color] with [color=aqua]1 Life[/color] and lessen [color=aqua]1-3 Hunger[/color]."
+			text += "\nHowever, [color=aqua]$name[/color] may hate you for this action depending on $his [color=aqua]Loyalty[/color] and will gain [color=aqua]Fear[/color]."
+		#Raise with Gold
+		if globals.resources.gold >= 500:
+			get_node("birthpanel/raise").set_disabled(false)
+			get_node("birthpanel/raise").set_tooltip("Spend 500 Gold to Raise the Baby")
+		else:
+			get_node("birthpanel/raise").set_disabled(true)
+			get_node("birthpanel/raise").set_tooltip("You cannot afford the cost of 500 Gold")
+		#Raise with Gold and Mana
+		if globals.resources.gold >= 250 && globals.resources.mana >= 25:
+			get_node("birthpanel/raisehybrid").set_disabled(false)
+			get_node("birthpanel/raisehybrid").set_tooltip("Spend 250 Gold and 25 Mana to Raise the Baby")
+		else:
+			get_node("birthpanel/raisehybrid").set_disabled(true)
+			get_node("birthpanel/raisehybrid").set_tooltip("You cannot afford the cost of 250 Gold and 25 Mana")
+		#Raise with Mana
+		if globals.resources.mana >= 50:
+			get_node("birthpanel/raisemana").set_disabled(false)
+			get_node("birthpanel/raisemana").set_tooltip("Spend 50 Mana to Raise the Baby")
+		else:
+			get_node("birthpanel/raisemana").set_disabled(true)
+			get_node("birthpanel/raisemana").set_tooltip("You cannot afford the cost of 50 Mana")
+		#Sacrifice Baby
+		if globals.state.thecrystal.abilities.has('sacrifice'):
+			get_node("birthpanel/sacrificebaby").show()
+			if globals.state.thecrystal.mode == "dark":
+				get_node("birthpanel/sacrificebaby").set_disabled(false)
+				get_node("birthpanel/sacrificebaby").set_tooltip("Sacrifice the Baby to the Dark Crystal to lower its Hunger by 1 to 3 and gain 1 Lifeforce")
+			else:
+				get_node("birthpanel/sacrificebaby").set_disabled(true)
+				get_node("birthpanel/sacrificebaby").set_tooltip("The Crystal is Light and will not currently accept Sacrifices")
+		else:
+			get_node("birthpanel/sacrificebaby").hide()
+		###---Expansion End---###
+	else:
+		if globals.player == person:
+			text = person.dictionary("You've had to use the town's hospital to give birth to your child. [color=red]Sadly, you can't keep it without Nursery Room and had to give it away.[/color]")
+		else:
+			text = person.dictionary("$name had to use the town's hospital to give birth to her child. [color=red]Sadly, you can't keep it without Nursery Room and had to give it away.[/color]")
+		get_node("birthpanel/raise").set_disabled(true)
+		###---Added by Expansion---### Disable if no nursery
+		get_node("birthpanel/raise").set_disabled(true)
+		get_node("birthpanel/raise").set_tooltip("You have no Nursery. You can build one in Mansion Upgrades.")
+		get_node("birthpanel/raisehybrid").set_disabled(true)
+		get_node("birthpanel/raisehybrid").set_tooltip("You have no Nursery. You can build one in Mansion Upgrades.")
+		get_node("birthpanel/raisemana").set_disabled(true)
+		get_node("birthpanel/raisemana").set_tooltip("You have no Nursery. You can build one in Mansion Upgrades.")
+		get_node("birthpanel/sacrificebaby").hide()
+		###---End Expansion---###
+	
+	#---Added Portrait
+	if globals.canloadimage(person.imageportait):
+		get_node("birthpanel/portraitpanel/portrait").set_texture(globals.loadimage(person.imageportait))
+	elif globals.gallery.nakedsprites.has(person.unique):
+		if person.obed <= 50 || person.stress > 50:
+			get_node("birthpanel/portraitpanel/portrait").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothrape])
+		else:
+			get_node("birthpanel/portraitpanel/portrait").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothcons])
+	else:
+		get_node("birthpanel/portraitpanel/portrait").set_texture(null)
+	get_node("birthpanel/portraitpanel/portrait").show()
+	
+	get_node("birthpanel/birthtext").set_bbcode(text)
+
+###---Added by Expansion---### Childbirth Expanded
+func _on_giveaway_pressed():
+	if birthmother.knowledge.has('currentpregnancywanted') || birthmother.pregexp.wantedpregnancy == true:
+		birthmother.loyal -= round(rand_range(10,25))
+	reset_after_pregnancy(birthmother)
+	get_node("birthpanel").hide()
+	childbirth_loop(birthmother)
+
+func _on_raise_pressed():
+	if globals.resources.gold >= 500:
+		globals.resources.gold -= 500
+	finish_raising()
+
+func babyage(age):
+	###---Added by Expansion---### Size Support || Replaced Functions
+	baby.name = get_node("birthpanel/childpanel/LineEdit").get_text()
+	if get_node("birthpanel/childpanel/surnamecheckbox").is_pressed() == true:
+		baby.surname = globals.player.surname
+	if age == 'child':
+		ClearBabyTraits(age) #ralph
+		baby.age = 'child'
+		baby.away.duration = variables.growuptimechild
+	elif age == 'teen':
+		ClearBabyTraits(age) #ralph
+		baby.age = 'teen'
+		baby.away.duration = variables.growuptimeteen
+	elif age == 'adult':
+		ClearBabyTraits(age) #ralph
+		baby.age = 'adult'
+		baby.away.duration = variables.growuptimeadult
+	baby.away.at = 'growing'
+	baby.obed += 75
+	baby.loyal += 20
+	if !baby.sex in ['male','dickgirl']:
+		baby.vagvirgin = true
+	baby.assvirgin = true
+	baby.unique = null #ralph
+	if globals.useRalphsTweaks:
+		globals.expansionsetup.setRaceBonus(baby, false) #ralph - needed to override certain inherited traits for certain hybrids including race_display
+		globals.expansionsetup.setRaceBonus(baby, true) #ralph
+	globals.slaves = baby
+	globals.state.relativesdata[baby.id].name = baby.name_long()
+	globals.state.relativesdata[baby.id].state = 'normal'
+
+	globals.state.babylist.erase(baby)
+	baby = null
+	get_node("birthpanel").hide()
+	get_node("birthpanel/childpanel").hide()
+	childbirth_loop(birthmother)
+
+
+
+
+
+func _on_helpglossary_pressed():
+	get_node("tutorialnode").callalise()
+
+#### selfinsepct
+
+
+func _on_selfbutton_pressed():
+	hide_everything()
+	get_node("MainScreen/mansion/selfinspect").show()
+	get_node("MainScreen/mansion/selfinspect/selflookspanel").hide()
+	var text = '[center]Personal Achievements[/center]\n'
+	var text2 = ''
+	var person = globals.player
+	$MainScreen/slave_tab.person = globals.player
+	var dict = {
+		0: "You do not belong in an Order.",
+		1: "Neophyte",
+		2: "Apprentice",
+		3: "Journeyman",
+		4: "Adept",
+		5: "Master",
+		6: "Grand Archmage",
+	}
+	text += 'Combat Abilities: '
+	for i in person.ability:
+		var ability = globals.abilities.abilitydict[i]
+		if ability.learnable == true:
+			text2 += ability.name + ', '
+	if text2 == '':
+		text += 'none. \n'
+	else:
+		text2 = text2.substr(0, text2.length() -2)+ '. '
+	text += text2 + '\nReputation:\n'
+	for i in globals.state.reputation:
+		text += i.capitalize() + " - "+ reputationword(globals.state.reputation[i])
+		###---Added by Expansion---### Towns Expanded
+		if globals.expansionsettings.enable_public_nudity_system == true:
+			var lawdict = globals.state.townsexpanded[i]
+			#Public Nudity
+			text += " - Local Laws: [color=aqua]Public Nudity[/color] " + globals.fastif(lawdict.laws.public_nudity == true, "[color=lime]Legal[/color]", "[color=red]Illegal[/color]")
+		#End Line (Change to Multi-line Spacing?)
+		text += "\n"
+		###---End Expansion---###
+	text += "Your mage order rank: " + dict[int(globals.state.rank)]
+	###---Added by Expansion---###
+	if globals.state.spec != "" && globals.state.spec != null:
+		text += "\n\nYour speciality: [color=yellow]" + globals.state.spec + "[/color]\nBonuses: " + globals.expandedplayerspecs[globals.state.spec]
+	###---End Expansion---###
+
+	get_node("MainScreen/mansion/selfinspect/mainstatlabel").set_bbcode(text)
+	updatestats(person)
+	if globals.state.mansionupgrades.mansionparlor >= 1:
+		$MainScreen/mansion/selfinspect/selftattoo.set_disabled(false)
+		$MainScreen/mansion/selfinspect/selfpierce.set_disabled(false)
+		$MainScreen/mansion/selfinspect/selftattoo.set_tooltip("")
+		$MainScreen/mansion/selfinspect/selfpierce.set_tooltip("")
+	else:
+		$MainScreen/mansion/selfinspect/selftattoo.set_disabled(true)
+		$MainScreen/mansion/selfinspect/selfpierce.set_disabled(true)
+		$MainScreen/mansion/selfinspect/selftattoo.set_tooltip("Unlock Beauty Parlor to access Tattoo options. ")
+		$MainScreen/mansion/selfinspect/selfpierce.set_tooltip("Unlock Beauty Parlor to access Piercing options. ")
+	$MainScreen/mansion/selfinspect/Contraception.pressed = person.effects.has("contraceptive")
+	$MainScreen/mansion/selfinspect/defaultMasterNoun.text = globals.state.defaultmasternoun
+
+func _on_defaultMasterNoun_text_entered(text):
+	get_node("MainScreen/mansion/selfinspect/defaultMasterNoun").release_focus()
+
+func _on_defaultMasterNoun_text_changed(text):
+	if text == '':
+		globals.state.defaultmasternoun = 'Master'
+	else:
+		globals.state.defaultmasternoun = text
+
+func contraceptiontoggle():
+	if $MainScreen/mansion/selfinspect/Contraception.pressed:
+		globals.player.add_effect(globals.effectdict.contraceptive)
+	else:
+		globals.player.add_effect(globals.effectdict.contraceptive, true)
+
+func stattooltip(value):
+	var text = globals.statsdescript[value]
+	globals.showtooltip(text)
+
+func statup(stat):
+	globals.player.stats[globals.basestatdict[stat]] += 1
+	globals.player.skillpoints -= 1
+	globals.player[stat] += 0
+	updatestats(globals.player)
+
+onready var sstr = get_node("MainScreen/mansion/selfinspect/statspanel/sstr")
+onready var sagi = get_node("MainScreen/mansion/selfinspect/statspanel/sagi")
+onready var smaf = get_node("MainScreen/mansion/selfinspect/statspanel/smaf")
+onready var send = get_node("MainScreen/mansion/selfinspect/statspanel/send")
+
+func updatestats(person):
+	var text = ''
+	for i in ['sstr','sagi','smaf','send']:
+		text = str(person[i])
+		get(i).get_node('cur').set_text(text)
+		if i in ['sstr','sagi','smaf','send']:
+			get(i).get_node('base').set_text(str(person.stats[globals.basestatdict[i]]))
+			if person.stats[globals.maxstatdict[i].replace("_max",'_mod')] >= 1:
+				get(i).get_node('cur').set('custom_colors/font_color', Color(0,1,0))
+			elif person.stats[globals.maxstatdict[i].replace("_max",'_mod')] < 0:
+				get(i).get_node('cur').set('custom_colors/font_color', Color(1,0.29,0.29))
+			else:
+				get(i).get_node('cur').set('custom_colors/font_color', Color(1,1,1))
+		get(i).get_node('max').set_text(str(min(person.stats[globals.maxstatdict[i]], person.originvalue[person.origins])))
+	text = person.name_long() + '\n[color=aqua][url=race]' +person.dictionary('$race[/url][/color]').capitalize() +  '\nLevel : '+str(person.level)
+	get_node("MainScreen/mansion/selfinspect/statspanel/info").set_bbcode(person.dictionary(text))
+	get_node("MainScreen/mansion/selfinspect/statspanel/attribute").set_text("Free Attribute Points : "+str(person.skillpoints))
+	
+	for i in ['send','smaf','sstr','sagi']:
+		if person.skillpoints >= 1 && (globals.slaves.find(person) >= 0||globals.player == person) && person.stats[globals.maxstatdict[i].replace('_max','_base')] < person.stats[globals.maxstatdict[i]]:
+			get_node("MainScreen/mansion/selfinspect/statspanel/" + i +'/Button').visible = true
+		else:
+			get_node("MainScreen/mansion/selfinspect/statspanel/" + i+'/Button').visible = false
+	get_node("MainScreen/mansion/selfinspect/statspanel/hp").set_value((person.stats.health_cur/float(person.stats.health_max))*100)
+	get_node("MainScreen/mansion/selfinspect/statspanel/en").set_value((person.stats.energy_cur/float(person.stats.energy_max))*100)
+	get_node("MainScreen/mansion/selfinspect/statspanel/xp").set_value(person.xp)
+	text = "Health: " + str(person.stats.health_cur) + "/" + str(person.stats.health_max) + "\nEnergy: " + str(round(person.stats.energy_cur)) + "/" + str(person.stats.energy_max) + "\nExperience: " + str(person.xp)
+	get_node("MainScreen/mansion/selfinspect/statspanel/hptooltip").set_tooltip(text)
+	if person.imageportait != null && globals.loadimage(person.imageportait):
+		$MainScreen/mansion/selfinspect/statspanel/TextureRect/portrait.set_texture(globals.loadimage(person.imageportait))
+	else:
+		person.imageportait = null
+		$MainScreen/mansion/selfinspect/statspanel/TextureRect/portrait.set_texture(null)
+
+var gradeimages = {
+	'slave' : load("res://files/buttons/mainscreen/40.png"),
+	poor = load("res://files/buttons/mainscreen/41.png"),
+	commoner = load("res://files/buttons/mainscreen/42.png"),
+	rich = load("res://files/buttons/mainscreen/43.png"),
+	noble = load("res://files/buttons/mainscreen/44.png"),
+}
+
+
+
+
+func _on_selfinspectclose_pressed():
+	get_node("MainScreen/mansion/selfinspect").hide()
+	_on_mansion_pressed()
+
+
+#Save for modifying reputations
+func reputationword(value):
+	var text = ""
+	if value >= 30:
+		text = "[color=green]Great[/color]"
+	elif value >= 10:
+		text = "[color=green]Positive[/color]"
+	elif value <= -10:
+		text = "[color=#ff4949]Bad[/color]"
+	elif value <= -30:
+		text = "[color=#ff4949]Terrible[/color]"
+	else:
+		text = "Neutral"
+	return text
+
+
+func _on_selfinspectlooks_pressed():
+	get_node("MainScreen/mansion/selfinspect/selflookspanel/selfdescript").set_bbcode(globals.player.description())
+	get_node("MainScreen/mansion/selfinspect/selflookspanel").show()
+
+func _on_selfskillclose_pressed():
+	get_node("MainScreen/mansion/selfinspect/selflookspanel").hide()
+
+func _on_selfabilityupgrade_pressed():
+	get_node("MainScreen/mansion/selfinspect/selfabilitypanel/abilitydescript").set_bbcode('')
+	get_node("MainScreen/mansion/selfinspect/selfabilitypanel").show()
+	get_node("MainScreen/mansion/selfinspect/selfabilitypanel/abilitypurchase").set_disabled(true)
+	for i in get_node("MainScreen/mansion/selfinspect/selfabilitypanel/ScrollContainer/VBoxContainer").get_children():
+		if i != get_node("MainScreen/mansion/selfinspect/selfabilitypanel/ScrollContainer/VBoxContainer/Button"):
+			i.hide()
+			i.queue_free()
+	for i in globals.abilities.abilitydict.values():
+		if i.learnable == true && globals.player.ability.find(i.code) < 0 && (i.has('requiredspell') == false || globals.spelldict[i.requiredspell].learned == true):
+			var newbutton = get_node("MainScreen/mansion/selfinspect/selfabilitypanel/ScrollContainer/VBoxContainer/Button").duplicate()
+			get_node("MainScreen/mansion/selfinspect/selfabilitypanel/ScrollContainer/VBoxContainer").add_child(newbutton)
+			newbutton.show()
+			newbutton.set_text(i.name)
+			newbutton.connect("pressed",self,'selfabilityselect',[i])
+
+
+func selfabilityselect(ability):
+	var text = ''
+	var person = globals.player
+	var dict = {'sstr': 'Strength', 'sagi' : 'Agility', 'smaf': 'Magic', 'level': 'Level', 'spec': 'Spec'}
+	var confirmbutton = get_node("MainScreen/mansion/selfinspect/selfabilitypanel/abilitypurchase")
+	
+	for i in get_node("MainScreen/mansion/selfinspect/selfabilitypanel/ScrollContainer/VBoxContainer").get_children():
+		if i.get_text() != ability.name:
+			i.set_pressed(false)
+	
+	confirmbutton.set_disabled(false)
+	
+	text = '[center]'+ ability.name + '[/center]\n' + ability.description + '\nCooldown:' + str(ability.cooldown) + '\nLearn requirements: '
+	
+	var array = []
+	for i in ability.reqs:
+		array.append(i)
+	array.sort_custom(self, 'levelfirst')
+	
+	for i in array:
+		var temp = i
+		var ref = person
+		if i.find('.') >= 0:
+			temp = i.split('.')
+			for ii in temp:
+				ref = ref[ii]
+		else:
+			ref = person[i]
+		if typeof(ability.reqs[i]) == TYPE_ARRAY: # Capitulize - Specialization based abilities 
+			if !ability.reqs[i].has(ref):
+				confirmbutton.set_disabled(true)
+				text += '[color=#ff4949]'+dict[i] + ': ' + str(ability.reqs[i]) + '[/color], '
+			else:
+				text += '[color=green]'+dict[i] + ': ' + str(ability.reqs[i]) + '[/color], ' #fix this someday UGHH
+		elif ref < ability.reqs[i]: # /Capitulize
+			confirmbutton.set_disabled(true)
+			text += '[color=#ff4949]'+dict[i] + ': ' + str(ability.reqs[i]) + '[/color], '
+		else:
+			text += '[color=green]'+dict[i] + ': ' + str(ability.reqs[i]) + '[/color], '
+	text = text.substr(0, text.length() - 2) + '.'
+	
+	confirmbutton.set_meta('abil', ability)
+
+	get_node("MainScreen/mansion/selfinspect/selfabilitypanel/abilitydescript").set_bbcode(text)
+
+
+
+
+
+func _on_abilitypurchase_pressed():
+	var abil = get_node("MainScreen/mansion/selfinspect/selfabilitypanel/abilitypurchase").get_meta('abil')
+	globals.player.ability.append(abil.code)
+	globals.player.abilityactive.append(abil.code)
+	if globals.spelldict.has(abil.code):
+		globals.spelldict[abil.code].learned = true
+	popup('You have learned ' + abil.name+'. ')
+	_on_selfabilityupgrade_pressed()
+	_on_selfbutton_pressed()
+
+
+func _on_selfportait_pressed():
+	imageselect("portrait",globals.player)
+
+func _on_selfbody_pressed():
+	imageselect("body",globals.player)
+
+func _on_abilityclose_pressed():
+	get_node("MainScreen/mansion/selfinspect/selfabilitypanel").hide()
+
+
+
+
+var potionselected
+
+func potbuttonpressed(potion):
+	potionselected = potion
+	var description = get_node("MainScreen/mansion/selfinspect/selectpotionpanel/potionusedescription")
+	var potlist = get_node("MainScreen/mansion/selfinspect/selectpotionpanel/ScrollContainer/selectpotionlist")
+	for i in get_tree().get_nodes_in_group('usables'):
+		if i.get_text() != potion.name && i.is_pressed() == true:
+			i.set_pressed(false)
+	description.set_bbcode(potion.description + '\n\nIn possession: ' + str(potion.amount))
+
+
+func _on_potioncancelbutton_pressed():
+	get_node("MainScreen/mansion/selfinspect/selectpotionpanel").hide()
+	potionselected = ''
+
+func _on_potionusebutton_pressed():
+	var person = globals.player
+	var itemnode = globals.items
+	itemnode.person = person
+	if potionselected.code != 'minoruspot' && potionselected.code != 'majoruspot' && potionselected.code != 'hairdye':
+		if potionselected.code in ['aphrodisiac', 'regressionpot', 'miscariagepot','amnesiapot','stimulantpot','deterrentpot']:
+			popup(person.dictionary(itemnode.call(potionselected.effect)))
+			return
+		popup(person.dictionary(itemnode.call(potionselected.effect)))
+		_on_selfbutton_pressed()
+		person.toxicity += potionselected.toxicity
+		potionselected.amount -= 1
+	else:
+		itemnode.call(potionselected.effect)
+	get_node("MainScreen/mansion/selfinspect/selectpotionpanel").hide()
+
+
+###---Added by Expansion---### Family Expanded
+func _on_selfrelatives_pressed():
+	get_node("MainScreen/mansion/selfinspect/relativespanel").popup()
+	var text = ''
+	var person = globals.player
+	var relativesdata = globals.state.relativesdata
+	if !relativesdata.has(person.id):
+		$MainScreen/mansion/selfinspect/relativespanel/relativestext.bbcode_text = person.dictionary("You don't know anything about your relatives. ")
+		return
+	var entry = relativesdata[person.id]
+	var entry2
+	text += '[center]Parents[/center]\n'
+	for i in ['father','mother']:
+		if int(entry[i]) <= 0 || !relativesdata.has(entry[i]):
+			text += i.capitalize() + ": Unknown\n"
+		else:
+			text += i.capitalize() + ": " + getentrytext(relativesdata[entry[i]]) + "\n"
+	
+	###---Added by Expansion---### Slime Breeding
+	if person.race == 'Slime' || person.genealogy.slime > 0:
+		for i in ['slimesire']:
+			if entry[i] == null || int(entry[i]) <= 0:
+				text += "Slimesire: Unknown\n"
+			else:
+				if relativesdata.has(entry[i]):
+					entry2 = relativesdata[entry[i]]
+					text += i.capitalize() + ": "
+					if entry2.state == 'free':
+						text += "[color=aqua]Free[/color] "
+					text += getentrytext(entry2) + "\n"
+				else:
+					text += i.capitalize() + ": Unknown\n"
+	###---End Expansion---###
+	
+	###---Added by Expansion---### Family Expanded
+	var halfsiblings = []
+	if !entry.siblings.empty():
+		text += '\n[center]Full-Blooded Siblings[/center]\n'
+		for i in entry.siblings:
+			entry2 = relativesdata[i]
+			if int(entry.father) == int(entry2.father) && int(entry.mother) == int(entry2.mother):
+				if entry2.state == 'fetus':
+					continue
+				if entry2.sex == 'male':
+					text += "Brother: "
+				else:
+					text += "Sister: "
+				if entry2.state == 'free':
+					text += "[color=aqua]Free[/color] "
+				text += getentrytext(entry2) + "\n"
+			else:
+				halfsiblings.append(i)
+	
+	halfsiblings.append_array(entry.halfsiblings)
+	if !halfsiblings.empty():
+		text += '\n[center]Half-Siblings[/center]\n'
+		for i in halfsiblings:
+			entry2 = relativesdata[i]
+			if entry2.state == 'fetus':
+				continue
+			if entry2.sex == 'male':
+				text += "Half-Brother: " 
+			else:
+				text += "Half-Sister: "
+			if entry2.state == 'free':
+				text += "[color=aqua]Free[/color] "
+			text += getentrytext(entry2) + "\n"
+	###---End Expansion---###
+	
+	if !entry.children.empty():
+		text += '\n[center]Children[/center]\n'
+		for i in entry.children:
+			entry2 = relativesdata[i]
+			if entry2.state == 'fetus':
+				continue
+			if entry2.sex == 'male':
+				text += "Son: " 
+			else:
+				text += "Daughter: "
+			text += getentrytext(entry2) + "\n"
+	$MainScreen/mansion/selfinspect/relativespanel/relativestext.bbcode_text = text
+
+
+###---Added by Expansion---### Renamed Slaves don't Rename | Ank BugFix v4a
+func getentrytext(entry):
+	var text = ''
+	var tempPerson = globals.state.findslave(entry.id)
+	if tempPerson != null && tempPerson.away.duration == 0:
+		var realname = str(tempPerson.name_long())
+		text += '[url=id' + str(entry.id) + '][color=yellow]' + realname + '[/color][/url]'
+	else:
+		text += entry.name
+	if entry.state == 'dead':
+		text += " - Deceased"
+	elif entry.state == 'free':
+		text += " - Roaming Free"
+	elif entry.state == 'left' || (tempPerson != null && tempPerson.away.at == 'hidden'):
+		text += " - Status Unknown"
+	text += ", " + entry.race
+	return text
+
+func relativeshover(meta):
+	globals.slavetooltip( globals.state.findslave( int(meta.replace('id',''))))
+
+func relativesselected(meta):
+	var tempslave = globals.state.findslave( int(meta.replace('id','')))
+	globals.slavetooltiphide()
+	$MainScreen/mansion/selfinspect/relativespanel.visible = false
+	globals.openslave(tempslave)
+	if tempslave != globals.player:
+		get_node('MainScreen/slave_tab')._on_relativesbutton_pressed()
+	else:
+		_on_selfrelatives_pressed()
+
+
+func _on_relativesclose_pressed():
+	get_node("MainScreen/mansion/selfinspect/relativespanel").hide()
+
+
+
+
+
+func showracedescript(person):
+	var text = globals.dictionary.getRaceDescription(person.race.replace("Beastkin","Halfkin"))
+	dialogue(true, self, text)
+
+func showracedescriptsimple(race):
+	var text = globals.dictionary.getRaceDescription(race)
+	dialogue(true, self, text)
+
+func _on_orderbutton_pressed():
+	for i in get_tree().get_nodes_in_group("sortbutton"):
+		if get_node("charlistcontrol/orderbutton").is_pressed() == true:
+			i.show()
+		else:
+			i.hide()
+
+####### PORTALS
+func _on_portals_pressed():
+	if globals.state.calculateweight().overload == true:
+		infotext("Your backpack is too heavy to leave", 'red')
+		return
+	_on_mansion_pressed()
+	#if OS.get_name() != 'HTML5':
+	yield(self, 'animfinished')
+	var list = get_node("MainScreen/mansion/portalspanel/ScrollContainer/VBoxContainer")
+	var button = get_node("MainScreen/mansion/portalspanel/ScrollContainer/VBoxContainer/portalbutton")
+	get_node("MainScreen/mansion/portalspanel").popup()
+	nameportallocation = null
+	$MainScreen/mansion/portalspanel/imagelocation.texture = null
+	$MainScreen/mansion/portalspanel/imagelocation/RichTextLabel.bbcode_text = 'Select a desired location to travel'
+	$MainScreen/mansion/portalspanel/imagelocation/namelocation.text = ''
+	$MainScreen/mansion/portalspanel/traveltoportal.disabled = true
+	for i in list.get_children():
+		if i != button:
+			i.hide()
+			i.queue_free()
+	for i in globals.state.portals.values():
+		var newbutton = button.duplicate()
+		list.add_child(newbutton)
+		if i.code != globals.state.location:
+			newbutton.show()
+		if i.enabled == true:
+			newbutton.disabled = false
+			newbutton.set_text(globals.portalnames[i.code])
+			newbutton.connect('pressed', self, 'portalbuttonpressed', [newbutton, i])
+		else:
+			newbutton.set_text('???')
+			newbutton.disabled = true
+	if globals.state.marklocation != null:
+		var newbutton = button.duplicate()
+		newbutton.show()
+		list.add_child(newbutton)
+		newbutton.text = exploration.areas.database[globals.state.marklocation].name
+		newbutton.connect('pressed', self, 'portalbuttonpressed', [newbutton, exploration.areas.database[globals.state.marklocation]])
+
+
+func portalbuttonpressed(newbutton, portal):
+	var text
+	nameportallocation = portal.code
+	$MainScreen/mansion/portalspanel/traveltoportal.disabled = false
+	for i in $MainScreen/mansion/portalspanel/ScrollContainer/VBoxContainer.get_children():
+		i.pressed = (i== newbutton)
+		if i.pressed == true:
+			var bg 
+			if globals.backgrounds.has(nameportallocation):
+				bg = globals.backgrounds[nameportallocation]
+			else:
+				bg = globals.backgrounds[globals.areas.database[nameportallocation].background]
+			get_node("MainScreen/mansion/portalspanel/imagelocation").set_texture(bg)
+			get_node("MainScreen/mansion/portalspanel/imagelocation/namelocation").text = newbutton.text+" Portal"
+			if newbutton.text == 'Umbra':
+				get_node("MainScreen/mansion/portalspanel/imagelocation/RichTextLabel").text = "Portal leads to the "+newbutton.text+" Undergrounds"
+			elif globals.backgrounds.has(nameportallocation):
+				get_node("MainScreen/mansion/portalspanel/imagelocation/RichTextLabel").text = "Portal leads to the " +newbutton.text + '.'
+			else:
+				get_node("MainScreen/mansion/portalspanel/imagelocation/RichTextLabel").text = "Portal leads to the city of "+newbutton.text
+
+func _on_traveltoportal_pressed():
+	if nameportallocation != null:
+		sound("teleport")
+		get_node("MainScreen/mansion/portalspanel").hide()
+		exploration.lastzone = null
+		get_node("explorationnode").call('zoneenter', nameportallocation)
+		yield(self, 'animfinished')
+		get_node("outside").gooutside()
+func _on_portalsclose_pressed():
+	get_node("MainScreen/mansion/portalspanel").hide()
+
+########FARM
+func _on_farmreturn_pressed():
+	get_node("MainScreen/mansion/farmpanel").hide()
+
+func _on_farm_pressed(inputslave = null):
+	_on_mansion_pressed()
+	###---Added by Expansion---### Farm Expansion
+	hide_farm_panels()
+	yield(self, 'animfinished')
+	var manager = inputslave
+	var text = ''
+	var residentlimit = variables.resident_farm_limit[globals.state.mansionupgrades.farmcapacity]
+	for i in globals.slaves:
+		if i.work == 'farmmanager':
+			manager = i
+			break
+	if manager != null:
+		manager.work = 'farmmanager'
+		text = manager.dictionary('Your farm manager is [color=aqua]' + manager.name_long() + '[/color].')
+	else:
+		text = "[color=red]You have no assigned manager. Without manager you won't be able to receive farm income. [/color]"
+	if globals.state.mansionupgrades.farmhatchery > 0:
+		text = text + '\n\nYou have [color=aqua]' + str(globals.state.snails) + '[/color] snails.'
+		if globals.state.snails == 0:
+			text += "\n[color=aqua]Search the woods north of Shaliq.[/color]"
+	var counter = 0
+	var list = get_node("MainScreen/mansion/farmpanel/ScrollContainer/VBoxContainer")
+	var button = get_node("MainScreen/mansion/farmpanel/ScrollContainer/VBoxContainer/farmbutton")
+	for i in list.get_children():
+		if i != button && i != get_node("MainScreen/mansion/farmpanel/ScrollContainer/VBoxContainer/farmadd"):
+			i.hide()
+			i.queue_free()
+	for i in globals.slaves:
+		if i.sleep == 'farm':
+			counter += 1
+			var newbutton = button.duplicate()
+			newbutton.set_text(i.name_long())
+			newbutton.show()
+			list.add_child(newbutton)
+			newbutton.connect("pressed",self,'farminspect',[i])
+	get_node("MainScreen/mansion/farmpanel/ScrollContainer/VBoxContainer/farmadd").set_disabled(counter >= residentlimit)
+#	if globals.state.mansionupgrades.farmtreatment == 1:
+#		text += "\n\n[color=green]Your farm won't break down its residents. [/color]"
+#	else:
+#		text += "\n\n[color=red]Your farm may cause heavy stress to its residents. [/color]"
+	text += '\n\nYou have ' + str(counter)+ '/' + str(residentlimit) + ' people present in farm. '
+	get_node("MainScreen/mansion/farmpanel").show()
+	get_node("MainScreen/mansion/farmpanel/farminfo").set_bbcode(text)
+	if globals.state.tutorial.farm == false:
+		get_node("tutorialnode").farm()
+	###---End Expansion---###
+
+func farminspect(person):
+	###---Added by Expansion---### Farm Expansion
+	hide_farm_panels()
+	nodeFarmSlave.show()
+	var text = globals.expansionfarm.getFarmDescription(person)
+	if person.work == 'cow':
+	#	nodeFarmSlave.get_node("slaveassigntext").set_bbcode(person.dictionary("You walk to the pen with $name. The " +person.race+ " $child is tightly kept here being milked out of $his mind all day long. $His eyes are devoid of sentience barely reacting at your approach."))
+		nodeFarmSlave.get_node("slaveassigntext").set_bbcode(person.dictionary(text))
+#	elif person.work == 'hen':
+	#	nodeFarmSlave.get_node("slaveassigntext").set_bbcode(person.dictionary("You walk to the pen with $name. The " +person.race+ " $child is tightly kept here as a hatchery for giant snail, with a sturdy leather harness covering $his body. $His eyes are devoid of sentience barely reacting at your approach. Crouching down next to $him, you can see the swollen curve of $his stomach, stuffed full of the creature's eggs. As you lay a hand on it, you can feel some movement inside - seems like something hatched quite recently and is making its way to be 'born' from $name's well-used hole."))
+#		nodeFarmSlave.get_node("slaveassigntext").set_bbcode(person.dictionary(text))
+	selectedfarmslave = person
+
+	#Counters
+	var beddingCounters = {'hay':0, 'cot':0, 'bed':0}
+	var workstationCounters = {'rack':0, 'cage':0}
+	var dailyactionCounters = {'exhaust':0, 'inspection':0, 'pamper':0, 'stimulate':0, 'prod':0}
+	var liquidExtraction = []
+	for type in globals.expansionfarm.liquidtypes:
+		liquidExtraction.append('extract'+type)
+	var extractorCounters = {'suction':0, 'pump':0, 'pressurepump':0}
+	var containerCounters = {'bucket':0, 'pail':0, 'jug':0, 'canister':0}
+
+	var farmhandcounter = 0
+	var snailBreeders = 0
+
+	var minInt = -99999 # values not listed in counters recieve this value to prevent deficit
+	var listSlaves = globals.slaves.duplicate()
+	listSlaves.erase(person)
+	for i in listSlaves:
+		if i.work == 'farmhand':
+			farmhandcounter += 1
+		if i.sleep == 'farm':
+			beddingCounters[i.farmexpanded.stallbedding] = beddingCounters.get(i.farmexpanded.stallbedding, minInt) + 1
+			workstationCounters[i.farmexpanded.workstation] = workstationCounters.get(i.farmexpanded.workstation, minInt) + 1
+			dailyactionCounters[i.farmexpanded.dailyaction] = dailyactionCounters.get(i.farmexpanded.dailyaction, minInt) + 1
+			for liquid in liquidExtraction:
+				var refLiquid = i.farmexpanded[liquid]
+				if refLiquid.enabled:
+					extractorCounters[refLiquid.method] = extractorCounters.get(refLiquid.method, minInt) + 1
+					containerCounters[refLiquid.container] = containerCounters.get(refLiquid.container, minInt) + 1
+			if i.farmexpanded.breeding.snails == true:
+				snailBreeders += 1
+	#temp fix, add selectedfarmslave to liquid counts to prevent assigning more than player has in stock
+	for liquid in liquidExtraction:
+		var refLiquid = person.farmexpanded[liquid]
+		if refLiquid.enabled:
+			extractorCounters[refLiquid.method] = extractorCounters.get(refLiquid.method, minInt) + 1
+			containerCounters[refLiquid.container] = containerCounters.get(refLiquid.container, minInt) + 1
+
+	#---Bedding
+	#Update Buttons
+	var counter = 0
+	var nodeBedding = nodeFarmSlave.get_node("stallbedding")
+	if !globals.selectForOptionButton(person.farmexpanded.stallbedding, nodeBedding, globals.expansionfarm.allbeddings):
+		person.farmexpanded.stallbedding = 'dirt'
+	for i in globals.expansionfarm.allbeddings:
+		# Disable if not enough
+		if beddingCounters.get(i,minInt) >= globals.resources.farmexpanded.stallbedding.get(i, 0):
+			nodeBedding.set_item_disabled(counter, true)
+			nodeBedding.set_item_text(counter, globals.expansionfarm.beddingdict[i].textLack)
+		else:
+			nodeBedding.set_item_disabled(counter, false)
+			nodeBedding.set_item_text(counter, i)
+		counter += 1
+	
+	#---Workstations
+	#Build Buttons
+	counter = 0
+	var nodeWorkstation = nodeFarmSlave.get_node("workstation")
+	if !globals.selectForOptionButton(person.farmexpanded.workstation, nodeWorkstation, globals.expansionfarm.allworkstations):
+		person.farmexpanded.workstation = 'free'
+	for i in globals.expansionfarm.allworkstations:
+		# Disable if not enough
+		if workstationCounters.get(i,minInt) >= globals.resources.farmexpanded.workstation.get(i, 0):
+			nodeWorkstation.set_item_disabled(counter, true)
+			nodeWorkstation.set_item_text(counter, globals.expansionfarm.workstationsdict[i].textLack)
+		else:
+			nodeWorkstation.set_item_disabled(counter, false)
+			nodeWorkstation.set_item_text(counter, i)
+		counter += 1
+	
+	#---Daily Actions
+	#Build Buttons
+	var nodeDailyaction = nodeFarmSlave.get_node("dailyaction")
+	if !globals.selectForOptionButton(person.farmexpanded.dailyaction, nodeDailyaction, globals.expansionfarm.alldailyactions):
+		person.farmexpanded.dailyaction = 'none'
+	
+	#Disable if Needed
+	counter = 0
+	for i in globals.expansionfarm.alldailyactions:
+		var refDict = globals.expansionfarm.dailyActionReqDict[i]
+		if refDict.has('farmitems'):
+			if refDict.farmitems.has('prods') && dailyactionCounters.prod >= globals.itemdict.prods.amount:
+				nodeDailyaction.set_item_disabled(counter, true)
+				nodeDailyaction.set_item_text(counter, 'Insufficient Prods')
+				counter += 1
+				continue
+		if refDict.farmhand:
+			var reqWorkers = dailyactionCounters[i]
+			for j in refDict.overlaps:
+				reqWorkers += dailyactionCounters[j]
+			if reqWorkers >= farmhandcounter:
+				nodeDailyaction.set_item_disabled(counter, true)
+				nodeDailyaction.set_item_text(counter, 'Insufficient Farmhands')
+			else:
+				nodeDailyaction.set_item_disabled(counter, false)
+				nodeDailyaction.set_item_text(counter, i)
+		counter += 1
+	
+	#---Breeding
+	var nodeBreedingoption = nodeFarmSlave.get_node("breedingoption")
+	if !globals.selectForOptionButton(person.farmexpanded.breeding.status, nodeBreedingoption, globals.expansionfarm.breedingoptions):
+		person.farmexpanded.breeding.status = 'none'
+	
+	#Disable if Needed
+	counter = 0
+	var listBreedingReqs = [false, person.vagina == 'none', person.penis == 'none', person.vagina == 'none' || person.penis == 'none']
+	var listBreedingDisableText = ['', 'No Vagina Present', 'No Penis Present', 'Both Genitals are needed']
+	for i in globals.expansionfarm.breedingoptions:
+		if listBreedingReqs[counter]:
+			nodeBreedingoption.set_item_disabled(counter, true)
+			nodeBreedingoption.set_item_text(counter, listBreedingDisableText[counter])
+		else:
+			nodeBreedingoption.set_item_disabled(counter, false)
+			nodeBreedingoption.set_item_text(counter, i)
+		counter += 1
+
+
+	#Breeding & Snails
+	if person.farmexpanded.breeding.snails == true:
+		nodeBreedingoption.set_disabled(true)
+		nodeBreedingoption.set_text('Breeding Snails')
+		person.farmexpanded.breeding.status = 'snails'
+		nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_disabled(true)
+		nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_text("No Partner Specified")
+		nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_tooltip(person.dictionary("$name's womb is being used to breed snails currently."))
+		nodeFarmSlave.get_node("snailbreeding").set_disabled(false)
+	else:
+		nodeBreedingoption.set_disabled(false)
+		if person.farmexpanded.breeding.status == 'none':
+			nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_disabled(true)
+			nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_text("No Partner Specified")
+			nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_tooltip(person.dictionary('$name is not assigned to breed or be bred'))
+		else:
+			var partner
+			if person.farmexpanded.breeding.partner != '-1':
+				partner = globals.state.findslave(person.farmexpanded.breeding.partner)
+				if partner == null:
+					person.unassignPartner()
+			nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_disabled(false)
+			if partner == null:
+				nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_text("No Partner Specified")
+				nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_tooltip('Click to choose new partner')
+			else:
+				nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_text(partner.name_long())
+				nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_tooltip('Click to unassign partner')
+
+		if person.vagina == 'none':
+			nodeFarmSlave.get_node("snailbreeding").set_disabled(true)
+			nodeFarmSlave.get_node("snailbreeding").set_tooltip("No Vagina Present.")
+		elif globals.state.mansionupgrades.farmhatchery == 0:
+			nodeFarmSlave.get_node("snailbreeding").set_disabled(true)
+			nodeFarmSlave.get_node("snailbreeding").set_tooltip("You have to unlock Hatchery first.")
+		elif snailBreeders >= globals.state.snails:
+			nodeFarmSlave.get_node("snailbreeding").set_disabled(true)
+			nodeFarmSlave.get_node("snailbreeding").set_tooltip("You don't have any free snails.")
+		else:
+			nodeFarmSlave.get_node("snailbreeding").set_disabled(false)
+			nodeFarmSlave.get_node("snailbreeding").set_tooltip(person.dictionary('Set $name to breed snails.'))
+
+	nodeFarmSlave.get_node("snailbreeding").set_pressed(person.farmexpanded.breeding.snails)
+	nodeFarmSlave.get_node("keeprestrained").set_pressed(person.farmexpanded.restrained)
+	nodeFarmSlave.get_node("usesedative").set_pressed(person.farmexpanded.usesedative)
+	nodeFarmSlave.get_node("giveaphrodisiac").set_pressed(person.farmexpanded.giveaphrodisiac)
+
+
+	#Milk Extraction only if lactating
+	if person.lactation == true:
+		nodeFarmSlave.get_node("extractmilk").set_disabled(false)
+		nodeFarmSlave.get_node("extractmilk").set_tooltip('')
+	else:
+		person.farmexpanded.extractmilk.enabled = false
+		nodeFarmSlave.get_node("extractmilk").set_disabled(true)
+		nodeFarmSlave.get_node("extractmilk").set_tooltip(person.dictionary("$name is not currently lactating."))
+
+	var nodesMethod = [nodeFarmSlave.get_node("milkextraction"), nodeFarmSlave.get_node("cumextraction"), nodeFarmSlave.get_node("pissextraction")]
+	var nodesContainer = [nodeFarmSlave.get_node("milkcontaineroptions"), nodeFarmSlave.get_node("cumcontaineroptions"), nodeFarmSlave.get_node("pisscontaineroptions")]
+	var nodeTemp1
+	var nodeTemp2
+	var temp
+	#Disable if Not Extracting
+	for i in range(liquidExtraction.size()):
+		nodeTemp1 = nodesMethod[i]
+		nodeTemp2 = nodesContainer[i]
+		temp = person.farmexpanded[liquidExtraction[i]]
+		nodeFarmSlave.get_node(liquidExtraction[i]).set_pressed(temp.enabled)
+		if temp.enabled:
+			nodeTemp1.set_disabled(false)
+			nodeTemp1.set_tooltip('')
+			nodeTemp2.set_disabled(false)
+			nodeTemp2.set_tooltip('')
+		else:
+			temp.method = 'leak'
+			temp.container = 'cup'
+			temp = person.dictionary("$name is not having $his "+globals.expansionfarm.liquidtypes[i].capitalize()+" collected.")
+			nodeTemp1.set_disabled(true)
+			nodeTemp1.set_tooltip(temp)
+			nodeTemp2.set_disabled(true)
+			nodeTemp2.set_tooltip(temp)
+
+
+	#Set up Extraction options
+	var choices = globals.expansionfarm.extractorsarray
+
+	#Select Extractions
+	if !globals.selectForOptionButton(person.farmexpanded.extractmilk.method, nodesMethod[0], choices):
+		person.farmexpanded.extractmilk.method = 'leak'
+
+	if !globals.selectForOptionButton(person.farmexpanded.extractcum.method, nodesMethod[1], choices):
+		person.farmexpanded.extractcum.method = 'leak'
+
+	if !globals.selectForOptionButton(person.farmexpanded.extractpiss.method, nodesMethod[2], choices):
+		person.farmexpanded.extractpiss.method = 'leak'
+
+	#Disable Extractions per available items
+	counter = 0
+	for i in choices:
+		temp = extractorCounters.get(i,minInt) >= globals.resources.farmexpanded.extractors.get(i, 0)
+		for node in nodesMethod:
+			node.set_item_disabled(counter, temp)
+		counter += 1
+
+
+	#Set up Containers options ['cup','bucket','pail','jug','canister', 'bottle']
+	choices = globals.expansionfarm.containersarray.duplicate()
+	choices.erase('bottle') #Bottles aren't valid containers for extraction (just for now)
+
+	#Select Containers
+	if !globals.selectForOptionButton(person.farmexpanded.extractmilk.container, nodesContainer[0], choices):
+		person.farmexpanded.extractmilk.container = 'cup'
+
+	if !globals.selectForOptionButton(person.farmexpanded.extractcum.container, nodesContainer[1], choices):
+		person.farmexpanded.extractcum.container = 'cup'
+
+	if !globals.selectForOptionButton(person.farmexpanded.extractpiss.container, nodesContainer[2], choices):
+		person.farmexpanded.extractpiss.container = 'cup'
+
+	#Disable Containers per available items
+	counter = 0
+	for i in choices:
+		temp = containerCounters.get(i,minInt) >= globals.resources.farmexpanded.containers.get(i, 0)
+		for node in nodesContainer:
+			node.set_item_disabled(counter, temp)
+		counter += 1
+
+
+	#Show Cattle Avatar | Mirroring SlaveTab
+	
+	if globals.canloadimage(person.imagefull):
+		nodeFarmSlave.get_node("bodypanel/body").set_texture( globals.loadimage(person.imagefull))
+	elif globals.gallery.nakedsprites.has(person.unique):
+		if person.obed <= 50 || person.stress > 50:
+			nodeFarmSlave.get_node("bodypanel/body").set_texture( globals.spritedict[ globals.gallery.nakedsprites[ person.unique].clothrape])
+		else:
+			nodeFarmSlave.get_node("bodypanel/body").set_texture( globals.spritedict[ globals.gallery.nakedsprites[ person.unique].clothcons])
+	else:
+		nodeFarmSlave.get_node("bodypanel/body").set_texture(null)
+	nodeFarmSlave.get_node("bodypanel/body").show()
+	nodeFarmSlave.get_node("bodypanel").show()
+	###---End Expansion---###
+
+
+var selectedfarmslave
+
+###---Added by Expansion---### Farm Expanded
+func _on_addcow_pressed():
+	var person = selectedfarmslave
+	person.sleep = 'farm'
+	person.work = 'cow'
+	if person.npcexpanded.contentment == 0:
+		person.npcexpanded.contentment = 3
+	person.exposed.chest = true
+	person.exposed.genitals = true
+	person.exposed.ass = true
+	person.movement = 'crawling'
+	person.farmexpanded.dailyaction = 'rest'
+	popup(person.dictionary("You lead $name into the farm and inform $him that $he is now going to be one of your livestock. $He nods understandingly, obviously prepared for this fate from your previous discussions.\nYou explain that $his clothing is not permitted here and will only get dirty. $He calmly removes $his clothing and hands it to you, exposing $his naked body.\nYou explain that all livestock must crawl to ensure gravity helps with fluid production. $He drops to $his hands and knees and crawls behind you into $his new stall.\n\nNow you must determine how you want $him to be used."))
+#	popup(person.dictionary("You put $name into specially designed pen and hook milking cups onto $his nipples, leaving $him shortly after in the custody of farm."))
+#	_on_closeslavefarm_pressed()
+	nodeSlaveToFarm.hide()
+	_on_farm_pressed()
+	rebuild_slave_list()
+	farminspect(person)
+
+
+#Not Currently Used
+func _on_addhen_pressed():
+	var person = selectedfarmslave
+	person.sleep = 'farm'
+	person.work = 'hen'
+	popup(person.dictionary("You put $name into specially designed pen and fixate $his body, exposing $his orifices to be fully accessible to giant snail, leaving $him shortly after in the custody of farm."))
+	_on_closeslavefarm_pressed()
+	_on_farm_pressed()
+	rebuild_slave_list()
+
+
+func _on_closeslavefarm_pressed():
+	get_node("MainScreen/mansion/farmpanel/slavetofarm").hide()
+
+
+func _on_farmadd_pressed():
+	selectslavelist(true, 'farmassignpanel')
+
+func farmassignpanel(person):
+	#Handles putting a selected slave into the farm
+	hide_farm_panels()
+	selectedfarmslave = person
+	if person.consentexp.livestock == true:
+		nodeSlaveToFarm.get_node("addcow").set_disabled(false)
+		nodeSlaveToFarm.get_node("addcow").set_tooltip('')
+	else:
+		nodeSlaveToFarm.get_node("addcow").set_tooltip(person.dictionary('$name is not willing to become your livestock. Try talking to them about it first.'))
+		nodeSlaveToFarm.get_node("addcow").set_disabled(true)
+	if person.sstr <= globals.player.sstr || person.sagi <= globals.player.sagi || person.energy < 50:
+		nodeSlaveToFarm.get_node("addcowforce").set_disabled(false)
+		nodeSlaveToFarm.get_node("addcowforce").set_tooltip(person.dictionary('This action will be very stressful to $name.'))
+	else:
+		nodeSlaveToFarm.get_node("addcowforce").set_tooltip(person.dictionary('$name is both stronger and faster than you and has over most of their energy. Try again when you can overpower them or when they have less than half energy.'))
+		nodeSlaveToFarm.get_node("addcowforce").set_disabled(true)
+	
+#	var counter = 0
+#	for i in globals.slaves:
+#		if i.work == 'hen':
+#			counter += 1
+#	if globals.state.mansionupgrades.farmhatchery == 0:
+#		nodeSlaveToFarm.get_node("addhen").set_disabled(true)
+#		nodeSlaveToFarm.get_node("addhen").set_tooltip("You have to unlock Hatchery first.")
+#	else:
+#		if counter >= globals.state.snails:
+#			nodeSlaveToFarm.get_node("addhen").set_disabled(true)
+#			nodeSlaveToFarm.get_node("addhen").set_tooltip("You don't have any free snails.")
+#		else:
+#			nodeSlaveToFarm.get_node("addhen").set_disabled(false)
+#			nodeSlaveToFarm.get_node("addhen").set_tooltip("")
+	var text = "[color=#d1b970][center]Breasts[/center][/color]\nTits Size: [color=aqua]" + person.titssize.capitalize() + "[/color]\nLactation: " + ('[color=lime]' if person.lactation == true else '[color=#ff4949]not ') + 'present[/color]\nHyper-Lactation: '
+	text += ('[color=lime]' if person.lactating.hyperlactation == true else '[color=#ff4949]not ')+ 'present[/color]\n\n[color=#d1b970][center]Genitals[/center][/color]\nPenis: ' +('[color=green]' if person.penis != 'none' else '[color=#ff4949]not ')
+	text += 'present[/color]\nVagina: ' +('[color=green]' if person.vagina != 'none' else '[color=#ff4949]not ')+ 'present[/color]\n\n' +('[color=lime]Trained Hucow[/color]' if person.spec == 'hucow' else '')
+	nodeSlaveToFarm.get_node("slaveassigntext").set_bbcode(text)
+	
+	###---Added by Expansion---### Display Image and Text | Ankmairdor's BugFix v4
+	#Image
+	if globals.canloadimage(person.imageportait):
+		nodeSlaveToFarm.get_node("image").set_texture(globals.loadimage(person.imageportait))
+	elif globals.gallery.nakedsprites.has(person.unique):
+		if person.obed <= 50 || person.stress > 50:
+			nodeSlaveToFarm.get_node("image").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothrape])
+		else:
+			nodeSlaveToFarm.get_node("image").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothcons])
+	else:
+		nodeSlaveToFarm.get_node("image").set_texture(null)
+	#Image Text
+	nodeSlaveToFarm.get_node("underpictext").set_bbcode("[center][color=aqua]" + person.name_long()+ "[/color]\n\n" + ('[color=lime]Consent' if person.consentexp.livestock == true else '[color=#ff4949]Consent Not') +' Granted[/color][/center]')
+	
+	nodeSlaveToFarm.show()
+	###---End Expansion---###
+
+func _on_releasefromfarm_pressed():
+	var person = selectedfarmslave
+	hide_farm_panels()
+	person.work = 'rest'
+	person.sleep = 'communal'
+	person.npcexpanded.contentment += 1
+	person.farmexpanded.dailyaction = 'none'
+	person.farmexpanded.workstation = 'free'
+	person.farmexpanded.stallbedding = 'dirt'
+	person.farmexpanded.breeding.status = 'none'
+	person.farmexpanded.breeding.snails = false
+	for i in ['extractmilk','extractcum','extractpiss']:
+		person.farmexpanded[i].enabled = false
+		person.farmexpanded[i].method = 'leak'
+		person.farmexpanded[i].container = 'cup'
+	nodeFarmSlave.hide()
+	_on_farm_pressed()
+	rebuild_slave_list()
+
+func _on_closeslaveinspect_pressed():
+	_on_farm_pressed()
+	rebuild_slave_list()
+	nodeFarmSlave.hide()
+
+#Currently Unused
+func _on_sellproduction_pressed():
+	selectedfarmslave.farmoutcome = nodeFarmSlave.get_node("sellproduction").is_pressed()
+
+func _on_over_pressed():
+	mainmenu()
+
+
+
+
+func _on_endlog_pressed():
+	get_node("FinishDayPanel").show()
+
+
+var nodetocall
+var functiontocall
+
+
+func selectslavelist(prisoners = false, calledfunction = 'popup', targetnode = self, reqs = 'true', player = false, onlyparty = false):
+	var array = []
+	if player == true:
+		array.append(globals.player)
+	for person in globals.slaves:
+		globals.currentslave = person
+		if person.away.duration != 0:
+			continue
+		if onlyparty == true && !globals.state.playergroup.has(person.id):
+			continue
+		if globals.evaluate(reqs) == false:
+			continue
+		if prisoners == false && person.sleep == 'jail' :
+			continue
+		if person.sleep == 'farm':
+			continue
+		array.append(person)
+	showChoosePerson(array, calledfunction, targetnode)
+
+func showChoosePerson(arrayPersons, calledfunction = 'popup', targetnode = self):
+	nodetocall = targetnode
+	functiontocall = calledfunction
+	for i in $chooseslavepanel/ScrollContainer/chooseslavelist.get_children():
+		if i.name != 'Button':
+			i.hide()
+			i.free()
+	for person in arrayPersons:
+		var button = $chooseslavepanel/ScrollContainer/chooseslavelist/Button.duplicate()
+		button.show()
+		button.get_node('Label').text = person.name_long()
+		button.connect('mouse_entered', globals, "slavetooltip", [person])
+		button.connect('mouse_exited', globals, "slavetooltiphide")
+		#button.get_node("slaveinfo").set_bbcode(person.name_long()+', '+person.race+ ', occupation - ' + person.work + ", grade - " + person.origins.capitalize())
+		button.connect("pressed", self, "slaveselected", [button])
+		button.connect("pressed", self, 'hideslaveselection')
+		button.set_meta("slave", person)
+		button.get_node("portrait").set_texture(globals.loadimage(person.imageportait))
+		###---Added by Expansion---### Jail Expanded
+		button.get_node("jailportrait").visible = (person.sleep == 'jail')
+		###---End Expansion---###
+		$chooseslavepanel/ScrollContainer/chooseslavelist/.add_child(button)
+	if arrayPersons.empty():
+		$chooseslavepanel/Label.text = "No characters fit the condition"
+	else:
+		$chooseslavepanel/Label.text = "Select Character"
+	get_node("chooseslavepanel").show()
+
+func slaveselected(button):
+	var person = button.get_meta('slave')
+	nodetocall.call(functiontocall, person)
+	get_node("chooseslavepanel").hide()
+
+func hideslaveselection():
+	$chooseslavepanel.hide()
+	globals.slavetooltiphide()
+
+
+func _on_choseslavecancel_pressed():
+	$chooseslavepanel.hide()
+
+
+
+
+
+
+func _on_startcombat_pressed():
+	get_node("outside").gooutside()
+	globals.state.backpack.stackables.rope = 3
+	get_node("explorationnode").zoneenter(startcombatzone)
+	#get_node("combat").start_battle()
+
+func checkplayergroup():
+	var removed = []
+	var checked = false
+	for i in range(0, globals.state.playergroup.size()):
+		checked = false
+		for ii in globals.slaves:
+			if str(ii.id) == str(globals.state.playergroup[i]) && ii.away.duration <= 0 && ii.away.at != 'hidden':
+				checked = true
+		if checked == false:
+			removed.append(i)
+	removed.invert()
+	for i in removed:
+		globals.state.playergroup.remove(i)
+
+
+
+
+
+
+
+func _on_cleanbutton_pressed():
+	animationfade()
+	yield(self, 'animfinished')
+	globals.state.condition = 100
+	globals.resources.gold -= min(ceil(globals.resources.day/7.0)*10,100)
+	_on_mansionsettings_pressed()
+	_on_mansion_pressed()
+
+
+
+
+func _on_defeateddescript_meta_clicked( meta ):
+	var person = get_node("explorationnode/winningpanel/defeateddescript").get_meta('slave')
+	showracedescript(person)
+
+
+
+
+
+func _on_selloutclose_pressed():
+	get_node("sellout").hide()
+
+
+func _on_sellouttext_meta_clicked( meta ):
+	OS.shell_open('https://www.patreon.com/maverik')
+
+
+
+
+func _on_popupclosebutton_pressed():
+	get_node("popupmessage").hide()
+
+
+func infotext(newtext, color = null):
+	if ( (newtext.findn("food") >= 0 || newtext.findn("gold") >= 0) && enddayprocess == true) || newtext == '' || $date.visible || (get_node("combat").visible && !get_node("combat/win").visible): 
+		return
+	if get_node("infotext").get_children().size() >= 15:
+		get_node("infotext").get_child(get_node("infotext").get_children().size() - 14).queue_free()
+	var text = newtext
+	var label = get_node("infotext/Label").duplicate()
+	label.set_text(text)
+	label.modulate = Color(1,1,1,1)
+	if color == 'red':
+		label.set('custom_colors/font_color', Color(1,0.29,0.29))
+	elif color == 'green':
+		label.set('custom_colors/font_color', Color(0,1,0))
+	elif color == 'yellow':
+		label.set('custom_colors/font_color', Color(1,1,0))
+	var timer = Timer.new()
+	timer.set_wait_time(4)
+	timer.set_autostart(true)
+	timer.connect("timeout", self, 'infotextfade', [label])
+	timer.set_name("timer")
+	label.add_child(timer)
+	$infotext.rect_size = $infotext.rect_min_size
+	get_node("infotext").add_child(label)
+	label.show()
+
+func infotextfade(label):
+	label.add_to_group('messages')
+	label.get_node('timer').stop()
+
+
+
+func _on_infotextpanel_mouse_enter():
+	for i in get_node("infotext").get_children():
+		if i != get_node("infotext/Label"):
+			i.modulate.a = 1
+			if i.is_in_group("messages"):
+				i.remove_from_group("messages")
+
+
+func setname(person):
+	var text = person.dictionary("Choose new name for $name")
+	get_node("entertext").show()
+	get_node("entertext").set_meta("action", "rename")
+	get_node("entertext").set_meta("slave", person)
+	get_node("entertext/dialoguetext").set_bbcode(text)
+	$entertext/confirmentertext.disabled = false
+
+#---Lab Scripts for Sizing Below
+func seteyecolor(person):
+	var assist
+	for i in globals.slaves:
+		if i.work == 'labassist':
+			assist = i
+			break
+	var priceModifier = 1 / (1+assist.wit/200.0)
+	var timeCost = 0
+	if person == globals.player:
+		priceModifier *= 2
+	else:
+		timeCost = max(round(2/(1+assist.smaf/8.0)),1)
+	###---Added by Expansion---### Hybrid Support
+	if person.race.find('Demon') >= 0:
+		priceModifier *= 0.7
+	###---End Expansion---###
+	var manaCost = round(40 * priceModifier)
+	var goldCost = round(100 * priceModifier)
+	var text = person.dictionary("Choose new eye color for $name. \n[color=yellow]Requires ") + str(manaCost) + " Mana, "
+	text += str(goldCost) + " Gold, 1 Nature Essence and " + str(timeCost) + " days.[/color]"
+	$entertext.show()
+	$entertext.set_meta('action', 'eyecolor')
+	$entertext.set_meta("slave", person)
+	$entertext.set_meta("manaCost", manaCost)
+	$entertext.set_meta("goldCost", goldCost)
+	$entertext.set_meta("timeCost", timeCost)
+	$entertext/LineEdit.text = person.eyecolor
+	$entertext/dialoguetext.bbcode_text = text
+	if globals.resources.mana < manaCost || globals.resources.gold < goldCost || globals.itemdict.natureessenceing.amount < 1:
+		$entertext/confirmentertext.disabled = true
+	else:
+		$entertext/confirmentertext.disabled = false
+
+func _on_confirmentertext_pressed():
+	var text = get_node("entertext/LineEdit").get_text()
+	if text == "":
+		return
+	var person
+	var meta = get_node("entertext").get_meta("action")
+	if meta == 'rename':
+		person = get_node("entertext").get_meta("slave")
+		person.name = text
+		if globals.state.relativesdata.has(person.id):
+			globals.state.relativesdata[person.id].name = person.name_long()
+		rebuild_slave_list()
+	elif meta == 'eyecolor':
+		person = get_node("entertext").get_meta("slave")
+		var manaCost = get_node("entertext").get_meta("manaCost")
+		var goldCost = get_node("entertext").get_meta("goldCost")
+		var timeCost = get_node("entertext").get_meta("timeCost")
+		person.eyecolor = text
+		if person != globals.player:
+			person.away.duration = timeCost
+			person.away.at = 'lab'
+		globals.resources.gold -= goldCost
+		globals.resources.mana -= manaCost
+		globals.itemdict.natureessenceing.amount -= 1
+		rebuild_slave_list()
+		$MainScreen/mansion/labpanel._on_labstart_pressed()
+	get_node("entertext").hide()
+
+
+func _on_cancelentertext_pressed():
+	$entertext.hide()
+
+func _on_infotextpanel_mouse_exit():
+	for i in get_node("infotext").get_children():
+		if i != get_node("infotext/Label"):
+			i.modulate.a = 1
+			i.add_to_group("messages")
+
+func _on_slavelist_pressed():
+	get_node("slavelist").visible = !get_node("slavelist").visible
+	slavelist()
+
+
+func slavelist():
+	for i in get_node("slavelist/ScrollContainer/VBoxContainer").get_children():
+		if i != get_node("slavelist/ScrollContainer/VBoxContainer/line"):
+			i.hide()
+			i.queue_free()
+	for person in globals.slaves:
+		if person.away.duration == 0 && !person.sleep in ['farm']:
+			var newline = get_node("slavelist/ScrollContainer/VBoxContainer/line").duplicate()
+			newline.show()
+			get_node("slavelist/ScrollContainer/VBoxContainer").add_child(newline)
+			newline.get_node("line/name/choseslave").connect("pressed",self,'openslave',[person])
+			newline.get_node("line/name/Label").set_text(person.name_short())
+			newline.get_node("line/grade/Label").set_text(person.origins.capitalize())
+			if person.spec != null:
+				newline.get_node("line/spec/Label").set_text(person.spec.capitalize())
+			else:
+				newline.get_node("line/spec/Label").set_text("None")
+			newline.get_node("line/phys/Label").set_text("S:" + str(person.sstr) + " A:" + str(person.sagi) + " M:" + str(person.smaf) + " E:"+str(person.send))
+			newline.get_node("line/mentals/Label").set_text("R:" + str(person.cour) + " O:" + str(person.conf) + " W:" + str(person.wit) + " H:" + str(person.charm) )
+			newline.get_node("line/mentals").set_custom_minimum_size(newline.get_node("line/mentals/Label").get_minimum_size() + Vector2(10,0))
+			newline.get_node("line/race/Label").set_text(person.race_short())
+			newline.get_node("line/race/Label").set_tooltip(person.race)
+			newline.get_node("job").set_text(get_node("MainScreen/slave_tab").jobdict[person.work].name)
+			newline.get_node("job").connect("pressed",self,'selectjob',[person])
+			if person.sleep == 'jail':
+				newline.get_node("job").set_disabled(true)
+			newline.get_node("sleep").set_text(globals.sleepdict[person.sleep].name)
+			newline.get_node("sleep").set_meta("slave", person)
+			newline.get_node("sleep").connect("pressed", self, 'sleeppressed', [newline.get_node("sleep")])
+			newline.get_node("sleep").connect("item_selected",self, 'sleepselect', [newline.get_node("sleep")])
+
+
+#---Keeping for more sleep options, like Stables
+func sleeppressed(button):
+	var person = button.get_meta('slave')
+	var beds = globals.count_sleepers()
+	button.clear()
+	button.add_item(globals.sleepdict['communal'].name)
+	if person.sleep == 'communal':
+		button.set_item_disabled(button.get_item_count()-1, true)
+		button.select(button.get_item_count()-1)
+	button.add_item(globals.sleepdict['jail'].name)
+	if beds.jail >= globals.state.mansionupgrades.jailcapacity:
+		button.set_item_disabled(button.get_item_count()-1, true)
+	if person.sleep == 'jail':
+		button.set_item_disabled(button.get_item_count()-1, true)
+		button.select(button.get_item_count()-1)
+	button.add_item(globals.sleepdict['personal'].name)
+	if beds.personal >= globals.state.mansionupgrades.mansionpersonal:
+		button.set_item_disabled(button.get_item_count()-1, true)
+	if person.sleep == 'personal':
+		button.set_item_disabled(button.get_item_count()-1, true)
+		button.select(button.get_item_count()-1)
+	button.add_item(globals.sleepdict['your'].name)
+	if beds.your_bed >= globals.state.mansionupgrades.mansionbed || (person.loyal + person.obed < 130 || person.tags.find('nosex') >= 0):
+		button.set_item_disabled(button.get_item_count()-1, true)
+	if person.sleep == 'your':
+		button.set_item_disabled(button.get_item_count()-1, true)
+		button.select(button.get_item_count()-1)
+	###---Added by Expansion---### Dog Kennels
+	button.add_item(globals.sleepdict['kennel'].name)
+	if globals.state.mansionupgrades.mansionkennels == 0:
+		button.set_item_disabled(button.get_item_count()-1, true)
+	if person.sleep == 'kennel':
+		button.set_item_disabled(button.get_item_count()-1, true)
+		button.select(button.get_item_count()-1)
+	###---End Expansion---###
+
+###---Added by Expansion---### Dog Kennels
+var sleepdict = {0 : 'communal', 1 : 'jail', 2 : 'personal', 3 : 'your', 4 : "kennel"}
+
+func sleepselect(item, button):
+	var person = button.get_meta('slave')
+	person.sleep = sleepdict[item]
+	if person.sleep == 'jail':
+		person.work = 'rest'
+	rebuild_slave_list()
+	slavelist()
+
+
+
+func selectjob(person):
+	globals.currentslave = person
+	joblist()
+
+func openslave(person):
+	currentslave = globals.slaves.find(person)
+	if get_node("MainScreen/slave_tab").visible:
+		get_node("MainScreen/slave_tab").hide()
+	get_node("MainScreen/slave_tab").slavetabopen()
+	get_node("slavelist").hide()
+
+func joblist():
+	get_node("joblist").joblist()
+
+func _on_listclose_pressed():
+	get_node("slavelist").hide()
+
+
+
+
+var itemselected
+var categoryselected
+var inventorymode = 'mainscreen'
+
+
+func _on_inventory_pressed(mode = 'mainscreen'):
+	get_node("inventory").open("mansion")
+#
+#func itemhovered(button):
+#	var item = button.get_meta("item")
+#	var pos
+#	get_node("inventory/Panel/tooltip/Label").set_text(item.name)
+#	get_node("inventory/Panel/tooltip").show()
+#	pos = button.get_global_pos()
+#	pos.y -= 40
+#	pos.x -= 62
+#	
+#	get_node("inventory/Panel/tooltip").set_global_pos(pos)
+#
+#func itemunhovered(button):
+#	get_node("inventory/Panel/tooltip").hide()
+
+
+
+func _on_wiki_pressed():
+	OS.shell_open('http://strive4power.wikia.com/wiki/Strive4power_Wiki')
+
+
+
+
+
+func _on_personal_pressed():
+	_on_selfbutton_pressed()
+
+
+
+func alisegreet():
+	get_node("tutorialnode").show()
+	get_node("tutorialnode").alisegreet()
+
+
+func _on_ugrades_pressed():
+	get_node("MainScreen/mansion/upgradespanel").show()
+
+func _on_upgradesclose_pressed():
+	get_node("MainScreen/mansion/upgradespanel").hide()
+	get_tree().get_current_scene()._on_mansion_pressed()
+
+func imageselect(mode = 'portrait', person = globals.currentslave):
+	if OS.get_name() != 'HTML5':
+		get_node("imageselect").person = person
+		get_node("imageselect").mode = mode
+		get_node("imageselect").chooseimage()
+	else:
+		popup("Sorry, this option can't be utilized in HTML5 Version. ")
+
+#Sex & interactions
+
+
+###---Added by Expansion---### Ank BugFix v4a
+func _on_sexbutton_pressed():
+	sexslaves.clear()
+#	sexassist.clear()
+	var newbutton
+	get_node("sexselect").show()
+	get_node("sexselect/selectbutton").set_text('Mode: ' + sexmode.capitalize())
+	for i in sexanimals:
+		sexanimals[i] = 0
+	$sexselect/managerypanel.visible = sexmode != 'meet' && globals.state.mansionupgrades.mansionkennels > 0
+	for i in get_node("sexselect/ScrollContainer1/VBoxContainer").get_children() + get_node("sexselect/ScrollContainer/VBoxContainer").get_children():
+		if i.get_name() != 'Button':
+			i.hide()
+			i.queue_free()
+	for i in globals.slaves:
+		if i.away.duration != 0 || i.sleep == 'farm':
+			continue
+		newbutton = get_node("sexselect/ScrollContainer/VBoxContainer/Button").duplicate()
+		get_node("sexselect/ScrollContainer/VBoxContainer").add_child(newbutton)
+		newbutton.set_text(i.dictionary('$name'))
+		newbutton.show()
+		newbutton.connect("pressed",self,'selectsexslave',[newbutton, i])
+		var numInteractions = i.getRemainingInteractions()
+		var tooltip = ''
+		if sexmode == 'meet':
+			if numInteractions > 0:
+				tooltip = 'You can interact with %s %s more time%s today.' % [i.name_long(), numInteractions, 's' if numInteractions > 1 else '']
+			else:
+				newbutton.set_disabled(true)
+				tooltip = 'You have already interacted with %s too many times today.' % i.name_long()
+		elif sexmode == 'sex':
+			###---Added by Expansion---### Breeding Consent and Incest Sex Blocker
+			if i.consent == false:
+				if sexslaves.size() >= 1 && i.consentexp.stud == true || sexslaves.size() >= 1 && i.consentexp.breeder == true:
+					newbutton.set('custom_colors/font_color', Color(1,0.2,0.2))
+					newbutton.set('custom_colors/font_color_pressed', Color(1,0.2,0.2))
+					tooltip = i.dictionary('$name gave you no consent, but did consent to have sex with others for you.\n')
+				else:
+					newbutton.set('custom_colors/font_color', Color(1,0.2,0.2))
+					newbutton.set('custom_colors/font_color_pressed', Color(1,0.2,0.2))
+					tooltip = i.dictionary('$name gave you no consent.\n')
+			elif globals.expansion.relatedCheck(i, globals.player) != 'unrelated':
+				if i.consentexp.incest == false:
+					newbutton.set('custom_colors/font_color', Color(1,0.2,0.2))
+					newbutton.hint_tooltip = i.dictionary('You are related to $name and $he has not given consent for incestuous actions.')
+			if sexslaves.size() >= 1:
+				for r in sexslaves:
+					if globals.expansion.relatedCheck(i, r) != 'unrelated':
+						newbutton.set('custom_colors/font_color', Color(1,0.2,0.2))
+						newbutton.hint_tooltip = i.dictionary(str(r.name)+ ' and ' +str(i.name)+ ' are related have not given consent for incestuous actions.')
+			###---Expansion End---###
+			if numInteractions > 0:
+				tooltip += 'You can interact with %s %s more time%s today.' % [i.name_long(), numInteractions, 's' if numInteractions > 1 else '']
+			else:
+				newbutton.set_disabled(true)
+				tooltip += 'You have already interacted with %s too many times today.' % i.name_long()
+		newbutton.set_tooltip(i.dictionary(tooltip))
+	updatedescription()
+	if globals.state.tutorial.interactions == false:
+		get_node("tutorialnode").interactions()
+
+var sexarray = ['meet','sex']
+var sexmode = 'meet'
+
+func sexselect():
+	pass
+
+func animalforsex(node):
+	var name = node.name
+	match name:
+		'dogplus':
+			if sexanimals.dog < 3:
+				sexanimals.dog += 1
+		'dogminus':
+			if sexanimals.dog > 0:
+				sexanimals.dog -= 1
+		'horseplus':
+			if sexanimals.horse < 3:
+				sexanimals.horse += 1
+		'horseminus':
+			if sexanimals.horse > 0:
+				sexanimals.horse -= 1
+	
+	updatedescription()
+
+func _on_selectbutton_pressed():
+	sexmode = sexarray[ (sexarray.find(sexmode)+1) % sexarray.size() ]
+	_on_sexbutton_pressed()
+
+var sexslaves = []
+var sexassist = []
+
+func selectsexslave(button, person):
+	if button.is_pressed():
+		sexslaves.append(person)
+#		if sexassist.find(person) >= 0:
+#			sexassist.erase(person)
+	else:
+		sexslaves.erase(person)
+	if sexmode == 'meet':
+		var status = sexslaves.size() >= 1
+		for i in get_node("sexselect/ScrollContainer/VBoxContainer").get_children():
+			if i.get_name() == 'Button' || i == button:
+				continue
+			i.disabled = status
+	updatedescription()		
+
+func selectassist(button, person):
+	if button.is_pressed():
+		sexassist.append(person)
+	else:
+		sexassist.erase(person)
+	sexselect()
+
+func updatedescription():
+	var text = ''
+	
+	if sexmode == 'meet':
+		text += "[center][color=yellow]Meet[/color][/center]\nBuild relationship or train your servant: "
+		for person in sexslaves:
+			text += '[color=aqua]%s[/color]. ' % person.name_short()
+	elif sexmode == 'sex':
+		var consensual = true
+		for person in sexslaves:
+			if !person.consent:
+				consensual = false
+				break
+		if sexslaves.empty():
+			text += "[center][color=yellow]Sex[/color][/center]\nCurrent participants: "
+		else:
+			if sexslaves.size() == 1:
+				if consensual:
+					text += "[center][color=yellow]Consensual Sex[/color][/center]"
+				else:
+					text += "[center][color=yellow]Rape[/color][/center]"
+			elif sexslaves.size() in [2,3]:
+				if consensual:
+					text += "[center][color=yellow]Consensual Group Sex[/color][/center]"
+				else:
+					text += "[center][color=yellow]Group Rape[/color][/center]"
+			else:
+				text += "[center][color=yellow]Orgy[/color][/center]\n[color=aqua]Aphrodite's Brew[/color] is required to initialize an orgy."
+
+			if consensual:
+				text += "\nAll participants have given consent."
+			else:
+				text += "\nNot all participants have given consent."
+			text += "\nCurrent participants: "
+			for person in sexslaves:
+				if person.consent:
+					text += '[color=aqua]%s[/color], ' % person.name_short()
+				else:
+					text += '[color=#ff3333]%s[/color], ' % person.name_short()
+			text = text.substr(0, text.length() - 2) + '.'
+		for animal in sexanimals:
+			if sexanimals[animal] != 0:
+				text += "\n" + animal.capitalize() + '(s): ' + str(sexanimals[animal])
+		
+#	elif sexmode == 'abuse':
+#		text += "[center][color=yellow]Rape[/color][/center]"
+#		text += "\nRequires a target and an optional assistant. Can be initiated with prisoners. \nCurrent target: "
+#		for i in sexslaves:
+#			text += i.dictionary('[color=aqua]$name[/color]') + ". "
+#		text += "\nCurrent assistant: "
+#		for i in sexassist:
+#			text += i.dictionary('[color=aqua]$name[/color]') + ". "
+#		for i in sexanimals:
+#			if sexanimals[i] != 0:
+#				text += "\n" + i.capitalize() + '(s): ' + str(sexanimals[i])
+#		get_node("sexselect/startbutton").set_disabled(sexslaves.size() == 1 && sexassist.size() <= 1)
+	if sexslaves.empty():
+		text += '\nSelect slaves to start.'
+	else:
+		text += '\nClick Start to initiate.'
+	###---Added by Expansion---### Interaction Hint
+	text += "\n\nNon-sex Interactions left for today: [color=aqua]" + str(globals.state.nonsexactions) + "[/color]"
+	text += "\nSex Interactions left for today: [color=aqua]" + str(globals.state.sexactions) + "[/color]"
+	###---End Expansion---###
+	get_node("sexselect/sextext").set_bbcode(text)
+	
+	var enablebutton = true
+	if sexslaves.size() == 0:
+		enablebutton = false
+	elif sexmode == 'meet':
+		if globals.state.nonsexactions < 1:
+			enablebutton = false 
+	elif sexmode == 'sex':
+		if globals.state.sexactions < 1:
+			enablebutton = false 
+		elif sexslaves.size() >= 4 && sexmode == 'sex' && globals.itemdict.aphroditebrew.amount < 1:
+			enablebutton = false 
+	$sexselect/startbutton.disabled = !enablebutton
+
+
+func _on_startbutton_pressed():
+	if sexmode == 'meet':
+		globals.state.nonsexactions -= 1
+	else:
+		globals.state.sexactions -= 1
+	if globals.state.sidequests.emily == 16:
+		var emily = false
+		var tisha = false
+		for i in sexslaves + sexassist:
+			if i.unique == 'Emily':
+				emily = true
+			elif i.unique == 'Tisha':
+				tisha = true
+		if emily && tisha:
+			globals.state.sidequests.emily = 17
+			$sexselect.visible = false
+			globals.events.emilytishasex()
+			return
+	var mode = 'normal'
+	if sexslaves.size() >= 4 && sexmode == 'sex':
+		globals.itemdict.aphroditebrew.amount -= 1
+	animationfade()
+	yield(self, 'animfinished')
+	get_node("Navigation").hide()
+	get_node('MainScreen').hide()
+	get_node("charlistcontrol").hide()
+	get_node("sexselect").hide()
+	if sexmode == 'meet':
+		$ResourcePanel.hide()
+		$date.initiate(sexslaves[0])
+		return
+	elif sexmode == 'abuse':
+		mode = 'abuse'
+		get_node("interactions").startsequence([globals.player] + sexassist, mode, sexslaves, sexanimals)
+	else:
+		get_node("interactions").startsequence([globals.player] + sexslaves + sexassist, mode, [], sexanimals)
+	get_node("interactions").show()
+
+func _on_cancelbutton_pressed():
+	get_node("sexselect").hide()
+
+
+
+
+func _on_mansionsettings_pressed():
+	get_node("mansionsettings").show()
+	var text = ''
+	text += "Cleaning can be done by either assigning your persons to the cleaning task or by hiring one time help from city. \n\nCost: "
+	text += '[color=yellow]' + str(min(ceil(globals.resources.day/5.0)*10,100)) + '[/color]'
+	if globals.resources.gold >= min(ceil(globals.resources.day/5.0)*10,100) && globals.state.condition < 80:
+		get_node("mansionsettings/Panel/cleanbutton").set_disabled(false)
+	elif globals.state.condition >= 80:
+		text += '\n\nYour mansion requires no cleaning.'
+		get_node("mansionsettings/Panel/cleanbutton").set_disabled(true)
+	else:
+		text += "\n\nYou don't have enough gold."
+		get_node("mansionsettings/Panel/cleanbutton").set_disabled(true)
+	get_node("mansionsettings/Panel/cleaningtext").set_bbcode(text)
+	var dict = {'none':0,'kind':1,'strict':2}
+	get_node("mansionsettings/Panel/headgirlbehavior").select(dict[globals.state.headgirlbehavior])
+	_on_headgirlbehavior_item_selected(dict[globals.state.headgirlbehavior])
+
+
+
+func _on_headgirlbehavior_item_selected( ID ):
+	var text = ''
+	if ID == 0:
+		globals.state.headgirlbehavior = 'none'
+		text += "Headgirl will not interfere with others' business. "
+	if ID == 1:
+		globals.state.headgirlbehavior = 'kind'
+		text += 'The Headgirl will focus on a kind approach and reduce the stress of others, trying to endorse acceptance of their master. '
+	if ID == 2:
+		globals.state.headgirlbehavior = 'strict'
+		text += "Headgirl will focus on putting other servants in line at the cost of their stress. "
+	var headgirl = null
+	for i in globals.slaves:
+		if i.work == 'headgirl':
+			headgirl = i
+	if headgirl == null:
+		text += "\nCurrently you have no headgirl assigned. "
+	else:
+		text += headgirl.dictionary("\n$name is your current headgirl. ")
+	get_node("mansionsettings/Panel/headgirldescript").set_bbcode(text)
+	get_node("mansionsettings/Panel/foodbuy").set_value(globals.state.foodbuy)
+	get_node("mansionsettings/Panel/manastock").set_value(globals.state.manastock)
+	get_node("mansionsettings/Panel/manastock/manabuy").set_pressed(globals.state.manabuy)
+	get_node("mansionsettings/Panel/supplykeep").set_value(globals.state.supplykeep)
+	get_node("mansionsettings/Panel/supplykeep/supplybuy").set_pressed(globals.state.supplybuy)
+
+func _on_foodbuy_value_changed( value ):
+	globals.state.foodbuy = get_node("mansionsettings/Panel/foodbuy").get_value()
+
+func _on_supplykeep_value_changed( value ):
+	globals.state.supplykeep = get_node("mansionsettings/Panel/supplykeep").get_value()
+
+
+func _on_supplybuy_pressed():
+	globals.state.supplybuy = get_node("mansionsettings/Panel/supplykeep/supplybuy").is_pressed()
+
+func _on_close_pressed():
+	get_node("mansionsettings").hide()
+
+func _on_hideui_pressed():
+	$outside.visible = !$outside.visible
+	if $outside.visible:
+		$hideui.text = "Hide UI"
+	else:
+		$hideui.text = "Show UI"
+	$ResourcePanel.visible = !$ResourcePanel.visible
+
+func _on_selfpierce_pressed():
+	$MainScreen/slave_tab.person = globals.player
+	$MainScreen/slave_tab._on_piercing_pressed()
+
+func _on_selftattoo_pressed():
+	$MainScreen/slave_tab.person = globals.player
+	$MainScreen/slave_tab._on_tattoo_pressed()
+
+
+#Tweens
+
+func tweenanimate(node, name):
+	var pos = node.rect_position
+	var tweennode
+	if node.has_node('tween') == false:
+		tweennode = tween.duplicate()
+		tweennode.repeat = false
+		tweennode.name = 'tween'
+		node.add_child(tweennode)
+	else:
+		tweennode = node.get_node("tween")
+	
+	
+	
+
+func repeattweenanimate(node, name):
+	var pos = node.rect_position
+	var tweennode
+	if node.has_node('reptween') == false:
+		tweennode = tween.duplicate()
+		tweennode.remove_all()
+		tweennode.repeat = true
+		tweennode.name = 'reptween'
+		node.add_child(tweennode)
+	else:
+		tweennode = node.get_node("reptween")
+	if name == 'stop':
+		tweennode.seek(0)
+		tweennode.set_active(false)
+	elif name == 'fairy':
+		if tweennode.get_runtime() == 0:
+			var change = 30
+			tweennode.interpolate_property(node, "rect_position", pos, Vector2(pos.x, pos.y-change), 2.5, Tween.TRANS_SINE, Tween.EASE_OUT)
+			tweennode.interpolate_property(node, "rect_position", Vector2(pos.x, pos.y-change), pos, 2.5, Tween.TRANS_SINE, Tween.EASE_OUT, 2.5)
+		tweennode.start()
+
+func nodeunfade(node, duration = 0.4, delay = 0):
+	if delay > 0 || node.get_modulate().a <= 0.1:
+		tween.interpolate_property(node, 'modulate', Color(1,1,1,0), Color(1,1,1,1), duration, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT, delay)
+		tween.start()
+
+func nodefade(node, duration = 0.4, delay = 0):
+	if delay > 0 || node.get_modulate().a >= 0.9:
+		tween.interpolate_property(node, 'modulate', Color(1,1,1,1), Color(1,1,1,0), duration, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT, delay)
+		tween.start()
+
+var traitaction = '' 
+
+func traitpanelshow(person, effect):
+	$traitselect.show()# = true
+	traitaction = effect
+	var text = ''
+	var array = []
+	var timeCost = 0
+	var manaCost = 0
+	var goldCost = 0
+	for i in $traitselect/Container/VBoxContainer.get_children():
+		if i.name != 'Button':
+			i.hide()
+			i.queue_free()
+	if effect == 'clearmental':
+		text += person.dictionary("Select mental trait to remove from $name.")
+	elif effect == 'clearphys':
+		var assist
+		for i in globals.slaves:
+			if i.work == 'labassist':
+				assist = i
+				break
+		var priceModifier = 1 / (1+assist.wit/200.0)
+		if person == globals.player:
+			priceModifier *= 2
+		else:
+			timeCost = max(round(3/(1+assist.smaf/8.0)),1)
+		###---Added by Expansion---### Hybrid Support
+		if person.race.find('Demon') >= 0:
+			priceModifier *= 0.7
+		###---End Expansion---###
+		manaCost = round(50 * priceModifier)
+		goldCost = round(100 * priceModifier)
+		text += person.dictionary("Select physical trait to remove from $name. Requires 1 [color=yellow]Elixir of Clarity[/color], ") + str(manaCost) + " mana, " + str(goldCost) +" gold, and " + str(timeCost) + " days."
+	for i in person.traits:
+		var trait = globals.origins.trait(i)
+		###---Added by Expansion---### Hybrid Support
+		if effect == 'clearmental':
+			if trait.tags.has('mental') && !trait.tags.has('lockedtrait'):
+				array.append(trait)
+		elif effect == 'clearphys' && !trait.tags.has('lockedtrait'):
+			if globals.itemdict.claritypot.amount < 1 || globals.resources.gold < goldCost || globals.resources.mana < manaCost || trait.tags.has('physical') == false:
+				continue
+			else:
+				array.append(trait)
+		###---End Expansion---###
+	for i in array:
+		var newnode = $traitselect/Container/VBoxContainer/Button.duplicate()
+		$traitselect/Container/VBoxContainer.add_child(newnode)
+		newnode.show()
+		newnode.text = i.name
+		newnode.connect("mouse_entered", globals, 'showtooltip', [person.dictionary(i.description)])
+		newnode.connect("mouse_exited", globals, 'hidetooltip')
+		newnode.connect("pressed", self, 'traitselect', [person, i, manaCost, goldCost, timeCost])
+	$traitselect/RichTextLabel.bbcode_text = text
+
+func traitselect(person, i, manaCost, goldCost, timeCost):
+	person.trait_remove(i.name)
+	$traitselect.hide()
+	globals.hidetooltip()
+	if traitaction == 'clearmental':
+		globals.state.removeStackableItem('claritypot', 1, $inventory.state)
+		$inventory.updateitems()
+	elif traitaction == 'clearphys':
+		globals.itemdict.claritypot.amount -= 1
+		if person != globals.player:
+			person.away.duration = timeCost
+			person.away.at = 'lab'
+		globals.resources.gold -= goldCost
+		globals.resources.mana -= manaCost
+		rebuild_slave_list()
+		$MainScreen/mansion/labpanel._on_labstart_pressed()
+
+
+
+func _on_traitselectclose_pressed():
+	$traitselect.hide()
+
+
+func _on_selfgear_pressed():
+	_on_inventory_pressed()
+	get_node('inventory/gear').pressed = true
+	get_node('inventory').selectcategory(get_node('inventory/gear'))
+	get_node('inventory').selectbuttonslave(globals.player)
+
+var manaeaters = ['Succubus','Golem'] #ralphC - used in food consumption calcs, etc.
+
+###---End Expansion---###
+var outOfMansionJobs = ['storewimborn','artistwimborn','assistwimborn','whorewimborn','escortwimborn','fucktoywimborn', 'lumberer', 'ffprostitution','guardian', 'research', 'slavecatcher','fucktoy'] # /Capitulize - Jobs outside of the mansion.
+
+var awayReturnText = {
+	'travel back': 'returned to the mansion and went back to $his duties.',
+	'transported back': 'transported back to the mansion and went back to $his duties.',
+	'in labor': 'recovered from labor and went back to $his duties.',
+	'training': 'completed $his training and went back to $his duties.',
+	'nurture': 'has finished being nurtured and went back to $his duties.',
+	'growing': 'has matured and is now ready to serve you.',
+	'lab': 'successfully recovered from laboratory modification and went back to $his duties.',
+	'rest': 'finished resting and went back to $his duties.',
+	'vacation': 'returned from vacation and went back to $his duties.',
+	'default': 'returned to the mansion and went back to $his duties.',
+}
+
+###---Added by Expansion---### Minor Tweaks by Dabros Integration
+func my_gotoslave_mansion_prev():
+	## CHANGED NEW - 28/5/19 - for allowing prev/next keys for slave selection in mansion slave panel on right
+	## NOTE - current_slave is index position (defaults at 0), globals.current_slave is an object reference (which may or may not be valid)
+	##		- so sanity check is for whether youve selected a slave at all yet
+	if globals.slaves.size() < 1:
+		return
+	if !currentslave && (!globals.currentslave || !('id' in globals.currentslave)):
+		openslave(globals.slaves[0])
+		return
+	else:
+		var prevslave
+		## DEBUG
+		#### var debug_text = ''
+		#### var debug_rows = []
+		## END DEBUG
+		for i in get_node("charlistcontrol/CharList/scroll_list/slave_list").get_children():
+			## DEBUG
+			#### debug_rows.append({
+			#### 'i': i
+			#### ,'i.get_meta(\'id\')': (str(i.get_meta('id')) if i.has_meta('id') else '-error-')
+			#### ,'currentslave': currentslave
+			#### ,'globals.currentslave': (globals.currentslave if globals.currentslave else '-empty-')
+			#### ,'globals.currentslave.id': (globals.currentslave.id if globals.currentslave && "id" in globals.currentslave else '-empty-')
+			#### ,'prevslave': (prevslave if prevslave else '-empty-')
+			#### ,'prevslave.id': (prevslave.id if prevslave && "id" in prevslave else '-empty-')
+			#### ,'globals.slaves[currentslave]': (globals.slaves[currentslave] if globals.slaves[currentslave] else '-error-')
+			#### ,'globals.state.findslave(i.get_meta(\'id\'))': (globals.state.findslave(i.get_meta('id')) if globals.state.findslave(i.get_meta('id')) else '-error-')
+			#### ,'globals.state.findslave(i.get_meta(\'id\')).id': (globals.state.findslave(i.get_meta('id')).id if globals.state.findslave(i.get_meta('id')) && "id" in globals.state.findslave(#### globals.currentslave.id) else '-error-')
+			#### })
+			## END DEBUG
+			if i.has_meta('id') && globals.currentslave && i.get_meta('id') == globals.currentslave.id:
+				if prevslave && prevslave.has_meta('id'):
+					openslave(globals.state.findslave(prevslave.get_meta('id')))
+					return
+			prevslave = i
+		## DEBUG
+		#### debug_text += to_json(debug_rows)
+		#### OS.set_clipboard(debug_text)
+		#### get_tree().get_current_scene().infotext('copied debug to clipboard','orange')
+		## END DEBUG
+	## END OF CHANGED
+
+func my_gotoslave_mansion_next():
+	## CHANGED NEW - 28/5/19 - for allowing prev/next keys for slave selection in mansion slave panel on right
+	if globals.slaves.size() < 1:
+		return
+	if !currentslave && (!globals.currentslave || !('id' in globals.currentslave)):
+		openslave(globals.slaves[0])
+		return
+	else:
+		var found = false
+		for i in get_node("charlistcontrol/CharList/scroll_list/slave_list").get_children():
+			if found && i.has_meta('id'):
+				openslave(globals.state.findslave(i.get_meta('id')))
+				return
+			elif i.has_meta('id') && globals.currentslave && i.get_meta('id') == globals.currentslave.id:
+				found = true
+	## END OF CHANGED
+
+func doExportSlaveStats():
+	#TBK - Needs to have Stats Updated to Current Person
+	## CHANGED NEW - 24/05/19 - export function for slave stats
+	var text = ''
+
+	# var slaves = [] setget slaves_set
+	var dict = {}
+	dict.slaves = []
+	##dict.babylist = []
+	##for i in globals.state.babylist:
+	##dict.babylist.append(inst2dict(i))
+	##dict.player = inst2dict(globals.player) 
+	# NOTE - define here so we can optionally print header column
+	var tmpkeys = []
+	var pos = 0
+	for i in globals.slaves:
+		pos += 1
+		var pname = ''
+		if(i.nickname):
+			pname += "\""+i.nickname+"\" "
+		pname += i.name
+		if(i.surname):
+			pname += " "+i.surname
+		##pname = pname.substr(0,20)
+		var numrules = 0
+		for value in i.rules.values():
+			if(value):
+				numrules += 1
+		##dict.slaves.append(inst2dict(i))
+		##var text = ''
+		##text += temp+"\t"
+		##var prettyvars = {
+		var temp = {
+		'pos': pos
+		,'stub':str("{name} -{beauty} {sex}{age} {race} {origins} -{sstr}{sagi}{smaf}{send}{cour}{conf}{wit}{charm} -{sp}{spec} {traits}").format({'name':"%-15s"%pname.substr(0,15),'sex':i.sex.substr(0,2).capitalize(),'age':i.age.substr(0,1).capitalize(),'race':"%-5s"%i.race.replacen('halfkin ','H-').replacen('beastkin ','B-').replacen('dark ','D-').substr(0,5),'origins':i.origins.substr(0,1),'spec':' spec-'+i.spec.substr(0,5).to_upper() if i.spec else '','traits':PoolStringArray(i.traits).join("_").replacen(" ","-").replacen("_"," "),'beauty':"%3d"%i.beauty,'sstr':"%3d"%i.sstr,'sagi':"%3d"%i.sagi,'smaf':"%3d"%i.smaf,'send':"%3d"%i.send,'cour':"%3d"%i.cour,'conf':"%3d"%i.conf,'wit':"%3d"%i.wit,'charm':"%3d"%i.charm,'sp':' +'+str(i.skillpoints)+'free' if i.skillpoints else ''})
+		,'name':pname
+		,'namef':"'"+pname ## str("{name}").format({'name':"%s"%pname})
+		,'sex':i.sex.substr(0,2).capitalize() ##((i.sex=='futa')?'x':i.sex.substr(0,1))
+		,'age':i.age.substr(0,1).capitalize()
+		,'race':i.race.replacen('halfkin ','H-').replacen('beastkin ','B-').replacen('dark ','D-').substr(0,10)
+		,'origins':i.origins.substr(0,1) if (i.origins != 'poor' && i.origins != 'slave') else ' '
+		,'beauty':i.beauty
+		,'stats1':str("{sstr} {sagi} {smaf} {send} {cour} {conf} {wit} {charm}").format({'sstr':"%3d"%i.sstr,'sagi':"%3d"%i.sagi,'smaf':"%3d"%i.smaf,'send':"%3d"%i.send,'cour':"%3d"%i.cour,'conf':"%3d"%i.conf,'wit':"%3d"%i.wit,'charm':"%3d"%i.charm})
+		,'stats2':str("{sstr} {sagi} {smaf} {send}").format({'sstr':"%3d"%i.sstr,'sagi':"%3d"%i.sagi,'smaf':"%3d"%i.smaf,'send':"%3d"%i.send})
+		,'stats3':str("{cour} {conf} {wit} {charm}").format({'cour':"%3d"%i.cour,'conf':"%3d"%i.conf,'wit':"%3d"%i.wit,'charm':"%3d"%i.charm})
+		,'str':i.sstr
+		,'agi':i.sagi
+		,'mag':i.smaf
+		,'end':i.send
+		,'cour':i.cour
+		,'conf':i.conf
+		,'wit':i.wit
+		,'charm':i.charm
+		,'spec':i.spec.substr(0,4) if i.spec else ''
+		,'specialisation':i.spec if i.spec else ''
+		,'obd':int(round(i.obed))
+		,'lp':i.learningpoints if i.learningpoints else ''
+		,'sp':i.skillpoints if i.skillpoints else ''
+		,'traits':to_json(i.traits) # NOTE - to_json for nested now we using csv approach
+		,'rules':numrules if numrules else ''
+		,'work':i.work
+		,'preg':i.preg.duration if i.preg.duration else ''
+		,'fert': int(round(i.preg.fertility)) if i.preg.has_womb else ''
+		,'stress':int(round(i.stress))
+		,'loyal':int(round(i.loyal))
+		,'fear':int(round(i.fear))
+		,'lewd':int(round(i.lewdness))
+		,'energy':int(round(i.energy))
+		,'level':i.level
+		,'consent':'y' if i.consent else ''
+		,'lactation':1 if i.lactation else ''
+		,'lust':int(round(i.lust))
+		## ,'naked':1 if i.naked else '' ## Aricsmod
+		,'xp':i.xp
+		}
+
+		##dict.slaves.append(temp)
+		tmpkeys = temp.keys();
+		for tmpkey in tmpkeys: 
+		   text += str(temp[tmpkey])+"\t";
+		text += "\n"
+	# NOTE - print header row
+	var toprow = ''
+	for tmpkey in tmpkeys: 
+		toprow += tmpkey+"\t";
+	text = toprow+"\n"+text
+	##text = to_json(dict)
+	##text = to_json(person)
+
+	OS.set_clipboard(text)
+
+	get_tree().get_current_scene().infotext("Stats for ALL slaves copied to clipboard",'green')
+
+	## END OF CHANGED
+
+func _on_manastock_value_changed(value):
+	globals.state.manastock = get_node("mansionsettings/Panel/manastock").get_value()
+
+func _on_manabuy_pressed():
+	globals.state.manabuy = get_node("mansionsettings/Panel/manastock/manabuy").is_pressed()
 
 #---The Dimensional Crystal
 func _on_dimcrystal_button_pressed():
@@ -2562,105 +6079,10 @@ func _on_dimcrystal_ability_choosesacrifice_pressed():
 
 func _on_dimcrystal_closepanel_pressed():
 	get_node("MainScreen/mansion/dimcrystalpanel").hide()
-	
-#---Jail Expanded
-func _on_jailpanel_visibility_changed():
-	var temp = ''
-	var text = ''
-	var count = 0
-	var prisoners = []
-	var jailer
-	
-	for i in get_node("MainScreen/mansion/jailpanel/ScrollContainer/prisonerlist").get_children():
-		i.hide()
-		i.queue_free()
-	###---Added by Expansion---### Prisoner Release Panel
-	for i in get_node("MainScreen/mansion/jailpanel/Scroll_Release/ready_prisonerlist").get_children():
-		i.hide()
-		i.queue_free()
-	for i in get_node("MainScreen/mansion/jailpanel/jailer_button").get_children():
-		i.hide()
-		i.queue_free()
-	###---End Expansion---###
-	
-	if get_node("MainScreen/mansion/jailpanel").visible == false:
-		return
-	for i in globals.slaves:
-		if i.sleep == 'jail' && i.away.duration == 0:
-			temp = temp + i.name
-			prisoners.append(i)
-			var button = Button.new()
-			var node = get_node("MainScreen/mansion/jailpanel/ScrollContainer/prisonerlist")
-			node.add_child(button)
-			button.set_text(i.name_long())
-			button.set_name(str(count))
-			button.connect('pressed', self, 'prisonertab', [count])
-			###---Added by Expansion---### Prisoner Release Panel
-			var rebelling = false
-			for check_captured in i.effects.values():
-				if check_captured.code == 'captured':
-					rebelling = true
-					break
-			if rebelling == false:
-				button = Button.new()
-				node = get_node("MainScreen/mansion/jailpanel/Scroll_Release/ready_prisonerlist")
-				node.add_child(button)
-				button.set_text(i.name_long())
-				button.set_name(str(count))
-				button.connect('pressed', self, 'prisonertab', [count])
-			###---End Expansion---###
-		if i.work == 'jailer' && i.away.duration == 0:
-			jailer = i
-			
-		count += 1
-	###---Added by Expansion---### Jail Expanded
-	if temp == '':
-		text = 'There are no prisoners currently in the Dungeon.'
-	else:
-		#Colorized Text
-		text = 'There are a total of [color=aqua] '+str(prisoners.size()) + '[/color] prisoner(s) in the Dungeon.\nThere are currently [color=aqua]' + str(globals.state.mansionupgrades.jailcapacity-prisoners.size()) + '[/color] free cell(s).\nPrisoners can be disciplined via [color=aqua]Interactions > Meet[/color]. '
-	if globals.state.mansionupgrades.jailtreatment:
-		text += "\n[color=lime]Your jail is decently furnished and tiled. [/color]"
-	if globals.state.mansionupgrades.jailincenses:
-		text += "\n[color=lime]You can smell soft burning incenses in the air.[/color]"
-	if jailer == null:
-		get_node("MainScreen/mansion/jailpanel/jailer_text").set_bbcode('[color=#d1b970]Current Jailer[/color]\n[color=red]No [color=aqua]Jailer[/color] is assigned to manage the Dungeon.[/color]')
-		get_node("MainScreen/mansion/jailpanel/TextureRect").visible = false
-	else:
-		get_node("MainScreen/mansion/jailpanel/jailer_text").set_bbcode('[color=#d1b970]Current Jailer[/color]')
-		#Add Button
-		var button = Button.new()
-		var node = get_node("MainScreen/mansion/jailpanel/jailer_button")
-		node.add_child(button)
-		button.set_text(jailer.name_long())
-		button.set_name(str(jailer.id))
-		button.connect('pressed', self, 'openslavetab', [jailer])
-		#Assign Portrait
-		if jailer.imageportait != null && globals.loadimage(jailer.imageportait):
-			get_node("MainScreen/mansion/jailpanel/TextureRect").visible = true
-			get_node("MainScreen/mansion/jailpanel/TextureRect/portrait").set_texture(globals.loadimage(jailer.imageportait))
-		else:
-			jailer.imageportait = null
-			#TBK - Debating on leaving Hidden or not
-			get_node("MainScreen/mansion/jailpanel/TextureRect").visible = true
-			get_node("MainScreen/mansion/jailpanel/TextureRect/portrait").set_texture(globals.loadimage(globals.sexuality_images.unknown))
-		#text = text + jailer.dictionary('\n$name is assigned as jailer.')
-	###---End Expansion---###
-	
-	get_node("MainScreen/mansion/jailpanel/jailtext").set_bbcode(text)
-
-func prisonertab(number):
-	self.currentslave = number
-	###---Added by Expansion---### Jail Expanded
-	background_set('jail')
-	yield(self, 'animfinished')
-	hide_everything()
-	###---End Expansion---###
-	get_node("MainScreen/slave_tab").tab = 'prison'
-	get_node("MainScreen/slave_tab").slavetabopen()
 
 ###---Added by Expansion---### Added by Deviate, Tweaked by Aric, Tested by Banana
 var birthmother
+
 func childbirth_loop(person):
 	birthmother = person
 	if !person.preg.unborn_baby.empty():
@@ -2674,111 +6096,6 @@ func childbirth_loop(person):
 		person.preg.duration = 0
 		person.preg.ovulation_stage = 2
 		person.preg.ovulation_day = randi() % 3 - 5
-###---End of Expansion---###
-
-###---Added by Expansion---### Added by Deviate - Minor modifications to add multiple births
-func childbirth(person,baby_id):
-	person.preg.offspring_count += 1
-	get_node("birthpanel").show()
-	baby = globals.state.findbaby(baby_id)
-	var text = ''
-	if globals.state.mansionupgrades.mansionnursery >= 1:
-		if globals.player == person:
-			text = person.dictionary('[color=aqua]You[/color] gave birth to a ')
-		else:
-			text = person.dictionary('[color=aqua]$name[/color] gave birth to a ')
-		text += baby.dictionary('healthy [color=aqua]$race $child[/color]. ') + globals.description.getBabyDescription(baby)
-		if globals.state.mansionupgrades.dimensionalcrystal >= 2:
-			text += baby.dictionary("\nYou see the octomarine remnants of magic slowly fading from $his skin. The Dimensional Crystal may have unlocked parts of $his DNA and given $him greater possible abilities than $his parents. ")
-		###---Added by Expansion---###
-		#Change the "0,5" to Lust/Orgasms,Stress+Pain*.5 ?
-		if person.pregexp.desiredoffspring - person.metrics.birth - rand_range(0,5) > 0:
-			#Randomize Dialogue - TBK
-			text += person.dictionary("\n\n[color=aqua]$name[/color] " + str(globals.randomitemfromarray(['whimpers','pants','moans','says','meekly says'])) + "\n" + person.quirk("[color=yellow]-I need time to recover, of course, but I don't mind having another baby "))
-			if globals.expansion.relatedCheck(globals.player,baby) == 'father':
-				text += "with you.[/color]\n"
-			else:
-				text += "for you.[/color]\n"	
-		else:
-			#Randomize Dialogue - TBK
-			text += person.dictionary("\n\n[color=aqua]$name[/color] " + str(globals.randomitemfromarray(['whimpers','pants','moans','says','meekly says'])) + "\n" + person.quirk("[color=yellow]-I really don't want to have another baby. Please don't make me have another baby...[/color]\n"))
-			person.consentexp.pregnancy = false
-			person.consentexp.breeder = false
-			person.consentexp.incestbreeder = false
-		var acceptsacrifice = round(rand_range(0,100))
-		if person.knowledge.has('currentpregnancywanted') || person.pregexp.wantedpregnancy == true:
-			text += person.dictionary(person.quirk("[color=yellow]Will you keep my baby? Please? I want to be able to be in ")) + baby.dictionary("$his") + person.dictionary(person.quirk(" life.[/color]\n"))
-		elif globals.state.thecrystal.abilities.has('sacrifice') && (acceptsacrifice < (person.loyal+person.obed)*.5 || acceptsacrifice <= person.fear):
-			person.dailytalk.append('acceptedsacrifice')
-			text += person.dictionary(person.quirk("[color=yellow]I understand if you...have to do what you do with the [color=#E389B9]Crystal[/color]. I would rather you not, obviously, but if you have absolutely have to get rid of to keep the rest of us from being eaten or sacrificed...I won't hold it against you. If it is between me and the baby I didn't want to have...well, you understand.[/color]\n"))
-		#---Modified Text and Raising Cost
-		text += "\nThe power of the [color=#E389B9]Dimensional Crystal[/color] will help accelerate it's growth allowing for it to experience entire years in a matter of days as it rests in the [color=aqua]Nursery[/color] next to the [color=#E389B9]Crystal[/color]."
-		text += "\nWould you like to [color=aqua]Raise[/color] it? This will cost you either [color=aqua]500 Gold[/color], [color=aqua]25 Mana and 250 Gold[/color], or [color=aqua]50 Mana[/color] to allow it to grow up healthy.\nYou may also [color=aqua]Give the Baby Away[/color] for no cost or penalty. "
-		if globals.state.thecrystal.abilities.has('sacrifice'):
-			text += "\nYou can also [color=red]Sacrifice[/color] the baby to the [color=#E389B9]Crystal[/color]. This will kill the baby but embue the [color=#E389B9]Crystal[/color] with [color=aqua]1 Life[/color] and lessen [color=aqua]1-3 Hunger[/color]."
-			text += "\nHowever, [color=aqua]$name[/color] may hate you for this action depending on $his [color=aqua]Loyalty[/color] and will gain [color=aqua]Fear[/color]."
-		#Raise with Gold
-		if globals.resources.gold >= 500:
-			get_node("birthpanel/raise").set_disabled(false)
-			get_node("birthpanel/raise").set_tooltip("Spend 500 Gold to Raise the Baby")
-		else:
-			get_node("birthpanel/raise").set_disabled(true)
-			get_node("birthpanel/raise").set_tooltip("You cannot afford the cost of 500 Gold")
-		#Raise with Gold and Mana
-		if globals.resources.gold >= 250 && globals.resources.mana >= 25:
-			get_node("birthpanel/raisehybrid").set_disabled(false)
-			get_node("birthpanel/raisehybrid").set_tooltip("Spend 250 Gold and 25 Mana to Raise the Baby")
-		else:
-			get_node("birthpanel/raisehybrid").set_disabled(true)
-			get_node("birthpanel/raisehybrid").set_tooltip("You cannot afford the cost of 250 Gold and 25 Mana")
-		#Raise with Mana
-		if globals.resources.mana >= 50:
-			get_node("birthpanel/raisemana").set_disabled(false)
-			get_node("birthpanel/raisemana").set_tooltip("Spend 50 Mana to Raise the Baby")
-		else:
-			get_node("birthpanel/raisemana").set_disabled(true)
-			get_node("birthpanel/raisemana").set_tooltip("You cannot afford the cost of 50 Mana")
-		#Sacrifice Baby
-		if globals.state.thecrystal.abilities.has('sacrifice'):
-			get_node("birthpanel/sacrificebaby").show()
-			if globals.state.thecrystal.mode == "dark":
-				get_node("birthpanel/sacrificebaby").set_disabled(false)
-				get_node("birthpanel/sacrificebaby").set_tooltip("Sacrifice the Baby to the Dark Crystal to lower its Hunger by 1 to 3 and gain 1 Lifeforce")
-			else:
-				get_node("birthpanel/sacrificebaby").set_disabled(true)
-				get_node("birthpanel/sacrificebaby").set_tooltip("The Crystal is Light and will not currently accept Sacrifices")
-		else:
-			get_node("birthpanel/sacrificebaby").hide()
-		###---Expansion End---###
-	else:
-		if globals.player == person:
-			text = person.dictionary("You've had to use the town's hospital to give birth to your child. [color=red]Sadly, you can't keep it without Nursery Room and had to give it away.[/color]")
-		else:
-			text = person.dictionary("$name had to use the town's hospital to give birth to her child. [color=red]Sadly, you can't keep it without Nursery Room and had to give it away.[/color]")
-		get_node("birthpanel/raise").set_disabled(true)
-		###---Added by Expansion---### Disable if no nursery
-		get_node("birthpanel/raise").set_disabled(true)
-		get_node("birthpanel/raise").set_tooltip("You have no Nursery. You can build one in Mansion Upgrades.")
-		get_node("birthpanel/raisehybrid").set_disabled(true)
-		get_node("birthpanel/raisehybrid").set_tooltip("You have no Nursery. You can build one in Mansion Upgrades.")
-		get_node("birthpanel/raisemana").set_disabled(true)
-		get_node("birthpanel/raisemana").set_tooltip("You have no Nursery. You can build one in Mansion Upgrades.")
-		get_node("birthpanel/sacrificebaby").hide()
-		###---End Expansion---###
-	
-	#---Added Portrait
-	if globals.canloadimage(person.imageportait):
-		get_node("birthpanel/portraitpanel/portrait").set_texture(globals.loadimage(person.imageportait))
-	elif globals.gallery.nakedsprites.has(person.unique):
-		if person.obed <= 50 || person.stress > 50:
-			get_node("birthpanel/portraitpanel/portrait").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothrape])
-		else:
-			get_node("birthpanel/portraitpanel/portrait").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothcons])
-	else:
-		get_node("birthpanel/portraitpanel/portrait").set_texture(null)
-	get_node("birthpanel/portraitpanel/portrait").show()
-	
-	get_node("birthpanel/birthtext").set_bbcode(text)
 
 #---Reset Stats after Pregnancy
 func reset_after_pregnancy(person):
@@ -2795,14 +6112,6 @@ func reset_after_pregnancy(person):
 	person.pregexp.babysize = 0
 	person.pregexp.incestbaby = false
 
-###---Added by Expansion---### Childbirth Expanded
-func _on_giveaway_pressed():
-	if birthmother.knowledge.has('currentpregnancywanted') || birthmother.pregexp.wantedpregnancy == true:
-		birthmother.loyal -= round(rand_range(10,25))
-	reset_after_pregnancy(birthmother)
-	get_node("birthpanel").hide()
-	childbirth_loop(birthmother)
-
 func _on_sacrificebaby_pressed():
 	if birthmother.dailytalk.has('acceptedsacrifice'):
 		birthmother.dailytalk.erase('acceptedsacrifice')
@@ -2816,11 +6125,6 @@ func _on_sacrificebaby_pressed():
 	get_node("birthpanel").hide()
 	childbirth_loop(birthmother)
 
-func _on_raise_pressed():
-	if globals.resources.gold >= 500:
-		globals.resources.gold -= 500
-	finish_raising()
-	
 #ralph - makes children not inherit parents sex traits and teens have lower chance to inherit them; also resets to Pliable
 func ClearBabyTraits(age):
 	if age == 'child':
@@ -2866,45 +6170,6 @@ func ClearBabyTraits(age):
 			baby.add_trait('Pliable')
 		if baby.traits.has('Sex-crazed') && rand_range(0,100) < 50:
 			baby.trait_remove('Sex-crazed')
-#/ralph
-
-
-func babyage(age):
-	###---Added by Expansion---### Size Support || Replaced Functions
-	baby.name = get_node("birthpanel/childpanel/LineEdit").get_text()
-	if get_node("birthpanel/childpanel/surnamecheckbox").is_pressed() == true:
-		baby.surname = globals.player.surname
-	if age == 'child':
-		ClearBabyTraits(age) #ralph
-		baby.age = 'child'
-		baby.away.duration = variables.growuptimechild
-	elif age == 'teen':
-		ClearBabyTraits(age) #ralph
-		baby.age = 'teen'
-		baby.away.duration = variables.growuptimeteen
-	elif age == 'adult':
-		ClearBabyTraits(age) #ralph
-		baby.age = 'adult'
-		baby.away.duration = variables.growuptimeadult
-	baby.away.at = 'growing'
-	baby.obed += 75
-	baby.loyal += 20
-	if !baby.sex in ['male','dickgirl']:
-		baby.vagvirgin = true
-	baby.assvirgin = true
-	baby.unique = null #ralph
-	if globals.useRalphsTweaks:
-		globals.expansionsetup.setRaceBonus(baby, false) #ralph - needed to override certain inherited traits for certain hybrids including race_display
-		globals.expansionsetup.setRaceBonus(baby, true) #ralph
-	globals.slaves = baby
-	globals.state.relativesdata[baby.id].name = baby.name_long()
-	globals.state.relativesdata[baby.id].state = 'normal'
-
-	globals.state.babylist.erase(baby)
-	baby = null
-	get_node("birthpanel").hide()
-	get_node("birthpanel/childpanel").hide()
-	childbirth_loop(birthmother)
 
 func _on_raisehybrid_pressed():
 	if globals.resources.gold >= 250 && globals.resources.mana >= 25:
@@ -2929,271 +6194,18 @@ func finish_raising():
 		get_node("birthpanel/childpanel/child").hide()
 	else:
 		get_node("birthpanel/childpanel/child").show()
-###---End of Expansion---###
-
-func _on_selfbutton_pressed():
-	hide_everything()
-	get_node("MainScreen/mansion/selfinspect").show()
-	get_node("MainScreen/mansion/selfinspect/selflookspanel").hide()
-	var text = '[center]Personal Achievements[/center]\n'
-	var text2 = ''
-	var person = globals.player
-	$MainScreen/slave_tab.person = globals.player
-	var dict = {
-		0: "You do not belong in an Order.",
-		1: "Neophyte",
-		2: "Apprentice",
-		3: "Journeyman",
-		4: "Adept",
-		5: "Master",
-		6: "Grand Archmage",
-	}
-	text += 'Combat Abilities: '
-	for i in person.ability:
-		var ability = globals.abilities.abilitydict[i]
-		if ability.learnable == true:
-			text2 += ability.name + ', '
-	if text2 == '':
-		text += 'none. \n'
-	else:
-		text2 = text2.substr(0, text2.length() -2)+ '. '
-	text += text2 + '\nReputation:\n'
-	for i in globals.state.reputation:
-		text += i.capitalize() + " - "+ reputationword(globals.state.reputation[i])
-		###---Added by Expansion---### Towns Expanded
-		if globals.expansionsettings.enable_public_nudity_system == true:
-			var lawdict = globals.state.townsexpanded[i]
-			#Public Nudity
-			text += " - Local Laws: [color=aqua]Public Nudity[/color] " + globals.fastif(lawdict.laws.public_nudity == true, "[color=lime]Legal[/color]", "[color=red]Illegal[/color]")
-		#End Line (Change to Multi-line Spacing?)
-		text += "\n"
-		###---End Expansion---###
-	text += "Your mage order rank: " + dict[int(globals.state.rank)]
-	###---Added by Expansion---###
-	if globals.state.spec != "" && globals.state.spec != null:
-		text += "\n\nYour speciality: [color=yellow]" + globals.state.spec + "[/color]\nBonuses: " + globals.expandedplayerspecs[globals.state.spec]
-	###---End Expansion---###
-
-	get_node("MainScreen/mansion/selfinspect/mainstatlabel").set_bbcode(text)
-	updatestats(person)
-	if globals.state.mansionupgrades.mansionparlor >= 1:
-		$MainScreen/mansion/selfinspect/selftattoo.set_disabled(false)
-		$MainScreen/mansion/selfinspect/selfpierce.set_disabled(false)
-		$MainScreen/mansion/selfinspect/selftattoo.set_tooltip("")
-		$MainScreen/mansion/selfinspect/selfpierce.set_tooltip("")
-	else:
-		$MainScreen/mansion/selfinspect/selftattoo.set_disabled(true)
-		$MainScreen/mansion/selfinspect/selfpierce.set_disabled(true)
-		$MainScreen/mansion/selfinspect/selftattoo.set_tooltip("Unlock Beauty Parlor to access Tattoo options. ")
-		$MainScreen/mansion/selfinspect/selfpierce.set_tooltip("Unlock Beauty Parlor to access Piercing options. ")
-	$MainScreen/mansion/selfinspect/Contraception.pressed = person.effects.has("contraceptive")
-	$MainScreen/mansion/selfinspect/defaultMasterNoun.text = globals.state.defaultmasternoun
-
-func updatestats(person):
-	var text = ''
-	for i in ['sstr','sagi','smaf','send']:
-		text = str(person[i])
-		get(i).get_node('cur').set_text(text)
-		if i in ['sstr','sagi','smaf','send']:
-			get(i).get_node('base').set_text(str(person.stats[globals.basestatdict[i]]))
-			if person.stats[globals.maxstatdict[i].replace("_max",'_mod')] >= 1:
-				get(i).get_node('cur').set('custom_colors/font_color', Color(0,1,0))
-			elif person.stats[globals.maxstatdict[i].replace("_max",'_mod')] < 0:
-				get(i).get_node('cur').set('custom_colors/font_color', Color(1,0.29,0.29))
-			else:
-				get(i).get_node('cur').set('custom_colors/font_color', Color(1,1,1))
-		get(i).get_node('max').set_text(str(min(person.stats[globals.maxstatdict[i]], person.originvalue[person.origins])))
-	text = person.name_long() + '\n[color=aqua][url=race]' +person.dictionary('$race[/url][/color]').capitalize() +  '\nLevel : '+str(person.level)
-	get_node("MainScreen/mansion/selfinspect/statspanel/info").set_bbcode(person.dictionary(text))
-	get_node("MainScreen/mansion/selfinspect/statspanel/attribute").set_text("Free Attribute Points : "+str(person.skillpoints))
-	
-	for i in ['send','smaf','sstr','sagi']:
-		if person.skillpoints >= 1 && (globals.slaves.find(person) >= 0||globals.player == person) && person.stats[globals.maxstatdict[i].replace('_max','_base')] < person.stats[globals.maxstatdict[i]]:
-			get_node("MainScreen/mansion/selfinspect/statspanel/" + i +'/Button').visible = true
-		else:
-			get_node("MainScreen/mansion/selfinspect/statspanel/" + i+'/Button').visible = false
-	get_node("MainScreen/mansion/selfinspect/statspanel/hp").set_value((person.stats.health_cur/float(person.stats.health_max))*100)
-	get_node("MainScreen/mansion/selfinspect/statspanel/en").set_value((person.stats.energy_cur/float(person.stats.energy_max))*100)
-	get_node("MainScreen/mansion/selfinspect/statspanel/xp").set_value(person.xp)
-	text = "Health: " + str(person.stats.health_cur) + "/" + str(person.stats.health_max) + "\nEnergy: " + str(round(person.stats.energy_cur)) + "/" + str(person.stats.energy_max) + "\nExperience: " + str(person.xp)
-	get_node("MainScreen/mansion/selfinspect/statspanel/hptooltip").set_tooltip(text)
-	if person.imageportait != null && globals.loadimage(person.imageportait):
-		$MainScreen/mansion/selfinspect/statspanel/TextureRect/portrait.set_texture(globals.loadimage(person.imageportait))
-	else:
-		person.imageportait = null
-		$MainScreen/mansion/selfinspect/statspanel/TextureRect/portrait.set_texture(null)
-
-
-#Save for modifying reputations
-func reputationword(value):
-	var text = ""
-	if value >= 30:
-		text = "[color=green]Great[/color]"
-	elif value >= 10:
-		text = "[color=green]Positive[/color]"
-	elif value <= -10:
-		text = "[color=#ff4949]Bad[/color]"
-	elif value <= -30:
-		text = "[color=#ff4949]Terrible[/color]"
-	else:
-		text = "Neutral"
-	return text
-
-func selfabilityselect(ability):
-	var text = ''
-	var person = globals.player
-	var dict = {'sstr': 'Strength', 'sagi' : 'Agility', 'smaf': 'Magic', 'level': 'Level', 'spec': 'Spec'}
-	var confirmbutton = get_node("MainScreen/mansion/selfinspect/selfabilitypanel/abilitypurchase")
-	
-	for i in get_node("MainScreen/mansion/selfinspect/selfabilitypanel/ScrollContainer/VBoxContainer").get_children():
-		if i.get_text() != ability.name:
-			i.set_pressed(false)
-	
-	confirmbutton.set_disabled(false)
-	
-	text = '[center]'+ ability.name + '[/center]\n' + ability.description + '\nCooldown:' + str(ability.cooldown) + '\nLearn requirements: '
-	
-	var array = []
-	for i in ability.reqs:
-		array.append(i)
-	array.sort_custom(self, 'levelfirst')
-	
-	for i in array:
-		var temp = i
-		var ref = person
-		if i.find('.') >= 0:
-			temp = i.split('.')
-			for ii in temp:
-				ref = ref[ii]
-		else:
-			ref = person[i]
-		if typeof(ability.reqs[i]) == TYPE_ARRAY: # Capitulize - Specialization based abilities 
-			if !ability.reqs[i].has(ref):
-				confirmbutton.set_disabled(true)
-				text += '[color=#ff4949]'+dict[i] + ': ' + str(ability.reqs[i]) + '[/color], '
-			else:
-				text += '[color=green]'+dict[i] + ': ' + str(ability.reqs[i]) + '[/color], ' #fix this someday UGHH
-		elif ref < ability.reqs[i]: # /Capitulize
-			confirmbutton.set_disabled(true)
-			text += '[color=#ff4949]'+dict[i] + ': ' + str(ability.reqs[i]) + '[/color], '
-		else:
-			text += '[color=green]'+dict[i] + ': ' + str(ability.reqs[i]) + '[/color], '
-	text = text.substr(0, text.length() - 2) + '.'
-	
-	confirmbutton.set_meta('abil', ability)
-
-	get_node("MainScreen/mansion/selfinspect/selfabilitypanel/abilitydescript").set_bbcode(text)
-
-
-###---Added by Expansion---### Family Expanded
-func _on_selfrelatives_pressed():
-	get_node("MainScreen/mansion/selfinspect/relativespanel").popup()
-	var text = ''
-	var person = globals.player
-	var relativesdata = globals.state.relativesdata
-	if !relativesdata.has(person.id):
-		$MainScreen/mansion/selfinspect/relativespanel/relativestext.bbcode_text = person.dictionary("You don't know anything about your relatives. ")
-		return
-	var entry = relativesdata[person.id]
-	var entry2
-	text += '[center]Parents[/center]\n'
-	for i in ['father','mother']:
-		if int(entry[i]) <= 0 || !relativesdata.has(entry[i]):
-			text += i.capitalize() + ": Unknown\n"
-		else:
-			text += i.capitalize() + ": " + getentrytext(relativesdata[entry[i]]) + "\n"
-	
-	###---Added by Expansion---### Slime Breeding
-	if person.race == 'Slime' || person.genealogy.slime > 0:
-		for i in ['slimesire']:
-			if entry[i] == null || int(entry[i]) <= 0:
-				text += "Slimesire: Unknown\n"
-			else:
-				if relativesdata.has(entry[i]):
-					entry2 = relativesdata[entry[i]]
-					text += i.capitalize() + ": "
-					if entry2.state == 'free':
-						text += "[color=aqua]Free[/color] "
-					text += getentrytext(entry2) + "\n"
-				else:
-					text += i.capitalize() + ": Unknown\n"
-	###---End Expansion---###
-	
-	###---Added by Expansion---### Family Expanded
-	var halfsiblings = []
-	if !entry.siblings.empty():
-		text += '\n[center]Full-Blooded Siblings[/center]\n'
-		for i in entry.siblings:
-			entry2 = relativesdata[i]
-			if int(entry.father) == int(entry2.father) && int(entry.mother) == int(entry2.mother):
-				if entry2.state == 'fetus':
-					continue
-				if entry2.sex == 'male':
-					text += "Brother: "
-				else:
-					text += "Sister: "
-				if entry2.state == 'free':
-					text += "[color=aqua]Free[/color] "
-				text += getentrytext(entry2) + "\n"
-			else:
-				halfsiblings.append(i)
-	
-	halfsiblings.append_array(entry.halfsiblings)
-	if !halfsiblings.empty():
-		text += '\n[center]Half-Siblings[/center]\n'
-		for i in halfsiblings:
-			entry2 = relativesdata[i]
-			if entry2.state == 'fetus':
-				continue
-			if entry2.sex == 'male':
-				text += "Half-Brother: " 
-			else:
-				text += "Half-Sister: "
-			if entry2.state == 'free':
-				text += "[color=aqua]Free[/color] "
-			text += getentrytext(entry2) + "\n"
-	###---End Expansion---###
-	
-	if !entry.children.empty():
-		text += '\n[center]Children[/center]\n'
-		for i in entry.children:
-			entry2 = relativesdata[i]
-			if entry2.state == 'fetus':
-				continue
-			if entry2.sex == 'male':
-				text += "Son: " 
-			else:
-				text += "Daughter: "
-			text += getentrytext(entry2) + "\n"
-	$MainScreen/mansion/selfinspect/relativespanel/relativestext.bbcode_text = text
-###---End Expansion---###
-
-
-###---Added by Expansion---### Renamed Slaves don't Rename | Ank BugFix v4a
-func getentrytext(entry):
-	var text = ''
-	var tempPerson = globals.state.findslave(entry.id)
-	if tempPerson != null && tempPerson.away.duration == 0:
-		var realname = str(tempPerson.name_long())
-		text += '[url=id' + str(entry.id) + '][color=yellow]' + realname + '[/color][/url]'
-	else:
-		text += entry.name
-	if entry.state == 'dead':
-		text += " - Deceased"
-	elif entry.state == 'free':
-		text += " - Roaming Free"
-	elif entry.state == 'left' || (tempPerson != null && tempPerson.away.at == 'hidden'):
-		text += " - Status Unknown"
-	text += ", " + entry.race
-	return text
-###---End Expansion---###
 
 ########FARM
 onready var nodeVats = get_node("MainScreen/mansion/farmpanel/vatspanel")
+
 onready var nodeVatDetails = get_node("MainScreen/mansion/farmpanel/vatspanel/vatdetailspanel")
+
 onready var nodeFarmSlave = get_node("MainScreen/mansion/farmpanel/slavefarminspect")
+
 onready var nodeSnailPanel = get_node("MainScreen/mansion/farmpanel/snailpanel")
+
 onready var nodeFarmStore = get_node("MainScreen/mansion/farmpanel/storepanel")
+
 onready var nodeSlaveToFarm = get_node("MainScreen/mansion/farmpanel/slavetofarm")
 
 # call in _ready
@@ -3230,349 +6242,6 @@ func prepareFarmOptionButtons():
 	for i in globals.expansionfarm.vatsautooptions:
 		nodeTemp.add_item(i)
 
-
-func _on_farm_pressed(inputslave = null):
-	_on_mansion_pressed()
-	###---Added by Expansion---### Farm Expansion
-	hide_farm_panels()
-	yield(self, 'animfinished')
-	var manager = inputslave
-	var text = ''
-	var residentlimit = variables.resident_farm_limit[globals.state.mansionupgrades.farmcapacity]
-	for i in globals.slaves:
-		if i.work == 'farmmanager':
-			manager = i
-			break
-	if manager != null:
-		manager.work = 'farmmanager'
-		text = manager.dictionary('Your farm manager is [color=aqua]' + manager.name_long() + '[/color].')
-	else:
-		text = "[color=red]You have no assigned manager. Without manager you won't be able to receive farm income. [/color]"
-	if globals.state.mansionupgrades.farmhatchery > 0:
-		text = text + '\n\nYou have [color=aqua]' + str(globals.state.snails) + '[/color] snails.'
-		if globals.state.snails == 0:
-			text += "\n[color=aqua]Search the woods north of Shaliq.[/color]"
-	var counter = 0
-	var list = get_node("MainScreen/mansion/farmpanel/ScrollContainer/VBoxContainer")
-	var button = get_node("MainScreen/mansion/farmpanel/ScrollContainer/VBoxContainer/farmbutton")
-	for i in list.get_children():
-		if i != button && i != get_node("MainScreen/mansion/farmpanel/ScrollContainer/VBoxContainer/farmadd"):
-			i.hide()
-			i.queue_free()
-	for i in globals.slaves:
-		if i.sleep == 'farm':
-			counter += 1
-			var newbutton = button.duplicate()
-			newbutton.set_text(i.name_long())
-			newbutton.show()
-			list.add_child(newbutton)
-			newbutton.connect("pressed",self,'farminspect',[i])
-	get_node("MainScreen/mansion/farmpanel/ScrollContainer/VBoxContainer/farmadd").set_disabled(counter >= residentlimit)
-#	if globals.state.mansionupgrades.farmtreatment == 1:
-#		text += "\n\n[color=green]Your farm won't break down its residents. [/color]"
-#	else:
-#		text += "\n\n[color=red]Your farm may cause heavy stress to its residents. [/color]"
-	text += '\n\nYou have ' + str(counter)+ '/' + str(residentlimit) + ' people present in farm. '
-	get_node("MainScreen/mansion/farmpanel").show()
-	get_node("MainScreen/mansion/farmpanel/farminfo").set_bbcode(text)
-	if globals.state.tutorial.farm == false:
-		get_node("tutorialnode").farm()
-	###---End Expansion---###
-
-func farminspect(person):
-	###---Added by Expansion---### Farm Expansion
-	hide_farm_panels()
-	nodeFarmSlave.show()
-	var text = globals.expansionfarm.getFarmDescription(person)
-	if person.work == 'cow':
-	#	nodeFarmSlave.get_node("slaveassigntext").set_bbcode(person.dictionary("You walk to the pen with $name. The " +person.race+ " $child is tightly kept here being milked out of $his mind all day long. $His eyes are devoid of sentience barely reacting at your approach."))
-		nodeFarmSlave.get_node("slaveassigntext").set_bbcode(person.dictionary(text))
-#	elif person.work == 'hen':
-	#	nodeFarmSlave.get_node("slaveassigntext").set_bbcode(person.dictionary("You walk to the pen with $name. The " +person.race+ " $child is tightly kept here as a hatchery for giant snail, with a sturdy leather harness covering $his body. $His eyes are devoid of sentience barely reacting at your approach. Crouching down next to $him, you can see the swollen curve of $his stomach, stuffed full of the creature's eggs. As you lay a hand on it, you can feel some movement inside - seems like something hatched quite recently and is making its way to be 'born' from $name's well-used hole."))
-#		nodeFarmSlave.get_node("slaveassigntext").set_bbcode(person.dictionary(text))
-	selectedfarmslave = person
-
-	#Counters
-	var beddingCounters = {'hay':0, 'cot':0, 'bed':0}
-	var workstationCounters = {'rack':0, 'cage':0}
-	var dailyactionCounters = {'exhaust':0, 'inspection':0, 'pamper':0, 'stimulate':0, 'prod':0}
-	var liquidExtraction = []
-	for type in globals.expansionfarm.liquidtypes:
-		liquidExtraction.append('extract'+type)
-	var extractorCounters = {'suction':0, 'pump':0, 'pressurepump':0}
-	var containerCounters = {'bucket':0, 'pail':0, 'jug':0, 'canister':0}
-
-	var farmhandcounter = 0
-	var snailBreeders = 0
-
-	var minInt = -99999 # values not listed in counters recieve this value to prevent deficit
-	var listSlaves = globals.slaves.duplicate()
-	listSlaves.erase(person)
-	for i in listSlaves:
-		if i.work == 'farmhand':
-			farmhandcounter += 1
-		if i.sleep == 'farm':
-			beddingCounters[i.farmexpanded.stallbedding] = beddingCounters.get(i.farmexpanded.stallbedding, minInt) + 1
-			workstationCounters[i.farmexpanded.workstation] = workstationCounters.get(i.farmexpanded.workstation, minInt) + 1
-			dailyactionCounters[i.farmexpanded.dailyaction] = dailyactionCounters.get(i.farmexpanded.dailyaction, minInt) + 1
-			for liquid in liquidExtraction:
-				var refLiquid = i.farmexpanded[liquid]
-				if refLiquid.enabled:
-					extractorCounters[refLiquid.method] = extractorCounters.get(refLiquid.method, minInt) + 1
-					containerCounters[refLiquid.container] = containerCounters.get(refLiquid.container, minInt) + 1
-			if i.farmexpanded.breeding.snails == true:
-				snailBreeders += 1
-	#temp fix, add selectedfarmslave to liquid counts to prevent assigning more than player has in stock
-	for liquid in liquidExtraction:
-		var refLiquid = person.farmexpanded[liquid]
-		if refLiquid.enabled:
-			extractorCounters[refLiquid.method] = extractorCounters.get(refLiquid.method, minInt) + 1
-			containerCounters[refLiquid.container] = containerCounters.get(refLiquid.container, minInt) + 1
-
-	#---Bedding
-	#Update Buttons
-	var counter = 0
-	var nodeBedding = nodeFarmSlave.get_node("stallbedding")
-	if !globals.selectForOptionButton(person.farmexpanded.stallbedding, nodeBedding, globals.expansionfarm.allbeddings):
-		person.farmexpanded.stallbedding = 'dirt'
-	for i in globals.expansionfarm.allbeddings:
-		# Disable if not enough
-		if beddingCounters.get(i,minInt) >= globals.resources.farmexpanded.stallbedding.get(i, 0):
-			nodeBedding.set_item_disabled(counter, true)
-			nodeBedding.set_item_text(counter, globals.expansionfarm.beddingdict[i].textLack)
-		else:
-			nodeBedding.set_item_disabled(counter, false)
-			nodeBedding.set_item_text(counter, i)
-		counter += 1
-	
-	#---Workstations
-	#Build Buttons
-	counter = 0
-	var nodeWorkstation = nodeFarmSlave.get_node("workstation")
-	if !globals.selectForOptionButton(person.farmexpanded.workstation, nodeWorkstation, globals.expansionfarm.allworkstations):
-		person.farmexpanded.workstation = 'free'
-	for i in globals.expansionfarm.allworkstations:
-		# Disable if not enough
-		if workstationCounters.get(i,minInt) >= globals.resources.farmexpanded.workstation.get(i, 0):
-			nodeWorkstation.set_item_disabled(counter, true)
-			nodeWorkstation.set_item_text(counter, globals.expansionfarm.workstationsdict[i].textLack)
-		else:
-			nodeWorkstation.set_item_disabled(counter, false)
-			nodeWorkstation.set_item_text(counter, i)
-		counter += 1
-	
-	#---Daily Actions
-	#Build Buttons
-	var nodeDailyaction = nodeFarmSlave.get_node("dailyaction")
-	if !globals.selectForOptionButton(person.farmexpanded.dailyaction, nodeDailyaction, globals.expansionfarm.alldailyactions):
-		person.farmexpanded.dailyaction = 'none'
-	
-	#Disable if Needed
-	counter = 0
-	for i in globals.expansionfarm.alldailyactions:
-		var refDict = globals.expansionfarm.dailyActionReqDict[i]
-		if refDict.has('farmitems'):
-			if refDict.farmitems.has('prods') && dailyactionCounters.prod >= globals.itemdict.prods.amount:
-				nodeDailyaction.set_item_disabled(counter, true)
-				nodeDailyaction.set_item_text(counter, 'Insufficient Prods')
-				counter += 1
-				continue
-		if refDict.farmhand:
-			var reqWorkers = dailyactionCounters[i]
-			for j in refDict.overlaps:
-				reqWorkers += dailyactionCounters[j]
-			if reqWorkers >= farmhandcounter:
-				nodeDailyaction.set_item_disabled(counter, true)
-				nodeDailyaction.set_item_text(counter, 'Insufficient Farmhands')
-			else:
-				nodeDailyaction.set_item_disabled(counter, false)
-				nodeDailyaction.set_item_text(counter, i)
-		counter += 1
-	
-	#---Breeding
-	var nodeBreedingoption = nodeFarmSlave.get_node("breedingoption")
-	if !globals.selectForOptionButton(person.farmexpanded.breeding.status, nodeBreedingoption, globals.expansionfarm.breedingoptions):
-		person.farmexpanded.breeding.status = 'none'
-	
-	#Disable if Needed
-	counter = 0
-	var listBreedingReqs = [false, person.vagina == 'none', person.penis == 'none', person.vagina == 'none' || person.penis == 'none']
-	var listBreedingDisableText = ['', 'No Vagina Present', 'No Penis Present', 'Both Genitals are needed']
-	for i in globals.expansionfarm.breedingoptions:
-		if listBreedingReqs[counter]:
-			nodeBreedingoption.set_item_disabled(counter, true)
-			nodeBreedingoption.set_item_text(counter, listBreedingDisableText[counter])
-		else:
-			nodeBreedingoption.set_item_disabled(counter, false)
-			nodeBreedingoption.set_item_text(counter, i)
-		counter += 1
-
-
-	#Breeding & Snails
-	if person.farmexpanded.breeding.snails == true:
-		nodeBreedingoption.set_disabled(true)
-		nodeBreedingoption.set_text('Breeding Snails')
-		person.farmexpanded.breeding.status = 'snails'
-		nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_disabled(true)
-		nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_text("No Partner Specified")
-		nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_tooltip(person.dictionary("$name's womb is being used to breed snails currently."))
-		nodeFarmSlave.get_node("snailbreeding").set_disabled(false)
-	else:
-		nodeBreedingoption.set_disabled(false)
-		if person.farmexpanded.breeding.status == 'none':
-			nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_disabled(true)
-			nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_text("No Partner Specified")
-			nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_tooltip(person.dictionary('$name is not assigned to breed or be bred'))
-		else:
-			var partner
-			if person.farmexpanded.breeding.partner != '-1':
-				partner = globals.state.findslave(person.farmexpanded.breeding.partner)
-				if partner == null:
-					person.unassignPartner()
-			nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_disabled(false)
-			if partner == null:
-				nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_text("No Partner Specified")
-				nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_tooltip('Click to choose new partner')
-			else:
-				nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_text(partner.name_long())
-				nodeFarmSlave.get_node("specifybreedingpartnerbutton").set_tooltip('Click to unassign partner')
-
-		if person.vagina == 'none':
-			nodeFarmSlave.get_node("snailbreeding").set_disabled(true)
-			nodeFarmSlave.get_node("snailbreeding").set_tooltip("No Vagina Present.")
-		elif globals.state.mansionupgrades.farmhatchery == 0:
-			nodeFarmSlave.get_node("snailbreeding").set_disabled(true)
-			nodeFarmSlave.get_node("snailbreeding").set_tooltip("You have to unlock Hatchery first.")
-		elif snailBreeders >= globals.state.snails:
-			nodeFarmSlave.get_node("snailbreeding").set_disabled(true)
-			nodeFarmSlave.get_node("snailbreeding").set_tooltip("You don't have any free snails.")
-		else:
-			nodeFarmSlave.get_node("snailbreeding").set_disabled(false)
-			nodeFarmSlave.get_node("snailbreeding").set_tooltip(person.dictionary('Set $name to breed snails.'))
-
-	nodeFarmSlave.get_node("snailbreeding").set_pressed(person.farmexpanded.breeding.snails)
-	nodeFarmSlave.get_node("keeprestrained").set_pressed(person.farmexpanded.restrained)
-	nodeFarmSlave.get_node("usesedative").set_pressed(person.farmexpanded.usesedative)
-	nodeFarmSlave.get_node("giveaphrodisiac").set_pressed(person.farmexpanded.giveaphrodisiac)
-
-
-	#Milk Extraction only if lactating
-	if person.lactation == true:
-		nodeFarmSlave.get_node("extractmilk").set_disabled(false)
-		nodeFarmSlave.get_node("extractmilk").set_tooltip('')
-	else:
-		person.farmexpanded.extractmilk.enabled = false
-		nodeFarmSlave.get_node("extractmilk").set_disabled(true)
-		nodeFarmSlave.get_node("extractmilk").set_tooltip(person.dictionary("$name is not currently lactating."))
-
-	var nodesMethod = [nodeFarmSlave.get_node("milkextraction"), nodeFarmSlave.get_node("cumextraction"), nodeFarmSlave.get_node("pissextraction")]
-	var nodesContainer = [nodeFarmSlave.get_node("milkcontaineroptions"), nodeFarmSlave.get_node("cumcontaineroptions"), nodeFarmSlave.get_node("pisscontaineroptions")]
-	var nodeTemp1
-	var nodeTemp2
-	var temp
-	#Disable if Not Extracting
-	for i in range(liquidExtraction.size()):
-		nodeTemp1 = nodesMethod[i]
-		nodeTemp2 = nodesContainer[i]
-		temp = person.farmexpanded[liquidExtraction[i]]
-		nodeFarmSlave.get_node(liquidExtraction[i]).set_pressed(temp.enabled)
-		if temp.enabled:
-			nodeTemp1.set_disabled(false)
-			nodeTemp1.set_tooltip('')
-			nodeTemp2.set_disabled(false)
-			nodeTemp2.set_tooltip('')
-		else:
-			temp.method = 'leak'
-			temp.container = 'cup'
-			temp = person.dictionary("$name is not having $his "+globals.expansionfarm.liquidtypes[i].capitalize()+" collected.")
-			nodeTemp1.set_disabled(true)
-			nodeTemp1.set_tooltip(temp)
-			nodeTemp2.set_disabled(true)
-			nodeTemp2.set_tooltip(temp)
-
-
-	#Set up Extraction options
-	var choices = globals.expansionfarm.extractorsarray
-
-	#Select Extractions
-	if !globals.selectForOptionButton(person.farmexpanded.extractmilk.method, nodesMethod[0], choices):
-		person.farmexpanded.extractmilk.method = 'leak'
-
-	if !globals.selectForOptionButton(person.farmexpanded.extractcum.method, nodesMethod[1], choices):
-		person.farmexpanded.extractcum.method = 'leak'
-
-	if !globals.selectForOptionButton(person.farmexpanded.extractpiss.method, nodesMethod[2], choices):
-		person.farmexpanded.extractpiss.method = 'leak'
-
-	#Disable Extractions per available items
-	counter = 0
-	for i in choices:
-		temp = extractorCounters.get(i,minInt) >= globals.resources.farmexpanded.extractors.get(i, 0)
-		for node in nodesMethod:
-			node.set_item_disabled(counter, temp)
-		counter += 1
-
-
-	#Set up Containers options ['cup','bucket','pail','jug','canister', 'bottle']
-	choices = globals.expansionfarm.containersarray.duplicate()
-	choices.erase('bottle') #Bottles aren't valid containers for extraction (just for now)
-
-	#Select Containers
-	if !globals.selectForOptionButton(person.farmexpanded.extractmilk.container, nodesContainer[0], choices):
-		person.farmexpanded.extractmilk.container = 'cup'
-
-	if !globals.selectForOptionButton(person.farmexpanded.extractcum.container, nodesContainer[1], choices):
-		person.farmexpanded.extractcum.container = 'cup'
-
-	if !globals.selectForOptionButton(person.farmexpanded.extractpiss.container, nodesContainer[2], choices):
-		person.farmexpanded.extractpiss.container = 'cup'
-
-	#Disable Containers per available items
-	counter = 0
-	for i in choices:
-		temp = containerCounters.get(i,minInt) >= globals.resources.farmexpanded.containers.get(i, 0)
-		for node in nodesContainer:
-			node.set_item_disabled(counter, temp)
-		counter += 1
-
-
-	#Show Cattle Avatar | Mirroring SlaveTab
-	
-	if globals.canloadimage(person.imagefull):
-		nodeFarmSlave.get_node("bodypanel/body").set_texture( globals.loadimage(person.imagefull))
-	elif globals.gallery.nakedsprites.has(person.unique):
-		if person.obed <= 50 || person.stress > 50:
-			nodeFarmSlave.get_node("bodypanel/body").set_texture( globals.spritedict[ globals.gallery.nakedsprites[ person.unique].clothrape])
-		else:
-			nodeFarmSlave.get_node("bodypanel/body").set_texture( globals.spritedict[ globals.gallery.nakedsprites[ person.unique].clothcons])
-	else:
-		nodeFarmSlave.get_node("bodypanel/body").set_texture(null)
-	nodeFarmSlave.get_node("bodypanel/body").show()
-	nodeFarmSlave.get_node("bodypanel").show()
-	###---End Expansion---###
-
-var selectedfarmslave
-
-###---Added by Expansion---### Farm Expanded
-func _on_addcow_pressed():
-	var person = selectedfarmslave
-	person.sleep = 'farm'
-	person.work = 'cow'
-	if person.npcexpanded.contentment == 0:
-		person.npcexpanded.contentment = 3
-	person.exposed.chest = true
-	person.exposed.genitals = true
-	person.exposed.ass = true
-	person.movement = 'crawling'
-	person.farmexpanded.dailyaction = 'rest'
-	popup(person.dictionary("You lead $name into the farm and inform $him that $he is now going to be one of your livestock. $He nods understandingly, obviously prepared for this fate from your previous discussions.\nYou explain that $his clothing is not permitted here and will only get dirty. $He calmly removes $his clothing and hands it to you, exposing $his naked body.\nYou explain that all livestock must crawl to ensure gravity helps with fluid production. $He drops to $his hands and knees and crawls behind you into $his new stall.\n\nNow you must determine how you want $him to be used."))
-#	popup(person.dictionary("You put $name into specially designed pen and hook milking cups onto $his nipples, leaving $him shortly after in the custody of farm."))
-#	_on_closeslavefarm_pressed()
-	nodeSlaveToFarm.hide()
-	_on_farm_pressed()
-	rebuild_slave_list()
-	farminspect(person)
-	
 func _on_addcowforced_pressed():
 	var person = selectedfarmslave
 	person.sleep = 'farm'
@@ -3602,123 +6271,6 @@ func _on_addcowforced_pressed():
 	_on_farm_pressed()
 	rebuild_slave_list()
 	farminspect(person)
-
-#Not Currently Used
-func _on_addhen_pressed():
-	var person = selectedfarmslave
-	person.sleep = 'farm'
-	person.work = 'hen'
-	popup(person.dictionary("You put $name into specially designed pen and fixate $his body, exposing $his orifices to be fully accessible to giant snail, leaving $him shortly after in the custody of farm."))
-	_on_closeslavefarm_pressed()
-	_on_farm_pressed()
-	rebuild_slave_list()
-
-func selectslavelist(prisoners = false, calledfunction = 'popup', targetnode = self, reqs = 'true', player = false, onlyparty = false):
-	var array = []
-	if player == true:
-		array.append(globals.player)
-	for person in globals.slaves:
-		globals.currentslave = person
-		if person.away.duration != 0:
-			continue
-		if onlyparty == true && !globals.state.playergroup.has(person.id):
-			continue
-		if globals.evaluate(reqs) == false:
-			continue
-		if prisoners == false && person.sleep == 'jail' :
-			continue
-		if person.sleep == 'farm':
-			continue
-		array.append(person)
-	showChoosePerson(array, calledfunction, targetnode)
-###---End Expansion---###
-
-func _on_farmadd_pressed():
-	selectslavelist(true, 'farmassignpanel')
-
-func farmassignpanel(person):
-	#Handles putting a selected slave into the farm
-	hide_farm_panels()
-	selectedfarmslave = person
-	if person.consentexp.livestock == true:
-		nodeSlaveToFarm.get_node("addcow").set_disabled(false)
-		nodeSlaveToFarm.get_node("addcow").set_tooltip('')
-	else:
-		nodeSlaveToFarm.get_node("addcow").set_tooltip(person.dictionary('$name is not willing to become your livestock. Try talking to them about it first.'))
-		nodeSlaveToFarm.get_node("addcow").set_disabled(true)
-	if person.sstr <= globals.player.sstr || person.sagi <= globals.player.sagi || person.energy < 50:
-		nodeSlaveToFarm.get_node("addcowforce").set_disabled(false)
-		nodeSlaveToFarm.get_node("addcowforce").set_tooltip(person.dictionary('This action will be very stressful to $name.'))
-	else:
-		nodeSlaveToFarm.get_node("addcowforce").set_tooltip(person.dictionary('$name is both stronger and faster than you and has over most of their energy. Try again when you can overpower them or when they have less than half energy.'))
-		nodeSlaveToFarm.get_node("addcowforce").set_disabled(true)
-	
-#	var counter = 0
-#	for i in globals.slaves:
-#		if i.work == 'hen':
-#			counter += 1
-#	if globals.state.mansionupgrades.farmhatchery == 0:
-#		nodeSlaveToFarm.get_node("addhen").set_disabled(true)
-#		nodeSlaveToFarm.get_node("addhen").set_tooltip("You have to unlock Hatchery first.")
-#	else:
-#		if counter >= globals.state.snails:
-#			nodeSlaveToFarm.get_node("addhen").set_disabled(true)
-#			nodeSlaveToFarm.get_node("addhen").set_tooltip("You don't have any free snails.")
-#		else:
-#			nodeSlaveToFarm.get_node("addhen").set_disabled(false)
-#			nodeSlaveToFarm.get_node("addhen").set_tooltip("")
-	var text = "[color=#d1b970][center]Breasts[/center][/color]\nTits Size: [color=aqua]" + person.titssize.capitalize() + "[/color]\nLactation: " + ('[color=lime]' if person.lactation == true else '[color=#ff4949]not ') + 'present[/color]\nHyper-Lactation: '
-	text += ('[color=lime]' if person.lactating.hyperlactation == true else '[color=#ff4949]not ')+ 'present[/color]\n\n[color=#d1b970][center]Genitals[/center][/color]\nPenis: ' +('[color=green]' if person.penis != 'none' else '[color=#ff4949]not ')
-	text += 'present[/color]\nVagina: ' +('[color=green]' if person.vagina != 'none' else '[color=#ff4949]not ')+ 'present[/color]\n\n' +('[color=lime]Trained Hucow[/color]' if person.spec == 'hucow' else '')
-	nodeSlaveToFarm.get_node("slaveassigntext").set_bbcode(text)
-	
-	###---Added by Expansion---### Display Image and Text | Ankmairdor's BugFix v4
-	#Image
-	if globals.canloadimage(person.imageportait):
-		nodeSlaveToFarm.get_node("image").set_texture(globals.loadimage(person.imageportait))
-	elif globals.gallery.nakedsprites.has(person.unique):
-		if person.obed <= 50 || person.stress > 50:
-			nodeSlaveToFarm.get_node("image").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothrape])
-		else:
-			nodeSlaveToFarm.get_node("image").set_texture(globals.spritedict[globals.gallery.nakedsprites[person.unique].clothcons])
-	else:
-		nodeSlaveToFarm.get_node("image").set_texture(null)
-	#Image Text
-	nodeSlaveToFarm.get_node("underpictext").set_bbcode("[center][color=aqua]" + person.name_long()+ "[/color]\n\n" + ('[color=lime]Consent' if person.consentexp.livestock == true else '[color=#ff4949]Consent Not') +' Granted[/color][/center]')
-	
-	nodeSlaveToFarm.show()
-	###---End Expansion---###
-
-func _on_releasefromfarm_pressed():
-	var person = selectedfarmslave
-	hide_farm_panels()
-	person.work = 'rest'
-	person.sleep = 'communal'
-	person.npcexpanded.contentment += 1
-	person.farmexpanded.dailyaction = 'none'
-	person.farmexpanded.workstation = 'free'
-	person.farmexpanded.stallbedding = 'dirt'
-	person.farmexpanded.breeding.status = 'none'
-	person.farmexpanded.breeding.snails = false
-	for i in ['extractmilk','extractcum','extractpiss']:
-		person.farmexpanded[i].enabled = false
-		person.farmexpanded[i].method = 'leak'
-		person.farmexpanded[i].container = 'cup'
-	nodeFarmSlave.hide()
-	_on_farm_pressed()
-	rebuild_slave_list()
-
-func _on_closeslaveinspect_pressed():
-	_on_farm_pressed()
-	rebuild_slave_list()
-	nodeFarmSlave.hide()
-
-#Currently Unused
-func _on_sellproduction_pressed():
-	selectedfarmslave.farmoutcome = nodeFarmSlave.get_node("sellproduction").is_pressed()
-
-func _on_over_pressed():
-	mainmenu()
 
 ###---Added by Expansion---### Farm Expansion
 func _on_workstation_selected( ID ):
@@ -3779,7 +6331,6 @@ func _on_specifybreedingpartnerbutton_pressed():
 	else:
 		selectedfarmslave.unassignPartner()
 		farminspect(selectedfarmslave)
-	
 
 func selectslavelist_breedingpartner():
 	var array = []
@@ -3819,7 +6370,7 @@ func assignspecificbreedingpartner(inputslave = null):
 	popup( selectedfarmslave.assignBreedingPartner(inputslave.id) )
 	rebuild_slave_list()
 	farminspect(selectedfarmslave)
-	
+
 func _on_snailbreeding_pressed():
 	selectedfarmslave.farmexpanded.breeding.status = 'none'
 	selectedfarmslave.unassignPartner()
@@ -4438,423 +6989,3 @@ func hide_farm_panels():
 	nodeFarmStore.hide()
 	nodeFarmStore.get_node("incubatorspanel").hide()
 	get_node("MainScreen/mansion/farmpanel/farmhelppanel").hide()
-###---End Expansion---###
-
-func _on_defeateddescript_meta_clicked( meta ):
-	var person = get_node("explorationnode/winningpanel/defeateddescript").get_meta('slave')
-	showracedescript(person)
-
-func showChoosePerson(arrayPersons, calledfunction = 'popup', targetnode = self):
-	nodetocall = targetnode
-	functiontocall = calledfunction
-	for i in $chooseslavepanel/ScrollContainer/chooseslavelist.get_children():
-		if i.name != 'Button':
-			i.hide()
-			i.free()
-	for person in arrayPersons:
-		var button = $chooseslavepanel/ScrollContainer/chooseslavelist/Button.duplicate()
-		button.show()
-		button.get_node('Label').text = person.name_long()
-		button.connect('mouse_entered', globals, "slavetooltip", [person])
-		button.connect('mouse_exited', globals, "slavetooltiphide")
-		#button.get_node("slaveinfo").set_bbcode(person.name_long()+', '+person.race+ ', occupation - ' + person.work + ", grade - " + person.origins.capitalize())
-		button.connect("pressed", self, "slaveselected", [button])
-		button.connect("pressed", self, 'hideslaveselection')
-		button.set_meta("slave", person)
-		button.get_node("portrait").set_texture(globals.loadimage(person.imageportait))
-		###---Added by Expansion---### Jail Expanded
-		button.get_node("jailportrait").visible = (person.sleep == 'jail')
-		###---End Expansion---###
-		$chooseslavepanel/ScrollContainer/chooseslavelist/.add_child(button)
-	if arrayPersons.empty():
-		$chooseslavepanel/Label.text = "No characters fit the condition"
-	else:
-		$chooseslavepanel/Label.text = "Select Character"
-	get_node("chooseslavepanel").show()
-
-#---Lab Scripts for Sizing Below
-func seteyecolor(person):
-	var assist
-	for i in globals.slaves:
-		if i.work == 'labassist':
-			assist = i
-			break
-	var priceModifier = 1 / (1+assist.wit/200.0)
-	var timeCost = 0
-	if person == globals.player:
-		priceModifier *= 2
-	else:
-		timeCost = max(round(2/(1+assist.smaf/8.0)),1)
-	###---Added by Expansion---### Hybrid Support
-	if person.race.find('Demon') >= 0:
-		priceModifier *= 0.7
-	###---End Expansion---###
-	var manaCost = round(40 * priceModifier)
-	var goldCost = round(100 * priceModifier)
-	var text = person.dictionary("Choose new eye color for $name. \n[color=yellow]Requires ") + str(manaCost) + " Mana, "
-	text += str(goldCost) + " Gold, 1 Nature Essence and " + str(timeCost) + " days.[/color]"
-	$entertext.show()
-	$entertext.set_meta('action', 'eyecolor')
-	$entertext.set_meta("slave", person)
-	$entertext.set_meta("manaCost", manaCost)
-	$entertext.set_meta("goldCost", goldCost)
-	$entertext.set_meta("timeCost", timeCost)
-	$entertext/LineEdit.text = person.eyecolor
-	$entertext/dialoguetext.bbcode_text = text
-	if globals.resources.mana < manaCost || globals.resources.gold < goldCost || globals.itemdict.natureessenceing.amount < 1:
-		$entertext/confirmentertext.disabled = true
-	else:
-		$entertext/confirmentertext.disabled = false
-
-func _on_confirmentertext_pressed():
-	var text = get_node("entertext/LineEdit").get_text()
-	if text == "":
-		return
-	var person
-	var meta = get_node("entertext").get_meta("action")
-	if meta == 'rename':
-		person = get_node("entertext").get_meta("slave")
-		person.name = text
-		if globals.state.relativesdata.has(person.id):
-			globals.state.relativesdata[person.id].name = person.name_long()
-		rebuild_slave_list()
-	elif meta == 'eyecolor':
-		person = get_node("entertext").get_meta("slave")
-		var manaCost = get_node("entertext").get_meta("manaCost")
-		var goldCost = get_node("entertext").get_meta("goldCost")
-		var timeCost = get_node("entertext").get_meta("timeCost")
-		person.eyecolor = text
-		if person != globals.player:
-			person.away.duration = timeCost
-			person.away.at = 'lab'
-		globals.resources.gold -= goldCost
-		globals.resources.mana -= manaCost
-		globals.itemdict.natureessenceing.amount -= 1
-		rebuild_slave_list()
-		$MainScreen/mansion/labpanel._on_labstart_pressed()
-	get_node("entertext").hide()
-
-#---Keeping for more sleep options, like Stables
-func sleeppressed(button):
-	var person = button.get_meta('slave')
-	var beds = globals.count_sleepers()
-	button.clear()
-	button.add_item(globals.sleepdict['communal'].name)
-	if person.sleep == 'communal':
-		button.set_item_disabled(button.get_item_count()-1, true)
-		button.select(button.get_item_count()-1)
-	button.add_item(globals.sleepdict['jail'].name)
-	if beds.jail >= globals.state.mansionupgrades.jailcapacity:
-		button.set_item_disabled(button.get_item_count()-1, true)
-	if person.sleep == 'jail':
-		button.set_item_disabled(button.get_item_count()-1, true)
-		button.select(button.get_item_count()-1)
-	button.add_item(globals.sleepdict['personal'].name)
-	if beds.personal >= globals.state.mansionupgrades.mansionpersonal:
-		button.set_item_disabled(button.get_item_count()-1, true)
-	if person.sleep == 'personal':
-		button.set_item_disabled(button.get_item_count()-1, true)
-		button.select(button.get_item_count()-1)
-	button.add_item(globals.sleepdict['your'].name)
-	if beds.your_bed >= globals.state.mansionupgrades.mansionbed || (person.loyal + person.obed < 130 || person.tags.find('nosex') >= 0):
-		button.set_item_disabled(button.get_item_count()-1, true)
-	if person.sleep == 'your':
-		button.set_item_disabled(button.get_item_count()-1, true)
-		button.select(button.get_item_count()-1)
-	###---Added by Expansion---### Dog Kennels
-	button.add_item(globals.sleepdict['kennel'].name)
-	if globals.state.mansionupgrades.mansionkennels == 0:
-		button.set_item_disabled(button.get_item_count()-1, true)
-	if person.sleep == 'kennel':
-		button.set_item_disabled(button.get_item_count()-1, true)
-		button.select(button.get_item_count()-1)
-	###---End Expansion---###
-
-###---Added by Expansion---### Dog Kennels
-var sleepdict = {0 : 'communal', 1 : 'jail', 2 : 'personal', 3 : 'your', 4 : "kennel"}
-###---End Expansion---###
-
-func sleepselect(item, button):
-	var person = button.get_meta('slave')
-	person.sleep = sleepdict[item]
-	if person.sleep == 'jail':
-		person.work = 'rest'
-	rebuild_slave_list()
-	slavelist()
-
-###---Added by Expansion---### Ank BugFix v4a
-func _on_sexbutton_pressed():
-	sexslaves.clear()
-#	sexassist.clear()
-	var newbutton
-	get_node("sexselect").show()
-	get_node("sexselect/selectbutton").set_text('Mode: ' + sexmode.capitalize())
-	for i in sexanimals:
-		sexanimals[i] = 0
-	$sexselect/managerypanel.visible = sexmode != 'meet' && globals.state.mansionupgrades.mansionkennels > 0
-	for i in get_node("sexselect/ScrollContainer1/VBoxContainer").get_children() + get_node("sexselect/ScrollContainer/VBoxContainer").get_children():
-		if i.get_name() != 'Button':
-			i.hide()
-			i.queue_free()
-	for i in globals.slaves:
-		if i.away.duration != 0 || i.sleep == 'farm':
-			continue
-		newbutton = get_node("sexselect/ScrollContainer/VBoxContainer/Button").duplicate()
-		get_node("sexselect/ScrollContainer/VBoxContainer").add_child(newbutton)
-		newbutton.set_text(i.dictionary('$name'))
-		newbutton.show()
-		newbutton.connect("pressed",self,'selectsexslave',[newbutton, i])
-		var numInteractions = i.getRemainingInteractions()
-		var tooltip = ''
-		if sexmode == 'meet':
-			if numInteractions > 0:
-				tooltip = 'You can interact with %s %s more time%s today.' % [i.name_long(), numInteractions, 's' if numInteractions > 1 else '']
-			else:
-				newbutton.set_disabled(true)
-				tooltip = 'You have already interacted with %s too many times today.' % i.name_long()
-		elif sexmode == 'sex':
-			###---Added by Expansion---### Breeding Consent and Incest Sex Blocker
-			if i.consent == false:
-				if sexslaves.size() >= 1 && i.consentexp.stud == true || sexslaves.size() >= 1 && i.consentexp.breeder == true:
-					newbutton.set('custom_colors/font_color', Color(1,0.2,0.2))
-					newbutton.set('custom_colors/font_color_pressed', Color(1,0.2,0.2))
-					tooltip = i.dictionary('$name gave you no consent, but did consent to have sex with others for you.\n')
-				else:
-					newbutton.set('custom_colors/font_color', Color(1,0.2,0.2))
-					newbutton.set('custom_colors/font_color_pressed', Color(1,0.2,0.2))
-					tooltip = i.dictionary('$name gave you no consent.\n')
-			elif globals.expansion.relatedCheck(i, globals.player) != 'unrelated':
-				if i.consentexp.incest == false:
-					newbutton.set('custom_colors/font_color', Color(1,0.2,0.2))
-					newbutton.hint_tooltip = i.dictionary('You are related to $name and $he has not given consent for incestuous actions.')
-			if sexslaves.size() >= 1:
-				for r in sexslaves:
-					if globals.expansion.relatedCheck(i, r) != 'unrelated':
-						newbutton.set('custom_colors/font_color', Color(1,0.2,0.2))
-						newbutton.hint_tooltip = i.dictionary(str(r.name)+ ' and ' +str(i.name)+ ' are related have not given consent for incestuous actions.')
-			###---Expansion End---###
-			if numInteractions > 0:
-				tooltip += 'You can interact with %s %s more time%s today.' % [i.name_long(), numInteractions, 's' if numInteractions > 1 else '']
-			else:
-				newbutton.set_disabled(true)
-				tooltip += 'You have already interacted with %s too many times today.' % i.name_long()
-		newbutton.set_tooltip(i.dictionary(tooltip))
-	updatedescription()
-	if globals.state.tutorial.interactions == false:
-		get_node("tutorialnode").interactions()
-
-func updatedescription():
-	var text = ''
-	
-	if sexmode == 'meet':
-		text += "[center][color=yellow]Meet[/color][/center]\nBuild relationship or train your servant: "
-		for person in sexslaves:
-			text += '[color=aqua]%s[/color]. ' % person.name_short()
-	elif sexmode == 'sex':
-		var consensual = true
-		for person in sexslaves:
-			if !person.consent:
-				consensual = false
-				break
-		if sexslaves.empty():
-			text += "[center][color=yellow]Sex[/color][/center]\nCurrent participants: "
-		else:
-			if sexslaves.size() == 1:
-				if consensual:
-					text += "[center][color=yellow]Consensual Sex[/color][/center]"
-				else:
-					text += "[center][color=yellow]Rape[/color][/center]"
-			elif sexslaves.size() in [2,3]:
-				if consensual:
-					text += "[center][color=yellow]Consensual Group Sex[/color][/center]"
-				else:
-					text += "[center][color=yellow]Group Rape[/color][/center]"
-			else:
-				text += "[center][color=yellow]Orgy[/color][/center]\n[color=aqua]Aphrodite's Brew[/color] is required to initialize an orgy."
-
-			if consensual:
-				text += "\nAll participants have given consent."
-			else:
-				text += "\nNot all participants have given consent."
-			text += "\nCurrent participants: "
-			for person in sexslaves:
-				if person.consent:
-					text += '[color=aqua]%s[/color], ' % person.name_short()
-				else:
-					text += '[color=#ff3333]%s[/color], ' % person.name_short()
-			text = text.substr(0, text.length() - 2) + '.'
-		for animal in sexanimals:
-			if sexanimals[animal] != 0:
-				text += "\n" + animal.capitalize() + '(s): ' + str(sexanimals[animal])
-		
-#	elif sexmode == 'abuse':
-#		text += "[center][color=yellow]Rape[/color][/center]"
-#		text += "\nRequires a target and an optional assistant. Can be initiated with prisoners. \nCurrent target: "
-#		for i in sexslaves:
-#			text += i.dictionary('[color=aqua]$name[/color]') + ". "
-#		text += "\nCurrent assistant: "
-#		for i in sexassist:
-#			text += i.dictionary('[color=aqua]$name[/color]') + ". "
-#		for i in sexanimals:
-#			if sexanimals[i] != 0:
-#				text += "\n" + i.capitalize() + '(s): ' + str(sexanimals[i])
-#		get_node("sexselect/startbutton").set_disabled(sexslaves.size() == 1 && sexassist.size() <= 1)
-	if sexslaves.empty():
-		text += '\nSelect slaves to start.'
-	else:
-		text += '\nClick Start to initiate.'
-	###---Added by Expansion---### Interaction Hint
-	text += "\n\nNon-sex Interactions left for today: [color=aqua]" + str(globals.state.nonsexactions) + "[/color]"
-	text += "\nSex Interactions left for today: [color=aqua]" + str(globals.state.sexactions) + "[/color]"
-	###---End Expansion---###
-	get_node("sexselect/sextext").set_bbcode(text)
-	
-	var enablebutton = true
-	if sexslaves.size() == 0:
-		enablebutton = false
-	elif sexmode == 'meet':
-		if globals.state.nonsexactions < 1:
-			enablebutton = false 
-	elif sexmode == 'sex':
-		if globals.state.sexactions < 1:
-			enablebutton = false 
-		elif sexslaves.size() >= 4 && sexmode == 'sex' && globals.itemdict.aphroditebrew.amount < 1:
-			enablebutton = false 
-	$sexselect/startbutton.disabled = !enablebutton
-
-###---End Expansion---###
-
-func traitpanelshow(person, effect):
-	$traitselect.show()# = true
-	traitaction = effect
-	var text = ''
-	var array = []
-	var timeCost = 0
-	var manaCost = 0
-	var goldCost = 0
-	for i in $traitselect/Container/VBoxContainer.get_children():
-		if i.name != 'Button':
-			i.hide()
-			i.queue_free()
-	if effect == 'clearmental':
-		text += person.dictionary("Select mental trait to remove from $name.")
-	elif effect == 'clearphys':
-		var assist
-		for i in globals.slaves:
-			if i.work == 'labassist':
-				assist = i
-				break
-		var priceModifier = 1 / (1+assist.wit/200.0)
-		if person == globals.player:
-			priceModifier *= 2
-		else:
-			timeCost = max(round(3/(1+assist.smaf/8.0)),1)
-		###---Added by Expansion---### Hybrid Support
-		if person.race.find('Demon') >= 0:
-			priceModifier *= 0.7
-		###---End Expansion---###
-		manaCost = round(50 * priceModifier)
-		goldCost = round(100 * priceModifier)
-		text += person.dictionary("Select physical trait to remove from $name. Requires 1 [color=yellow]Elixir of Clarity[/color], ") + str(manaCost) + " mana, " + str(goldCost) +" gold, and " + str(timeCost) + " days."
-	for i in person.traits:
-		var trait = globals.origins.trait(i)
-		###---Added by Expansion---### Hybrid Support
-		if effect == 'clearmental':
-			if trait.tags.has('mental') && !trait.tags.has('lockedtrait'):
-				array.append(trait)
-		elif effect == 'clearphys' && !trait.tags.has('lockedtrait'):
-			if globals.itemdict.claritypot.amount < 1 || globals.resources.gold < goldCost || globals.resources.mana < manaCost || trait.tags.has('physical') == false:
-				continue
-			else:
-				array.append(trait)
-		###---End Expansion---###
-	for i in array:
-		var newnode = $traitselect/Container/VBoxContainer/Button.duplicate()
-		$traitselect/Container/VBoxContainer.add_child(newnode)
-		newnode.show()
-		newnode.text = i.name
-		newnode.connect("mouse_entered", globals, 'showtooltip', [person.dictionary(i.description)])
-		newnode.connect("mouse_exited", globals, 'hidetooltip')
-		newnode.connect("pressed", self, 'traitselect', [person, i, manaCost, goldCost, timeCost])
-	$traitselect/RichTextLabel.bbcode_text = text
-
-func updateSlaveListNode(node, person, visible):
-	node.visible = visible
-	node.find_node('name').set_text(person.name_long())
-	#Whims -- change text color
-	node.find_node('name').set('custom_colors/font_color', ColorN(person.namecolor))
-	if person.xp >= 100:
-		node.find_node('name').rect_min_size.x = 208 # manual resize since auto glitched
-		node.find_node('levelup').visible = true
-		node.find_node('levelup').hint_tooltip = person.dictionary("Talk to $him to investigate unlocking $his potential." if person.levelupreqs.empty() else "Check requirements for unlocking $his potential.")
-	else:
-		node.find_node('levelup').visible = false
-		node.find_node('name').rect_min_size.x = 235 # manual resize since auto glitched
-	node.find_node('health').set_normal_texture( person.health_icon())
-	node.find_node('healthvalue').set_text( str(round(person.health)))
-	node.find_node('obedience').set_normal_texture( person.obed_icon())
-	node.find_node('stress').set_normal_texture( person.stress_icon())
-	if person.imageportait != null:
-		node.find_node('portait').set_texture( globals.loadimage(person.imageportait))
-
-func dialogue(showcloseButton, destination, dialogtext, dialogbuttons = null, sprites = null, background = null): #for arrays: 0 - boolean to show close button or not. 1 - node to return connection back. 2 - text to show 3+ - arrays of buttons and functions in those
-	var text = get_node("dialogue/dialoguetext")
-	var buttons = $dialogue/buttonscroll/buttoncontainer
-	var newbutton
-	var counter = 1
-	get_node("dialogue/blockinput").hide()
-	get_node("dialogue/background").set_texture(null if background == null else globals.backgrounds[background])
-	if !get_node("dialogue").visible:
-		get_node("dialogue").show()
-#		get_node("dialogue").popup()
-		nodeunfade($dialogue, 0.4)
-		#get_node("dialogue/AnimationPlayer").play("fading")
-	text.set_bbcode('')
-	for i in buttons.get_children():
-		if i.name != "Button":
-			i.hide()
-			i.queue_free()
-	if dialogtext == "":
-		dialogtext = var2str(dialogtext)
-	text.set_bbcode(globals.player.dictionary(dialogtext))
-	text.scroll_to_line(0)
-	if dialogbuttons != null:
-		for i in dialogbuttons:
-			dialoguebuttons(dialogbuttons[counter-1], destination, counter)
-			counter += 1
-	if showcloseButton == true:
-		newbutton = $dialogue/buttonscroll/buttoncontainer/Button.duplicate()
-		newbutton.show()
-		newbutton.set_text('Close')
-		newbutton.connect('pressed',self,'close_dialogue')
-		newbutton.get_node("Label").set_text(str(counter))
-		buttons.add_child(newbutton)
-	
-	var clearSprites = []
-	for key in nodedict:
-		if nodedict[key].get_texture() != null:
-			clearSprites.append(key)
-	
-	if sprites != null && globals.rules.spritesindialogues == true:
-		for i in sprites:
-			if !spritedict.has(i[0]) && globals.loadimage(i[0]) == null:
-				var temp = "WARNING: Dialogue cannot display sprite '%s'." %[i[0]]
-				print(temp)
-				globals.traceFile(temp)
-				continue
-			else:
-				if spritedict.has(i[0]):
-					if i.size() > 2 && (i[2] != 'opac' || spritedict[i[0]] != nodedict[i[1]].get_texture()):
-						tweenopac(nodedict[i[1]])
-					nodedict[i[1]].set_texture(spritedict[i[0]])
-				else:
-					if i.size() > 2 && (i[2] != 'opac' || globals.loadimage(i[0]) != nodedict[i[1]].get_texture()):
-						tweenopac(nodedict[i[1]])
-					nodedict[i[1]].set_texture(globals.loadimage(i[0]))
-				clearSprites.erase(i[1])
-	for key in clearSprites:
-		nodedict[key].set_texture(null)
-
-func _on_upgradesclose_pressed():
-	get_node("MainScreen/mansion/upgradespanel").hide()
-	get_tree().get_current_scene()._on_mansion_pressed()

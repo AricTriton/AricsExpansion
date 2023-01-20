@@ -1,5 +1,232 @@
 
-var travel = globals.expansiontravel #ralphD
+extends Control
+
+onready var mansion = get_parent()
+
+var progress = 0.0
+var enemygroup = {}
+var defeated = {units = {}}
+var inencounter = false
+var currentzone
+var lastzone
+var awareness = 0
+var ambush = false
+var scout
+var launchonwin = null
+var combatdata = globals.combatdata
+var deeperregion = false
+var capturedtojail = 0
+var enemyloot = {stackables = {}, unstackables = []}
+var enemygear = {}
+var areas = globals.areas
+
+var scriptedareas = {
+	aydashop = load("res://files/scripts/areascripts/aydashop.gd").new(),
+	
+}
+
+var enemygrouppools = combatdata.enemygrouppools
+var capturespool = combatdata.capturespool
+var enemypool = combatdata.enemypool
+
+
+var zones = areas.database
+
+var buttoncontainer
+var button
+var newbutton
+var main
+var outside
+var minimap
+
+func mansionreturn():
+	main._on_mansion_pressed()
+
+func event(eventname):
+	globals.events.call(eventname)
+
+func zoneenter(zone):
+	var text = ''
+	var endofarea = false
+	if lastzone == null:
+		lastzone = zones[zone].code
+	else:
+		lastzone = currentzone.code
+	zone = self.zones[zone]
+	if zone.combat == false:
+		progress = 0
+		deeperregion = false
+	#edited by Futur Planet [Start] | BG
+	if deeperregion:
+		main.background_set(zone.background, false, "deep")
+	else:
+		main.background_set(zone.background, false)
+	yield(main, "animfinished")
+	#edited by Futur Planet [End] | BG
+	enemyinfoclear()
+	calculateawareness()
+	main.checkplayergroup()
+	outside.playergrouppanel()
+	text = zone.name
+	if deeperregion:
+		text = "+" + text + "+"
+	if outside.get_node('locationname').get_text() != text:
+		outside.get_node('locationname').set_text(text)
+		main.nodeunfade(outside.get_node("locationname"), 0.5, 0.01)
+	text = ''
+	var progressvalue = (progress/max(zone.length,1))*100
+	var progressbar = globals.get_tree().get_current_scene().get_node("outside/exploreprogress")
+	if progress != 0:
+		get_parent().tween.interpolate_property(progressbar, "value", progressbar.value, progressvalue, 0.7, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+		get_parent().tween.start()
+	else:
+		progressbar.set_value(progressvalue)
+	currentzone = zone
+	outside.clearbuttons()
+	showmap(currentzone)
+	text += zone.description
+	if globals.state.marklocation == zone.code:
+		text += "\n\n[color=aqua]You have a mark in this area[/color]"
+	if zone.code in ['wimborn','gorn','amberguard','frostford']:
+		text += "\n\n[color=yellow]You can use public teleport to return to mansion from this location.[/color]"
+	mansion.maintext = text
+	if zone.combat == false:
+		call(zone.locationscript)
+		return
+	else:
+		main.music_set(zone.music)
+#		if zone.code in ['mountaincave','undercitytunnels','undercityruins','undercityhall','redcave','darkness','culthideout','cavelake']:
+#			main.music_set('dungeon')
+#		else:
+#			main.music_set('explore')
+	var array = []
+	if zone.combat == true && progress >= zone.length:
+		for i in zone.exits:
+			var temp = self.zones[i]
+			if globals.evaluate(temp.reqs) == true:
+				array.append({name = 'Move to ' + temp.name, function = 'zoneenter', args = temp.code})
+		if globals.state.backpack.stackables.has('supply') && globals.state.backpack.stackables.supply >= 3 && globals.state.playergroup.size()*5+5 <= globals.resources.food:
+			array.append({name = "Rest and eat", function = 'rest', tooltip = 'Requires 3 units of supplies (in total) and 5 food per party member'})
+		else:
+			array.append({name = "Rest and eat", function = 'rest', disabled = true, tooltip = 'Requires 3 units of supplies (in total) and 5 food per party member'})
+		if globals.state.restday == globals.resources.day:
+			array[array.size()-1].disabled = true
+			array[array.size()-1].tooltip = 'Can only be done once per day'
+		progress = 0
+		endofarea = true
+		if deeperregion == false:
+			array.insert(0,{name = 'Move deeper into the region', function = 'deepzone', args = currentzone.code})
+			array.insert(0,{name = 'Explore this area again', function = 'zoneenter', args = currentzone.code})
+		else:
+			array.insert(0,{name = 'Return to the central region', function = 'zoneenter', args = currentzone.code})
+			array.insert(0,{name = 'Stay in the deeper region', function = 'deepzone', args = currentzone.code})
+		deeperregion = false
+		outside.buildbuttons(array, self)
+	else:
+		inencounter = false
+		array.append({name = "Proceed through area", function = 'enemyencounter'})
+		if globals.developmode == true:
+			array.append({name = "Skip", function = 'areaskip'})
+	
+	if globals.state.sidequests.cali == 19 && zone.code == 'forest':
+		array.append({name = "Look for bandits' camp", function = 'event',args = 'calibanditcamp'})
+	elif (globals.state.sidequests.cali == 23 || globals.state.sidequests.cali == 24) && zone.code == 'wimbornoutskirts':
+		array.append({name = "Visit slaver's camp", function = 'event',args = 'calislavercamp'})
+	elif (globals.state.sidequests.cali == 25) && zone.code == 'wimbornoutskirts':
+		array.append({name = "Find the Bandit",function = 'event',args = 'calistraybandit'})
+	elif (globals.state.sidequests.cali == 26) && zone.code == 'grove':
+		for i in globals.slaves:
+			if i.unique == 'Cali':
+				array.append({name = "Find Cali's village",function = 'event',args = 'calireturnhome'})
+				break
+	elif zone.code == 'dragonnests' && endofarea && globals.state.decisions.has('dragonkilled') == false:
+		array.append({name = "Approach Cave Entrance", function = 'event',args = 'dragonbossenc'})
+	elif zone.code == 'culthideout' && endofarea && globals.state.decisions.has('cultbosskilled') == false:
+		array.append({name = "Approach Central Hall", function = 'event',args = 'cultbossenc'})
+	elif zone.code == 'darkness' && endofarea && globals.state.decisions.has('darknessdefeated') == false:
+		array.append({name = "Approach Bright Passage", function = 'event',args = 'finalbossenc'})
+	if globals.state.mainquest == 13 && zone.code == 'gornoutskirts':
+		array.append({name = "Search for Ivran's location",function = 'event',args = 'gornivran'})
+	if zone.code == 'undercitytunnels' && progress >= 6 && globals.state.lorefound.find('amberguardlog1') < 0:
+		globals.state.lorefound.append('amberguardlog1')
+		mansion.maintext = mansion.maintext + "[color=yellow]\n\nYou've found some old writings in the ruins. Does not look like what you came for, but you can read them later.[/color]"
+	if zone.code == 'undercityruins' && progress >= 5 && globals.state.lorefound.find('amberguardlog2') < 0:
+		globals.state.lorefound.append('amberguardlog2')
+		mansion.maintext = mansion.maintext + "[color=yellow]\n\nYou've found some old writings in the ruins. Does not look like what you came for, but you can read them later.[/color]"
+	if zone.code == 'frostfordoutskirts' && globals.state.mainquest in [27,30,32] && progress >= 5:
+		array.append({name = "Explore hunting grounds to South-East", function = 'event', args = 'frostforddryad'})
+	if zone.code == 'frostfordoutskirts' && globals.state.sidequests.zoe == 1 && progress >= 3:
+		globals.state.sidequests.zoe = 2
+		main.dialogue(true, self, globals.questtext.MainQuestFrostfordBeforeForestZoe, [], [['zoehappy','pos1','opac']])
+	if zone.code == 'mountaincave' && globals.state.mainquest == 39:
+		array.append({name = "Search for Ayda's location",function = 'event',args = 'mountainelfcamp'})
+	if zone.code == 'mountains' && globals.state.mainquest == 40 && globals.state.decisions.has("goodroute"):
+		event('garthorencounter')
+	if zone.code == 'gornoutskirts' && globals.state.mainquest == 40 && globals.state.decisions.has("badroute"):
+		event('davidencounter')
+	if zone.code == 'cavelake' && !globals.state.decisions.has("cultbosskilled") && endofarea:
+		event('cavelakedoor')
+	if progress == 0 && lastzone != zone.code && globals.evaluate(zones[lastzone].reqs) == true && lastzone != 'umbra':
+		array.append({name = "Return to " + zones[lastzone].name, function = "zoneenter", args = lastzone})
+	if zone.code == 'dragonnests' && progress == 0:
+		array.append({name = "Return to Mansion",function = 'mansion'})
+	outside.buildbuttons(array, self)
+
+func showmap(currentzone):
+	var map = currentzone.code
+	main.minimap.mapshowup(map)
+
+func teleportmansion():
+	globals.resources.gold -= 25
+	globals.main.sound("teleport")
+	mansionreturn()
+
+func deepzone(currentzonecode):
+	deeperregion = true
+	zoneenter(currentzonecode)
+
+
+func rest():
+	globals.state.backpack.stackables.supply -= 3
+	globals.player.health += globals.player.stats.health_max/4
+	globals.player.energy += globals.player.stats.energy_max
+	globals.resources.food -= 5
+	for i in globals.state.playergroup:
+		var person = globals.state.findslave(i)
+		person.health += person.stats.health_max/4
+		person.energy += person.stats.energy_max
+		person.stress -= person.stress/1.5
+		globals.resources.food -= 5
+	outside.playergrouppanel()
+	progress = currentzone.length
+	globals.state.restday = globals.resources.day
+	zoneenter(currentzone.code)
+	get_parent().popup("You set up a small camp and take a rest with your party. ")
+
+func frostfordclearing():
+	event('frostforddryad')
+
+
+
+func areaskip():
+	progress = currentzone.length
+	zoneenter(currentzone.code)
+
+func calculateawareness():
+	scout = globals.player
+	var scoutAwareness = scout.awareness()
+	for i in globals.state.playergroup.duplicate():
+		var tempSlave = globals.state.findslave(i)
+		if tempSlave == null:
+			globals.state.playergroup.erase(i)
+			continue
+		var tempAwareness = tempSlave.awareness()
+		if tempSlave.spec == 'ranger':
+			tempAwareness += 6
+		if tempAwareness > scoutAwareness:
+			scout = tempSlave
+			scoutAwareness = tempAwareness
+	return scoutAwareness
 
 func enemyencounter():
 	var enc
@@ -203,10 +430,75 @@ func buildslave(i, criminal = false):
 		slavetemp.health = slavetemp.stats.health_max
 	return slavetemp
 
+func enemyinfo():
+	var text = ''
+	if enemygroup.units.size() <= 3:
+		text = "Number: " + str(enemygroup.units.size())
+	else:
+		text = "Estimate number: " + str(max(round(enemygroup.units.size() + rand_range(-2,2)),3))
+	var total = 0
+	for i in enemygroup.units:
+		if i.capture != null:
+			total += i.capture.level
+		elif deeperregion:
+			total += ceil(i.level * 1.3)
+		else:
+			total += i.level
+	text += "\nEstimated level: " + str(max(1,round(total/enemygroup.units.size()) + round(rand_range(-1,1))))
+	var firstEnemy = enemygroup.units[0]
+	text += '\nGroup: ' + firstEnemy.faction
+	if enemygroup.captured != null && enemygroup.captured.size() >= 1:
+		text += "\n\nHave other persons involved. "
+	if firstEnemy.capture != null && firstEnemy.capture.sex != 'male' && firstEnemy.has('iconalt'):
+		outside.get_node("textpanelexplore/enemyportrait").set_texture(firstEnemy.iconalt)
+	else:
+		outside.get_node("textpanelexplore/enemyportrait").set_texture(firstEnemy.icon)
+	outside.get_node("textpanelexplore/enemyinfo").set_bbcode(text)
+
+func enemyinfoclear():
+	outside.get_node("textpanelexplore/enemyportrait").set_texture(null)
+	outside.get_node("textpanelexplore/enemyinfo").set_bbcode('')
+
+func enemylevelup(person, levelarray):
+	var level = round(rand_range(levelarray[0], levelarray[1]))
+	var statdict = ['sstr','sagi','smaf','send']
+	var skillpoints = abs(level-person.level)*variables.skillpointsperlevel
+	while skillpoints > 0 && statdict.size() > 0:
+		var tempstat = statdict[randi()%statdict.size()]
+		#slaves can be constructed with levels greater than they will recieve for the region of encounter
+		if person.level < level:
+			if randf() <= 0.2:
+				person.skillpoints += 1
+			elif person.stats[globals.maxstatdict[tempstat].replace('_max',"_base")] >= person.stats[globals.maxstatdict[tempstat]]:
+				statdict.erase(tempstat)
+				continue
+			else:
+				person.stats[globals.maxstatdict[tempstat].replace('_max',"_base")] += 1
+		elif person.stats[globals.maxstatdict[tempstat].replace('_max',"_base")] <= 0:
+			statdict.erase(tempstat)
+			continue
+		else:
+			person.stats[globals.maxstatdict[tempstat].replace('_max',"_base")] -= 1
+		skillpoints -= 1
+	if skillpoints > 0 && statdict.empty():
+		if person.level < level:
+			person.skillpoints += skillpoints
+		else:
+			person.skillpoints = max(person.skillpoints - skillpoints, 0)
+	person.level = level
+	person.health = person.stats.health_max
+
 func buildenemies(enemyname = null):
 	if enemyname == null:
-		enemygroup = enemygrouppools[globals.weightedrandom(currentzone.enemies)].duplicate()
+	#edited by Futur Planet [Start] | BG
+		var fpm_pool = globals.weightedrandom(currentzone.enemies)
+		fpm_enemyGroupname = fpm_pool
+		enemygroup = enemygrouppools[fpm_pool].duplicate()
+	#edited by Futur Planet [End] | BG
 	else:
+	#edited by Futur Planet [Start] | BG
+		fpm_enemyGroupname = enemyname
+	#edited by Futur Planet [End] | BG
 		enemygroup = enemygrouppools[enemyname].duplicate()
 	var tempunits = enemygroup.units.duplicate()
 	var unitcounter = {}
@@ -235,16 +527,38 @@ func buildenemies(enemyname = null):
 			buildslave(i,true)
 			###---End Expansion---###
 
-##############ralphD - space out combats through new noncombat enemyencounter
-func noenemyencountered():
+
+func encounterbuttons(state = null):
 	var array = []
-	#mansion.maintext = "Your journey continues peacefully. \n"
-	#noenemyencounteredandthen(zone)
-	#print("Ralph Test: enemygroup: "+str(enemygroup))
-	mansion.maintext = travel.getzonetraveltext(currentzone,currentzone.length)
-	array.append({name = "Proceed through area", function = 'enemyleave'})
+	if state == null:
+		if ambush == false:
+			array.append({name = "Attack",function = "enemyfight"})
+			array.append({name = "Leave", function = "enemyleave"})
+		else:
+			array.append({name = "Fight",function = "enemyfight"})
+	elif state in ['patrolsmall', 'patrolbig']:
+		array.append({name = "Fight",function = "enemyfight"})
+		var dict = {}
+		if state == 'patrolsmall':
+			dict = {name = "Bribe with 100 gold", args = 100, function = 'patrolbribe'}
+			if globals.resources.gold < 100 :
+				dict.disabled = true
+		elif state == 'patrolbig':
+			dict = {name = "Bribe with 300 gold", args = 300, function = 'patrolbribe'}
+			if globals.resources.gold < 300 :
+				dict.disabled = true
+		array.append(dict)
 	outside.buildbuttons(array, self)
-#/ralphD
+
+func patrolbribe(sum):
+	var array = []
+	globals.resources.gold -= sum
+	array.append({name = "Leave", function = "enemyleave"})
+	mansion.maintext = "You bribe Patrol's leader and hastily escape from the scene. "
+	outside.buildbuttons(array, self)
+
+
+##############
 
 
 var treasuremisc = [['magicessenceing',7],['taintedessenceing',7],['natureessenceing',7],['bestialessenceing',7],['fluidsubstanceing',7],['gem',1],['claritypot',0.5],['regressionpot',1],['youthingpot',2],['maturingpot',2]]
@@ -255,19 +569,38 @@ var chestloot = {
 	medium = ['armorchain','weaponsword','weaponserrateddagger','clothsundress','clothmaid','clothbutler', 'armorelvenchain','armorrobe', 'weaponhammer','weapongreatsword','clothkimono','clothpet','clothmiko','clothbedlah','accgoldring','accslavecollar','acchandcuffs','acctravelbag','weaponancientsword','accelvenboots'],
 	hard = ['armorplate','accamuletemerald','accamuletruby','armorelvenhalfplate','armorhalfplate','armorfieldplate','weaponrunesword','armormagerobe','accbooklife'],
 }
-###---End Expansion---###
 
-func winscreenclear():
-	var winpanel = get_node("winningpanel")
-	defeated = []
-	enemyloot = {stackables = {}, unstackables = []}
-	for i in winpanel.get_node("ScrollContainer/VBoxContainer").get_children():
-		if i != winpanel.get_node("ScrollContainer/VBoxContainer/Button"):
-			i.visible = false
-			i.free()
-	winpanel.get_node("ScrollContainer").visible = false
-	winpanel.get_node("Panel").visible = false
-	main.checkplayergroup()
+
+
+var chest = {strength = 0, agility = 0, treasure = {}, trap = ''}
+var selectedpartymember = null
+var chestaction = ''
+
+func getchestlevel():
+	var level = rand_range(currentzone.levelrange[0], currentzone.levelrange[1])
+	if level < 5:
+		level = 'easy'
+		chest.strength = round(rand_range(1,3))
+		chest.agility = round(rand_range(1,3))
+	elif level < 10:
+		level = 'medium'
+		chest.strength = round(rand_range(3,5))
+		chest.agility = round(rand_range(3,5))
+	else:
+		level = 'hard'
+		chest.strength = round(rand_range(5,8))
+		chest.agility = round(rand_range(5,8))
+	return level
+
+func treasurechest():
+	var level = getchestlevel()
+	treasurechestgenerate(level)
+	var text = "You found a hidden [color=yellow]chest[/color]. However, it seems to be locked and is too heavy to carry with you. "
+	treasurechestoptions(text)
+	text = "Chest\nDifficulty level: [color=aqua]" + level.capitalize() + '[/color]\n\nStrength : ' + str(chest.strength) + '\nComplexity: ' + str(chest.agility)
+	outside.get_node("textpanelexplore/enemyportrait").set_texture(load("res://files/buttons/chest.png"))
+	outside.get_node("textpanelexplore/enemyinfo").set_bbcode(text)
+
 
 func chestselectslave(action):
 	chestaction = action
@@ -283,6 +616,7 @@ func chestselectslave(action):
 		reqs = 'person.energy >= 20'
 		text = 'Lock strength: ' + str(chest.strength)
 	outside.chosepartymember(true, [self,chestaction], reqs, text)#func chosepartymember(includeplayer = true, targetfunc = [null,null], reqs = 'true'):
+
 
 func treasurechestoptions(text = ''):
 	var array = []
@@ -300,6 +634,34 @@ func treasurechestoptions(text = ''):
 	array.append({name = 'Crack it open (20 energy)', function = 'chestselectslave', args = 'chestbash'})
 	array.append({name = "Leave", function = 'enemyleave'})
 	outside.buildbuttons(array, self)
+
+
+
+func treasurechestgenerate(level = 'easy'):
+	var gear = {number = 0, enchantchance = 0 }
+	var misc = 0
+	var text
+	var miscnumber = 1
+	if level == 'easy':
+		gear.number = round(rand_range(1,2))
+		gear.enchantchance = 45
+		misc = round(rand_range(0,1))
+		miscnumber = [1,2]
+	elif level == 'medium':
+		gear.number = round(rand_range(1,4))
+		gear.enchantchance = 55
+		misc = round(rand_range(0,2))
+		miscnumber = [1,3]
+	elif level == 'hard':
+		gear.number = round(rand_range(2,4))
+		gear.enchantchance = 65
+		misc = round(rand_range(1,3))
+		miscnumber = [1,4]
+	var gearpool = chestloot[level]
+	if level == 'hard':
+		gearpool = chestloot.medium+chestloot.hard
+	winscreenclear()
+	generaterandomloot(gearpool, gear, misc, miscnumber)
 
 func chestlockpick(person):
 	var unlock = false
@@ -329,29 +691,304 @@ func chestlockpick(person):
 	else:
 		showlootscreen(text)
 
-func chestmouselockpick(person):
+func chestbash(person):
 	var unlock = false
 	var text = ''
-	person.energy -= 10
-	if person.sagi >= chest.agility:
+	person.energy -= 20
+	if person.sstr >= chest.strength:
 		unlock = true
-		text = "$name skillfully picks the lock on the chest."
+		text = "$name easily smashes the chest's lock mechanism."
 	else:
-		if 60 - (chest.agility - person.sagi) * 10 >= rand_range(0,100):
-			text = "With some luck, $name manages to pick the lock on the chest. "
+		if 60 - (chest.strength - person.sstr) * 10 >= rand_range(0,100):
+			text = "With some luck, $name manages to crack the chest open. "
 			unlock = true
 		else:
-			text = "$name fails to pick the lock. "
+			text = "[color=yellow]$name seems to be too weak to break the chest open. [/color]"
 			unlock = false
-
+	
 	text = person.dictionary(text)
 	if unlock == false:
-		###---Added by Expansion---### Ank Bugfix v4
 		outside.playergrouppanel()
-		###---End Exploration---###
 		treasurechestoptions(text)
 	else:
 		showlootscreen(text)
+
+
+
+
+
+###################
+
+func blockedsection():
+	var array = []
+	
+	mansion.maintext = "You found a hidden [color=yellow]section[/color] covered in thick roots. "
+	if globals.state.backpack.stackables.has("torch"):
+		array.append({name = "Use a torch", function = 'blockedsectionopen'})
+	else:
+		array.append({name = "Use a torch", function = 'blockedsectionopen', tooltip = 'You have no torches with you',disabled = true})
+	
+	array.append({name = "Leave", function = 'enemyleave'})
+	outside.buildbuttons(array, self)
+
+func blockedsectionopen():
+	var gear = {number = round(randf()*3), enchantchance = 75 }
+	var misc = rand_range(1,4)
+	var text
+	var miscnumber = [1,3]
+	var loottable = chestloot.medium
+	globals.state.backpack.stackables.torch -= 1
+	text = "After roots burn down you discover a hidden stash."
+	if gear.number == 0:
+		gear.number = 1
+	winscreenclear()
+	generaterandomloot(loottable, gear, misc, miscnumber)
+	showlootscreen(text)
+
+func generateloot(loot = [], text = ''):
+	var winpanel = get_node("winningpanel")
+	var tempitem
+	var enchant
+	for i in winpanel.get_node("ScrollContainer/VBoxContainer").get_children():
+		if i != winpanel.get_node("ScrollContainer/VBoxContainer/Button"):
+			i.visible = false
+			i.free()
+	enchant = false
+	var item = loot[0]
+	if item.findn('+') >= 0:
+		enchant = true
+		item = item.replace("+","")
+	if globals.itemdict[item].type == 'gear':
+		var counter = loot[1]
+		while counter > 0:
+			tempitem = globals.items.createunstackable(item)
+			if enchant:
+				globals.items.enchantrand(tempitem)
+			enemyloot.unstackables.append(tempitem)
+			counter -= 1
+	else:
+		enemyloot.stackables[loot[0]] = loot[1]
+	
+	showlootscreen()
+
+func generaterandomloot(loottable = [], gear = {number = 0, enchantchance = 0}, misc = 0, miscnumber = [0,0]):
+	var tempitem
+	while gear.number > 0:
+		gear.number -= 1
+		tempitem = globals.items.createunstackable(loottable[randi()%loottable.size()])
+		if randf() <= float(gear.enchantchance)/100:
+			globals.items.enchantrand(tempitem)
+		enemyloot.unstackables.append(tempitem)
+	while misc > 0:
+		misc -= 1
+		tempitem = globals.weightedrandom(treasuremisc)
+		if enemyloot.stackables.has(tempitem):
+			enemyloot.stackables[tempitem] += round(rand_range(miscnumber[0], miscnumber[1]))
+		else:
+			enemyloot.stackables[tempitem] = round(rand_range(miscnumber[0], miscnumber[1]))
+	
+	#showlootscreen()
+
+func showlootscreen(text = ''):
+	var winpanel = get_node("winningpanel")
+	for i in winpanel.get_node("ScrollContainer/VBoxContainer").get_children():
+		if i.name != "Button":
+			i.visible = false
+			i.free()
+	winpanel.visible = true
+	winpanel.get_node("wintext").set_bbcode(text)
+	builditemlists()
+
+
+
+
+
+func banditcamp():
+	globals.get_tree().get_current_scene().get_node('outside').clearbuttons()
+	newbutton = button.duplicate()
+	buttoncontainer.add_child(newbutton)
+	newbutton.set_text('Attack them')
+	newbutton.visible = true
+	newbutton.connect("pressed",self,'enemyfight')
+	newbutton = button.duplicate()
+	buttoncontainer.add_child(newbutton)
+	newbutton.set_text('Ignore them')
+	newbutton.visible = true
+	newbutton.connect("pressed",self,'enemyleave')
+
+func slaversenc(stage = 0):
+	var state = false
+	var buttons = []
+	var image
+	var sprites = []
+	if stage == 0:
+		if enemygroup.units.size() < 4:
+			mansion.maintext = "You spot a small group of slavers escorting a captured person. "
+		else:
+			mansion.maintext = "You come across a considerable group of slavers escorting a few capturees. "
+		buttons.append({name = 'Attack Slavers', function = 'slaversenc', args = 1})
+		buttons.append({name = 'Greet Slavers',function = 'slaversenc',args = 2})
+		buttons.append({name = 'Leave',function = 'enemyleave'})
+		outside.mindread = false
+	elif stage == 1:
+		enemyfight()
+		return
+	elif stage == 2:
+		mansion.maintext = "You greet the group of slavers and they offer you to check their freshly acquired merchandise. "
+		buttons.append({name = 'Fight Slavers', function = 'slaversenc', args = 1})
+		buttons.append({name = 'Check Victims',function = 'slaversenc',args = 4})
+		buttons.append({name = 'Leave',function = 'enemyleave'})
+	elif stage == 3:
+		progress += 1
+		zoneenter(currentzone.code)
+	elif stage == 4:
+		outside.get_node("playergrouppanel/VBoxContainer").visible = false
+		globals.main.get_node("outside").slavearray = enemygroup.captured
+		globals.main.get_node("outside").slaveguildslaves('slavers')
+	outside.buildbuttons(buttons,self)
+	#globals.main.dialogue(state, self, text, buttons, sprites)
+	
+#func slaverwin():
+#	var state = false
+#	var text = ''
+#	var buttons = []
+#	var sprites = []
+#	text = textnode.SlaverWin1
+#	globals.main.dialogue(state, self, text, buttons, sprites)
+	
+func merchantencounter(stage = 0):
+	var state = false
+	var text = ''
+	var buttons = []
+	var image
+	var sprites = []
+	if stage == 0:
+		text = ""
+		buttons.append({text = 'Trade',function = 'merchantencounter',args = 1})
+		buttons.append({text = 'Ignore',function = 'merchantencounter',args = 2})
+	elif stage == 1:
+		globals.main.get_node("outside").shopinitiate('outdoor')
+		globals.main.get_node("outside").shopbuy()
+		globals.main.close_dialogue()
+		return
+	elif stage == 2:
+		globals.main.close_dialogue()
+		return
+	globals.main.dialogue(state, self, text, buttons, sprites)
+#-----------------------------------------------------------------------
+
+
+func slaversgreet():
+	globals.get_tree().get_current_scene().get_node('outside').clearbuttons()
+	globals.get_tree().get_current_scene().get_node('outside').maintext = globals.player.dictionary("You reveal yourself to the slavers' group and wonder if they'd be willing to part with their merchandise saving them hassle of transportation.\n\n- You, $sir, know how to bargain. We'll agree to part with our treasure here for ")+str(max(round(enemygroup.captured.buyprice()*0.7),40))+" gold.\n\nYou still might try to take their hostage by force, but given they know about your presence, you are at considerable disadvantage. "
+	newbutton = button.duplicate()
+	buttoncontainer.add_child(newbutton)
+	newbutton.set_text('Inspect')
+	newbutton.visible = true
+	newbutton.connect("pressed",self,'inspectenemy')
+	newbutton = button.duplicate()
+	buttoncontainer.add_child(newbutton)
+	newbutton.set_text('Agree on the deal')
+	newbutton.visible = true
+	newbutton.connect("pressed",self,'slaverbuy')
+	if globals.resources.gold < max(round(enemygroup.captured.buyprice()*0.7),40):
+		newbutton.set_disabled(true)
+		newbutton.set_tooltip("You don't have enough gold.")
+	if globals.spelldict.mindread.learned == true:
+		newbutton = button.duplicate()
+		buttoncontainer.add_child(newbutton)
+		newbutton.set_text('Cast Mindread to check personality')
+		newbutton.visible = true
+		newbutton.connect("pressed",self,'mindreadcapturee', ['slavers'])
+		if globals.spells.spellcost(globals.spelldict.mindread) > globals.resources.mana:
+			newbutton.set_disabled(true)
+	newbutton = button.duplicate()
+	buttoncontainer.add_child(newbutton)
+	newbutton.set_text('Fight')
+	newbutton.visible = true
+	newbutton.connect("pressed",self,'enemyfight')
+	newbutton = button.duplicate()
+	buttoncontainer.add_child(newbutton)
+	newbutton.set_text('Refuse and leave')
+	newbutton.visible = true
+	newbutton.connect("pressed",self,'enemyleave')
+
+func snailevent():
+	var array = []
+	mansion.maintext = "You come across a humongous snail making its way through the trees. It makes you remember hearing how you could use it for farming additional income but you will likely need to sacrifice some food to tame it first. "
+	if globals.resources.food >= 200:
+		array.append({name = 'Feed Snail (200 food)', function = 'snailget'})
+	else:
+		array.append({name = 'Feed Snail (200 food)', function = 'snailget', disabled = true, tooltip = "not enough food"})
+	array.append({name = "Ignore it", function = "zoneenter", args = 'grove'})
+	outside.buildbuttons(array,self)
+
+func snailget():
+	globals.resources.food -= 200
+	globals.state.snails += 1
+	main.popup("You've brought a giant snail back with you and left it at your farm. ")
+	main._on_mansion_pressed()
+
+func slaverbuy():
+	globals.resources.gold -= max(round(enemygroup.captured.buyprice()*0.7),30)
+	#enemycapture()
+	globals.get_tree().get_current_scene().popup("You purchase slavers' captive and return to the mansion. " )
+
+func inspectenemy():
+	globals.get_tree().get_current_scene().popup(enemygroup.captured.descriptionsmall())
+
+func mindreadcapturee(state = 'encounter'):
+	globals.spells.person = enemygroup.captured
+	globals.main.popup(globals.spells.mindreadeffect())
+	if state == 'win':
+		enemydefeated()
+	elif state == 'slavers':
+		slaversgreet()
+	else:
+		encounterbuttons()
+
+
+func enemyleave():
+	progress += 1.0
+	var text = ''
+	globals.player.energy -= max(5-floor((globals.player.sagi+globals.player.send)/2),1)
+	for i in globals.state.playergroup:
+		var person = globals.state.findslave(i)
+		person.energy -= max(5-floor((person.sagi+person.send)/2),1)
+	zoneenter(currentzone.code)
+	if text != '':
+		mansion.maintext = mansion.maintext +'\n[color=yellow]'+text+'[/color]'
+
+func enemyfight(soundkeep = false):
+	mansion.maintext = ''
+	outside.clearbuttons()
+	main.get_node("combat").currentenemies = enemygroup.units
+	main.get_node('combat').area = currentzone
+	main.get_node('combat').enemygear = enemygear
+	#edited by Futur Planet [Start] | BG
+	if deeperregion:
+		main.background_set(currentzone.background, false, "combat_deep_" + fpm_enemyGroupname)
+	else:
+		main.background_set(currentzone.background, false, "combat_default_" + fpm_enemyGroupname)
+	fpm_enemyGroupname = ""
+	#edited by Futur Planet [End] | BG
+	main.get_node("combat").start_battle(soundkeep)
+	
+#edited by Futur Planet [Start] | BG
+var fpm_BG_Data = load("user://mods/AricsExpansion/scripts/fpm_BG_Data.gd").new()
+var fpm_enemyGroupname = ""
+
+func winscreenclear():
+	var winpanel = get_node("winningpanel")
+	defeated = []
+	enemyloot = {stackables = {}, unstackables = []}
+	for i in winpanel.get_node("ScrollContainer/VBoxContainer").get_children():
+		if i != winpanel.get_node("ScrollContainer/VBoxContainer/Button"):
+			i.visible = false
+			i.free()
+	winpanel.get_node("ScrollContainer").visible = false
+	winpanel.get_node("Panel").visible = false
+	main.checkplayergroup()
 
 func enemydefeated():
 	if launchonwin != null:
@@ -562,7 +1199,6 @@ func enemydefeated():
 				main.popup("One of the defeated bandits in exchange for their life reveals the location of their camp you've been searching for. ")
 				globals.state.sidequests.cali = 19
 				return
-		
 
 func buildcapturelist():
 	var winpanel = get_node("winningpanel")
@@ -597,23 +1233,10 @@ func buildcapturelist():
 		newbutton.get_node("choice").select(i.select)
 		newbutton.get_node("choice").connect("item_selected",self, 'defeatedchoice', [person, newbutton.get_node("choice")])
 
-func defeatedchoice(ID, person, node):
-	for i in defeated:
-		if i.unit == person:
-			i.select = ID
-			return
-
-func captureeffect(person):
-	
-	var effect = globals.effectdict.captured
-	var dict = {'slave':0.7, 'poor':1,'commoner':1.2,"rich": 2, "noble": 4}
-	###---Added by Expansion---### NPCs Expanded
-	person.npcexpanded.enslavedby == globals.player.name_long()
-	###---End Expansion---###
-	person.fear += rand_range(30, 25+person.cour/4)
-	effect.duration = round((4 + (person.conf+person.cour)/20) * dict[person.origins])
-	person.add_effect(effect)
-	globals.state.capturedgroup.append(person)
+func mindreadslave(person):
+	globals.spells.person = person
+	globals.main.popup(globals.spells.mindreadeffect())
+	buildcapturelist()
 
 func captureslave(person):
 	var location
@@ -635,6 +1258,176 @@ func captureslave(person):
 	get_tree().get_current_scene().infotext("New captive added to your group",'green')
 	buildcapturelist()
 	builditemlists()
+
+func captureeffect(person):
+	
+	var effect = globals.effectdict.captured
+	var dict = {'slave':0.7, 'poor':1,'commoner':1.2,"rich": 2, "noble": 4}
+	###---Added by Expansion---### NPCs Expanded
+	person.npcexpanded.enslavedby == globals.player.name_long()
+	###---End Expansion---###
+	person.fear += rand_range(30, 25+person.cour/4)
+	effect.duration = round((4 + (person.conf+person.cour)/20) * dict[person.origins])
+	person.add_effect(effect)
+	globals.state.capturedgroup.append(person)
+
+func builditemlists():
+	var newbutton
+	var tempitem
+	for i in get_node("winningpanel/lootpanel/backpack/VBoxContainer").get_children()+get_node("winningpanel/lootpanel/enemyloot/VBoxContainer").get_children():
+		if i.get_name() != "Button":
+			i.visible = false
+			i.queue_free()
+	for i in enemyloot.stackables:
+		tempitem = globals.itemdict[i]
+		newbutton = get_node("winningpanel/lootpanel/enemyloot/VBoxContainer/Button").duplicate()
+		get_node("winningpanel/lootpanel/enemyloot/VBoxContainer").add_child(newbutton)
+		newbutton.visible = true
+		newbutton.get_node("amount").set_text(str(enemyloot.stackables[i]))
+		if tempitem.icon != null:
+			newbutton.get_node("image").set_texture(tempitem.icon)
+		newbutton.connect("pressed",self,'moveitemtobackpack',[newbutton])
+		newbutton.set_meta("item", tempitem)
+		newbutton.connect("mouse_entered", self, 'itemtooltip', [tempitem])
+		newbutton.connect("mouse_exited", self, 'itemtooltiphide')
+	for i in enemyloot.unstackables:
+		newbutton = get_node("winningpanel/lootpanel/enemyloot/VBoxContainer/Button").duplicate()
+		get_node("winningpanel/lootpanel/enemyloot/VBoxContainer").add_child(newbutton)
+		newbutton.visible = true
+		if i.icon != null:
+			newbutton.get_node("image").set_texture(globals.loadimage(i.icon))
+		if i.enchant != '':
+			newbutton.get_node("enchant").visible = true
+		newbutton.connect("pressed",self,'moveitemtobackpack',[newbutton])
+		newbutton.set_meta("item", i)
+		newbutton.get_node("amount").visible = false
+		newbutton.connect("mouse_entered", self, 'itemtooltip', [i])
+		newbutton.connect("mouse_exited", self, 'itemtooltiphide')
+	
+	
+	for i in globals.state.backpack.stackables:
+		tempitem = globals.itemdict[i]
+		newbutton = get_node("winningpanel/lootpanel/backpack/VBoxContainer/Button").duplicate()
+		get_node("winningpanel/lootpanel/backpack/VBoxContainer").add_child(newbutton)
+		newbutton.visible = true
+		newbutton.get_node("amount").set_text(str(globals.state.backpack.stackables[i]))
+		if tempitem.icon != null:
+			newbutton.get_node("image").set_texture(tempitem.icon)
+		newbutton.connect("pressed",self,'moveitemtoenemy',[newbutton])
+		newbutton.set_meta("item", tempitem)
+		newbutton.connect("mouse_entered", self, 'itemtooltip', [tempitem])
+		newbutton.connect("mouse_exited", self, 'itemtooltiphide')
+	for i in globals.state.unstackables.values():
+		if str(i.owner) != 'backpack':
+			continue
+		newbutton = get_node("winningpanel/lootpanel/backpack/VBoxContainer/Button").duplicate()
+		get_node("winningpanel/lootpanel/backpack/VBoxContainer").add_child(newbutton)
+		newbutton.visible = true
+		newbutton.get_node("amount").visible = false
+		if i.icon != null:
+			newbutton.get_node("image").set_texture(globals.loadimage(i.icon))
+		newbutton.connect("pressed",self,'moveitemtoenemy',[newbutton])
+		if i.enchant != '':
+			newbutton.get_node("enchant").visible = true
+		newbutton.set_meta("item", i)
+		newbutton.connect("mouse_entered", self, 'itemtooltip', [i])
+		newbutton.connect("mouse_exited", self, 'itemtooltiphide')
+	$winningpanel/lootpanel/backpack/VBoxContainer.move_child($winningpanel/lootpanel/backpack/VBoxContainer/Button, $winningpanel/lootpanel/backpack/VBoxContainer.get_children().size())
+	$winningpanel/lootpanel/enemyloot/VBoxContainer.move_child($winningpanel/lootpanel/enemyloot/VBoxContainer/Button, $winningpanel/lootpanel/enemyloot/VBoxContainer.get_children().size())
+	calculateweight()
+
+func calculateweight():
+	var person
+	var tempitem
+	var weight = globals.state.calculateweight()
+	
+	get_node("winningpanel/lootpanel/weightmeter/Label").set_text("Weight: " + str(weight.currentweight) + '/' + str(weight.maxweight))
+	get_node("winningpanel/lootpanel/weightmeter/").set_value((weight.currentweight*10/max(weight.maxweight,1)*10))
+	if weight.currentweight > weight.maxweight:
+		get_node("winningpanel/confirmwinning").set_tooltip("Reduce carry weight before proceeding")
+		get_node("winningpanel/confirmwinning").set_disabled(true)
+	else:
+		get_node("winningpanel/confirmwinning").set_tooltip("")
+		get_node("winningpanel/confirmwinning").set_disabled(false)
+
+func moveitemtobackpack(button):
+	var item = button.get_meta('item')
+	if item.type == 'quest':
+		globals.items.call(item.effect, item)
+		enemyloot.stackables[item.code] -= 1
+		if enemyloot.stackables[item.code] <= 0:
+			enemyloot.stackables.erase(item.code)
+	elif item.has('owner') == false:
+		enemyloot.stackables[item.code] -= 1
+		if enemyloot.stackables[item.code] <= 0:
+			enemyloot.stackables.erase(item.code)
+		if globals.state.backpack.stackables.has(item.code):
+			globals.state.backpack.stackables[item.code] += 1
+		else:
+			globals.state.backpack.stackables[item.code] = 1
+	else:
+		globals.state.unstackables[item.id] = item
+		item.owner = 'backpack'
+		enemyloot.unstackables.erase(item)
+	itemtooltiphide()
+	builditemlists()
+
+
+func _on_takeallbutton_pressed():
+	for i in enemyloot.stackables.duplicate():
+		var item = globals.itemdict[i]
+		if item.type == 'quest':
+			globals.items.call(item.effect, item)
+		elif globals.state.backpack.stackables.has(i):
+			globals.state.backpack.stackables[i] += enemyloot.stackables[i]
+		else:
+			globals.state.backpack.stackables[i] = enemyloot.stackables[i]
+		enemyloot.stackables.erase(i)
+	for i in enemyloot.unstackables.duplicate():
+		globals.state.unstackables[i.id] = i
+		i.owner = 'backpack'
+		enemyloot.unstackables.erase(i)
+	
+	builditemlists()
+
+func moveitemtoenemy(button):
+	var item = button.get_meta('item')
+	if item.has('owner') == false:
+		if enemyloot.stackables.has(item.code):
+			enemyloot.stackables[item.code] += 1
+		else:
+			enemyloot.stackables[item.code] = 1
+		globals.state.backpack.stackables[item.code] -= 1
+	else:
+		enemyloot.unstackables.append(item)
+		globals.state.unstackables.erase(item.id)
+	itemtooltiphide()
+	builditemlists()
+
+func itemtooltip(item):
+	globals.itemtooltip(item)
+
+func itemtooltiphide():
+	globals.hidetooltip()
+
+
+func defeatedselected(person):
+	get_tree().get_current_scene().get_node("MainScreen/slave_tab").person = person
+	get_tree().get_current_scene().popup(person.descriptionsmall())
+
+
+func defeatedchoice(ID, person, node):
+	for i in defeated:
+		if i.unit == person:
+			i.select = ID
+			return
+
+
+
+
+
+
+var secondarywin = false
 
 func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 	var text = ''
@@ -1064,6 +1857,15 @@ func _on_confirmwinning_pressed(): #0 leave, 1 capture, 2 rape, 3 kill
 	if text != '':
 		main.popup(text)
 
+var rewardslave
+
+func capturereward():
+	var text = ""
+	var buttons = [['Take no reward','capturedecide',1],['Ask for material reward','capturedecide',2],['Ask for sex','capturedecide',3],['Ask to join you','capturedecide',4]]
+	text = "As you are about to move on, the $race $child that you have rescued appeals to you. $His name is $name and $he's very thankful for your help. $name wishes to repay you somehow. "
+	
+	
+	main.dialogue(false,self,rewardslave.dictionary(text),buttons)
 
 func capturedecide(stage): #1 - no reward, 2 - material, 3 - sex, 4 - join
 	var text = ""
@@ -1134,6 +1936,634 @@ func capturedecide(stage): #1 - no reward, 2 - material, 3 - sex, 4 - join
 					break
 	main.dialogue(true,self,rewardslave.dictionary(text))
 	
+
+func _on_sellconfirm_pressed():
+	_on_confirmwinning_pressed()
+	get_node("winningpanel/sellpanel").visible = false
+
+
+
+
+func wimborn():
+	main.get_node('outside').wimborn()
+	
+	###---Added by Expansion---### Towns Expanded
+	outside.addbutton({name = 'Enter Town Hall', function = 'townhall_enter', args = 'wimborn', textcolor = 'green', tooltip = 'Enter the Town Hall to pay fines or affect laws'}, self)
+	###---End Expansion---###
+	
+	if globals.state.location != 'wimborn':
+		if globals.resources.gold >= 25 :
+			outside.addbutton({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold'}, self)
+		else:
+			outside.addbutton({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold', disabled = true}, self)
+
+func gorn():
+	main.music_set('gorn')
+	var array = []
+	array.append({name = "Visit local Slaver Guild", function = 'gornslaveguild'})
+	array.append({name = "Visit local bar", function = 'gornbar'})
+	if globals.state.mainquest in [12,13,14,15,37]:
+		array.append({name = "Visit Palace", function = 'gornpalace'})
+	if ((globals.state.sidequests.ivran in ['tobetaken','tobealtered','potionreceived','notaltered'] || globals.state.mainquest >= 16) && !globals.state.decisions.has("mainquestslavers")) || globals.state.sandbox == true:
+		array.append({name = "Visit Alchemist", function = 'gornayda'})
+	array.append({name = "Gorn's Market (shop)", function = 'gornmarket'})
+	###---Added by Expansion---### Towns Expanded
+	array.append({name = 'Enter Town Hall', function = 'townhall_enter', args = 'gorn', textcolor = 'green', tooltip = 'Enter the Town Hall to pay fines or affect laws'})
+	array.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = 'gorn', textcolor = 'green', tooltip = 'Hear yesterdays news'})
+	###---End Expansion---###
+	array.append({name = "Outskirts", function = 'zoneenter', args = 'gornoutskirts'})
+	if globals.state.location == 'gorn':
+		array.append({name = "Return to Mansion",function = 'mansion'})
+	else:
+		if globals.resources.gold >= 25 :
+			array.append({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold'})
+		else:
+			array.append({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold', disabled = true})
+	outside.buildbuttons(array,self)
+	
+
+func mansion():
+	get_parent().mansion()
+
+func gornbar():
+	var array = []
+	var text = globals.questtext.GornBar
+	main.animationfade()
+	yield(main, 'animfinished')
+	
+	if globals.state.sidequests.yris == 0:
+		text += "As you move towards the bar your presence is noticed by a girl of beastkin origins. Drawing your attention she gives you an  undoubtedly interested look. "
+		array.append({name = "Approach the girl", function = "gornyris"})
+	elif globals.state.sidequests.yris < 6:
+		array.append({name = "Approach Yris", function = 'gornyris'})
+	array.append({name = "Leave",function = 'zoneenter', args = 'gorn'})
+	mansion.maintext = text
+	outside.buildbuttons(array,self)
+
+func gornyris():
+	var state = false
+	var text
+	var buttons = []
+	var sprite = [['yrisnormal', 'pos1', 'opac']]
+	if globals.player.penis == 'none':
+		main.popup("This encounter requires your character to possess a penis. ")
+		return
+	if globals.state.sidequests.yris == 0:
+		text = globals.questtext.GornYrisMeet
+		globals.charactergallery.yris.unlocked = true
+		if globals.resources.gold >= 200:
+			buttons.append({text = "Accept (200 Gold)", function = "gornyrisaccept", args = 1})
+		else:
+			buttons.append({text = "Accept (200 Gold)", function = "gornyrisaccept", args = 1, disabled = true})
+		globals.state.sidequests.yris = 1
+	elif globals.state.sidequests.yris == 1:
+		text = globals.questtext.GornYrisRepeatMeet
+		if globals.resources.gold >= 200:
+			buttons.append({text = "Accept (200 Gold)", function = "gornyrisaccept", args = 1})
+		else:
+			buttons.append({text = "Accept (200 Gold)", function = "gornyrisaccept", args = 1, disabled = true})
+	elif globals.state.sidequests.yris == 2:
+		text = globals.questtext.GornYrisRepeatMeet
+		if globals.resources.gold >= 200:
+			buttons.append({text = "Accept (200 Gold)", function = "gornyrisaccept", args = 2})
+			if globals.state.getCountStackableItem('deterrentpot','backpack') >= 1:
+				buttons.append({text = "Accept and use Deterrent potion (200 Gold)", function = "gornyrisaccept", args = 3})
+			else:
+				buttons.append({text = "Accept and use potion (200 Gold)", function = "gornyrisaccept", args = 3, disabled = true, tooltip = "You did not bring the appropriate potion."})
+		else:
+			buttons.append({text = "Accept (200 Gold)", function = "gornyrisaccept", args = 2, disabled = true})
+	elif globals.state.sidequests.yris == 3:
+		text = globals.questtext.GornYrisOffer2
+		globals.state.sidequests.yris += 1
+	elif globals.state.sidequests.yris in [4,5]:
+		text = globals.questtext.GornYrisOffer2Repeat
+		if globals.resources.gold < 1000 || globals.state.getCountStackableItem('deterrentpot','backpack') < 1 || globals.state.sidequests.yris < 5:
+			text += "\n\n[color=yellow]You decide that you should prepare before putting your money on the table.[/color] "
+			if globals.state.sidequests.yris < 5:
+				text += "\n\nPerhaps, somebody skilled in alchemy might shine some light upon your previous finding. "
+				if globals.state.getCountStackableItem('deterrentpot','backpack') < 1:
+					text += "\n\nYou will need another Deterrent potion for a fair fight. "
+			elif globals.state.getCountStackableItem('deterrentpot','backpack') < 1:
+				text += "\n\nYou will need another Deterrent potion to ensure your win. "
+			buttons.append({text = "Accept (1000 Gold)", function = "gornyrisaccept", args = 4, disabled = true})
+		else:
+			buttons.append({text = "Accept (1000 Gold)", function = "gornyrisaccept", args = 4})
+	buttons.append({text = "Refuse", function = "gornyrisaccept", args = 0})
+	gornbar()
+	main.dialogue(state, self, text, buttons, sprite)
+
+func gornyrisleave(args):
+	zoneenter('gorn')
+	main.close_dialogue()
+
+func gornyrisaccept(stage):
+	var text = ''
+	var state = false
+	var buttons = []
+	var sprite = []
+	var image
+	if stage == 0:
+		sprite = [['yrisnormal', 'pos1']]
+		text = globals.questtext.GornYrisRefuse
+		buttons.append({text = "Continue", function = 'gornyrisleave', args = null})
+	elif stage == 1:
+		sprite = [['yrisnormalnaked', 'pos1']]
+		image = 'yrisbj'
+		globals.charactergallery.yris.scenes[0].unlocked = true
+		globals.charactergallery.yris.nakedunlocked = true
+		text = globals.questtext.GornYrisAccept1
+		globals.resources.gold -= 200
+		globals.resources.mana += 15
+		globals.state.sidequests.yris = 2
+		buttons.append({text = "Close", function = 'closescene'})
+		state = true
+	elif stage == 2:
+		sprite = [['yrisnormalnaked', 'pos1']]
+		text = globals.questtext.GornYrisAcceptRepeat
+		image = 'yrisbj'
+		state = true
+		buttons.append({text = "Close", function = 'closescene'})
+		globals.resources.gold -= 200
+		globals.resources.mana += 15
+	elif stage == 3:
+		sprite = [['yrisnormalnaked', 'pos1']]
+		text = globals.questtext.GornYrisAccept2
+		image = 'yrissex'
+		buttons.append({text = "Close", function = 'closescene'})
+		globals.charactergallery.yris.scenes[1].unlocked = true
+		globals.state.sidequests.yris += 1
+		globals.state.removeStackableItem('deterrentpot', 1, 'backpack')
+		state = true
+		globals.resources.mana += 25
+	elif stage == 4:
+		sprite = [['yrisshocknaked', 'pos1']]
+		globals.charactergallery.yris.scenes[2].unlocked = true
+		image = 'yrissex'
+		globals.state.removeStackableItem('deterrentpot', 1, 'backpack')
+		text = globals.questtext.GornYrisAccept3
+		buttons.append({text = "Reveal everything", function = 'gornyrisaccept', args = 5})
+		buttons.append({text = "Demand the gold", function = 'gornyrisaccept', args = 6})
+	elif stage == 5:
+		sprite = [['yrisnormalnaked', 'pos1']]
+		text = globals.questtext.GornYrisReveal
+		buttons.append({text = "Offer Yris to work for you", function = 'gornyrisaccept', args = 8})
+		buttons.append({text = "Demand the gold", function = 'gornyrisaccept', args = 7})
+	elif stage == 6:
+		sprite = [['yrisaltnaked', 'pos1']]
+		text = globals.questtext.GornYrisTakeGold
+		globals.state.sidequests.yris = 100
+		globals.resources.gold += 1000
+		text += "\n\nIn the end you get the gold you asked for, but never seen Yris again. "
+		state = true
+	elif stage == 7:
+		sprite = [['yrisaltnaked', 'pos1']]
+		text = globals.questtext.GornYrisTakeGold2
+		globals.state.sidequests.yris = 100
+		text += "\n\nIn the end you get the gold you asked for, but never seen Yris again. "
+		globals.resources.gold += 1000
+		state = true
+	elif stage == 8:
+		state = true
+		sprite = [['yrisnormalnaked', 'pos1']]
+		text = globals.questtext.GornYrisHire
+		globals.state.sidequests.yris += 1
+		var person = globals.characters.create("Yris")
+		globals.slaves = person
+	gornbar()
+	if image != null:
+		main.close_dialogue()
+		main.scene(self, image, text, buttons)
+	else:
+		main.closescene()
+		main.dialogue(state, self, text, buttons, sprite)
+
+func closescene():
+	main.closescene()
+
+func amberguard():
+	var array = []
+	main.music_set('frostford')
+#	if globals.state.portals.amberguard.enabled == false:
+#		globals.state.portals.amberguard.enabled = true
+#		mansion.maintext = mansion.maintext + "\n\n[color=yellow]You have unlocked new portal![/color]"
+	if globals.state.mainquest == 17:
+		globals.state.mainquest = 18
+	elif globals.state.mainquest == 19:
+		array.append({name = "Search for clues", function = "amberguardsearch"})
+	elif globals.state.mainquest == 20:
+		array.append({name = 'Find stranger', function = 'amberguardsearch', args = 2})
+	array.append({name = "Local Market (shop)", function = 'amberguardmarket'})
+	###---Added by Expansion---### Towns Expanded
+	array.append({name = 'Enter Town Hall', function = 'townhall_enter', args = 'amberguard', textcolor = 'green', tooltip = 'Enter the Town Hall to pay fines or affect laws'})
+	array.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = 'amberguard', textcolor = 'green', tooltip = 'Hear yesterdays news'})
+	###---End Expansion---###
+	array.append({name = "Return to Elven Grove", function = 'zoneenter', args = 'elvenforest'})
+	array.append({name = "Move to the Amber Road", function = 'zoneenter', args = 'amberguardforest'})
+	if globals.state.sidequests.ayneris == 6:
+		for i in globals.state.playergroup:
+			if globals.state.findslave(i).unique == 'Ayneris':
+				event("aynerisrapieramberguard")
+	outside.buildbuttons(array,self)
+	if globals.state.location != 'amberguard':
+		if globals.resources.gold >= 25 :
+			outside.addbutton({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold'}, self)
+		else:
+			outside.addbutton({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold', disabled = true}, self)
+
+func amberguardsearch(stage = 1):
+	var text
+	var buttons = []
+	globals.state.mainquest = 20
+	if stage == 1:
+		text = globals.questtext.MainQuestAmberguardSearch
+	elif stage == 2:
+		text = globals.questtext.MainQuestAmberguardReturn
+	if globals.resources.gold >= 1000:
+		buttons.append({text = 'Pay 1000 gold',function = 'amberguardpurchase',args = 1})
+	else:
+		buttons.append({text = 'Pay 1000 gold',function = 'amberguardpurchase',args = 1, disabled = true})
+	buttons.append({text = 'Leave',  function = 'amberguardpurchase', args = 2})
+	main.dialogue(false,self,text,buttons)
+	amberguard()
+
+func amberguardpurchase(stage):
+	var text
+	if stage == 1:
+		globals.state.mainquest = 21
+		globals.resources.gold -= 1000
+		text = globals.questtext.MainQuestAmberguardPay
+	elif stage == 2:
+		text = "You return to the main street."
+	amberguard()
+	main.dialogue(true, self, text, null)
+
+func witchhut():
+	var array = []
+	if globals.state.mainquest == 21:
+		globals.state.mainquest = 22
+		mansion.maintext = globals.questtext.MainQuestAmberguardWitch
+		array.append({name = "Go inside", function = 'shuriyavisit', args = 1})
+	else:
+		array.append({name = "Go inside", function = 'shuriyavisit', args = 2})
+	array.append({name = "Return to Amber Road", function = 'zoneenter', args = 'amberguardforest'})
+	outside.buildbuttons(array,self)
+
+func shuriyavisit(stage):
+	var text
+	var buttons = []
+	var state = true
+	if stage == 1:
+		text = globals.questtext.AmberguardShuriyaVisit
+	elif stage == 2:
+		text = "Shuriya greets you with frown on her face. \n\n[color=yellow]— Oh, it's you again? What do you need?[/color]"
+	elif stage == 3:
+		text = globals.questtext.MainQuestAmberguardTunnelsAsk
+	elif stage == 4:
+		text = globals.questtext.MainQuestAmberguardTunnelEnterAsk
+		globals.state.mainquest = 23
+	buttons.append({text = 'Ask about the tunnels', function = 'shuriyavisit', args = 3})
+	if globals.state.mainquest == 22:
+		buttons.append({text = 'Ask about entrance', function = 'shuriyavisit', args = 4})
+	if globals.state.mainquest == 23:
+		buttons.append({text = 'Deliver slaves', function = 'shuriyaslaves', args = true})
+	zoneenter(currentzone.code)
+	main.dialogue(state, self, text, buttons)
+
+var slave1 = null
+var slave2 = null
+
+func shuriyaslaves(first = true):
+	var state = true
+	var text = '[color=yellow]— Well, who do you have?[/color]'
+	var buttons = []
+	var cancontinue = false
+	if first == true:
+		slave1 = null
+		slave2 = null
+	else:
+		if slave1 != null && slave2 != null:
+			cancontinue = true
+	
+	if slave1 != null:
+		text += slave1.dictionary("\n$name will be given away as an Elf.")
+	if slave2 != null:
+		text += slave2.dictionary("\n$name will be given away as a Dark Elf.")
+	
+	if cancontinue == true:
+		buttons.append({text = "Confirm", function = 'shuriyaslavesgive', args = null})
+	else:
+		if slave1 == null:
+			buttons.append({text = 'Select an Elf', function = 'shuriyaslaveselect', args = 1})
+		if slave2 == null:
+			buttons.append({text = 'Select a Dark Elf', function = 'shuriyaslaveselect', args = 2})
+	main.dialogue(state, self, text, buttons)
+
+func shuriyaslaveselect(stage):
+	###---Added by Expansion---### Races Expanded
+	if stage == 1:
+		main.selectslavelist(true, 'shuriyaelfselect', self, 'person.findRace(["Elf"]) && !person.findRace(["Dark Elf"]) && !person.findRace(["Tribal Elf"])')
+	else:
+		main.selectslavelist(true, 'shuriyadrowselect', self, 'person.findRace(["Dark Elf"])')
+	###---End Expansion---###
+
+func shuriyaslavesgive(none):
+	globals.state.mainquest = 24
+	slave1.removefrommansion()
+	slave2.removefrommansion()
+	var text = globals.questtext.MainQuestAmberguardSlaveDeliver
+	main.popup(text)
+	main.close_dialogue()
+
+func shuriyaelfselect(person):
+	slave1 = person
+	shuriyaslaves(false)
+
+func shuriyadrowselect(person):
+	slave2 = person
+	shuriyaslaves(false)
+
+
+func undercityentrance():
+	var array = []
+	if globals.state.mainquest == 18:
+		globals.state.mainquest = 19
+	if globals.state.mainquest >= 24:
+		array.append({name = 'Go through hidden passage', function = 'zoneenter', args = 'undercitytunnels'})
+	array.append({name = "Return to Amber Road", function = 'zoneenter', args = 'amberguardforest'})
+	outside.buildbuttons(array,self)
+
+func undercityhall():
+	var array = []
+	if globals.state.mainquest == 24:
+		array.append({name = "Search for documents", function = 'undercityboss'})
+	else:
+		array.append({name = "Search for valuables", function = 'undercityboss'})
+	outside.buildbuttons(array,self)
+
+func undercityboss():
+	main.get_node("combat").nocaptures = true
+	if globals.state.mainquest == 24:
+		buildenemies("bossgolem")
+		launchonwin = 'undercitybosswin'
+		enemyfight()
+	else:
+		buildenemies("bosswyvern")
+		launchonwin = 'undercitybosswin'
+		enemyfight()
+
+func undercitylibrary():
+	globals.main.maintext = globals.questtext.undercitybookenc
+	var array = []
+	array.append({name = "Fight", function = 'undercitylibraryfight'})
+	outside.buildbuttons(array,self)
+
+func undercitylibraryfight():
+	buildenemies("bookmutants")
+	globals.main.get_node("combat").nocaptures = true
+	launchonwin = 'undercitylibrarywin'
+	enemyfight()
+
+func undercitylibrarywin():
+	winscreenclear()
+	generateloot(['zoebook', 1], globals.questtext.undercitybookafterabttle)
+	showlootscreen()
+	zoneenter("undercityruins")
+
+func gornmarket():
+	main.animationfade()
+	yield(main, 'animfinished')
+	outside.shopinitiate('gornmarket')
+
+func amberguardmarket():
+	
+	main.animationfade()
+	yield(main, 'animfinished')
+	if globals.state.sidequests.ayneris == 4:
+		globals.events.aynerismarket()
+		return
+	outside.shopinitiate('amberguardmarket')
+
+func gornpalace():
+	globals.events.gornpalace()
+	zoneenter('gorn')
+
+func gornayda():
+	main.animationfade()
+	yield(main, 'animfinished')
+	scriptedareas.aydashop.gornayda()
+
+func frostford():
+	main.music_set('frostford')
+	var array = []
+	if globals.state.mainquest in [28, 29, 30, 31, 33, 34, 35]:
+		array.append({name = "Visit City Hall", function = "frostfordcityhall"})
+	if globals.state.reputation.frostford >= 20 && globals.state.mainquest == 30 && globals.state.sidequests.zoe == 0:
+		var text = globals.questtext.MainQuestFrostfordCityhallZoe
+		var buttons = []
+		var sprite = [['zoeneutral','pos1','opac']]
+		globals.charactergallery.zoe.unlocked = true
+		buttons.append({text = 'Accept', function = "frostfordzoe", args = 1})
+		buttons.append({text = 'Refuse', function = "frostfordzoe", args = 2})
+		main.dialogue(false, self, text, buttons, sprite)
+	if globals.state.sandbox == true && globals.state.reputation.frostford >= 20 && globals.state.sidequests.zoe < 3:
+		array.append({name = "Invite Zoe to your mansion", function = 'frostfordzoe', args = 3})
+	array.append({name = "Visit local Slaver Guild", function = 'frostfordslaveguild'})
+	array.append({name = "Frostford's Market (shop)", function = 'frostfordmarket'})
+	###---Added by Expansion---### Towns Expanded
+	array.append({name = 'Enter Town Hall', function = 'townhall_enter', args = 'frostford', textcolor = 'green', tooltip = 'Enter the Town Hall to pay fines or affect laws'})
+	array.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = 'frostford', textcolor = 'green', tooltip = 'Hear yesterdays news'})
+	###---End Expansion---###
+	array.append({name = "Outskirts", function = 'zoneenter', args = 'frostfordoutskirts'})
+	if globals.state.location == 'frostford':
+		array.append({name = "Return to Mansion",function = 'mansion'})
+	else:
+		if globals.resources.gold >= 25 :
+			array.append({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold'})
+		else:
+			array.append({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold', disabled = true})
+	outside.buildbuttons(array,self)
+	
+
+func frostfordzoe(stage):
+	var text
+	var buttons = []
+	var sprite = [['zoehappy','pos1']]
+	if stage == 1:
+		text = globals.questtext.MainQuestFrostfordCityhallZoeAccept
+		globals.state.sidequests.zoe = 1
+	elif stage == 2:
+		text = globals.questtext.MainQuestFrostfordCityhallZoeRefuse
+		globals.state.sidequests.zoe = 100
+	elif stage == 3:
+		text = globals.questtext.MainQuestFrostfordZoeJoin
+		sprite = [['zoehappy','pos1']]
+		var person = globals.characters.create("Zoe")
+		globals.state.sidequests.zoe = 3
+		globals.slaves = person
+		frostford()
+	
+	main.dialogue(true, self, text, buttons, sprite)
+
+func frostfordcityhall():
+	globals.events.frostfordcityhall()
+
+func frostfordmarket():
+	main.animationfade()
+	yield(main, 'animfinished')
+	outside.shopinitiate('frostfordmarket')
+
+func gornslaveguild():
+	main.animationfade()
+	yield(main, 'animfinished')
+	outside.slaveguild('gorn')
+
+func frostfordslaveguild():
+	outside.slaveguild('frostford')
+
+
+func shaliq():
+	var array = []
+	if globals.state.sidequests.cali == 17:
+		globals.events.calivillage()
+	elif globals.state.sidequests.cali in [20,21]:
+		globals.events.calivillage2()
+	array.append({name = "Visit Local Trader", function = 'shaliqshop'})
+	if globals.state.sidequests.chloe >= 1:
+		array.append({name = "Visit Chloe's house", function = "chloehouse"})
+	array.append({name = "Leave to the Forest", function = 'zoneenter', args = 'forest'})
+	array.append({name = "Leave to the Eerie Grove", function = 'zoneenter', args = 'grove'})
+	if globals.state.sidequests.chloe == 15:
+		globals.state.sidequests.chloe = 16
+		mansion.maintext = "You lead Chloe back to her house and give her some time to rest and clean herself."
+		
+	outside.buildbuttons(array,self)
+
+func shaliqshop():
+	outside.shopinitiate('shaliqshop')
+
+func umbra():
+	if globals.state.umbrafirstvisit == true:
+		globals.state.umbrafirstvisit = false
+		mansion.maintext = mansion.maintext + "\n\n" + globals.questtext.UmbraFirstVisit
+	var array = []
+	if globals.state.mainquest >= 38 && globals.state.portals.has('dragonnests') == false:
+		globals.events.umbraportalenc()
+	array.append({name = "Black Market (shop)", function = 'umbrashop'})
+	array.append({name = "Buy Slaves", function = 'umbrabuyslaves'})
+	array.append({name = "Sell Servants", function = 'umbrasellslaves'})
+	array.append({name = "Return to Mansion", function = 'mansionreturn'})
+	outside.buildbuttons(array,self)
+
+func umbrashop():
+	outside.shopinitiate('blackmarket')
+
+func umbrabuyslaves():
+	outside.mindread = false
+	outside.slavearray = globals.guildslaves.umbra
+	outside.get_node("playergrouppanel/VBoxContainer").visible = false
+	outside.slaveguildslaves('umbra')
+
+func umbrasellslaves():
+	outside.get_node("playergrouppanel/VBoxContainer").visible = false
+	outside.sellslavelist('umbra')
+
+func chloeforest():
+	globals.events.chloeforest()
+
+func aynerisencounter():
+	globals.events.aynerisforest()
+
+func merchantrandomencounter():
+	globals.events.merchantencounter()
+
+
+func chloehouse():
+	if globals.state.sidequests.chloe in [2,3]:
+		globals.events.chloevillage(1)
+	elif globals.state.sidequests.chloe in [4,5,6]:
+		globals.events.chloevillage(4)
+	elif globals.state.sidequests.chloe in [7,8,9]:
+		globals.events.chloevillage(5)
+	elif globals.state.sidequests.chloe == 10:
+		globals.events.chloevillage(8)
+
+func chloegrove():
+	globals.events.chloegrove()
+
+func encounterdictionary(text):
+	var string = text
+	var temp
+	temp = str(enemygroup.units.size())
+	if temp == '1':
+		temp = 'sole'
+	string = string.replace('$unitnumber', temp)
+	if enemygroup.captured != null:
+		temp = str(enemygroup.captured.size())
+		if temp == '1':
+			temp = 'sole'
+		string = string.replace('$capturednumber', temp)
+		string = string.replace('$capturedrace', enemygroup.captured[0].race)
+		if enemygroup.captured[0].sex == 'male':
+			temp = 'guy'
+		else:
+			temp = 'girl'
+		string = string.replace('$capturedsex', temp)
+		string = string.replace('$capturedchild', enemygroup.captured[0].dictionary('$child'))
+	if enemygroup.units[0].capture != null:
+		string = enemygroup.units[0].capture.dictionary(string)
+	string = string.replace('$scoutname', scout.dictionary('$name'))
+	return string
+
+func unloadgroup():
+	for i in globals.state.capturedgroup:
+		globals.slaves = i
+		if globals.count_sleepers().jail < globals.state.mansionupgrades.jailcapacity:
+			i.sleep = 'jail'
+			get_parent().infotext(i.dictionary("$name has been moved to jail"),'green')
+		else:
+			get_parent().infotext(i.dictionary("With no free cells in jail $name has been assigned to the communal room"),'yellow')
+	for i in globals.state.backpack.stackables:
+		var item = globals.itemdict[i]
+		if item.type in ['ingredient']:
+			item.amount += globals.state.backpack.stackables[i]
+			globals.state.backpack.stackables.erase(i)
+
+
+var travel = globals.expansiontravel #ralphD
+
+##############ralphD - space out combats through new noncombat enemyencounter
+func noenemyencountered():
+	var array = []
+	#mansion.maintext = "Your journey continues peacefully. \n"
+	#noenemyencounteredandthen(zone)
+	#print("Ralph Test: enemygroup: "+str(enemygroup))
+	mansion.maintext = travel.getzonetraveltext(currentzone,currentzone.length)
+	array.append({name = "Proceed through area", function = 'enemyleave'})
+	outside.buildbuttons(array, self)
+
+func chestmouselockpick(person):
+	var unlock = false
+	var text = ''
+	person.energy -= 10
+	if person.sagi >= chest.agility:
+		unlock = true
+		text = "$name skillfully picks the lock on the chest."
+	else:
+		if 60 - (chest.agility - person.sagi) * 10 >= rand_range(0,100):
+			text = "With some luck, $name manages to pick the lock on the chest. "
+			unlock = true
+		else:
+			text = "$name fails to pick the lock. "
+			unlock = false
+
+	text = person.dictionary(text)
+	if unlock == false:
+		###---Added by Expansion---### Ank Bugfix v4
+		outside.playergrouppanel()
+		###---End Exploration---###
+		treasurechestoptions(text)
+	else:
+		showlootscreen(text)
 
 ###---Added by Expansion---###
 func getTownReport(town):
@@ -1281,111 +2711,3 @@ func townhall_toggle_autopay(town):
 	buttons.append({name = "Return to the Entryway", function = 'townhall_enter', args = town})
 	mansion.maintext = text
 	outside.buildbuttons(buttons,self)
-	
-###---End Expansion---###
-
-func wimborn():
-	main.get_node('outside').wimborn()
-	
-	###---Added by Expansion---### Towns Expanded
-	outside.addbutton({name = 'Enter Town Hall', function = 'townhall_enter', args = 'wimborn', textcolor = 'green', tooltip = 'Enter the Town Hall to pay fines or affect laws'}, self)
-	###---End Expansion---###
-	
-	if globals.state.location != 'wimborn':
-		if globals.resources.gold >= 25 :
-			outside.addbutton({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold'}, self)
-		else:
-			outside.addbutton({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold', disabled = true}, self)
-
-func gorn():
-	main.music_set('gorn')
-	var array = []
-	array.append({name = "Visit local Slaver Guild", function = 'gornslaveguild'})
-	array.append({name = "Visit local bar", function = 'gornbar'})
-	if globals.state.mainquest in [12,13,14,15,37]:
-		array.append({name = "Visit Palace", function = 'gornpalace'})
-	if ((globals.state.sidequests.ivran in ['tobetaken','tobealtered','potionreceived','notaltered'] || globals.state.mainquest >= 16) && !globals.state.decisions.has("mainquestslavers")) || globals.state.sandbox == true:
-		array.append({name = "Visit Alchemist", function = 'gornayda'})
-	array.append({name = "Gorn's Market (shop)", function = 'gornmarket'})
-	###---Added by Expansion---### Towns Expanded
-	array.append({name = 'Enter Town Hall', function = 'townhall_enter', args = 'gorn', textcolor = 'green', tooltip = 'Enter the Town Hall to pay fines or affect laws'})
-	array.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = 'gorn', textcolor = 'green', tooltip = 'Hear yesterdays news'})
-	###---End Expansion---###
-	array.append({name = "Outskirts", function = 'zoneenter', args = 'gornoutskirts'})
-	if globals.state.location == 'gorn':
-		array.append({name = "Return to Mansion",function = 'mansion'})
-	else:
-		if globals.resources.gold >= 25 :
-			array.append({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold'})
-		else:
-			array.append({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold', disabled = true})
-	outside.buildbuttons(array,self)
-	
-func amberguard():
-	var array = []
-	main.music_set('frostford')
-#	if globals.state.portals.amberguard.enabled == false:
-#		globals.state.portals.amberguard.enabled = true
-#		mansion.maintext = mansion.maintext + "\n\n[color=yellow]You have unlocked new portal![/color]"
-	if globals.state.mainquest == 17:
-		globals.state.mainquest = 18
-	elif globals.state.mainquest == 19:
-		array.append({name = "Search for clues", function = "amberguardsearch"})
-	elif globals.state.mainquest == 20:
-		array.append({name = 'Find stranger', function = 'amberguardsearch', args = 2})
-	array.append({name = "Local Market (shop)", function = 'amberguardmarket'})
-	###---Added by Expansion---### Towns Expanded
-	array.append({name = 'Enter Town Hall', function = 'townhall_enter', args = 'amberguard', textcolor = 'green', tooltip = 'Enter the Town Hall to pay fines or affect laws'})
-	array.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = 'amberguard', textcolor = 'green', tooltip = 'Hear yesterdays news'})
-	###---End Expansion---###
-	array.append({name = "Return to Elven Grove", function = 'zoneenter', args = 'elvenforest'})
-	array.append({name = "Move to the Amber Road", function = 'zoneenter', args = 'amberguardforest'})
-	if globals.state.sidequests.ayneris == 6:
-		for i in globals.state.playergroup:
-			if globals.state.findslave(i).unique == 'Ayneris':
-				event("aynerisrapieramberguard")
-	outside.buildbuttons(array,self)
-	if globals.state.location != 'amberguard':
-		if globals.resources.gold >= 25 :
-			outside.addbutton({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold'}, self)
-		else:
-			outside.addbutton({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold', disabled = true}, self)
-
-func shuriyaslaveselect(stage):
-	###---Added by Expansion---### Races Expanded
-	if stage == 1:
-		main.selectslavelist(true, 'shuriyaelfselect', self, 'person.findRace(["Elf"]) && !person.findRace(["Dark Elf"]) && !person.findRace(["Tribal Elf"])')
-	else:
-		main.selectslavelist(true, 'shuriyadrowselect', self, 'person.findRace(["Dark Elf"])')
-	###---End Expansion---###
-
-func frostford():
-	main.music_set('frostford')
-	var array = []
-	if globals.state.mainquest in [28, 29, 30, 31, 33, 34, 35]:
-		array.append({name = "Visit City Hall", function = "frostfordcityhall"})
-	if globals.state.reputation.frostford >= 20 && globals.state.mainquest == 30 && globals.state.sidequests.zoe == 0:
-		var text = globals.questtext.MainQuestFrostfordCityhallZoe
-		var buttons = []
-		var sprite = [['zoeneutral','pos1','opac']]
-		globals.charactergallery.zoe.unlocked = true
-		buttons.append({text = 'Accept', function = "frostfordzoe", args = 1})
-		buttons.append({text = 'Refuse', function = "frostfordzoe", args = 2})
-		main.dialogue(false, self, text, buttons, sprite)
-	if globals.state.sandbox == true && globals.state.reputation.frostford >= 20 && globals.state.sidequests.zoe < 3:
-		array.append({name = "Invite Zoe to your mansion", function = 'frostfordzoe', args = 3})
-	array.append({name = "Visit local Slaver Guild", function = 'frostfordslaveguild'})
-	array.append({name = "Frostford's Market (shop)", function = 'frostfordmarket'})
-	###---Added by Expansion---### Towns Expanded
-	array.append({name = 'Enter Town Hall', function = 'townhall_enter', args = 'frostford', textcolor = 'green', tooltip = 'Enter the Town Hall to pay fines or affect laws'})
-	array.append({name = 'Inquire about Recent Events', function = 'getTownReport', args = 'frostford', textcolor = 'green', tooltip = 'Hear yesterdays news'})
-	###---End Expansion---###
-	array.append({name = "Outskirts", function = 'zoneenter', args = 'frostfordoutskirts'})
-	if globals.state.location == 'frostford':
-		array.append({name = "Return to Mansion",function = 'mansion'})
-	else:
-		if globals.resources.gold >= 25 :
-			array.append({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold'})
-		else:
-			array.append({name = 'Teleport to Mansion - 25 gold', function = 'teleportmansion', textcolor = 'green', tooltip = '25 gold', disabled = true})
-	outside.buildbuttons(array,self)
