@@ -113,10 +113,28 @@ func _ready():
 	###---Added by Expansion---###
 	prepareFarmOptionButtons()
 	###---End Expansion---###
+	get_node("FinishDayPanel/alise").hide()
+	get_node("FinishDayPanel/FinishDayScreen/Global Report").set_bbcode(globals.state.daily_reports.global)
+	get_node("FinishDayPanel/FinishDayScreen/Job Report").set_bbcode(globals.state.daily_reports.job)
+	get_node("FinishDayPanel/FinishDayScreen/Secondary Report").set_bbcode(globals.state.daily_reports.secondary)
+	get_node("FinishDayPanel/FinishDayScreen/Farm Report").set_bbcode(globals.state.daily_reports.farm)
 	if get_node("FinishDayPanel/FinishDayScreen/Global Report").get_bbcode().empty():
 		get_node("Navigation/endlog").disabled = true
 	_on_mansion_pressed()
 	#startending()
+
+var awayReturnText = {
+	'travel back': 'returned to the mansion and went back to $his duties.',
+	'transported back': 'transported back to the mansion and went back to $his duties.',
+	'in labor': 'recovered from labor and went back to $his duties.',
+	'training': 'completed $his training and went back to $his duties.',
+	'nurture': 'has finished being nurtured and went back to $his duties.',
+	'growing': 'has matured and is now ready to serve you.',
+	'lab': 'successfully recovered from laboratory modification and went back to $his duties.',
+	'rest': 'finished resting and went back to $his duties.',
+	'vacation': 'returned from vacation and went back to $his duties.',
+	'default': 'returned to the mansion and went back to $his duties.',
+}
 
 func rebuild_slave_list():
 	var personList = get_node("charlistcontrol/CharList/scroll_list/slave_list")
@@ -1052,6 +1070,7 @@ func _on_end_pressed():
 							text0.set_bbcode(text0.get_bbcode() + person.dictionary("The beast lunged forward and violently thrust its throbbing member into the wimpering $name's " + str(globals.expansion.namePussy()) + ". "))
 						else:
 							text0.set_bbcode(text0.get_bbcode() + person.dictionary("The beast lunged forward and forced $name onto the floor before mounting $his " + str(globals.expansion.namePenis()) + " and having its way with $him. "))
+					text0.set_bbcode(text0.get_bbcode() + "\n")
 			###---End Expansion---###
 			person.health += slavehealing * person.stats.health_max
 
@@ -1114,75 +1133,6 @@ func _on_end_pressed():
 						elif luxurycheck.vice_modifier < 0:
 							text1.set_bbcode(text1.get_bbcode() + person.dictionary("[color=red]negatively[/color] today. \n"))
 				###---End Expansion---###
-		elif person.away.duration > 0:
-			person.away.duration -= 1
-			###---Added by Expansion---### Hybrid Support && Ankmairdor's BugFix v4
-			if person.away.at == 'lab' && person.health < 5:
-				temptext = "$name has not survived the laboratory operation due to poor health.\n"
-				deads_array.append({number = count, reason = temptext})
-				person.removefrommansion()
-				continue
-			else:
-				if person.away.at in ['rest','vacation']:
-					slavehealing += 0.15
-					person.stress -= 20
-				if person.race.find('Orc') >= 0:
-					slavehealing += 0.15
-				if person.traits.has("Infirm"):
-					slavehealing = slavehealing/3
-				person.health += slavehealing * person.stats.health_max
-				if person.race.find('Fairy') >= 0:
-					person.stress -= rand_range(10,20)
-				else:
-					person.stress -= rand_range(5,10)
-				person.energy += rand_range(20,30) + person.send*6
-
-				if person.away.duration == 0:
-					if person.away.at == 'transported back':
-						globals.itemdict['rope'].amount += globals.state.calcRecoverRope(1)
-						if globals.count_sleepers().jail < globals.state.mansionupgrades.jailcapacity:
-							person.sleep = 'jail'
-							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] has been transported to the mansion and placed in the jail. \n"))
-						else:
-							person.sleep = 'communal'
-							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] has been transported to the mansion. You are out of free jail cells and $he was assigned to the communal area. \n"))
-					else:
-						text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] returned to the mansion and went back to $his duty. \n"))
-						###---End Expansion---###
-						var sleepChange = false
-						if person.sleep != 'communal':
-							match person.sleep:
-								'personal':
-									sleepChange = globals.count_sleepers().personal > globals.state.mansionupgrades.mansionpersonal
-								'your':
-									sleepChange = globals.count_sleepers().your_bed > globals.state.mansionupgrades.mansionbed
-								'jail':
-									sleepChange = globals.count_sleepers().jail > globals.state.mansionupgrades.jailcapacity
-								'farm':
-									if globals.count_sleepers().farm > variables.resident_farm_limit[globals.state.mansionupgrades.farmcapacity]:
-										sleepChange = true
-										person.job = 'rest'
-						if sleepChange:
-							person.sleep = 'communal'
-							###---Added by Expansion---### Colorized
-							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name's[/color] sleeping place is no longer available so $he has moved to the communal area. \n"))
-							###---End Expansion---###
-					person.away.at = ''
-				for i in person.effects.values():
-					if i.has('duration') && i.code != 'captured':
-						###---Added by Expansion---### Hybrid Support && Ank BugFix v4
-						if person.race.find('Tribal Elf') < 0 || i.code in ['bandaged','sedated', 'drunk'] || randf() > 0.5:
-							i.duration -= 1
-						###---End Expansion---###
-						if i.duration <= 0:
-							person.add_effect(i, true)
-					elif i.code == 'captured':
-						if i.duration <= 0:
-							if i.code == 'captured':
-								text0.set_bbcode(text0.get_bbcode() + person.dictionary('$name grew accustomed to your ownership.\n'))
-							person.add_effect(i, true)
-					if i.has("ondayend"):
-						globals.effects.call(i.ondayend, person)
 		person.work = jobRestore
 		count+=1
 	if headgirl != null && globals.state.headgirlbehavior != 'none':
@@ -1379,6 +1329,82 @@ func _on_end_pressed():
 	if globals.state.mansionupgrades.foodpreservation == 0 && globals.resources.food >= globals.resources.foodcaparray[globals.state.mansionupgrades.foodcapacity]*0.80:
 		globals.resources.food -= globals.resources.food*0.03
 		text0.set_bbcode(text0.get_bbcode() + '[color=yellow]Some of your food reserves have spoiled.[/color]\n')
+
+	# Process away slaves now
+	for person in globals.slaves:
+		if person.away.duration > 0:
+			person.away.duration -= 1
+			###---Added by Expansion---### Hybrid Support && Ankmairdor's BugFix v4
+			if person.away.at == 'lab' && person.health < 5:
+				temptext = "$name has not survived the laboratory operation due to poor health.\n"
+				deads_array.append({number = count, reason = temptext})
+				person.removefrommansion()
+				continue
+			else:
+				var slavehealing = person.send * 0.03 + 0.02
+				if person.away.at in ['rest','vacation']:
+					slavehealing += 0.15
+					person.stress -= 20
+				if person.race.find('Orc') >= 0:
+					slavehealing += 0.15
+				if person.traits.has("Infirm"):
+					slavehealing = slavehealing/3
+				person.health += slavehealing * person.stats.health_max
+				if person.race.find('Fairy') >= 0:
+					person.stress -= rand_range(10,20)
+				else:
+					person.stress -= rand_range(5,10)
+				person.energy += rand_range(20,30) + person.send*6
+
+				if person.away.duration == 0:
+					if person.away.at == 'transported back':
+						globals.itemdict['rope'].amount += globals.state.calcRecoverRope(1)
+						if globals.count_sleepers().jail < globals.state.mansionupgrades.jailcapacity:
+							person.sleep = 'jail'
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] has been transported to the mansion and placed in the jail. \n"))
+						else:
+							person.sleep = 'communal'
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] has been transported to the mansion. You are out of free jail cells and $he was assigned to the communal area. \n"))
+					else:
+						text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] " + awayReturnText.get(person.away.at, awayReturnText.default) + "\n"))
+						if person.away.get("prev_work", "") != "":
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name[/color] was [color=red]removed[/color] from $his previous job (" + globals.jobs.jobdict[person.away.prev_work].name + ") while away, so will now be resting.\n"))
+							person.away.erase("prev_work")
+						###---End Expansion---###
+						var sleepChange = false
+						if person.sleep != 'communal':
+							match person.sleep:
+								'personal':
+									sleepChange = globals.count_sleepers().personal > globals.state.mansionupgrades.mansionpersonal
+								'your':
+									sleepChange = globals.count_sleepers().your_bed > globals.state.mansionupgrades.mansionbed
+								'jail':
+									sleepChange = globals.count_sleepers().jail > globals.state.mansionupgrades.jailcapacity
+								'farm':
+									if globals.count_sleepers().farm > variables.resident_farm_limit[globals.state.mansionupgrades.farmcapacity]:
+										sleepChange = true
+										person.job = 'rest'
+						if sleepChange:
+							person.sleep = 'communal'
+							###---Added by Expansion---### Colorized
+							text0.set_bbcode(text0.get_bbcode() + person.dictionary("[color=aqua]$name's[/color] sleeping place is no longer available so $he has moved to the communal area. \n"))
+							###---End Expansion---###
+					person.away.at = ''
+				for i in person.effects.values():
+					if i.has('duration') && i.code != 'captured':
+						###---Added by Expansion---### Hybrid Support && Ank BugFix v4
+						if person.race.find('Tribal Elf') < 0 || i.code in ['bandaged','sedated', 'drunk'] || randf() > 0.5:
+							i.duration -= 1
+						###---End Expansion---###
+						if i.duration <= 0:
+							person.add_effect(i, true)
+					elif i.code == 'captured':
+						if i.duration <= 0:
+							if i.code == 'captured':
+								text0.set_bbcode(text0.get_bbcode() + person.dictionary('$name grew accustomed to your ownership.\n'))
+							person.add_effect(i, true)
+					if i.has("ondayend"):
+						globals.effects.call(i.ondayend, person)
 
 	###---Added by Expansion---### Ovulation System
 	text0.set_bbcode(text0.get_bbcode()+globals.expansion.nightly_womb(globals.player))
@@ -1615,6 +1641,30 @@ func nextdayevents():
 		return
 	startnewday()
 
+func startnewday():
+	rebuild_slave_list()
+	###---Added by Expansion---### Save daily reports
+	globals.state.daily_reports.global = get_node("FinishDayPanel/FinishDayScreen/Global Report").get_bbcode()
+	globals.state.daily_reports.job = get_node("FinishDayPanel/FinishDayScreen/Job Report").get_bbcode()
+	globals.state.daily_reports.secondary = get_node("FinishDayPanel/FinishDayScreen/Secondary Report").get_bbcode()
+	globals.state.daily_reports.farm = get_node("FinishDayPanel/FinishDayScreen/Farm Report").get_bbcode()
+	###---End Expansion---###
+	get_node("FinishDayPanel").show()
+	autosave()
+	if globals.rules.enddayalise == 0:
+		alisebuild(aliseresults)
+	elif globals.rules.enddayalise == 1 && dailyeventhappend:
+		alisebuild(aliseresults)
+		dailyeventhappend = false
+	else:
+		alisehide()
+	_on_mansion_pressed()
+	
+	enddayprocess = false
+#	if globals.state.supporter == false && int(globals.resources.day)%100 == 0:
+#		get_node("sellout").show()
+
+
 func _on_headgirlbehavior_item_selected( ID ):
 	var text = ''
 	if ID == 0:
@@ -1785,11 +1835,11 @@ func build_mansion_info():
 					text += "[color=lime]" + str(round(person.stress)) + "[/color] | [color=aqua]" + str(person.stats.stress_max) + "[/color]"
 				text += "  |  Energy: "
 				if person.energy >= person.stats.energy_max*.8:
-					text += "[color=lime]" + str(person.energy) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
+					text += "[color=lime]" + str(round(person.energy)) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
 				elif person.energy >= person.stats.energy_max*.4:
-					text += "[color=green]" + str(person.energy) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
+					text += "[color=green]" + str(round(person.energy)) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
 				else:
-					text += "[color=red]" + str(person.energy) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
+					text += "[color=red]" + str(round(person.energy)) + "[/color] | [color=aqua]" + str(person.stats.energy_max) + "[/color]"
 				if person.ability.size() > 2:
 					text += "\nAbilities Known: [color=aqua]" + str(person.ability.size() -2) + "[/color]" 
 					if person.learningpoints > 0:
@@ -1893,7 +1943,7 @@ func build_mansion_info():
 		get_node("MainScreen/mansion/AE_Headgirl_TextRect").visible = false
 		get_node("MainScreen/mansion/AE_Headgirl_TextRect/portrait").set_texture(globals.loadimage(globals.sexuality_images.unknown))
 	#---Dimensional Crystal
-	if globals.state.sidequests.dimcrystal == 0:
+	if globals.state.sidequests.dimcrystal == 0 || globals.state.mansionupgrades.dimensionalcrystal == 0:
 		get_node("MainScreen/mansion/AE_DimCrystal").visible = false
 	else:
 		if globals.state.mansionupgrades.dimensionalcrystal >= 6:
@@ -2632,9 +2682,6 @@ func childbirth(person,baby_id):
 	get_node("birthpanel").show()
 	baby = globals.state.findbaby(baby_id)
 	var text = ''
-	###---Added by Expansion---### Add Metrics
-	if person.mind.secrets.has('currentpregnancy') && !person.knowledge.has('currentpregnancy'):
-		person.metrics.preg += 1
 	if globals.state.mansionupgrades.mansionnursery >= 1:
 		if globals.player == person:
 			text = person.dictionary('[color=aqua]You[/color] gave birth to a ')
@@ -2940,6 +2987,7 @@ func _on_selfbutton_pressed():
 		$MainScreen/mansion/selfinspect/selftattoo.set_tooltip("Unlock Beauty Parlor to access Tattoo options. ")
 		$MainScreen/mansion/selfinspect/selfpierce.set_tooltip("Unlock Beauty Parlor to access Piercing options. ")
 	$MainScreen/mansion/selfinspect/Contraception.pressed = person.effects.has("contraceptive")
+	$MainScreen/mansion/selfinspect/defaultMasterNoun.text = globals.state.defaultmasternoun
 
 func updatestats(person):
 	var text = ''
@@ -2967,7 +3015,7 @@ func updatestats(person):
 	get_node("MainScreen/mansion/selfinspect/statspanel/hp").set_value((person.stats.health_cur/float(person.stats.health_max))*100)
 	get_node("MainScreen/mansion/selfinspect/statspanel/en").set_value((person.stats.energy_cur/float(person.stats.energy_max))*100)
 	get_node("MainScreen/mansion/selfinspect/statspanel/xp").set_value(person.xp)
-	text = "Health: " + str(person.stats.health_cur) + "/" + str(person.stats.health_max) + "\nEnergy: " + str(person.stats.energy_cur) + "/" + str(person.stats.energy_max) + "\nExperience: " + str(person.xp)
+	text = "Health: " + str(person.stats.health_cur) + "/" + str(person.stats.health_max) + "\nEnergy: " + str(round(person.stats.energy_cur)) + "/" + str(person.stats.energy_max) + "\nExperience: " + str(person.xp)
 	get_node("MainScreen/mansion/selfinspect/statspanel/hptooltip").set_tooltip(text)
 	if person.imageportait != null && globals.loadimage(person.imageportait):
 		$MainScreen/mansion/selfinspect/statspanel/TextureRect/portrait.set_texture(globals.loadimage(person.imageportait))
@@ -3841,7 +3889,7 @@ func _on_snailbutton_pressed():
 			counter += 1
 			temptext += "\n" + incubators[i].name + ": [color=aqua]Level " +str(incubators[i].level)+"[/color] - "
 			if incubators[i].filled == true:
-				temptext += "[color=green]Incubating Egg Growth (" +str(incubators[i].growth)+"/10) "
+				temptext += "[color=green]Incubating Egg Growth (" +str(incubators[i].growth)+"/10)[/color] "
 			else:
 				temptext += "[color=red]Empty[/color]"
 	text += "\n\n[center]Incubators[/center]\n[center]Total Incubators: [color=aqua]" +str(counter)+ " / 10[/color][/center]\n" + temptext
@@ -4079,7 +4127,7 @@ func _on_workersbutton_pressed():
 	#Farm Manager
 	text += "\n\n\n[color=#d1b970][center]Farm Manager[/center][/color]"
 	for person in workersDict.farmmanager:
-		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(person.energy) + "[/color] - Job Experience: " + str(person.jobskills.farmmanager)
+		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(round(person.energy)) + "[/color] - Job Experience: " + str(person.jobskills.farmmanager)
 		text += "\n\n[color=yellow]Your Farm Manager will serve as a substitute Farm Hand, Milk Maid, or Bottler if none are assigned.[/color]"
 	if workersDict.farmmanager.empty():
 		text += "\n[color=red]None Assigned[/color]"
@@ -4087,7 +4135,7 @@ func _on_workersbutton_pressed():
 	#Farmhands
 	text += "\n\n[color=#d1b970][center]Farm Hands[/center][/color]"
 	for person in workersDict.farmhand:
-		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(person.energy) + "[/color] - Job Experience: " + str(person.jobskills.farmhand)
+		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(round(person.energy)) + "[/color] - Job Experience: " + str(person.jobskills.farmhand)
 		if person.traits.has('Sadist'):
 			text += " - [color=aqua]Sadist[/color]"
 		if person.traits.has('Dominant'):
@@ -4098,7 +4146,7 @@ func _on_workersbutton_pressed():
 	#Milk-Maids
 	text += "\n\n[color=#d1b970][center]Milk Maids[/center][/color]"
 	for person in workersDict.milkmaid:
-		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(person.energy) + "[/color] - Job Experience: " + str(person.jobskills.milking)
+		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(round(person.energy)) + "[/color] - Job Experience: " + str(person.jobskills.milking)
 		if person.traits.has('Sadist'):
 			text += " - [color=aqua]Sadist[/color]"
 		if person.traits.has('Dominant'):
@@ -4109,14 +4157,14 @@ func _on_workersbutton_pressed():
 	#Milk Merchant
 	text += "\n\n[color=#d1b970][center]Milk Merchants[/center][/color]"
 	for person in workersDict.milkmerchant:
-		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(person.energy) + "[/color] - Job Experience: " + str(person.jobskills.milkmerchant)
+		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(round(person.energy)) + "[/color] - Job Experience: " + str(person.jobskills.milkmerchant)
 	if workersDict.milkmerchant.empty():
 		text += "\n[color=red]None Assigned[/color]"
 
 	#Bottlers
 	text += "\n\n[color=#d1b970][center]Bottlers[/center][/color]"
 	for person in workersDict.bottler:
-		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(person.energy) + "[/color] - Job Experience: " + str(person.jobskills.bottler)
+		text += "\n[color=aqua]"+person.name_short()+"[/color] - Energy: " + ("[color=green]" if person.energy >= 20 else "[color=red]") +str(round(person.energy)) + "[/color] - Job Experience: " + str(person.jobskills.bottler)
 	if workersDict.bottler.empty():
 		text += "\n[color=red]None Assigned[/color]"
 	

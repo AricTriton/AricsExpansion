@@ -1,0 +1,146 @@
+#---New Features---#
+<Dimensional Crystal>
+The Crystal button in the Mansion now visually reflects the Crystal's power level from 0-6. Art provided by Rendrassa.
+The Crystal doesn't show if the crystal hasn't been upgraded at least once to minimize confusion.
+
+#---Feature Fixes---#
+Banner resized to be more legible on all but the smallest screen sizes - Art Provided by Rendrassa
+
+Vocal Traits system (automatically added Lisp/Mute) now correctly removes the traits it added. It can also be fully disabled by setting vocal_traits_autochange to false in expansionsettings or via Constants. You can also disable the automatic timer between days if you prefer to allow changes to happen daily.
+
+#---BugFix and Misc Stuff---#
+Fixed the chance of duplicated "nice" tits in description line 673 - Reported by eventide
+Fixed typos in repeatablequests line 466  - Reported by eventide
+Fixed the travel event Taurus girl to not specify the one you'd give to the guild in case the quest wasn't completed yet - Reported by Rendrassa
+Fixed the Town Nudity Laws from proccing on non-major towns like Shaliq and Umbra (as there's no town hall) - Reported by Rendrassa
+Fixed the Dark Crystal Intro repeating (Pending Bugtest) - Reported by [CONFIRM]
+Added effect = null to Deadly Blow to fix the ability hanging - Reported by eventide; Fixed by Ankmairdor
+Fixed an issue from the Prods change to an actual item breaking the backwards compatibility by assigning the number of them over the item itself.
+Fixed the prod prices to match the price in the Farm - Reported by Ankmairdor
+
+#---Other Contributor Notes---#
+Reference Key:
+Person -
+>Feature Focused on
+Details of their Pull Request
+
+Flaire Fleetmist -
+>Wear and Tear System Tweaks
+Adjust pleasure modifier when torn, depending on traits.
+Adjust mood text when torn, depending on traits.
+If torn, should not show text that says the girl loves being stretched.
+If unwilling, text should say pleasure is reluctant.
+Slightly increase the chance to tear during forced sex.
+No relationship penalty for tearing if masochist or likes it rough.
+Display arousal changes correctly if perfectinfo flag is set.
+Lose hitpoints when torn, but the character can't die.
+>Typo Corrections
+Fix a number of typos, and improve wording here and there. Also, change the name of the sex actions from "clap" to "clamp".
+>Hide Talk Notifications Remaining for Non-Owned Slaves
+Hide the "Once per day talk subjects still available today" section in person descriptions, unless you own the slave.
+>Facefuck Fixes
+Ensure that, after an orgasm, the giver's cum is deposited in takers' mouths during facefuck, same as with a blowjob. It might apply to actions other than facefuck, but it should still be correct to add the cum.
+The taker's request for cum in her mouth was previously not satisfied by a facefuck. This fix should remedy that.
+>Brothel Worker Text Expansion
+Expand the texts used to describe whores working in the brothel.
+>I have now provided separate descriptions for the fucktoy job. Many thanks to Alice Bunny for some epic suggestions! I have also slightly updated the wording in the Wimborn brothel text, and expanded the descriptions of the brothel jobs when you select them in the jobs menu. As you may notice, I've pointed out the advantages of working at an established brothel. I have plans to add a "freelance prostitute" job in the future, which would be far more risky.
+My apologies for all the whitespace changes! I'm out travelling at the moment, so I've moved to my laptop. Turns out my Programmer's Notepad was set up to delete trailing whitespace automatically. I'll give it a slap on the nose and tell it not to do that again.
+>
+This provides more variety, so the text description might be worth reading. It also accounts for the way people with different traits and personalities would do things differently, and provides different descriptions based on arousal levels. Unwilling participants will now make their views known. Results will also vary depending on arousal, with the action being slightly more effective as foreplay.
+
+CyrusLance -
+>New Background Image Locations
+Compiled background images from #art_assets to be functional in game.
+Location with new background: Wimborn, Elven Grove, Amber Road, Eerie Grove, Prairie/Gorn Outskirts and the Marsh.
+Vanilla background left untouched and code line disabled - will need code monkey make it toggleable with constants.
+
+durandal3 -
+>Misc Fixes
+Remove duplicate/unused fertilize_egg func
+Round slave sell price at end
+Add line breaks after player daily update, typo
+Fix negative stat traits applying backwards
+Don't show extra bottles that don't bottle anything
+>Remove special casing headgirl/farmmanager daily updates
+Doesn't seem like the ordering of these really matters, and the way it
+was handled prevented all the daily update text for them from being
+shown.
+>Tweak lactation during sex
+Prevent milkstorage from going negative
+Reset pressure to 0
+Tweak message, and only show when lactation occurred
+>Fix milk merchant bottle count and town handling
+Edit handling of number of bottles per worker, so each worker gets an
+integer amount, and all bottles will be used even when there are more
+workers than towns available.
+Fix removing towns sold to from the list of available towns.
+Fix location of a newline.
+>Rebuild race list after applying Ralph's
+>Reset breeding settings when removing a slave from the farm
+Prevents a slave that was assigned to stud from continuing to act as a
+stud even after being removed from the farm.
+>Prevent spilling more fluid than there is
+Previously, a cup with 1 milk could potentially spill out 3 milk,
+causing a negative amount of milk to be delivered.
+>Don't have bottlers bottle 0 bottles
+>Fix error in movement calculation
+The weight variable is negative when things are too heavy, but it was
+being subtracted from energy, meaning additional swelling could lead to
+better movement.
+>Fix bottler upgrade not working until you visit the vats
+The bottler level is stored in two places - as the mansion upgrade, and
+in resources.farmexpanded. The latter is used for determining bottling
+energy cost, but was only being set when you open the vats panel.
+>Fix bottler job skill getting reset
+>Fix discrepancy in required obed when selling slaves
+The text display required obed >= 80 to say you would get upgrade
+points, but the check when selling required >= 90.
+Make these the same, at 80 (same as in vanilla)
+>Fix resting text removing daily update text (including slave name)
+>Check for vagina presence when generating desires during sex
+>Run randomportrait for babies after their primary race is determined
+Previously would always use the mothers race, since it is run before
+updating race based on genealogy.
+>Edit random regen/storage to work like the other random traits
+Before, would always give regen before it could give storage
+>Round character stats for display
+Round energy/stress/etc... for displaying in a few locations:
+Adventuring Party in mansion screen, tooltip for energy bars,
+inventory screen, etc...
+>Add extra message when a returning slave had their job removed
+>Fixes at least a couple things:
+Returned slaves working in the farm (but not other jobs)
+Later slaves may suffer from communal room overcrowding
+Possible it causes some other issue I haven't noticed.
+>A few edits to pregnancies
+Edit pregnancy metric tracking to add when getting pregnant, then check
+for knowledge when showing it. Makes more sense to me this way, and
+fixes a usage of it when milking in the farm. Will also count
+pregnancies that are aborted before being known.
+Fix a condition using .append('currentpregnancy') instead of .has
+Change order of impregnation and ovulation processing, so the ovulation
+state the player sees is accurate.
+>The old place wouldn't update the text in time for the autosave, unless there were events that delayed the save. Some events can also add text to the reports, so also want to wait for those to complete.
+This place should probably work... Could possibly move it to the save function itself? Not sure if that would be appropriate.
+>Fix selling snail eggs... again
+Previous "fix" would subtract too many eggs with multiple merchants.
+>Fix exhibitionism check for public nudity during jobs
+>Add new tooltip for away slaves in party select
+The check for away was at the same time as the check for consent, so a
+slave that gave consent but was away had a tooltip saying they didn't
+give consent yet.
+>Fix selling snail eggs
+Previously would consume eggs, then "sell" the remaining eggs.
+>Correct condition change for draining cum
+The setter for condition makes it not act like a normal number, you set
+it directly to what you want to change it by.
+>Block input when raise baby dialog is open
+So you can't save or go to next day, which are not expected at that time
+>Typo fixes: A couple missing color close tags, missing newline.
+
+warasd1 - 
+>Deadly Blow (Refix?)
+Deadly blow has no effect member and causes a script error at scripts/combat.gd 1055. (And freezes us the game)
+
+Bubblepot -
+>The Player's grade now increases up to Noble by progressing in the main story.

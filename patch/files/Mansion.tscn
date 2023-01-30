@@ -9638,6 +9638,16 @@ size_flags_vertical = 2
 theme = ExtResource( 3 )
 custom_styles/panel = ExtResource( 51 )
 
+[node name="Panel" type="Panel" parent="birthpanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -314.0
+margin_top = -150.0
+margin_right = 283.0
+margin_bottom = 189.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
 [node name="Control" type="Control" parent="birthpanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0

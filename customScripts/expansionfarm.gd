@@ -121,7 +121,7 @@ var reactiondict = {
 		impregnated = {
 			horny = "$He is laying back with a little smile. $He seems to have fully accepted the situation.",
 			pleading = "$He looks over at you and pouts. [color=yellow]\n-Its not too late, right? It...it can be stopped?[/color]",
-			horrified = "$He seems to be in shock still. [color=yellow]\n-Wh-what's happening to me?/color]"
+			horrified = "$He seems to be in shock still. [color=yellow]\n-Wh-what's happening to me?[/color]"
 		},
 		swollen = {
 			horny = "$He seems to be enjoying the feeling of the mass inside of $him. $He is slowly rubbing $his [pussy] while touching $his belly fondly.",
@@ -1371,13 +1371,13 @@ func manageSnails(workersDict):
 	if refSnails.sell > 0:
 		merchantcounter += workersDict.milkmerchant.size()
 		snailresults = refSnails.sell
-		while merchantcounter > 0 && snailresults > 0:
-			snailresults -= round(rand_range(0, snailresults))
+		while merchantcounter > 0 && refSnails.sell > 0:
+			refSnails.sell -= round(rand_range(0, refSnails.sell))
 			merchantcounter -= 1
-		refSnails.sell = snailresults
+		snailresults = snailresults - refSnails.sell
 		var gold = snailresults * refSnails.goldperegg
 		text += "\nYour merchants were able to sell [color=green]" +str(snailresults)+ " eggs [/color] today for [color=yellow]" +str(gold)+ "[/color] gold. "
-		globals.resources.gold += snailresults
+		globals.resources.gold += gold
 	
 	#Incubate & Hatch
 	var hatchedsnails = 0

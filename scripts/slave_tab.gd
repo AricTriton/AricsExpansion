@@ -216,8 +216,11 @@ func buildmetrics():
 	#text += person.dictionary("Of those $he liked: ") + str(person.metrics.roughsexlike) + " time"+globals.fastif(person.metrics.roughsexlike == 1, '','s')+";\n"
 	text += "Had partners: " + textForCountNoun(person.sexexp.partners.size(), " partner") +"\n"
 	text += "Participated in orgies: " + textForCountNoun(person.metrics.orgy, " time") +"\n"
-	if person.preg.has_womb == true || person.metrics.preg > 0:
-		text += "Was pregnant: " + textForCountNoun(person.metrics.preg, " time") +"\n"
+	var known_preg = person.metrics.preg
+	if person.preg.is_preg and !person.knowledge.has('currentpregnancy'):
+		known_preg -= 1
+	if (person.preg.has_womb == true) || (known_preg > 0) || (person.metrics.birth > 0):
+		text += "Was pregnant: " + textForCountNoun(known_preg, " time") +"\n"
 		if person.preg.baby_type == 'birth':
 			text += "Gave birth: " + textForCountNoun(person.metrics.birth, " time") +" to " + textForCountNoun(person.preg.offspring_count, " kid") +"\n"
 		else:
@@ -667,7 +670,7 @@ func updatestats():
 	get_node("stats/statspanel/hp").set_value((person.stats.health_cur/float(person.stats.health_max))*100)
 	get_node("stats/statspanel/en").set_value((person.stats.energy_cur/float(person.stats.energy_max))*100)
 	get_node("stats/statspanel/xp").set_value(person.xp)
-	text = "Health: " + str(person.stats.health_cur) + "/" + str(person.stats.health_max) + "\nEnergy: " + str(person.stats.energy_cur) + "/" + str(person.stats.energy_max) + "\nExperience: " + str(person.xp) 
+	text = "Health: " + str(person.stats.health_cur) + "/" + str(person.stats.health_max) + "\nEnergy: " + str(round(person.stats.energy_cur)) + "/" + str(person.stats.energy_max) + "\nExperience: " + str(person.xp) 
 	get_node("stats/statspanel/hptooltip").set_tooltip(text)
 	get_node("stats/statspanel/grade").set_texture(gradeimages[person.origins])
 	###---Added by Expansion---### Jail Images

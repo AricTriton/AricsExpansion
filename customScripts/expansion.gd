@@ -156,7 +156,7 @@ func updatePerson(person):
 	#Update Traitlines
 	updateSexuality(person)
 	updateSexualityImage(person)
-	
+
 	updateFertility(person)
 
 	#Update Body
@@ -169,7 +169,7 @@ func updatePerson(person):
 	setFetishes(person)
 	if person.consentexp.incest == true:
 		setFetishConsent(person,'incest')
-	
+
 	#---Trait Alteration
 	setTraitsperFetish(person)
 
@@ -337,7 +337,7 @@ func updateSexualityOld(person,shift=0):
 			var trait = globals.origins.trait(i)
 			if trait.tags.has('sexualitytrait'):
 				person.trait_remove(i)
-	
+
 	#Update Bisexual/Homosexual Traits
 	if globals.kinseyscale.find(person.sexuality) >= 5:
 		if !person.traits.has('Homosexual'):
@@ -860,7 +860,7 @@ func correctGenes(person):
 					person.genealogy[race] = person2.genealogy[race]
 					percent += person.genealogy[race]
 				break
-	
+
 	if percent > 0:
 		while percent != 100:
 			percent = globals.constructor.build_genealogy_equalize(person, percent)
@@ -1108,25 +1108,27 @@ func nameHelplessOrgasmPreface():
 func nameHelplessOrgasm():
 	return globals.randomitemfromarray(['came','orgasmed','came so hard that $he squirted','relentlessly orgasmed','moaned in orgasm','responded instinctually','gave in to $his animalistic urges','responded helplessly','grunted like a bitch in heat','squealed as $he orgasmed','gushed in esctasy','drenched $himself'])
 
-func getBrothelWhoreDescription(id):
-	var name = "[url=id" + str(id) + "][color=yellow]$name[/color][/url]"
+func getBrothelWhoreDescription(person):
+	var name = "[url=id" + str(person.id) + "][color=yellow]$name[/color][/url]"
 	var races = ["a human", "a human", "a human", "a human", "a human", "an elf", "a dark elf", "a tribal elf", "an orc", "a gnome"]
 	var intros = [
 		"You can see " + name,
 		"You see " + name,
 		"You notice " + name,
 		"You spot " + name,
+		"You observe " + name,
+		"You pause to admire " + name,
 		name + " is"
 	]
 	var awayWithClientTasks = [
 		"$He is probably in a private room with a client.",
 		"$He is probably serving a client.",
 		"$He is most likely in a private room, serving a client.",
-		"However, you hear a series of muffled squeals from a nearby room that sort of sound like $him.",
+		"However, you hear a series of muffled squeals from a nearby room that sort of sound like $him."
 	]
 	var loungingTasks = [
 		".",
-		", catching her breath.",
+		", catching $his breath.",
 		", trying to look enticing.",
 		", glancing seductively at " + globals.randomitemfromarray(races),
 		", waving coquettishly at " + globals.randomitemfromarray(races) + ", who seems rather interested in $him."
@@ -1156,11 +1158,91 @@ func getBrothelWhoreDescription(id):
 	]
 	for i in 4:
 		activities.append(globals.randomitemfromarray(intros) + " with " + globals.randomitemfromarray(races) + globals.randomitemfromarray(servingClientTasks))
-	
+
 	return "\n" + globals.randomitemfromarray(activities)
 
-func getBrothelFucktoyDescription(id):
-	return getBrothelWhoreDescription(id)
+func getBrothelFucktoyDescription(person):
+	var name = "[url=id" + str(person.id) + "][color=yellow]$name[/color][/url]"
+	var intros = [
+		"You can see " + name,
+		"You see " + name,
+		"You notice " + name,
+		"You spot " + name,
+		"You observe " + name,
+		"You pause to admire " + name,
+		name + " is"
+	]
+	var awayWithClientTasks = [
+		"However, you hear faint cries from a private room that sound like '...too cold! It's too cold!' That must be $him.",
+		"However, you can hear $his voice coming from a private room, crying 'Stop! It tickles! Ahahah!'",
+		"However, you hear $his voice from a private room, squeaking 'Noo! Not in there!'",
+		"However, you think you hear $his nervous laughter coming from a private room nearby. 'Seriously? That'll never fit!'",
+		"However, you hear a sharp scream from a nearby room. That might be $him. A bit of pain is part of the job.",
+		"However, you hear a series of frantic but muffled screams from a nearby room that sort of sound like $him. Whatever is going on in there must be rather painful."
+	]
+
+	var hasTits = person.titssize != 'masculine' && person.titssize != 'flat'
+	var chest = "breasts"
+	if !hasTits:
+		chest = "chest"
+
+	var worm = globals.randomitemfromarray(intros)
+	if person.vagina != "none":
+		worm += " tied upside down, with a geeky-looking customer trying to encourage an inquisitive yellow-striped snake to enter $his pussy."
+	else:
+		worm += " strapped to a table, with a geeky-looking customer trying to encourage an inquisitive earthworm to enter $his urethra."
+
+	var activities = [
+		name + " is nowhere to be seen. " + globals.randomitemfromarray(awayWithClientTasks),
+		"You can't see " + name + " anywhere. " + globals.randomitemfromarray(awayWithClientTasks),
+		"You fail to spot " + name + ". " + globals.randomitemfromarray(awayWithClientTasks),
+		globals.randomitemfromarray(intros) + " tied to an X-cross, having $his " + chest + " whipped publicly. $He squeals with each lash.",
+		globals.randomitemfromarray(intros) + " on $his knees, fully naked, serving as a table. $He has $his bum in the air, and two pitchers of ale balanced on $his back.",
+		worm,
+		globals.randomitemfromarray(intros) + " on $his knees, sipping sparkling wine from a reclining customer's long, stretched-out foreskin.",
+		globals.randomitemfromarray(intros) + " tied to a leather bench, with a customer dripping melted wax in intricate patterns across $his " + chest + " as $he squirms and squeals.",
+		globals.randomitemfromarray(intros) + " covered in oil, engaged in a nude wrestling match with another whore. $He appears to be winning.",
+		globals.randomitemfromarray(intros) + " kneeling in front of a customer, his penis in $his mouth, trying $his best to drink it all without spilling. Judging by his softness, the customer is not cumming.",
+		"You can barely see " + name + " crouched under a table, strapped in an uncomfortable-looking harness. $He is ready to orally service the next customer who decides to sit at the table.",
+		"You can just barely see " + name + " crouched under a table, strapped in an uncomfortable-looking harness. $He is busily licking an elegantly dressed lady who is seated at the table, apparently completely unperturbed by the attention."
+	]
+
+	if person.vagina != "none":
+		# Girls only.
+		activities.append(globals.randomitemfromarray(intros) + " blindfolded, trying to move along a rough hemp rope held up by a pair of enthusiastic customers. The rope appears to be dug in deep between $his legs.")
+		activities.append(globals.randomitemfromarray(intros) + " tied upside down in a cloud of smoke, spreading $his labia with trembling fingers. Customers appear to be using $him as an ashtray.")
+		if person.age != "child":
+			if person.titssize == "flat":
+				activities.append(globals.randomitemfromarray(intros) + " tied to the wall, surrounded by a group of customers who are making fun of $his nearly flat chest. By the looks of it, $he's on the verge of crying.")
+			elif person.titssize == "small":
+				activities.append(globals.randomitemfromarray(intros) + " tied to the wall, surrounded by a group of customers who are making fun of $his tiny tits. By the looks of it, $he's about to start crying.")
+		if person.vagvirgin:
+			activities.append(globals.randomitemfromarray(intros) + " strapped to a table in the centre of the room, with several customers spreading $his labia in awe, admiring $his intact hymen. $He's blushing furiously under their gaze.")
+			activities.append(globals.randomitemfromarray(intros) + " lying on $his back on a customer's lap as he gingerly parts $his lips to drool over $his intact hymen, a look of anticipation on his face. $He squeezes $his eyes shut, a tear trickling down $his cheek.")
+		else:
+			activities.append(globals.randomitemfromarray(intros) + " firmly tied upside down, with a generous number of lollipops protruding from $his crowded pussy. Occasionally a customer helps themselves to one.")
+			activities.append(globals.randomitemfromarray(intros) + " surrounded by cheering customers encouraging $him to impale $his pussy on a cone-shaped dildo. $He is wincing from the size of it.")
+			activities.append("A hole in the wall reveals someone's pussy slit, presented at just the right height. It is already moist with cum, and her clit hood looks sore. With an expert eye for your own property, you guess it belongs to " + name + ".")
+	elif person.penis != "none":
+		# Guys only.
+		activities.append(globals.randomitemfromarray(intros) + " with $his arms tied over $his head, being used as a punching bag by a group of cheering customers.")
+		activities.append(globals.randomitemfromarray(intros) + " surrounded by customers betting how long $he can keep $his penis in a pot of water as it is slowly heated.")
+		activities.append(globals.randomitemfromarray(intros) + " kneeling in a cloud of smoke, face to the floor and spreading $his ass cheeks with trembling hands. Customers appear to be using $him as an ashtray.")
+		activities.append("You spot a naked butt protruding from a hole in the wall, ready for use by anyone. You think it might belong to " + name + ". A cane has been helpfully hung from a hook right next to $him.")
+		activities.append("A penis dangles invitingly from a hole in an outward-sloping wall, available for use and abuse. You think it might belong to " + name + ". A tray of nasty-looking clips can be found nearby.")
+		if person.age != "child" && (person.penis == "micro" || person.penis == "tiny" || person.penis == "small"):
+			activities.append(globals.randomitemfromarray(intros) + " tied to the wall, surrounded by a group of customers who are making fun of $his tiny penis. $He's doing $his best to hold back $his tears.")
+		if !person.assvirgin:
+			activities.append(globals.randomitemfromarray(intros) + " surrounded by cheering customers encouraging $him to impale $his ass on a cone-shaped dildo. $He is wincing from the size of it.")
+
+	if hasTits:
+		activities.append(globals.randomitemfromarray(intros) + " surrounded by customers betting how long $he can keep $his nipples touching a pot of water as it is slowly heated.")
+		if person.titsextra >= 1 && person.titsextradeveloped:
+			activities.append(globals.randomitemfromarray(intros) + " using $his nipples to paint on a canvas. $His artwork is impressively colourful. After all, lots of nipples allow lots of colours.")
+		else:
+			activities.append(globals.randomitemfromarray(intros) + " using $his nipples to paint on a canvas. $His art looks pretty good, considering $he's restricted to two colours.")
+
+	return "\n" + globals.randomitemfromarray(activities)
 
 #Non-Generic Description Names for Body Parts
 func getChest(person):
@@ -1197,7 +1279,7 @@ func getCumCoatedDescription(person,part):
 	var text = ""
 	#Cum on Face
 	if person.cum.face > 0 && part == 'face':
-		text += "\n$His " + globals.randomitemfromarray(['','',' ' +str(person.race)+ ' '])
+		text += "\n$His " + globals.randomitemfromarray(['','',str(person.race)+ ' '])
 		if person.cum.face >= 10:
 			text += 'face is ' + globals.randomitemfromarray(['undiscernable underneath the ','completely coated in the ','unrecognizable in the ','concealed beneath ','hidden under ']) + "layers of "
 		elif person.cum.face > 5:
@@ -1209,7 +1291,7 @@ func getCumCoatedDescription(person,part):
 		text += '[color=#E0D8C6]' + nameCum() + '[/color].\n'
 	#Cum on Body
 	if person.cum.body > 0 && part == 'body':
-		text += "$His " + globals.randomitemfromarray(['','',' ' +str(person.race)+ ' ']) + str(getChest(person)) + ' are '
+		text += "$His " + globals.randomitemfromarray(['','',str(person.race)+ ' ']) + str(getChest(person)) + ' are '
 		if person.exposed.chest == true:
 			if person.cum.body >= 10:
 				text += globals.randomitemfromarray(['undiscernable underneath the ','completely coated in the ','unrecognizable in the ','concealed beneath ','hidden under ']) + "layers of "
@@ -1221,7 +1303,7 @@ func getCumCoatedDescription(person,part):
 				text += globals.randomitemfromarray(['streaked with ','dotted with ','speckled with '])
 			text += '[color=#E0D8C6]' + nameCum() + '[/color].\n'
 		else:
-			text += ' covered by clothing, but you see a series of ' + globals.randomitemfromarray(['wet','gloopy','moist','damp','dark']) + ' spots on $his clothing that seem to be sticking to $his ' + str(getChest(person)) + '. ' + globals.randomitemfromarray(['Maybe it is just water?','Could it be water?','Maybe they spilled milk?','What it could be?','Interesting...'])
+			text += 'covered by clothing, but you see a series of ' + globals.randomitemfromarray(['wet','gloopy','moist','damp','dark']) + ' spots on $his clothing that seem to be sticking to $his ' + str(getChest(person)) + '. ' + globals.randomitemfromarray(['Maybe it is just water?','Could it be water?','Maybe they spilled milk?','What it could be?','Interesting...'])
 	return text
 
 func getSwollenDescription(person,short=false):
@@ -1474,12 +1556,12 @@ func getMovementIcon(person):
 		text += "lay"
 	else:
 		text += str(person.movement)
-	
+
 	if int(person.exposed.chest) + int(person.exposed.genitals) + int(person.exposed.ass) >= 2:
 		text += "_naked"
 	else:
 		text += "_clothed"
-	
+
 	if person.sex != "male":
 		var trimester = getTrimester(person)
 		getSwollen(person)
@@ -1492,7 +1574,7 @@ func getMovementIcon(person):
 				text += "_2"
 			else:
 				text += "_1"
-	
+
 	return text
 
 var sexualityText = {
@@ -1617,13 +1699,13 @@ func assOverload(person):
 func ovulation_day(person):
 	var expansion = globals.expansion
 	var expansionsetup = globals.expansionsetup
-	
+
 	if person.preg.has_womb == false || person.race_type == 4:
 		return
-	
+
 	if person.preg.ovulation_type <= 0 || person.preg.baby_type == '':
 		globals.constructor.set_ovulation(person)
-	
+
 	if person.preg.is_preg == false:
 		if person.preg.ovulation_stage == 0:
 			globals.constructor.setRandomOvulationDay(person)
@@ -1641,7 +1723,7 @@ func ovulation_day(person):
 		else:
 			person.preg.ovulation_stage = 1
 			person.preg.ovulation_day = 1
-		
+
 	#Semen Cleanser
 	for i in person.preg.womb.duplicate():
 		if i.day >= globals.expansionsettings.semenlifespan:
@@ -1651,12 +1733,12 @@ func ovulation_day(person):
 			if person.cum.pussy >= 1:
 				i.semen = i.semen * 1.2
 				person.cum.pussy -= 1
-	
+
 	#globals.traceFile('ovulation day')
 
 func fertilize_egg(mother, father_id, father_unique):
 	var father
-	
+
 	###Get/Build Father
 	if father_id != null && father_id != '-1' && !father_unique in ['','dog','horse']:
 		father = globals.state.findslave(father_id)
@@ -1672,10 +1754,10 @@ func fertilize_egg(mother, father_id, father_unique):
 		father.race = globals.getracebygroup("starting")
 		globals.constructor.set_genealogy(father)
 		father.id = '-1'
-		
+
 		if father_unique != null:
 			father.unique = father_unique
-		
+
 		globals.constructor.clearGenealogies(father)
 		if father_unique == 'bunny':
 			father.genealogy.bunny = 100
@@ -1716,7 +1798,7 @@ func fertilize_egg(mother, father_id, father_unique):
 		else:
 			father.race = globals.getracebygroup("starting")
 			globals.constructor.set_genealogy(father)
-	
+
 	#Consent/Wanted Pregnancy Check
 	if father.id == globals.player.id:
 		mother.pregexp.wantedpregnancy = mother.consentexp.pregnancy
@@ -1743,28 +1825,27 @@ func nightly_womb(person):
 
 	person.preg.fertility = clamp(person.preg.fertility + 10 * (person.health / person.stats.health_max - 0.6) + 10 * (0.6 - person.stress / person.stats.stress_max), -20, 50)
 
-	ovulation_day(person)
-	if person.preg.has_womb == false || person.preg.is_preg == true || person.preg.ovulation_type <= 0 || person.preg.ovulation_stage != 1 || person.effects.has('contraceptive'):
-		return text
+	# Check if valid for impregnation
+	if person.preg.has_womb && !person.preg.is_preg && person.preg.ovulation_type > 0 && person.preg.ovulation_stage == 1 && !person.effects.has('contraceptive'):
+		var bonus = 1.25 if globals.state.spec == "Breeder" else 1
+		var fertility = round(5 + max(person.preg.fertility + person.preg.bonus_fertility, 0) * person.pregexp.eggstr)
+		if person.traits.has("Fertile"):
+			fertility *= 1.5
+		elif person.traits.has("Infertile"):
+			fertility *= 0.5
 
-	var bonus = 1.25 if globals.state.spec == "Breeder" else 1
-	var fertility = round(5 + max(person.preg.fertility + person.preg.bonus_fertility, 0) * person.pregexp.eggstr)
-	if person.traits.has("Fertile"):
-		fertility *= 1.5
-	elif person.traits.has("Infertile"):
-		fertility *= 0.5
-	
-	fertility *= bonus
-	var multiBabyLimitChance = 100 - globals.expansionsettings.multipleBabyChance
-	for i in person.preg.womb:
-		if bonus * round(i.semen) * i.virility > rand_range(0,100):
-			i.day -= 1
-			if fertility > rand_range(0,100):
-				#if person.preg.baby_type == 'birth':
-				fertilize_egg(person,i.id,i.unique)
-				if rand_range(0,100) <= multiBabyLimitChance || person.preg.unborn_baby.size() > 3:
-					break
-	
+		fertility *= bonus
+		var multiBabyLimitChance = 100 - globals.expansionsettings.multipleBabyChance
+		for i in person.preg.womb:
+			if bonus * round(i.semen) * i.virility > rand_range(0,100):
+				i.day -= 1
+				if fertility > rand_range(0,100):
+					#if person.preg.baby_type == 'birth':
+					fertilize_egg(person,i.id,i.unique)
+					if rand_range(0,100) <= multiBabyLimitChance || person.preg.unborn_baby.size() > 3:
+						break
+
+	ovulation_day(person)
 	
 	#globals.traceFile('nightly_womb')
 	return text
@@ -1818,14 +1899,14 @@ func dailyPregnancy(person):
 		#	#Realize Pregnant if haven't yet
 		#	if !person.mind.secrets.has('currentpregnancy') && !person.knowledge.has('currentpregnancy'):
 		#		getSecret(person,'currentpregnancy')
-	
+
 		#Second and Third
 		else:
 			person.lactation = true
 			#Realize Pregnant if haven't yet
 			if !person.mind.secrets.has('currentpregnancy') && !person.knowledge.has('currentpregnancy'):
 				getSecret(person,'currentpregnancy')
-			
+
 		#Set Wanted Pregnancy
 		if person.mind.secrets.has('currentpregnancy') || person.knowledge.has('currentpregnancy'):
 			setWantedPregnancy(person)
@@ -1941,7 +2022,7 @@ func dailyCrystal():
 
 	#Check for Researcher
 	var researcher = getCrystalResearcher()
-	
+
 	#Check for Abilities
 	var moreabilitiesexist = false
 	var allabilities = globals.expansion.dimcrystal_abilities_array
@@ -1949,7 +2030,7 @@ func dailyCrystal():
 		if !refCrystal.abilities.has(abilitycheck):
 			moreabilitiesexist = true
 			break
-	
+
 	if researcher == null:
 		if globals.expansionsettings.show_warning_if_missing_researcher == true && globals.state.sidequests.dimcrystal != 0 && moreabilitiesexist == true:
 			text = "\n[center][color=red]No Researcher was assigned to study the [color=#E389B9]Dimensional Crystal[/color] today.[/color][/center]"
@@ -1957,14 +2038,14 @@ func dailyCrystal():
 				text = "\n[center][color=red]Half of the actively completed Research was lost due to the absense of the Researcher[/color][/center]."
 				refCrystal.research = round(refCrystal.research*.5)
 		return text
-	
+
 	#Set Research if Unassisted
 	if refCrystal.research <= 0:
 		if researcher.smaf >= globals.state.mansionupgrades.dimensionalcrystal:
 			refCrystal.research = round(rand_range(researcher.smaf, researcher.wit))
 		else:
 			text += researcher.dictionary("\n[center][color=red]Your [color=aqua]Crystal Researcher[/color], [color=aqua]$name[/color] comes over to you holding $his head. $He sadly reports $he was unable to even interact with the magical power within the [color=#E389B9]Crystal[/color] and was completely overwhelmed by its power. Either $he needs more [color=aqua]Magical Affinity[/color], you will need to [color=aqua]actively assist[/color] $him from within the [color=aqua]Crystal's panel[/color], or you may need to assign a new [color=aqua]Researcher[/color].[/color][/center]")
-	
+
 	#Crystal Time
 	if globals.player.dailyevents.count('dimcrystaldarkened') > 0:
 		refCrystal.mode = "dark"
@@ -1989,25 +2070,25 @@ func dailyCrystal():
 			refCrystal.lifeforce += 1
 		if rand_range(40,100) <= refCrystal.research && refCrystal.lifeforce < globals.state.mansionupgrades.dimensionalcrystal:
 			refCrystal.lifeforce += 1
-	
+
 	if refCrystal.abilities.size() > 0 && !refCrystal.abilities.has('attunement'):
 		if rand_range(50,100) <= refCrystal.research:
 			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
 			text += "You dream deeply. You are standing before the [color=#E389B9]Crystal[/color] in your Mansion and staring deeply into the flowing energy within it. As you watch, the energy begins to split and separate itself into understandable forms. You see the [color=aqua]Coloration[/color] of the [color=#E389B9]Crystal[/color]. You see the latent [color=aqua]Lifeforce[/color] inside it and the [color=red]Hunger[/color] consuming those trapped souls. You feel [color=green]Attuned[/color] to the [color=#E389B9]Crystal[/color]. "
-			refCrystal.abilities.append('attunement')	
-	
+			refCrystal.abilities.append('attunement')
+
 	if globals.state.mansionupgrades.dimensionalcrystal >= 1 && !refCrystal.abilities.has('pregnancyspeed'):
 		if rand_range(35,100) <= refCrystal.research:
 			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
 			text += "You dream that you are the [color=#E389B9]Crystal[/color]. You feel life moving within your walls. Life grows. You love life. You are life. You see the growing sprouts and water them with words. They burst out of their seeds and grow mightily. You bask in their life.\nYou awaken and write down the words uttered in your dream. You have been granted the secret of [color=green]Altering Pregnancy Speeds[/color]. "
 			refCrystal.abilities.append('pregnancyspeed')
-	
+
 	elif globals.state.mansionupgrades.dimensionalcrystal >= 1 && !refCrystal.abilities.has('empowervirginity'):
 		if rand_range(40,100) <= refCrystal.research:
 			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
 			text += "You dream a dream of ephemeral beauty. You feel yourself in the body of another, feeling spry and treasured. You hold in your hand two flawless jewels. Inside of each radiates the octarine glow of mana, begging to be released. You feel yourself fall enamored with the pristine beauty of these orbs. They are perfect, untarnished, and untouched. You feel your singular focus embuing these objects with a deeper meaning, a deeper magic, as long as they remain untarnished simply on the premise of how fleeting they are. You pull back to feel the power these now only have when in perfect, pristine condition. You feel the power their loss will have, magic pouring out like a flood, these temporal seals are tarnished. Your crystaline mind retreats from the passing fancy, the sentient creature, and you now sense how to ask the [color=#E389B9]Crystal[/color] to actually fulfill it's fascination with real magic.\n\nYou awaken with a start. Apparently the only thing that can fascinate an indistructable, eternal artifact are things that are so temporary. You have been granted the secret of [color=#E389B9]Empowering Virginities[/color]. You may now ask the [color=#E389B9]Crystal[/color] to give a [color=green]stacking multiplier of 5x the normal mana produced[/color] at the end of a sexual encounter in the Mansion for [color=green]any virginities taken[/color], but losing [color=red]half of the mana normally produced[/color] when [color=red]they lose neither vaginal or anal virginities during sex[/color]. "
 			refCrystal.abilities.append('empowervirginity')
-	
+
 	elif globals.state.mansionupgrades.dimensionalcrystal >= 2 && !refCrystal.abilities.has('secondwind'):
 		if rand_range(50,100) <= refCrystal.research:
 			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
@@ -2019,14 +2100,14 @@ func dailyCrystal():
 			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
 			text += "You dream that you are the [color=#E389B9]Crystal[/color]. You feel each soul living within the warmth of your glow. You see a shadowy, skeletal entity sneak within your glow and raise a long scythe above one of your beings. You mutter a series of words and sent a part of your essence to banish the entity.\nWhen you awaken, you write the words down. You have been granted the secret of [color=green]Immortality[/color]. "
 			refCrystal.abilities.append('immortality')
-	
+
 	elif (refCrystal.mode == "dark" || refCrystal.lifeforce <= 0) && !refCrystal.abilities.has('sacrifice'):
 		if rand_range(-25,100) <= refCrystal.research:
 			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
 			text += "You dream that you are famished. You look down and see your ribs poking through your skin. Hunger. You need hunger. You need LIFE! You sit in a corner and wait. A rat scurries into your view.\nLife. Life for you.\nYou rush forward and snap the creatures neck. You sink your teeth in and feel your hunger subside. "
 			text += "\n\n[color=yellow]-Good. Good. You know hunger too. You know what it is to consume life.[/color]\nThe voice ripples through you and you see teeth. You look up into it's gaping maw and squeak. Your tail squishes back and forth in a panic and you try to move. But the tentacles around you body aren't going to let you escape. As you feel yourself approach the teeth, you feel your rat-like body crumple and you wake up. For better or worse, you now know two things. You know how you can feed the [color=#E389B9]Crystal[/color]. And now, you know you must."
 			refCrystal.abilities.append('sacrifice')
-	
+
 	elif refCrystal.abilities.has('sacrifice') && !refCrystal.abilities.has('understandsacrifice'):
 		if rand_range(0,100) <= refCrystal.research:
 			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
@@ -2034,7 +2115,7 @@ func dailyCrystal():
 			text += "You look in amazement as the woman turns to walk off. You look at the [color=#E389B9]Crystal[/color] and see cracks and veins start to appear in it's surface. You see a tendril reach out towards you.\nYou open your mouth to protest 'I am still alive!' and a loud bleating erupts from your lips. It reaches into your open mouth and extends through your body. You sense it draining every one of your levels to restore it's hunger, then finally take your lifeforce back into it. As your soul splits off from your body, you see the cracks and veins healing. "
 			text += "You now understand how the sacrifices work. "
 			refCrystal.abilities.append('understandsacrifice')
-	
+
 	refCrystal.research = 0
 
 	return text
@@ -2066,7 +2147,7 @@ func dailyUpdate(person):
 	#Header
 	if person != globals.player:
 		text += person.dictionary("[color=#d1b970][center]$name[/center][/color]\n")
-	
+
 	#Pregnancy Dailies
 	temptext = dailyPregnancy(person)
 	if temptext != null:
@@ -2089,14 +2170,14 @@ func dailyUpdate(person):
 	#Cum Drip (Will move to bath) || Expanded by Deviate
 	var vagcapacity = getCapacity(person, person.vagina)
 	var asscapacity = getCapacity(person, person.asshole)
-	
+
 	if person.cum.mouth > 0 && person.fetish.drinkcum in ['mindblowing','enjoyable','acceptable']:
 		text += "\n$name had " +nameCum()+ " still in $his mouth and swallowed it. "
 		person.cum.mouth = 0
 	elif person.cum.mouth > 0:
 		text += "\n$name had " +nameCum()+ " still in $his mouth and washed it out. "
 		person.cum.mouth = 0
-	
+
 	#---Daily Baths
 	#Player (Auto)
 	if person == globals.player:
@@ -2134,7 +2215,7 @@ func dailyUpdate(person):
 		elif person.cum.face > 0:
 			text += "\n$name had " +nameCum()+ " on $his face from the day's activities and washed it off. "
 			person.cum.face = 0
-		
+
 		if person.cum.body > 15:
 			text += "\n$name had " +nameCum()+ " stuck to $his body and cleaned it off. "
 			person.cum.body = 0
@@ -2156,7 +2237,7 @@ func dailyUpdate(person):
 				text += "\n$name had " +nameCum()+ " still in $his asshole. Throughout the day some drained down $his thighs. "
 				person.cum.ass -= person.cum.ass *.25
 			else:
-				text += "\n$name had " +nameCum()+ " still in $his asshole. "	
+				text += "\n$name had " +nameCum()+ " still in $his asshole. "
 		else:
 			if person.cum.ass > asscapacity * 2:
 				text += "\n$name had " +nameCum()+ " still in $his asshole and washed out as much of it as $he could. "
@@ -2169,12 +2250,12 @@ func dailyUpdate(person):
 				person.cum.ass = 0
 
 	person.cum.ass = max(0, person.cum.ass - .2)
-	
+
 	if person.cum.pussy > 0:
 		if person.fetish.creampiepussy in ['mindblowing','enjoyable','acceptable']:
 			if person.cum.pussy > vagcapacity * 2:
 				text += "\n$name had " +nameCum()+ " still in $his pussy. Throughout the day some drained down $his thighs. "
-				person.cum.pussy -= person.cum.pussy *.5	
+				person.cum.pussy -= person.cum.pussy *.5
 			elif person.cum.pussy > vagcapacity:
 				text += "\n$name had " +nameCum()+ " still in $his pussy. Throughout the day some drained down $his thighs. "
 				person.cum.pussy -= person.cum.pussy *.25
@@ -2192,7 +2273,7 @@ func dailyUpdate(person):
 		else:
 			if person.cum.pussy > vagcapacity * 2:
 				text += "\n$name had " +nameCum()+ " still in $his pussy and washed out as much of it as $he could. Throughout the day some drained down $his thighs. "
-				person.cum.pussy -= person.cum.pussy *.5	
+				person.cum.pussy -= person.cum.pussy *.5
 			elif person.cum.pussy > vagcapacity:
 				text += "\n$name had " +nameCum()+ " still in $his pussy and washed out as much of it as $he could. Throughout the day some drained down $his thighs. "
 				person.cum.pussy -= person.cum.pussy *.25
@@ -2220,7 +2301,7 @@ func dailyUpdate(person):
 		else:
 			var lipincreasechance = globals.expansionsettings.lipstraitbasechance + (10*(globals.lipssizearray.find(person.lips)-6))
 			var lipdecreasechance = globals.expansionsettings.lipstraitbasechance + (10*(7 - globals.lipssizearray.find(person.lips)))
-			
+
 			#Repair Speech
 			if person.npcexpanded.temptraits.has('Mute') && person.traits.has('Mute') && person.lips != globals.lipssizearray.back():
 				if rand_range(0,100) <= lipdecreasechance:
@@ -2250,14 +2331,14 @@ func dailyUpdate(person):
 							person.npcexpanded.temptraits.append('Mute')
 							text += "\n$name is no longer able to speak due to $his massive lips. $He is now [color=red]Mute[/color]. $He may naturally be able to speak again in time as long as $his lips are not the size of a [color=aqua]Facepussy[/color]."
 							vocaltraitchanged = true
-		
+
 		#Delay Timer between Changes
 		if vocaltraitchanged == true:
 			var delays = clamp(round(rand_range(-3,3) + (globals.lipssizearray.find(person.lips)*.5)), 1, 7)
 			while delays > 0:
 				person.npcexpanded.temptraits.append('vocaltraitdelay')
 				delays -= 1
-	
+
 	#Clamp Jobskills at 0-100
 	var job = person.work
 	for i in person.jobskills:
@@ -2276,7 +2357,7 @@ func dailyUpdate(person):
 	if person.lactation == true && person.lactating.milkedtoday == false && person.lactating.milkstorage > 0:
 		getMilkLeak(person,50)
 #		dailyMilking(person,'none',false)
-	
+
 	#Resets it for the next day
 	person.lactating.milkedtoday = false
 
@@ -2796,7 +2877,7 @@ func dailyTownEvents():
 			if gold_lost > 0:
 				text += "\n\nYou spent a total of [color=yellow]" + str(gold_lost) + "[/color] paying off existing [color=red]fines[/color] today in [color=aqua]" + town.capitalize() + "[/color]. "
 				globals.resources.gold -= gold_lost
-		
+
 	return text
 
 func getTownReportText(senttown):
@@ -2838,7 +2919,7 @@ func getTownReportText(senttown):
 
 	if !town.pendingexecution.empty():
 		text += "There are also [color=aqua]" +str(town.pendingexecution.size())+ "[/color] people awaiting sentencing and execution in the town dungeon right now. "
-	
+
 	#Town Events
 	if !town.currentevents.empty():
 		if town.currentevents.has('public_nudity_success'):
@@ -2846,7 +2927,7 @@ func getTownReportText(senttown):
 		if town.currentevents.has('public_nudity_failure'):
 			text += "\n\n[center]Council Vote![/center]\nThe Council voted on a proposition to legalize Public Nudity yesterday. This vote did not receive enough support from the citizens of the town to pass. [color=aqua]Public nudity[/color] remains [color=red]Illegal[/color]."
 		town.currentevents.clear()
-		
+
 	if town.dailyreport.text != "":
 		text += town.dailyreport.text
 	return text
@@ -3035,7 +3116,7 @@ func dailyLactation(person):
 		var transfer = round(lact.milkstorage * globals.expansionsettings.lacation_pressurepermilkstored)
 		lact.pressure += transfer
 		lact.milkstorage -= transfer
-	
+
 	#Hyperlactation
 	if person.lactating.hyperlactation == true:
 		pressure = person.lactating.milkstorage - person.lactating.milkmax
@@ -3047,7 +3128,7 @@ func dailyLactation(person):
 					text += "$name's "+ str(person.titssize) +" "+nameTits()+ " were so filled and full of pressure that $his body could only handle it by "+nameStretching()
 					person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)+1]
 					var hpdamage = round(rand_range(pressure,pressure*2.5))
-					text += " to "+ str(person.titssize) +".\nThis caused damage to $his health. [color=red]" +str(hpdamage)+ " Health Lost[color]"
+					text += " to "+ str(person.titssize) +".\nThis caused damage to $his health. [color=red]" +str(hpdamage)+ " Health Lost[/color]"
 					#Inflict Damage. They won't die from it though.
 					if person.health - hpdamage <= 0:
 						person.health = 1
@@ -3055,7 +3136,7 @@ func dailyLactation(person):
 							person.energy -= hpdamage
 						else:
 							person.energy = 0
-						text += "Due to $his extremely poor health condition, $his energy has been drastically reduced as well by the incident.\n[color=red]" +str(hpdamage)+ "Energy Lost[color]\n"
+						text += "Due to $his extremely poor health condition, $his energy has been drastically reduced as well by the incident.\n[color=red]" +str(hpdamage)+ "Energy Lost[/color]\n"
 					else:
 						text += "\n"
 						person.health -= hpdamage
@@ -3102,15 +3183,15 @@ func dailyMilking(person, extraction='', autopump = false):
 	else:
 		lact.milkedtoday = true
 		lact.daysunmilked = 0
-		
+
 		#Gain Being Milked Fetish
 		if rand_range(0,100) <= ((person.lactating.milkstorage*.25)+person.lactating.pressure) * globals.expansionsettings.beingmilkedacceptancemultiplier:
 			if person.fetish.bemilked != globals.fetishopinion.back():
 				person.fetish.bemilked = globals.fetishopinion[globals.fetishopinion.find(person.fetish.bemilked)+1]
 				text += "$name seems to be more comfortable with lactating now. $He now feels that it is " + str(person.fetish.bemilked) + " to be lactating. "
-		
+
 		#Stress/Lust based on the Being Milked Fetish
-		
+
 		#Cow Quality
 		if person.preg.duration > 0:
 			cowquality = round(lact.milkstorage*1.5)
@@ -3170,21 +3251,21 @@ func getMilkLeak(person,value=50):
 func sexWorkBonus(person):
 	#Bonus Gold for Previous Experience, Sizes, and Lust
 	var bonus = 0
-	
+
 	#Skill Bonus
 	person.add_jobskill('sexworker', 1)
 	if person.jobskills['sexworker'] > 1:
 		bonus += round(person.jobskills['sexworker']*.2)
-	
+
 	#Lust Bonus
 	if rand_range(0,100) <= person.lust:
 		bonus += round(person.lust*.1)
-	
+
 	#Sexual Traits Bonus
 	for trait in person.traits:
 		if trait in ['Sex-crazed','Deviant','Slutty','Fickle','Pervert','Likes it rough','Enjoys Anal','Soaker']:
 			bonus += round(rand_range(1,3))
-	
+
 	#Lip Size Bonus
 	bonus += globals.lipssizearray.find(person.lips)-3
 	#Tits Bonus
@@ -3195,11 +3276,11 @@ func sexWorkBonus(person):
 		bonus += globals.vagsizearray.size() - globals.vagsizearray.find(person.vagina)
 	if person.asshole != "none":
 		bonus += globals.assholesizearray.size() - globals.assholesizearray.find(person.asshole)
-	
+
 	#Energy - Stress Modifier
 	if person.energy - person.stress > 0:
 		bonus = round(bonus * rand_range(1.1,3))
-	
+
 	return bonus
 
 #---End Job Checks---#
@@ -3420,16 +3501,16 @@ func updateBodyImage(person):
 			stress = MID_STRESS
 		else:
 			stress = HIGH_STRESS
-		if person.preg.duration > 0 && person.knowledge.append('currentpregnancy') || person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height)/2:
+		if person.preg.duration > 0 && person.knowledge.has('currentpregnancy') || person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height)/2:
 			if dictUniqueImagePaths[person.unique][imagetype].has(IMAGE_PREG):
 				stress = IMAGE_PREG
 		person.imagetype = typeEnumToString[imagetype]
 		var ref = dictUniqueImagePaths[person.unique][imagetype]
-		person.imagefull = ref[stress] if ref.has(stress) else ref[HIGH_STRESS] 
+		person.imagefull = ref[stress] if ref.has(stress) else ref[HIGH_STRESS]
 	###---End Expansion---###
 	elif person.imagefull != null:
 		var attempt = []
-		if person.preg.duration > 0  && person.knowledge.append('currentpregnancy') || person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height)/2:
+		if person.preg.duration > 0 && person.knowledge.has('currentpregnancy') || person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height)/2:
 			attempt.append('preg')
 		if int(person.exposed.chest) + int(person.exposed.genitals) + int(person.exposed.ass) >= 2:
 			attempt.append('naked')
@@ -3453,7 +3534,7 @@ var listSex = ['male', 'female', 'futanari']
 func updateSexualityImage(person):
 	if person == null:
 		return
-	
+
 	var refSexImg = person.sexuality_images
 	if person.knowledge.has('sexuality'):
 		refSexImg.base = 'base_' + person.sex.trim_suffix('nari').replace('dickgirl','futa')

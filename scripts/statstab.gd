@@ -582,7 +582,6 @@ func eventPregnancyReveal(mode=''):
 	if mode == 'introdiscovered':
 		text += "$He looks shocked and touches $his "+expansion.nameBelly()+" reflexively.\n\n[color=yellow]" + person.quirk("-I...um...I think I may be pregnant. I was just scared to say anything...")
 		person.knowledge.append('currentpregnancy')
-		person.metrics.preg += 1
 		if person.mind.secrets.has('currentpregnancy'):
 			person.mind.secrets.erase('currentpregnancy')
 	
@@ -595,7 +594,6 @@ func eventPregnancyReveal(mode=''):
 	if mode == 'introtold':
 		text += "$He gently rubs $his swollen "+expansion.nameBelly()+" and smiles.\n\n[color=yellow]" + person.quirk("-I am pregnant, $master! Isn't that exciting?")
 		person.knowledge.append('currentpregnancy')
-		person.metrics.preg += 1
 		person.dailytalk.erase('currentpregnancy')
 		
 		text += "\n\n[color=aqua]Discovered $name is Pregnant[/color]"
@@ -1475,7 +1473,7 @@ func eventDrainCum(mode = ''):
 	if mode == 'wombinflate':
 		text += "You hit the button labeled 'Clean' and feel the hose come alive. $He moans loudly as a thick, viscious liquid begins to pour directly into $his womb. $He writhes as you watch $his belly begin to rise and rise from the liquid swelling inside of $him. After you are satisfied, you click the 'Off' button and wait. "
 		if person.checkFetish('pregnancy'):
-			text += "$name holds $his belly and moans softly, but then whispers to you.\n[color=yellow]- " + person.quirk("I feel bloated, like I'm pregnant! Oh, it feels so good!")
+			text += "$name holds $his belly and moans softly, but then whispers to you.\n[color=yellow]- " + person.quirk("I feel bloated, like I'm pregnant! Oh, it feels so good![/color]")
 		else:
 			text += "$name can simply hold $his swollen belly and helplessly moan in discomfort. "
 		mode = 'wombdrain'
@@ -1499,7 +1497,7 @@ func eventDrainCum(mode = ''):
 		puddle = 0
 	
 	if mode == 'leavepuddle':
-		globals.state.condition -= round(puddle/2)
+		globals.state.condition = -round(puddle/2)
 		puddle = 0
 	
 	if puddle <= 0:
