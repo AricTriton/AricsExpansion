@@ -2082,7 +2082,7 @@ var shops = {
 		code = 'wimbornmarket',
 		sprite = 'merchant',
 		name = "Wimborn's Market",
-		items = ['teleportwimborn','food','supply','bandage','rope','torch','teleportseal', 'basicsolutioning','hairdye', 'aphrodisiac' ,'beautypot', 'magicessenceing', 'natureessenceing','armorleather','armorchain','weapondagger','weaponserrateddagger','weaponbasicstaff','weaponsword','weaponceremonialsword','clothsundress','clothmaid','clothbutler','underwearlacy','underwearboxers', 'acctravelbag'],
+		items = ['teleportwimborn','food','supply','bandage','rope','torch','teleportseal', 'basicsolutioning','hairdye', 'aphrodisiac' ,'beautypot', 'magicessenceing', 'natureessenceing','armorleather','armorchain','weapondagger','weaponserrateddagger','weaponlongbow','weaponbasicstaff','weaponmagusstaff','weaponmace','weaponsword','weaponceremonialsword','clothsundress','clothmaid','clothbutler','underwearlacy','underwearboxers', 'acctravelbag'],
 		selling = true
 	},
 	shaliqshop = {
@@ -2095,14 +2095,14 @@ var shops = {
 		code = 'gornmarket',
 		sprite = 'centaur',
 		name = "Gorn's Market",
-		items = ['teleportgorn','food', 'supply','bandage','rope','teleportseal','magicessenceing',"armorleather",'armorchain','weaponclaymore','weaponhammer','clothbedlah','accslavecollar','acchandcuffs','armorpadded'],
+		items = ['teleportgorn','food', 'supply','bandage','rope','teleportseal','magicessenceing',"armorleather",'armorchain','weapongoblinspear','weaponbattleaxe','weaponclaymore','weaponhammer','clothbedlah','accslavecollar','acchandcuffs','armorpadded'],
 		selling = true
 	},
 	frostfordmarket = {
 		code = 'frostfordmarket',
 		sprite = 'frostfordtrader',
 		name = "Frostford's Market",
-		items = ['aydabrandy','teleportfrostford', 'supply','bandage','rope','torch','teleportseal', 'basicsolutioning','bestialessenceing','clothpet', 'weaponsword','weaponclaymore','weapongreatsword','accgoldring', 'acctravelbag'],
+		items = ['aydabrandy','teleportfrostford', 'supply','bandage','rope','torch','teleportseal', 'basicsolutioning','bestialessenceing','clothpet','weaponsword','weaponclaymore','weapongreatsword','weaponhunterbow','weaponlongbow','weapongoldbow','armorleather','armorpadded','accgoldring', 'acctravelbag'],
 		selling = true
 	},
 	aydashop = {
@@ -2135,7 +2135,7 @@ var shops = {
 	blackmarket = {
 		code = 'blackmarket',
 		name = 'Black Market',
-		items = ['aydabook','lockpick','accslavecollar','acchandcuffs','armorleather','armorchain','weaponsword','weaponhammer','armortentacle','clothchainbikini','oblivionpot'],
+		items = ['aydabook','lockpick','accslavecollar','acchandcuffs','armorleather','armorchain','weaponsword','weaponhammer','armortentacle','armorruneset','clothchainbikini','oblivionpot'],
 		selling = true
 	},
 }
@@ -2259,9 +2259,10 @@ var treasurepool = [
 	['armorninja',5],['armorplate',1],['armorleather',20],['armorchain',11],['armorelvenchain',3],['armorrobe',4],
 	['weapondagger',20], ['weaponsword',9], ['weaponclaymore',3], ['weaponhammer', 4], ['underwearlacy', 3], ['underwearboxers', 3],
 	['clothsundress',10], ['clothmaid',10], ['clothkimono',7], ['clothmiko',5], ['clothpet',3], ['clothbutler',10], ['clothbedlah',4],
-	['accgoldring',3],['accslavecollar',4],['acchandcuffs',3],['acctravelbag',5],['accamuletemerald', 1], ['accamuletruby', 1],
-	['weaponelvensword',3], ['weaponnaturestaff',2], ['armortentacle', 0.5], ['clothtentacle', 1],
-	['armorrogue', 0.5],['weaponcursedsword', 0.5],
+	['accgoldring',3],['accslavecollar',4],['acchandcuffs',3],['acctravelbag',5],['accamuletemerald', 1], ['accamuletruby', 1], 
+	['weaponelvensword',3], ['weaponnaturestaff',2], ['armortentacle', 0.5], ['clothtentacle', 1],['armorpadded',20],['weapongreatsword',3],
+	['armorrogue', 0.5],['weaponcursedsword', 0.5],['accelvenboots',1],['armorhalfplate', 1],['armorelvenhalfplate',4],
+	['weaponbattleaxe',9],['weaponlongbow',9],['weaponmace',3],['weaponserrateddagger',9],['weaponbasicstaff',20],
 ]
 
 func exchangeitemsconfirm():
