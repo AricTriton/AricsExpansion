@@ -50,10 +50,10 @@ var extractorsarray = ['sealed', 'hand', 'leak', 'suction', 'pump', 'pressurepum
 var extractorsdict = {
 	sealed = {name = 'Sealed', description = "couldn't be collected as $he was sealed up", low = 0, high = 0, cost = 0},
 	hand = {name = 'Hand', description = "was extracted by hand", low = 0, high = 1, cost = 0},
-	leak = {name = 'Leaking', description = "dripped out of $him", low = .2, high = 0.5, cost = 0},
+	leak = {name = 'Leaking', description = "dripped out of $him", low = .2, high = 0.4, cost = 0},
 	suction = {name = 'Suction Cup', description = "flowed out of $him into the suction cups", low = .3, high = .6, cost = 50},
-	pump = {name = 'Basic Pump', description = "was actively pumped out of $him", low = .4, high = .8, cost = 100},
-	pressurepump = {name = 'Pressure Pump', description = "was pumped out of $him using extreme suction", low = .5, high = 1, cost = 250},
+	pump = {name = 'Basic Pump', description = "was actively pumped out of $him", low = .5, high = .8, cost = 100},
+	pressurepump = {name = 'Pressure Pump', description = "was pumped out of $him using extreme suction", low = .7, high = 1, cost = 250},
 }
 
 #Containers: The % of milk preserved
@@ -601,7 +601,6 @@ func extractMilk(cattle, milkmaid, farmmanager):
 	elif cattle.lactating.milkstorage <= 0:
 		return "\n[color=red]$name did not successfully produce any milk today.[/color] "
 	
-	var milkproduced = 0
 	var extractionmod = 0
 	var effort = 0
 	var text = ''
@@ -612,7 +611,7 @@ func extractMilk(cattle, milkmaid, farmmanager):
 		text += "\n[color=aqua]$name[/color] has the following stats: "
 		if cattle.lactating.hyperlactation == true:
 			text += "[color=lime]Hyperlactation[/color] | "
-		text +=  "Milk Storage: " +str(cattle.lactating.milkstorage)+ " | Milk Regeneration: " +str(cattle.lactating.regen)+ ""
+		text +=  "Milk Storage: " + str(cattle.lactating.milkstorage) + "/" + str(cattle.lactating.milkmax) + " | Milk Regeneration: " + str(cattle.lactating.regen) + ""
 		if cattle.lactating.pressure > 0:
 			text += " | Pressure = " +str(cattle.lactating.pressure)+ "\n "
 	
@@ -631,11 +630,18 @@ func extractMilk(cattle, milkmaid, farmmanager):
 	else:
 		#Manual Extraction
 		text += "$He was milked manually today by [color=aqua]" + milkmaid.name_short() + "[/color]. "
-		effort = round(rand_range(1, milkmaid.send+1))
-		milkmaid.energy -= effort
+		effort = clamp(round(rand_range(1, milkmaid.send + 1)), 1, milkmaid.energy)
 		milkmaid.add_jobskill('milking', round(effort*.25))
-		text += "[color=aqua]" + milkmaid.name_short() + "[/color] spent [color=aqua]" + str(effort) + " Energy[/color] milking [color=aqua]$name[/color]. "
-		extractionmod = clamp(milkmaid.jobskills.milking * .25, 0, effort)
+		extractionmod = milkmaid.jobskills.milking * 0.01
+		var spent_energy = 0
+		while extractionmod < 1 and effort > 0: # Prevent milkmaid from spending unneeded energy
+			extractionmod += 0.1
+			effort -= 1
+			spent_energy += 1
+		extractionmod = clamp(extractionmod, 0, 1)
+		spent_energy = max(1, spent_energy)
+		milkmaid.energy -= spent_energy
+		text += "[color=aqua]" + milkmaid.name_short() + "[/color] spent [color=aqua]" + str(spent_energy) + " Energy[/color] milking [color=aqua]$name[/color]. "
 	
 	#Metrics
 	cattle.lactating.milkedtoday = true
@@ -643,18 +649,16 @@ func extractMilk(cattle, milkmaid, farmmanager):
 	cattle.lactating.daysunmilked = 0
 	
 	#Pressure Production (100% Extraction)
-	milkproduced = cattle.lactating.pressure
+	var pressure_production = cattle.lactating.pressure
 	if cattle.lactating.pressure > 0:
 		text += "$His " + globals.expansion.getChest(cattle) + " were swollen beyond their normal capacity. $His " + globals.expansion.nameTits() + " exploded with [color=green]" + str(cattle.lactating.pressure) + "[/color] Milk as soon as the milking started. "
-		cattle.lactating.milkstorage -= cattle.lactating.pressure
 		cattle.lactating.pressure = 0
 	
-	#Pregnancy/Hyperlactation Bonus
-	var lactationbonus = 0
+	#Pregnancy Bonus
 	var extraproduction = 0
 	if cattle.preg.duration > 0:
-		lactationbonus = clamp(cattle.metrics.preg*.05, .05, 2)
-		extraproduction = round(cattle.lactating.milkstorage * lactationbonus)
+		var lactationbonus = clamp(cattle.metrics.preg * 0.1, 0.1, 1)
+		extraproduction += round(cattle.lactating.regen * lactationbonus)
 		if cattle.knowledge.has('currentpregnancy'):
 			text += "$He was able to produce more milk than normal today due to $his [color=aqua]pregnancy[/color]. $His [color=aqua]" + str(cattle.metrics.preg) + "[/color] pregnancies have altered $his body to produce milk at a greater rate throughout the day. "
 		else:
@@ -665,60 +669,56 @@ func extractMilk(cattle, milkmaid, farmmanager):
 				cattle.knowledge.append('currentpregnancy')
 			elif farmmanager != null:
 				text += "[color=aqua]$" + farmmanager.name_short() + "[/color] isn't sure why yet. "
-	if cattle.lactating.hyperlactation == true:
-		lactationbonus = clamp(cattle.lactating.duration*.2, .2, 5)
-		extraproduction = round(cattle.lactating.milkstorage * lactationbonus)
-		text += "Just when $he thought that $he had no more milk $he could possible give, $his tits continued pouring out even more. The [color=aqua]Hyperlactation[/color] serum is forcing $his body to produce longer than it normally would and the results will only get better the longer $he continues lactating. "
-		if lactationbonus >= 5:
-			text += "$His breasts gushed out around [color=aqua]five times[/color] the amount of milk that $he may naturally be able to produce. You suspect that even with the serum, $he is producing at $his body's maximum capacity. "
-		elif lactationbonus >= 4:
-			text += "$His breasts gushed out around [color=aqua]four times[/color] the amount of milk that $he may naturally be able to produce. "
-		elif lactationbonus >= 3:
-			text += "$His breasts gushed out around [color=aqua]three times[/color] the amount of milk that $he may naturally be able to produce. "
-		elif lactationbonus >= 2:
-			text += "$His breasts gushed out around [color=aqua]twice[/color] the amount of milk that $he may naturally be able to produce. "
-	
-	#Extraction Addition
-	if cattle.farmexpanded.resistance <= 0 || cattle.farmexpanded.extractmilk.fate != "undecided" || cattle.spec == 'hucow':
-		milkproduced += clamp(round((cattle.lactating.milkstorage + extraproduction) * extractionmod), 0, 50)
-		text += "[color=aqua]$name[/color] allowed $himself to be milked without resistance and produced [color=green]" + str(milkproduced) + "[/color] Milk in total. "
-		cattle.lactating.milkstorage -= milkproduced
-		if cattle.lactating.milkstorage > 0:
-			text += "$He seems to have about [color=aqua]" + str(cattle.lactating.milkstorage) + "[/color] remaining that wasn't able to be extracted today. "
-	else:
-		milkproduced += clamp(round(((cattle.lactating.milkstorage + extraproduction) * extractionmod) * (cattle.farmexpanded.resistance*.1)), 0, 50)
-		text += "[color=aqua]$name[/color] [color=red]resisted[/color] milking today. This interfered with the milking process and $he only produced [color=green]" + str(milkproduced) + "[/color] Milk total. "
-		cattle.lactating.milkstorage -= milkproduced
-		if cattle.lactating.milkstorage > 0:
-			text += "$He seems to have about [color=aqua]" + str(cattle.lactating.milkstorage) + "[/color] remaining that wasn't able to be extracted today. "
 
-	
+	# Farm manager hinting Hyperlactation can make tits larger
+	if cattle.lactating.hyperlactation == true:
+		if globals.titssizearray.back() != cattle.titssize:
+			if farmmanager != null && rand_range(0,100) <= farmmanager.wit + farmmanager.jobskills.farmmanager:
+				text += farmmanager.dictionary("[color=aqua]$name[/color] believes that [color=aqua]" + cattle.name_short() + "[/color]'s " + globals.expansion.nameTits() + " have the potential to grow larger if left unmilked temporarily. ")
+
+	#Extraction Addition
+	var base_production = clamp(round(cattle.lactating.milkstorage * extractionmod), 0, cattle.lactating.milkstorage)
+	cattle.lactating.milkstorage -= base_production
+	var milkproduced = base_production + round(extraproduction * extractionmod)
+	if cattle.farmexpanded.resistance <= 0 || cattle.farmexpanded.extractmilk.fate != "undecided" || cattle.spec == 'hucow':
+		milkproduced = round(milkproduced)
+		text += "[color=aqua]$name[/color] allowed $himself to be milked without resistance and produced "
+	else:
+		milkproduced = round(milkproduced * clamp(1 - (cattle.farmexpanded.resistance * 0.1), 0, 1))
+		text += "[color=aqua]$name[/color] [color=red]resisted[/color] milking today. This interfered with the milking process and $he only produced "
+	milkproduced += pressure_production
+	text += "[color=green]" + str(milkproduced) + "[/color] Milk in total. "
+
+	if cattle.lactating.milkstorage > 0:
+		text += "$He seems to have about [color=aqua]" + str(cattle.lactating.milkstorage) + "[/color] remaining that wasn't able to be extracted today. "
+
+
 	#Cattle Reaction && Relations
-	var gain = round(rand_range(1,5))
+	var lust_gain = round(max(1, milkmaid.lewdness / 10) * rand_range(1,2))
 	if cattle.checkFetish('bemilked', 1.5) == true || cattle.spec == 'hucow':
 		if milkmaid != null && (rand_range(0,100) <= (cattle.obed-100) + (milkmaid.charm + milkmaid.jobskills.milking)):
 			globals.addrelations(cattle, milkmaid, rand_range(20,40))
-			text += "[color=aqua]" + milkmaid.name_short() + "[/color] made it enjoyable for [color=aqua]$name[/color] to be milked today. $He has gained [color=green]" + str(gain) + " Lust[/color]. "
+			text += "[color=aqua]" + milkmaid.name_short() + "[/color] made it enjoyable for [color=aqua]$name[/color] to be milked today. $He has gained [color=green]" + str(lust_gain) + " Lust[/color]. "
 			cattle.farmexpanded.extractmilk.opinion.append('accepted')
-			cattle.lust += gain
+			cattle.lust += lust_gain
 		else:
 			globals.addrelations(cattle, milkmaid, rand_range(10,20))
 			text += "[color=aqua]$name[/color] didn't mind being milked today. "
 			cattle.farmexpanded.extractmilk.opinion.append('obeyed')
 	elif cattle.farmexpanded.resistance >= 0:
 		if cattle.traits.has('Masochist') || cattle.traits.has('Submissive'):
-			text += "[color=aqua]$name[/color] resisted being milked and would have hated $his treatment, but being mistreated turns $him on. $He has gained [color=green]" + str(gain) + " Lust[/color].\n "
+			text += "[color=aqua]$name[/color] resisted being milked and would have hated $his treatment, but being mistreated turns $him on. $He has gained [color=green]" + str(lust_gain) + " Lust[/color].\n "
 			cattle.farmexpanded.extractmilk.opinion.append('accepted')
-			cattle.lust += gain
+			cattle.lust += lust_gain
 			if milkmaid != null && (rand_range(0,100) <= (cattle.obed-100) + (milkmaid.charm + milkmaid.jobskills.milking)):
 				globals.addrelations(cattle, milkmaid, rand_range(20,40))
 			elif milkmaid != null:
 				globals.addrelations(cattle, milkmaid, rand_range(10,20))
 		else:
-			#var stressgain = round(rand_range(1,5))
-			text += "[color=aqua]$name[/color] was stressed out by being milked today. $He has gained [color=red]" + str(gain) + " Stress[/color].\n "
+			var stressgain = round(rand_range(1,5))
+			text += "[color=aqua]$name[/color] was stressed out by being milked today. $He has gained [color=red]" + str(stressgain) + " Stress[/color].\n "
 			cattle.farmexpanded.extractmilk.opinion.append('forced')
-			cattle.stress += gain
+			cattle.stress += stressgain
 			if milkmaid != null:
 				globals.addrelations(cattle, milkmaid, rand_range(-20,-40))
 	else:
@@ -747,7 +747,6 @@ func extractMilk(cattle, milkmaid, farmmanager):
 	###Add Racial Milk Here (if Hand Milked)
 	
 	refVats.milk.new += milkproduced
-	#globals.resources.milk += milkproduced
 	return text
 
 
@@ -1475,7 +1474,7 @@ func manageVats(workersDict):
 						continue
 					if !worker.jobskills.has('bottler'):
 						worker.jobskills['bottler'] = 0
-					var workerEnergyCost = energycost*(1 - worker.jobskills.bottler*.01)
+					var workerEnergyCost = energycost / (1 + worker.jobskills.bottler * .02)
 					var canMake = goalMake if workerEnergyCost == 0 else floor(worker.energy / workerEnergyCost)
 					if canMake >= goalMake:
 						text += worker.dictionary("\n[color=aqua]$name[/color] spent [color=red]" + str(ceil(workerEnergyCost*goalMake)) + " Energy[/color] to create [color=green]" + str(goalMake) + " Bottles of " + fluid + "[/color] today. ")
@@ -1724,21 +1723,26 @@ func calcUnspilled(refContainer, worker, totalFluid):
 
 func setFate(person, type):
 	var text = ""
+	var newfate
 	if person.farmexpanded[type].opinion.size() >= person.farmexpanded[type].resistance:
 		var accepted = person.farmexpanded[type].opinion.count('accepted')
 		var obeyed = person.farmexpanded[type].opinion.count('obeyed')
 		var forced = person.farmexpanded[type].opinion.count('forced')
 		
 		if accepted >= obeyed && accepted >= forced:
-			person.farmexpanded[type].fate = 'accepted'
+			newfate = 'accepted'
 			text += "[color=aqua]$name[/color] [color=green]accepted[/color] this as part of $his future. "
 		elif obeyed >= accepted && obeyed >= forced:
-			person.farmexpanded[type].fate = 'obeyed'
+			newfate = 'obeyed'
 			text += "[color=aqua]$name[/color] realized that $he will have to [color=aqua]obey[/color] and let this happen to $him as long as you'd like. "
 		else:
-			person.farmexpanded[type].fate = 'broken'
+			newfate = 'broken'
 			text += "[color=aqua]$name[/color] [color=red]broke down[/color] after realizing that there is nothing that $he could do to stop this from happening whenever you'd like. "
 		text += "You shouldn't encounter any future resistance from $him any longer.\n"
+		if person.farmexpanded[type].fate != newfate:
+			person.farmexpanded[type].fate = newfate
+		else:
+			text = ""
 	return person.dictionary(text)
 
 
@@ -1764,65 +1768,3 @@ func chooseworker(type, workers):
 				currentperson = worker
 				variable = worker.jobskill.get(type,0)
 	return currentperson
-
-#---Milk Extraction Functions
-
-var containerefficiency = {
-	bucketspillchance = 50,
-	bucketspillpercent = 50,
-	pailspillchance = 40,
-	pailspillpercent = 40,
-	jugspillchance = 25,
-	jugspillpercent = 25,
-	canisterspillchance = 5,
-	canisterspillpercent = 5,
-}
-
-func buyContainers(type):
-	var text = ""
-	if globals.resources.farmexpanded[type] == -1:
-		globals.resources.farmexpanded[type] = 0
-		text = str(type.capitalize()) + " is now unlocked. "
-	globals.resources.farmexpanded[type] += 1
-	text += str(type.capitalize()) + " purchased. [color=aqua]" + str(globals.resources.farmexpanded[type]) + " [/color] available. "
-	return text
-
-func assignContainer(type):
-	if globals.resources.farmexpanded[type] > 0:
-		#Replace Old Container
-		if person.farmexpanded.container != 'bucket':
-			globals.resources.farmexpanded[person.farmexpanded.container] += 1
-		
-		#Assign New Container
-		if type != 'bucket':
-			globals.resources.farmexpanded[type] -= 1
-		person.farmexpanded.container = type
-	else:
-		print("Not enough " + str(type) + " available. ")
-	return
-
-func milkingContainment(person, value):
-	var text = ""
-	if person == null || value <= 0:
-		print("Invalid Milk Container")
-		return
-	#Determine Container Type
-	var container = person.farmexpanded.container
-	if container == 'default':
-		container = 'bucket'
-	var spillchance = containerefficiency[container + "spillchance"]
-	var spillpercent = containerefficiency[container + "spillpercent"]
-	#Spill Chance
-	var milkamt = value
-	if rand_range(0,100) <= spillchance:
-		milkamt = round(rand_range(value*(spillpercent*.01), value))
-	return milkamt
-
-#---Stole from Mansion.gd
-func createPersonURL(person):
-	if person == null:
-		return "[color=yellow]Unassigned[/color]"
-	if person.away.duration != 0:
-		return "[color=aqua]" + person.name_short() + "[/color] [color=yellow](away)[/color]"
-	return "[color=aqua][url=id" + person.id + "]" + person.name_short() + "[/url][/color]"
-

@@ -326,11 +326,11 @@ func buildmetrics():
 		text += "\n[color=#d1b970][center]Lactation Factors[/center][/color]\n"
 		if person.lactating.daysunmilked > 0:
 			text += "[center][color=red]Hasn't been milked in " + textForCountNoun(person.lactating.daysunmilked, "[/color] day") +"[/center]\n"
-		if person.lactating.milkstorage - person.lactating.milkmax > 0:
-			text += "[center][color=red]" +globals.expansion.nameTits().capitalize()+ " stretching due to [color=aqua]" + str(person.lactating.milkstorage - person.lactating.milkmax) + "oz[/color] pressure. They may gain size and cause stress and health damage.[/color]\n"
 		text += "Lactating for [color=aqua]" + textForCountNoun(person.lactating.duration, "[/color] day") +"\n"
+		if person.lactating.hyperlactation_duration > 0:
+			text += "Hyperlactating for [color=aqua]" + textForCountNoun(person.lactating.hyperlactation_duration, "[/color] day") +"\n"
 		text += "Produces [color=aqua]" + str(person.lactating.regen) + "[/color] milk daily\n"
-		text += "Milk Glands: [color=aqua]" + str(person.lactating.milkstorage) + "[/color] stored / [color=aqua]" + str(person.lactating.milkmax) + "[/color] before stretching\n"
+		text += "Milk Glands: [color=aqua]" + str(person.lactating.milkstorage) + "[/color] stored ([color=aqua]" + str(person.lactating.pressure) + "[/color] pressure)/ [color=aqua]" + str(person.lactating.milkmax) + "[/color] max\n"
 		
 	###---Expansion End---###
 	#text += "Participated in threesomes: " + str(person.metrics.threesome) + " time"+globals.fastif(person.metrics.threesome == 1, '','s')+";\n"

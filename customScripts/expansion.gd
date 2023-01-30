@@ -59,8 +59,6 @@ var basemilkvalue = 10
 var chancelactationincreasetits = 50
 #Chance to stop lactating if unmilked
 var chancelactationstops = 5
-#Amount that turns into Pressure if left naturally
-var milkregenperday = .1
 
 #---Category: Secrets---#
 #Chance that they will tell you about Secrets
@@ -1929,22 +1927,24 @@ func dailyPregnancy(person):
 				text += " and gained [color=red]"+str(number)+" Stress[/color].\n"
 		#Grow Tits
 		if rand_range(0,100) <= (chancetitsgrow * (1.0 - pregdict.get("titssizebonus",0)/3.0))*gestation:
-			if globals.titssizearray.back() != person.titssize && (person.lactating.hyperlactation == true || globals.titssizearray.find(person.titssize) <= 5):
-				text += "$name's "+str(getChest(person))+" started "+nameStretching()+" due to $his pregnancy. They are now nice and "
-				person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)+1]
-				text += "[color=aqua]" +str(person.titssize)+"[/color]. "
-				pregdict.titssizebonus = pregdict.get("titssizebonus",0) + 1
+			if globals.titssizearray.back() != person.titssize:
+				if person.lactating.hyperlactation == true || globals.titssizearray.find(person.titssize) <= 5:
+					text += "$name's "+str(getChest(person))+" started "+nameStretching()+" due to $his pregnancy. They are now nice and "
+					person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)+1]
+					text += "[color=aqua]" +str(person.titssize)+"[/color]. "
+					pregdict.titssizebonus = pregdict.get("titssizebonus",0) + 1
 
-				var number = round(rand_range(1,person.preg.duration*1.5))
-				number = clamp(number, 0, 100) / 2
-				if globals.fetishopinion.find(person.fetish.pregnancy) >= 4 || pregdict.wantedpregnancy == true:
-					person.lust += number
-					text += "$He seemed to enjoy the new size of $his "+nameTits()+" immensely and got off on knowing what the pregnancy was doing to $him. $He gained [color=green]"+str(number)+" Lust[/color].\n"
+					var number = rand_range(1, person.preg.duration*1.5)
+					number = clamp(number, 0, 100)
+					number = round(number/2)
+					if globals.fetishopinion.find(person.fetish.pregnancy) >= 4 || pregdict.wantedpregnancy == true:
+						person.lust += number
+						text += "$He seemed to enjoy the new size of $his "+nameTits()+" immensely and got off on knowing what the pregnancy was doing to $him. $He gained [color=green]"+str(number)+" Lust[/color].\n"
+					else:
+						person.stress = number
+						text += "$He seemed horrified by $his lack of control over $his own body as $he watched $his "+str(getChest(person))+" grow helplessly. $He gained [color=red]"+str(number)+" Stress[/color].\n"
 				else:
-					person.stress = number
-					text += "$He seemed horrified by $his lack of control over $his own body as $he watched $his "+str(getChest(person))+" grow helplessly. $He gained [color=red]"+str(number)+" Stress[/color].\n"
-			else:
-				text += "$name's "+str(getChest(person))+" seemed to try to swell slightly but then shrunk back to the size it was before. You believe that $his "+str(getChest(person))+" is as large as it can get naturally. You may be able to expand it further by giving $him a [color=aqua]Hyperlactation Potion[/color].\n"
+					text += "$name's "+str(getChest(person))+" seemed to try to swell slightly but then shrunk back to the size it was before. You believe that $his "+str(getChest(person))+" is as large as it can get naturally. You may be able to expand it further by giving $him a [color=aqua]Hyperlactation Potion[/color].\n"
 	else:
 		#Shrink Tits
 		if pregdict.get("titssizebonus",0) > 0:
@@ -2352,11 +2352,6 @@ func dailyUpdate(person):
 	###Night Phase###
 
 	dailyFetish(person)
-
-	#Check Milk Leak
-	if person.lactation == true && person.lactating.milkedtoday == false && person.lactating.milkstorage > 0:
-		getMilkLeak(person,50)
-#		dailyMilking(person,'none',false)
 
 	#Resets it for the next day
 	person.lactating.milkedtoday = false
@@ -3021,16 +3016,13 @@ func dailyLactation(person):
 	var text = ""
 	var lact = person.lactating
 	var regen = 0
-	var milkstorage = 0
-	var pressure = 0
-	var traitmod = 0
+	var milkmax = 0
 	var traitrank = 0
-	person.lactating.milkstorage = clamp(person.lactating.milkstorage, 0, 100)
 
-	if globals.expansionsettings.lactationstops == true && person.lactating.hyperlactation == false:
+	if globals.expansionsettings.lactationstops == true && lact.hyperlactation == false:
 		if lact.daysunmilked > 0 && person.preg.duration == 0 && rand_range(0,100) - lact.daysunmilked <= chancelactationstops:
 			person.lactation = false
-			person.lactating.duration = 0
+			lact.duration = 0
 			if person.knowledge.has('lactating'):
 				text = "[center][color=red]$name's "+str(getChest(person))+" have gone unmilked for too long and $his lactation has dried up.[/color][/center]\n "
 				person.knowledge.erase('lactating')
@@ -3042,33 +3034,30 @@ func dailyLactation(person):
 	if lact.duration == 0:
 		globals.expansionsetup.setLactation(person)
 	lact.duration += 1
+	if lact.hyperlactation:
+		lact.hyperlactation_duration += 1
 
 	#Gain Lactation Fetish
-	if rand_range(0,100) <= person.lactating.duration*globals.expansionsettings.lactationacceptancemultiplier:
+	if rand_range(0,100) <= lact.duration*globals.expansionsettings.lactationacceptancemultiplier:
 		if person.fetish.lactation != globals.fetishopinion.back():
 			person.fetish.lactation = globals.fetishopinion[globals.fetishopinion.find(person.fetish.lactation)+1]
 			text += "$name seems to be more comfortable with lactating now. $He now feels that it is " + str(person.fetish.lactation) + " to be lactating. "
 
 	#Permanent Swelling
 	if person.titssize == "masculine":
-		#Always Swells Masculine into Flat so Regen/milkstorage is at least 1
+		#Always Swells Masculine into Flat so Regen/milkmax is at least 1
 		person.titssize = "flat"
 		text += "$name's masculine chest swelled up and sprouted into two tiny little bumps. $His " +nameTits()+" are now flat."
 
 	#Generate Milk: Normal Tits
-	if person.lactating.hyperlactation == true:
-		regen = (globals.titssizearray.find(person.titssize) * 2) + clamp(round(rand_range(person.lactating.duration * .2,person.lactating.duration * .4)), 1, 20)
-	else:
-		regen = globals.titssizearray.find(person.titssize) * 2
-	milkstorage = globals.titssizearray.find(person.titssize) * 2
+	regen = globals.titssizearray.find(person.titssize) * 2
 	#Generate Milk: Extra Tits
 	if person.titsextradeveloped == true:
-		regen += round(person.titsextra*.25)
-		milkstorage += round(person.titsextra*.25)
+		regen *= (1 + person.titsextra * 0.25)
 	#Racial Modifiers
-	if person.race.find('Taurus'):
-		regen = round(regen*1.2)
-		milkstorage = round(milkstorage*1.2)
+	if person.race.find('Taurus') >= 0:
+		regen *= 1.2
+	milkmax = regen
 
 	#Traits
 	for i in person.traits:
@@ -3077,79 +3066,114 @@ func dailyLactation(person):
 		if trait.tags.has('lactation-trait') && trait.tags.has('regentrait'):
 			traitrank = regentrait.find(i)
 			if traitrank == 0:
-				traitmod = round(regen*.5)
+				regen *= 0.5
 				text += "[color=red]Milk regeneration hampered by Trait: " + str(i) + ".[/color]\n"
 			elif traitrank > 0:
-				traitrank = 1+(traitrank*.2)
-				traitrank = clamp(traitrank, 1.2, 2)
-				traitmod = round(regen*traitrank)
+				var traitmod = clamp(traitrank * 0.2, 0, 1)
+				regen *= (1 + traitmod)
 				text += "[color=green]Milk regeneration increased by Trait: " + str(i) + ".[/color]\n"
-		if traitmod > 0:
-			regen = traitmod
-		traitmod = 0
 		if trait.tags.has('lactation-trait') && trait.tags.has('storagetrait'):
 			traitrank = storagetrait.find(i)
 			if traitrank == 0:
-				traitmod = round(milkstorage*.5)
+				milkmax *= 0.5
 				text += "[color=red]Milk gland capacity lessened by Trait: " + str(i) + ".[/color]\n"
 			elif traitrank > 0:
-				traitrank = 1 + (traitrank*.2)
-				traitrank = clamp(traitrank, 1.2, 2)
-				traitmod = round(milkstorage*traitrank)
+				var traitmod = clamp(traitrank * 0.2, 0, 1)
+				milkmax *= (1 + traitmod)
 				text += "[color=green]Milk gland capacity increased by Trait: " + str(i) + ".[/color]\n"
-		if traitmod > 0:
-			milkstorage = traitmod
-		traitmod = 0
 
+	var bonus_regen = 0
+	var bonus_milkmax = 0.5 # Can normally store more than regenerate
+	#Hyperlactation bonus - immediate 25% bonus, maxing at 100% after 15 days
+	if lact.hyperlactation == true:
+		var bonus = clamp((5 + lact.hyperlactation_duration) / 20, 0, 1)
+		bonus_regen += bonus
+		bonus_milkmax += bonus
+
+	regen = ceil(regen * (1 + bonus_regen))
+	milkmax = ceil(milkmax * (1 + bonus_milkmax))
 	#Apply to Person
-	person.lactating.regen = regen
-	person.lactating.milkstorage += regen
-	person.lactating.milkmax = milkstorage
+	lact.milkmax = milkmax
+	lact.regen = regen
+	lact.milkstorage += regen
 	text += "$name's "+str(getChest(person))+ " produced [color=aqua]"+str(regen)+" milk[/color] today. "
 
-	#Pressure Stress and Swelling
-	if lact.milkedtoday == false && lact.milkstorage >= 1:
+	#Normal pressure increase
+	var excess_milk = lact.milkstorage - lact.milkmax
+	if lact.milkedtoday == false:
 		lact.daysunmilked += 1
-		if lact.daysunmilked >= 1:
+		if excess_milk > 0:
 			text += "$name feels growing pressure in $his breasts as $he goes [color=red]unmilked[/color] for [color=aqua]"+ str(lact.daysunmilked) +" Days[/color]. "
-		#Turn Default .25 of Storage into Pressure
-		var transfer = round(lact.milkstorage * globals.expansionsettings.lacation_pressurepermilkstored)
-		lact.pressure += transfer
-		lact.milkstorage -= transfer
+			#Turn 25% of excess Storage into Pressure
+			var transfer = ceil(excess_milk * 0.25)
+			lact.pressure += transfer
+			lact.milkstorage -= transfer
 
 	#Hyperlactation
-	if person.lactating.hyperlactation == true:
-		pressure = person.lactating.milkstorage - person.lactating.milkmax
-		pressure = clamp(pressure, -10, 10)
-		if pressure > 0:
-			#Chance at Swelling
-			if globals.titssizearray.find(person.titssize)*3 < pressure && rand_range(0,100) <= chancelactationincreasetits + pressure:
-				if globals.titssizearray.back() != person.titssize:
-					text += "$name's "+ str(person.titssize) +" "+nameTits()+ " were so filled and full of pressure that $his body could only handle it by "+nameStretching()
-					person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)+1]
-					var hpdamage = round(rand_range(pressure,pressure*2.5))
-					text += " to "+ str(person.titssize) +".\nThis caused damage to $his health. [color=red]" +str(hpdamage)+ " Health Lost[/color]"
-					#Inflict Damage. They won't die from it though.
-					if person.health - hpdamage <= 0:
-						person.health = 1
-						if person.energy - hpdamage >= 0:
-							person.energy -= hpdamage
-						else:
-							person.energy = 0
-						text += "Due to $his extremely poor health condition, $his energy has been drastically reduced as well by the incident.\n[color=red]" +str(hpdamage)+ "Energy Lost[/color]\n"
+	excess_milk = lact.milkstorage - lact.milkmax
+	var stress_gain = 0
+	if lact.hyperlactation == true:
+		if excess_milk > 0:
+			#Additional pressure increase possibile while hyperlactating
+			var transfer = ceil(excess_milk * 0.5)
+			lact.pressure += transfer
+			lact.milkstorage -= transfer
+
+		#Chance at Swelling
+		if globals.titssizearray.back() != person.titssize:
+			excess_milk = lact.milkstorage - lact.milkmax
+			var pressure = excess_milk + lact.pressure
+			var pressure_required = globals.titssizearray.find(person.titssize) * 5
+			if person.titsextradeveloped == true:
+				pressure_required *= (1 + person.titsextra * 0.25)
+			var pressure_extra = pressure - pressure_required
+			if pressure_extra >= 0 && rand_range(0,100) <= chancelactationincreasetits + pressure_extra:
+				text += "$name's " + str(person.titssize) + " " + nameTits() + " were so filled and full of pressure that $his body could only handle it by " + nameStretching()
+				person.titssize = globals.titssizearray[globals.titssizearray.find(person.titssize)+1]
+				var hpdamage = round(rand_range(1, 2) * pressure_required)
+				text += " to " + str(person.titssize) + ".\nThis caused damage to $his health. [color=red]" + str(hpdamage) + " Health Lost[/color]"
+				#Inflict Damage. They won't die from it though.
+				if person.health - hpdamage <= 0:
+					hpdamage -= (person.health - 1)
+					person.health = 1
+					if person.energy - hpdamage >= 0:
+						person.energy -= hpdamage
 					else:
-						text += "\n"
-						person.health -= hpdamage
-			#Apply Pressure Stress
-			if globals.fetishopinion.find(person.fetish.lactation) >= 3 || person.traits.has('Masochist'):
-				person.lust += pressure
-				text += "$name's " +nameTits()+ " are so "+nameStretched()+"that $he would normally feel incredibly stressed by it. Instead, $he is simply [color=green]turned on[/color] by the pain of $his swollen " +nameTits()+ ".\n$He gained [color=red]"+str(pressure)+ " Lust[/color]\n"
-			elif globals.expansionsettings.lactationstressenabled == true:
-				person.stress += pressure
-				text += "$name's " +nameTits()+ " are so "+nameStretched()+" that $he constantly feels the pain from $his achy " +nameTits()+ ".\n$He gained [color=red]"+str(pressure)+ " Stress[/color]\n"
-			person.lactating.pressure = pressure
-	elif person.lactating.milkstorage > person.lactating.milkmax:
-		person.lactating.milkstorage = person.lactating.milkmax
+						person.energy = 0
+					text += "Due to $his extremely poor health condition, $his energy has been drastically reduced as well by the incident.\n[color=red]" +str(hpdamage)+ "Energy Lost[/color]\n"
+				else:
+					text += "\n"
+					person.health -= hpdamage
+				stress_gain += hpdamage
+				# Reset pressure (make it take longer to expand again)
+				lact.milkstorage += lact.pressure
+				lact.pressure = 0
+
+	#Apply Pressure Stress
+	var excess_pressure = max(0, lact.pressure - lact.milkmax)
+	stress_gain += excess_pressure
+	if stress_gain > 0:
+		text += "$name's " + nameTits() + " are so " + nameStretched() + " that $he constantly feels the pain from $his achy " + nameTits() + "."
+		if globals.fetishopinion.find(person.fetish.lactation) >= 3 || person.traits.has('Masochist'):
+			person.lust += stress_gain
+			text += " $He is [color=green]turned on[/color] by the pain of $his swollen " + nameTits() + " and gained [color=green]" + str(stress_gain) + " Lust[/color]."
+		elif globals.expansionsettings.lactationstressenabled:
+			person.stress += stress_gain
+			text += " $He gained [color=red]" + str(stress_gain) + " Stress[/color]."
+		text += "\n"
+
+	#Remaining excess has a chance to leak out
+	lact.leaking = 0
+	excess_milk = lact.milkstorage - lact.milkmax
+	if excess_milk > 0:
+		if rand_range(0,100) <= excess_milk * 10:
+			lact.leaking += round(rand_range(1, excess_milk))
+	if excess_pressure > 0:
+		lact.leaking += round(excess_pressure)
+
+
+	lact.milkstorage = min(lact.milkstorage, lact.milkmax)
+	lact.pressure = min(lact.pressure, lact.milkmax)
 
 	#Keep the Secret (if Possible)
 	if !person.knowledge.has('lactating') && !person.mind.secrets.has('lactating'):
@@ -3161,92 +3185,6 @@ func dailyLactation(person):
 
 	return person.dictionary(text)
 
-#Old System
-func dailyMilking(person, extraction='', autopump = false):
-	var text = ""
-	var lact = person.lactating
-	var regen = lact.regen
-	var transfer = 0
-	var cowquality = 0
-	var extractionquality = 0
-	var result
-	var auto = autopump
-	if extraction == 'none':
-		lact.daysunmilked += 1
-		if lact.daysunmilked >= 1:
-			text += "$name feels growing pressure in $his breasts as $he goes [color=red]unmilked[/color] for [color=aqua]"+ str(lact.daysunmilked) +" Days[/color]. "
-		#Turn .1 of Storage into Pressure
-		transfer = round(lact.milkstorage * milkregenperday)
-		lact.pressure += transfer
-		lact.milkstorage -= transfer
-		result = 0
-	else:
-		lact.milkedtoday = true
-		lact.daysunmilked = 0
-
-		#Gain Being Milked Fetish
-		if rand_range(0,100) <= ((person.lactating.milkstorage*.25)+person.lactating.pressure) * globals.expansionsettings.beingmilkedacceptancemultiplier:
-			if person.fetish.bemilked != globals.fetishopinion.back():
-				person.fetish.bemilked = globals.fetishopinion[globals.fetishopinion.find(person.fetish.bemilked)+1]
-				text += "$name seems to be more comfortable with lactating now. $He now feels that it is " + str(person.fetish.bemilked) + " to be lactating. "
-
-		#Stress/Lust based on the Being Milked Fetish
-
-		#Cow Quality
-		if person.preg.duration > 0:
-			cowquality = round(lact.milkstorage*1.5)
-		else:
-			cowquality = lact.milkstorage
-		#Extraction Quality
-		var farmmanager
-		var efficiency
-		for i in globals.slaves:
-			if i.work == 'farmmanager':
-				farmmanager = i
-		if person.work == 'cow':
-			if auto == false:
-				#Determine Efficiency
-				if farmmanager != null:
-					if !farmmanager.jobskills.has("farmmanager"):
-						farmmanager.jobskills['farmmanager'] = 1
-					#Add Farm Manager Endurance Tracker
-					efficiency = 1 + (farmmanager.jobskills.farmmanager*.01) + (farmmanager.conf*.01)+(farmmanager.wit*.01)
-#					text += "\n" + farmmanager.dictionary("$name") + " managed to coax slightly better production out of " + person.dictionary("$name's " + str(getChest(person)) + ", recovering [color=green]" + str(regen) + " milk back into $his " + nameTits() + ".")
-				else:
-					efficiency = 0
-#					text += "\n[color=red]There was no manager of the farm today, so $name merely sat there with $his "+getChest(person)+" "+nameSwelling()+".[/color]"
-			else:
-				#Determine Efficiency
-				efficiency = farmmanager.wit + farmmanager.jobskills.farmmanager
-				if rand_range(0,100) > efficiency:
-					efficiency = ((farmmanager.wit + farmmanager.jobskills.farmmanager)*.01)
-				else:
-					efficiency = 1+((farmmanager.wit + farmmanager.jobskills.farmmanager)*.01)
-			if extraction == 'hand':
-				extractionquality = .5+efficiency
-			elif extraction == 'basic':
-				extractionquality = .75+efficiency
-			elif extraction == 'masterwork':
-				extractionquality = 1+efficiency
-			elif extraction == 'magical':
-				extractionquality = 2+efficiency
-
-			result = (cowquality*extractionquality)
-			var drained = lact.milkstorage - result
-			lact.milkstorage = clamp(drained, 0 ,lact.milkmax)
-
-	#Possibly add Farm Text to a separate location instead of returning it, so I can return a number?
-	return result
-
-func getMilkLeak(person,value=50):
-	#Sends a Chance to cause Leaking (Working, Activities, Talking, etc)
-	var leak = 0
-	if rand_range(0,100) - person.lactating.pressure <= value:
-		leak = round(rand_range(1,person.lactating.pressure))
-		person.lactating.pressure -= leak
-		person.lactating.milkstorage -= leak
-		person.lactating.leaking = leak
-	return leak
 
 func sexWorkBonus(person):
 	#Bonus Gold for Previous Experience, Sizes, and Lust
