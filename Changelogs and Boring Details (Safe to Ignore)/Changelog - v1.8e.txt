@@ -1,0 +1,21 @@
+#---New Features---#
+<Dimensional Crystal>
+>New Ability: Detoxify
+Detoxify is a new Crystal Ability that grants you a new spell when discovered. The spell will fully purge the Toxicity of a slave at the cost of one of the Crystal's Lifeforce. It requires at least level 2 to unlock.
+
+#---Feature Fixes---#
+
+
+
+#---BugFix and Misc Stuff---#
+	FlaireFleetmist
+>Fix error when an action continues but the selected givers and takers have changed
+Fix error when the "103 suck nipples" action continues but the selected givers and takers have changed. In most cases, the text would still be displayed correctly. However, in some cases, you'd have a console error, or the wrong giver or taker would be described.
+
+
+#---Other Contributor Notes---#
+#Reference Key#
+ Person -
+>Feature/Title
+Details of their Pull Request
+#Reference Key#

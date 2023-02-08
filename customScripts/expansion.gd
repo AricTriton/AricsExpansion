@@ -2095,6 +2095,13 @@ func dailyCrystal():
 			text += "You dream of standing in a great field of combat. You look down and see arrows, blades, and magic blasts have destroyed parts of your body. Despite it all, you feel a resurgence of energy within you. You have been hurt...but you will fight again. You MUST fight on. \n[color=lime]You have been granted the secret of [color=green]Second Wind[/color], allowing you personally to survive 1 fatal blow in combat daily.[/color] "
 			refCrystal.abilities.append('secondwind')
 
+	elif globals.state.mansionupgrades.dimensionalcrystal >= 2 && !refCrystal.abilities.has('detoxify'):
+		if rand_range(50,100) <= refCrystal.research:
+			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"
+			text += "You dream of a sickly green ooze coursing through the veins of your slaves. You see it rising up, consuming them, and twisting their minds and bodies into monstrosities. A light appears in your hand and you reach out towards them. As you do, a spear pierces out and penetrates the sickly green ooze. You rip it back and see it trailing out of their bodies like a venom withdrawn. You see their blood, minds, and bodies remaining free...only allowed to be corrupted by your whims. \n[color=lime]You have been granted the [color=aqua]Spell[/color] [color=aqua]Detoxify[/color], allowing you to purge [color=aqua]Toxicity[/color] from a slave at the cost of the [color=#E389B9]Crystal's[/color] [color=#65CD72]Lifeforce[/color].[/color] "
+			refCrystal.abilities.append('detoxify')
+			globals.spelldict.detoxify.learned = true
+
 	elif globals.state.mansionupgrades.dimensionalcrystal >= 3 && !refCrystal.abilities.has('immortality'):
 		if rand_range(50,100) <= refCrystal.research:
 			text += "\n[center][color=yellow]The [color=#E389B9]Crystal[/color] grants you a Secret[/color][/center]\n"

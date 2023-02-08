@@ -92,6 +92,8 @@ func backwardsCompatibility(person):
 		person.mind['secretslog'] = ""
 	if !person.mind.has('willpower'):
 		person.mind['willpower'] = 100
+	if !person.mind.has('trust'):
+		person.mind['trust'] = 0
 	if !person.mind.has('approaches'):
 		person.mind['approaches'] = {openness = 0, loyal = 0, obed = 0, fear = 0, lust = 0, pushed = []}
 

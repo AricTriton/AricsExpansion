@@ -2021,6 +2021,9 @@ func _on_dimcrystal_button_pressed():
 	#Second Wind
 	if globals.state.mansionupgrades.dimensionalcrystal >= 2 && !globals.state.thecrystal.abilities.has('secondwind'):
 		text += "\n[color=green]Inspiration[/color]: You think you may be able to learn how to make the [color=#E389B9]Crystal[/color] to revive you and your slaves to half health from a fatal blow in combat once per day."
+	#Detoxify
+	if globals.state.mansionupgrades.dimensionalcrystal >= 2 && !globals.state.thecrystal.abilities.has('detoxify'):
+		text += "\n[color=green]Inspiration[/color]: You think you may be able to learn how to make the [color=#E389B9]Crystal[/color] remove [color=red]Toxicity[/color] from your slaves."
 	#Death Prevention
 	if globals.state.mansionupgrades.dimensionalcrystal >= 3 && !globals.state.thecrystal.abilities.has('immortality'):
 		text += "\n[color=green]Inspiration[/color]: You believe that the [color=#E389B9]Crystal[/color] can grant [color=aqua]Immortality[/color], but are not yet sure how."

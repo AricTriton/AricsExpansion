@@ -269,6 +269,19 @@ var spelllist = {
 		learned = true,
 		type = 'utility',
 	},
+	detoxify = {
+		code = 'detoxify',
+		name = 'Detoxify',
+		description = 'Purges all Toxicity from a target by drawing it into a Lifeforce from the Dimensional Crystal and destroying that Lifeforce. ',
+		effect = 'detoxifyeffect',
+		manacost = 10,
+		req = 10,
+		price = 500,
+		personal = true,
+		combat = false,
+		learned = false,
+		type = 'utility',
+	},
 ###---End Expansion---###
 }
 
@@ -614,7 +627,7 @@ func masssedationeffect():
 	var skippedslaves = []
 	var alreadyaffectedslaves = []
 	var stresstarget = 33
-	text = ''
+	
 	for i in globals.slaves:
 		if i.stress >= stresstarget:
 			if !i.effects.has('sedated'):
@@ -667,7 +680,6 @@ func masshealeffect():
 	var loyaltyaffectedslaves = []
 	var skippedslaves = []
 	var alreadyaffectedslaves = []
-	text = ''
 
 	## TODO - heal YOU first
 	var _slave
@@ -779,4 +791,15 @@ func leakeffect():
 	
 	return person.dictionary(text)
 
+func detoxifyeffect(person):
+	var spell = globals.spelldict.detoxify
+	var text = "[color=aqua]$name[/color] is enveloped by a "
+	if globals.state.thecrystal.mode == "light":
+		text += "violet light around $his feet. The light stretches up from the circle around $him as you see a rising tendril of pulsing light begin to glow incredibly brightly as it pierces through $his chest, seemingly causing no damage. As it pierces through the other side, you see the tendril dampened with streaks of sickly green trailing back to $his chest as though still attached to $his body. The light tendril seems to pull stronger as the strings of sickly green stretch thin before they finally snap away from $his body and permeate the now darkened tendril. As quickly as it began, the light and tendrils both vanish.\n\nYou know that $his [color=red]Toxicity[/color] has been purged at the cost of one of the [color=#65CD72]Lifeforce[/color] stored within the [color=#E389B9]Dimensional Crystal[/color]. Unless it is drained past its limit, however, you believe it should recover it in time."
+	else:
+		text += "dull red glow around $his feet. As you watch, sections of the glowing light seem to dull as a tentacle of shadow slithers up $his legs and envelop $his body. You catch the mere glimpse of $his terror filled eyes as the shadowy tentacle grows and slithers until it fully encompasses $his body. You watch as it begins to contract and pulse, squeezing and releasing in a silent rhythm. One such contraction seems to squeeze what looks like a sickly green ooze through the only now visible lines between the shadowy tentacles form. Again and again it pulses, milking the toxicity from the tendril's prey until the sickly green ooze drains into the glowing light around the feet of the encompassed slave. Once no oozing green [color=red]Toxicity[/color] remains, the shadow begins to drain off of $his face, neck, and torso until nothing but the red dull light remains. Finally, as suddenly as it began, that too vanishes.\n\nYou are sure that $his [color=red]Toxicity[/color] has been purged at the cost of one of the [color=#65CD72]Lifeforce[/color]. It is just one more debt of life remaining to be paid to the cracked, darkened [color=#E389B9]Crystal[/color]."
+	person.toxicity = 0
+	globals.state.thecrystal.lifeforce -= 1
+	
+	return person.dictionary(text)
 ###---End Expansion---###
