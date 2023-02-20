@@ -170,7 +170,16 @@ func expandGame():
 	globals.state.expansionversion = globals.expansionsettings.modversion
 	
 	#Force Mass Person Expansion
-	for person in globals.slaves + globals.state.allnpcs + globals.state.babylist:
+	var all_people = []
+	all_people.append(globals.player)
+	all_people.append_array(globals.slaves)
+	all_people.append_array(globals.state.allnpcs)
+	all_people.append_array(globals.state.babylist)
+	for i in globals.guildslaves:
+		all_people.append_array(globals.guildslaves[i])
+	if globals.state.sebastianslave != null:
+		all_people.append(globals.state.sebastianslave)
+	for person in all_people:
 		if person.expanded == false:
 			globals.expansionsetup.expandPerson(person)
 #		if float(person.expansionversion) < float(globals.expansionsettings.modversion): #Old Method#
@@ -183,21 +192,6 @@ func expandGame():
 			person.feathercolor = globals.randomfromarray(globals.races["Harpy"].feathercolor)
 		if globals.state.relativesdata.has(person.id):
 			globals.state.relativesdata[person.id].name = person.name_long()
-	for i in globals.guildslaves:
-		for person in globals.guildslaves[i]:
-			if person.expanded == false:
-				globals.expansionsetup.expandPerson(person)
-#			if float(person.expansionversion) < float(globals.expansionsettings.modversion):
-			if str(person.expansionversion) != str(globals.expansionsettings.modversion):
-				globals.backwardscompatibility.backwardsCompatibility(person)
-			globals.expansion.updatePerson(person)
-			if person.race == "Dragonkin" && person.scalecolor == '':
-				person.scalecolor = globals.randomfromarray(globals.races["Dragonkin"].scalecolor)
-			if person.race == "Harpy" && person.feathercolor == '':
-				person.feathercolor = globals.randomfromarray(globals.races["Harpy"].feathercolor)
-
-			if globals.state.relativesdata.has(person.id):
-				globals.state.relativesdata[person.id].name = person.name_long()
 
 	#---BugFixing & Cleanup
 	#erase NPCs with duplicate ids to slaves

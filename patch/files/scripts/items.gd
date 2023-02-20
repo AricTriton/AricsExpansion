@@ -1695,20 +1695,16 @@ func end(value):
 	person.stats.end_mod += value
 
 func cour(value):
-	person.stats.cour_base += value
-	return ''
+	person.stats.cour_mod += value
 
 func conf(value):
-	person.stats.conf_base += value
-	return ''
+	person.stats.conf_mod += value
 
 func wit(value):
-	person.stats.wit_base += value
-	return ''
+	person.stats.wit_mod += value
 
 func charm(value):
-	person.stats.charm_base += value
-	return ''
+	person.stats.charm_mod += value
 
 func health(value):
 	person.stats.health_bonus += value

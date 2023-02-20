@@ -163,7 +163,22 @@ func backwardsCompatibility(person):
 		person.stats['wit_racial'] = 0
 	if !person.stats.has('charm_racial'):
 		person.stats['charm_racial'] = 0
-	
+
+	if !person.stats.has('cour_mod'):
+		# Update mental stat tracking
+		for stat_type in ['cour', 'conf', 'wit', 'charm']:
+			# First make the new _mod field
+			person.stats[stat_type + '_mod'] = 0
+			# Now go through and convert any item bonuses to use the new _mod field instead
+			for slot in person.gear.values():
+				if slot != null:
+					var item = globals.state.unstackables[slot]
+					for effect in item.effects:
+						if effect.type == 'onequip':
+							if effect.effect == stat_type:
+								person.stats[stat_type + '_base'] -= effect.effectvalue
+								person.stats[stat_type + '_mod'] += effect.effectvalue
+
 	#Movement Icon Change from Traits (Unneeded now?)
 	for i in ['Movement: Walking','Movement: Flying','Movement: Crawling','Movement: Immobilized']:
 		if person.traits.has(i):
