@@ -177,7 +177,7 @@ func expandGame():
 	all_people.append_array(globals.state.babylist)
 	for i in globals.guildslaves:
 		all_people.append_array(globals.guildslaves[i])
-	if globals.state.sebastianslave != null:
+	if globals.state.sebastianorder.taken == true:
 		all_people.append(globals.state.sebastianslave)
 	for person in all_people:
 		if person.expanded == false:
