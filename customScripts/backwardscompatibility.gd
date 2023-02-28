@@ -167,7 +167,10 @@ func backwardsCompatibility(person):
 	if !person.stats.has('cour_mod'):
 		# Update mental stat tracking
 		for stat_type in ['cour', 'conf', 'wit', 'charm']:
-			# First make the new _mod field
+			# Add racial stat modifications directly to base/max
+			person.stats[stat_type + '_base'] += person.stats[stat_type + '_racial']
+			person.stats[stat_type + '_max'] += person.stats[stat_type + '_racial']
+			# Make the new _mod field
 			person.stats[stat_type + '_mod'] = 0
 			# Now go through and convert any item bonuses to use the new _mod field instead
 			for slot in person.gear.values():

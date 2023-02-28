@@ -580,53 +580,53 @@ func loyal_set(value):
 ###---Added by Expansion---### Modified by Deviate - Allow current stat up to max stat
 func cour_set(value):
 	var difference = value - cour_get()
-	stats.cour_base = clamp(stats.cour_base + difference, 0, cour_max_get() - stats.cour_racial)
+	stats.cour_base = clamp(stats.cour_base + difference, stats.cour_racial, cour_max_get())
 
 func conf_set(value):
 	var difference = value - conf_get()
-	stats.conf_base = clamp(stats.conf_base + difference, 0, conf_max_get() - stats.conf_racial)
+	stats.conf_base = clamp(stats.conf_base + difference, stats.conf_racial, conf_max_get())
 
 func wit_set(value):
 	var difference = value - wit_get()
-	stats.wit_base = clamp(stats.wit_base + difference, 0, wit_max_get() - stats.wit_racial)
+	stats.wit_base = clamp(stats.wit_base + difference, stats.wit_racial, wit_max_get())
 
 func charm_set(value):
 	var difference = value - charm_get()
-	stats.charm_base = clamp(stats.charm_base + difference, 0, charm_max_get() - stats.charm_racial)
+	stats.charm_base = clamp(stats.charm_base + difference, stats.charm_racial, charm_max_get())
 
 func cour_max_get():
 	var origin_base = originvalue[origins]
 	var max_mod = stats.cour_max - originvalue['noble']
-	return max(0, origin_base + max_mod + stats.cour_racial)
+	return max(0, origin_base + max_mod)
 
 func conf_max_get():
 	var origin_base = originvalue[origins]
 	var max_mod = stats.conf_max - originvalue['noble']
-	return max(0, origin_base + max_mod + stats.conf_racial)
+	return max(0, origin_base + max_mod)
 
 func wit_max_get():
 	var origin_base = originvalue[origins]
 	var max_mod = stats.wit_max - originvalue['noble']
-	return max(0, origin_base + max_mod + stats.wit_racial)
+	return max(0, origin_base + max_mod)
 
 func charm_max_get():
 	var origin_base = originvalue[origins]
 	var max_mod = stats.charm_max - originvalue['noble']
-	return max(0, origin_base + max_mod + stats.charm_racial)
+	return max(0, origin_base + max_mod)
 ###---End Expansion---###
 
 
 func cour_get():
-	return floor(stats.cour_base + stats.cour_racial + stats.cour_mod)
+	return floor(stats.cour_base + stats.cour_mod)
 
 func conf_get():
-	return floor(stats.conf_base + stats.conf_racial + stats.conf_mod)
+	return floor(stats.conf_base + stats.conf_mod)
 
 func wit_get():
-	return floor(stats.wit_base + stats.wit_racial + stats.wit_mod)
+	return floor(stats.wit_base + stats.wit_mod)
 
 func charm_get():
-	return floor(stats.charm_base + stats.charm_racial + stats.charm_mod)
+	return floor(stats.charm_base + stats.charm_mod)
 
 
 func name_long():
