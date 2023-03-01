@@ -169,9 +169,9 @@ func slaves_set(person):
 	###---Added by Expansion---### Category: NPCs Expanded
 	if person.npcexpanded.timesmet > 0:
 		if person.npcexpanded.timesfought > 0:
-			person.fear = person.npcexpanded.timesfought*5
+			person.fear += person.npcexpanded.timesfought*5
 		if person.npcexpanded.timesrescued > 0:
-			person.loyal = person.npcexpanded.timesrescued*5
+			person.loyal += person.npcexpanded.timesrescued*5
 	if globals.state.relativesdata[person.id].state != "enslaved":
 		globals.state.relativesdata[person.id].state = "enslaved"
 	###---End Expansion---###
