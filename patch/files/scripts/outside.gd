@@ -180,12 +180,52 @@ func abilitytooltip(ability):
 		text += "\n\n[color=green]Ability active[/color]"
 	else:
 		text += "\n\nAbility inactive"
+	if partyselectedchar.ability_autoattack.has(ability.code):
+		text += ", will be used to autoattack"
 	globals.showtooltip(text)
 
 func statinfo(stat):
 	globals.showtooltip(globals.statsdescript[stat])
 
 var partyselectedchar = null
+
+
+func edit_characted_combat_info():
+	$playergrouppanel/characterinfo/center_container/combat_settings_popup.set_person(partyselectedchar)
+	$playergrouppanel/characterinfo/center_container/combat_settings_popup.popup_centered()
+
+
+func on_combat_info_hide():
+	iteminfoclose()
+	update_abilities()
+	if get_parent().get_node('combat').is_visible_in_tree():
+		var combatant = get_parent().get_node('combat').findcombatantfromslave(partyselectedchar)
+		if combatant.actionpoints > 0:
+			combatant.selectcombatant()
+			combatant.update_skills_person()
+			combatant.buildabilities()
+
+
+func update_abilities():
+	var person = partyselectedchar
+	var ability_container = $playergrouppanel/characterinfo/Container/GridContainer
+	var original_button = ability_container.get_node("original_button")
+	var edit_button = ability_container.get_node("center_container")
+	for i in ability_container.get_children():
+		if i != original_button and i != edit_button:
+			i.visible = false
+			i.queue_free()
+	for i in person.ability:
+		var ability = globals.abilities.abilitydict[i]
+		var newnode = original_button.duplicate()
+		ability_container.add_child(newnode)
+		newnode.visible = true
+		newnode.texture_normal = ability.iconnorm
+		if !person.abilityactive.has(i):
+			newnode.texture_normal = ability.icondisabled
+		newnode.connect("mouse_entered",self,'abilitytooltip',[ability])
+		newnode.connect("mouse_exited",self,'iteminfoclose')
+
 
 func opencharacter(person, combat = false, combatant = null):
 	partyselectedchar = person
@@ -196,22 +236,7 @@ func opencharacter(person, combat = false, combatant = null):
 		if person.gear[i] != null:
 			var item = globals.state.unstackables[person.gear[i]]
 			$playergrouppanel/characterinfo.get_node(i).texture_normal = globals.loadimage(item.icon)
-	for i in $playergrouppanel/characterinfo/Container/GridContainer.get_children():
-		if i.get_name() != 'Button':
-			i.visible = false
-			i.queue_free()
-	for i in person.ability:
-		var ability = globals.abilities.abilitydict[i]
-		var newnode = $playergrouppanel/characterinfo/Container/GridContainer/Button.duplicate()
-		$playergrouppanel/characterinfo/Container/GridContainer.add_child(newnode)
-		newnode.visible = true
-		newnode.texture_normal = ability.iconnorm
-		newnode.texture_pressed = ability.icondisabled
-		if !person.abilityactive.has(i):
-			newnode.pressed = true
-		newnode.connect("mouse_entered",self,'abilitytooltip',[ability])
-		newnode.connect("mouse_exited",self,'iteminfoclose')
-		newnode.connect("pressed", self, 'abilitytoggle', [i])
+	update_abilities()
 	for i in ['sstr','sagi','smaf','send']:
 		$playergrouppanel/characterinfo/stats.get_node(i+'/Label').text = str(person[i]) + "/" +str(min(person.stats[globals.maxstatdict[i]], person.originvalue[person.origins]))
 	$playergrouppanel/characterinfo/grade.texture = globals.gradeimages[person.origins]
@@ -231,18 +256,6 @@ func opencharacter(person, combat = false, combatant = null):
 			get_node("playergrouppanel/characterinfo/combstats/" + i + '/Label').text = str(combatant[i])
 			if i == 'protection':
 				get_node("playergrouppanel/characterinfo/combstats/" + i + '/Label').text += '%'
-
-func abilitytoggle(ability):
-	if !partyselectedchar.abilityactive.has(ability):
-		partyselectedchar.abilityactive.append(ability)
-	else:
-		partyselectedchar.abilityactive.erase(ability)
-	iteminfoclose()
-	if get_parent().get_node('combat').is_visible_in_tree():
-		var combatant = get_parent().get_node('combat').findcombatantfromslave(partyselectedchar)
-		if combatant.actionpoints > 0:
-			combatant.selectcombatant()
-			combatant.buildabilities()
 
 func _on_grade_mouse_entered():
 	var text = ''
