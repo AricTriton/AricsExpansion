@@ -191,8 +191,8 @@ var partyselectedchar = null
 
 
 func edit_characted_combat_info():
-	$playergrouppanel/characterinfo/center_container/combat_settings_popup.set_person(partyselectedchar)
-	$playergrouppanel/characterinfo/center_container/combat_settings_popup.popup_centered()
+	$playergrouppanel/characterinfo/combat_settings_popup.set_person(partyselectedchar)
+	$playergrouppanel/characterinfo/combat_settings_popup.popup_centered()
 
 
 func on_combat_info_hide():

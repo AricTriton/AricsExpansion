@@ -196,7 +196,8 @@ func add_new_ability(from_index: int, to_ability_array: Array, to_index: int) ->
 func move_ability(ability_array: Array, from_index: int, to_index: int) -> void:
 	if from_index == to_index:
 		return
-	var moved_ability = ability_array.pop_at(from_index)
+	var moved_ability = ability_array[from_index]
+	ability_array.remove(from_index)
 	if to_index <= ability_array.size():
 		ability_array.insert(to_index, moved_ability)	
 

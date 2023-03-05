@@ -143,8 +143,8 @@ func recreate_combat_settings() -> void:
 	var vbox_container = get_node("grouppanel/combat_settings_scroll/vbox")
 
 	var max_party_array = []
-	max_party_array.resize(MAX_PARTY_SIZE)
-	max_party_array.fill(globals.player)
+	for index in MAX_PARTY_SIZE:
+		max_party_array.append(globals.player)
 	var combat_settings_persons_buttons = update_list(vbox_container, max_party_array)
 
 	combat_settings_buttons = []
