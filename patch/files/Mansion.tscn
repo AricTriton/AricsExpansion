@@ -1,4 +1,4 @@
-[gd_scene load_steps=217 format=2]
+[gd_scene load_steps=218 format=2]
 
 [ext_resource path="res://files/scripts/Mansion.gd" type="Script" id=1]
 [ext_resource path="res://files/backgrounds/mansion.png" type="Texture" id=2]
@@ -143,6 +143,7 @@
 [ext_resource path="res://files/aric_expansion_images/pregnancy_icons/pregnancy_icon.png" type="Texture" id=141]
 [ext_resource path="res://files/buttons/inventory/33.png" type="Texture" id=142]
 [ext_resource path="res://files/buttons/mainscreen/1.png" type="Texture" id=143]
+[ext_resource path="res://files/combat_settings_popup.tscn" type="PackedScene" id=146]
 
 [sub_resource type="StyleBoxTexture" id=1]
 texture = ExtResource( 40 )
@@ -11590,32 +11591,41 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/panel = SubResource( 60 )
 
-[node name="Panel" type="Panel" parent="groupselectnode/grouppanel"]
-anchor_bottom = 1.0
+[node name="slave_list_label" type="Label" parent="groupselectnode/grouppanel"]
 margin_left = 11.0
 margin_top = 13.0
+margin_right = 343.0
+margin_bottom = 53.0
+text = "Select slaves to join your party"
+align = 1
+valign = 1
+
+[node name="slave_list_frame" type="Panel" parent="groupselectnode/grouppanel"]
+anchor_bottom = 1.0
+margin_left = 11.0
+margin_top = 53.0
 margin_right = 343.0
 margin_bottom = -24.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/panel = SubResource( 61 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="groupselectnode/grouppanel"]
+[node name="slave_list_scroll" type="ScrollContainer" parent="groupselectnode/grouppanel"]
 anchor_bottom = 1.0
 margin_left = 22.0
-margin_top = 20.0
-margin_right = 341.0
-margin_bottom = -44.0
+margin_top = 60.0
+margin_right = 332.0
+margin_bottom = -37.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 scroll_horizontal_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="groupselectnode/grouppanel/ScrollContainer"]
+[node name="vbox" type="VBoxContainer" parent="groupselectnode/grouppanel/slave_list_scroll"]
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_constants/separation = 7
 
-[node name="Button" type="Button" parent="groupselectnode/grouppanel/ScrollContainer/VBoxContainer"]
+[node name="original_button" type="Button" parent="groupselectnode/grouppanel/slave_list_scroll/vbox"]
 visible = false
 margin_right = 300.0
 margin_bottom = 40.0
@@ -11625,15 +11635,58 @@ size_flags_vertical = 2
 theme = ExtResource( 43 )
 toggle_mode = true
 
+[node name="combat_settings_label" type="Label" parent="groupselectnode/grouppanel"]
+margin_left = 944.0
+margin_top = 13.0
+margin_right = 1276.0
+margin_bottom = 53.0
+text = "Change active combat skills"
+align = 1
+valign = 1
+
+[node name="combat_settings_frame" type="Panel" parent="groupselectnode/grouppanel"]
+anchor_bottom = 1.0
+margin_left = 944.0
+margin_top = 53.0
+margin_right = 1276.0
+margin_bottom = -24.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/panel = SubResource( 61 )
+
+[node name="combat_settings_scroll" type="ScrollContainer" parent="groupselectnode/grouppanel"]
+anchor_bottom = 1.0
+margin_left = 955.0
+margin_top = 60.0
+margin_right = 1265.0
+margin_bottom = -37.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="vbox" type="VBoxContainer" parent="groupselectnode/grouppanel/combat_settings_scroll"]
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_constants/separation = 7
+
+[node name="original_button" type="Button" parent="groupselectnode/grouppanel/combat_settings_scroll/vbox"]
+visible = false
+margin_right = 300.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 300, 40 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 43 )
+
 [node name="closegroup" type="Button" parent="groupselectnode/grouppanel"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -623.0
-margin_top = -58.0
-margin_right = -453.0
-margin_bottom = -18.0
+margin_left = -709.0
+margin_top = -66.0
+margin_right = -539.0
+margin_bottom = -26.0
 rect_min_size = Vector2( 40, 0 )
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -11652,9 +11705,9 @@ size_flags_vertical = 0
 custom_fonts/normal_font = ExtResource( 45 )
 bbcode_enabled = true
 
-[node name="imageselect" parent="." groups=[
-"blockmaininput",
-] instance=ExtResource( 133 )]
+[node name="combat_settings_popup" parent="groupselectnode/grouppanel" instance=ExtResource( 146 )]
+
+[node name="imageselect" parent="." groups=["blockmaininput"] instance=ExtResource( 133 )]
 visible = false
 margin_left = -1033.0
 margin_top = -562.0
@@ -13076,6 +13129,8 @@ current = true
 [connection signal="pressed" from="MainScreen/mansion/jailpanel/jailsettings/jailsettingspanel/jailerclose" to="." method="_on_jailerclose_pressed"]
 [connection signal="pressed" from="MainScreen/mansion/alchemypanel/brewbutton" to="." method="_on_brewbutton_pressed"]
 [connection signal="value_changed" from="MainScreen/mansion/alchemypanel/brewcounter" to="." method="_on_brewcounter_value_changed"]
+[connection signal="pressed" from="MainScreen/mansion/enchantpanel/brewbutton" to="." method="_on_brewbutton_pressed"]
+[connection signal="value_changed" from="MainScreen/mansion/enchantpanel/brewcounter" to="." method="_on_brewcounter_value_changed"]
 [connection signal="meta_clicked" from="MainScreen/mansion/selfinspect/statspanel/info" to="MainScreen/slave_tab" method="_on_info_meta_clicked"]
 [connection signal="pressed" from="MainScreen/mansion/selfinspect/selfinspectclose" to="." method="_on_selfinspectclose_pressed"]
 [connection signal="text_changed" from="MainScreen/mansion/selfinspect/defaultMasterNoun" to="." method="_on_defaultMasterNoun_text_changed"]
