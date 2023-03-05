@@ -250,8 +250,9 @@ class combatant:
 	var portrait
 	var target
 	var geareffects = []
-	var abilities
-	var activeabilities
+	var enemy_abilities
+	var active_abilities
+	var auto_abilities
 	var node
 	var scene
 	var cooldowns = {}
@@ -272,7 +273,7 @@ class combatant:
 			group = 'player'
 		else:
 			group = 'enemy'
-		abilities = data.stats.abilities
+		enemy_abilities = data.stats.abilities
 		#Filling values
 		
 		###---Added by Expansion---###
@@ -303,6 +304,11 @@ class combatant:
 			hpmax = ceil(hpmax * 1.5)
 			hp = hpmax
 			speed = ceil(speed + 5)
+
+	
+	func update_skills_person():
+		active_abilities = person.abilityactive.duplicate()
+		auto_abilities = person.ability_autoattack.duplicate()
 		
 	
 	func createfromslave(person, data = null):
@@ -316,11 +322,11 @@ class combatant:
 			portrait = data.icon
 			if person.sex != 'male' && data.has('iconalt'):
 				portrait = data.iconalt
-		abilities = person.ability.duplicate()
-		activeabilities = person.abilityactive
+		update_skills_person()
+		enemy_abilities = person.ability.duplicate()
 		if data != null:
 			for i in data.stats.abilities:
-				abilities.append(i)
+				enemy_abilities.append(i)
 		
 		###---Added by Expansion---###
 		if person != null:
@@ -397,10 +403,10 @@ class combatant:
 					tempitem = globals.state.unstackables[i]
 				else:
 					tempitem = scene.enemygear[i]
-#				if group == 'player':
-#					tempitem = globals.state.unstackables[i]
-#				else:
-#					tempitem = scene.enemygear[i]
+				#if group == 'player':
+				#	tempitem = globals.state.unstackables[i]
+				#else:
+				#	tempitem = scene.enemygear[i]
 				###---End Expansion---###
 				for k in tempitem.effects:
 					if k.type == 'incombat' && globals.abilities.has_method(k.effect) && !k.has("effectscale"):
@@ -469,7 +475,7 @@ class combatant:
 			if i.name != 'skill':
 				i.hide()
 				i.free()
-		for i in activeabilities:
+		for i in active_abilities:
 			var skill = globals.abilities.abilitydict[i]
 			var newbutton = scene.get_node("grouppanel/skilline/skill").duplicate()
 			scene.get_node("grouppanel/skilline").add_child(newbutton)
@@ -489,9 +495,9 @@ class combatant:
 				newbutton.set_normal_texture(skill.iconnorm)
 				newbutton.set_pressed_texture(skill.iconpressed)
 				newbutton.set_disabled_texture(skill.icondisabled)
-#			if action != null:
-#				if action.name == skill.name:
-#					newbutton.set_pressed(true)
+			#if action != null:
+			#	if action.name == skill.name:
+			#		newbutton.set_pressed(true)
 			if newbutton.is_disabled():
 				newbutton.get_node("number").set('custom_colors/font_color', Color(1,0,0,1))
 			elif newbutton.is_pressed():
@@ -739,7 +745,7 @@ func pressskill(skill):
 	else:
 		period = 'skilluse'
 		useskills(skill, selectedcharacter, selectedcharacter)
-
+	
 func hitChance(caster,target,skill):
 	var hitchance = 80
 	if caster.speed >= target.speed:
@@ -917,30 +923,22 @@ func useskills(skill, caster = null, target = null, retarget = false):
 	emit_signal("skillplayed")
 
 func useAutoAbility(combatant):
-	for abilityName in combatant.activeabilities:
+	if combatant.auto_abilities.back() != "attack":
+		combatant.auto_abilities.append("attack")
+	for abilityName in combatant.auto_abilities:
 		var ability = globals.abilities.abilitydict[abilityName]
 		if !combatant.cooldowns.has(abilityName) && combatant.energy >= ability.costenergy && globals.resources.mana >= globals.spells.spellCostCalc(ability.costmana) && ability.targetgroup == "enemy":
 			for j in enemygroup:
 				if j.node != null && j.state == 'normal':
 					useskills(ability, combatant, j)
 					return
-	for j in enemygroup:
-		if j.node != null && j.state == 'normal':
-			useskills(globals.abilities.abilitydict.attack, combatant, j)
-			return
 
 ###---Added by Expansion---### Combat Stress Alteration
 func enemyturn():
 	if $autoattack.pressed == true:
 		for i in playergroup:
 			if i.state == 'normal' && i.actionpoints > 0:
-				if globals.expansionsettings.autoattackability:
-					useAutoAbility(i)
-				else:
-					for j in enemygroup:
-						if j.node != null && j.state == 'normal':
-							useskills(globals.abilities.abilitydict.attack, i, j)
-							break
+				useAutoAbility(i)
 				yield(self, 'skillplayed')
 				endcombatcheck()
 				if period == 'win':
@@ -978,7 +976,7 @@ func enemyturn():
 			if effect.code == 'escapeeffect':
 				combatant.escape()
 		var skill = []
-		for k in combatant.abilities:
+		for k in combatant.enemy_abilities:
 			var i = globals.abilities.abilitydict[k]
 			
 			if combatant.ai == 'escape':
