@@ -1,4 +1,162 @@
 
+var categories = {everything = true, potion = false, ingredient = false, gear = false, supply = false}
+var selected_gear_categories = {}
+
+
+func _ready():	
+	for i in ['costume','weapon','armor','accessory','underwear']:
+		get_node("gearpanel/" + i).connect("pressed", self, 'gearinfo', [i])
+		get_node("gearpanel/" + i).connect("mouse_entered", self, 'geartooltip', [i])
+		get_node("gearpanel/" + i + '/TextureFrame').connect("mouse_entered", self, 'geartooltip', [i])
+		get_node("gearpanel/" + i + '/TextureFrame').connect("mouse_exited", globals, 'itemtooltiphide')
+		get_node("gearpanel/" + i + "/unequip").connect("pressed", self, 'unequip', [i])
+		get_node("gearpanel/" + i + "/filter_by_slot").connect("pressed", self, 'filter_gear', [i])
+	
+	for i in get_tree().get_nodes_in_group("invcategory"):
+		i.connect("pressed",self,'selectcategory',[i])
+
+
+func selectcategory(button):
+	if button.get_name() == 'everything':
+		for i in get_tree().get_nodes_in_group('invcategory'):
+			i.set_pressed(i == button)
+	else:
+		categories.everything = false
+		get_node("everything").set_pressed(false)
+	for i in categories:
+		categories[i] = get_node(i).is_pressed()
+	selected_gear_categories.clear()
+	categoryitems()
+
+
+func categoryitems():
+	for i in get_node("ScrollContainer/GridContainer/").get_children():
+		i.visible = item_should_be_visible(i)
+
+
+func item_should_be_visible(button) -> bool:
+	if not button.has_meta('category'):
+		return false   # original button which we duplicate
+	var item = button.get_meta('item')
+	if filter != '' and item.name.findn(filter) < 0 and item.description.findn(filter) < 0:
+		return false   # item does not match search string
+	if categories.everything:
+		return true    # show everything
+	
+	var item_category = button.get_meta('category')
+	if not categories.get(item_category, false):
+		return false   # category not in categories, like 'quest'
+	
+	if item_category == 'gear': # additional filter by gear type
+		var gear_type = button.get_meta("itemarray")[0].type
+		return selected_gear_categories.empty() or selected_gear_categories.has(gear_type) 
+	
+	return true
+
+
+func filter_gear(gear_type):
+	for i in categories:
+		categories[i] = false
+		get_node(i).set_pressed(false)
+	
+	categories.gear = true	
+	selected_gear_categories = {gear_type: true}
+	categoryitems()
+
+
+func create_item_button(i: Dictionary, amount: int, category: String, move_callback: String) -> Node:	
+	var button = get_node("ScrollContainer/GridContainer/Button").duplicate()
+	button.visible = true
+
+	button.set_meta('item', i)
+	button.set_meta("number", amount)
+	button.set_meta("category", category)
+
+	button.get_node('number').set_text(str(amount))
+	button.get_node("Label").set_text(i.name)
+
+	button.connect("mouse_entered", globals, 'itemtooltip', [i])
+	button.connect("mouse_exited", globals, 'itemtooltiphide')
+	button.get_node("move").connect("pressed",self,move_callback,[button])
+	button.get_node("use").connect("pressed",self,'use',[button])
+
+	itemgrid.add_child(button)	
+	return button
+
+
+func fill_items_list_non_gear(stackable_items: Array, move_callback: String) -> void:
+	var stackable_array = []
+	
+	for i in stackable_items:
+		if i.amount < 1 || i.type in ['gear','dummy']:
+			continue
+		stackable_array.append(i)
+	
+	stackable_array.sort_custom(globals.items,'sortitems')
+	
+	for i in stackable_array:
+		var button = create_item_button(i, i.amount, i.type, move_callback)
+
+		button.get_node("use").visible = i.type == 'potion' || i.code == 'bandage'
+			
+		if i.icon != null:
+			button.get_node("icon").set_texture(i.icon)
+	
+
+func fill_items_list_gear(gear_owner, move_callback: String) -> void:
+	var gear_array = []
+	var gear_unique_dict = {}
+	
+	for i in globals.state.unstackables.values():
+		if (i.owner != null && str(i.owner) != 'backpack') && globals.state.findslave(i.owner) == null && str(i.owner) != globals.player.id:
+			i.owner = null
+		if i.owner != gear_owner:
+			continue
+		
+		var gear_unique_id = "%s%s%s" % [i.code, i.name, i.effects]
+		if gear_unique_dict.has(gear_unique_id):
+			gear_unique_dict[gear_unique_id].append(i)
+		else:
+			gear_array.append([i])
+			gear_unique_dict[gear_unique_id] = gear_array.back()
+	
+	gear_array.sort_custom(self, 'sortgear')
+	
+	for i in gear_array:
+		var button = create_item_button(i[0], i.size(), 'gear', move_callback)
+		
+		button.set_meta("itemarray", i)
+		button.get_node("use").set_tooltip("Equip")
+		button.get_node("rename").visible = true
+		button.get_node("rename").connect("pressed",self,"renameitem",[i[0]])
+
+		if i[0].enchant == 'basic':
+			button.get_node("Label").set('custom_colors/font_color', Color(0,0.5,0))
+		elif i[0].enchant == 'unique':
+			button.get_node("Label").set('custom_colors/font_color', Color(0.6,0.4,0))
+		if i[0].icon != null:
+			button.get_node("icon").set_texture(globals.loadimage(i[0].icon))
+
+
+func fill_items_list_common(stackable_items: Array, gear_owner, move_callback: String) -> void:
+	fill_items_list_non_gear(stackable_items, move_callback)
+	fill_items_list_gear(gear_owner, move_callback)
+
+
+func itemsinventory():
+	fill_items_list_common(globals.itemdict.values(), null, 'movetobackpack')
+
+
+func itemsbackpack():
+	var stackable_items = []
+	for item_name in globals.state.backpack.stackables:
+		var item = globals.itemdict[item_name].duplicate()
+		item.amount = globals.state.backpack.stackables[item_name]
+		stackable_items.append(item)
+	
+	fill_items_list_common(stackable_items, 'backpack', 'movefrombackpack')
+
+
 ###---Added by Expansion---### Minor Tweaks by Dabros Integration
 func _input(event):
 	## CHANGED NEW - 26/5/19 - for allowing prev/next keys for slave selection
@@ -489,3 +647,8 @@ func amnesiapoteffect():
 	$amnesia/name.text = selectedslave.name
 	$amnesia/surname.text = selectedslave.surname
 	$amnesia/RichTextLabel.bbcode_text = selectedslave.dictionary(text)
+
+
+func _on_LineEdit_text_changed(new_text):
+	filter = new_text
+	categoryitems()
