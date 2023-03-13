@@ -1,0 +1,1096 @@
+[gd_scene load_steps=61 format=2]
+
+[ext_resource path="res://files/theme.tres" type="Theme" id=1]
+[ext_resource path="res://files/buttons/inventory/11-litter.png" type="Texture" id=2]
+[ext_resource path="res://files/inventory.gd" type="Script" id=3]
+[ext_resource path="res://files/buttons/inventory/1.png" type="Texture" id=4]
+[ext_resource path="res://files/buttons/inventory/12_chest.png" type="Texture" id=5]
+[ext_resource path="res://files/theme slavetab.tres" type="Theme" id=6]
+[ext_resource path="res://files/buttons/inventory/14(1).png" type="Texture" id=7]
+[ext_resource path="res://files/buttons/inventory/14(2).png" type="Texture" id=8]
+[ext_resource path="res://files/buttons/inventory/15(1).png" type="Texture" id=9]
+[ext_resource path="res://files/buttons/inventory/15(2).png" type="Texture" id=10]
+[ext_resource path="res://files/buttons/inventory/31.png" type="Texture" id=11]
+[ext_resource path="res://files/buttons/inventory/32.png" type="Texture" id=12]
+[ext_resource path="res://files/buttons/inventory/16(1).png" type="Texture" id=13]
+[ext_resource path="res://files/buttons/inventory/16(2).png" type="Texture" id=14]
+[ext_resource path="res://files/buttons/inventory/17(1).png" type="Texture" id=15]
+[ext_resource path="res://files/buttons/inventory/17(2).png" type="Texture" id=16]
+[ext_resource path="res://files/buttons/inventory/6-(item).png" type="Texture" id=17]
+[ext_resource path="res://files/images/items/armorleather.png" type="Texture" id=18]
+[ext_resource path="res://files/buttons/inventory/20(1).png" type="Texture" id=19]
+[ext_resource path="res://files/buttons/inventory/19(1).png" type="Texture" id=20]
+[ext_resource path="res://files/buttons/inventory/19(2).png" type="Texture" id=21]
+[ext_resource path="res://files/buttons/inventory/21(1).png" type="Texture" id=22]
+[ext_resource path="res://files/buttons/inventory/21(2).png" type="Texture" id=23]
+[ext_resource path="res://files/buttons/inventory/18(1).png" type="Texture" id=24]
+[ext_resource path="res://files/buttons/inventory/18(2).png" type="Texture" id=25]
+[ext_resource path="res://files/buttons/edit.png" type="Texture" id=26]
+[ext_resource path="res://files/buttons/inventorypanel.png" type="Texture" id=27]
+[ext_resource path="res://files/buttons/inventory/7-(slave).png" type="Texture" id=28]
+[ext_resource path="res://files/buttons/inventory/37.png" type="Texture" id=29]
+[ext_resource path="res://files/buttons/inventory/36.png" type="Texture" id=30]
+[ext_resource path="res://files/buttons/inventory/35.png" type="Texture" id=31]
+[ext_resource path="res://files/buttons/inventory/34.png" type="Texture" id=32]
+[ext_resource path="res://files/buttons/icons/strength.png" type="Texture" id=33]
+[ext_resource path="res://files/buttons/icons/agility.png" type="Texture" id=34]
+[ext_resource path="res://files/buttons/icons/magic.png" type="Texture" id=35]
+[ext_resource path="res://files/buttons/icons/endurance.png" type="Texture" id=36]
+[ext_resource path="res://files/buttons/explorebar2.png" type="Texture" id=37]
+[ext_resource path="res://files/buttons/explorebar.png" type="Texture" id=38]
+[ext_resource path="res://files/buttons/inventory/1 (2).png" type="Texture" id=39]
+[ext_resource path="res://files/buttons/inventory/2 (1).png" type="Texture" id=40]
+[ext_resource path="res://files/buttons/inventory/3.png" type="Texture" id=41]
+[ext_resource path="res://files/buttons/inventory/25.png" type="Texture" id=42]
+[ext_resource path="res://files/buttons/inventory/8-(equipped_item).png" type="Texture" id=43]
+[ext_resource path="res://files/buttons/inventory/30.png" type="Texture" id=44]
+[ext_resource path="res://files/buttons/inventory/26.png" type="Texture" id=45]
+[ext_resource path="res://files/buttons/inventory/29.png" type="Texture" id=46]
+[ext_resource path="res://files/buttons/inventory/28.png" type="Texture" id=47]
+[ext_resource path="res://files/buttons/inventory/27.png" type="Texture" id=48]
+[ext_resource path="res://files/buttons/inventory/9.png" type="Texture" id=49]
+[ext_resource path="res://files/buttons/inventory/4.png" type="Texture" id=50]
+[ext_resource path="res://files/buttons/inventory/5.png" type="Texture" id=51]
+[ext_resource path="res://files/buttons/inventory/33.png" type="Texture" id=52]
+[ext_resource path="res://files/bigpanel.tres" type="StyleBox" id=53]
+[ext_resource path="res://files/buttons/arrows/down.png" type="Texture" id=54]
+[ext_resource path="res://files/buttons/arrows/down-press.png" type="Texture" id=55]
+[ext_resource path="res://files/buttons/arrows/down-hl.png" type="Texture" id=56]
+[ext_resource path="res://files/aric_expansion_images/items/item_search_icon.png" type="Texture" id=57]
+
+[sub_resource type="StyleBoxTexture" id=1]
+texture = ExtResource( 27 )
+region_rect = Rect2( 0, 0, 613, 833 )
+
+[sub_resource type="StyleBoxTexture" id=2]
+texture = ExtResource( 37 )
+region_rect = Rect2( 0, 0, 150, 18 )
+margin_left = 5.0
+margin_right = 5.0
+margin_top = 5.0
+margin_bottom = 5.0
+
+[sub_resource type="StyleBoxTexture" id=3]
+texture = ExtResource( 38 )
+region_rect = Rect2( 0, 0, 150, 18 )
+margin_left = 5.0
+margin_right = 5.0
+margin_top = 5.0
+margin_bottom = 5.0
+
+[node name="inventory" type="TextureRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 1 )
+texture = ExtResource( 2 )
+expand = true
+script = ExtResource( 3 )
+
+[node name="TextureFrame 2" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 4 )
+expand = true
+
+[node name="mode" type="TextureButton" parent="."]
+margin_left = 7.0
+margin_top = 29.0
+margin_right = 103.0
+margin_bottom = 78.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 5 )
+expand = true
+
+[node name="everything" type="TextureButton" parent="." groups=[
+"invcategory",
+]]
+margin_left = 154.0
+margin_top = 30.0
+margin_right = 211.0
+margin_bottom = 78.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 6 )
+toggle_mode = true
+texture_normal = ExtResource( 7 )
+texture_pressed = ExtResource( 8 )
+expand = true
+
+[node name="potion" type="TextureButton" parent="." groups=[
+"invcategory",
+]]
+margin_left = 274.0
+margin_top = 30.0
+margin_right = 331.0
+margin_bottom = 78.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 6 )
+toggle_mode = true
+texture_normal = ExtResource( 9 )
+texture_pressed = ExtResource( 10 )
+expand = true
+
+[node name="supply" type="TextureButton" parent="." groups=[
+"invcategory",
+]]
+margin_left = 214.0
+margin_top = 30.0
+margin_right = 271.0
+margin_bottom = 78.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 6 )
+toggle_mode = true
+texture_normal = ExtResource( 11 )
+texture_pressed = ExtResource( 12 )
+expand = true
+
+[node name="ingredient" type="TextureButton" parent="." groups=[
+"invcategory",
+]]
+margin_left = 334.0
+margin_top = 30.0
+margin_right = 391.0
+margin_bottom = 78.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 6 )
+toggle_mode = true
+texture_normal = ExtResource( 13 )
+texture_pressed = ExtResource( 14 )
+expand = true
+
+[node name="gear" type="TextureButton" parent="." groups=[
+"invcategory",
+]]
+margin_left = 394.0
+margin_top = 30.0
+margin_right = 451.0
+margin_bottom = 78.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 6 )
+toggle_mode = true
+texture_normal = ExtResource( 15 )
+texture_pressed = ExtResource( 16 )
+expand = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchor_bottom = 1.0
+margin_left = 13.0
+margin_top = 96.0
+margin_right = 477.0
+margin_bottom = -96.0
+mouse_filter = 1
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="GridContainer" type="VBoxContainer" parent="ScrollContainer"]
+margin_right = 400.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_min_size = Vector2( 400, 0 )
+mouse_filter = 0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_constants/separation = -2
+
+[node name="Button" type="TextureRect" parent="ScrollContainer/GridContainer"]
+visible = false
+margin_right = 430.0
+margin_bottom = 85.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_min_size = Vector2( 430, 85 )
+mouse_filter = 0
+size_flags_vertical = 0
+texture = ExtResource( 17 )
+expand = true
+
+[node name="icon" type="TextureRect" parent="ScrollContainer/GridContainer/Button"]
+margin_left = 6.0
+margin_top = 7.0
+margin_right = 80.0
+margin_bottom = 79.0
+mouse_filter = 0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 18 )
+expand = true
+stretch_mode = 6
+
+[node name="number" type="Label" parent="ScrollContainer/GridContainer/Button"]
+margin_left = 55.0
+margin_top = 59.0
+margin_right = 78.0
+margin_bottom = 79.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "20"
+align = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/GridContainer/Button"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 85.0
+margin_top = 3.0
+margin_right = -23.0
+margin_bottom = -48.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Itemname"
+valign = 1
+autowrap = true
+clip_text = true
+
+[node name="discard" type="TextureButton" parent="ScrollContainer/GridContainer/Button"]
+margin_left = 384.0
+margin_top = 40.0
+margin_right = 420.0
+margin_bottom = 76.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Discard"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 19 )
+expand = true
+
+[node name="use" type="TextureButton" parent="ScrollContainer/GridContainer/Button"]
+margin_left = 162.0
+margin_top = 43.0
+margin_right = 198.0
+margin_bottom = 79.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Use"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 20 )
+texture_pressed = ExtResource( 21 )
+expand = true
+
+[node name="move" type="TextureButton" parent="ScrollContainer/GridContainer/Button"]
+margin_left = 123.0
+margin_top = 43.0
+margin_right = 159.0
+margin_bottom = 79.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Move"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 22 )
+texture_pressed = ExtResource( 23 )
+expand = true
+
+[node name="info" type="TextureButton" parent="ScrollContainer/GridContainer/Button"]
+margin_left = 83.0
+margin_top = 43.0
+margin_right = 119.0
+margin_bottom = 79.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Inspect"
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 24 )
+texture_pressed = ExtResource( 25 )
+expand = true
+
+[node name="rename" type="TextureButton" parent="ScrollContainer/GridContainer/Button"]
+visible = false
+margin_left = 385.0
+margin_top = 5.0
+margin_right = 415.0
+margin_bottom = 35.0
+hint_tooltip = "Rename"
+texture_normal = ExtResource( 26 )
+expand = true
+stretch_mode = 5
+
+[node name="Panel" type="Panel" parent="."]
+margin_left = 7.0
+margin_top = 89.0
+margin_right = 453.0
+margin_bottom = 683.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/panel = SubResource( 1 )
+
+[node name="slavelist" type="ScrollContainer" parent="."]
+anchor_bottom = 1.0
+margin_left = 900.0
+margin_top = 33.0
+margin_right = 1349.0
+margin_bottom = -78.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="GridContainer" type="VBoxContainer" parent="slavelist"]
+margin_right = 350.0
+rect_min_size = Vector2( 350, 0 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_constants/separation = -2
+
+[node name="Button" type="TextureButton" parent="slavelist/GridContainer" groups=[
+"inventoryslaves",
+]]
+visible = false
+margin_right = 408.0
+margin_bottom = 85.0
+rect_min_size = Vector2( 408, 85 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+toggle_mode = true
+texture_normal = ExtResource( 28 )
+texture_pressed = ExtResource( 29 )
+expand = true
+
+[node name="name" type="RichTextLabel" parent="slavelist/GridContainer/Button"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 123.0
+margin_top = 5.0
+margin_right = -14.0
+margin_bottom = -36.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+bbcode_enabled = true
+
+[node name="portrait" type="TextureRect" parent="slavelist/GridContainer/Button"]
+show_behind_parent = true
+margin_left = 3.0
+margin_right = 88.0
+margin_bottom = 85.0
+rect_min_size = Vector2( 80, 80 )
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+expand = true
+stretch_mode = 6
+
+[node name="hpbar" type="TextureProgress" parent="slavelist/GridContainer/Button"]
+margin_left = 89.0
+margin_top = 1.0
+margin_right = 105.0
+margin_bottom = 82.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+value = 95.0
+texture_over = ExtResource( 30 )
+texture_progress = ExtResource( 31 )
+fill_mode = 3
+
+[node name="enbar" type="TextureProgress" parent="slavelist/GridContainer/Button"]
+margin_left = 103.0
+margin_top = 1.0
+margin_right = 119.0
+margin_bottom = 82.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+value = 95.0
+texture_over = ExtResource( 30 )
+texture_progress = ExtResource( 32 )
+fill_mode = 3
+
+[node name="TextureFrame" type="TextureRect" parent="slavelist/GridContainer/Button"]
+margin_left = 125.0
+margin_top = 56.0
+margin_right = 150.0
+margin_bottom = 81.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 33 )
+
+[node name="TextureFrame1" type="TextureRect" parent="slavelist/GridContainer/Button"]
+margin_left = 188.0
+margin_top = 56.0
+margin_right = 213.0
+margin_bottom = 81.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 34 )
+
+[node name="TextureFrame2" type="TextureRect" parent="slavelist/GridContainer/Button"]
+margin_left = 254.0
+margin_top = 56.0
+margin_right = 279.0
+margin_bottom = 81.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 35 )
+
+[node name="TextureFrame3" type="TextureRect" parent="slavelist/GridContainer/Button"]
+margin_left = 322.0
+margin_top = 56.0
+margin_right = 347.0
+margin_bottom = 81.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 36 )
+
+[node name="sstr" type="Label" parent="slavelist/GridContainer/Button"]
+margin_left = 152.0
+margin_top = 60.0
+margin_right = 189.0
+margin_bottom = 80.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "1/5"
+
+[node name="send" type="Label" parent="slavelist/GridContainer/Button"]
+margin_left = 348.0
+margin_top = 60.0
+margin_right = 385.0
+margin_bottom = 80.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "1/5"
+
+[node name="smaf" type="Label" parent="slavelist/GridContainer/Button"]
+margin_left = 280.0
+margin_top = 60.0
+margin_right = 317.0
+margin_bottom = 80.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "1/5"
+
+[node name="sagi" type="Label" parent="slavelist/GridContainer/Button"]
+margin_left = 215.0
+margin_top = 60.0
+margin_right = 252.0
+margin_bottom = 80.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "1/5"
+
+[node name="noitems" type="Label" parent="."]
+visible = false
+margin_left = 48.0
+margin_top = 104.0
+margin_right = 312.0
+margin_bottom = 147.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Currently you have no suitable 
+items in possession "
+
+[node name="weightmeter" type="ProgressBar" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -1192.0
+margin_top = -44.0
+margin_right = -925.0
+margin_bottom = -19.0
+size_flags_horizontal = 2
+custom_styles/fg = SubResource( 2 )
+custom_styles/bg = SubResource( 3 )
+step = 1.0
+value = 10.0
+percent_visible = false
+
+[node name="Label" type="Label" parent="weightmeter"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -431.0
+margin_top = -21.0
+margin_right = -273.0
+margin_bottom = -1.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Carry Weight:"
+align = 1
+
+[node name="inventoryclose" type="Button" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -779.0
+margin_top = -58.0
+margin_right = -566.0
+margin_bottom = -19.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Close"
+
+[node name="gearpanel" type="TextureRect" parent="."]
+margin_left = 501.0
+margin_top = 30.0
+margin_right = 877.0
+margin_bottom = 460.0
+mouse_filter = 0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 39 )
+expand = true
+stretch_mode = 5
+
+[node name="charframe" type="TextureRect" parent="gearpanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 40 )
+expand = true
+stretch_mode = 6
+
+[node name="TextureFrame" type="TextureRect" parent="gearpanel"]
+margin_left = -5.0
+margin_top = -5.0
+margin_right = 382.0
+margin_bottom = 432.0
+mouse_filter = 0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 41 )
+expand = true
+stretch_mode = 6
+
+[node name="costume" type="TextureButton" parent="gearpanel"]
+margin_left = 30.0
+margin_top = 192.0
+margin_right = 95.0
+margin_bottom = 252.0
+rect_min_size = Vector2( 0, 60 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 42 )
+expand = true
+
+[node name="TextureFrame2" type="TextureRect" parent="gearpanel/costume"]
+self_modulate = Color( 0.957031, 0.957031, 0.957031, 1 )
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -2.0
+margin_top = -2.0
+margin_right = -2.0
+margin_bottom = -2.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 2 )
+expand = true
+
+[node name="TextureFrame" type="TextureRect" parent="gearpanel/costume"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -2.0
+margin_top = -2.0
+margin_right = 3.0
+margin_bottom = 3.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 43 )
+expand = true
+
+[node name="unequip" type="TextureButton" parent="gearpanel/costume"]
+visible = false
+margin_left = 45.0
+margin_top = 46.0
+margin_right = 68.0
+margin_bottom = 65.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 44 )
+expand = true
+
+[node name="filter_by_slot" type="TextureButton" parent="gearpanel/costume"]
+margin_left = -3.0
+margin_top = 45.0
+margin_right = 16.0
+margin_bottom = 64.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 57 )
+expand = true
+
+[node name="underwear" type="TextureButton" parent="gearpanel"]
+margin_left = 30.0
+margin_top = 293.0
+margin_right = 95.0
+margin_bottom = 353.0
+rect_min_size = Vector2( 0, 60 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 45 )
+expand = true
+
+[node name="TextureFrame2" type="TextureRect" parent="gearpanel/underwear"]
+self_modulate = Color( 0.957031, 0.957031, 0.957031, 1 )
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 1.0
+margin_bottom = 1.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 2 )
+expand = true
+
+[node name="TextureFrame" type="TextureRect" parent="gearpanel/underwear"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -2.0
+margin_top = -1.0
+margin_right = 3.0
+margin_bottom = 4.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 43 )
+expand = true
+
+[node name="unequip" type="TextureButton" parent="gearpanel/underwear"]
+visible = false
+margin_left = 45.0
+margin_top = 46.0
+margin_right = 68.0
+margin_bottom = 65.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 44 )
+expand = true
+
+[node name="filter_by_slot" type="TextureButton" parent="gearpanel/underwear"]
+margin_left = -3.0
+margin_top = 46.0
+margin_right = 16.0
+margin_bottom = 65.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 57 )
+expand = true
+
+[node name="weapon" type="TextureButton" parent="gearpanel"]
+margin_left = 278.0
+margin_top = 42.0
+margin_right = 343.0
+margin_bottom = 102.0
+rect_min_size = Vector2( 0, 60 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 46 )
+expand = true
+
+[node name="TextureFrame2" type="TextureRect" parent="gearpanel/weapon"]
+self_modulate = Color( 0.957031, 0.957031, 0.957031, 1 )
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 1.0
+margin_bottom = 1.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 2 )
+expand = true
+
+[node name="TextureFrame" type="TextureRect" parent="gearpanel/weapon"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -2.0
+margin_top = -1.0
+margin_right = 3.0
+margin_bottom = 4.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 43 )
+expand = true
+
+[node name="unequip" type="TextureButton" parent="gearpanel/weapon"]
+visible = false
+margin_left = 45.0
+margin_top = 46.0
+margin_right = 68.0
+margin_bottom = 65.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 44 )
+expand = true
+
+[node name="filter_by_slot" type="TextureButton" parent="gearpanel/weapon"]
+margin_left = -3.0
+margin_top = 46.0
+margin_right = 16.0
+margin_bottom = 65.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 57 )
+expand = true
+
+[node name="armor" type="TextureButton" parent="gearpanel"]
+margin_left = 278.0
+margin_top = 131.0
+margin_right = 343.0
+margin_bottom = 191.0
+rect_min_size = Vector2( 0, 60 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 47 )
+expand = true
+
+[node name="TextureFrame2" type="TextureRect" parent="gearpanel/armor"]
+self_modulate = Color( 0.957031, 0.957031, 0.957031, 1 )
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 1.0
+margin_bottom = 1.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 2 )
+expand = true
+
+[node name="TextureFrame" type="TextureRect" parent="gearpanel/armor"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -2.0
+margin_top = -1.0
+margin_right = 3.0
+margin_bottom = 4.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 43 )
+expand = true
+
+[node name="unequip" type="TextureButton" parent="gearpanel/armor"]
+visible = false
+margin_left = 45.0
+margin_top = 46.0
+margin_right = 68.0
+margin_bottom = 65.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 44 )
+expand = true
+
+[node name="filter_by_slot" type="TextureButton" parent="gearpanel/armor"]
+margin_left = -3.0
+margin_top = 46.0
+margin_right = 16.0
+margin_bottom = 65.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 57 )
+expand = true
+
+[node name="accessory" type="TextureButton" parent="gearpanel"]
+margin_left = 278.0
+margin_top = 337.0
+margin_right = 343.0
+margin_bottom = 397.0
+rect_min_size = Vector2( 0, 60 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 48 )
+expand = true
+
+[node name="TextureFrame2" type="TextureRect" parent="gearpanel/accessory"]
+self_modulate = Color( 0.957031, 0.957031, 0.957031, 1 )
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 1.0
+margin_bottom = 1.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 2 )
+expand = true
+
+[node name="TextureFrame" type="TextureRect" parent="gearpanel/accessory"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -2.0
+margin_top = -1.0
+margin_right = 3.0
+margin_bottom = 4.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 43 )
+expand = true
+
+[node name="unequip" type="TextureButton" parent="gearpanel/accessory"]
+visible = false
+margin_left = 45.0
+margin_top = 46.0
+margin_right = 68.0
+margin_bottom = 65.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 44 )
+expand = true
+
+[node name="filter_by_slot" type="TextureButton" parent="gearpanel/accessory"]
+margin_left = -3.0
+margin_top = 46.0
+margin_right = 16.0
+margin_bottom = 65.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = ExtResource( 57 )
+expand = true
+
+[node name="Panel" type="TextureRect" parent="gearpanel"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -3.0
+margin_top = 444.0
+margin_right = -6.0
+margin_bottom = 233.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 49 )
+expand = true
+
+[node name="TextureFrame" type="TextureRect" parent="gearpanel/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -2.0
+margin_right = 9.0
+margin_bottom = -1.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 50 )
+expand = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="gearpanel"]
+margin_left = 13.0
+margin_top = 462.0
+margin_right = 359.0
+margin_bottom = 653.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+bbcode_enabled = true
+bbcode_text = "Slave
+Info
+And
+Stats"
+text = "Slave
+Info
+And
+Stats"
+
+[node name="TextureFrame 3" type="TextureRect" parent="."]
+margin_left = 893.0
+margin_top = 25.0
+margin_right = 1316.0
+margin_bottom = 702.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 51 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="iteminfo" type="Popup" parent="."]
+margin_left = 187.0
+margin_top = 78.0
+margin_right = 1121.0
+margin_bottom = 424.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="iteminfo"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 52 )
+expand = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="iteminfo"]
+margin_left = 364.0
+margin_top = 24.0
+margin_right = 911.0
+margin_bottom = 324.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+bbcode_enabled = true
+
+[node name="TextureFrame" type="TextureRect" parent="iteminfo"]
+margin_left = 35.0
+margin_top = 23.0
+margin_right = 335.0
+margin_bottom = 323.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+expand = true
+stretch_mode = 6
+
+[node name="hairchange" type="Popup" parent="."]
+margin_left = 462.0
+margin_top = 175.0
+margin_right = 908.0
+margin_bottom = 398.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="Panel" type="Panel" parent="hairchange"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = ExtResource( 53 )
+
+[node name="TextEdit" type="LineEdit" parent="hairchange"]
+margin_left = 52.0
+margin_top = 37.0
+margin_right = 391.0
+margin_bottom = 71.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+placeholder_text = "Input desired hair color"
+
+[node name="hairconfirm" type="Button" parent="hairchange"]
+margin_left = 45.0
+margin_top = 167.0
+margin_right = 181.0
+margin_bottom = 206.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Confirm"
+
+[node name="haircancel" type="Button" parent="hairchange"]
+margin_left = 255.0
+margin_top = 167.0
+margin_right = 391.0
+margin_bottom = 206.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Cancel"
+
+[node name="itemrename" type="Popup" parent="."]
+margin_left = 462.0
+margin_top = 175.0
+margin_right = 908.0
+margin_bottom = 398.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="Panel" type="Panel" parent="itemrename"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = ExtResource( 53 )
+
+[node name="TextEdit" type="LineEdit" parent="itemrename"]
+margin_left = 52.0
+margin_top = 37.0
+margin_right = 391.0
+margin_bottom = 71.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+placeholder_text = "Input new name"
+
+[node name="renameconfirm" type="Button" parent="itemrename"]
+margin_left = 45.0
+margin_top = 167.0
+margin_right = 181.0
+margin_bottom = 206.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Confirm"
+
+[node name="renamecancel" type="Button" parent="itemrename"]
+margin_left = 255.0
+margin_top = 167.0
+margin_right = 391.0
+margin_bottom = 206.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Cancel"
+
+[node name="amnesia" type="Popup" parent="."]
+margin_left = 447.0
+margin_top = 232.0
+margin_right = 893.0
+margin_bottom = 588.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="Panel" type="Panel" parent="amnesia"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = ExtResource( 53 )
+
+[node name="name" type="LineEdit" parent="amnesia"]
+margin_left = 53.0
+margin_top = 225.0
+margin_right = 392.0
+margin_bottom = 259.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+placeholder_text = "Name"
+
+[node name="surname" type="LineEdit" parent="amnesia"]
+margin_left = 53.0
+margin_top = 265.0
+margin_right = 392.0
+margin_bottom = 299.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+placeholder_text = "Surname"
+
+[node name="amnesiaconf" type="Button" parent="amnesia"]
+margin_left = 146.0
+margin_top = 302.0
+margin_right = 282.0
+margin_bottom = 341.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Confirm"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="amnesia"]
+margin_left = 21.0
+margin_top = 15.0
+margin_right = 425.0
+margin_bottom = 220.0
+bbcode_enabled = true
+
+[node name="search" type="LineEdit" parent="."]
+margin_left = 47.0
+margin_top = 686.0
+margin_right = 420.0
+margin_bottom = 720.0
+placeholder_text = "Search"
+
+[node name="moveall" type="TextureButton" parent="."]
+margin_left = 102.0
+margin_top = 26.0
+margin_right = 155.0
+margin_bottom = 80.0
+hint_tooltip = "Move everything to storage"
+texture_normal = ExtResource( 54 )
+texture_pressed = ExtResource( 55 )
+texture_hover = ExtResource( 56 )
+expand = true
+
+[connection signal="pressed" from="mode" to="." method="_on_mode_pressed"]
+[connection signal="pressed" from="inventoryclose" to="." method="_on_inventoryclose_pressed"]
+[connection signal="gui_input" from="iteminfo" to="." method="_on_iteminfo_input_event"]
+[connection signal="pressed" from="hairchange/hairconfirm" to="." method="_on_hairconfirm_pressed"]
+[connection signal="pressed" from="hairchange/haircancel" to="." method="_on_haircancel_pressed"]
+[connection signal="pressed" from="itemrename/renameconfirm" to="." method="_on_renameconfirm_pressed"]
+[connection signal="pressed" from="itemrename/renamecancel" to="." method="_on_renamecancel_pressed"]
+[connection signal="pressed" from="amnesia/amnesiaconf" to="." method="_on_amnesiaconf_pressed"]
+[connection signal="text_changed" from="search" to="." method="_on_LineEdit_text_changed"]
+[connection signal="pressed" from="moveall" to="." method="_on_moveall_pressed"]
