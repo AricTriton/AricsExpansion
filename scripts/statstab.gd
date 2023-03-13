@@ -6,6 +6,43 @@ var expansion = globals.expansion
 var talk = globals.expansiontalk
 ###---Expansion End---###
 
+func _on_trainingabils_pressed():
+	get_node("trainingabilspanel").popup()
+	get_parent().upgradecostupdate()
+	for i in get_node("trainingabilspanel/ScrollContainer/VBoxContainer").get_children():
+		if i != get_node("trainingabilspanel/ScrollContainer/VBoxContainer/Button"):
+			i.visible = true
+			i.free()
+
+	for i in ['cour','conf','wit','charm']:
+		var statCur = person[i]
+		var statBase = statCur - person.stats[i + '_mod']
+		var statMax = person[i + '_max']
+		get_node("trainingabilspanel/" +i ).text = globals.statsdict[i] + ": " + str(statBase) + " (" + str(statCur) + ")/" + str(statMax)
+		get_node("trainingabilspanel/"+i+"/Button").disabled = !(statBase < statMax && person.learningpoints >= variables.learnpointsperstat)
+		get_node("trainingabilspanel/"+i+"/Button2").disabled = !(statBase + 4 < statMax && person.learningpoints >= variables.learnpointsperstat * 5)
+
+	$trainingabilspanel/learningpoints.text = "Free Learn Points: " + str(person.learningpoints)
+	get_node("trainingabilspanel/abilitytext").set_bbcode('')
+	get_node("trainingabilspanel/abilityconfirm").set_disabled(true)
+	$trainingabilspanel/abilityicon.texture = null
+	var array = []
+	for i in globals.abilities.abilitydict.values():
+		if i.attributes.find('onlyself') < 0:
+			array.append(i)
+	array.sort_custom(self, 'alphabeticalsortbycode')
+
+	for i in array:
+		if i.learnable == true:
+			var newbutton = get_node("trainingabilspanel/ScrollContainer/VBoxContainer/Button").duplicate()
+			get_node("trainingabilspanel/ScrollContainer/VBoxContainer").add_child(newbutton)
+			newbutton.visible = true
+			newbutton.connect("pressed", self, "chooseability", [i])
+			newbutton.text = i.name
+			if person.ability.has(i.code):
+				newbutton.disabled = true
+				newbutton.hint_tooltip = person.dictionary("$name already learned this ability")
+
 func chooseability(ability):
 	var text = ''
 	var confirmbutton = get_node("trainingabilspanel/abilityconfirm")

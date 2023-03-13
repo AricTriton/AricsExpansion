@@ -170,7 +170,16 @@ func expandGame():
 	globals.state.expansionversion = globals.expansionsettings.modversion
 	
 	#Force Mass Person Expansion
-	for person in globals.slaves + globals.state.allnpcs + globals.state.babylist:
+	var all_people = []
+	all_people.append(globals.player)
+	all_people.append_array(globals.slaves)
+	all_people.append_array(globals.state.allnpcs)
+	all_people.append_array(globals.state.babylist)
+	for i in globals.guildslaves:
+		all_people.append_array(globals.guildslaves[i])
+	if globals.state.sebastianorder.taken == true:
+		all_people.append(globals.state.sebastianslave)
+	for person in all_people:
 		if person.expanded == false:
 			globals.expansionsetup.expandPerson(person)
 #		if float(person.expansionversion) < float(globals.expansionsettings.modversion): #Old Method#
@@ -183,21 +192,6 @@ func expandGame():
 			person.feathercolor = globals.randomfromarray(globals.races["Harpy"].feathercolor)
 		if globals.state.relativesdata.has(person.id):
 			globals.state.relativesdata[person.id].name = person.name_long()
-	for i in globals.guildslaves:
-		for person in globals.guildslaves[i]:
-			if person.expanded == false:
-				globals.expansionsetup.expandPerson(person)
-#			if float(person.expansionversion) < float(globals.expansionsettings.modversion):
-			if str(person.expansionversion) != str(globals.expansionsettings.modversion):
-				globals.backwardscompatibility.backwardsCompatibility(person)
-			globals.expansion.updatePerson(person)
-			if person.race == "Dragonkin" && person.scalecolor == '':
-				person.scalecolor = globals.randomfromarray(globals.races["Dragonkin"].scalecolor)
-			if person.race == "Harpy" && person.feathercolor == '':
-				person.feathercolor = globals.randomfromarray(globals.races["Harpy"].feathercolor)
-
-			if globals.state.relativesdata.has(person.id):
-				globals.state.relativesdata[person.id].name = person.name_long()
 
 	#---BugFixing & Cleanup
 	#erase NPCs with duplicate ids to slaves
@@ -1167,15 +1161,23 @@ func setRaceBonus(person, increasestats):
 			somethingchanged = true
 		if bonus_courage != 0:
 			person.stats.cour_racial += round(bonus_courage)
+			person.stats.cour_base += round(bonus_courage)
+			person.stats.cour_max += round(bonus_courage)
 			somethingchanged = true
 		if bonus_confidence != 0:
 			person.stats.conf_racial += round(bonus_confidence)
+			person.stats.conf_base += round(bonus_confidence)
+			person.stats.conf_max += round(bonus_confidence)
 			somethingchanged = true
 		if bonus_wit != 0:
 			person.stats.wit_racial += round(bonus_wit)
+			person.stats.wit_base += round(bonus_wit)
+			person.stats.wit_max += round(bonus_wit)
 			somethingchanged = true
 		if bonus_charm != 0:
 			person.stats.charm_racial += round(bonus_charm)
+			person.stats.charm_base += round(bonus_charm)
+			person.stats.charm_max += round(bonus_charm)
 			somethingchanged = true
 		if bonus_beauty != 0:
 			person.beautybase += round(bonus_beauty)
@@ -1200,15 +1202,23 @@ func setRaceBonus(person, increasestats):
 			somethingchanged = true
 		if bonus_courage != 0:
 			person.stats.cour_racial -= round(bonus_courage)
+			person.stats.cour_base -= round(bonus_courage)
+			person.stats.cour_max -= round(bonus_courage)
 			somethingchanged = true
 		if bonus_confidence != 0:
 			person.stats.conf_racial -= round(bonus_confidence)
+			person.stats.conf_base -= round(bonus_confidence)
+			person.stats.conf_max -= round(bonus_confidence)
 			somethingchanged = true
 		if bonus_wit != 0:
 			person.stats.wit_racial -= round(bonus_wit)
+			person.stats.wit_base -= round(bonus_wit)
+			person.stats.wit_max -= round(bonus_wit)
 			somethingchanged = true
 		if bonus_charm != 0:
 			person.stats.charm_racial -= round(bonus_charm)
+			person.stats.charm_base -= round(bonus_charm)
+			person.stats.charm_max -= round(bonus_charm)
 			somethingchanged = true
 		if bonus_beauty != 0:
 			person.beautybase -= round(bonus_beauty)
@@ -3251,27 +3261,43 @@ func setRaceBonus_Ralph(person, increasestats):
 			somethingchanged = true
 		if bonus_courage != 0:
 			person.stats.cour_racial += round(bonus_courage)
+			person.stats.cour_base += round(bonus_courage)
+			person.stats.cour_max += round(bonus_courage)
 			somethingchanged = true
 		if bonus_confidence != 0:
 			person.stats.conf_racial += round(bonus_confidence)
+			person.stats.conf_base += round(bonus_confidence)
+			person.stats.conf_max += round(bonus_confidence)
 			somethingchanged = true
 		if bonus_wit != 0:
 			person.stats.wit_racial += round(bonus_wit)
+			person.stats.wit_base += round(bonus_wit)
+			person.stats.wit_max += round(bonus_wit)
 			somethingchanged = true
 		if bonus_charm != 0:
 			person.stats.charm_racial += round(bonus_charm)
+			person.stats.charm_base += round(bonus_charm)
+			person.stats.charm_max += round(bonus_charm)
 			somethingchanged = true
 		if bonus_courage_racial != 0:
 			person.stats.cour_racial += round(bonus_courage_racial)
+			person.stats.cour_base += round(bonus_courage_racial)
+			person.stats.cour_max += round(bonus_courage_racial)
 			somethingchanged = true
 		if bonus_confidence_racial != 0:
 			person.stats.conf_racial += round(bonus_confidence_racial)
+			person.stats.conf_base += round(bonus_confidence_racial)
+			person.stats.conf_max += round(bonus_confidence_racial)
 			somethingchanged = true
 		if bonus_wit_racial != 0:
 			person.stats.wit_racial += round(bonus_wit_racial)
+			person.stats.wit_base += round(bonus_wit_racial)
+			person.stats.wit_max += round(bonus_wit_racial)
 			somethingchanged = true
 		if bonus_charm_racial != 0:
 			person.stats.charm_racial += round(bonus_charm_racial)
+			person.stats.charm_base += round(bonus_charm_racial)
+			person.stats.charm_max += round(bonus_charm_racial)
 			somethingchanged = true
 		if bonus_beauty != 0:
 			person.beautybase += round(bonus_beauty)
@@ -3391,27 +3417,43 @@ func setRaceBonus_Ralph(person, increasestats):
 			somethingchanged = true # /Capitulize
 		if bonus_courage != 0:
 			person.stats.cour_racial -= round(bonus_courage)
+			person.stats.cour_base -= round(bonus_courage)
+			person.stats.cour_max -= round(bonus_courage)
 			somethingchanged = true
 		if bonus_confidence != 0:
 			person.stats.conf_racial -= round(bonus_confidence)
+			person.stats.conf_base -= round(bonus_confidence)
+			person.stats.conf_max -= round(bonus_confidence)
 			somethingchanged = true
 		if bonus_wit != 0:
 			person.stats.wit_racial -= round(bonus_wit)
+			person.stats.wit_base -= round(bonus_wit)
+			person.stats.wit_max -= round(bonus_wit)
 			somethingchanged = true
 		if bonus_charm != 0:
 			person.stats.charm_racial -= round(bonus_charm)
+			person.stats.charm_base -= round(bonus_charm)
+			person.stats.charm_max -= round(bonus_charm)
 			somethingchanged = true
 		if bonus_courage_racial != 0:
 			person.stats.cour_racial -= round(bonus_courage_racial)
+			person.stats.cour_base -= round(bonus_courage_racial)
+			person.stats.cour_max -= round(bonus_courage_racial)
 			somethingchanged = true
 		if bonus_confidence_racial != 0:
 			person.stats.conf_racial -= round(bonus_confidence_racial)
+			person.stats.conf_base -= round(bonus_confidence_racial)
+			person.stats.conf_max -= round(bonus_confidence_racial)
 			somethingchanged = true
 		if bonus_wit_racial != 0:
 			person.stats.wit_racial -= round(bonus_wit_racial)
+			person.stats.wit_base -= round(bonus_wit_racial)
+			person.stats.wit_max -= round(bonus_wit_racial)
 			somethingchanged = true
 		if bonus_charm_racial != 0:
 			person.stats.charm_racial -= round(bonus_charm_racial)
+			person.stats.charm_base -= round(bonus_charm_racial)
+			person.stats.charm_max -= round(bonus_charm_racial)
 			somethingchanged = true
 		if bonus_beauty != 0:
 			person.beautybase -= round(bonus_beauty)

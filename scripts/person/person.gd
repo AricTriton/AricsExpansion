@@ -39,15 +39,19 @@ var stats = {
 	cour_max = 100,
 	cour_base = 0,
 	cour_racial = 0,
+	cour_mod = 0,
 	conf_max = 100,
 	conf_base = 0,
 	conf_racial = 0,
+	conf_mod = 0,
 	wit_max = 100,
 	wit_base = 0,
 	wit_racial = 0,
+	wit_mod = 0,
 	charm_max = 100,
 	charm_base = 0,
 	charm_racial = 0,
+	charm_mod = 0,
 	obed_cur = 0.0,
 	obed_max = 100,
 	obed_min = 0,
@@ -79,6 +83,11 @@ var stats = {
 	loyal_max = 100,
 	loyal_min = 0,
 }
+
+var cour_max setget ,cour_max_get
+var conf_max setget ,conf_max_get
+var wit_max setget ,wit_max_get
+var charm_max setget ,charm_max_get
 
 func add_trait(trait, remove = false):
 	var traitEntry = globals.origins.trait(trait)
@@ -570,43 +579,54 @@ func loyal_set(value):
 
 ###---Added by Expansion---### Modified by Deviate - Allow current stat up to max stat
 func cour_set(value):
-	if stats.cour_max > 100:
-		stats.cour_base = clamp(value - stats.cour_racial, 0, stats.cour_max)
-	else:
-		stats.cour_base = clamp(value - stats.cour_racial, 0, min(stats.cour_max, originvalue[origins]))
+	var difference = value - cour_get()
+	stats.cour_base = clamp(stats.cour_base + difference, stats.cour_racial, cour_max_get())
 
 func conf_set(value):
-	var bonus = max(0, stats.conf_max - originvalue['noble'])
-	if stats.conf_max > 100:
-		stats.conf_base = clamp(value - stats.conf_racial, 0, stats.conf_max)
-	else:
-		stats.conf_base = clamp(value - stats.conf_racial, 0, min(stats.conf_max, originvalue[origins] + bonus))
+	var difference = value - conf_get()
+	stats.conf_base = clamp(stats.conf_base + difference, stats.conf_racial, conf_max_get())
 
 func wit_set(value):
-	if stats.wit_max > 100:
-		stats.wit_base = clamp(value - stats.wit_racial, 0, stats.wit_max)
-	else:
-		stats.wit_base = clamp(value - stats.wit_racial, 0, min(stats.wit_max, originvalue[origins]))
+	var difference = value - wit_get()
+	stats.wit_base = clamp(stats.wit_base + difference, stats.wit_racial, wit_max_get())
 
 func charm_set(value):
-	if stats.charm_max > 100:
-		stats.charm_base = clamp(value - stats.charm_racial, 0, stats.charm_max)
-	else:
-		stats.charm_base = clamp(value - stats.charm_racial, 0, min(stats.charm_max, originvalue[origins]))
+	var difference = value - charm_get()
+	stats.charm_base = clamp(stats.charm_base + difference, stats.charm_racial, charm_max_get())
+
+func cour_max_get():
+	var origin_base = originvalue[origins]
+	var max_mod = stats.cour_max - originvalue['noble']
+	return max(0, origin_base + max_mod)
+
+func conf_max_get():
+	var origin_base = originvalue[origins]
+	var max_mod = stats.conf_max - originvalue['noble']
+	return max(0, origin_base + max_mod)
+
+func wit_max_get():
+	var origin_base = originvalue[origins]
+	var max_mod = stats.wit_max - originvalue['noble']
+	return max(0, origin_base + max_mod)
+
+func charm_max_get():
+	var origin_base = originvalue[origins]
+	var max_mod = stats.charm_max - originvalue['noble']
+	return max(0, origin_base + max_mod)
 ###---End Expansion---###
 
 
 func cour_get():
-	return floor(stats.cour_base + stats.cour_racial)
+	return floor(stats.cour_base + stats.cour_mod)
 
 func conf_get():
-	return floor(stats.conf_base + stats.conf_racial)
+	return floor(stats.conf_base + stats.conf_mod)
 
 func wit_get():
-	return floor(stats.wit_base + stats.wit_racial)
+	return floor(stats.wit_base + stats.wit_mod)
 
 func charm_get():
-	return floor(stats.charm_base + stats.charm_racial)
+	return floor(stats.charm_base + stats.charm_mod)
 
 
 func name_long():

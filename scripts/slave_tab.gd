@@ -629,15 +629,17 @@ func updatestats():
 	for i in globals.statsdict:
 		text = str(person[i]) 
 		get(i).get_node('cur').set_text(text)
+		if person.stats[globals.maxstatdict[i].replace("_max",'_mod')] >= 1:
+			get(i).get_node('cur').set('custom_colors/font_color', Color(0,1,0))
+		elif person.stats[globals.maxstatdict[i].replace("_max",'_mod')] < 0:
+			get(i).get_node('cur').set('custom_colors/font_color', Color(1,0.29,0.29))
+		else:
+			get(i).get_node('cur').set('custom_colors/font_color', Color(1,1,1))
 		if i in ['sstr','sagi','smaf','send']:
 			get(i).get_node('base').set_text(str(person.stats[globals.basestatdict[i]]))
-			if person.stats[globals.maxstatdict[i].replace("_max",'_mod')] >= 1:
-				get(i).get_node('cur').set('custom_colors/font_color', Color(0,1,0))
-			elif person.stats[globals.maxstatdict[i].replace("_max",'_mod')] < 0:
-				get(i).get_node('cur').set('custom_colors/font_color', Color(1,0.29,0.29))
-			else:
-				get(i).get_node('cur').set('custom_colors/font_color', Color(1,1,1))
-		get(i).get_node('max').set_text(str(min(person.stats[globals.maxstatdict[i]], person.originvalue[person.origins])))
+			get(i).get_node('max').set_text(str(person.stats[globals.maxstatdict[i]]))
+		else:
+			get(i).get_node('max').set_text(str(person[globals.maxstatdict[i]]))
 		#get(i).set_bbcode(text)
 	for i in mentals:
 		if person == globals.player:
