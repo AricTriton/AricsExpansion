@@ -16,6 +16,12 @@ var manafeedpolicy = 99999 #ralphC - mana resource value set for each npc below 
 var mana_hunger = 0 #ralphC - only used for Succubus and future mana eating races/hybrids
 ###---End Expansion---###
 
+###---Added by expansion---### Modified by zclimber. Combat skills reordering and settings
+var ability = ['attack']
+var abilityactive = ['attack']
+var ability_autoattack = ['attack']
+###---End Expansion---###
+
 
 ###---Added by Expansion---### Modified by Deviate
 #var metrics = {ownership = 0, jail = 0, mods = 0, brothel = 0, sex = 0, partners = [], randompartners = 0, item = 0, spell = 0, orgy = 0, threesome = 0, win = 0, capture = 0, goldearn = 0, foodearn = 0, manaearn = 0, birth = 0, preg = 0, vag = 0, anal = 0, oral = 0, roughsex = 0, roughsexlike = 0, orgasm = 0}
