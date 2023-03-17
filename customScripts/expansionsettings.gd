@@ -3,7 +3,6 @@
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
 var modversion = "1.8e"
-
 #---Aric's and Game's Base Values potentially changed by Ralph's
 var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within applyRalphsTweaks as well as the Hybrid system.
 var unique_trait_generation = false				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
@@ -164,7 +163,6 @@ var lactationstressenabled = true
 
 #Increase/Decrease Milk Storage to Pressure
 var lacation_pressurepermilkstored = .25
-
 #------Farm Expanded
 #Livestock Consent Base Chance (+ 50% loyalty, 25% obediance, + various factors)
 var baselivestockconsentchance = 10

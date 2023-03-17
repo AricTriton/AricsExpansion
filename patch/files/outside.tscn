@@ -1,4 +1,4 @@
-[gd_scene load_steps=120 format=2]
+[gd_scene load_steps=121 format=2]
 
 [ext_resource path="res://files/theme.tres" type="Theme" id=1]
 [ext_resource path="res://files/scripts/outside.gd" type="Script" id=2]
@@ -89,6 +89,7 @@
 [ext_resource path="res://files/buttons/combat/12.png" type="Texture" id=87]
 [ext_resource path="res://files/buttons/combat/13.png" type="Texture" id=88]
 [ext_resource path="res://files/buttons/combat/14.png" type="Texture" id=89]
+[ext_resource path="res://files/combat_settings_popup.tscn" type="PackedScene" id=90]
 
 [sub_resource type="StyleBoxTexture" id=1]
 texture = ExtResource( 3 )
@@ -734,11 +735,13 @@ margin_bottom = 553.0
 scroll_horizontal_enabled = false
 
 [node name="GridContainer" type="GridContainer" parent="playergrouppanel/characterinfo/Container"]
+margin_right = 51.0
+margin_bottom = 39.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 columns = 7
 
-[node name="Button" type="TextureButton" parent="playergrouppanel/characterinfo/Container/GridContainer"]
+[node name="original_button" type="TextureButton" parent="playergrouppanel/characterinfo/Container/GridContainer"]
 visible = false
 margin_right = 50.0
 margin_bottom = 50.0
@@ -749,6 +752,17 @@ size_flags_vertical = 0
 toggle_mode = true
 expand = true
 stretch_mode = 5
+
+[node name="center_container" type="CenterContainer" parent="playergrouppanel/characterinfo/Container/GridContainer"]
+margin_right = 51.0
+margin_bottom = 39.0
+
+[node name="edit_combat_settings" type="Button" parent="playergrouppanel/characterinfo/Container/GridContainer/center_container"]
+margin_right = 51.0
+margin_bottom = 39.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Edit"
 
 [node name="closechar" type="TextureButton" parent="playergrouppanel/characterinfo"]
 margin_left = 419.0
@@ -921,6 +935,8 @@ margin_top = 97.0
 margin_right = 447.0
 margin_bottom = 120.0
 texture_normal = ExtResource( 37 )
+
+[node name="combat_settings_popup" parent="playergrouppanel/characterinfo" instance=ExtResource( 90 )]
 
 [node name="exploreprogress" type="TextureProgress" parent="."]
 anchor_left = 1.0
@@ -3104,6 +3120,7 @@ texture_hover = ExtResource( 32 )
 [connection signal="meta_clicked" from="textpanelexplore/outsidetextbox2" to="." method="_on_outsidetextbox_meta_clicked"]
 [connection signal="meta_clicked" from="textpanel/outsidetextbox" to="." method="_on_outsidetextbox_meta_clicked"]
 [connection signal="pressed" from="playergrouppanel/details" to="." method="_on_details_pressed"]
+[connection signal="pressed" from="playergrouppanel/characterinfo/Container/GridContainer/center_container/edit_combat_settings" to="." method="edit_characted_combat_info"]
 [connection signal="pressed" from="playergrouppanel/characterinfo/closechar" to="." method="_on_closechar_pressed"]
 [connection signal="mouse_entered" from="playergrouppanel/characterinfo/grade" to="." method="_on_grade_mouse_entered"]
 [connection signal="mouse_exited" from="playergrouppanel/characterinfo/grade" to="." method="_on_grade_mouse_exited"]
@@ -3113,6 +3130,7 @@ texture_hover = ExtResource( 32 )
 [connection signal="mouse_exited" from="playergrouppanel/characterinfo/movement" to="." method="_on_movement_mouse_exited"]
 [connection signal="pressed" from="playergrouppanel/characterinfo/switch" to="." method="_on_switch_pressed"]
 [connection signal="pressed" from="playergroupdetails/bountysell" to="." method="_on_bountysell_pressed"]
+[connection signal="popup_hide" from="playergrouppanel/characterinfo/combat_settings_popup" to="." method="on_combat_info_hide"]
 [connection signal="pressed" from="playergroupdetails/Panel/usebutton" to="." method="_on_usebutton_pressed"]
 [connection signal="pressed" from="playergroupdetails/Panel/discardbutton" to="." method="_on_discardbutton_pressed"]
 [connection signal="pressed" from="playergroupdetails/closegroup" to="." method="_on_closegroup_pressed"]

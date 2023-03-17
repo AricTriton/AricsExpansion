@@ -1,0 +1,178 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://files/scripts/combat_settings_popup.gd" type="Script" id=1]
+[ext_resource path="res://mainfont.tres" type="DynamicFont" id=2]
+[ext_resource path="res://files/buttons/mana.png" type="Texture" id=3]
+
+[node name="combat_settings_popup" type="Popup"]
+margin_left = 330.0
+margin_top = 10.0
+margin_right = 950.0
+margin_bottom = 677.0
+script = ExtResource( 1 )
+
+[node name="panel" type="Panel" parent="."]
+margin_right = 620.0
+margin_bottom = 667.0
+
+[node name="person_label" type="Label" parent="panel"]
+margin_left = 20.0
+margin_top = 15.0
+margin_right = 600.0
+margin_bottom = 35.0
+text = "Skill settings for ABACABA BARAKADABRA Human"
+align = 1
+
+[node name="all_skills" type="ReferenceRect" parent="panel"]
+margin_left = 20.0
+margin_top = 40.0
+margin_right = 600.0
+margin_bottom = 220.0
+
+[node name="label" type="Label" parent="panel/all_skills"]
+margin_left = 20.0
+margin_top = 10.0
+margin_right = 529.0
+margin_bottom = 53.0
+text = "All learned skills - drag from here to add skills to other lists
+These are all skills this character has learned"
+
+[node name="scroll" type="ScrollContainer" parent="panel/all_skills"]
+margin_left = 15.0
+margin_top = 60.0
+margin_right = 585.0
+margin_bottom = 168.0
+scroll_horizontal_enabled = false
+
+[node name="container" type="GridContainer" parent="panel/all_skills/scroll"]
+rect_pivot_offset = Vector2( -777, 174 )
+columns = 10
+
+[node name="original_button" type="TextureButton" parent="panel/all_skills/scroll/container"]
+visible = false
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+rect_clip_content = true
+size_flags_horizontal = 0
+size_flags_vertical = 0
+toggle_mode = true
+texture_normal = ExtResource( 3 )
+expand = true
+stretch_mode = 5
+
+[node name="active_skills" type="ReferenceRect" parent="panel"]
+margin_left = 20.0
+margin_top = 225.0
+margin_right = 600.0
+margin_bottom = 405.0
+
+[node name="label" type="Label" parent="panel/active_skills"]
+margin_left = 20.0
+margin_top = 10.0
+margin_right = 529.0
+margin_bottom = 53.0
+text = "Active skills  - drag to reorder or remove
+These skills will be shown in combat for manual use"
+
+[node name="scroll" type="ScrollContainer" parent="panel/active_skills"]
+margin_left = 15.0
+margin_top = 60.0
+margin_right = 585.0
+margin_bottom = 168.0
+scroll_horizontal_enabled = false
+
+[node name="container" type="GridContainer" parent="panel/active_skills/scroll"]
+rect_pivot_offset = Vector2( -777, 174 )
+columns = 10
+
+[node name="original_button" type="TextureButton" parent="panel/active_skills/scroll/container"]
+visible = false
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+rect_clip_content = true
+size_flags_horizontal = 0
+size_flags_vertical = 0
+toggle_mode = true
+texture_normal = ExtResource( 3 )
+expand = true
+stretch_mode = 5
+
+[node name="auto_skills" type="ReferenceRect" parent="panel"]
+margin_left = 20.0
+margin_top = 410.0
+margin_right = 600.0
+margin_bottom = 590.0
+
+[node name="label" type="Label" parent="panel/auto_skills"]
+margin_left = 20.0
+margin_top = 10.0
+margin_right = 529.0
+margin_bottom = 53.0
+text = "Character will use the first ready skill from this list to autoattack
+Simple attack will be used if all other skills are unable to be used "
+
+[node name="scroll" type="ScrollContainer" parent="panel/auto_skills"]
+margin_left = 15.0
+margin_top = 60.0
+margin_right = 585.0
+margin_bottom = 168.0
+scroll_horizontal_enabled = false
+
+[node name="container" type="GridContainer" parent="panel/auto_skills/scroll"]
+rect_pivot_offset = Vector2( -777, 174 )
+columns = 10
+
+[node name="original_button" type="TextureButton" parent="panel/auto_skills/scroll/container"]
+visible = false
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+rect_clip_content = true
+size_flags_horizontal = 0
+size_flags_vertical = 0
+toggle_mode = true
+texture_normal = ExtResource( 3 )
+expand = true
+stretch_mode = 5
+
+[node name="button_container" type="HBoxContainer" parent="panel"]
+margin_left = 20.0
+margin_top = 600.0
+margin_right = 600.0
+margin_bottom = 640.0
+
+[node name="save_button" type="Button" parent="panel/button_container"]
+margin_left = 30.0
+margin_right = 159.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 40, 0 )
+size_flags_horizontal = 6
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 2 )
+text = "Save changes"
+
+[node name="reset_button" type="Button" parent="panel/button_container"]
+margin_left = 210.0
+margin_right = 369.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 40, 0 )
+size_flags_horizontal = 6
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 2 )
+text = "Reset to defaults"
+
+[node name="discard_button" type="Button" parent="panel/button_container"]
+margin_left = 396.0
+margin_right = 573.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 40, 0 )
+size_flags_horizontal = 6
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 2 )
+text = "Exit without saving"
+
+[connection signal="pressed" from="panel/button_container/save_button" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="panel/button_container/reset_button" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="panel/button_container/discard_button" to="." method="_on_discard_button_pressed"]

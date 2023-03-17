@@ -169,9 +169,9 @@ func slaves_set(person):
 	###---Added by Expansion---### Category: NPCs Expanded
 	if person.npcexpanded.timesmet > 0:
 		if person.npcexpanded.timesfought > 0:
-			person.fear = person.npcexpanded.timesfought*5
+			person.fear += person.npcexpanded.timesfought*5
 		if person.npcexpanded.timesrescued > 0:
-			person.loyal = person.npcexpanded.timesrescued*5
+			person.loyal += person.npcexpanded.timesrescued*5
 	if globals.state.relativesdata[person.id].state != "enslaved":
 		globals.state.relativesdata[person.id].state = "enslaved"
 	###---End Expansion---###
@@ -182,6 +182,12 @@ func slaves_set(person):
 		get_tree().get_current_scene().find_node('population').set_text(str(slavecount())) 
 	if globals.get_tree().get_current_scene().has_node("infotext"):
 		globals.get_tree().get_current_scene().infotext("New Character acquired: " + person.name_long(),'green')
+
+<RemoveFrom 6 7>
+func canloadimage(path):
+	# if Image.new().load(path) != OK:
+	# 	return false
+
 
 class resource:
 	var day = 1 setget day_set

@@ -251,8 +251,8 @@ var treasuremisc = [['magicessenceing',7],['taintedessenceing',7],['natureessenc
 
 ###---Added by Expansion---### ElPresidente Items
 var chestloot = {
-	easy = ['armorleather','armorchain','weapondagger','weaponbasicstaff','weaponserrateddagger','weaponsword','clothsundress','clothmaid','clothbutler','armorpadded','weaponclaymore'],
-	medium = ['armorchain','weaponsword','weaponserrateddagger','clothsundress','clothmaid','clothbutler', 'armorelvenchain','armorrobe', 'weaponhammer','weapongreatsword','clothkimono','clothpet','clothmiko','clothbedlah','accgoldring','accslavecollar','acchandcuffs','acctravelbag','weaponancientsword','accelvenboots'],
+	easy = ['armorleather','armorchain','weapondagger','weaponbasicstaff','weaponserrateddagger','weaponsword','clothsundress','clothmaid','clothbutler','armorpadded','weaponclaymore','weaponbattleaxe','weaponlongbow','weaponmace'],
+	medium = ['armorchain','weaponsword','weaponserrateddagger','clothsundress','clothmaid','clothbutler', 'armorelvenchain','armorrobe', 'weaponhammer','weapongreatsword','clothkimono','clothpet','clothmiko','clothbedlah','accgoldring','accslavecollar','acchandcuffs','acctravelbag','weaponancientsword','accelvenboots','accbooklife','weaponbattleaxe','weaponlongbow','weaponmace'],
 	hard = ['armorplate','accamuletemerald','accamuletruby','armorelvenhalfplate','armorhalfplate','armorfieldplate','weaponrunesword','armormagerobe','accbooklife'],
 }
 ###---End Expansion---###

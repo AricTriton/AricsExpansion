@@ -11,7 +11,7 @@ class member:
 	var submission
 	var loyalty
 	var lust = 0 setget lust_set
-	var sens = 0 setget sens_set
+	var sens = 0
 	var sensmod = 1.0
 	var lube = 0
 	var pain = 0
@@ -167,24 +167,26 @@ class member:
 	func lust_set(value):
 		lust = min(value, 1000)
 
-	func sens_set(value):
+	func add_sens(value):
 		var change 
+		var text = ''
 		var isKobold = person.race.find('Kobold') >= 0 # Capitulize - Kobolds are pretty horny
 		if (isKobold):
-			change = (value - sens)*1.2
+			change = value*1.2
 		else:
-			change = value - sens
+			change = value
 		sens += change*sensmod
 		if sens >= 1000:
 			if ((lastaction.givers.has(self) && lastaction.scene.givertags.has('noorgasm')) || (lastaction.takers.has(self) && lastaction.scene.takertags.has('noorgasm'))):
-				return
+				return text
 			if(isKobold):
 				sens = 150
 				sensmod -= sensmod*0.15
 			else:
 				sens = 100
 				sensmod -= sensmod*0.2
-			orgasm()
+			text += orgasm()
+		return text
 
 	func lube():
 		if person.vagina != 'none':
@@ -628,13 +630,12 @@ class member:
 			text = sceneref.decoder(text, lastaction.givers, [self])
 		###---Expansion End---###
 
-		#return
-		yield(sceneref.get_tree().create_timer(0.1), "timeout")
 		###---Added by Expansion---### Decoder
-		sceneref.get_node("Panel/sceneeffects").bbcode_text += "[color=#ff5df8]" + text + "[/color]\n"
+		return "[color=#ff5df8]" + text + "[/color]\n"
 		###---End Expansion---###
 
 	func actioneffect(acceptance, values, scenedict):
+		var returnText = ""
 		for key in ['lewd', 'lust', 'sens', 'pain', 'obed', 'stress']:
 			values[key] = float(values.get(key, 0))
 		lastaction = scenedict
@@ -1015,11 +1016,11 @@ class member:
 					if person.lactation == true:
 						if person.lactating.milkstorage > 0 || person.lactating.pressure > 0:
 							number = ceil(rand_range(person.lactating.milkstorage * 0.1, person.lactating.milkstorage * 0.3))
-							if person.lactating.pressure > 0:
-								number += person.lactating.pressure
-								person.lactating.pressure = 0
-							number = clamp(number, 0, person.lactating.milkstorage)
 							person.lactating.milkstorage -= number
+							if person.lactating.pressure > 0:
+								var pressure_bonus = min(10, person.lactating.pressure)
+								person.lactating.pressure -= pressure_bonus
+								number += pressure_bonus
 							person.lactating.milkedtoday = true
 							person.lactating.daysunmilked = 0
 							person.dailyevents.append('lactation')
@@ -1035,14 +1036,14 @@ class member:
 
 			text = globals.fastif(person==globals.player, text.replace("[doesn't]","don't"), text.replace("[doesn't]","doesn't"))
 			text = globals.fastif(person==globals.player, text.replace("[seems]","seem"), text.replace("[seems]","seems"))
-			sceneref.get_node("Panel/sceneeffects").bbcode_text += sceneref.decoder(text, scenedict.givers, scenedict.takers)
+			returnText += sceneref.decoder(text, scenedict.givers, scenedict.takers)
 
 		sexualityshift += calcShift(tempShift, scenedict.takers.size() + scenedict.givers.size() - 1)
 		###---Expansion End---###
 		
 		self.lewd += values.lewd
 		self.lust += values.lust
-		self.sens += values.sens
+		var orgasmText = add_sens(values.sens)
 		person.obed += values.obed
 		person.stress += values.stress
 		
@@ -1054,7 +1055,8 @@ class member:
 			text += '. [/color]'
 			#yield(sceneref.get_tree().create_timer(0.1), "timeout")
 			effects.erase('resist')
-			sceneref.get_node("Panel/sceneeffects").bbcode_text += sceneref.decoder(text, scenedict.givers, scenedict.takers) + '\n'
+			returnText += sceneref.decoder(text, scenedict.givers, scenedict.takers) + '\n'
+		return {"actiontext" : returnText, "orgasmtext" : orgasmText}
 
 <RemoveFrom 5 5>
 func dog():
@@ -1114,16 +1116,14 @@ func startsequence(actors, mode = null, secondactors = [], otheractors = []):
 		turns += variables.bonustimeperslavefororgy * actors.size()
 		for person in actors:
 			person.metrics.orgy += 1
+	initializeparticipantslist()
 	changecategory('caress')
 	clearstate()
 	rebuildparticipantslist()
 
-func rebuildparticipantslist():
+func initializeparticipantslist():
 	var newnode
-	var effects
-	if selectmode == 'ai':
-		clearstate()
-	for i in get_node("Panel/ScrollContainer/VBoxContainer").get_children() + get_node("Panel/GridContainer/GridContainer").get_children() + get_node("Panel/givetakepanel/ScrollContainer/VList").get_children() + $Panel/GridContainer2/GridContainer.get_children():
+	for i in get_node("Panel/ScrollContainer/VBoxContainer").get_children() + get_node("Panel/givetakepanel/ScrollContainer/VList").get_children():
 		if !i.get_name() in ['Panel', 'Button', 'ControlLine']:
 			i.hide()
 			i.queue_free()
@@ -1133,18 +1133,50 @@ func rebuildparticipantslist():
 		get_node("Panel/ScrollContainer/VBoxContainer").add_child(newnode)
 		newnode.get_node("name").set_text(i.person.dictionary('$name'))
 		newnode.get_node("name").connect("pressed",self,"slavedescription",[i])
-		newnode.set_meta("person", i)
 		newnode.get_node("sex").set_texture(globals.sexicon[i.person.sex])
 		newnode.get_node("sex").set_tooltip(i.person.sex)
-		newnode.get_node('arousal').value = i.sens
 		newnode.get_node("portrait").texture = globals.loadimage(i.person.imageportait)
 		newnode.get_node("portrait").connect("mouse_entered",self,'showbody',[i])
 		newnode.get_node("portrait").connect("mouse_exited",self,'hidebody')
 		
+		
+		newnode = get_node("Panel/givetakepanel/ScrollContainer/VList/ControlLine").duplicate()
+		var giveNode = newnode.get_node("ButtonGiver")
+		var takeNode = newnode.get_node("ButtonReceiver")
+		giveNode.text = i.person.name_short()
+		takeNode.text = i.person.name_short()
+		giveNode.connect("pressed",self,'switchsides',[i, 'give'])
+		takeNode.connect("pressed",self,'switchsides',[i, 'take'])
+		newnode.visible = true
+		get_node("Panel/givetakepanel/ScrollContainer/VList").add_child(newnode)
+
+
+func rebuildparticipantslist():
+	var newnode
+	var effects
+	if selectmode == 'ai':
+		clearstate()
+	for i in get_node("Panel/GridContainer/GridContainer").get_children() + $Panel/GridContainer2/GridContainer.get_children():
+		if !i.get_name() in ['Panel', 'Button', 'ControlLine']:
+			i.hide()
+			i.queue_free()
+	var index = 0
+	for i in participants:
+		index += 1 # Skip index 0, which is the hidden base line
+		newnode = get_node("Panel/ScrollContainer/VBoxContainer").get_child(index)
+		newnode.get_node('arousal').value = i.sens
+		
 		if i.request != null:
 			newnode.get_node('desire').show()
 			newnode.get_node('desire').hint_tooltip = i.person.dictionary(requests[i.request])
+		else:
+			newnode.get_node('desire').hide()
 		
+		newnode.get_node('tied').hide()
+		newnode.get_node('sexcrazed').hide()
+		newnode.get_node('drunk').hide()
+		newnode.get_node('resist').hide()
+		newnode.get_node('forced').hide()
 		for k in i.effects:
 			###---Added by Expansion---### Ank BugFix v4a
 			if newnode.has_node(k):
@@ -1155,17 +1187,11 @@ func rebuildparticipantslist():
 #			newnode.get_node('name').set('custom_colors/font_color', Color(1,0.2,0.8))
 #			newnode.get_node('name').hint_tooltip = 'Leads'
 		
-		newnode = get_node("Panel/givetakepanel/ScrollContainer/VList/ControlLine").duplicate()
+		newnode = get_node("Panel/givetakepanel/ScrollContainer/VList").get_child(index)
 		var giveNode = newnode.get_node("ButtonGiver")
 		var takeNode = newnode.get_node("ButtonReceiver")
 		giveNode.set_pressed(givers.has(i))
 		takeNode.set_pressed(takers.has(i))
-		giveNode.text = i.person.name_short()
-		takeNode.text = i.person.name_short()
-		giveNode.connect("pressed",self,'switchsides',[i, 'give'])
-		takeNode.connect("pressed",self,'switchsides',[i, 'take'])
-		newnode.visible = true
-		get_node("Panel/givetakepanel/ScrollContainer/VList").add_child(newnode)
 
 	
 	#check for double dildo scenes between participants
@@ -1528,10 +1554,10 @@ func generaterequest(member):
 
 
 	rval = rval[randi()%rval.size()]
-	###---Added by Expansion---### Centered/Set Alerted Text
-	$Panel/sceneeffects.bbcode_text += ("\n[center][color=#f4adf4]Desire! -  " + member.person.dictionary(requests[rval]) + '[/color][/center]\n')
-	###---End Expansion---###
 	member.request = rval
+	###---Added by Expansion---### Centered/Set Alerted Text
+	return "\n[center][color=#f4adf4]Desire! -  " + member.person.dictionary(requests[rval]) + '[/color][/center]\n'
+	###---End Expansion---###
 
 func checkrequest(member):
 
@@ -1696,7 +1722,8 @@ func checkaction(action):
 		return ['allowed',hint_tooltip]
 
 func startscene(scenescript, cont = false, pretext = ''):
-	var textdict = {mainevent = pretext, repeats = '', orgasms = '', speech = ''}
+	var textdict = {mainevent = pretext, repeats = '', orgasms = '', speech = '', actioneffects = '', desires = ''}
+	var action_result_text
 	var pain = 0
 	var effects
 	scenescript.givers = givers
@@ -1812,13 +1839,17 @@ func startscene(scenescript, cont = false, pretext = ''):
 	for i in givers: 
 		if scenescript.has_method('givereffect'):
 			effects = scenescript.givereffect(i)
-			i.actioneffect(effects[0], effects[1], dict)
+			action_result_text = i.actioneffect(effects[0], effects[1], dict)
+			textdict.actioneffects += action_result_text.actiontext
+			textdict.orgasms += action_result_text.orgasmtext
 		i.lube()
 		
 	for i in takers:
 		if scenescript.has_method('takereffect'):
 			effects = scenescript.takereffect(i)
-			i.actioneffect(effects[0], effects[1], dict)
+			action_result_text = i.actioneffect(effects[0], effects[1], dict)
+			textdict.actioneffects += action_result_text.actiontext
+			textdict.orgasms += action_result_text.orgasmtext
 		i.lube()
 	
 	var sceneexists = false
@@ -1854,12 +1885,15 @@ func startscene(scenescript, cont = false, pretext = ''):
 		if i.scene.has_method("givereffect"):
 			for member in i.givers:
 				effects = i.scene.givereffect(member)
-				member.actioneffect(effects[0], effects[1], i)
+				action_result_text = member.actioneffect(effects[0], effects[1], i)
+				textdict.actioneffects += action_result_text.actiontext
+				textdict.orgasms += action_result_text.orgasmtext
 		if i.scene.has_method("takereffect"):
 			for member in i.takers:
 				effects = i.scene.takereffect(member)
-				member.actioneffect(effects[0], effects[1], i)
-	
+				action_result_text = member.actioneffect(effects[0], effects[1], i)
+				textdict.actioneffects += action_result_text.actiontext
+				textdict.orgasms += action_result_text.orgasmtext
 	
 	var request
 	
@@ -1868,7 +1902,7 @@ func startscene(scenescript, cont = false, pretext = ''):
 			i.lastaction = dict
 			request = checkrequest(i)
 			if request == true:
-				textdict.orgasms += decoder("[color=aqua]Desire fulfilled! [name1] grows lewder and more sensitive. [/color]\n", [i], [i])
+				textdict.desires += decoder("[color=aqua]Desire fulfilled! [name1] grows lewder and more sensitive. [/color]\n", [i], [i])
 #			if i.sens >= 1000:
 #				textdict.orgasms += triggerorgasm(i)
 #				i.orgasm = true
@@ -1909,27 +1943,6 @@ func startscene(scenescript, cont = false, pretext = ''):
 		x -= 1
 	
 	
-	var text = textdict.mainevent + "\n" + textdict.repeats + '\n' + textdict.speech + textdict.orgasms
-#	temptext = ''
-#	while text.length() > 0:
-#		if !text.begins_with('%'):
-#			if text.find('%') >= 0:
-#				temptext = text.substr(0,text.find('%'))
-#			else:
-#				temptext = text
-#			text = text.replace(temptext, '')
-#			$Panel/sceneeffects.append_bbcode(temptext)
-#		else:
-#			var string = text.substr(text.find("%"), 2)
-#			add_portrait_to_text(participants[int(string.substr(1,1))])
-#			text.erase(0,2)
-		#print($Panel/sceneeffects.text)
-		#get_node("Panel/sceneeffects").add_text()
-	#$Panel/sceneeffects.bbcode_enabled = true
-	get_node("Panel/sceneeffects").bbcode_text += '\n' + text
-	
-	
-	
 	var temparray = []
 	
 	for i in participants:
@@ -1939,7 +1952,7 @@ func startscene(scenescript, cont = false, pretext = ''):
 				if !i.effects.has('resist'):
 					i.request = null
 			elif i.effects.has('resist') && !i.person.traits.has('Likes it rough') && randf() < 0.66:
-				$Panel/sceneeffects.bbcode_text += ("[color=#f4adf4]Desire: " + i.person.dictionary(requests.stop) + '[/color]\n')
+				textdict.desires += ("[color=#f4adf4]Desire: " + i.person.dictionary(requests.stop) + '[/color]\n')
 				i.request = 'stop'
 			continue
 		elif i.person == globals.player || i.person.unique in ['dog','horse'] || i.effects.has('resist'):
@@ -1948,8 +1961,25 @@ func startscene(scenescript, cont = false, pretext = ''):
 	
 	
 	if randf() < 0.15 && temparray.size() > 0:
-		generaterequest(temparray[randi()%temparray.size()])
+		textdict.desires += generaterequest(temparray[randi()%temparray.size()])
 	
+	if not textdict.actioneffects.empty():
+		textdict.actioneffects += '\n'
+	if not textdict.repeats.empty():
+		textdict.repeats += '\n'
+	if not textdict.desires.empty():
+		textdict.desires += '\n'
+	get_node("Panel/sceneeffects").bbcode_text += (
+		'\n' +
+		textdict.actioneffects +
+		textdict.mainevent +
+		'\n' +
+		textdict.repeats +
+		textdict.speech +
+		textdict.orgasms +
+		textdict.desires
+	)
+
 	rebuildparticipantslist()
 
 func characterspeech(scene, details = []):
