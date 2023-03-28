@@ -1445,6 +1445,8 @@ func getMovement(person):
 	titweight = clamp(titweight, -1, 5)
 	#Natural Carry Capacity
 	var swollencarry = (person.sstr + person.send + 2) + round((globals.heightarrayexp.find(person.height)+1)/2)
+	#Ensure Swollen state is up to date
+	getSwollen(person)
 	var weight = swollencarry - (person.swollen + titweight)
 	weight = clamp(weight, -20, 20)
 

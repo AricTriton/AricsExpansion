@@ -311,6 +311,10 @@ func buildmetrics():
 				text += "[color=green]Is Currently Ovulating[/color]\n"
 			else:
 				text += "[color=red]Is Not Currently Ovulating[/color]\n"
+			if globals.state.perfectinfo == true:
+				var maxCycle = globals.expansionsettings.livebirthcycle if person.preg.ovulation_type == 1 else globals.expansionsettings.eggcycle
+				var activeCycle = floor(maxCycle * globals.expansionsettings.fertileduringcycle)
+				text += "Ovulation Cycle (current/active/max): " + str(person.preg.ovulation_day) + "/" + str(activeCycle) + "/" + str(maxCycle) + "\n"
 		if person.penis != "none":
 			text += "Virility: " + str(person.pregexp.virility) + "\n"
 		if person.preg.has_womb == true:

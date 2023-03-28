@@ -14,6 +14,8 @@ const AUTO_SKILLS_NAME = "auto_skills"
 var trash_texture = load("res://files/aric_expansion_images/skill_icons/TrashCan.png")
 var add_skill_texture = load("res://files/aric_expansion_images/skill_icons/AddSkill.png")
 
+# Label for currently selected persons name
+var person_label: Label
 
 # Container with all_skills buttons
 var all_skills_container: GridContainer
@@ -270,6 +272,8 @@ func get_ability_names_array(abilities_array: Array) -> Array:
 func set_person(person) -> void:
 	current_person = person
 	
+	person_label.text = "Skill settings for " + person.name_long() + " " + person.race
+
 	old_all_skills = person.ability
 	old_active_skills = person.abilityactive
 	old_auto_skills = person.ability_autoattack
@@ -299,6 +303,7 @@ func _on_discard_button_pressed() -> void:
 
 
 func _ready() -> void:
+	person_label = get_node("panel/person_label")
 	all_skills_container = get_node("panel/all_skills/scroll/container")
 	active_skills_container = get_node("panel/active_skills/scroll/container")
 	auto_skills_container = get_node("panel/auto_skills/scroll/container")

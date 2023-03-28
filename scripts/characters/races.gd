@@ -778,7 +778,7 @@ var races = {
 		naturebonus = "Magic+",
 		highcorruptionbonus = "Strength+, Magic-",
 		lowcorruptionbonus = "Strength-, Magic+",
-		breedingquirk = "Strength+, Agility+ from breeding with predatory beast races/nFertility+ as a secondary race for egg-laying races.",
+		breedingquirk = "Strength+, Agility+ from breeding with predatory beast races\nFertility+ as a secondary race for egg-laying races.",
 		mutations = "Gargoyle",
 		pricemod = 2.5,
 		#ralph5
