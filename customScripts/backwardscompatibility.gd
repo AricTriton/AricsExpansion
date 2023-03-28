@@ -184,6 +184,9 @@ func backwardsCompatibility(person):
 								person.stats[stat_type + '_base'] -= effect.effectvalue
 								person.stats[stat_type + '_mod'] += effect.effectvalue
 
+			# Reset the stat, to ensure it is within the changed min/max bounds
+			person.set(stat_type, person.get(stat_type))
+
 	#Movement Icon Change from Traits (Unneeded now?)
 	for i in ['Movement: Walking','Movement: Flying','Movement: Crawling','Movement: Immobilized']:
 		if person.traits.has(i):
