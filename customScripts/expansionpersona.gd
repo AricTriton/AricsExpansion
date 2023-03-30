@@ -430,5 +430,12 @@ func countpersona(persona):
 			counter += 1
 	return counter
 		
+func aliceimages (): #for manipulating body images for Alices
+	#BBP-Alice
+	var alicepath = "patch/files/aric_expansion_images" #Check Path with OS
+	if alicepath != null: #if not null
+		pass
+		#check slave arrays for alices
+		#Load images for each alice
 	
 #---End---#
