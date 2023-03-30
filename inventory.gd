@@ -84,18 +84,20 @@ func create_item_button(i: Dictionary, amount: int, category: String, move_callb
 	return button
 
 
-func fill_items_list_non_gear(stackable_items: Array, move_callback: String) -> void:
+func fill_items_list_non_gear(stackable_items: Array, stackable_amount: Dictionary, move_callback: String) -> void:
 	var stackable_array = []
 	
 	for i in stackable_items:
-		if i.amount < 1 || i.type in ['gear','dummy']:
+		var item_amount = stackable_amount.get(i.code, i.amount)
+		if item_amount < 1 || i.type in ['gear','dummy']:
 			continue
 		stackable_array.append(i)
 	
 	stackable_array.sort_custom(globals.items,'sortitems')
 	
 	for i in stackable_array:
-		var button = create_item_button(i, i.amount, i.type, move_callback)
+		var item_amount = stackable_amount.get(i.code, i.amount)
+		var button = create_item_button(i, item_amount, i.type, move_callback)
 
 		button.get_node("use").visible = i.type == 'potion' || i.code == 'bandage'
 			
@@ -138,23 +140,21 @@ func fill_items_list_gear(gear_owner, move_callback: String) -> void:
 			button.get_node("icon").set_texture(globals.loadimage(i[0].icon))
 
 
-func fill_items_list_common(stackable_items: Array, gear_owner, move_callback: String) -> void:
-	fill_items_list_non_gear(stackable_items, move_callback)
+func fill_items_list_common(stackable_items: Array, stackable_amount: Dictionary, gear_owner, move_callback: String) -> void:
+	fill_items_list_non_gear(stackable_items, stackable_amount, move_callback)
 	fill_items_list_gear(gear_owner, move_callback)
 
 
 func itemsinventory():
-	fill_items_list_common(globals.itemdict.values(), null, 'movetobackpack')
+	fill_items_list_common(globals.itemdict.values(), {}, null, 'movetobackpack')
 
 
 func itemsbackpack():
 	var stackable_items = []
-	for item_name in globals.state.backpack.stackables:
-		var item = globals.itemdict[item_name].duplicate()
-		item.amount = globals.state.backpack.stackables[item_name]
-		stackable_items.append(item)
+	for item_code in globals.state.backpack.stackables:
+		stackable_items.append(globals.itemdict[item_code])
 	
-	fill_items_list_common(stackable_items, 'backpack', 'movefrombackpack')
+	fill_items_list_common(stackable_items, globals.state.backpack.stackables, 'backpack', 'movefrombackpack')
 
 
 ###---Added by Expansion---### Minor Tweaks by Dabros Integration
