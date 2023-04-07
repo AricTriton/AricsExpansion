@@ -2,6 +2,9 @@
 var categories = {everything = true, potion = false, ingredient = false, gear = false, supply = false}
 var selected_gear_categories = {}
 
+var enchantscript = load("res://files/scripts/enchantments.gd").new()
+var enchant_colors: Dictionary = enchantscript.enchant_colors
+
 
 func _ready():	
 	for i in ['costume','weapon','armor','accessory','underwear']:
@@ -45,7 +48,7 @@ func item_should_be_visible(button) -> bool:
 	
 	var item_category = button.get_meta('category')
 	if not categories.get(item_category, false):
-		return false   # category not in categories, like 'quest'
+		return false   # category not selected or not in categories list, like 'quest'
 	
 	if item_category == 'gear': # additional filter by gear type
 		var itemarray = button.get_meta("itemarray")
@@ -135,10 +138,8 @@ func fill_items_list_gear(gear_owner, move_callback: String) -> void:
 		button.get_node("rename").visible = true
 		button.get_node("rename").connect("pressed",self,"renameitem",[i[0]])
 
-		if i[0].enchant == 'basic':
-			button.get_node("Label").set('custom_colors/font_color', Color(0,0.5,0))
-		elif i[0].enchant == 'unique':
-			button.get_node("Label").set('custom_colors/font_color', Color(0.6,0.4,0))
+		if i[0].enchant in enchant_colors:
+			button.get_node("Label").set('custom_colors/font_color', enchant_colors[i[0].enchant])
 		if i[0].icon != null:
 			button.get_node("icon").set_texture(globals.loadimage(i[0].icon))
 
