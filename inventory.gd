@@ -48,7 +48,10 @@ func item_should_be_visible(button) -> bool:
 		return false   # category not in categories, like 'quest'
 	
 	if item_category == 'gear': # additional filter by gear type
-		var gear_type = button.get_meta("itemarray")[0].type
+		var itemarray = button.get_meta("itemarray")
+		if itemarray.size() == 0:
+			return false
+		var gear_type = itemarray[0].type
 		return selected_gear_categories.empty() or selected_gear_categories.has(gear_type) 
 	
 	return true
