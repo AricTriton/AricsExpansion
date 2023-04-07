@@ -1718,6 +1718,8 @@ func hide_everything():
 	#---DimCrystal
 	get_node("MainScreen/mansion/AE_DimCrystal").visible = false
 	get_node("MainScreen/mansion/dimcrystalpanel").hide()
+	#---Enchanting	
+	get_node("MainScreen/mansion/enchanting_panel").hide()
 	###---End Expansion---###
 	globals.hidetooltip()
 
@@ -3616,6 +3618,7 @@ func _on_addhen_pressed():
 	_on_farm_pressed()
 	rebuild_slave_list()
 
+# now you can pass function to reqs, wrapped with @GDScript.funcref. It has to accept person argument and return true to include them in list
 func selectslavelist(prisoners = false, calledfunction = 'popup', targetnode = self, reqs = 'true', player = false, onlyparty = false):
 	var array = []
 	if player == true:
@@ -3626,7 +3629,9 @@ func selectslavelist(prisoners = false, calledfunction = 'popup', targetnode = s
 			continue
 		if onlyparty == true && !globals.state.playergroup.has(person.id):
 			continue
-		if globals.evaluate(reqs) == false:
+		if typeof(reqs) == TYPE_STRING && reqs != 'true' && globals.evaluate(reqs) == false:
+			continue
+		if typeof(reqs) == TYPE_OBJECT && !reqs.call_func(person):
 			continue
 		if prisoners == false && person.sleep == 'jail' :
 			continue
@@ -4867,3 +4872,22 @@ func dialogue(showcloseButton, destination, dialogtext, dialogbuttons = null, sp
 func _on_upgradesclose_pressed():
 	get_node("MainScreen/mansion/upgradespanel").hide()
 	get_tree().get_current_scene()._on_mansion_pressed()
+
+
+var awayText = {
+	'travel back': 'will return back in ',
+	'transported back': 'will be transported back in ',
+	'in labor': 'will be resting after labor for ',
+	'training': 'will be undergoing training for ',
+	'nurture': 'will be undergoing nurturing for ',
+	'growing': 'will keep maturing for ',
+	'lab': 'will be undergoing modification for ',
+	'rest': 'will be taking a rest for ',
+	'vacation': 'will be on vacation for ',
+	'blood_donor': 'will be recovering from blood loss for ',
+	'default': 'will be unavailable for ',
+}
+
+
+func enchanting():
+	get_node("MainScreen/mansion/enchanting_panel")._on_enchanting_pressed()

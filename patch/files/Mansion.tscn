@@ -1,4 +1,4 @@
-[gd_scene load_steps=218 format=2]
+[gd_scene load_steps=219 format=2]
 
 [ext_resource path="res://files/scripts/Mansion.gd" type="Script" id=1]
 [ext_resource path="res://files/backgrounds/mansion.png" type="Texture" id=2]
@@ -143,6 +143,7 @@
 [ext_resource path="res://files/aric_expansion_images/pregnancy_icons/pregnancy_icon.png" type="Texture" id=141]
 [ext_resource path="res://files/buttons/inventory/33.png" type="Texture" id=142]
 [ext_resource path="res://files/buttons/mainscreen/1.png" type="Texture" id=143]
+[ext_resource path="res://files/enchanting_panel.tscn" type="PackedScene" id=144]
 [ext_resource path="res://files/combat_settings_popup.tscn" type="PackedScene" id=146]
 
 [sub_resource type="StyleBoxTexture" id=1]
@@ -2415,6 +2416,20 @@ size_flags_vertical = 2
 custom_fonts/font = ExtResource( 45 )
 text = "Brew"
 
+[node name="enchanting" type="Button" parent="MainScreen/mansion/alchemypanel" groups=["mansionbuttons"]]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -156.0
+margin_top = -53.0
+margin_right = -12.0
+margin_bottom = -13.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 45 )
+text = "Enchant items"
+
 [node name="potdescription" type="RichTextLabel" parent="MainScreen/mansion/alchemypanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -2625,6 +2640,10 @@ size_flags_vertical = 2
 texture = ExtResource( 53 )
 expand = true
 stretch_mode = 6
+
+[node name="enchanting_panel" parent="MainScreen/mansion" instance=ExtResource( 144 )]
+margin_right = -3.0
+margin_bottom = -4.0
 
 [node name="selfinspect" type="Panel" parent="MainScreen/mansion"]
 editor/display_folded = true
