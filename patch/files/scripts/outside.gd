@@ -2379,7 +2379,7 @@ func enchantingUnlockQuest(sidequest_state = null):
 	if typeof(sidequest_state) == TYPE_INT:
 		globals.state.sidequests.enchantment_access = sidequest_state
 
-	var gold_cost = 5000
+	var gold_cost = globals.expansionsettings.enchanting_unlock_cost
 	
 	var text = ""
 	var buttons = [

@@ -594,8 +594,10 @@ func applyCapitulizeTweaks():
 	variables.banditishumanchance = 25.0				# Original - 70.0
 
 
-var enchanting_max_level = 2 # Amount of times you can custom enchant an item
-var enchanting_bloody = true # Allow using blood for enchanting
+#--- Enchanting settings
+var enchanting_max_level = 2        # Amount of times you can custom enchant an item
+var enchanting_bloody = true        # Allow using blood for enchanting
+var enchanting_unlock_cost = 5000   # Amount of gold you have to pay to unlock enchanting
 
 func addConstantsSupport():
 	variables.list["Aric's Expansion Mod"] = {
@@ -669,5 +671,6 @@ func addConstantsSupport():
 	variables.list["AE Mod - Enchanting"] = {
 		enchanting_max_level = {descript = "How many times you can enchant single item. Default: 2", min = 1, max = 10, object = self},
 		enchanting_bloody = {descript = "Allow using slave blood for enchanting. Default: True", object = self},
+		enchanting_unlock_cost = {descript = "Amount of gold you have to pay to unlock enchanting. Default: 5000", min = 1, max = 100000, object = self},
 	}
 	
