@@ -15,11 +15,12 @@ onready var resources_container: Node = $resources
 onready var resources_original_node: Node = $resources/resource1
 
 const MAX_SHOWN_ENCHANTMENTS = 2
-const MAX_CUSTOM_ENCHANT_LEVEL = 2
+var MAX_CUSTOM_ENCHANT_LEVEL = 2
 
-const ITEM_CREATE_SPARKS_MULTIPLIER = 3
-const ITEM_USING_BLOOD_INGREDIENT_MULTIPLIER = 0.5
-const ITEM_NO_BLOOD_INGREDIENT_MULTIPLIER = 2
+const ITEM_DEFAULT_SPARKS_MULTIPLIER = 2
+const ITEM_NO_BLOOD_SPARKS_MULTIPLIER = 1.5
+const ITEM_DEFAULT_INGREDIENT_MULTIPLIER = 0.5
+const ITEM_NO_BLOOD_INGREDIENT_MULTIPLIER = 4
 const ITEM_TIER_MULTIPLIERS = [3, 5, 8]
 
 const SLAVE_HEALTH_LEVEL_BREAKS = [0.66, 0.33, 0.01]
@@ -81,6 +82,7 @@ func _on_enchanting_pressed() -> void:
 	yield(main, "animfinished")
 	main.hide_everything()
 	self.visible = true
+	MAX_CUSTOM_ENCHANT_LEVEL = globals.enchantscript.enchanting_max_level
 
 	set_enchanting_mode(false)
 	selected_enchant = null
@@ -212,9 +214,10 @@ func on_mode_change_pressed() -> void:
 func set_enchanting_mode(is_enchanting_now: bool) -> void:
 	is_enchanting = is_enchanting_now
 
-	$select_slave.visible = is_enchanting
-	$use_essences.visible = is_enchanting
-	$or_label.visible = is_enchanting
+	var blood_enabled = globals.enchantscript.enchanting_bloody
+	$select_slave.visible = is_enchanting && blood_enabled
+	$use_essences.visible = is_enchanting && blood_enabled
+	$or_label.visible = is_enchanting && blood_enabled
 
 	if is_enchanting:
 		$mode_select.text = "Enchant items"
@@ -400,17 +403,22 @@ func calculate_item_enchantment_cost(item: Dictionary) -> ResourcesPrice:
 	var item_multiplier = calculate_item_multiplier(item)
 	var cost = ResourcesPrice.new()
 
-	var max_effect = max(enchant_data.get("maxeffect", 0), enchant_data.get("effectvalue", 0))
-	var sparks_cost = int(normalize_effect_value(max_effect) * item_multiplier * ITEM_CREATE_SPARKS_MULTIPLIER)
-	cost.enchantment_sparks[selected_enchant] = sparks_cost
-
+	var sparks_coefficient = ITEM_DEFAULT_SPARKS_MULTIPLIER
+	var ingr_coefficient = ITEM_DEFAULT_INGREDIENT_MULTIPLIER
 	if selected_slave != null:
 		cost.blood_hp_points = calculate_blood_cost(item)
+	else:
+		cost.ingredients["basicsolutioning"] = 1
+		ingr_coefficient *= ITEM_NO_BLOOD_INGREDIENT_MULTIPLIER
+		sparks_coefficient *= ITEM_NO_BLOOD_SPARKS_MULTIPLIER
 
-	var blood_coefficient = ITEM_USING_BLOOD_INGREDIENT_MULTIPLIER if selected_slave != null else ITEM_NO_BLOOD_INGREDIENT_MULTIPLIER
+	var max_effect = max(enchant_data.get("maxeffect", 0), enchant_data.get("effectvalue", 0))
+	var sparks_cost = int(normalize_effect_value(max_effect) * item_multiplier * sparks_coefficient)
+	cost.enchantment_sparks[selected_enchant] = sparks_cost
+
 	var ingredients = enchantment_creation_ingredients[selected_enchant].essence_types
 	for ingredient in ingredients:
-		cost.ingredients[ingredient] = int(ingredients[ingredient] * item_multiplier * blood_coefficient)
+		cost.ingredients[ingredient] = int(ingredients[ingredient] * item_multiplier * ingr_coefficient)
 
 	return cost
 

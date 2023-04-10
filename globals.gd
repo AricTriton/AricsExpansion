@@ -452,8 +452,24 @@ class progress:
 	var mainquest = 0
 	var mainquestcomplete = false
 	var rank = 0
-	var password = ''
-	var sidequests = {startslave = 0, emily = 0, brothel = 0, cali = 0, caliparentsdead = false, chloe = 0, ayda = 0, ivran = '', yris = 0, zoe = 0, ayneris = 0, sebastianumbra = 0, maple = 0, dimcrystal = 0} setget quest_set
+	var password = ''	
+	var sidequests = {
+		startslave = 0,
+		emily = 0,
+		brothel = 0,
+		cali = 0,
+		caliparentsdead = false,
+		chloe = 0,
+		ayda = 0,
+		ivran = '',
+		yris = 0,
+		zoe = 0,
+		ayneris = 0,
+		sebastianumbra = 0,
+		maple = 0,
+		dimcrystal = 0,
+		enchantment_access = 0,
+	} setget quest_set
 	var repeatables = {wimbornslaveguild = [], frostfordslaveguild = [], gornslaveguild = []}
 	var babylist = []
 	var companion = -1

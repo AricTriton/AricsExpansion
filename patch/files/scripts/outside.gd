@@ -2231,23 +2231,68 @@ func shopclose():
 	if currentshop.has('sprite') && currentshop.code != 'aydashop':
 		get_parent().nodefade($charactersprite, 0.3)
 
+var sortByItemType: bool = false
+
 func exchangeRefresh():
-	for i in $shoppanel/exchange/ScrollContainer/GridContainer.get_children():
-		if i.name != 'Button':
-			i.hide()
-			i.free()
+	var items_container = $shoppanel/exchange/ScrollContainer/GridContainer
+	var item_original_button = items_container.get_node("Button")
+	for item_button in items_container.get_children():
+		if item_button != item_original_button:
+			item_button.visible = false
+			item_button.queue_free()
+
+	var items = []
 
 	for i in globals.state.unstackables.values():
 		if i.owner == null && i.enchant == 'basic':
-			var newbutton = $shoppanel/exchange/ScrollContainer/GridContainer/Button.duplicate()
-			newbutton.show()
-			newbutton.get_node('Icon').texture = globals.loadimage(i.icon)
-			$shoppanel/exchange/ScrollContainer/GridContainer.add_child(newbutton)
-			newbutton.connect('mouse_entered', globals, 'itemtooltip', [i])
-			newbutton.connect("mouse_exited", globals, 'itemtooltiphide')
-			newbutton.connect("pressed", self, 'calculateexchange')
-			newbutton.set_meta("item", i)
+			items.append(i)
+	
+	if sortByItemType:
+		items.sort_custom(self, "sortgear")
+
+	for item in items:
+		var newbutton = item_original_button.duplicate()
+		newbutton.visible = true
+		newbutton.get_node('Icon').texture = globals.loadimage(item.icon)
+		items_container.add_child(newbutton)
+		newbutton.connect('mouse_entered', globals, 'itemtooltip', [item])
+		newbutton.connect("mouse_exited", globals, 'itemtooltiphide')
+		newbutton.connect("pressed", self, 'calculateexchange')
+		newbutton.set_meta("item", item)
 	calculateexchange()
+	updateExchangeSidePanel()
+
+
+const gearTypes = ['weapon','armor','costume','underwear','accessory']
+const itemPilesAvailable = {"all": gearTypes, "weapons": ['weapon'], "armors": ['armor'], "misc items": ['costume','underwear','accessory']}
+var itemPileSelected = "all"
+
+func updateExchangeSidePanel() -> void:
+	if globals.state.sidequests.enchantment_access >= 4:
+		$shoppanel/exchange/ask_enchanting.text = "Selected item pile: " + itemPileSelected
+	if globals.state.sidequests.enchantment_access == 0:
+		globals.state.sidequests.enchantment_access = 1
+		$shoppanel/exchange/RichTextLabel.text = questtext.UmbraExchangeFirstVisit + questtext.UmbraExchangeExplanationText
+	else:
+		$shoppanel/exchange/RichTextLabel.text = questtext.UmbraExchangeNextVisits + questtext.UmbraExchangeExplanationText
+
+
+func toggleSortByItemType() -> void:
+	sortByItemType = !sortByItemType
+	if sortByItemType:
+		$shoppanel/exchange/ordering_button.text = "Item type"
+	else:
+		$shoppanel/exchange/ordering_button.text = "Latest obtained"
+	exchangeRefresh()
+
+
+func sortgear(first, second) -> bool:
+	var typeCompare = gearTypes.find(first.type) - gearTypes.find(second.type)
+	if typeCompare == 0:
+		return first.name < second.name
+	else:
+		return typeCompare < 0
+
 
 func exchangeitems():
 	if $shoppanel/exchange.visible:
@@ -2257,15 +2302,16 @@ func exchangeitems():
 		$shoppanel/exchange.visible = true
 	exchangeRefresh()
 
+
 var ItemsForExchange = []
+
 
 func calculateexchange():
 	var itemarray = []
-	ItemsForExchange.clear()
 	for i in $shoppanel/exchange/ScrollContainer/GridContainer.get_children():
 		if i.visible && i.pressed:
 			itemarray.append(i.get_meta('item'))
-	ItemsForExchange = itemarray.duplicate()
+	ItemsForExchange = itemarray
 	$shoppanel/exchange/TradeButton.disabled = itemarray.size() == 0 || itemarray.size() % 3 != 0
 
 var treasurepool = [
@@ -2278,13 +2324,36 @@ var treasurepool = [
 	['weaponbattleaxe',9],['weaponlongbow',9],['weaponmace',3],['weaponserrateddagger',9],['weaponbasicstaff',20],
 ]
 
+func selectItemPile(selectedPile = null) -> void:
+	if selectedPile != null:
+		itemPileSelected = selectedPile
+		main_close_dialogue()
+		updateExchangeSidePanel()
+	
+	var buttons = []
+	for pile in itemPilesAvailable:
+		var pile_name = "%s piles" % pile if pile == "all" else "%s pile" % pile
+		buttons.append(["Draw from %s" % pile_name, "selectItemPile", pile])
+	main.dialogue(true, self, "Select pile to draw from", buttons)
+
+
+func getTreasurePoolFromPile() -> Array:
+	var result_pool = []
+	var pile_subtypes = itemPilesAvailable[itemPileSelected]
+	for item in treasurepool:
+		if globals.items.itemlist[item[0]].subtype in pile_subtypes:
+			result_pool.append(item)
+	return result_pool
+
+
 func exchangeitemsconfirm():
 	var numNew = ItemsForExchange.size() / 3
 	for i in ItemsForExchange:
 		globals.state.unstackables.erase(i.id)
 	ItemsForExchange.clear()
+	var pool = getTreasurePoolFromPile()
 	for i in range(numNew):
-		var newitem = globals.items.createunstackable(globals.weightedrandom(treasurepool))
+		var newitem = globals.items.createunstackable(globals.weightedrandom(pool))
 		if newitem.enchant != 'unique':
 			if randf() >= 0.3:
 				globals.items.enchantrand(newitem, 2)
@@ -2297,6 +2366,48 @@ func exchangeitemsconfirm():
 	if numNew >= 6:
 		get_parent().infotext('Received many items from exchange','green')
 	exchangeRefresh()
+
+
+func onEnchantmentAskPressed():
+	if globals.state.sidequests.enchantment_access < 4:
+		enchantingUnlockQuest()
+	else:
+		selectItemPile()
+
+
+func enchantingUnlockQuest(sidequest_state = null):
+	if typeof(sidequest_state) == TYPE_INT:
+		globals.state.sidequests.enchantment_access = sidequest_state
+
+	var gold_cost = 5000
+	
+	var text = ""
+	var buttons = [
+		{text = "Pay %s gold to meet enchanter" % gold_cost, function = "enchantingUnlockQuest", args = 3, tooltip = "%s gold" % gold_cost, disabled = globals.resources.gold < gold_cost},
+		["Don't pay", "main_close_dialogue"]
+	]
+
+	if globals.state.sidequests.enchantment_access <= 1:
+		text = questtext.EnchantmentAccessAsk1 % gold_cost
+		globals.state.sidequests.enchantment_access = 2
+	elif globals.state.sidequests.enchantment_access == 2:
+		text = questtext.EnchantmentAccessAsk2 % gold_cost
+	elif globals.state.sidequests.enchantment_access == 3:
+		globals.resources.gold -= gold_cost
+		text = questtext.EnchantmentAccessPaymentText + questtext.EnchantmentAccessExplanation
+		var medium_text = questtext.EnchantmentAccessBloodMedium if globals.expansionsettings.enchanting_bloody else questtext.EnchantmentAccessNoBloodMedium
+		text = text.format({max_custom_effects = globals.expansionsettings.enchanting_max_level, spark_multiplier = 3, medium = medium_text})
+		buttons = [["Write it down", "enchantingUnlockQuest", 4]]
+	elif globals.state.sidequests.enchantment_access == 4:
+		text = questtext.EnchantmentAccessMerchantAfterword
+		buttons = [["Accept the deal", "main_close_dialogue"]]
+	updateExchangeSidePanel()
+	main.dialogue(false, self, text, buttons)
+
+
+func main_close_dialogue():
+	main.close_dialogue()
+
 
 ####QUESTS
 var cali

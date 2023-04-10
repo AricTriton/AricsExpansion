@@ -592,7 +592,11 @@ func applyCapitulizeTweaks():
 	#---Variable Tweaks
 	
 	variables.banditishumanchance = 25.0				# Original - 70.0
-	
+
+
+var enchanting_max_level = 2 # Amount of times you can custom enchant an item
+var enchanting_bloody = true # Allow using blood for enchanting
+
 func addConstantsSupport():
 	variables.list["Aric's Expansion Mod"] = {
 		autoattackability = {descript = "Use abilities on auto attack, left to right. Hint: reorder/activate abilities in the character info menu when out.", object = self},
@@ -661,5 +665,9 @@ func addConstantsSupport():
 
 		basemanafoodconsumption = {descript = "The amount of mana per day required by mana eating races/hybrids. This is multiplied for some based on age, etc. Default: 10", min = 0.0, max = 100.0},
 		orgasmmana = {descript = "The amount of mana produced by a single orgasm. Default: 3", min = 1.0, max = 100.0},
+	}
+	variables.list["AE Mod - Enchanting"] = {
+		enchanting_max_level = {descript = "How many times you can enchant single item. Default: 2", min = 1, max = 10, object = self},
+		enchanting_bloody = {descript = "Allow using slave blood for enchanting. Default: True", object = self},
 	}
 	

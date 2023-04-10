@@ -4917,6 +4917,7 @@ func _on_alchemy_pressed():
 		get_node("MainScreen/mansion/alchemypanel/potdescription").set_bbcode('')
 		for i in get_node("MainScreen/mansion/alchemypanel").get_children():
 			i.show()
+	enchanting_button_setup()
 	for i in potlist.get_children():
 		if i != potline:
 			i.hide()
@@ -4966,6 +4967,8 @@ func _on_questnode_visibility_changed():
 		sidetext.set_bbcode(sidetext.get_bbcode() + "—"+ aydaquestdict[str(globals.state.sidequests.ayda)]+"\n\n")
 	if zoequestdict.has(str(globals.state.sidequests.zoe)):
 		sidetext.set_bbcode(sidetext.get_bbcode() + "—"+ zoequestdict[str(globals.state.sidequests.zoe)]+"\n\n")
+	if globals.state.sidequests.enchantment_access == 2:
+		sidetext.set_bbcode(sidetext.get_bbcode() + "—Pay Umbra's exchange merchant to make custom orders to enchanter\n\n")
 	#repeatables
 	for i in get_node("questnode/TabContainer/Repeatable Quests/ScrollContainer/VBoxContainer").get_children():
 		if i != get_node("questnode/TabContainer/Repeatable Quests/ScrollContainer/VBoxContainer/Button"):
@@ -4990,3 +4993,18 @@ func _on_questnode_visibility_changed():
 		repeattext.set_bbcode('You have no active repeatable quests.')
 	else:
 		repeattext.set_bbcode('Choose repeatable quest to see detailed info.')
+
+
+func enchanting_button_setup():
+	var enchanting_button: Button = $MainScreen/mansion/alchemypanel/enchanting
+	if globals.state.sidequests.enchantment_access < 4:
+		enchanting_button.visible = false
+	elif globals.state.mansionupgrades.mansionalchemy < 2:
+		enchanting_button.visible = true
+		enchanting_button.disabled = true
+		enchanting_button.hint_tooltip = "You need to upgrade your Alchemy equimpment to use "
+	else:
+		enchanting_button.visible = true
+		enchanting_button.disabled = false
+		enchanting_button.hint_tooltip = ""
+		
