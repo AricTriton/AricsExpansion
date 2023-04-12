@@ -21,6 +21,7 @@ const ITEM_DEFAULT_SPARKS_MULTIPLIER = 2
 const ITEM_NO_BLOOD_SPARKS_MULTIPLIER = 1.5
 const ITEM_DEFAULT_INGREDIENT_MULTIPLIER = 0.5
 const ITEM_NO_BLOOD_INGREDIENT_MULTIPLIER = 4
+const ITEM_HAS_CUSTOM_ENCHANTMENTS_MULTUPLIER = 1.5
 const ITEM_TIER_MULTIPLIERS = [3, 5, 8]
 
 const SLAVE_HEALTH_LEVEL_BREAKS = [0.66, 0.33, 0.01]
@@ -37,6 +38,7 @@ class ItemButtonData:
 
 
 var is_enchanting: bool = false
+var cleaned_item
 var selected_slave
 var selected_enchant
 var selected_item
@@ -55,19 +57,19 @@ func _ready() -> void:
 	init_enchantment_buttons()
 
 
-func init_enchantment_buttons() -> void:	
+func init_enchantment_buttons() -> void:
 	for enchant in enchant_dict:
 		if enchantments_by_effect[enchant][0] != enchant:
 			continue
-		
+
 		if !globals.state.enchantment_sparks.has(enchant):
 			globals.state.enchantment_sparks[enchant] = 0
 
 		var enchant_node: CanvasItem = enchantment_original_node.duplicate()
-		enchant_node.visible = true 
+		enchant_node.visible = true
 		enchant_node.set_meta("enchantment_id", enchant)
 
-		var button: Button = enchant_node.get_node("button")	
+		var button: Button = enchant_node.get_node("button")
 		enchantment_names[enchant] = enchant_dict[enchant].name.replace("&v ", "").replace("&100v ", "")
 		button.text = enchantment_names[enchant]
 		button.set_meta("enchantment_id", enchant)
@@ -76,13 +78,27 @@ func init_enchantment_buttons() -> void:
 		enchantment_container.add_child(enchant_node)
 
 
+func fix_enchant_id(effect):
+	var enchant_id = effect.get("enchant_id")
+	if typeof(enchant_id) == TYPE_DICTIONARY:
+		for enchantment_id in enchant_dict:
+			var candidate = enchant_dict[enchantment_id]
+			if candidate.name == enchant_id.name && candidate.id == enchant_id.id:
+				effect.enchant_id = enchantment_id
+				return
+		print_debug("")
+
+
 func _on_enchanting_pressed() -> void:
+	for item in globals.state.unstackables.values():
+		for effect in item.effects:
+			fix_enchant_id(effect)
 	var main = get_tree().get_current_scene()
 	main.background_set("enchanting")
 	yield(main, "animfinished")
 	main.hide_everything()
 	self.visible = true
-	MAX_CUSTOM_ENCHANT_LEVEL = globals.enchantscript.enchanting_max_level
+	MAX_CUSTOM_ENCHANT_LEVEL = globals.expansionsettings.enchanting_max_level
 
 	set_enchanting_mode(false)
 	selected_enchant = null
@@ -106,22 +122,22 @@ func recreate_item_buttons() -> void:
 		if node != items_original_button:
 			node.visible = false
 			node.queue_free()
-	
+
 	var gear_array = []
 	var gear_unique_dict = {}
 	for item in globals.state.unstackables.values():
 		if item.owner != null && str(item.owner) != "backpack":
 			continue # item is worn by somebody
-		
+
 		var gear_unique_id = get_item_unique_id(item)
 		if gear_unique_dict.has(gear_unique_id):
 			gear_unique_dict[gear_unique_id].append(item)
 		else:
 			gear_array.append([item])
 			gear_unique_dict[gear_unique_id] = gear_array.back()
-	
+
 	gear_array.sort_custom(self, "sortItemCopiesArray")
-	
+
 	for item_copies in gear_array:
 		create_item_button(item_copies)
 
@@ -161,7 +177,7 @@ func get_item_text(item) -> String:
 			enchants_count += 1
 			if enchants_count <= MAX_SHOWN_ENCHANTMENTS:
 				text += "\n" + effect.descript
-	
+
 	if enchants_count > MAX_SHOWN_ENCHANTMENTS:
 		text += " + %s more" % (enchants_count - 2)
 
@@ -171,10 +187,10 @@ func get_item_text(item) -> String:
 func get_effect_enchantment_type(effect: Dictionary, item: Dictionary, deduplicate: bool = false):
 	if typeof(effect) != TYPE_DICTIONARY:
 		return null;
-	
+
 	if effect.has("enchant_id"):
 		return effect["enchant_id"]
-	
+
 	if effect.has("descript") && "[color=green]" in effect.descript: # let's find matching enchantments
 		for enchantment_id in enchant_dict:
 			var enchantment_info = enchant_dict[enchantment_id]
@@ -182,7 +198,7 @@ func get_effect_enchantment_type(effect: Dictionary, item: Dictionary, deduplica
 				if deduplicate:
 					return enchantments_by_effect[enchantment_id][0]
 				return enchantment_id
-	
+
 	return null
 
 
@@ -194,7 +210,7 @@ func sortItemCopiesArray(first_array: Array, second_array: Array) -> bool:
 	var category_compare = gearTypesOrdered.find(first.type) - gearTypesOrdered.find(second.type)
 	if category_compare != 0:
 		return category_compare < 0
-	
+
 	if first.name != second.name:
 		return first.name < second.name
 
@@ -214,23 +230,23 @@ func on_mode_change_pressed() -> void:
 func set_enchanting_mode(is_enchanting_now: bool) -> void:
 	is_enchanting = is_enchanting_now
 
-	var blood_enabled = globals.enchantscript.enchanting_bloody
-	$select_slave.visible = is_enchanting && blood_enabled
-	$use_essences.visible = is_enchanting && blood_enabled
-	$or_label.visible = is_enchanting && blood_enabled
-
 	if is_enchanting:
 		$mode_select.text = "Enchant items"
 		$do_action.text = "Enchant item"
 		$resources_label.text = "Required Resources:"
+		$select_slave.text = "Select slave"
+		$use_essences.text = "Use essences"
 	else:
 		$mode_select.text = "Dismantle items"
 		$do_action.text = "Dismantle item"
 		$resources_label.text = "Obtained Resources:"
-	
+		$select_slave.text = "Clean item"
+		$use_essences.text = "Get essences"
+
 	if selected_item != null:
 		selected_item.item_button.set_pressed_no_signal(false)
 		selected_item = null
+	cleaned_item = null
 	update_visibility()
 
 
@@ -240,11 +256,11 @@ func on_enchantment_toggled(button_pressed: bool, enchant_code: String) -> void:
 	else:
 		selected_enchant = null
 
-	selected_slave = null	
+	selected_slave = null
 	if selected_item != null && !should_item_be_visible(selected_item, selected_enchant):
 		selected_item.item_button.set_pressed_no_signal(false)
 		selected_item = null
-	
+
 	for node in enchantment_container.get_children():
 		if node == enchantment_original_node || node.get_meta("enchantment_id") != enchant_code:
 			node.get_node("button").set_pressed_no_signal(false)
@@ -262,19 +278,22 @@ func on_item_toggled(button_pressed: bool, item_data: ItemButtonData) -> void:
 	update_visibility()
 
 
-func update_visibility() -> void:	
+func update_visibility() -> void:
 	if selected_item != null && selected_item.items_list.empty():
 		selected_item = null
 	if selected_item == null:
 		selected_slave = null
-	
+	if !is_enchanting && cleaned_item != null && cleaned_item != selected_item:
+		deselect_slave()
+		return
+
 	for node in enchantment_container.get_children():
 		if node == enchantment_original_node:
 			continue
 		var enchantment_id = node.get_meta("enchantment_id")
 		node.visible = selected_item == null || can_enchant_be_applied(enchantment_id, selected_item)
 		node.get_node("count").text = str(globals.state.enchantment_sparks[enchantment_id])
-	
+
 	for button in items_container.get_children():
 		if button == items_original_button:
 			continue
@@ -286,9 +305,9 @@ func update_visibility() -> void:
 func should_item_be_visible(item_data: ItemButtonData, enchantment_id) -> bool:
 	if item_data.items_list.empty():
 		return false
-	
+
 	item_data.item_button.get_node("amount").text = str(item_data.items_list.size())
-	
+
 	var item: Dictionary = item_data.items_list[0]
 	if is_enchanting:
 		var applicable = can_enchant_be_applied(enchantment_id, item_data)
@@ -311,7 +330,7 @@ func update_action() -> void:
 		$do_action.disabled = true
 		show_price(null)
 		return
-	
+
 	if is_enchanting:
 		update_enchant()
 	else:
@@ -324,6 +343,8 @@ func get_flavor_text() -> String:
 		return "This %s cannot be further enchanted with sparks" % selected_item.items_list[0].name
 	if selected_slave != null:
 		return get_slave_flavor_text()
+	if selected_item != null && cleaned_item == selected_item:
+		return "This will remove all enchantments from item. However, you won't get any sparks from it"
 	if selected_enchant != null:
 		return enchantment_creation_ingredients[selected_enchant].flavor_text
 	return ""
@@ -389,6 +410,8 @@ func normalize_effect_value(effect_value) -> float:
 func calculate_item_disassemble_gain(item: Dictionary) -> ResourcesPrice:
 	var item_multiplier = calculate_item_multiplier(item)
 	var gain = ResourcesPrice.new()
+	if cleaned_item != null:
+		return gain
 	for effect in item.effects:
 		var enchant_id = get_effect_enchantment_type(effect, item, true)
 		if enchant_id == null:
@@ -411,6 +434,8 @@ func calculate_item_enchantment_cost(item: Dictionary) -> ResourcesPrice:
 		cost.ingredients["basicsolutioning"] = 1
 		ingr_coefficient *= ITEM_NO_BLOOD_INGREDIENT_MULTIPLIER
 		sparks_coefficient *= ITEM_NO_BLOOD_SPARKS_MULTIPLIER
+	if get_custom_enchants_count() > 0:
+		sparks_coefficient *= ITEM_HAS_CUSTOM_ENCHANTMENTS_MULTUPLIER
 
 	var max_effect = max(enchant_data.get("maxeffect", 0), enchant_data.get("effectvalue", 0))
 	var sparks_cost = int(normalize_effect_value(max_effect) * item_multiplier * sparks_coefficient)
@@ -432,6 +457,8 @@ func update_disassemble() -> void:
 	current_price = item_gain
 	show_price(item_gain)
 	$do_action.disabled = false
+	$select_slave.disabled = false
+	$use_essences.disabled = false
 
 
 func update_enchant() -> void:
@@ -439,19 +466,24 @@ func update_enchant() -> void:
 	var item_cost = calculate_item_enchantment_cost(item)
 	current_price = item_cost
 	show_price(item_cost)
+	var blood_enabled = globals.expansionsettings.enchanting_bloody
 	var can_enchant_further = can_enchant_current_item_further()
 	$do_action.disabled = !can_enchant_further || !check_enough_resources(item_cost)
 	$select_slave.disabled = !can_enchant_further
 	$use_essences.disabled = !can_enchant_further
 
 
-func can_enchant_current_item_further() -> bool:
+func get_custom_enchants_count() -> int:
 	var custom_enchants_count = 0
 	for effect in selected_item.items_list[0].effects:
 		custom_enchants_count += effect.get("enchant_custom_level", 0)
-	return custom_enchants_count + 1 <= MAX_CUSTOM_ENCHANT_LEVEL
+	return custom_enchants_count
 
-	
+
+func can_enchant_current_item_further() -> bool:
+	return get_custom_enchants_count() + 1 <= MAX_CUSTOM_ENCHANT_LEVEL
+
+
 func setup_next_resource_node(name_text: String, number_text: String, red_number: bool) -> void:
 	var node = resources_original_node.duplicate()
 	resources_container.add_child(node)
@@ -515,16 +547,16 @@ func do_enchant() -> void:
 	var changed_enchant = {id = enchant_info.id, type = enchant_info.type, effect = enchant_info.effect, effectvalue = 0,
 					descript = "", enchant_id = selected_enchant, enchant_custom_level = 0}
 	var added_effect = [changed_enchant]
-	
+
 	for effect in enchanted_item.effects:
 		if effect.get("enchant_id") == selected_enchant && effect.has("enchant_custom_level"):
 			changed_enchant = effect
 			added_effect = []
-	
+
 	changed_enchant.enchant_custom_level += 1
 	changed_enchant.effectvalue += max(enchant_info.get("effectvalue", 0), enchant_info.get("maxeffect", 0))
 	enchanted_item.effects += added_effect
-			
+
 	var enchant_description = enchant_info.name.replace('&100v', str(changed_enchant.effectvalue*100)).replace('&v', str(changed_enchant.effectvalue))
 	changed_enchant.descript = '[color=%s]%s[/color]' % [enchant_bbcode_colors[enchanted_item.enchant], enchant_description]
 
@@ -546,22 +578,22 @@ func check_enough_resources(price: ResourcesPrice) -> bool:
 		var owned_ingredient = globals.state.getCountStackableItem(ingredient)
 		var required_ingredient = price.ingredients[ingredient]
 		enough = enough && owned_ingredient >= required_ingredient
-	
+
 	return enough
 
 
 func consume_resources(price: ResourcesPrice) -> bool:
 	if !check_enough_resources(price):
 		return false
-	
+
 	for enchantment_id in price.enchantment_sparks:
 		var required_sparks = price.enchantment_sparks[enchantment_id]
 		globals.state.enchantment_sparks[enchantment_id] -= required_sparks
-	
+
 	for ingredient in price.ingredients:
 		var required_ingredient = price.ingredients[ingredient]
 		globals.state.removeStackableItem(ingredient, required_ingredient)
-	
+
 	if selected_slave != null:
 		var break_level = get_slave_health_break()
 		if break_level != -1:
@@ -572,11 +604,21 @@ func consume_resources(price: ResourcesPrice) -> bool:
 
 
 func deselect_slave() -> void:
-	slave_selected(null)
+	if is_enchanting:
+		slave_selected(null)
+	else:
+		cleaned_item = null
+		$do_action.text = "Dismantle item"
+		update_visibility()
 
 
-func select_slave() -> void:	
-	globals.main.selectslavelist(true, "slave_selected", self, funcref(self, "slave_can_donate_blood"))
+func select_slave() -> void:
+	if is_enchanting:
+		globals.main.selectslavelist(true, "slave_selected", self, funcref(self, "slave_can_donate_blood"))
+	else:
+		cleaned_item = selected_item
+		$do_action.text = "Disenchant item"
+		update_visibility()
 
 
 func slave_can_donate_blood(person) -> bool:
@@ -592,10 +634,10 @@ func slave_selected(person) -> void:
 
 
 func get_slave_flavor_text() -> String:
-	var text = "You need a lot of blood to enchant %s with %s, and $name will provide it.\n $He " 
+	var text = "You need a lot of blood to enchant %s with %s, and $name will provide it.\n $He "
 	text = text % [selected_item.items_list[0].name, enchantment_names[selected_enchant]]
 	text = selected_slave.dictionary(text)
-	
+
 	var break_level = get_slave_health_break()
 	match break_level:
 		-1: text += "will likely die from blood loss"
@@ -611,7 +653,7 @@ func get_slave_health_break() -> int: # -1 means death, 0-2 means away for SLAVE
 	var health_breaks = SLAVE_HEALTH_LEVEL_BREAKS
 	if selected_slave.obed >= 80 && selected_slave.loyal >= 25:
 		health_breaks = LOYAL_SLAVE_HEALTH_LEVEL_BREAKS
-	
+
 	for index in health_breaks.size():
 		if slave_health_percentage >= health_breaks[index]:
 			return index
@@ -620,9 +662,18 @@ func get_slave_health_break() -> int: # -1 means death, 0-2 means away for SLAVE
 
 func do_disenchant() -> void:
 	var removed_item = selected_item.items_list.pop_back()
-	globals.state.unstackables.erase(removed_item.id)
-	for enchantment_id in current_price.enchantment_sparks:
-		globals.state.enchantment_sparks[enchantment_id] += current_price.enchantment_sparks[enchantment_id]
+	if cleaned_item != null:
+		for effect in removed_item.effects.duplicate():
+			if get_effect_enchantment_type(effect, removed_item) != null:
+				removed_item.effects.erase(effect)
+		removed_item.enchant = ""
+
+		recreate_item_buttons()
+		cache_of_item_buttons[get_item_unique_id(removed_item)].set_pressed(true)
+	else:
+		globals.state.unstackables.erase(removed_item.id)
+		for enchantment_id in current_price.enchantment_sparks:
+			globals.state.enchantment_sparks[enchantment_id] += current_price.enchantment_sparks[enchantment_id]
 
 
 func can_enchant_be_applied(enchantment_id, item) -> bool:
@@ -630,7 +681,7 @@ func can_enchant_be_applied(enchantment_id, item) -> bool:
 		return false
 	if item == null || item.items_list.empty():
 		return false
-	
+
 	for equivalent_enchantment in enchantments_by_effect[enchantment_id]:
 		var enchantment_info = enchant_dict[equivalent_enchantment]
 		var item_subtype = item.items_list[0].type

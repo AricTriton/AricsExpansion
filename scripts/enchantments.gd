@@ -148,7 +148,7 @@ var _enchantment_id_to_id = {}
 func _init():
 	for enchantment_id in enchantmentdict:
 		var enchantment = enchantmentdict[enchantment_id]
-		_enchantment_id_to_id[enchantment.id] = enchantment
+		_enchantment_id_to_id[enchantment.id] = enchantment_id
 
 		if !enchantments_by_effect.has(enchantment.effect):
 			enchantments_by_effect[enchantment.effect] = []
