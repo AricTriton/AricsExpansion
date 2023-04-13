@@ -70,7 +70,7 @@ func init_enchantment_buttons() -> void:
 		enchant_node.set_meta("enchantment_id", enchant)
 
 		var button: Button = enchant_node.get_node("button")
-		enchantment_names[enchant] = enchant_dict[enchant].name.replace("&v ", "").replace("&100v ", "")
+		enchantment_names[enchant] = enchant_dict[enchant].name.replace("&v ", "").replace("&100v% ", "%")
 		button.text = enchantment_names[enchant]
 		button.set_meta("enchantment_id", enchant)
 		button.connect("toggled", self, "on_enchantment_toggled", [enchant])
@@ -244,13 +244,22 @@ func set_enchanting_mode(is_enchanting_now: bool) -> void:
 		$use_essences.text = "Get essences"
 
 	if selected_item != null:
-		selected_item.item_button.set_pressed_no_signal(false)
+		unpress_button(selected_item.item_button)
 		selected_item = null
 	cleaned_item = null
 	update_visibility()
 
 
+var is_unpressing: bool = false
+func unpress_button(button: BaseButton) -> void:
+	is_unpressing = true
+	button.pressed = false
+	is_unpressing = false
+
+
 func on_enchantment_toggled(button_pressed: bool, enchant_code: String) -> void:
+	if is_unpressing:
+		return
 	if button_pressed:
 		selected_enchant = enchant_code
 	else:
@@ -258,23 +267,25 @@ func on_enchantment_toggled(button_pressed: bool, enchant_code: String) -> void:
 
 	selected_slave = null
 	if selected_item != null && !should_item_be_visible(selected_item, selected_enchant):
-		selected_item.item_button.set_pressed_no_signal(false)
+		unpress_button(selected_item.item_button)
 		selected_item = null
 
 	for node in enchantment_container.get_children():
 		if node == enchantment_original_node || node.get_meta("enchantment_id") != enchant_code:
-			node.get_node("button").set_pressed_no_signal(false)
+			unpress_button(node.get_node("button"))
 	update_visibility()
 
 
 func on_item_toggled(button_pressed: bool, item_data: ItemButtonData) -> void:
+	if is_unpressing:
+		return
 	if button_pressed:
 		selected_item = item_data
 	else:
 		selected_item = null
 	for button in items_container.get_children():
 		if button == items_original_button || button != item_data.item_button:
-			button.set_pressed_no_signal(false)
+			unpress_button(button)
 	update_visibility()
 
 
