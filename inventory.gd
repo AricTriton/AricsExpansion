@@ -5,12 +5,15 @@ var selected_gear_categories = {}
 
 func _ready():	
 	for i in ['costume','weapon','armor','accessory','underwear']:
-		get_node("gearpanel/" + i).connect("pressed", self, 'gearinfo', [i])
-		get_node("gearpanel/" + i).connect("mouse_entered", self, 'geartooltip', [i])
-		get_node("gearpanel/" + i + '/TextureFrame').connect("mouse_entered", self, 'geartooltip', [i])
-		get_node("gearpanel/" + i + '/TextureFrame').connect("mouse_exited", globals, 'itemtooltiphide')
-		get_node("gearpanel/" + i + "/unequip").connect("pressed", self, 'unequip', [i])
-		get_node("gearpanel/" + i + "/filter_by_slot").connect("pressed", self, 'filter_gear', [i])
+		var item_node = "gearpanel/" + i
+		get_node(item_node).connect("pressed", self, 'gearinfo', [i])
+		get_node(item_node).connect("mouse_entered", self, 'geartooltip', [i])
+		get_node(item_node + '/TextureFrame').connect("mouse_entered", self, 'geartooltip', [i])
+		get_node(item_node + '/TextureFrame').connect("mouse_exited", globals, 'itemtooltiphide')
+		get_node(item_node + "/unequip").connect("pressed", self, 'unequip', [i])
+		get_node(item_node + "/filter_by_slot").connect("pressed", self, 'filter_gear', [i])
+		get_node(item_node + "/unequip_2x").connect("pressed", self, 'unequip', [i])
+		get_node(item_node + "/filter_by_slot_2x").connect("pressed", self, 'filter_gear', [i])
 	
 	for i in get_tree().get_nodes_in_group("invcategory"):
 		i.connect("pressed",self,'selectcategory',[i])
@@ -253,9 +256,11 @@ func slavegear(person):
 	for i in ['weapon','costume','underwear','armor','accessory']:
 		if person.gear[i] == null:
 			get_node("gearpanel/"+i+"/unequip").visible = false
+			get_node("gearpanel/"+i+"/unequip_2x").visible = false
 			get_node("gearpanel/"+i).set_normal_texture(sil[i])
 		else:
 			get_node("gearpanel/"+i+"/unequip").visible = true
+			get_node("gearpanel/"+i+"/unequip_2x").visible = true
 			###---Added by Expansion---### Ankmairdor's BugFix V4d
 			get_node("gearpanel/"+i).set_normal_texture(globals.loadimage(globals.state.unstackables[person.gear[i]].icon))
 			###---Expansion End---###
