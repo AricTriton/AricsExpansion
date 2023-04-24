@@ -1718,6 +1718,8 @@ func hide_everything():
 	#---DimCrystal
 	get_node("MainScreen/mansion/AE_DimCrystal").visible = false
 	get_node("MainScreen/mansion/dimcrystalpanel").hide()
+	#---Enchanting	
+	get_node("MainScreen/mansion/enchanting_panel").hide()
 	###---End Expansion---###
 	globals.hidetooltip()
 
@@ -3616,6 +3618,7 @@ func _on_addhen_pressed():
 	_on_farm_pressed()
 	rebuild_slave_list()
 
+# now you can pass function to reqs, wrapped with @GDScript.funcref. It has to accept person argument and return true to include them in list
 func selectslavelist(prisoners = false, calledfunction = 'popup', targetnode = self, reqs = 'true', player = false, onlyparty = false):
 	var array = []
 	if player == true:
@@ -3626,7 +3629,9 @@ func selectslavelist(prisoners = false, calledfunction = 'popup', targetnode = s
 			continue
 		if onlyparty == true && !globals.state.playergroup.has(person.id):
 			continue
-		if globals.evaluate(reqs) == false:
+		if typeof(reqs) == TYPE_STRING && reqs != 'true' && globals.evaluate(reqs) == false:
+			continue
+		if typeof(reqs) == TYPE_OBJECT && !reqs.call_func(person):
 			continue
 		if prisoners == false && person.sleep == 'jail' :
 			continue
@@ -4867,3 +4872,139 @@ func dialogue(showcloseButton, destination, dialogtext, dialogbuttons = null, sp
 func _on_upgradesclose_pressed():
 	get_node("MainScreen/mansion/upgradespanel").hide()
 	get_tree().get_current_scene()._on_mansion_pressed()
+
+
+var awayText = {
+	'travel back': 'will return back in ',
+	'transported back': 'will be transported back in ',
+	'in labor': 'will be resting after labor for ',
+	'training': 'will be undergoing training for ',
+	'nurture': 'will be undergoing nurturing for ',
+	'growing': 'will keep maturing for ',
+	'lab': 'will be undergoing modification for ',
+	'rest': 'will be taking a rest for ',
+	'vacation': 'will be on vacation for ',
+	'blood_donor': 'will be recovering from blood loss for ',
+	'default': 'will be unavailable for ',
+}
+
+
+func enchanting():
+	get_node("MainScreen/mansion/enchanting_panel")._on_enchanting_pressed()
+
+
+func _on_alchemy_pressed():
+	background_set('alchemy' + str(globals.state.mansionupgrades.mansionalchemy))
+	yield(self, 'animfinished')
+	hide_everything()
+	get_node("MainScreen/mansion/alchemypanel").show()
+	if globals.state.tutorial.alchemy == false:
+		get_node("tutorialnode").alchemy()
+	if globals.state.sidequests.chloe == 8 && globals.state.mansionupgrades.mansionalchemy >= 1:
+		globals.events.chloealchemy()
+	potselected = null
+	var potlist = get_node("MainScreen/mansion/alchemypanel/ScrollContainer/selectpotionlist")
+	var potline = get_node("MainScreen/mansion/alchemypanel/ScrollContainer/selectpotionlist/selectpotionline")
+	var maintext = get_node("MainScreen/mansion/alchemypanel/alchemytext")
+	if globals.state.mansionupgrades.mansionalchemy == 0:
+		maintext.set_bbcode("Your alchemy room lacks sufficient tools to craft your own potions. You have to unlock it from [color=yellow]Mansion Upgrades[/color] first.")
+		for i in get_node("MainScreen/mansion/alchemypanel").get_children():
+			i.hide()
+		maintext.show()
+		return
+	else:
+		get_node("MainScreen/mansion/alchemypanel/alchemytext").set_bbcode("This is your alchemy room. Chemistry equipment is ready to use and shelves contain your fresh ingredients.")
+		get_node("MainScreen/mansion/alchemypanel/potdescription").set_bbcode('')
+		for i in get_node("MainScreen/mansion/alchemypanel").get_children():
+			i.show()
+	enchanting_button_setup()
+	for i in potlist.get_children():
+		if i != potline:
+			i.hide()
+			i.queue_free()
+	var array = []
+	for i in globals.itemdict.values():
+		if i.recipe != '' && globals.evaluate(i.reqs):
+			array.append(i)
+	array.sort_custom(globals.items,'sortitems')
+	for i in array:
+		var newpotline = potline.duplicate()
+		potlist.add_child(newpotline)
+		if i.icon != null:
+			newpotline.get_node("potbutton/icon").set_texture(i.icon)
+		newpotline.show()
+		newpotline.get_node("potnumber").set_text(str(i.amount))
+		newpotline.get_node("potbutton").set_text(i.name)
+		newpotline.get_node("potbutton").connect('pressed', self, 'brewlistpressed', [i])
+		newpotline.set_name(i.name)
+	alchemyclear()
+	get_node("MainScreen/mansion/alchemypanel/brewbutton").set_disabled(true)
+
+
+func _on_questnode_visibility_changed():
+	if get_node("questnode").visible == false:
+		return
+	var maintext = get_node("questnode/TabContainer/Main Quest/mainquesttext")
+	var sidetext = get_node("questnode/TabContainer/Side Quests/sidequesttext")
+	var repeattext = get_node("questnode/TabContainer/Repeatable Quests/repetablequesttext")
+	maintext.set_bbcode(mainquestdict[str(globals.state.mainquest)])
+	sidetext.set_bbcode('')
+	repeattext.set_bbcode('')
+	#sidequests
+	if globals.state.sidequests.brothel == 1:
+		sidetext.set_bbcode(sidetext.get_bbcode() + "—To let your slaves work at prostitution, you'll have to bring [color=green]Elf girl[/color] to the brothel. \n\n")
+	if globals.state.farm == 2:
+		sidetext.set_bbcode(sidetext.get_bbcode()+ "—Sebastian proposed you to purchase to set up your own human farm for 1000 gold.\n\n")
+	if chloequestdict.has(str(globals.state.sidequests.chloe)):
+		sidetext.set_bbcode(sidetext.get_bbcode() + "—"+ chloequestdict[str(globals.state.sidequests.chloe)]+"\n\n")
+	if caliquestdict.has(str(globals.state.sidequests.cali)):
+		sidetext.set_bbcode(sidetext.get_bbcode() + "—"+ caliquestdict[str(globals.state.sidequests.cali)]+"\n\n")
+	if emilyquestdict.has(str(globals.state.sidequests.emily)):
+		sidetext.set_bbcode(sidetext.get_bbcode() + "—"+ emilyquestdict[str(globals.state.sidequests.emily)]+"\n\n")
+	if yrisquestdict.has(str(globals.state.sidequests.yris)):
+		sidetext.set_bbcode(sidetext.get_bbcode() + "—"+ yrisquestdict[str(globals.state.sidequests.yris)]+"\n\n")
+	if aydaquestdict.has(str(globals.state.sidequests.ayda)):
+		sidetext.set_bbcode(sidetext.get_bbcode() + "—"+ aydaquestdict[str(globals.state.sidequests.ayda)]+"\n\n")
+	if zoequestdict.has(str(globals.state.sidequests.zoe)):
+		sidetext.set_bbcode(sidetext.get_bbcode() + "—"+ zoequestdict[str(globals.state.sidequests.zoe)]+"\n\n")
+	if globals.state.sidequests.enchantment_access == 2:
+		sidetext.set_bbcode(sidetext.get_bbcode() + "—Pay Umbra's exchange merchant to make custom orders to enchanter\n\n")
+	#repeatables
+	for i in get_node("questnode/TabContainer/Repeatable Quests/ScrollContainer/VBoxContainer").get_children():
+		if i != get_node("questnode/TabContainer/Repeatable Quests/ScrollContainer/VBoxContainer/Button"):
+			i.hide()
+			i.queue_free()
+	selectedrepeatable = null
+	get_node("questnode/TabContainer/Repeatable Quests/questforfeit").set_disabled(true)
+	for i in globals.state.repeatables:
+		for ii in globals.state.repeatables[i]:
+			if ii.taken == true:
+				var newbutton = get_node("questnode/TabContainer/Repeatable Quests/ScrollContainer/VBoxContainer/Button").duplicate()
+				get_node("questnode/TabContainer/Repeatable Quests/ScrollContainer/VBoxContainer").add_child(newbutton)
+				newbutton.show()
+				newbutton.set_text(ii.location.capitalize() + ' - ' + questtype[ii.type])
+				newbutton.connect("pressed",self,'repeatableselect', [ii])
+				newbutton.set_meta('quest', ii)
+	
+	
+	if sidetext.get_bbcode() == '':
+		sidetext.set_bbcode('You have no active sidequests.')
+	if get_node("questnode/TabContainer/Repeatable Quests/ScrollContainer/VBoxContainer").get_children().size() <= 1:
+		repeattext.set_bbcode('You have no active repeatable quests.')
+	else:
+		repeattext.set_bbcode('Choose repeatable quest to see detailed info.')
+
+
+func enchanting_button_setup():
+	var enchanting_button: Button = $MainScreen/mansion/alchemypanel/enchanting
+	if globals.state.sidequests.enchantment_access < 4:
+		enchanting_button.visible = false
+	elif globals.state.mansionupgrades.mansionalchemy < 2:
+		enchanting_button.visible = true
+		enchanting_button.disabled = true
+		enchanting_button.hint_tooltip = "You need to upgrade your Alchemy equimpment to use "
+	else:
+		enchanting_button.visible = true
+		enchanting_button.disabled = false
+		enchanting_button.hint_tooltip = ""
+		

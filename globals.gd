@@ -27,6 +27,7 @@ var rules = {
 	randomcustomportraits = true,
 	thumbnails = false,
 }
+var enchantscript = load("res://files/scripts/enchantments.gd").new()
 
 ###---Added by Expansion---### Hucow Specialization
 var specarray = ['geisha','ranger','executor','bodyguard','assassin','housekeeper','trapper','nympho','merchant','tamer','hucow','mage','warrior','dancer']
@@ -451,8 +452,24 @@ class progress:
 	var mainquest = 0
 	var mainquestcomplete = false
 	var rank = 0
-	var password = ''
-	var sidequests = {startslave = 0, emily = 0, brothel = 0, cali = 0, caliparentsdead = false, chloe = 0, ayda = 0, ivran = '', yris = 0, zoe = 0, ayneris = 0, sebastianumbra = 0, maple = 0, dimcrystal = 0} setget quest_set
+	var password = ''	
+	var sidequests = {
+		startslave = 0,
+		emily = 0,
+		brothel = 0,
+		cali = 0,
+		caliparentsdead = false,
+		chloe = 0,
+		ayda = 0,
+		ivran = '',
+		yris = 0,
+		zoe = 0,
+		ayneris = 0,
+		sebastianumbra = 0,
+		maple = 0,
+		dimcrystal = 0,
+		enchantment_access = 0,
+	} setget quest_set
 	var repeatables = {wimbornslaveguild = [], frostfordslaveguild = [], gornslaveguild = []}
 	var babylist = []
 	var companion = -1
@@ -475,6 +492,7 @@ class progress:
 	var dailyeventprevious = 0
 	var currentversion = 5000
 	var unstackables = {}
+	var enchantment_sparks = {}
 	var supplykeep = 10
 	var foodbuy = 200
 	var supplybuy = false
@@ -1097,6 +1115,29 @@ var alleyecolors = ['blue', 'green', 'brown', 'hazel', 'black', 'gray', 'purple'
 
 ###---Added by Expansion---### Kennels Expanded
 var sleepdict = {communal = {name = 'Communal Room'}, jail = {name = "Jail"}, personal = {name = 'Personal Room'}, your = {name = "Your bed"}, kennel = {name = "Dog Kennel"}}
+
+
+func itemdescription(item, short = false):
+	var text = ''
+	var name = ''
+	name = item.name
+	if short == false:
+		text += item.description + '\n\n'
+	elif !item.has('owner'):
+		text += item.description
+	if item.has('owner'):
+		if item.enchant in enchantscript.enchant_bbcode_colors:
+			name = '[color=%s]%s[/color]' % [enchantscript.enchant_bbcode_colors[item.enchant], name]
+		for i in item.effects:
+			text += i.descript + "\n"
+	if item.type == 'gear':
+		text += '\n\n'
+		for i in item.effect:
+			text += i.descript + "\n"
+	if item.has('weight'):
+		text += "\n[color=yellow]Weight: " + str(item.weight) + "[/color]"
+	return '[center]' + name + '[/center]\n' + text
+
 
 func save():
 	state.spelllist.clear()

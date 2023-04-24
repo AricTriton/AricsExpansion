@@ -25,3 +25,26 @@ func getcost(item, mode):
 	if item.code != "food":
 		cost *= globals.expansionsettings.itemCostMod
 	return round(cost)
+
+
+func _on_SpinBox_value_changed(value):
+	var text = ""
+	var item = selecteditem.get_meta('item')
+	var amount = $amountselect/SpinBox.value
+
+	var max_item_amount = int(selecteditem.get_node('number').text)
+	if isBuying:
+		max_item_amount = floor(globals.resources.gold / selecteditem.get_meta('price'))
+	if $amountselect/SpinBox.value > max_item_amount:
+		$amountselect/SpinBox.value = max_item_amount
+		amount = max_item_amount
+
+	if isBuying:
+		var cost = getcost(item, 'buy')
+		text += "You will purchase [color=green]" + item.name + "[/color] for " + str(cost) + " gold each. "
+		text += "\nCost for [color=yellow]" + str(amount) + "[/color] is [color=yellow]" + str(cost*amount) + "[/color] gold"
+	else:
+		var cost = getcost(item, 'sell')
+		text += "You will sell [color=green]" + item.name + "[/color] for " + str(cost) + " gold each. "
+		text += "\nOffer for [color=yellow]" + str(amount) + "[/color] is [color=yellow]" + str(cost*amount) + "[/color] gold"
+	$amountselect/RichTextLabel.bbcode_text = text

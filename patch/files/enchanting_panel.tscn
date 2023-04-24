@@ -1,0 +1,368 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://files/buttongrouptheme.tres" type="Theme" id=1]
+[ext_resource path="res://files/buttons/inventory/item_frame_selected.png" type="Texture" id=2]
+[ext_resource path="res://files/buttons/chek.png" type="Texture" id=3]
+[ext_resource path="res://files/buttons/inventory/6-(item).png" type="Texture" id=4]
+[ext_resource path="res://files/buttons/menupanel.png" type="Texture" id=5]
+[ext_resource path="res://mainfont.tres" type="DynamicFont" id=6]
+[ext_resource path="res://files/scripts/enchanting_panel.gd" type="Script" id=7]
+[ext_resource path="res://files/buttons/inventorypanel.png" type="Texture" id=9]
+[ext_resource path="res://files/images/items/armorleather.png" type="Texture" id=10]
+
+[sub_resource type="StyleBoxTexture" id=8]
+texture = ExtResource( 5 )
+region_rect = Rect2( 0, 0, 500, 500 )
+margin_left = 10.0
+margin_right = 10.0
+margin_top = 10.0
+margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id=9]
+texture = ExtResource( 3 )
+region_rect = Rect2( 0, 0, 20, 20 )
+margin_left = 10.0
+margin_right = 10.0
+margin_top = 10.0
+margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id=10]
+texture = ExtResource( 9 )
+region_rect = Rect2( 0, 0, 613, 833 )
+
+[node name="enchanting_panel" type="Panel"]
+self_modulate = Color( 1, 1, 1, 0.486196 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -424.0
+margin_bottom = -153.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+script = ExtResource( 7 )
+
+[node name="enchanting_text" type="RichTextLabel" parent="."]
+anchor_right = 1.0
+margin_left = 21.0
+margin_top = 13.0
+margin_right = -519.0
+margin_bottom = 61.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/normal_font = ExtResource( 6 )
+bbcode_enabled = true
+bbcode_text = "This is your alchemy room blablablabl"
+text = "This is your alchemy room blablablabl"
+
+[node name="do_action" type="Button" parent="." groups=["mansionbuttons"]]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -228.0
+margin_top = -60.0
+margin_right = -78.0
+margin_bottom = -20.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Enchant items"
+
+[node name="select_slave" type="Button" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -285.0
+margin_top = -362.0
+margin_right = -173.0
+margin_bottom = -322.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Select slave"
+
+[node name="use_essences" type="Button" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -145.0
+margin_top = -362.0
+margin_right = -19.0
+margin_bottom = -322.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Use essences"
+
+[node name="mode_select" type="Button" parent="." groups=["mansionbuttons"]]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -374.0
+margin_top = -606.0
+margin_right = -221.0
+margin_bottom = -566.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 6 )
+text = "Dismantle items"
+
+[node name="flavor_text" type="RichTextLabel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 658.0
+margin_top = 83.0
+margin_right = -20.0
+margin_bottom = -371.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+bbcode_enabled = true
+text = "BLABLA
+BLABLABLA
+ABLACADABLA
+String4
+String5
+String6
+String7"
+
+[node name="enchants_frame" type="Panel" parent="."]
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 77.0
+margin_right = 276.0
+margin_bottom = -16.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/panel = SubResource( 8 )
+
+[node name="enchantment_select_label" type="Label" parent="enchants_frame"]
+margin_top = -23.0
+margin_right = 266.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+text = "Select enchantment type"
+align = 1
+
+[node name="enchants_scroll" type="ScrollContainer" parent="."]
+anchor_bottom = 1.0
+margin_left = 30.0
+margin_top = 86.0
+margin_right = 258.0
+margin_bottom = -17.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="enchants_list" type="VBoxContainer" parent="enchants_scroll"]
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="enchant_line" type="HBoxContainer" parent="enchants_scroll/enchants_list"]
+visible = false
+margin_right = 236.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="count" type="Label" parent="enchants_scroll/enchants_list/enchant_line"]
+margin_right = 32.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 32, 10 )
+size_flags_horizontal = 2
+size_flags_vertical = 1
+text = "25"
+align = 2
+valign = 1
+
+[node name="button" type="Button" parent="enchants_scroll/enchants_list/enchant_line" groups=["alchemypot"]]
+margin_left = 36.0
+margin_right = 236.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource( 1 )
+toggle_mode = true
+text = "Aphrodisiac"
+align = 0
+
+[node name="mode_label" type="Label" parent="."]
+margin_left = 422.0
+margin_top = 18.0
+margin_right = 552.0
+margin_bottom = 44.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+text = "Selected mode"
+align = 1
+
+[node name="resources" type="VBoxContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 651.0
+margin_top = -283.0
+margin_right = -15.0
+margin_bottom = -58.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="resource1" type="Panel" parent="resources"]
+visible = false
+margin_right = 270.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 270, 40 )
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_styles/panel = SubResource( 9 )
+
+[node name="name" type="Label" parent="resources/resource1"]
+margin_left = 7.0
+margin_top = 11.0
+margin_right = 191.0
+margin_bottom = 27.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Endurance sparks"
+max_lines_visible = 1
+
+[node name="totalnumber" type="Label" parent="resources/resource1"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -73.0
+margin_top = -29.0
+margin_right = -6.0
+margin_bottom = -9.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+align = 1
+
+[node name="resources_label" type="Label" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 659.0
+margin_top = -312.0
+margin_right = 916.0
+margin_bottom = -290.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+text = "Required Resources:"
+align = 1
+
+[node name="or_label" type="Label" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 768.0
+margin_top = -352.0
+margin_right = 793.0
+margin_bottom = -330.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+text = "or"
+align = 1
+
+[node name="items_frame" type="Panel" parent="."]
+anchor_bottom = 1.0
+margin_left = 287.0
+margin_top = 77.0
+margin_right = 630.0
+margin_bottom = -16.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/panel = SubResource( 10 )
+
+[node name="enchantment_select_label2" type="Label" parent="items_frame"]
+margin_top = -26.0
+margin_right = 343.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 6 )
+text = "Select item"
+align = 1
+
+[node name="items_scroll" type="ScrollContainer" parent="."]
+anchor_bottom = 1.0
+margin_left = 292.0
+margin_top = 82.0
+margin_right = 650.0
+margin_bottom = -21.0
+mouse_filter = 1
+size_flags_horizontal = 2
+size_flags_vertical = 2
+scroll_horizontal_enabled = false
+
+[node name="container" type="VBoxContainer" parent="items_scroll"]
+margin_right = 330.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_min_size = Vector2( 330, 0 )
+mouse_filter = 0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_constants/separation = -2
+
+[node name="original_button" type="TextureButton" parent="items_scroll/container"]
+visible = false
+margin_right = 330.0
+margin_bottom = 85.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_min_size = Vector2( 330, 85 )
+size_flags_vertical = 0
+toggle_mode = true
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 2 )
+expand = true
+
+[node name="icon" type="TextureRect" parent="items_scroll/container/original_button"]
+margin_left = 6.0
+margin_top = 7.0
+margin_right = 80.0
+margin_bottom = 79.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 10 )
+expand = true
+stretch_mode = 6
+
+[node name="amount" type="Label" parent="items_scroll/container/original_button"]
+margin_left = 55.0
+margin_top = 59.0
+margin_right = 78.0
+margin_bottom = 79.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "20"
+align = 2
+
+[node name="item_text" type="RichTextLabel" parent="items_scroll/container/original_button"]
+margin_left = 86.0
+margin_top = 10.0
+margin_right = 322.0
+margin_bottom = 78.0
+mouse_filter = 2
+bbcode_enabled = true
+bbcode_text = "[color=yellow]Enchant1[/color]
+[color=#4FCCBD]Enchant1[/color]
+[color=#e32636]Enchant1[/color]
+[color=green]Enchant2[/color]"
+text = "Enchant1
+Enchant1
+Enchant1
+Enchant2"
+
+[connection signal="pressed" from="do_action" to="." method="do_action"]
+[connection signal="pressed" from="select_slave" to="." method="select_slave"]
+[connection signal="pressed" from="use_essences" to="." method="deselect_slave"]
+[connection signal="pressed" from="mode_select" to="." method="on_mode_change_pressed"]
