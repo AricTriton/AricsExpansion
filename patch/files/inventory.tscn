@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=2]
+[gd_scene load_steps=64 format=2]
 
 [ext_resource path="res://files/theme.tres" type="Theme" id=1]
 [ext_resource path="res://files/buttons/inventory/11-litter.png" type="Texture" id=2]
@@ -77,6 +77,16 @@ margin_left = 5.0
 margin_right = 5.0
 margin_top = 5.0
 margin_bottom = 5.0
+
+[sub_resource type="Gradient" id=4]
+offsets = PoolRealArray( 0, 0.0229885, 0.733333, 1 )
+colors = PoolColorArray( 0, 0, 0, 0, 0.310345, 0.310345, 0.310345, 0, 0.733333, 0.733333, 0.733333, 0, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=5]
+gradient = SubResource( 4 )
+
+[sub_resource type="GradientTexture" id=6]
+gradient = SubResource( 4 )
 
 [node name="inventory" type="TextureRect"]
 anchor_right = 1.0
@@ -626,6 +636,29 @@ size_flags_vertical = 2
 texture_normal = ExtResource( 57 )
 expand = true
 
+[node name="filter_by_slot_2x" type="TextureButton" parent="gearpanel/costume"]
+margin_left = -10.0
+margin_top = 38.0
+margin_right = 22.0
+margin_bottom = 70.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+keep_pressed_outside = true
+texture_normal = SubResource( 5 )
+texture_hover = ExtResource( 57 )
+expand = true
+
+[node name="unequip_2x" type="TextureButton" parent="gearpanel/costume"]
+margin_left = 37.0
+margin_top = 38.0
+margin_right = 75.0
+margin_bottom = 70.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = SubResource( 6 )
+texture_hover = ExtResource( 44 )
+expand = true
+
 [node name="underwear" type="TextureButton" parent="gearpanel"]
 margin_left = 30.0
 margin_top = 293.0
@@ -680,6 +713,29 @@ margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 texture_normal = ExtResource( 57 )
+expand = true
+
+[node name="filter_by_slot_2x" type="TextureButton" parent="gearpanel/underwear"]
+margin_left = -10.0
+margin_top = 38.0
+margin_right = 22.0
+margin_bottom = 70.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+keep_pressed_outside = true
+texture_normal = SubResource( 5 )
+texture_hover = ExtResource( 57 )
+expand = true
+
+[node name="unequip_2x" type="TextureButton" parent="gearpanel/underwear"]
+margin_left = 37.0
+margin_top = 38.0
+margin_right = 75.0
+margin_bottom = 70.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = SubResource( 6 )
+texture_hover = ExtResource( 44 )
 expand = true
 
 [node name="weapon" type="TextureButton" parent="gearpanel"]
@@ -738,6 +794,29 @@ size_flags_vertical = 2
 texture_normal = ExtResource( 57 )
 expand = true
 
+[node name="filter_by_slot_2x" type="TextureButton" parent="gearpanel/weapon"]
+margin_left = -10.0
+margin_top = 38.0
+margin_right = 22.0
+margin_bottom = 70.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+keep_pressed_outside = true
+texture_normal = SubResource( 5 )
+texture_hover = ExtResource( 57 )
+expand = true
+
+[node name="unequip_2x" type="TextureButton" parent="gearpanel/weapon"]
+margin_left = 37.0
+margin_top = 38.0
+margin_right = 75.0
+margin_bottom = 70.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = SubResource( 6 )
+texture_hover = ExtResource( 44 )
+expand = true
+
 [node name="armor" type="TextureButton" parent="gearpanel"]
 margin_left = 278.0
 margin_top = 131.0
@@ -794,6 +873,29 @@ size_flags_vertical = 2
 texture_normal = ExtResource( 57 )
 expand = true
 
+[node name="filter_by_slot_2x" type="TextureButton" parent="gearpanel/armor"]
+margin_left = -10.0
+margin_top = 38.0
+margin_right = 22.0
+margin_bottom = 70.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+keep_pressed_outside = true
+texture_normal = SubResource( 5 )
+texture_hover = ExtResource( 57 )
+expand = true
+
+[node name="unequip_2x" type="TextureButton" parent="gearpanel/armor"]
+margin_left = 37.0
+margin_top = 38.0
+margin_right = 75.0
+margin_bottom = 70.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = SubResource( 6 )
+texture_hover = ExtResource( 44 )
+expand = true
+
 [node name="accessory" type="TextureButton" parent="gearpanel"]
 margin_left = 278.0
 margin_top = 337.0
@@ -848,6 +950,29 @@ margin_bottom = 65.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 texture_normal = ExtResource( 57 )
+expand = true
+
+[node name="filter_by_slot_2x" type="TextureButton" parent="gearpanel/accessory"]
+margin_left = -10.0
+margin_top = 38.0
+margin_right = 22.0
+margin_bottom = 70.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+keep_pressed_outside = true
+texture_normal = SubResource( 5 )
+texture_hover = ExtResource( 57 )
+expand = true
+
+[node name="unequip_2x" type="TextureButton" parent="gearpanel/accessory"]
+margin_left = 37.0
+margin_top = 38.0
+margin_right = 75.0
+margin_bottom = 70.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture_normal = SubResource( 6 )
+texture_hover = ExtResource( 44 )
 expand = true
 
 [node name="Panel" type="TextureRect" parent="gearpanel"]

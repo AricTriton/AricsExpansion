@@ -5,12 +5,15 @@ var selected_gear_categories = {}
 
 func _ready():	
 	for i in ['costume','weapon','armor','accessory','underwear']:
-		get_node("gearpanel/" + i).connect("pressed", self, 'gearinfo', [i])
-		get_node("gearpanel/" + i).connect("mouse_entered", self, 'geartooltip', [i])
-		get_node("gearpanel/" + i + '/TextureFrame').connect("mouse_entered", self, 'geartooltip', [i])
-		get_node("gearpanel/" + i + '/TextureFrame').connect("mouse_exited", globals, 'itemtooltiphide')
-		get_node("gearpanel/" + i + "/unequip").connect("pressed", self, 'unequip', [i])
-		get_node("gearpanel/" + i + "/filter_by_slot").connect("pressed", self, 'filter_gear', [i])
+		var item_node = "gearpanel/" + i
+		get_node(item_node).connect("pressed", self, 'gearinfo', [i])
+		get_node(item_node).connect("mouse_entered", self, 'geartooltip', [i])
+		get_node(item_node + '/TextureFrame').connect("mouse_entered", self, 'geartooltip', [i])
+		get_node(item_node + '/TextureFrame').connect("mouse_exited", globals, 'itemtooltiphide')
+		get_node(item_node + "/unequip").connect("pressed", self, 'unequip', [i])
+		get_node(item_node + "/filter_by_slot").connect("pressed", self, 'filter_gear', [i])
+		get_node(item_node + "/unequip_2x").connect("pressed", self, 'unequip', [i])
+		get_node(item_node + "/filter_by_slot_2x").connect("pressed", self, 'filter_gear', [i])
 	
 	for i in get_tree().get_nodes_in_group("invcategory"):
 		i.connect("pressed",self,'selectcategory',[i])
@@ -48,7 +51,10 @@ func item_should_be_visible(button) -> bool:
 		return false   # category not in categories, like 'quest'
 	
 	if item_category == 'gear': # additional filter by gear type
-		var gear_type = button.get_meta("itemarray")[0].type
+		var itemarray = button.get_meta("itemarray")
+		if itemarray.size() == 0:
+			return false
+		var gear_type = itemarray[0].type
 		return selected_gear_categories.empty() or selected_gear_categories.has(gear_type) 
 	
 	return true
@@ -84,18 +90,20 @@ func create_item_button(i: Dictionary, amount: int, category: String, move_callb
 	return button
 
 
-func fill_items_list_non_gear(stackable_items: Array, move_callback: String) -> void:
+func fill_items_list_non_gear(stackable_items: Array, stackable_amount: Dictionary, move_callback: String) -> void:
 	var stackable_array = []
 	
 	for i in stackable_items:
-		if i.amount < 1 || i.type in ['gear','dummy']:
+		var item_amount = stackable_amount.get(i.code, i.amount)
+		if item_amount < 1 || i.type in ['gear','dummy']:
 			continue
 		stackable_array.append(i)
 	
 	stackable_array.sort_custom(globals.items,'sortitems')
 	
 	for i in stackable_array:
-		var button = create_item_button(i, i.amount, i.type, move_callback)
+		var item_amount = stackable_amount.get(i.code, i.amount)
+		var button = create_item_button(i, item_amount, i.type, move_callback)
 
 		button.get_node("use").visible = i.type == 'potion' || i.code == 'bandage'
 			
@@ -138,23 +146,21 @@ func fill_items_list_gear(gear_owner, move_callback: String) -> void:
 			button.get_node("icon").set_texture(globals.loadimage(i[0].icon))
 
 
-func fill_items_list_common(stackable_items: Array, gear_owner, move_callback: String) -> void:
-	fill_items_list_non_gear(stackable_items, move_callback)
+func fill_items_list_common(stackable_items: Array, stackable_amount: Dictionary, gear_owner, move_callback: String) -> void:
+	fill_items_list_non_gear(stackable_items, stackable_amount, move_callback)
 	fill_items_list_gear(gear_owner, move_callback)
 
 
 func itemsinventory():
-	fill_items_list_common(globals.itemdict.values(), null, 'movetobackpack')
+	fill_items_list_common(globals.itemdict.values(), {}, null, 'movetobackpack')
 
 
 func itemsbackpack():
 	var stackable_items = []
-	for item_name in globals.state.backpack.stackables:
-		var item = globals.itemdict[item_name].duplicate()
-		item.amount = globals.state.backpack.stackables[item_name]
-		stackable_items.append(item)
+	for item_code in globals.state.backpack.stackables:
+		stackable_items.append(globals.itemdict[item_code])
 	
-	fill_items_list_common(stackable_items, 'backpack', 'movefrombackpack')
+	fill_items_list_common(stackable_items, globals.state.backpack.stackables, 'backpack', 'movefrombackpack')
 
 
 ###---Added by Expansion---### Minor Tweaks by Dabros Integration
@@ -250,9 +256,11 @@ func slavegear(person):
 	for i in ['weapon','costume','underwear','armor','accessory']:
 		if person.gear[i] == null:
 			get_node("gearpanel/"+i+"/unequip").visible = false
+			get_node("gearpanel/"+i+"/unequip_2x").visible = false
 			get_node("gearpanel/"+i).set_normal_texture(sil[i])
 		else:
 			get_node("gearpanel/"+i+"/unequip").visible = true
+			get_node("gearpanel/"+i+"/unequip_2x").visible = true
 			###---Added by Expansion---### Ankmairdor's BugFix V4d
 			get_node("gearpanel/"+i).set_normal_texture(globals.loadimage(globals.state.unstackables[person.gear[i]].icon))
 			###---Expansion End---###
