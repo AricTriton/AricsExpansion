@@ -233,7 +233,7 @@ class combatant:
 	var state = 'normal'
 	var panel
 	var name
-	var hp setget health_set, health_get
+	var hp setget health_set
 	var hpmax
 	var energy
 	var energymax
@@ -510,69 +510,67 @@ class combatant:
 	func dodge():
 		scene.floattext(node.rect_global_position, 'Miss!', '#ffff00')
 	
-	func health_set(value):
-		var effect = ''
-		var color = 'white'
-		var difference = ceil(value - hp)
-		if difference > 0:
-			effect = 'increase'
-			color = '#00ff5e'
-			scene.healdamage(self)
-		elif difference < 0:
-			effect = 'decrease'
-			color = '#f05337'
-			scene.takedamage(self)
-			
-			###---Added by Expansion---### Combat Stress
-			if person != null:
-				var hppercent = 100 - round(100*((100 - (hpmax - hp))/hpmax))
-				if value + hppercent > person.cour || hp <= hpmax/4:
-					#Max of 50% for 1/4 Health Left OR Damage + Total Damage Taken > Courage
-					if rand_range(0,100) > (person.cour + person.conf)/4:
-						stress += round(rand_range(2,4))
-						if person.traits.has('Coward'):
-							stress += round(rand_range(2,4))
-				#Chance of 100% Resist
-				elif value + hppercent > person.cour/2:
-					if rand_range(0,100) > (person.cour + person.conf)/2:
-						stress += round(rand_range(2,4))
-						if person.traits.has('Coward'):
-							stress += round(rand_range(2,4))
-			###---End Expansion---###
+	func health_set(new_hp):
+		var old_hp = hp
+		hp = clamp(ceil(new_hp), 0, hpmax)
 		
-		hp = clamp(ceil(value), 0, hpmax)
+		var difference = ceil(new_hp - old_hp)
+		show_health_change(difference)
+		get_stressed_from_damage(old_hp, difference)			
 		
 		if group == 'enemy' && person != null && ai == 'attack' && hp <= hpmax/2 && randf() >= 0.6:
 			ai = 'escape'
 		
-		#draw()
-		scene.floattext(node.rect_global_position, str(difference), color)
+		check_zero_hp()
+
+	func show_health_change(difference: float):
+		var text_color = 'white'
+		if difference > 0:
+			text_color = '#00ff5e'
+			scene.healdamage(self)
+		elif difference < 0:
+			text_color = '#f05337'
+			scene.takedamage(self)
+		scene.floattext(node.rect_global_position, str(difference), text_color)
+
+	
+	###---Added by Expansion---### Combat Stress
+	func get_stressed_from_damage(old_hp: float, difference: float):
+		if difference < 0 && person != null:
+			var damage_taken_now = difference * -1
+			var health_missing_pct = (hpmax - old_hp) / hpmax + 100
+			var stress_threshold = damage_taken_now + health_missing_pct
+			
+			if stress_threshold > person.cour || old_hp <= hpmax/4:
+				#Max of 50% for 1/4 Health Left OR Damage + Total Damage Taken > Courage
+				if rand_range(0,100) > (person.cour + person.conf)/4:
+					stress += round(rand_range(2,4))
+					if person.traits.has('Coward'):
+						stress += round(rand_range(2,4))
+			#Chance of 100% Resist
+			elif stress_threshold > person.cour/2:
+				if rand_range(0,100) > (person.cour + person.conf)/2:
+					stress += round(rand_range(2,4))
+					if person.traits.has('Coward'):
+						stress += round(rand_range(2,4))
+	###---End Expansion---###
+
+	func check_zero_hp():
 		if hp <= 0 && state != 'defeated':
 			#---Second Wind
 			if group == 'player' && globals.state.thecrystal.abilities.has('secondwind') && !person.dailyevents.has('crystal_second_wind'):
-				if person == globals.player:
-					scene.combatlog += "\n[color=#ff4949]You are struck a fatal blow, but the magic of the [color=aqua]Crystal[/color] swirls around you, restoring you to [color=lime]half health[/color]. [/color]"
-					globals.state.thecrystal.hunger += 1
-					hp += round(hpmax*.5)
-					person.dailyevents.append('crystal_second_wind')
-					if globals.state.thecrystal.abilities.has('attunement'):
-						scene.combatlog += "\n[color=#ff4949]The [color=aqua]Crystal's Hunger[/color] grows to [color=red]" + str(globals.state.thecrystal.hunger) + "[/color]. It cannot restore you like this again today.[/color] "
-					else:
-						scene.combatlog += "\n[color=#ff4949]The [color=aqua]Crystal[/color] cannot restore you like this again today.[/color] "
+				var name = "You" if person == globals.player else person.name
+				
+				scene.queue.combatlog += "\n[color=#ff4949]" + name + " received a fatal blow, but the magic of the [color=aqua]Crystal[/color] swirls around them, restoring them to [color=lime]half health[/color]. [/color]"
+				globals.state.thecrystal.hunger += 1
+				hp += round(hpmax*.5)
+				person.dailyevents.append('crystal_second_wind')
+				if globals.state.thecrystal.abilities.has('attunement'):
+					scene.queue.combatlog += "\n[color=#ff4949]The [color=aqua]Crystal's Hunger[/color] grows to [color=red]" + str(globals.state.thecrystal.hunger) + "[/color]. It cannot restore " + person.name + " like this again today.[/color] "
 				else:
-					scene.combatlog += "\n[color=#ff4949]" + person.name + " is struck a fatal blow, but the magic of the [color=aqua]Crystal[/color] swirls around them, restoring them to [color=lime]half health[/color]. [/color]"
-					globals.state.thecrystal.hunger += 1
-					hp += round(hpmax*.5)
-					person.dailyevents.append('crystal_second_wind')
-					if globals.state.thecrystal.abilities.has('attunement'):
-						scene.combatlog += "\n[color=#ff4949]The [color=aqua]Crystal's Hunger[/color] grows to [color=red]" + str(globals.state.thecrystal.hunger) + "[/color]. It cannot restore " + person.name + " like this again today.[/color] "
-					else:
-						scene.combatlog += "\n[color=#ff4949]The [color=aqua]Crystal[/color] cannot restore " + person.name + " like this again today.[/color] "
+					scene.queue.combatlog += "\n[color=#ff4949]The [color=aqua]Crystal[/color] cannot restore " + name + " like this again today.[/color] "
 			else:
 				defeat()
-	
-	func health_get():
-		return hp
 	
 	func defeat():
 		###---Added by Expansion---### Combat Death Prevention
@@ -582,55 +580,51 @@ class combatant:
 		node.hide()
 		effects.clear()
 		scene.combatantnodes.erase(node)
+		
 		if group == 'enemy':
-			for i in scene.enemygroup:
-				if i.passives.has("cultleaderpassive") && i.state != 'defeated':
-					i.hpmax += 150
-					i.hp += 300
-					i.attack += 50
-					scene.combatlog += "\n[color=red]Cult leader absorbs the power of defeated ally and grows stronger![/color]"
-			scene.combatlog += scene.combatantdictionary(self, self, "\n[color=aqua][name1] has been defeated.[/color]")
+			on_enemy_defeated()
 		if group == 'player':
 			scene.playergroup.remove(scene.playergroup.find(self))
 			if person == globals.player:
-				globals.main.animationfade(1)
-				if OS.get_name() != 'HTML5':
-					yield(globals.main, 'animfinished')
-				globals.main.get_node("gameover").show()
-				globals.main.get_node("gameover/Panel/text").set_bbcode("[center]You have died.[/center]")
-				scene.period = 'end'
-				return
+				pass
 			else:
-				var _slave = person
-				if globals.rules.permadeath == false:
-					scene.combatlog += "\n[color=#ff4949]" + _slave.name + " has been defeated. [/color]"
-					_slave.stats.health_cur = 15
-					_slave.away.duration = 3
-					_slave.away.at = 'rest'
-					_slave.work = 'rest'
-					globals.state.playergroup.erase(person.id)
-				elif globals.state.thecrystal.preventsdeath == true:
-					scene.combatlog += "\n[color=#ff4949]" + _slave.name + " has been defeated, but " + _slave.name + "'s death was prevented by the magic of the [color=aqua]Crystal[/color]. [/color]"
-					scene.combatlog +=  "\n[color=#ff4949]The [color=aqua]Crystal's Lifeforce[/color] [color=red]decreases by 1[/color]. [/color]"
-					globals.state.thecrystal.lifeforce -= 1
-					_slave.stats.health_cur = 15
-					_slave.away.duration = 3
-					_slave.away.at = 'rest'
-					_slave.work = 'rest'
-					globals.state.playergroup.erase(person.id)
-				else:
-					scene.combatlog += "\n[color=#ff4949]" + _slave.name + " has died. [/color]"
-					globals.state.playergroup.erase(person.id)
-					for i in globals.state.playergroup:
-						globals.state.findslave(i).stress += rand_range(25,40)
-					_slave.death()
-			###---End Expansion---###
-		else:
-			scene.repositionanimation()
+				on_slave_defeated()
+		
 		animationplaying = false
 		scene.ongoinganimation = false
 		scene.emit_signal("defeat2finished")
 		scene.endcombatcheck()
+
+	func on_enemy_defeated():
+		scene.combatlog += scene.combatantdictionary(self, self, "\n[color=aqua][name1] has been defeated.[/color]")
+		for i in scene.enemygroup:
+			if i.passives.has("cultleaderpassive") && i.state != 'defeated':
+				i.hpmax += 150
+				i.hp += 300
+				i.attack += 50
+				scene.combatlog += "\n[color=red]Cult leader absorbs the power of defeated ally and grows stronger![/color]"
+		scene.repositionanimation()
+
+	func on_slave_defeated():
+		var _slave = person
+		if !globals.rules.permadeath || globals.state.thecrystal.preventsdeath:
+			if !globals.rules.permadeath:
+				scene.combatlog += "\n[color=#ff4949]" + _slave.name + " has been defeated. [/color]"
+			else:
+				scene.combatlog += "\n[color=#ff4949]" + _slave.name + " has been defeated, but " + _slave.name + "'s death was prevented by the magic of the [color=aqua]Crystal[/color]. [/color]"
+				scene.combatlog +=  "\n[color=#ff4949]The [color=aqua]Crystal's Lifeforce[/color] [color=red]decreases by 1[/color]. [/color]"
+				globals.state.thecrystal.lifeforce -= 1
+			_slave.stats.health_cur = 15
+			_slave.away.duration = 3
+			_slave.away.at = 'rest'
+			_slave.work = 'rest'
+			globals.state.playergroup.erase(person.id)
+		else:
+			scene.combatlog += "\n[color=#ff4949]" + _slave.name + " has died. [/color]"
+			globals.state.playergroup.erase(person.id)
+			for i in globals.state.playergroup:
+				globals.state.findslave(i).stress += rand_range(25,40)
+			_slave.death()
 	
 	func escape():
 		state = 'escaped'
@@ -1166,25 +1160,30 @@ func end_turn():
 		elif period == 'lose':
 			lose()
 
+
 func endcombatcheck():
-	var counter = 0
+	var enemies_alive = 0
 	for i in enemygroup:
-		if i.state in ['escaped','defeated','captured']:
-			counter += 1
+		if i.state == 'normal':
+			enemies_alive += 1
 	
-	if counter >= enemygroup.size():
+	if enemies_alive == 0:
 		period = 'win'
 		return
-	
-	if playergroup[0].state == 'escaped':
-		period = 'escape'
-		return
-	
-	if playergroup.size() == 0 || playergroup[0].state == 'defeated':
-		period = 'lose'
-		return
 
-	return 'continue'
+	var player_combatant = null
+	for i in playergroup:
+		if i.person == globals.player:
+			player_combatant = i
+			break
+	
+	if player_combatant != null && player_combatant.state == 'normal':
+		return 'continue'
+	
+	if player_combatant != null && player_combatant.state == 'escaped':
+		period = 'escape'
+	else:
+		period = 'lose'
 ###---End Expansion---###
 
 func checkforinheritdebuffs(combatant):
