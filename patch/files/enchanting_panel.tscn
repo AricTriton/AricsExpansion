@@ -53,7 +53,7 @@ bbcode_enabled = true
 bbcode_text = "This is your alchemy room blablablabl"
 text = "This is your alchemy room blablablabl"
 
-[node name="do_action" type="Button" parent="." groups=["mansionbuttons"]]
+[node name="do_action" type="Button" parent="."]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -95,7 +95,7 @@ size_flags_vertical = 2
 custom_fonts/font = ExtResource( 6 )
 text = "Use essences"
 
-[node name="mode_select" type="Button" parent="." groups=["mansionbuttons"]]
+[node name="mode_select" type="Button" parent="."]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
