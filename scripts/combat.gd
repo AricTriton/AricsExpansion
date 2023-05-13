@@ -789,17 +789,17 @@ func calculatehit(caster: combatant, target: combatant, skill: Dictionary) -> in
 
 
 class CombatLogAdder:
-	var parent
+	var scene
 	var caster: combatant
 	var target: combatant
 
-	func _init(parent, caster: combatant, target: combatant):
-		self.parent = parent
+	func _init(scene, caster: combatant, target: combatant):
+		self.scene = scene
 		self.caster = caster
 		self.target = target
 
 	func log(text: String) -> void:
-		parent.combatlog += parent.combatantdictionary(caster, target, text)
+		scene.combatlog += scene.combatantdictionary(caster, target, text)
 
 
 func checkTargetProtected(skill: Dictionary, caster: combatant, target: combatant) -> bool:
@@ -848,10 +848,9 @@ func useskills(skill, caster = null, target = null, canRetarget = true):
 	
 	var usesCount = calcMultipleAttack(skill, caster)
 	for attackIndex in usesCount:
-		useSkillOnce(caster, target, skill)
-
-	if skill.code == 'escape':
-		logAdder.log("[name1] prepares to escape! ")
+		var function_state = useSkillOnce(caster, target, skill)
+		if function_state is GDScriptFunctionState: # Still working.
+			yield(function_state, "completed")
 	
 	if period != 'enemyturn':
 		endcombatcheck()
@@ -863,6 +862,7 @@ func useskills(skill, caster = null, target = null, canRetarget = true):
 	emit_signal("skillplayed")
 
 
+#can yield
 func useSkillOnce(caster: combatant, target: combatant, skill: Dictionary) -> void:
 	var logAdder = CombatLogAdder.new(self, caster, target)
 	if skill.has('castersfx'):
@@ -876,40 +876,14 @@ func useSkillOnce(caster: combatant, target: combatant, skill: Dictionary) -> vo
 	
 	#target skills
 	if skill.target == 'one':
-		if skill.code == 'attack':
-			logAdder.log('[color=lime][name1][/color] tries to attack [targetname1]. ')
-		else:
-			logAdder.log('[name1] uses [color=aqua]{skill}[/color] on [targetname1]. '.format({skill = skill.name}))
-		
-		useSkillOnOneTarget(caster, target, skill)
+		useTargetSkill(caster, target, skill, logAdder)
 	#aoe skills
 	elif skill.target == 'all':
-		var isPlayerGroup: bool = playergroup.has(caster)
-		var targetarray
-		if (isPlayerGroup && skill.targetgroup == 'enemy') || (!isPlayerGroup && skill.targetgroup == 'ally'):
-			targetarray = enemygroup
-		else:
-			targetarray = playergroup
-		
-		logAdder.log('[name1] uses [color=aqua]{skill}[/color]. '.format({skill = skill.name}))
-		for i in targetarray:
-			useSkillOnOneTarget(caster, i, skill)
+		useAllSkill(caster, skill, logAdder)
 	#self skills
 	elif skill.target == 'self':
-		if skill.code == 'escape' && globals.main.get_node("explorationnode").launchonwin != null && caster.group == 'player':
-			globals.main.popup("You can't escape from this fight")
-			caster.energy += skill.costenergy
-			caster.actionpoints += 1
-			period = 'base'
-			caster.cooldowns.erase('escape')
+		if useSelfSkill(caster, skill, logAdder) == "break":
 			return
-		if skill.code == 'mindread':
-			caster.actionpoints += 1
-
-	#buffs and effects
-	if skill.attributes.has('noescape') && target.effects.has('escapeeffect'):
-		logAdder.log("[targetname1] being held in place! ")
-		removebuff("escapeeffect",target)
 	
 	if skill.has('effectself') && skill.effectself != null:
 		sendbuff(caster, caster, skill.effectself)
@@ -919,48 +893,88 @@ func useSkillOnce(caster: combatant, target: combatant, skill: Dictionary) -> vo
 		yield(self, 'defeat2finished')
 
 
+func useTargetSkill(caster: combatant, target: combatant, skill: Dictionary, logAdder: CombatLogAdder) -> void:
+	if skill.code == 'attack':
+		logAdder.log('[color=lime][name1][/color] tries to attack [targetname1]. ')
+	else:
+		logAdder.log('[name1] uses [color=aqua]{skill}[/color] on [targetname1]. '.format({skill = skill.name}))	
+	useSkillOnOneTarget(caster, target, skill)
+
+
+func useAllSkill(caster: combatant, skill: Dictionary, logAdder: CombatLogAdder) -> void:
+	var isPlayerGroup: bool = playergroup.has(caster)
+	var targetarray
+	if (isPlayerGroup && skill.targetgroup == 'enemy') || (!isPlayerGroup && skill.targetgroup == 'ally'):
+		targetarray = enemygroup
+	else:
+		targetarray = playergroup
+	
+	logAdder.log('[name1] uses [color=aqua]{skill}[/color]. '.format({skill = skill.name}))
+	for i in targetarray:
+		useSkillOnOneTarget(caster, i, skill)
+
+
+func useSelfSkill(caster: combatant, skill: Dictionary, logAdder: CombatLogAdder):
+	if skill.code == 'escape':
+		if globals.main.get_node("explorationnode").launchonwin != null && caster.group == 'player':
+			globals.main.popup("You can't escape from this fight")
+			caster.energy += skill.costenergy
+			caster.actionpoints += 1
+			period = 'base'
+			caster.cooldowns.erase('escape')
+			return "break"
+		else:
+			logAdder.log("[name1] prepares to escape! ")
+	if skill.code == 'mindread':
+		caster.actionpoints += 1
+	useSkillOnOneTarget(caster, caster, skill)
+
+
 func useSkillOnOneTarget(caster: combatant, target: combatant, skill: Dictionary) -> void:
 	var logAdder = CombatLogAdder.new(self, caster, target)
-
-	var skillUseCount = 1
-	if caster.passives.has('doubleattack') && rand_range(0,100) < caster.passives.doubleattack.effectvalue && skill.type == 'physical':
-		skillUseCount = 2
-		logAdder.log("[color=yellow]Double attack![/color] ")
 	
-	for skillUse in skillUseCount:
-		if target.state != 'normal':
-			return
-		var infoText = " "
-		var hit = HitResult.Hit
+	if target.state != 'normal':
+		return
+	var infoText = [" "]
+	var hit = HitResult.Hit
 
-		if skill.can_miss == true:
-			hit = calculatehit(caster, target, skill)
-			infoText += "H: {chance}% ".format({chance = hitChance(caster, target, skill)})
+	if skill.can_miss == true:
+		hit = calculatehit(caster, target, skill)
+		infoText[0] += "H: {chance}% ".format({chance = hitChance(caster, target, skill)})
 
-		if skill.attributes.has('damage'):
-			if skill.type == 'spell':
-				var damage = spelldamage(caster, target, skill)
-				logAdder.log('[targetname1] takes [color=#f05337]{damage}[/color] spell damage.'.format({damage = damage}))
-				target.hp -= damage
-			
-			elif skill.type == 'physical':
-				if hit == HitResult.Crit:
-					logAdder.log("[color=yellow]Critical Attack![/color] ")
-				if hit != HitResult.Miss:
-					var damage = physdamage(caster, target, skill, hit == HitResult.Crit)
-					logAdder.log('[targetname1] takes [color=#f05337]{damage}[/color] damage.'.format({damage = damage}))
-					infoText += "B: {rawDmg} A: {armor} P: {prot}%".format({rawDmg = caster.attack*skill.power, armor = target.armor, prot = target.protection})
-					target.hp -= damage
-				else:
-					target.dodge()
-					logAdder.log("[targetname1] [color=yellow]dodges[/color] it. ")
+	if skill.attributes.has('damage'):
+		skillDealDamage(caster, target, skill, hit, infoText, logAdder)
 
-		if skill.effect != null && hit != HitResult.Miss:
-			sendbuff(caster, target, skill.effect)
-		if skill.has('script') && hit != HitResult.Miss:
-			scripteffect(caster, target, skill.script)
-		if globals.expansionsettings.perfectinfo:
-			logAdder.log(infoText)
+	if skill.effect != null && hit != HitResult.Miss:
+		sendbuff(caster, target, skill.effect)
+	if skill.has('script') && hit != HitResult.Miss:
+		scripteffect(caster, target, skill.script)
+	
+	if skill.attributes.has('noescape') && target.effects.has('escapeeffect'):
+		logAdder.log("[targetname1] being held in place! ")
+		removebuff("escapeeffect",target)
+	
+	if globals.expansionsettings.perfectinfo:
+		logAdder.log(infoText[0])
+
+
+func skillDealDamage(caster: combatant, target: combatant, skill: Dictionary, hit: int, infoText: Array, logAdder: CombatLogAdder) -> void:
+	if skill.type == 'spell':
+		var damage = spelldamage(caster, target, skill)
+		logAdder.log('[targetname1] takes [color=#f05337]{damage}[/color] spell damage.'.format({damage = damage}))
+		target.hp -= damage
+	
+	elif skill.type == 'physical':
+		if hit == HitResult.Crit:
+			logAdder.log("[color=yellow]Critical Attack![/color] ")
+		if hit != HitResult.Miss:
+			var damage = physdamage(caster, target, skill, hit == HitResult.Crit)
+			logAdder.log('[targetname1] takes [color=#f05337]{damage}[/color] damage.'.format({damage = damage}))
+			infoText[0] += "B: {rawDmg} A: {armor} P: {prot}%".format({rawDmg = caster.attack*skill.power, armor = target.armor, prot = target.protection})
+			target.hp -= damage
+		else:
+			target.dodge()
+			logAdder.log("[targetname1] [color=yellow]dodges[/color] it. ")
 
 
 func useAutoAbility(combatant):
@@ -981,16 +995,28 @@ func useAutoAbility(combatant):
 
 ###---Added by Expansion---### Combat Stress Alteration
 func enemyturn():
-	if $autoattack.pressed == true:
+	for func_name in ["player_team_autoattack", "check_state_before_enemy_turn", "actual_enemy_turn", "process_end_of_turn_effects"]:
+		var func_result = self.call(func_name)
+		if func_result is GDScriptFunctionState:
+			func_result = yield(func_result, "completed")
+		if func_result == "break":
+			break
+	
+	end_turn()
+
+
+func player_team_autoattack():
+	if $autoattack.pressed:
 		for i in playergroup:
 			if i.state == 'normal' && i.actionpoints > 0:
 				useAutoAbility(i)
 				yield(self, 'skillplayed')
 				endcombatcheck()
 				if period == 'win':
-					playerwin() 
-					return
+					return "break"
 
+
+func check_state_before_enemy_turn():
 	for i in enemygroup + playergroup:
 		if i.state != 'normal':
 			continue
@@ -1013,62 +1039,69 @@ func enemyturn():
 					effect.duration -= 1
 				if effect.duration == 0:
 					removebuff(effect.code, i)
+
+
+func actual_enemy_turn():
 	enemyturn = true
-	var target
-	for combatant in enemygroup:
-		if combatant.state != 'normal' || combatant.effects.has('stun'):
+	for enemy_combatant in enemygroup:
+		if enemy_combatant.state != 'normal' || enemy_combatant.effects.has('stun'):
 			continue
-		for effect in combatant.effects.values():
+		if playergroup.size() == 0:
+			return "break"
+		
+		for effect in enemy_combatant.effects.values():
 			if effect.code == 'escapeeffect':
 				combatant.escape()
-		var skill = []
-		for k in combatant.enemy_abilities:
-			var i = globals.abilities.abilitydict[k]
-			
-			if combatant.ai == 'escape':
-				if !combatant.effects.has('shackleeffect'):
-					skill = 'escape'
-				else:
-					combatant.ai = 'attack'
-			if combatant.ai == 'attack':
-				if combatant.cooldowns.has(i.code):
-					continue
-				if i.aipatterns.has('attack'):
-					skill.append({value = i, weight = i.aipriority})
 		
-		
-		
-		
-		if playergroup.size() == 0:
-			lose()
-			return
-		
-		if typeof(skill) == TYPE_ARRAY:
-			skill = globals.weightedrandom(skill)
-			combatant.aimemory = skill.code
-		if skill == null:
-			skill = globals.abilities.abilitydict[combatant.abilities[0]]
-		elif typeof(skill) == TYPE_STRING:
-			skill = globals.abilities.abilitydict[skill]
-		var targetarray = []
-		if skill.targetgroup == 'enemy':
-			for i in playergroup:
-				if i.state == 'normal':
-					targetarray.append(i)
-		elif skill.target == 'self':
-			targetarray = [combatant]
-		else:
-			for i in enemygroup:
-				if i.state == 'normal':
-					targetarray.append(i)
-		if targetarray.size() <= 0:
-			return
-		target = targetarray[randi()%targetarray.size()]
-		if combatant.state in ['normal']:
-			useskills(skill, combatant, target)
+		var skill = enemy_select_used_skill(enemy_combatant)
+		var target = enemy_select_random_target(enemy_combatant, skill)
+
+		if target != null && enemy_combatant.state in ['normal']:
+			useskills(skill, enemy_combatant, target)
 			yield(self, 'skillplayed')
-	
-	
+
+
+func enemy_select_used_skill(enemy_combatant: combatant) -> String:
+	if enemy_combatant.ai == 'escape' && !enemy_combatant.effects.has('shackleeffect'):
+		return globals.abilities.abilitydict['escape']
+	else:
+		var skills_list = []
+		for k in enemy_combatant.enemy_abilities:
+			var i = globals.abilities.abilitydict[k]
+			if enemy_combatant.cooldowns.has(i.code):
+				continue
+			if i.aipatterns.has('attack'):
+				skills_list.append({value = i, weight = i.aipriority})
+		var selected_skill = globals.weightedrandom(skills_list)
+		if selected_skill == null:
+			return enemy_combatant.abilities[0]
+		else:
+			return selected_skill
+
+
+func enemy_select_random_target(enemy_combatant: combatant, skill: Dictionary):
+	var targetarray = []
+	if skill.targetgroup == 'enemy':
+		for i in playergroup:
+			if i.state == 'normal':
+				targetarray.append(i)
+	elif skill.target == 'self':
+		return enemy_combatant
+	else:
+		for i in enemygroup:
+			if i.state == 'normal':
+				targetarray.append(i)
+	if targetarray.size() <= 0:
+		return null
+	return targetarray[randi()%targetarray.size()]
+
+
+func process_end_of_turn_effects():
+	process_enemy_effects()
+	process_player_group_effects()
+
+
+func process_enemy_effects():	
 	for i in enemygroup:
 #		i.stress += 3
 		i.actionpoints = 1
@@ -1087,6 +1120,9 @@ func enemyturn():
 					effect.duration -= 1
 				if effect.duration == 0:
 					removebuff(effect.code, i)
+
+
+func process_player_group_effects():
 	for i in playergroup:
 		checkforinheritdebuffs(i)
 #		i.stress += 3
@@ -1114,6 +1150,7 @@ func enemyturn():
 						i.state = 'escaped'
 					removebuff(effect.code, i)
 	
+func end_turn():
 	if endcombatcheck() == 'continue':
 		enemyturn = false
 		
@@ -1126,6 +1163,28 @@ func enemyturn():
 			playerescape()
 		elif period == 'win':
 			playerwin()
+		elif period == 'lose':
+			lose()
+
+func endcombatcheck():
+	var counter = 0
+	for i in enemygroup:
+		if i.state in ['escaped','defeated','captured']:
+			counter += 1
+	
+	if counter >= enemygroup.size():
+		period = 'win'
+		return
+	
+	if playergroup[0].state == 'escaped':
+		period = 'escape'
+		return
+	
+	if playergroup.size() == 0 || playergroup[0].state == 'defeated':
+		period = 'lose'
+		return
+
+	return 'continue'
 ###---End Expansion---###
 
 func checkforinheritdebuffs(combatant):
