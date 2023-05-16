@@ -610,6 +610,7 @@ var backgrounds = {
 	alchemy0 = load("res://files/backgrounds/alchemy0.png"),
 	alchemy1 = load("res://files/backgrounds/alchemy1.png"),
 	alchemy2 = load("res://files/backgrounds/alchemy2.png"),
+	enchanting = load("res://files/backgrounds/enchanting.png"),
 	#wimborn = load("res://files/backgrounds/town.png"), #Wimborn - vanilla background.
 	wimborn = load("res://files/aric_expansion_images/backgrounds/wimborntown.png"), #Wimborn - new background.
 	mageorder = load("res://files/backgrounds/mageorder.png"),
