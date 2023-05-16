@@ -599,6 +599,15 @@ var enchanting_max_level = 2        # Amount of times you can custom enchant an 
 var enchanting_bloody = true        # Allow using blood for enchanting
 var enchanting_unlock_cost = 5000   # Amount of gold you have to pay to unlock enchanting
 
+
+#--- Combat tweaks
+var combat_tweaks_enabled = true
+var minimal_hit_chance = 25
+var critical_strikes = true
+var critical_damage_base = 100
+var critical_damage_per_str = 20
+
+
 func addConstantsSupport():
 	variables.list["Aric's Expansion Mod"] = {
 		autoattackability = {descript = "Use abilities on auto attack, left to right. Hint: reorder/activate abilities in the character info menu when out.", object = self},
@@ -672,5 +681,12 @@ func addConstantsSupport():
 		enchanting_max_level = {descript = "How many times you can enchant single item. Default: 2", min = 1, max = 10, object = self},
 		enchanting_bloody = {descript = "Allow using slave blood for enchanting. Default: True", object = self},
 		enchanting_unlock_cost = {descript = "Amount of gold you have to pay to unlock enchanting. Default: 5000", min = 1, max = 100000, object = self},
+	}
+	variables.list["AE Mod - Mkzd' Combat Tweaks"] = {
+		combat_tweaks_enabled = {descript = "Set to true to use combat tweaks", object = self},
+		minimal_hit_chance = {descript = "Minimal hit chance after speed comparision.", min = 0, max = 80, object = self},
+		critical_damage_base = {descript = "Base critical hit damage multiplier, in percent", min = 100, max = 500, object = self},
+		critical_damage_per_str = {descript = "Additional critical hit damage multiplier per point of strength, in percent", min = 0, max = 100, object = self},
+		critical_strikes = {descript = "Enable critical strikes. The bigger your speed over enemy's, the bigger the chance.", object = self},
 	}
 	
