@@ -1,6 +1,6 @@
 ### <CustomFile> ###
-
-#Template Storage for easy guidance
+"""
+Template to read so I don't keep switching tabs
 # Melissa = {
 # 		basics = ['Human', 'adult', 'female', 'noble'],
 # 		name = 'Melissa',
@@ -15,7 +15,7 @@
 # 		hairstyle = 'straight',
 # 		vagvirgin = false,
 # 		unique = 'Melissa',
-# 		imageportait = "res://files/images/melissa/melissaportrait.png",
+# 		imageportait = 'res://files/images/melissa/melissaportrait.png',
 # 		obed = 20,
 # 		cour = 77,
 # 		conf = 65,
@@ -33,6 +33,7 @@
 # 		traits = ['Authority', 'Natural Beauty', 'Dominant', 'Responsive'],
 # 		ability = ['attack', 'shackle', 'sedation', 'mindblast'],
 # 	},
+"""
 
 #For access to names
 var namefile = load("res://files/scripts/characters/names.gd").new()
@@ -430,12 +431,64 @@ func countpersona(persona):
 			counter += 1
 	return counter
 		
-func aliceimages (): #for manipulating body images for Alices
-	#BBP-Alice
-	var alicepath = "patch/files/aric_expansion_images" #Check Path with OS
-	if alicepath != null: #if not null
-		pass
-		#check slave arrays for alices
-		#Load images for each alice
-	
-#---End---#
+
+
+#Brought this here to mimic the dictionary structure for uniques without linking the entire script here.
+enum {IMAGE_DEFAULT, IMAGE_NAKED}
+enum {LOW_STRESS, MID_STRESS, HIGH_STRESS, IMAGE_PREG}
+var typeEnumToString = ['default','naked']
+
+var dictPersonaImagePaths = {
+	'AliceClassic': {
+		IMAGE_DEFAULT: {
+			HIGH_STRESS: 'res://files/aric_expansion_images/KK/Alice Portraits/A_Base.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/KK/Alice Portraits/A_Base_preg.png',
+		},
+		IMAGE_NAKED: {
+			HIGH_STRESS: 'res://files/aric_expansion_images/KK/Alice Portraits/A_base_naked.png',
+		},
+	},
+	'AliceBunny': {
+		IMAGE_DEFAULT: {
+			HIGH_STRESS: 'res://files/aric_expansion_images/KK/Alice Portraits/A_bunny.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/KK/Alice Portraits/A_bunny_preg.png',
+		},
+		IMAGE_NAKED: {
+			HIGH_STRESS: 'res://files/aric_expansion_images/KK/Alice Portraits/A_bunny_naked.png',
+		},
+	},
+	'AliceMeow': {
+		IMAGE_DEFAULT: {
+			HIGH_STRESS: 'res://files/aric_expansion_images/KK/Alice Portraits/A_cat.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/KK/Alice Portraits/A_cat_preg.png',
+		},
+		IMAGE_NAKED: {
+			HIGH_STRESS: 'res://files/aric_expansion_images/KK/Alice Portraits/A_cat_naked.png',
+		},
+	},
+	'AlicePuppy': {
+		IMAGE_DEFAULT: {
+			HIGH_STRESS: 'res://files/aric_expansion_images/KK/Alice Portraits/A_dog.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/KK/Alice Portraits/A_dog_preg.png',
+		},
+		IMAGE_NAKED: {
+			HIGH_STRESS: 'res://files/aric_expansion_images/KK/Alice Portraits/A_dog_naked.png',
+		},
+	},
+	'AliceFoxy': {
+		IMAGE_DEFAULT: {
+			HIGH_STRESS: 'res://files/aric_expansion_images/KK/Alice Portraits/A_foxy.png',
+			IMAGE_PREG: 'res://files/aric_expansion_images/KK/Alice Portraits/A_foxy_preg.png',
+		},
+		IMAGE_NAKED: {
+			HIGH_STRESS: 'res://files/aric_expansion_images/KK/Alice Portraits/A_foxy_naked.png',
+		},
+	},
+}
+
+var typeToPath = {
+	'default' : 'bodies',
+	'preg' : 'bodiespreg',
+	'naked' : 'bodiesnaked',
+}
+
