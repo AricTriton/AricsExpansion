@@ -2204,15 +2204,16 @@ custom_constants/separation = 15
 
 [node name="spellbutton" type="Button" parent="mageorderservices/ScrollContainer/spelllist"]
 visible = false
-margin_right = 200.0
+margin_right = 220.0
 margin_bottom = 40.0
-rect_min_size = Vector2( 200, 40 )
+rect_min_size = Vector2( 220, 40 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme = ExtResource( 52 )
 custom_fonts/font = ExtResource( 6 )
 toggle_mode = true
 text = "Mind Read- learned"
+clip_text = true
 
 [node name="learnspellbutton" type="Button" parent="mageorderservices"]
 anchor_left = 1.0
