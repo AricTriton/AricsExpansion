@@ -302,8 +302,34 @@ var spelllist = {
 		type = 'utility',
 		tags = [],
 	},
+	treasure_guidance = {
+		code = 'treasure_guidance',
+		name = 'Treasure Guidance',
+		description = "An utility spell which helps to find treasure chests among the wilds.\nIt tries to find safest way to located treasure, but it might not succeed...\nEffect grows with Magic Affinity. \n[color=yellow]Effect reduced in enclosed spaces[/color] ",
+		effect = 'treasure_guidance_effect',
+		manacost = 8,
+		req = 2,
+		price = 1000,
+		personal = false,
+		combat = false,
+		learned = false,
+		type = 'utility',
+		tags = ['used_outside'],
+	},
 ###---End Expansion---###
 }
+
+func treasure_guidance_effect():
+	var spell = globals.spelldict.guidance
+	globals.resources.mana -= spellcost(spell)
+	var text = 'You cast guidance and move forward through the area avoiding any unnecessary encounters. '
+	
+	if main.exploration.currentzone.tags.has("enclosed"):
+		main.exploration.progress += round((2 + globals.player.smaf*1.5)/2)
+	else:
+		main.exploration.progress += round(2 + globals.player.smaf*1.5)
+	main.exploration.zoneenter(main.exploration.currentzone.code)
+	return text
 
 func spellCostCalc(cost):
 	if globals.state.spec == 'Mage' && globals.expansionsettings.mage_mana_reduction:

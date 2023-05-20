@@ -41,7 +41,7 @@ func generate_regular_encounter(override_enemy = null) -> bool:
 	return true
 
 
-func enemyencounter() -> void:
+func enemyencounter(override_enemy = null) -> void:
 	enemygear.clear()
 	enemygroup.clear()
 	inencounter = true
@@ -51,7 +51,7 @@ func enemyencounter() -> void:
 	var scoutawareness = calculateawareness()
 	var patrol_out = [null]
 
-	generate_special_zone_encounter() or generate_guards_encounter(scoutawareness, patrol_out) or generate_regular_encounter()
+	generate_special_zone_encounter() or generate_guards_encounter(scoutawareness, patrol_out) or generate_regular_encounter(override_enemy)
 
 	if patrol_out[0] != null:
 		text = encounterdictionary(enemygroup.description) + "Your bad reputation around here will certainly lead to a difficult fight..."
