@@ -1,74 +1,75 @@
 
 var travel = globals.expansiontravel #ralphD
 
-func enemyencounter():
-	var enc
-	var encmoveto
-	var scoutawareness = -1
-	var patrol = 'none'
-	var text = ''
-	var enemyawareness
+func generate_special_zone_encounter() -> bool:
+	if currentzone.encounters.size() > 0:
+		for i in currentzone.encounters:
+			var encounter_function = i[0]
+			var condition = i[1]
+			var chance = i[2]
+			if globals.evaluate(condition) == true && rand_range(0,100) < chance:
+				call(encounter_function)
+				return true
+	
+	return false
+
+
+func generate_guards_encounter(scoutawareness: float, patrol_out: Array) -> bool:
+	for i in currentzone.tags:
+		if i in ['wimborn','frostford','gorn','amberguard']:
+			var patrol_chance = clamp(abs(globals.state.reputation[i])/1.2, 10, 30) - scoutawareness / 2
+			if globals.state.reputation[i] <= -10 && rand_range(0,100) < patrol_chance:
+				if globals.state.reputation[i] <= -25 && rand_range(0,10) > 3:
+					buildenemies(i+'guardsmany')
+					patrol_out[0] = 'patrolbig'
+				else:
+					buildenemies(i+'guards')
+					patrol_out[0] = 'patrolsmall'
+				return true
+	return false
+
+
+func generate_regular_encounter(override_enemy = null) -> bool:
+	buildenemies(override_enemy)
+	if enemygroup.captured != null:
+		var group = enemygroup.captured
+		enemygroup.captured = []
+		for i in group:
+			###---Added by Expansion---### NPCs Expanded
+			enemygroup.captured.append(buildslave(capturespool[i],false))
+			###---End Expansion---###
+	return true
+
+
+func enemyencounter() -> void:
 	enemygear.clear()
 	enemygroup.clear()
 	inencounter = true
 	outside.clearbuttons()
-	scoutawareness = calculateawareness()
-	if currentzone.encounters.size() > 0:
-		for i in currentzone.encounters:
-			enc = i[0]
-			var condition = i[1]
-			var chance = i[2]
-			if globals.evaluate(condition) == true && rand_range(0,100) < chance:
-				encmoveto = enc
-				break
-	if encmoveto != null:
-		call(enc)
-		return
-	else:
-		for i in currentzone.tags:
-			if i in ['wimborn','frostford','gorn','amberguard'] && globals.state.reputation[i] <= -10 && max(10, min(abs(globals.state.reputation[i])/1.2,30)) - scoutawareness/2 > rand_range(0,100):
-				if globals.state.reputation[i] <= -25 && rand_range(0,10) > 3:
-					buildenemies(i+'guardsmany')
-					patrol = 'patrolbig'
-					break
-				elif globals.state.reputation[i] <= -10:
-					buildenemies(i+'guards')
-					patrol = 'patrolsmall'
-					break
-		if enemygroup.empty() == true:
-			buildenemies()
-#		for i in enemygroup.units:
-#			if i.capture == true:
-#				buildslave(i)
-		if enemygroup.captured != null:
-			var group = enemygroup.captured
-			enemygroup.captured = []
-			for i in group:
-				###---Added by Expansion---### NPCs Expanded
-				enemygroup.captured.append(buildslave(capturespool[i],false))
-				###---End Expansion---###
-	enemyawareness = enemygroup.awareness
-	if deeperregion == true:
-		enemyawareness *= 1.25
-	if patrol != 'none':
+
+	var text = ''
+	var scoutawareness = calculateawareness()
+	var patrol_out = [null]
+
+	generate_special_zone_encounter() or generate_guards_encounter(scoutawareness, patrol_out) or generate_regular_encounter()
+
+	if patrol_out[0] != null:
 		text = encounterdictionary(enemygroup.description) + "Your bad reputation around here will certainly lead to a difficult fight..."
-		encounterbuttons(patrol)
-	elif scoutawareness < (enemyawareness + rand_range(globals.expansionsettings.random_enemy_awareness[0],globals.expansionsettings.random_enemy_awareness[1])): #ralph4
-		ambush = true
-		text = encounterdictionary(enemygroup.descriptionambush)
-		if enemygroup.special == null:
-			encounterbuttons()
-		else:
-			call(enemygroup.specialambush)
-			return
+		encounterbuttons(patrol_out[0])
 	else:
-		ambush = false
-		text = encounterdictionary(enemygroup.description)
-		if enemygroup.special == null:
-			encounterbuttons()
-		else:
+		var enemyawareness = enemygroup.awareness
+		if deeperregion == true:
+			enemyawareness *= 1.25
+		enemyawareness += rand_range(globals.expansionsettings.random_enemy_awareness[0],globals.expansionsettings.random_enemy_awareness[1]) #ralph4
+
+		ambush = scoutawareness < enemyawareness
+		if enemygroup.special != null:
 			call(enemygroup.special)
 			return
+		else:
+			var description = enemygroup.descriptionambush if ambush else enemygroup.description
+			text = encounterdictionary(description)
+			encounterbuttons()
 	mansion.maintext = text
 	enemyinfo()
 
