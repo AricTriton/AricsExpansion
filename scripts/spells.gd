@@ -28,6 +28,7 @@ var spelllist = {
 		combat = true,
 		learned = false,
 		type = 'control',
+		tags = ['used_outside'],
 		flavor = "Reading other person's thoughts hardly worth the effort: way too often they are just chaotic streams changing one after another. Nevertheless, you can grasp some understanding how others think by devoting your time to them. ",
 	},
 	sedation = {
@@ -42,6 +43,7 @@ var spelllist = {
 		combat = true,
 		learned = false,
 		type = 'control',
+		tags = [],
 		flavor = "Ability to calm down another person is invaluable in many situations. ",
 	},
 	masssedation = { 
@@ -56,6 +58,7 @@ var spelllist = {
 		combat = false,
 		learned = false, ## NOTE - locked away, if you have enough slaves you really needing it, you can afford to save up
 		type = 'control',
+		tags = [],
 		flavor = "The ability to bring calm to all those around you is priceless in many situations.",
 	},
 	heal = {
@@ -70,6 +73,7 @@ var spelllist = {
 		combat = true,
 		learned = false,
 		type = 'defensive',
+		tags = ['used_outside'],
 		flavor = "Regeneration is a part of every living being.",
 	},
 	massheal = {
@@ -84,6 +88,7 @@ var spelllist = {
 		combat = true,
 		learned = false,
 		type = 'defensive',
+		tags = [],
 		flavor = "Regeneration is a part of every living being.",
 	},
 	dream = {
@@ -98,6 +103,7 @@ var spelllist = {
 		combat = false,
 		learned = false,
 		type = 'control',
+		tags = [],
 	},
 	entrancement = {
 		code = 'entrancement',
@@ -111,6 +117,7 @@ var spelllist = {
 		combat = false,
 		learned = false,
 		type = 'control',
+		tags = [],
 	},
 	fear = {
 		code = 'fear',
@@ -124,6 +131,7 @@ var spelllist = {
 		combat = false,
 		learned = false,
 		type = 'control',
+		tags = [],
 	},
 	domination = {
 		code = 'domination',
@@ -137,6 +145,7 @@ var spelllist = {
 		combat = false,
 		learned = false,
 		type = 'control',
+		tags = [],
 	},
 	mutate = {
 		code = 'mutate',
@@ -150,6 +159,7 @@ var spelllist = {
 		combat = false,
 		learned = false,
 		type = 'utility',
+		tags = [],
 	},
 	barrier = {
 		code = 'barrier',
@@ -163,6 +173,7 @@ var spelllist = {
 		combat = true,
 		learned = false,
 		type = 'defensive',
+		tags = [],
 	},
 	shackle = {
 		code = 'shackle',
@@ -176,6 +187,7 @@ var spelllist = {
 		combat = true,
 		learned = false,
 		type = 'utility',
+		tags = [],
 	},
 	acidspit = {
 		code = 'acidspit',
@@ -189,6 +201,7 @@ var spelllist = {
 		combat = true,
 		learned = false,
 		type = 'offensive',
+		tags = [],
 	},
 	mindblast = {
 		code = 'mindblast',
@@ -202,6 +215,7 @@ var spelllist = {
 		combat = true,
 		learned = false,
 		type = 'offensive',
+		tags = [],
 	},
 	invigorate = {
 		code = 'invigorate',
@@ -215,6 +229,7 @@ var spelllist = {
 		combat = false,
 		learned = false,
 		type = 'utility',
+		tags = ['used_outside'],
 	},
 	summontentacle = {
 		code = 'summontentacle',
@@ -228,6 +243,7 @@ var spelllist = {
 		combat = false,
 		learned = false,
 		type = 'utility',
+		tags = [],
 	},
 	guidance = {
 		code = 'guidance',
@@ -241,6 +257,7 @@ var spelllist = {
 		combat = false,
 		learned = false,
 		type = 'utility',
+		tags = ['used_outside'],
 	},
 	mark = {
 		code = 'mark',
@@ -254,6 +271,7 @@ var spelllist = {
 		combat = false,
 		learned = false,
 		type = 'utility',
+		tags = ['used_outside'],
 	},
 ###---Added by Expansion---### DeathnDekay's Leak Spell (Modified)
 	leak = {
@@ -268,6 +286,7 @@ var spelllist = {
 		combat = false,
 		learned = true,
 		type = 'utility',
+		tags = [],
 	},
 	detoxify = {
 		code = 'detoxify',
@@ -281,6 +300,7 @@ var spelllist = {
 		combat = false,
 		learned = false,
 		type = 'utility',
+		tags = [],
 	},
 ###---End Expansion---###
 }

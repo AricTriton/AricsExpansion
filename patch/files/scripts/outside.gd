@@ -2886,9 +2886,10 @@ func _on_details_pressed(empty = null):
 		newbutton.connect("pressed",self,'itembackpackselect', [item])
 	calculateweight()
 
-	for i in ['heal','mindread','invigorate','guidance','mark']:
-		var spell = globals.spelldict[i]
-		if spell.learned == false:
+	for spell in globals.spelldict.values():
+		if !spell.tags.has('used_outside'):
+			continue
+		if !spell.learned:
 			continue
 		newbutton = get_node("playergroupdetails/Panel/TabContainer/Spells/VBoxContainer/Button").duplicate()
 		get_node("playergroupdetails/Panel/TabContainer/Spells/VBoxContainer").add_child(newbutton)
@@ -2952,20 +2953,29 @@ func spellbackpackselect(spell):
 	for i in get_node("playergroupdetails/Panel/TabContainer/Spells/VBoxContainer").get_children():
 		i.set_pressed(i.get_name() != 'Button' && i.get_meta("spell") == spell)
 	get_node("playergroupdetails/Panel/discardbutton").set_disabled(false)
-	var cost = globals.spells.spellcost(spell)
-	if spell.code == 'mindread' && partyselectedslave == globals.player:
-		get_node("playergroupdetails/Panel/usebutton").set_disabled(true)
-	elif globals.resources.mana >= cost:
-		if spell.code == 'guidance':
-			get_node("playergroupdetails/Panel/usebutton").set_disabled(get_parent().exploration.inencounter)
-		elif spell.code == 'mark':
-			get_node("playergroupdetails/Panel/usebutton").set_disabled(!get_parent().exploration.currentzone.combat)
-		else:
-			get_node("playergroupdetails/Panel/usebutton").set_disabled(partyselectedslave == null)
-	else:
-		get_node("playergroupdetails/Panel/usebutton").set_disabled(true)
-	var text ='[center]' + spell.name + '[/center]\n' + spell.description + '\n\nMana Cost: ' + str(cost)
+
+	var use_button = get_node("playergroupdetails/Panel/usebutton")
+	var spell_cannot_be_cast_tooltip = check_if_spell_can_be_cast(spell)
+	use_button.set_tooltip(spell_cannot_be_cast_tooltip)
+	use_button.set_disabled(spell_cannot_be_cast_tooltip != '')
+	
+	var text = '[center]' + spell.name + '[/center]\n' + spell.description + '\n\nMana Cost: ' + str(globals.spells.spellcost(spell))
 	get_node("playergroupdetails/Panel/itemdescript").set_bbcode(text)
+
+
+# returns empty string if OK, or tooltip string if not OK
+func check_if_spell_can_be_cast(spell: Dictionary) -> String:
+	if spell.code == 'mindread' && partyselectedslave == globals.player:
+		return 'Cannot mindread yourself'
+	if 'guidance' in spell.code && get_parent().exploration.inencounter:
+		return 'You cannot leave this encounter with Guidance'
+	elif spell.code == 'mark' && !get_parent().exploration.currentzone.combat:
+		return 'You cannot mark this location'
+	elif partyselectedslave == null:
+		return 'Select who you want to cast the spell on'
+	if globals.spells.spellcost(spell) > globals.resources.mana:
+		return 'Not enough mana'
+	return ''
 
 
 var teleport_seals_used = 0
@@ -3085,16 +3095,7 @@ func useitem(item, person):
 func usespell(spell, person):
 	var text = ''
 	globals.spells.person = person
-	if spell.code == 'heal':
-		text = globals.spells.healeffect()
-	elif spell.code == 'invigorate':
-		text = globals.spells.invigorateeffect()
-	elif spell.code == 'mindread' && person != globals.player:
-		text = globals.spells.mindreadeffect()
-	elif spell.code == 'guidance':
-		text = globals.spells.guidanceeffect()
-	elif spell.code == 'mark':
-		text = globals.spells.markeffect()
+	text = globals.spells.call(spell.effect)
 	main.popup(text)
 	_on_details_pressed()
 	playergrouppanel()
