@@ -317,7 +317,7 @@ func buildbars(parentnode, person):
 	parentnode.get_node("portait").set_texture(globals.loadimage(person.imageportait))
 	if parentnode.get_parent() == $playergrouppanel/VBoxContainer:
 		parentnode.get_node("xp").value = person.xp
-		parentnode.get_node("xp").hint_tooltip = "Experience: " + str(person.xp) + "/100"
+		parentnode.get_node("xp").hint_tooltip = "Experience: %d/%d (%d%%)" % [person.not_percent_xp, person.not_percent_max_xp, person.xp]
 		if person.xp == 100:
 			parentnode.get_node("xp").tint_progress = Color(0.65,0.87,0.875,1)
 		else:
