@@ -41,6 +41,15 @@ func generate_regular_encounter(override_enemy = null) -> bool:
 	return true
 
 
+func calculate_enemy_awareness() -> float:
+	var enemyawareness = enemygroup.awareness
+	if deeperregion == true:
+		enemyawareness *= 1.25
+	var bonus_range = globals.expansionsettings.random_enemy_awareness
+	var random_bonus = rand_range(bonus_range[0], bonus_range[1]) #ralph4
+	return enemyawareness + random_bonus
+
+
 func enemyencounter(override_enemy = null) -> void:
 	enemygear.clear()
 	enemygroup.clear()
@@ -51,18 +60,15 @@ func enemyencounter(override_enemy = null) -> void:
 	var scoutawareness = calculateawareness()
 	var patrol_out = [null]
 
-	generate_special_zone_encounter() or generate_guards_encounter(scoutawareness, patrol_out) or generate_regular_encounter(override_enemy)
+	if generate_special_zone_encounter():
+		return
 
-	if patrol_out[0] != null:
+	elif generate_guards_encounter(scoutawareness, patrol_out):
 		text = encounterdictionary(enemygroup.description) + "Your bad reputation around here will certainly lead to a difficult fight..."
 		encounterbuttons(patrol_out[0])
-	else:
-		var enemyawareness = enemygroup.awareness
-		if deeperregion == true:
-			enemyawareness *= 1.25
-		enemyawareness += rand_range(globals.expansionsettings.random_enemy_awareness[0],globals.expansionsettings.random_enemy_awareness[1]) #ralph4
 
-		ambush = scoutawareness < enemyawareness
+	elif generate_regular_encounter(override_enemy):
+		ambush = scoutawareness < calculate_enemy_awareness()
 		if enemygroup.special != null:
 			call(enemygroup.special)
 			return
