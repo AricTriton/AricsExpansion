@@ -1,22 +1,16 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://files/buttongrouptheme.tres" type="Theme" id=1]
+[ext_resource path="res://files/buttons/inventory/item_square_frame.png" type="Texture" id=1]
 [ext_resource path="res://files/buttons/inventory/item_frame_selected.png" type="Texture" id=2]
 [ext_resource path="res://files/buttons/chek.png" type="Texture" id=3]
 [ext_resource path="res://files/buttons/inventory/6-(item).png" type="Texture" id=4]
-[ext_resource path="res://files/buttons/menupanel.png" type="Texture" id=5]
+[ext_resource path="res://files/buttons/inventory/item_square_frame_selected.png" type="Texture" id=5]
 [ext_resource path="res://mainfont.tres" type="DynamicFont" id=6]
 [ext_resource path="res://files/scripts/enchanting_panel.gd" type="Script" id=7]
+[ext_resource path="res://files/aric_expansion_images/items/enchantment_sphere.png" type="Texture" id=8]
 [ext_resource path="res://files/buttons/inventorypanel.png" type="Texture" id=9]
 [ext_resource path="res://files/images/items/armorleather.png" type="Texture" id=10]
-
-[sub_resource type="StyleBoxTexture" id=8]
-texture = ExtResource( 5 )
-region_rect = Rect2( 0, 0, 500, 500 )
-margin_left = 10.0
-margin_right = 10.0
-margin_top = 10.0
-margin_bottom = 10.0
+[ext_resource path="res://files/aric_expansion_images/items/enchantment_dust.png" type="Texture" id=11]
 
 [sub_resource type="StyleBoxTexture" id=9]
 texture = ExtResource( 3 )
@@ -40,74 +34,50 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 script = ExtResource( 7 )
 
-[node name="enchanting_text" type="RichTextLabel" parent="."]
-anchor_right = 1.0
-margin_left = 21.0
-margin_top = 13.0
-margin_right = -519.0
-margin_bottom = 61.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-custom_fonts/normal_font = ExtResource( 6 )
-bbcode_enabled = true
-bbcode_text = "This is your alchemy room blablablabl"
-text = "This is your alchemy room blablablabl"
+[node name="slave_select_buttons_container" type="GridContainer" parent="."]
+margin_left = 651.0
+margin_top = 253.0
+margin_right = 923.0
+margin_bottom = 295.0
+columns = 3
+
+[node name="select_slave" type="Button" parent="slave_select_buttons_container"]
+margin_right = 112.0
+margin_bottom = 42.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 6 )
+text = "Select slave"
+
+[node name="or_label" type="Label" parent="slave_select_buttons_container"]
+margin_left = 116.0
+margin_right = 142.0
+margin_bottom = 42.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 6 )
+text = "or"
+align = 1
+valign = 1
+
+[node name="use_essences" type="Button" parent="slave_select_buttons_container"]
+margin_left = 146.0
+margin_right = 272.0
+margin_bottom = 42.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 6 )
+text = "Use essences"
 
 [node name="do_action" type="Button" parent="."]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -228.0
-margin_top = -60.0
-margin_right = -78.0
-margin_bottom = -20.0
+margin_left = 708.0
+margin_top = 555.0
+margin_right = 844.0
+margin_bottom = 581.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_fonts/font = ExtResource( 6 )
 text = "Enchant items"
-
-[node name="select_slave" type="Button" parent="."]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -285.0
-margin_top = -362.0
-margin_right = -173.0
-margin_bottom = -322.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-custom_fonts/font = ExtResource( 6 )
-text = "Select slave"
-
-[node name="use_essences" type="Button" parent="."]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -145.0
-margin_top = -362.0
-margin_right = -19.0
-margin_bottom = -322.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-custom_fonts/font = ExtResource( 6 )
-text = "Use essences"
-
-[node name="mode_select" type="Button" parent="."]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -374.0
-margin_top = -606.0
-margin_right = -221.0
-margin_bottom = -566.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-custom_fonts/font = ExtResource( 6 )
-text = "Dismantle items"
 
 [node name="flavor_text" type="RichTextLabel" parent="."]
 anchor_right = 1.0
@@ -118,6 +88,7 @@ margin_right = -20.0
 margin_bottom = -371.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
+custom_fonts/normal_font = ExtResource( 6 )
 bbcode_enabled = true
 text = "BLABLA
 BLABLABLA
@@ -126,80 +97,6 @@ String4
 String5
 String6
 String7"
-
-[node name="enchants_frame" type="Panel" parent="."]
-anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 77.0
-margin_right = 276.0
-margin_bottom = -16.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-custom_styles/panel = SubResource( 8 )
-
-[node name="enchantment_select_label" type="Label" parent="enchants_frame"]
-margin_top = -23.0
-margin_right = 266.0
-size_flags_horizontal = 2
-size_flags_vertical = 0
-custom_fonts/font = ExtResource( 6 )
-text = "Select enchantment type"
-align = 1
-
-[node name="enchants_scroll" type="ScrollContainer" parent="."]
-anchor_bottom = 1.0
-margin_left = 30.0
-margin_top = 86.0
-margin_right = 258.0
-margin_bottom = -17.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-scroll_horizontal_enabled = false
-
-[node name="enchants_list" type="VBoxContainer" parent="enchants_scroll"]
-size_flags_horizontal = 2
-size_flags_vertical = 2
-
-[node name="enchant_line" type="HBoxContainer" parent="enchants_scroll/enchants_list"]
-visible = false
-margin_right = 236.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 200, 0 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-
-[node name="count" type="Label" parent="enchants_scroll/enchants_list/enchant_line"]
-margin_right = 32.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 32, 10 )
-size_flags_horizontal = 2
-size_flags_vertical = 1
-text = "25"
-align = 2
-valign = 1
-
-[node name="button" type="Button" parent="enchants_scroll/enchants_list/enchant_line" groups=["alchemypot"]]
-margin_left = 36.0
-margin_right = 236.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 200, 0 )
-size_flags_horizontal = 2
-size_flags_vertical = 2
-theme = ExtResource( 1 )
-toggle_mode = true
-text = "Aphrodisiac"
-align = 0
-
-[node name="mode_label" type="Label" parent="."]
-margin_left = 422.0
-margin_top = 18.0
-margin_right = 552.0
-margin_bottom = 44.0
-size_flags_horizontal = 2
-size_flags_vertical = 0
-custom_fonts/font = ExtResource( 6 )
-text = "Selected mode"
-align = 1
 
 [node name="resources" type="VBoxContainer" parent="."]
 anchor_top = 1.0
@@ -257,33 +154,21 @@ custom_fonts/font = ExtResource( 6 )
 text = "Required Resources:"
 align = 1
 
-[node name="or_label" type="Label" parent="."]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_left = 768.0
-margin_top = -352.0
-margin_right = 793.0
-margin_bottom = -330.0
-size_flags_horizontal = 2
-size_flags_vertical = 0
-custom_fonts/font = ExtResource( 6 )
-text = "or"
-align = 1
-
 [node name="items_frame" type="Panel" parent="."]
 anchor_bottom = 1.0
-margin_left = 287.0
-margin_top = 77.0
-margin_right = 630.0
-margin_bottom = -16.0
+margin_left = 11.0
+margin_top = 36.0
+margin_right = 354.0
+margin_bottom = -87.0
 mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
 custom_styles/panel = SubResource( 10 )
 
-[node name="enchantment_select_label2" type="Label" parent="items_frame"]
+[node name="item_select_label" type="Label" parent="items_frame"]
 margin_top = -26.0
 margin_right = 343.0
+rect_pivot_offset = Vector2( -316, 68 )
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 6 )
@@ -292,10 +177,10 @@ align = 1
 
 [node name="items_scroll" type="ScrollContainer" parent="."]
 anchor_bottom = 1.0
-margin_left = 292.0
-margin_top = 82.0
-margin_right = 650.0
-margin_bottom = -21.0
+margin_left = 16.0
+margin_top = 41.0
+margin_right = 374.0
+margin_bottom = -92.0
 mouse_filter = 1
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -319,7 +204,6 @@ grow_horizontal = 0
 grow_vertical = 0
 rect_min_size = Vector2( 330, 85 )
 size_flags_vertical = 0
-toggle_mode = true
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 2 )
 expand = true
@@ -362,7 +246,253 @@ Enchant1
 Enchant1
 Enchant2"
 
+[node name="ench_filter_label" type="Label" parent="."]
+margin_left = 85.0
+margin_top = 537.0
+margin_right = 278.0
+margin_bottom = 557.0
+custom_fonts/font = ExtResource( 6 )
+text = "Filter by enchantment:"
+
+[node name="dust_label" type="Label" parent="."]
+margin_left = 656.0
+margin_top = 23.0
+margin_right = 924.0
+margin_bottom = 60.0
+custom_fonts/font = ExtResource( 6 )
+text = "You have 0 enchantment dust"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="ench_filter_combobox" type="OptionButton" parent="."]
+margin_left = 27.0
+margin_top = 565.0
+margin_right = 277.0
+margin_bottom = 600.0
+
+[node name="ench_filter_reset" type="Button" parent="ench_filter_combobox"]
+margin_left = 263.0
+margin_right = 324.0
+margin_bottom = 35.0
+custom_fonts/font = ExtResource( 6 )
+text = "Reset"
+
+[node name="middle_column" type="ReferenceRect" parent="."]
+margin_left = 404.0
+margin_top = 20.0
+margin_right = 644.0
+margin_bottom = 600.0
+
+[node name="mode_select_label" type="Label" parent="middle_column"]
+margin_top = 20.0
+margin_right = 240.0
+margin_bottom = 40.0
+custom_fonts/font = ExtResource( 6 )
+text = "Select mode:"
+align = 1
+valign = 1
+
+[node name="modes_container" type="GridContainer" parent="middle_column"]
+margin_top = 60.0
+margin_right = 240.0
+margin_bottom = 130.0
+size_flags_vertical = 0
+custom_constants/vseparation = 8
+custom_constants/hseparation = 8
+columns = 2
+
+[node name="mode_button" type="Button" parent="middle_column/modes_container"]
+visible = false
+margin_right = 120.0
+margin_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 6 )
+toggle_mode = true
+text = "Mode"
+
+[node name="mode_text" type="RichTextLabel" parent="middle_column"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 144.0
+margin_bottom = -310.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/normal_font = ExtResource( 6 )
+bbcode_enabled = true
+text = "BLABLA
+BLABLABLA
+ABLACADABLA
+String4
+String5
+String6"
+
+[node name="pair_item1" type="TextureRect" parent="middle_column"]
+margin_top = 330.0
+margin_right = 85.0
+margin_bottom = 415.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_min_size = Vector2( 85, 85 )
+size_flags_vertical = 0
+texture = ExtResource( 1 )
+expand = true
+
+[node name="icon" type="TextureRect" parent="middle_column/pair_item1"]
+margin_left = 6.0
+margin_top = 7.0
+margin_right = 80.0
+margin_bottom = 79.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 10 )
+expand = true
+stretch_mode = 6
+
+[node name="what_label" type="Label" parent="middle_column/pair_item1"]
+margin_top = -22.0
+margin_right = 85.0
+margin_bottom = -2.0
+custom_fonts/font = ExtResource( 6 )
+text = "First"
+align = 1
+
+[node name="reset_button" type="Button" parent="middle_column/pair_item1"]
+margin_left = 12.0
+margin_top = 88.0
+margin_right = 73.0
+margin_bottom = 114.0
+custom_fonts/font = ExtResource( 6 )
+text = "Reset"
+
+[node name="pair_item2" type="TextureRect" parent="middle_column"]
+margin_left = 155.0
+margin_top = 330.0
+margin_right = 240.0
+margin_bottom = 415.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_min_size = Vector2( 85, 85 )
+size_flags_vertical = 0
+texture = ExtResource( 1 )
+expand = true
+
+[node name="icon" type="TextureRect" parent="middle_column/pair_item2"]
+margin_left = 6.0
+margin_top = 7.0
+margin_right = 80.0
+margin_bottom = 79.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 10 )
+expand = true
+stretch_mode = 6
+
+[node name="what_label" type="Label" parent="middle_column/pair_item2"]
+margin_top = -22.0
+margin_right = 85.0
+margin_bottom = -2.0
+custom_fonts/font = ExtResource( 6 )
+text = "Second"
+align = 1
+
+[node name="reset_button" type="Button" parent="middle_column/pair_item2"]
+margin_left = 12.0
+margin_top = 88.0
+margin_right = 73.0
+margin_bottom = 114.0
+custom_fonts/font = ExtResource( 6 )
+text = "Reset"
+
+[node name="single_item" type="TextureRect" parent="middle_column"]
+margin_left = 78.0
+margin_top = 330.0
+margin_right = 163.0
+margin_bottom = 415.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_min_size = Vector2( 85, 85 )
+size_flags_vertical = 0
+texture = ExtResource( 1 )
+expand = true
+
+[node name="icon" type="TextureRect" parent="middle_column/single_item"]
+margin_left = 6.0
+margin_top = 7.0
+margin_right = 80.0
+margin_bottom = 79.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 11 )
+expand = true
+stretch_mode = 6
+
+[node name="what_label" type="Label" parent="middle_column/single_item"]
+margin_top = -22.0
+margin_right = 85.0
+margin_bottom = -2.0
+custom_fonts/font = ExtResource( 6 )
+text = "Input"
+align = 1
+
+[node name="reset_button" type="Button" parent="middle_column/single_item"]
+margin_left = 12.0
+margin_top = 88.0
+margin_right = 73.0
+margin_bottom = 114.0
+custom_fonts/font = ExtResource( 6 )
+text = "Reset"
+
+[node name="result_item" type="TextureRect" parent="middle_column"]
+margin_left = 78.0
+margin_top = 490.0
+margin_right = 163.0
+margin_bottom = 575.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_min_size = Vector2( 85, 85 )
+size_flags_vertical = 0
+texture = ExtResource( 5 )
+expand = true
+
+[node name="icon" type="TextureRect" parent="middle_column/result_item"]
+margin_left = 6.0
+margin_top = 7.0
+margin_right = 80.0
+margin_bottom = 79.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = ExtResource( 8 )
+expand = true
+stretch_mode = 6
+
+[node name="what_label" type="Label" parent="middle_column/result_item"]
+margin_top = -22.0
+margin_right = 85.0
+margin_bottom = -2.0
+custom_fonts/font = ExtResource( 6 )
+text = "Result"
+align = 1
+
+[node name="amount" type="Label" parent="middle_column/result_item"]
+margin_left = 55.0
+margin_top = 59.0
+margin_right = 78.0
+margin_bottom = 79.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "20"
+align = 2
+
+[connection signal="pressed" from="slave_select_buttons_container/select_slave" to="." method="select_slave"]
+[connection signal="pressed" from="slave_select_buttons_container/use_essences" to="." method="deselect_slave"]
 [connection signal="pressed" from="do_action" to="." method="do_action"]
-[connection signal="pressed" from="select_slave" to="." method="select_slave"]
-[connection signal="pressed" from="use_essences" to="." method="deselect_slave"]
-[connection signal="pressed" from="mode_select" to="." method="on_mode_change_pressed"]
+[connection signal="item_selected" from="ench_filter_combobox" to="." method="on_selected_ench_changed"]
+[connection signal="pressed" from="ench_filter_combobox/ench_filter_reset" to="." method="on_selected_ench_changed" binds= [ -1 ]]

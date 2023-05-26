@@ -1570,6 +1570,21 @@ var itemlist = {
 		weight = 1,
 		amount = 0
 	},
+	enchantment_orb = {
+		code = 'enchantment_orb',
+		name = 'Enchantment orb',
+		icon = load("res://files/aric_expansion_images/items/enchantment_sphere.png"),
+		description = "Enchantment in its pure form, separated from item. It can be boosted and then infused into another item.",
+		effect = [],
+		recipe = '',
+		reqs = null,
+		cost = 0,
+		type = 'gear',
+		subtype = 'enchantment',
+		weight = 0,
+		amount = 0,
+		enchant = '',
+	},
 ###---End Expansion---###
 }
 
