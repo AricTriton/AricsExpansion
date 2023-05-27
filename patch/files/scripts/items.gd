@@ -85,7 +85,7 @@ var itemlist = {
 		cost = 20,
 		type = 'supply',
 		amount = 0,
-		weight = 1,
+		weight = 0,
 		reqs = true,
 	},
 	bandage = {

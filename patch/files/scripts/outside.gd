@@ -2972,7 +2972,6 @@ var teleport_seals_used = 0
 
 func teleport_finale():
 	main.close_dialogue()
-	_on_closegroup_pressed()
 	if teleport_seals_used > 0:
 		globals.state.backpack.stackables['teleportseal'] -= teleport_seals_used
 		globals.main.sound("teleport")
@@ -3033,6 +3032,7 @@ func teleportseal_player():
 	var not_enough_seals = 'You need %d teleport seals for teleporting everyone.'
 	var have_seals = 'Use %d teleport seals.'
 	teleport_seals_used = 0
+	_on_closegroup_pressed()
 	if partysize == 0 and capturedsize == 0:
 		teleportseal_player_self()
 	else:
@@ -3054,7 +3054,6 @@ func teleportseal_player():
 			var enabled = sealcount >= seals_needed
 			var tip = (have_seals if enabled else not_enough_seals) % seals_needed # Godot ternary operator is: [true] if [condition] else [false]
 			buttons.append({text = 'Teleport everyone', function = 'teleportseal_player_party_slaves', disabled = not enabled, tooltip = tip})
-		var dialogue_node = main.get_node("dialogue")
 		main.dialogue(true, self, text, buttons)
 
 
