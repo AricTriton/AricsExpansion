@@ -696,6 +696,8 @@ class progress:
 	var milkeconomy = {currentvalue = 1, futurevalue = 1}
 	#Best Slave - Used for Envy Flaw
 	var bestslave
+	#Inventory settings
+	var inventory_settings = {}
 	###---Expansion End---###
 	var daily_reports = {
 		global = "",

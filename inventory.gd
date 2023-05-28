@@ -20,6 +20,7 @@ func _ready():
 	
 	for i in get_tree().get_nodes_in_group("invcategory"):
 		i.connect("pressed",self,'selectcategory',[i])
+	setup_auto_management()
 
 
 func selectcategory(button):
@@ -661,3 +662,58 @@ func amnesiapoteffect():
 func _on_LineEdit_text_changed(new_text):
 	filter = new_text
 	categoryitems()
+
+
+const AUTO_MANAGEMENT_ITEMS = ['rope', 'bandage', 'teleportseal', 'torch', 'lockpick', 'supply']
+const AUTO_MANAGEMENT_ITEM_NAMES = {rope = 'Ropes', bandage = 'Bandages', teleportseal = 'Teleport seals', torch = 'Torches', lockpick = 'Lockpicks', supply = 'Supplies'}
+
+
+func setup_auto_management():
+	$auto_management_popup.theme = theme
+	for item in AUTO_MANAGEMENT_ITEMS:
+		var item_input: Node = $auto_management_popup/load_items/item_button.duplicate()
+		item_input.name = "select_" + item
+		item_input.visible = true
+		item_input.get_node("item_container/name").text = AUTO_MANAGEMENT_ITEM_NAMES[item]
+		$auto_management_popup/load_items.add_child(item_input)
+	$auto_management_popup/cancel.connect("pressed", $auto_management_popup, "hide")
+
+
+func show_auto_management():
+	update_auto_management()
+	on_fill_enabled_changed()
+	$auto_management_popup.popup()
+
+
+func on_fill_enabled_changed():
+	var restock_enabled = $auto_management_popup/restock_backpack.pressed
+	for item_input in $auto_management_popup/load_items.get_children():
+		item_input.get_node("item_container/edit").editable = restock_enabled
+
+
+func update_auto_management():
+	var settings = globals.state.inventory_settings.get("auto_management", {})
+	for setting_name in ["unload_backpack", "restock_backpack", "buy_items", "warn_not_enough_items"]:
+		get_node("auto_management_popup/%s" % setting_name).pressed = settings.get(setting_name, false)
+	
+	var restock_amount = settings.get("restock_amount", {})
+	for item in restock_amount:
+		get_node("auto_management_popup/load_items/select_%s/item_container/edit" % item).get_line_edit().text = str(restock_amount[item])
+
+
+func save_auto_management():
+	var restock_amount = {}
+	for item in AUTO_MANAGEMENT_ITEMS:
+		var value = get_node("auto_management_popup/load_items/select_%s/item_container/edit" % item).get_line_edit().text
+		restock_amount[item] = int(value)
+	
+	var settings = {
+		"unload_backpack": $auto_management_popup/unload_backpack.pressed,
+		"restock_backpack" : $auto_management_popup/restock_backpack.pressed,
+		"buy_items" : $auto_management_popup/buy_items.pressed,
+		"warn_not_enough_items": $auto_management_popup/warn_not_enough_items.pressed,
+		"restock_amount" : restock_amount
+	}
+		
+	globals.state.inventory_settings.auto_management = settings
+	$auto_management_popup.hide()
