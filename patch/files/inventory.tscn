@@ -545,6 +545,19 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "Auto inventory"
 
+[node name="extra_settings_button" type="Button" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -232.0
+margin_top = -56.0
+margin_right = -56.0
+margin_bottom = -17.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "Extra settings"
+
 [node name="gearpanel" type="TextureRect" parent="."]
 margin_left = 501.0
 margin_top = 30.0
@@ -1310,6 +1323,41 @@ margin_right = 385.0
 margin_bottom = 463.0
 text = "Cancel"
 
+[node name="extra_settings_popup" type="Popup" parent="."]
+margin_left = 447.0
+margin_top = 232.0
+margin_right = 893.0
+margin_bottom = 588.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="background" type="Panel" parent="extra_settings_popup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = ExtResource( 53 )
+
+[node name="info_label" type="Label" parent="extra_settings_popup"]
+margin_left = 25.0
+margin_top = 16.0
+margin_right = 417.0
+margin_bottom = 40.0
+text = "Additional inventory settings"
+align = 1
+
+[node name="party_members_first" type="CheckBox" parent="extra_settings_popup"]
+margin_left = 33.0
+margin_top = 56.0
+margin_right = 53.0
+margin_bottom = 76.0
+text = "Show party members first in slaves list"
+
+[node name="ok" type="Button" parent="extra_settings_popup"]
+margin_left = 161.0
+margin_top = 288.0
+margin_right = 289.0
+margin_bottom = 327.0
+text = "OK"
+
 [node name="search" type="LineEdit" parent="."]
 margin_left = 47.0
 margin_top = 686.0
@@ -1331,6 +1379,7 @@ expand = true
 [connection signal="pressed" from="mode" to="." method="_on_mode_pressed"]
 [connection signal="pressed" from="inventoryclose" to="." method="_on_inventoryclose_pressed"]
 [connection signal="pressed" from="auto_management_button" to="." method="show_auto_management"]
+[connection signal="pressed" from="extra_settings_button" to="." method="show_extra_settings"]
 [connection signal="gui_input" from="iteminfo" to="." method="_on_iteminfo_input_event"]
 [connection signal="pressed" from="hairchange/hairconfirm" to="." method="_on_hairconfirm_pressed"]
 [connection signal="pressed" from="hairchange/haircancel" to="." method="_on_haircancel_pressed"]
@@ -1339,5 +1388,7 @@ expand = true
 [connection signal="pressed" from="amnesia/amnesiaconf" to="." method="_on_amnesiaconf_pressed"]
 [connection signal="pressed" from="auto_management_popup/restock_backpack" to="." method="on_fill_enabled_changed"]
 [connection signal="pressed" from="auto_management_popup/confirm" to="." method="save_auto_management"]
+[connection signal="pressed" from="extra_settings_popup/party_members_first" to="." method="change_party_slaves_first"]
+[connection signal="pressed" from="extra_settings_popup/ok" to="." method="hide_extra_settings"]
 [connection signal="text_changed" from="search" to="." method="_on_LineEdit_text_changed"]
 [connection signal="pressed" from="moveall" to="." method="_on_moveall_pressed"]

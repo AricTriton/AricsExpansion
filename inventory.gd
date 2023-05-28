@@ -165,6 +165,55 @@ func itemsbackpack():
 	fill_items_list_common(stackable_items, globals.state.backpack.stackables, 'backpack', 'movefrombackpack')
 
 
+func slavelist():
+	for i in get_node("slavelist/GridContainer").get_children():
+		if i.get_name() != 'Button':
+			i.visible = false
+			i.queue_free()
+	$slavelist/GridContainer.rect_size = $slavelist/GridContainer.rect_min_size
+	
+	if globals.state.inventory_settings.get("party_members_first", true):
+		var party = [globals.player]
+		var nonparty = []
+		for i in globals.slaves:
+			if i.id in globals.state.playergroup:
+				party.append(i)
+			else:
+				nonparty.append(i)
+		create_persons_buttons(party)
+		var separator: HSeparator = HSeparator.new()
+		separator.add_constant_override("separation", 20)
+		$slavelist/GridContainer.add_child(separator)
+		create_persons_buttons(nonparty)
+	else:
+		create_persons_buttons([globals.player] + globals.slaves)
+
+
+func create_persons_buttons(persons_array: Array):
+	for i in persons_array:
+		if i.away.duration != 0:
+			return
+		var button = $slavelist/GridContainer/Button.duplicate()
+		$slavelist/GridContainer.add_child(button)
+		button.visible = true
+		
+		var text = i.name_long() + " [color=yellow]" + i.race + "[/color]"
+		if i == globals.player:
+			text += " [color=aqua]Master[/color]"
+		else:
+			text += " " + i.origins.capitalize()
+		button.get_node("name").set_bbcode(text)
+		button.get_node("hpbar").set_value(float((i.stats.health_cur)/float(i.stats.health_max))*100)
+		button.get_node("enbar").set_value(float((i.stats.energy_cur)/float(i.stats.energy_max))*100)
+		if i.imageportait != null:
+			button.get_node("portrait").set_texture(globals.loadimage(i.imageportait))
+		for k in ['sstr','sagi','smaf','send']:
+			button.get_node(k).set_text(str(i[k])+ "/" +str(min(i.stats[globals.maxstatdict[k]], i.originvalue[i.origins])))
+		button.connect("pressed",self,'selectslave',[button])
+		button.pressed = i==selectedslave
+		button.set_meta('person', i)
+
+
 ###---Added by Expansion---### Minor Tweaks by Dabros Integration
 func _input(event):
 	## CHANGED NEW - 26/5/19 - for allowing prev/next keys for slave selection
@@ -717,3 +766,18 @@ func save_auto_management():
 		
 	globals.state.inventory_settings.auto_management = settings
 	$auto_management_popup.hide()
+
+
+func show_extra_settings():
+	$extra_settings_popup.popup()
+	$extra_settings_popup/party_members_first.pressed = globals.state.inventory_settings.get("party_members_first", false)
+
+
+func hide_extra_settings():
+	$extra_settings_popup.hide()
+
+
+func change_party_slaves_first():
+	globals.state.inventory_settings.party_members_first = $extra_settings_popup/party_members_first.pressed
+	slavelist()
+
