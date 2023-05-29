@@ -492,7 +492,7 @@ class progress:
 	var dailyeventprevious = 0
 	var currentversion = 5000
 	var unstackables = {}
-	var enchantment_sparks = {}
+	var enchantment_dust = 0
 	var supplykeep = 10
 	var foodbuy = 200
 	var supplybuy = false
