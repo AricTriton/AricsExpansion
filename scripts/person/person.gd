@@ -14,6 +14,9 @@ var feathercolor = ''
 var preg = {fertility = 0, bonus_fertility = 0, has_womb = true, is_preg = false, duration = 0, baby = null, baby_type = '',  ovulation_type = 0, ovulation_stage = 0, ovulation_day = 0, womb = [], offspring_count = 0, unborn_baby = [],}
 var manafeedpolicy = 99999 #ralphC - mana resource value set for each npc below which mana eaters do not get fed (only relevant for mana eaters; ie. Succubus, Golem)
 var mana_hunger = 0 #ralphC - only used for Succubus and future mana eating races/hybrids
+
+var not_percent_xp = 0 setget ,not_percent_xp_get
+var not_percent_max_xp = 100 setget ,not_percent_max_xp_get
 ###---End Expansion---###
 
 ###---Added by expansion---### Modified by zclimber. Combat skills reordering and settings
@@ -453,6 +456,13 @@ func setFetish(fetish='none',mod=0):
 		clamper = clamp(clamper,0,globals.fetishopinion.size()-1)
 		self.fetish[fetish] = globals.fetishopinion[clamper]
 #---End Expansion---#
+
+
+func not_percent_xp_get():
+	return self.xp * level
+
+func not_percent_max_xp_get():
+	return 100 * level
 
 
 func levelup():

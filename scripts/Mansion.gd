@@ -1311,6 +1311,7 @@ func _on_end_pressed():
 		rebuildrepeatablequests()
 
 	if globals.player.xp >= 100:
+		assert(false) # this should have been handled in xp setter
 		globals.player.xp -= 100
 		globals.player.value += 1
 		globals.player.skillpoints += 1
@@ -3020,7 +3021,9 @@ func updatestats(person):
 	get_node("MainScreen/mansion/selfinspect/statspanel/hp").set_value((person.stats.health_cur/float(person.stats.health_max))*100)
 	get_node("MainScreen/mansion/selfinspect/statspanel/en").set_value((person.stats.energy_cur/float(person.stats.energy_max))*100)
 	get_node("MainScreen/mansion/selfinspect/statspanel/xp").set_value(person.xp)
-	text = "Health: " + str(person.stats.health_cur) + "/" + str(person.stats.health_max) + "\nEnergy: " + str(round(person.stats.energy_cur)) + "/" + str(person.stats.energy_max) + "\nExperience: " + str(person.xp)
+	text = "Health: %d/%d\n" % [person.stats.health_cur, person.stats.health_max]
+	text += "Energy: %d/%d\n" % [round(person.stats.energy_cur), person.stats.energy_max]
+	text += "Experience: %d/%d (%d%%)" % [person.not_percent_xp, person.not_percent_max_xp, person.xp]
 	get_node("MainScreen/mansion/selfinspect/statspanel/hptooltip").set_tooltip(text)
 	if person.imageportait != null && globals.loadimage(person.imageportait):
 		$MainScreen/mansion/selfinspect/statspanel/TextureRect/portrait.set_texture(globals.loadimage(person.imageportait))
