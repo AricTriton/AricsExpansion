@@ -1726,7 +1726,6 @@ func hide_everything():
 
 #---Keeping to have the "X is following you" for pet groups
 func _on_mansion_pressed():
-	var text = ''
 	background_set('mansion')
 	yield(self, 'animfinished')
 	hide_everything()
@@ -1751,17 +1750,22 @@ func _on_mansion_pressed():
 		$Navigation/personal/TextureRect.texture = selftexture
 	$ResourcePanel/clean.set_text(str(round(globals.state.condition)) + '%')
 	
-	if globals.state.farm >= 3:
-		get_node("Navigation/farm").set_disabled(false)
-	else:
-		get_node("Navigation/farm").set_disabled(true)
-	if globals.state.mansionupgrades.mansionlab > 0:
-		get_node("Navigation/laboratory").set_disabled(false)
-	else:
-		get_node("Navigation/laboratory").set_disabled(true)
+	get_node("Navigation/farm").set_disabled(globals.state.farm < 3)
+	get_node("Navigation/laboratory").set_disabled(globals.state.mansionupgrades.mansionlab <= 0)
+	
 	music_set('mansion')
 	if globals.state.sidequests.emily == 3:
 		globals.events.emilymansion()
+	
+	var mansion_popup = []
+	mansion_popup.append(process_captured_group())
+	mansion_popup.append(process_auto_inventory_management())
+	build_mansion_info()
+	rebuild_slave_list()
+	show_popup_with_texts(mansion_popup)
+
+
+func process_captured_group() -> String:
 	if globals.state.capturedgroup.size() > 0:
 		var array = globals.state.capturedgroup
 		globals.state.capturedgroup = []
@@ -1776,10 +1780,76 @@ func _on_mansion_pressed():
 			else:
 				nojailcells = true
 		globals.itemdict['rope'].amount += globals.state.calcRecoverRope(array.size())
-		text = "You have assigned your captives to the mansion. " + globals.fastif(nojailcells, '[color=yellow]You are out of free jail cells and some captives were assigned to the living room.[/color]', '')
-		popup(text)
-	build_mansion_info()
-	rebuild_slave_list()
+		var text = "You have assigned your captives to the mansion."
+		if nojailcells:
+			text += '[color=yellow]You are out of free jail cells and some captives were assigned to the living room.[/color]'
+		return text
+	return ""
+
+
+func process_auto_inventory_management() -> String:
+	var settings = globals.state.inventory_settings.get("auto_management", {})
+
+	if settings.get("unload_backpack", false): #unload items
+		unload_backpack()
+	
+	if !settings.get("restock_backpack", false):
+		return ""
+
+	var buy = settings.get("buy_items", false)
+	var warn = settings.get("warn_not_enough_items", false)
+	var restock_amount = settings.get("restock_amount", {})
+	return restock_backpack(restock_amount, buy, warn)
+
+
+func unload_backpack():
+	for stackable in globals.state.backpack.stackables:
+		globals.itemdict[stackable].amount += globals.state.backpack.stackables[stackable]
+	globals.state.backpack.stackables = {}
+	for item in globals.state.unstackables.values():
+		if item.owner == 'backpack':
+			item.owner = null
+
+
+func restock_backpack(restock_amount: Dictionary, buy_items: bool, warn_items: bool) -> String:
+	var warnings = PoolStringArray()
+	var backpack_items = globals.state.backpack.stackables
+	
+	for item in restock_amount:
+		var need_item = restock_amount[item] - backpack_items.get(item, 0)
+		if need_item <= 0:
+			continue
+		var has_item = globals.itemdict[item].amount
+		var item_name = globals.itemdict[item].name
+
+		if has_item < need_item && buy_items:
+			var items_to_buy = need_item - has_item
+			var price = items_to_buy * globals.itemdict[item].cost
+			if price <= globals.resources.gold:
+				if warn_items:
+					warnings.append("Bought additional %s of `%s` for %s gold" % [items_to_buy, item_name, price])
+				globals.resources.gold -= price
+				globals.itemdict[item].amount += items_to_buy
+
+		has_item = globals.itemdict[item].amount
+		if has_item < need_item && warn_items:
+			warnings.append("Failed to add all %s `%s` to backpack: you only have %s" % [need_item, item_name, has_item])
+		
+		var items_to_move = min(has_item, need_item)
+		backpack_items[item] = backpack_items.get(item, 0) + items_to_move
+		globals.itemdict[item].amount -= items_to_move
+
+	return warnings.join("\n")
+
+
+func show_popup_with_texts(texts: Array) -> void:
+	var not_empty_texts = PoolStringArray()
+	for text in texts:
+		if !text.empty():
+			not_empty_texts.append(text)
+	if !not_empty_texts.empty():
+		popup(not_empty_texts.join("/n/n"))
+
 
 func build_mansion_info():
 	var textnode = get_node("MainScreen/mansion/mansioninfo")

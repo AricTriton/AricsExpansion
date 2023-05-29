@@ -20,6 +20,7 @@ func _ready():
 	
 	for i in get_tree().get_nodes_in_group("invcategory"):
 		i.connect("pressed",self,'selectcategory',[i])
+	setup_auto_management()
 
 
 func selectcategory(button):
@@ -162,6 +163,55 @@ func itemsbackpack():
 		stackable_items.append(globals.itemdict[item_code])
 	
 	fill_items_list_common(stackable_items, globals.state.backpack.stackables, 'backpack', 'movefrombackpack')
+
+
+func slavelist():
+	for i in get_node("slavelist/GridContainer").get_children():
+		if i.get_name() != 'Button':
+			i.visible = false
+			i.queue_free()
+	$slavelist/GridContainer.rect_size = $slavelist/GridContainer.rect_min_size
+	
+	if globals.state.inventory_settings.get("party_members_first", true):
+		var party = [globals.player]
+		var nonparty = []
+		for i in globals.slaves:
+			if i.id in globals.state.playergroup:
+				party.append(i)
+			else:
+				nonparty.append(i)
+		create_persons_buttons(party)
+		var separator: HSeparator = HSeparator.new()
+		separator.add_constant_override("separation", 20)
+		$slavelist/GridContainer.add_child(separator)
+		create_persons_buttons(nonparty)
+	else:
+		create_persons_buttons([globals.player] + globals.slaves)
+
+
+func create_persons_buttons(persons_array: Array):
+	for i in persons_array:
+		if i.away.duration != 0:
+			return
+		var button = $slavelist/GridContainer/Button.duplicate()
+		$slavelist/GridContainer.add_child(button)
+		button.visible = true
+		
+		var text = i.name_long() + " [color=yellow]" + i.race + "[/color]"
+		if i == globals.player:
+			text += " [color=aqua]Master[/color]"
+		else:
+			text += " " + i.origins.capitalize()
+		button.get_node("name").set_bbcode(text)
+		button.get_node("hpbar").set_value(float((i.stats.health_cur)/float(i.stats.health_max))*100)
+		button.get_node("enbar").set_value(float((i.stats.energy_cur)/float(i.stats.energy_max))*100)
+		if i.imageportait != null:
+			button.get_node("portrait").set_texture(globals.loadimage(i.imageportait))
+		for k in ['sstr','sagi','smaf','send']:
+			button.get_node(k).set_text(str(i[k])+ "/" +str(min(i.stats[globals.maxstatdict[k]], i.originvalue[i.origins])))
+		button.connect("pressed",self,'selectslave',[button])
+		button.pressed = i==selectedslave
+		button.set_meta('person', i)
 
 
 ###---Added by Expansion---### Minor Tweaks by Dabros Integration
@@ -661,3 +711,73 @@ func amnesiapoteffect():
 func _on_LineEdit_text_changed(new_text):
 	filter = new_text
 	categoryitems()
+
+
+const AUTO_MANAGEMENT_ITEMS = ['rope', 'bandage', 'teleportseal', 'torch', 'lockpick', 'supply']
+const AUTO_MANAGEMENT_ITEM_NAMES = {rope = 'Ropes', bandage = 'Bandages', teleportseal = 'Teleport seals', torch = 'Torches', lockpick = 'Lockpicks', supply = 'Supplies'}
+
+
+func setup_auto_management():
+	$auto_management_popup.theme = theme
+	for item in AUTO_MANAGEMENT_ITEMS:
+		var item_input: Node = $auto_management_popup/load_items/item_button.duplicate()
+		item_input.name = "select_" + item
+		item_input.visible = true
+		item_input.get_node("item_container/name").text = AUTO_MANAGEMENT_ITEM_NAMES[item]
+		$auto_management_popup/load_items.add_child(item_input)
+	$auto_management_popup/cancel.connect("pressed", $auto_management_popup, "hide")
+
+
+func show_auto_management():
+	update_auto_management()
+	on_fill_enabled_changed()
+	$auto_management_popup.popup()
+
+
+func on_fill_enabled_changed():
+	var restock_enabled = $auto_management_popup/restock_backpack.pressed
+	for item_input in $auto_management_popup/load_items.get_children():
+		item_input.get_node("item_container/edit").editable = restock_enabled
+
+
+func update_auto_management():
+	var settings = globals.state.inventory_settings.get("auto_management", {})
+	for setting_name in ["unload_backpack", "restock_backpack", "buy_items", "warn_not_enough_items"]:
+		get_node("auto_management_popup/%s" % setting_name).pressed = settings.get(setting_name, false)
+	
+	var restock_amount = settings.get("restock_amount", {})
+	for item in restock_amount:
+		get_node("auto_management_popup/load_items/select_%s/item_container/edit" % item).get_line_edit().text = str(restock_amount[item])
+
+
+func save_auto_management():
+	var restock_amount = {}
+	for item in AUTO_MANAGEMENT_ITEMS:
+		var value = get_node("auto_management_popup/load_items/select_%s/item_container/edit" % item).get_line_edit().text
+		restock_amount[item] = int(value)
+	
+	var settings = {
+		"unload_backpack": $auto_management_popup/unload_backpack.pressed,
+		"restock_backpack" : $auto_management_popup/restock_backpack.pressed,
+		"buy_items" : $auto_management_popup/buy_items.pressed,
+		"warn_not_enough_items": $auto_management_popup/warn_not_enough_items.pressed,
+		"restock_amount" : restock_amount
+	}
+		
+	globals.state.inventory_settings.auto_management = settings
+	$auto_management_popup.hide()
+
+
+func show_extra_settings():
+	$extra_settings_popup.popup()
+	$extra_settings_popup/party_members_first.pressed = globals.state.inventory_settings.get("party_members_first", false)
+
+
+func hide_extra_settings():
+	$extra_settings_popup.hide()
+
+
+func change_party_slaves_first():
+	globals.state.inventory_settings.party_members_first = $extra_settings_popup/party_members_first.pressed
+	slavelist()
+

@@ -1584,9 +1584,6 @@ margin_bottom = 24.0
 [node name="Control" parent="slavebuypanel/statspanel/sstr" index="1"]
 margin_right = 105.0
 
-[node name="Button" parent="slavebuypanel/statspanel/sstr" index="2"]
-visible = false
-
 [node name="sagi" parent="slavebuypanel/statspanel" index="2"]
 editor/display_folded = true
 margin_left = -413.0
@@ -1601,9 +1598,6 @@ margin_bottom = 24.0
 [node name="Control" parent="slavebuypanel/statspanel/sagi" index="1"]
 margin_right = 111.0
 
-[node name="Button" parent="slavebuypanel/statspanel/sagi" index="2"]
-visible = false
-
 [node name="smaf" parent="slavebuypanel/statspanel" index="3"]
 margin_left = -413.0
 margin_top = 291.0
@@ -1616,9 +1610,6 @@ margin_bottom = 24.0
 
 [node name="Control" parent="slavebuypanel/statspanel/smaf" index="1"]
 margin_right = 106.0
-
-[node name="Button" parent="slavebuypanel/statspanel/smaf" index="2"]
-visible = false
 
 [node name="send" parent="slavebuypanel/statspanel" index="4"]
 editor/display_folded = true
@@ -1633,9 +1624,6 @@ margin_bottom = 24.0
 
 [node name="Control" parent="slavebuypanel/statspanel/send" index="1"]
 margin_right = 109.0
-
-[node name="Button" parent="slavebuypanel/statspanel/send" index="2"]
-visible = false
 
 [node name="Label1" parent="slavebuypanel/statspanel" index="5"]
 margin_left = -220.0
@@ -1695,22 +1683,12 @@ margin_bottom = 27.0
 [node name="Control" parent="slavebuypanel/statspanel/charm" index="1"]
 margin_right = 102.0
 
-[node name="leveltext" parent="slavebuypanel/statspanel" index="10"]
-margin_top = 357.0
-margin_bottom = 464.0
+[node name="text_container" parent="slavebuypanel/statspanel" index="10"]
+margin_top = 362.0
+margin_bottom = 596.0
+
+[node name="leveltext" parent="slavebuypanel/statspanel/text_container" index="0"]
 mouse_filter = 2
-
-[node name="levelreqs" parent="slavebuypanel/statspanel" index="11"]
-visible = false
-
-[node name="traittext" parent="slavebuypanel/statspanel" index="12"]
-margin_left = 19.0
-margin_top = 403.0
-margin_right = -22.0
-margin_bottom = 510.0
-
-[node name="levelprogress" parent="slavebuypanel/statspanel" index="13"]
-visible = false
 
 [node name="portrait" type="TextureRect" parent="slavebuypanel/statspanel"]
 margin_left = 16.0
