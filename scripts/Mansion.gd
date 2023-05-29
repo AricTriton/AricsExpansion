@@ -1762,6 +1762,8 @@ func _on_mansion_pressed():
 	mansion_popup.append(process_auto_inventory_management())
 	build_mansion_info()
 	rebuild_slave_list()
+	exploration.visited_outside = false
+	exploration.visited_wild = false
 	show_popup_with_texts(mansion_popup)
 
 
@@ -1790,56 +1792,12 @@ func process_captured_group() -> String:
 func process_auto_inventory_management() -> String:
 	var settings = globals.state.inventory_settings.get("auto_management", {})
 
-	if settings.get("unload_backpack", false): #unload items
-		unload_backpack()
-	
-	if !settings.get("restock_backpack", false):
-		return ""
+	if !exploration.visited_outside || !settings.get("execute_return", false):
+		return "" # Don't execute when not visited outside (for example, just loaded game)
+	if settings.get("execute_return_wild", false) && !exploration.visited_wild:
+		return "" # Don't execute when required visit wild and only visited cities
 
-	var buy = settings.get("buy_items", false)
-	var warn = settings.get("warn_not_enough_items", false)
-	var restock_amount = settings.get("restock_amount", {})
-	return restock_backpack(restock_amount, buy, warn)
-
-
-func unload_backpack():
-	for stackable in globals.state.backpack.stackables:
-		globals.itemdict[stackable].amount += globals.state.backpack.stackables[stackable]
-	globals.state.backpack.stackables = {}
-	for item in globals.state.unstackables.values():
-		if item.owner == 'backpack':
-			item.owner = null
-
-
-func restock_backpack(restock_amount: Dictionary, buy_items: bool, warn_items: bool) -> String:
-	var warnings = PoolStringArray()
-	var backpack_items = globals.state.backpack.stackables
-	
-	for item in restock_amount:
-		var need_item = restock_amount[item] - backpack_items.get(item, 0)
-		if need_item <= 0:
-			continue
-		var has_item = globals.itemdict[item].amount
-		var item_name = globals.itemdict[item].name
-
-		if has_item < need_item && buy_items:
-			var items_to_buy = need_item - has_item
-			var price = items_to_buy * globals.itemdict[item].cost
-			if price <= globals.resources.gold:
-				if warn_items:
-					warnings.append("Bought additional %s of `%s` for %s gold" % [items_to_buy, item_name, price])
-				globals.resources.gold -= price
-				globals.itemdict[item].amount += items_to_buy
-
-		has_item = globals.itemdict[item].amount
-		if has_item < need_item && warn_items:
-			warnings.append("Failed to add all %s `%s` to backpack: you only have %s" % [need_item, item_name, has_item])
-		
-		var items_to_move = min(has_item, need_item)
-		backpack_items[item] = backpack_items.get(item, 0) + items_to_move
-		globals.itemdict[item].amount -= items_to_move
-
-	return warnings.join("\n")
+	return get_node("inventory").run_auto_inventory_management()
 
 
 func show_popup_with_texts(texts: Array) -> void:

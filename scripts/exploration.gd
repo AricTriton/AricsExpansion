@@ -1,5 +1,13 @@
 
+var visited_outside = false
+var visited_wild = false
+
 var travel = globals.expansiontravel #ralphD
+
+<AddTo 7>
+func zoneenter(zone):
+	visited_outside = true
+	visited_wild = visited_wild || zone.combat
 
 func enemyencounter():
 	var enc

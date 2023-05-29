@@ -715,7 +715,11 @@ func _on_LineEdit_text_changed(new_text):
 
 const AUTO_MANAGEMENT_ITEMS = ['rope', 'bandage', 'teleportseal', 'torch', 'lockpick', 'supply']
 const AUTO_MANAGEMENT_ITEM_NAMES = {rope = 'Ropes', bandage = 'Bandages', teleportseal = 'Teleport seals', torch = 'Torches', lockpick = 'Lockpicks', supply = 'Supplies'}
-
+var spinboxes_for_resupply_items = {}
+const AUTO_MANAGEMENT_UNLOAD_CATEGORIES = {supply = false, potion = true, ingredient = true, gear = true, other = true}
+var checkboxes_for_unload_categories = {}
+const AUTO_MANAGEMENT_SETTINGS_NAMES = {execute_return = false, execute_return_wild = false, unload_backpack = false, restock_backpack = false, buy_items = false, warn_not_enough_items = false}
+var checkboxes_for_setting_names = {}
 
 func setup_auto_management():
 	$auto_management_popup.theme = theme
@@ -724,48 +728,145 @@ func setup_auto_management():
 		item_input.name = "select_" + item
 		item_input.visible = true
 		item_input.get_node("item_container/name").text = AUTO_MANAGEMENT_ITEM_NAMES[item]
+		item_input.get_node("item_container/icon").texture = globals.loadimage(globals.itemdict[item].icon)
+		spinboxes_for_resupply_items[item] = item_input.get_node("item_container/edit")
 		$auto_management_popup/load_items.add_child(item_input)
+	
+	for category in AUTO_MANAGEMENT_UNLOAD_CATEGORIES:
+		checkboxes_for_unload_categories[category] = get_node("auto_management_popup/unload_items/%s/checkbox" % category)
+	
+	for setting_name in AUTO_MANAGEMENT_SETTINGS_NAMES:
+		checkboxes_for_setting_names[setting_name] = get_node("auto_management_popup/%s" % setting_name)
+		checkboxes_for_setting_names[setting_name].connect("pressed", self, "update_disabled_edits")
+
 	$auto_management_popup/cancel.connect("pressed", $auto_management_popup, "hide")
 
 
 func show_auto_management():
 	update_auto_management()
-	on_fill_enabled_changed()
+	update_disabled_edits()
 	$auto_management_popup.popup()
 
 
-func on_fill_enabled_changed():
+func update_disabled_edits():
 	var restock_enabled = $auto_management_popup/restock_backpack.pressed
-	for item_input in $auto_management_popup/load_items.get_children():
-		item_input.get_node("item_container/edit").editable = restock_enabled
+	for spinbox in spinboxes_for_resupply_items.values():
+		spinbox.editable = restock_enabled
+
+	var unload_enabled = $auto_management_popup/unload_backpack.pressed
+	for checkbox in checkboxes_for_unload_categories.values():
+		checkbox.disabled = !unload_enabled
 
 
 func update_auto_management():
 	var settings = globals.state.inventory_settings.get("auto_management", {})
-	for setting_name in ["unload_backpack", "restock_backpack", "buy_items", "warn_not_enough_items"]:
-		get_node("auto_management_popup/%s" % setting_name).pressed = settings.get(setting_name, false)
+	for setting_name in AUTO_MANAGEMENT_SETTINGS_NAMES:
+		checkboxes_for_setting_names[setting_name].pressed = settings.get(setting_name, AUTO_MANAGEMENT_SETTINGS_NAMES[setting_name])
 	
 	var restock_amount = settings.get("restock_amount", {})
 	for item in restock_amount:
-		get_node("auto_management_popup/load_items/select_%s/item_container/edit" % item).get_line_edit().text = str(restock_amount[item])
+		spinboxes_for_resupply_items[item].get_line_edit().text = str(restock_amount[item])
+	
+	var unload_categories = settings.get("unload_categories", AUTO_MANAGEMENT_UNLOAD_CATEGORIES)
+	for category in unload_categories:
+		checkboxes_for_unload_categories[category].pressed = unload_categories[category]
 
 
 func save_auto_management():
-	var restock_amount = {}
-	for item in AUTO_MANAGEMENT_ITEMS:
-		var value = get_node("auto_management_popup/load_items/select_%s/item_container/edit" % item).get_line_edit().text
-		restock_amount[item] = int(value)
-	
 	var settings = {
-		"unload_backpack": $auto_management_popup/unload_backpack.pressed,
-		"restock_backpack" : $auto_management_popup/restock_backpack.pressed,
-		"buy_items" : $auto_management_popup/buy_items.pressed,
-		"warn_not_enough_items": $auto_management_popup/warn_not_enough_items.pressed,
-		"restock_amount" : restock_amount
+		restock_amount = {},
+		unload_categories = {}
 	}
+	
+	for item in AUTO_MANAGEMENT_ITEM_NAMES:
+		var value = spinboxes_for_resupply_items[item].get_line_edit().text
+		settings.restock_amount[item] = int(value)
+	
+	var unload_categories = {}
+	for category in AUTO_MANAGEMENT_UNLOAD_CATEGORIES:
+		settings.unload_categories[category] = checkboxes_for_unload_categories[category].pressed
+	
+	for setting_name in AUTO_MANAGEMENT_SETTINGS_NAMES:
+		settings[setting_name] = checkboxes_for_setting_names[setting_name].pressed
 		
 	globals.state.inventory_settings.auto_management = settings
 	$auto_management_popup.hide()
+
+
+func manual_run_auto_inventory_management():
+	var warnings = run_auto_inventory_management()
+	updateitems()
+	calculateweight()
+	if !warnings.empty():
+		get_parent().popup(warnings)
+
+
+func run_auto_inventory_management() -> String:
+	var settings = globals.state.inventory_settings.get("auto_management", {})
+
+	if settings.get("unload_backpack", false):
+		unload_backpack(settings.get("unload_categories", AUTO_MANAGEMENT_UNLOAD_CATEGORIES))
+	
+	if !settings.get("restock_backpack", false):
+		return ""
+
+	var buy = settings.get("buy_items", false)
+	var warn = settings.get("warn_not_enough_items", false)
+	var restock_amount = settings.get("restock_amount", {})
+	return restock_backpack(restock_amount, buy, warn)
+
+
+func is_item_category_selected(item_name: String, unload_categories: Dictionary) -> bool:
+	var item_type = globals.itemdict[item_name].type
+	if item_type in AUTO_MANAGEMENT_UNLOAD_CATEGORIES:
+		return unload_categories[item_type]
+	else:
+		return unload_categories.other
+
+
+func unload_backpack(unload_categories: Dictionary):
+	if unload_categories.gear:
+		for item in globals.state.unstackables.values():
+			if item.owner == 'backpack':
+				item.owner = null
+
+	var backpack_stackables : Dictionary = globals.state.backpack.stackables
+	for item in backpack_stackables.keys(): # we iterate over keys array, because it won't change when we erase values
+		if is_item_category_selected(item, unload_categories):
+			globals.itemdict[item].amount += backpack_stackables[item]
+			backpack_stackables.erase(item)
+
+
+func restock_backpack(restock_amount: Dictionary, buy_items: bool, warn_items: bool) -> String:
+	var warnings = PoolStringArray()
+	var backpack_items = globals.state.backpack.stackables
+	
+	for item in restock_amount:
+		var need_item = restock_amount[item] - backpack_items.get(item, 0)
+		if need_item <= 0:
+			continue
+		var has_item = globals.itemdict[item].amount
+		var item_name = globals.itemdict[item].name
+
+		if has_item < need_item && buy_items:
+			var items_to_buy = need_item - has_item
+			var price = items_to_buy * globals.itemdict[item].cost
+			if price <= globals.resources.gold:
+				if warn_items:
+					warnings.append("Bought additional %s of `%s` for %s gold" % [items_to_buy, item_name, price])
+				globals.resources.gold -= price
+				globals.itemdict[item].amount += items_to_buy
+
+		has_item = globals.itemdict[item].amount
+		if has_item < need_item && warn_items:
+			warnings.append("Failed to add all %s `%s` to backpack: you only have %s" % [need_item, item_name, has_item])
+		
+		var items_to_move = min(has_item, need_item)
+		if items_to_move > 0:
+			backpack_items[item] = backpack_items.get(item, 0) + items_to_move
+			globals.itemdict[item].amount -= items_to_move
+
+	return warnings.join("\n")
 
 
 func show_extra_settings():
