@@ -174,7 +174,7 @@ func addrandomenchant(item, number = 1):
 		var encharrayid = encharray[randi()%encharray.size()]
 		var tempenchant = enchantmentdict[encharrayid]
 		var enchant = {id = tempenchant.id, type = tempenchant.type, effect = tempenchant.effect, effectvalue = 0,
-						descript = "", enchant_id = _enchantment_id_to_id[tempenchant.id]}
+						descript = "", enchant_id = _enchantment_id_to_id[tempenchant.id], enchant_custom_level = 1}
 		encharray.erase(encharrayid)
 		if tempenchant.has("mineffect") and tempenchant.has("maxeffect"):
 			if tempenchant.maxeffect < 1:
@@ -183,7 +183,12 @@ func addrandomenchant(item, number = 1):
 				enchant.effectvalue = round(rand_range(tempenchant.mineffect, tempenchant.maxeffect))
 		elif tempenchant.has('effectvalue'):
 			enchant.effectvalue = tempenchant.effectvalue
-		var enchant_description = tempenchant.name.replace('&100v', str(enchant.effectvalue*100)).replace('&v', str(enchant.effectvalue))
-		enchant.descript = '[color=%s]%s[/color]' % [enchant_bbcode_colors[item.enchant], enchant_description]
+		generate_enchantment_effect_descript(item, enchant, encharrayid)
 		
 		item.effects += [enchant]
+
+
+func generate_enchantment_effect_descript(item: Dictionary, effect: Dictionary, enchant_id: String) -> void:
+	var base_name = enchantmentdict[enchant_id].name
+	var enchant_description = base_name.replace('&100v', str(effect.effectvalue*100)).replace('&v', str(effect.effectvalue))
+	effect.descript = '[color=%s]%s[/color]' % [enchant_bbcode_colors[item.enchant], enchant_description]

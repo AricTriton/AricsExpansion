@@ -20,11 +20,11 @@ static func add_color_tag(text, color: String) -> String:
 func show():
 	var mode_adv = mode in ['full','slaveadv']
 	var mode_full = mode in ['full']
-
+  
 	show_stats(mode_adv, mode_full)
 	show_traits(mode_adv, mode_full)
 	show_stats_text(mode_adv, mode_full)
-
+  get_node("levelprogress/Label").set_text("Experience: %d/%d (%d%%)" % [person.not_percent_xp, person.not_percent_max_xp, person.xp])
 
 func show_stats(mode_adv: bool, mode_full: bool) -> void:
 	for i in globals.statsdict:
