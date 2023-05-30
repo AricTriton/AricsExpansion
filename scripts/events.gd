@@ -1,3 +1,38 @@
+func caligoodend(choice):
+	var text = ''
+	var cali = null
+	for i in globals.slaves:
+		if i.unique == 'Cali':
+			cali = i
+	var sprite = [['calihappy','pos1']]
+	if choice == 1:
+		text = textnode.CaliGoodEndNoReward
+		cali.away.at = 'hidden'
+		cali.away.duration = -1
+		globals.state.upcomingevents.append({code = 'calireturn', duration = 7})
+		globals.state.decisions.append('calistayedwithyou')
+	elif choice == 2:
+		text = textnode.CaliGoodEndReward
+		globals.itemdict.hairgrowthpot.amount += 3
+		globals.itemdict.stimulantpot.amount += 2
+		globals.itemdict.oblivionpot.amount += 1
+		globals.itemdict.youthingpot.amount += 1
+		cali.removefrommansion()
+		globals.state.decisions.append('calireturnedhome')
+	elif choice == 3:
+		text = globals.player.dictionary( textnode.CaliGoodEndKeep ) # fixed here
+		cali.add_trait('Pliable')
+		cali.loyal += 100
+		globals.main._on_mansion_pressed()
+		globals.state.decisions.append('calistayedwithyou')
+	if choice != 3:
+		globals.main.exploration.zoneenter('grove')
+	globals.resources.upgradepoints += 15
+	cali.add_trait("Grateful")
+	cali.consent = true
+	globals.main.dialogue(true,self,text,null,sprite)
+	globals.state.sidequests.cali = 103
+
 
 func gornpalaceivran(stage):
 	var text
