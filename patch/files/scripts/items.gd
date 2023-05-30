@@ -2048,7 +2048,8 @@ func oblivionpoteffect():
 	var text = ''
 	if person != globals.player:
 		text = person.dictionary('$name drinks the oblivion potion, forgetting all $his fixations. ')
-		person.levelupreqs.clear()
+		if person.xp_boost_reqs.code != 'none':
+			person.xp_boost_reqs.code = 'hidden'
 	else:
 		text = person.dictionary('You drink the oblivion potion, but it seems to not have any effect on you. ')
 	return text

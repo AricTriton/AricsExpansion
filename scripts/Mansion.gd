@@ -215,6 +215,21 @@ func rebuild_slave_list():
 	###---End Expansion---###
 	_on_orderbutton_pressed()
 
+
+func openslavetab(person, islevelup = false):
+	if person.sleep == 'farm':
+		_on_farm_pressed()
+		farminspect(person)
+	else:
+		currentslave = globals.slaves.find(person)
+		get_tree().get_current_scene().hide_everything()
+		$MainScreen/slave_tab.slavetabopen()
+		if islevelup:
+			$MainScreen/slave_tab._on_inspect_pressed()
+			if person.xp_boost_reqs.code == 'hidden':
+				get_node("MainScreen/slave_tab/stats")._on_talk_pressed()
+
+
 func _input(event):
 	###---Added by Expansion---### Minor Tweaks by Dabros Integration
 	## CHANGED NEW - 26/5/19 - for allowing prev/next keys for slave selection
@@ -4822,10 +4837,10 @@ func updateSlaveListNode(node, person, visible):
 	node.find_node('name').set_text(person.name_long())
 	#Whims -- change text color
 	node.find_node('name').set('custom_colors/font_color', ColorN(person.namecolor))
-	if person.xp >= 100:
+	if person.xp_boost_reqs.code == 'hidden':
 		node.find_node('name').rect_min_size.x = 208 # manual resize since auto glitched
 		node.find_node('levelup').visible = true
-		node.find_node('levelup').hint_tooltip = person.dictionary("Talk to $him to investigate unlocking $his potential." if person.levelupreqs.empty() else "Check requirements for unlocking $his potential.")
+		node.find_node('levelup').hint_tooltip = person.dictionary("Talk to $him to investigate unlocking $his potential.")
 	else:
 		node.find_node('levelup').visible = false
 		node.find_node('name').rect_min_size.x = 235 # manual resize since auto glitched

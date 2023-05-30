@@ -18,6 +18,8 @@ var mana_hunger = 0 #ralphC - only used for Succubus and future mana eating race
 var not_percent_xp = 0 setget ,not_percent_xp_get
 var not_percent_max_xp = 100 setget ,not_percent_max_xp_get
 ###---End Expansion---###
+var xp_boost_reqs = {code = 'none'}
+var xp_multiplier = 1
 
 ###---Added by expansion---### Modified by zclimber. Combat skills reordering and settings
 var ability = ['attack']
@@ -466,17 +468,59 @@ func not_percent_max_xp_get():
 
 
 func levelup():
-	levelupreqs.clear()
+	xp_boost_reqs = {code = 'hidden'}
 	level += 1
 	skillpoints += variables.skillpointsperlevel
 	realxp = 0
+	xp_multiplier = 1
 	if int(level) % 2 == 0:
 		self.health += 10
 	self.loyal += rand_range(5,10)
-	if self != globals.player:
-		globals.get_tree().get_current_scene().infotext(dictionary("$name has advanced to Level " + str(level)),'green')
-	else:
-		globals.get_tree().get_current_scene().infotext(dictionary("You have advanced to Level " + str(level)),'green')
+	var name = "You" if self == globals.player else self.dictionary("$name")
+	var infotext = "%s has advanced to Level %d" % [name, level]
+	globals.get_tree().get_current_scene().infotext(infotext,'green')
+
+
+func boost_xp():
+	xp_multiplier = 2
+	xp_boost_reqs = {code = 'none'}
+	var added_xp = self.not_percent_xp / 2
+	xp_add(added_xp, false)
+
+
+func xp_set(value):
+	xp_add(value - realxp)
+
+
+func xp_add(difference, add_multiplier: bool = true):
+	if add_multiplier:
+		difference *= xp_multiplier
+
+	var required_to_next_level = (100 - realxp) * max(level, 1)
+	realxp += max(float(difference)/max(level,1),1)
+	realxp = round(clamp(realxp, 0, 100))
+	if realxp < 100:
+		return
+
+	levelup()
+	var overflow_xp = difference - required_to_next_level
+	if overflow_xp >= level:
+		xp_add(overflow_xp, false)
+
+
+func consent_set(value):
+	consent = value
+
+	if value && !consent && xp_boost_reqs.code == 'relationship':
+		var current_scene = globals.get_tree().get_current_scene()
+		var scene_has_infotext = current_scene.has_node("infotext")
+		var not_on_date = !current_scene.has_node("date") || !current_scene.get_node("date").visible
+		var owned = globals.slaves.has(self)
+		if scene_has_infotext && not_on_date && owned:
+			var text =  self.dictionary("After getting closer with $name, you felt like $he unlocked new potential.")
+			current_scene.infotext(text, 'green')
+		boost_xp()
+
 
 func getessence():
 	var essence

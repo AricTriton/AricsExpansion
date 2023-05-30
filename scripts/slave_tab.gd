@@ -671,7 +671,7 @@ func updatestats():
 			get_node("stats/statspanel/" + i +'/Button').visible = true
 		else:
 			get_node("stats/statspanel/" + i+'/Button').visible = false
-	if person.levelupreqs.empty() && person.xp < 100:
+	if person.xp_boost_reqs.code == 'none':
 		$stats/basics/levelupreqs.set_bbcode("")
 	get_node("stats/statspanel/hp").set_value((person.stats.health_cur/float(person.stats.health_max))*100)
 	get_node("stats/statspanel/en").set_value((person.stats.energy_cur/float(person.stats.energy_max))*100)
@@ -694,15 +694,13 @@ func updatestats():
 		get_node("stats/statspanel/jailportrait").visible = false
 	###---End Expansion---###
 	$stats/statspanel/spec.set_texture(specimages[str(person.spec)])
-	if person.xp >= 100:
-		get_node("stats/statspanel/xp").tint_progress = Color(2.167,1.176,1.167,1)
-		if person.levelupreqs.empty():
-			$stats/basics/levelupreqs.set_bbcode(person.dictionary("You don't know what might unlock $name's potential further, yet. "))
-		else:
-			$stats/basics/levelupreqs.set_bbcode(person.levelupreqs.descript)
-	else:
-		get_node("stats/statspanel/xp").tint_progress = ColorN("white")
+	if person.xp_boost_reqs.code == 'none':
 		$stats/basics/levelupreqs.set_bbcode('')
+	elif person.xp_boost_reqs.code == 'hidden':
+		$stats/basics/levelupreqs.set_bbcode(person.dictionary("You don't know what might unlock $name's potential further, yet. "))
+	else:
+		$stats/basics/levelupreqs.set_bbcode(person.xp_boost_reqs.descript)
+	get_node("stats/statspanel/xp").tint_progress = ColorN("white")
 	###---Added by Expansion---### New Images
 	#---Movement Icons
 	$stats/statspanel/movement.set_texture(movementimages[str(globals.expansion.getMovementIcon(person))])

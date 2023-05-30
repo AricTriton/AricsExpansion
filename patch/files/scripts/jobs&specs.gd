@@ -529,61 +529,61 @@ var leveluprequests = {
 	weakitem = {
 		reqs = 'true',
 		speech = "you will need a [color=aqua]$item[/color] to unlock $his potential. ",
-		descript = '$name needs a [color=aqua]$item[/color] to advance $his level.  ',
+		descript = '$name needs a [color=aqua]$item[/color] to unlock $his potential. ',
 		execfunc = 'weakitem'
 	},
 	multitem = {
 		reqs = 'true',
 		speech = "you will need a [color=aqua]$item[/color] to unlock $his potential. ",
-		descript = '$name needs a [color=aqua]$item[/color] to advance $his level.  ',
+		descript = '$name needs a [color=aqua]$item[/color] to unlock $his potential. ',
 		execfunc = 'multitem'
 	},
 	gearitem = {
 		reqs = 'true',
 		speech = "you will need a [color=aqua]$item[/color] to unlock $his potential. ",
-		descript = '$name needs a [color=aqua]$item[/color] to advance $his level.  ',
+		descript = '$name needs a [color=aqua]$item[/color] to unlock $his potential. ',
 		execfunc = 'gearitem'
 	},
 	ingreditem = {
 		reqs = 'true',
 		speech = "you will need a [color=aqua]$item[/color] to unlock $his potential. ",
-		descript = '$name needs [color=aqua]$item[/color] to advance $his level. ',
+		descript = '$name needs [color=aqua]$item[/color] to unlock $his potential. ',
 		execfunc = 'ingreditem'
 	},
 	vacation = {
 		reqs = 'true',
 		speech = "you should provide $name with [color=aqua]2 free days[/color] to furtherly unlock $his potential.",
-		descript = '$name needs a [color=aqua]vacation[/color] to advance $his level. ',
+		descript = '$name needs a [color=aqua]vacation[/color] to unlock $his potential. ',
 		execfunc = 'vacationshort'
 	},
 	vacationlong = {
 		reqs = 'true',
 		speech = "you should provide $name with [color=aqua]3 free days[/color] to furtherly unlock $his potential.",
-		descript = '$name needs a [color=aqua]vacation[/color] to advance $his level. ',
+		descript = '$name needs a [color=aqua]vacation[/color] to unlock $his potential. ',
 		execfunc = 'vacationlong'
 	},
 	relationship = {
 		reqs = "person.obed >= 70 && person.consent == false && person.tags.find('nosex') < 0",
 		speech = "you should unlock [color=aqua]intimacy[/color] with $name to unlock $his potential.",
-		descript = "$name needs to have [color=aqua]intimacy unlocked[/color] to advance $his level. ",
+		descript = "$name needs to have [color=aqua]intimacy unlocked[/color] to unlock $his potential. ",
 		execfunc = 'startrelationship'
 	},
 	wincombat = {
 		reqs = 'true',
 		speech = "you should let $name to [color=aqua]win in a fight[/color] to unlock $his potential.",
-		descript = "$name needs to [color=aqua]win in a fight[/color] to advance $his level. ",
+		descript = "$name needs to [color=aqua]win in a fight[/color] to unlock $his potential. ",
 		execfunc = 'wincombat'
 	},
 	improvegrade = {
 		reqs = 'globals.originsarray.find(person.origins) < min(4, floor(person.level/2.0))',
 		speech = "you should raise $name's [color=aqua]grade[/color] to unlock $his potential.",
-		descript = "$name needs to [color=aqua]raise $his grade[/color] to advance $his level. ",
+		descript = "$name needs to [color=aqua]raise $his grade[/color] to unlock $his potential. ",
 		execfunc = 'raisegrade'
 	},
 	specialization = {
 		reqs = 'person.spec == null && person.level >= 5',
 		speech = "you should let $name's [color=aqua]learn a specialization[/color] to unlock $his potential.",
-		descript = "$name needs to [color=aqua]learn a specialization[/color] to advance $his level. ",
+		descript = "$name needs to [color=aqua]learn a specialization[/color] to unlock $his potential. ",
 		execfunc = 'getspec'
 	},
 }
@@ -602,22 +602,22 @@ var ingredlist = ['bestialessenceing', 'natureessenceing','taintedessenceing','m
 var succubusgonewild = 0.75 #ralphC - lower == easier to trigger extreme hunger whoring events for Succubi
 
 func vacation(person):
-	person.away.duration = int(person.levelupreqs.value)
+	person.away.duration = int(person.xp_boost_reqs.value)
 	person.away.at = 'vacation'
 	globals.get_tree().get_current_scene()._on_mansion_pressed()
 	globals.get_tree().get_current_scene().popup(person.dictionary("You've sent $name on vacation, boosting $his mood with this sudden reward. "))
-	person.levelup()
+	person.boost_xp()
 
 func itemlevelup(person):
-	if globals.state.getCountStackableItem(person.levelupreqs.value) < 1:
-		globals.get_tree().get_current_scene().popup(person.dictionary("Sadly, you have no available " + globals.itemdict[person.levelupreqs.value].name + " in possession. "))
+	if globals.state.getCountStackableItem(person.xp_boost_reqs.value) < 1:
+		globals.get_tree().get_current_scene().popup(person.dictionary("Sadly, you have no available " + globals.itemdict[person.xp_boost_reqs.value].name + " in possession. "))
 	else:
-		globals.state.removeStackableItem(person.levelupreqs.value)
-		globals.get_tree().get_current_scene().popup(person.dictionary("You gift $name " + globals.itemdict[person.levelupreqs.value].name + ". After returning a surprised look, $he whole-heartedly shows $his gratitude"))
-		person.levelup()
+		globals.state.removeStackableItem(person.xp_boost_reqs.value)
+		globals.get_tree().get_current_scene().popup(person.dictionary("You gift $name " + globals.itemdict[person.xp_boost_reqs.value].name + ". After returning a surprised look, $he whole-heartedly shows $his gratitude"))
+		person.boost_xp()
 
 func gearlevelup(person):
-	var item = person.levelupreqs.value
+	var item = person.xp_boost_reqs.value
 	var founditem = false
 	for i in globals.state.unstackables.values():
 		if i.code == item && i.owner == null:
@@ -625,19 +625,19 @@ func gearlevelup(person):
 			founditem = true
 			break
 	if founditem == true:
-		globals.get_tree().get_current_scene().popup(person.dictionary("You gift $name " + globals.itemdict[person.levelupreqs.value].name + ". After returning a surprised look, $he whole-heartedly shows $his gratitude"))
-		person.levelup()
+		globals.get_tree().get_current_scene().popup(person.dictionary("You gift $name " + globals.itemdict[person.xp_boost_reqs.value].name + ". After returning a surprised look, $he whole-heartedly shows $his gratitude"))
+		person.boost_xp()
 	else:
-		globals.get_tree().get_current_scene().popup("Sadly, there's no unused [color=aqua]" + globals.itemdict[person.levelupreqs.value].name + "[/color] in your possessions. ")
+		globals.get_tree().get_current_scene().popup("Sadly, there's no unused [color=aqua]" + globals.itemdict[person.xp_boost_reqs.value].name + "[/color] in your possessions. ")
 
 func vacationshort(person):
 	var text = person.dictionary(leveluprequests.vacation.speech)
-	person.levelupreqs = {code = 'vacation', value = '2', speech = leveluprequests.vacation.speech, descript = person.dictionary(leveluprequests.vacation.descript), button = person.dictionary('Send $name on vacation'), effect = 'vacation', activate = 'fromtalk'}
+	person.xp_boost_reqs = {code = 'vacation', value = '2', speech = leveluprequests.vacation.speech, descript = person.dictionary(leveluprequests.vacation.descript), button = person.dictionary('Send $name on vacation'), effect = 'vacation', activate = 'fromtalk'}
 	return text
 
 func vacationlong(person):
 	var text = person.dictionary(leveluprequests.vacation.speech)
-	person.levelupreqs = {code = 'vacation', value = '3', speech = leveluprequests.vacationlong.speech, descript = person.dictionary(leveluprequests.vacationlong.descript), button = person.dictionary('Send $name on vacation'), effect = 'vacation', activate = 'fromtalk'}
+	person.xp_boost_reqs = {code = 'vacation', value = '3', speech = leveluprequests.vacationlong.speech, descript = person.dictionary(leveluprequests.vacationlong.descript), button = person.dictionary('Send $name on vacation'), effect = 'vacation', activate = 'fromtalk'}
 	return text
 
 func weakitem(person):
@@ -649,7 +649,7 @@ func weakitem(person):
 	var text = person.dictionary(leveluprequests.weakitem.speech)
 	text = text.replace('$item', item.name)
 	var descript = person.dictionary(leveluprequests.weakitem.descript).replace('$item', item.name)
-	person.levelupreqs = {code = 'weakitem', value = item.code, speech = text, descript = descript , button = person.dictionary('Provide $name with $item').replace('$item', item.name), effect = 'itemlevelup', activate = 'fromtalk'}
+	person.xp_boost_reqs = {code = 'weakitem', value = item.code, speech = text, descript = descript , button = person.dictionary('Provide $name with $item').replace('$item', item.name), effect = 'itemlevelup', activate = 'fromtalk'}
 	return text
 
 func multitem(person):
@@ -674,35 +674,35 @@ func multitem(person):
 	var text = person.dictionary(leveluprequests.multitem.speech)
 	text = text.replace('$item', itemtext)
 	var descript = person.dictionary(leveluprequests.multitem.descript).replace('$item', itemtext)
-	person.levelupreqs = {code = 'multitem', value = array2, speech = text, descript = descript , button = person.dictionary('Provide $name with necessary items'), effect = 'multitemlevelup', activate = 'fromtalk'}
+	person.xp_boost_reqs = {code = 'multitem', value = array2, speech = text, descript = descript , button = person.dictionary('Provide $name with necessary items'), effect = 'multitemlevelup', activate = 'fromtalk'}
 	return text
 
 func multitemlevelup(person):
 	var hasitems = true
-	for i in person.levelupreqs.value:
+	for i in person.xp_boost_reqs.value:
 		for k in i:
 			if globals.state.getCountStackableItem(k) < i[k]:
 				hasitems = false
 	if hasitems == false:
 		globals.get_tree().get_current_scene().popup("Sadly, you don't have all required items in your possessions. ")
 	else:
-		for i in person.levelupreqs.value:
+		for i in person.xp_boost_reqs.value:
 			for k in i:
 				globals.state.removeStackableItem(k,i[k])
 		globals.get_tree().get_current_scene().popup(person.dictionary("You gift $name an assortment of items. After returning a surprised look, $he whole-heartedly shows $his gratitude"))
-		person.levelup()
+		person.boost_xp()
 
 func gearitem(person):
 	var item = globals.itemdict[globals.randomfromarray(gearitemslist)]
 	var text = person.dictionary(leveluprequests.gearitem.speech)
 	text = text.replace('$item', item.name)
 	var descript = person.dictionary(leveluprequests.gearitem.descript).replace('$item', item.name)
-	person.levelupreqs = {code = 'gearitem', value = item.code, speech = text, descript = descript , button = person.dictionary('Provide $name with $item').replace('$item', item.name), effect = 'gearlevelup', activate = 'fromtalk'}
+	person.xp_boost_reqs = {code = 'gearitem', value = item.code, speech = text, descript = descript , button = person.dictionary('Provide $name with $item').replace('$item', item.name), effect = 'gearlevelup', activate = 'fromtalk'}
 	return text
 
 func getspec(person):
 	var text = person.dictionary(leveluprequests.specialization.speech)
-	person.levelupreqs = {code = 'specialization', value = '0', speech = leveluprequests.specialization.speech, descript = person.dictionary(leveluprequests.specialization.descript), effect = 'specialization', activate = 'action'}
+	person.xp_boost_reqs = {code = 'specialization', value = '0', speech = leveluprequests.specialization.speech, descript = person.dictionary(leveluprequests.specialization.descript), effect = 'specialization', activate = 'action'}
 	return text
 
 func ingreditem(person):
@@ -726,22 +726,22 @@ func ingreditem(person):
 	temptext = temptext.substr(0, temptext.length() -2)+ ' '
 	text = person.dictionary(leveluprequests.ingreditem.speech.replace('$item', temptext))
 	var descript = person.dictionary(leveluprequests.ingreditem.descript).replace('$item', temptext)
-	person.levelupreqs = {code = 'ingreditem', value = [finalitems], speech = text, descript = descript , button = person.dictionary('Provide $name with $item').replace('$item', temptext), effect = 'multitemlevelup', activate = 'fromtalk'}
+	person.xp_boost_reqs = {code = 'ingreditem', value = [finalitems], speech = text, descript = descript , button = person.dictionary('Provide $name with $item').replace('$item', temptext), effect = 'multitemlevelup', activate = 'fromtalk'}
 	return text
 
 func startrelationship(person):
 	var text = person.dictionary(leveluprequests.relationship.speech)
-	person.levelupreqs = {code = 'relationship', value = '0', speech = leveluprequests.relationship.speech, descript = person.dictionary(leveluprequests.relationship.descript), effect = 'relationship', activate = 'action'}
+	person.xp_boost_reqs = {code = 'relationship', value = '0', speech = leveluprequests.relationship.speech, descript = person.dictionary(leveluprequests.relationship.descript), effect = 'relationship', activate = 'action'}
 	return text
 
 func wincombat(person):
 	var text = person.dictionary(leveluprequests.wincombat.speech)
-	person.levelupreqs = {code = 'wincombat', value = '0', speech = leveluprequests.wincombat.speech, descript = person.dictionary(leveluprequests.wincombat.descript), effect = 'wincombat', activate = 'action'}
+	person.xp_boost_reqs = {code = 'wincombat', value = '0', speech = leveluprequests.wincombat.speech, descript = person.dictionary(leveluprequests.wincombat.descript), effect = 'wincombat', activate = 'action'}
 	return text
 
 func raisegrade(person):
 	var text = person.dictionary(leveluprequests.improvegrade.speech)
-	person.levelupreqs = {code = 'improvegrade', value = '0', speech = leveluprequests.improvegrade.speech, descript = person.dictionary(leveluprequests.improvegrade.descript), effect = 'improvegrade', activate = 'action'}
+	person.xp_boost_reqs = {code = 'improvegrade', value = '0', speech = leveluprequests.improvegrade.speech, descript = person.dictionary(leveluprequests.improvegrade.descript), effect = 'improvegrade', activate = 'action'}
 	return text
 
 func getrequest(person):
