@@ -792,7 +792,7 @@ func _on_movement_mouse_entered():
 	if person.movement == 'walk':
 		text = "[center][color=aqua]Normal Movement.[/color][/center]\n$name is walking around like normal."
 	elif person.movement == 'fly':
-		text = "[center][color=aqua]Will Fly until under 50 Energy[/color][/center]\n$name is currently flapping $his wings and hovering a foot or two off of the ground.\n\n[color=green]Attack and Speed increased by 125%\n[/color]"
+		text = "[center][color=aqua]Will Fly until under 50 Energy[/color][/center]\n$name is currently flapping $his wings and hovering a foot or two off of the ground.\n\n[color=green]Attack and Speed increased by +3\n[/color]"
 	elif person.movement == 'crawl':
 		text = "[center][color=red]Only able to Crawl.\nAttack and Speed Penalties in Combat.\nWill not Join the Party.\nUnable to work many jobs.[/color][/center]\n$name is currently crawling on the ground on all fours.\n\n"
 	elif person.movement == 'none':
