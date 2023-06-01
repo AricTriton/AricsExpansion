@@ -87,7 +87,7 @@ func create_item_button(i: Dictionary, amount: int, category: String, move_callb
 
 	button.connect("mouse_entered", globals, 'itemtooltip', [i])
 	button.connect("mouse_exited", globals, 'itemtooltiphide')
-	button.get_node("move").connect("pressed",self,move_callback,[button])
+	button.get_node("move").connect("pressed", self, 'move_item', [button, move_callback])
 	button.get_node("use").connect("pressed",self,'use',[button])
 
 	itemgrid.add_child(button)	
@@ -163,6 +163,52 @@ func itemsbackpack():
 		stackable_items.append(globals.itemdict[item_code])
 	
 	fill_items_list_common(stackable_items, globals.state.backpack.stackables, 'backpack', 'movefrombackpack')
+
+
+func move_item(button, direction) -> void:
+	var to_backpack = direction == 'movetobackpack'
+	var move_all = Input.is_key_pressed(KEY_SHIFT)
+	var item = button.get_meta('item')
+	var new_item_count = 0
+	if item.has('owner') == false:
+		new_item_count = move_stackable(item, to_backpack, move_all)
+	else:
+		new_item_count = move_unstackable(button.get_meta('itemarray'), to_backpack, move_all)
+
+	button.get_node('number').set_text(str(new_item_count))
+	if new_item_count == 0:
+		button.visible = false
+		button.queue_free()
+	calculateweight()
+
+
+func move_stackable(item: Dictionary, to_backpack: bool, move_all: bool) -> int:
+	var backpack_stackables = globals.state.backpack.stackables
+
+	var moved_to_backpack = 1 if to_backpack else -1
+	if move_all && to_backpack:
+		moved_to_backpack = item.amount
+	elif move_all && !to_backpack:
+		moved_to_backpack = -backpack_stackables[item.code]
+	
+	item.amount -= moved_to_backpack
+	backpack_stackables[item.code] = backpack_stackables.get(item.code, 0) + moved_to_backpack
+	if backpack_stackables[item.code] == 0:
+		backpack_stackables.erase(item.code)
+	
+	if to_backpack:
+		return item.amount
+	else:
+		return backpack_stackables.get(item.code, 0)
+
+
+func move_unstackable(itemarray: Array, to_backpack: bool, move_all: bool) -> int:
+	var new_owner = 'backpack' if to_backpack else null
+	var items_to_remove = itemarray if move_all else [itemarray.pop_back()] 
+	for item in items_to_remove:
+		item.owner = new_owner
+	items_to_remove.clear()
+	return itemarray.size()
 
 
 func slavelist():
