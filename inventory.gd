@@ -238,7 +238,7 @@ func slavelist():
 func create_persons_buttons(persons_array: Array):
 	for i in persons_array:
 		if i.away.duration != 0:
-			return
+			continue
 		var button = $slavelist/GridContainer/Button.duplicate()
 		$slavelist/GridContainer.add_child(button)
 		button.visible = true
@@ -917,7 +917,7 @@ func restock_backpack(restock_amount: Dictionary, buy_items: bool, warn_items: b
 
 func show_extra_settings():
 	$extra_settings_popup.popup()
-	$extra_settings_popup/party_members_first.pressed = globals.state.inventory_settings.get("party_members_first", false)
+	$extra_settings_popup/party_members_first.pressed = globals.state.inventory_settings.get("party_members_first", true)
 
 
 func hide_extra_settings():
