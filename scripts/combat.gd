@@ -538,7 +538,7 @@ class combatant:
 	func get_stressed_from_damage(old_hp: float, difference: float):
 		if difference < 0 && person != null:
 			var damage_taken_now = difference * -1
-			var health_missing_pct = (hpmax - old_hp) / hpmax + 100
+			var health_missing_pct = (hpmax - old_hp) / hpmax * 100
 			var stress_threshold = damage_taken_now + health_missing_pct
 			
 			if stress_threshold > person.cour || old_hp <= hpmax/4:
@@ -772,6 +772,9 @@ func calculatehit(caster: combatant, target: combatant, skill: Dictionary) -> in
 	var crit_chance = hit_chance - 100
 
 	if hit_chance < rand_range(0, 100):
+		return HitResult.Miss
+
+	if caster.effects.has('panic') && rand_range(0, 100) < 66:
 		return HitResult.Miss
 	
 	var can_crit = globals.expansionsettings.combat_tweaks_enabled && globals.expansionsettings.critical_strikes && caster.group == 'player'
@@ -1203,6 +1206,11 @@ func checkforinheritdebuffs(combatant):
 		else:
 			removebuff('luststrong',combatant)
 			removebuff('lustweak',combatant)
+		if globals.expansionsettings.combat_tweaks_enabled && globals.expansionsettings.panic_debuff:
+			if combatant.stress >= 99:
+				sendbuff(combatant, combatant, 'panic')
+			else:
+				removebuff('panic', combatant)
 
 func victory():
 	var deads = []

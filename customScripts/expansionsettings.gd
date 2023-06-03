@@ -606,6 +606,7 @@ var minimal_hit_chance = 25
 var critical_strikes = true
 var critical_damage_base = 100
 var critical_damage_per_str = 20
+var panic_debuff = true
 
 
 func addConstantsSupport():
@@ -688,5 +689,6 @@ func addConstantsSupport():
 		critical_damage_base = {descript = "Base critical hit damage multiplier, in percent", min = 100, max = 500, object = self},
 		critical_damage_per_str = {descript = "Additional critical hit damage multiplier per point of strength, in percent", min = 0, max = 100, object = self},
 		critical_strikes = {descript = "Enable critical strikes. The bigger your speed over enemy's, the bigger the chance.", object = self},
+		panic_debuff = {descript = "Enable 'Panic' debuff at high stress level. Heavy penalty to hit percentage.", object = self},
 	}
 	

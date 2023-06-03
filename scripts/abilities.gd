@@ -881,6 +881,15 @@ var effects = {
 		type = 'passive',
 		stats = [],
 	},
+	panic = {
+		icon = load("res://files/aric_expansion_images/abils/panic.png"),
+		duration = -1,
+		name = "Panic",
+		code = 'panic',
+		description = 'This character is panicking!\n[color=yellow]66% chance to miss![/color]',
+		type = 'passive',
+		stats = [],
+	},
 }
 
 func restorehealth(caster, target):
