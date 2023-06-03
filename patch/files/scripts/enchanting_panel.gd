@@ -408,9 +408,12 @@ func should_item_be_visible(item: Dictionary, type_filter: String, ench_filter) 
 		if !item.enchant in ['basic', 'custom', 'custom_blood']:
 			return false
 	
-	if "enchantable" in type_filter && selected_items[0] != null:
-		var ench_orb = selected_items[0].items_list.back()
-		ench_filter = self.get_effect_enchantment_type(ench_orb.effects[0], ench_orb)
+	if "enchantable" in type_filter:
+		if !item.enchant in ['', 'basic', 'custom', 'custom_blood']:
+			return false
+		if selected_items[0] != null:
+			var ench_orb = selected_items[0].items_list.back()
+			ench_filter = self.get_effect_enchantment_type(ench_orb.effects[0], ench_orb)
 	
 	if ench_filter != null:
 		if "enchantable" in type_filter:
@@ -469,6 +472,7 @@ func update_action() -> void:
 		$flavor_text.bbcode_text = ""
 		$slave_select_buttons_container.visible = false
 		$do_action.disabled = true
+		selected_slave = null
 		set_result_item_data(null)
 		show_price(null)
 		return
@@ -547,8 +551,9 @@ func calculate_item_grind_gain(item: Dictionary) -> ResourcesPrice:
 		var enchant_id = get_effect_enchantment_type(effect, item, true)
 		if enchant_id == null:
 			continue
-		var rarity_coeff = 0.5 if enchant_id in ["enchdmg", "enchspeed"] else 1.0
-		gain.enchantment_dust_gain += round(item_multiplier * calculate_potency(effect, enchant_id) * rarity_coeff * 10)
+		var rarity_coeff = 0.7 if enchant_id in ["enchdmg", "enchspeed"] else 1.0
+		var orb_coeff = 0.5 if item.code == 'enchantment_orb' else 1.0
+		gain.enchantment_dust_gain += round(item_multiplier * calculate_potency(effect, enchant_id) * rarity_coeff * orb_coeff * 10)
 	return gain
 
 
@@ -841,6 +846,7 @@ func consume_resources(price: ResourcesPrice) -> bool:
 		else:
 			current_price.result_item.enchant = 'custom_blood'
 		selected_slave.health -= price.blood_hp_points
+		rebuild_slave_list()
 
 	for item_button in selected_items:
 		if item_button != null:
@@ -934,3 +940,6 @@ func do_boost():
 
 func do_infuse():
 	apply_current_cost()
+
+func rebuild_slave_list():
+	get_tree().get_current_scene().rebuild_slave_list()
