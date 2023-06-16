@@ -671,7 +671,7 @@ func updatestats():
 			get_node("stats/statspanel/" + i +'/Button').visible = true
 		else:
 			get_node("stats/statspanel/" + i+'/Button').visible = false
-	if person.xp_boost_reqs.code == 'none':
+	if !person.has_xp_requirement():
 		$stats/basics/levelupreqs.set_bbcode("")
 	get_node("stats/statspanel/hp").set_value((person.stats.health_cur/float(person.stats.health_max))*100)
 	get_node("stats/statspanel/en").set_value((person.stats.energy_cur/float(person.stats.energy_max))*100)
@@ -694,9 +694,9 @@ func updatestats():
 		get_node("stats/statspanel/jailportrait").visible = false
 	###---End Expansion---###
 	$stats/statspanel/spec.set_texture(specimages[str(person.spec)])
-	if person.xp_boost_reqs.code == 'none':
+	if !person.has_xp_requirement():
 		$stats/basics/levelupreqs.set_bbcode('')
-	elif person.xp_boost_reqs.code == 'hidden':
+	elif person.has_hidden_xp_requirement():
 		$stats/basics/levelupreqs.set_bbcode(person.dictionary("You don't know what might unlock $name's potential further, yet. "))
 	else:
 		$stats/basics/levelupreqs.set_bbcode(person.xp_boost_reqs.descript)

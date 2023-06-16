@@ -468,7 +468,10 @@ func not_percent_max_xp_get():
 
 
 func levelup():
-	xp_boost_reqs = {code = 'hidden'}
+	if globals.expansionsettings.disable_levelup_gate:
+		create_new_xp_requirement()
+	else:
+		clear_xp_requirement()
 	level += 1
 	skillpoints += variables.skillpointsperlevel
 	realxp = 0
@@ -482,10 +485,29 @@ func levelup():
 
 
 func boost_xp():
-	xp_multiplier = 2
+	if globals.expansionsettings.disable_levelup_gate:
+		clear_xp_requirement()
+		xp_multiplier = 2
+		var added_xp = self.not_percent_xp / 2
+		xp_add(added_xp, false)
+	else:
+		levelup()
+
+
+func create_new_xp_requirement() -> void:
+	xp_boost_reqs = {code = 'hidden'}
+
+
+func clear_xp_requirement() -> void:
 	xp_boost_reqs = {code = 'none'}
-	var added_xp = self.not_percent_xp / 2
-	xp_add(added_xp, false)
+
+
+func has_xp_requirement() -> bool:
+	return xp_boost_reqs.code != 'none'
+
+
+func has_hidden_xp_requirement() -> bool:
+	return xp_boost_reqs.code == 'hidden'
 
 
 func xp_set(value):
@@ -502,6 +524,11 @@ func xp_add(difference, add_multiplier: bool = true):
 	if realxp < 100:
 		return
 
+	if !globals.expansionsettings.disable_levelup_gate:
+		if !has_xp_requirement():
+			create_new_xp_requirement()
+		return
+	 
 	levelup()
 	var overflow_xp = difference - required_to_next_level
 	if overflow_xp >= level:

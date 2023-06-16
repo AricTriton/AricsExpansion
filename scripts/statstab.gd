@@ -266,11 +266,12 @@ func _on_talk_pressed(mode = 'talk'):
 			elif person.lust >= 60 && person.consent == true:
 				text = text + "— Uhm... would you like to give me some private attention? — $name gives you a deep lusting look. \n"
 
-		if person.xp_boost_reqs.code == 'hidden':
+		if person.has_hidden_xp_requirement():
 			buttons.append({text = person.dictionary("Investigate $name's potential"), function = 'levelreqs'})
-		elif person.xp_boost_reqs.code != 'none':
+		elif person.has_xp_requirement():
 			text += "\n\n[color=yellow]Your investigation has shown that " + person.dictionary(person.xp_boost_reqs.speech) + '[/color]'
-			text += person.dictionary("\n\n[color=yellow]This will increase $his collected experience by 50%, and will double all received experience until next levelup[/color]")
+			if globals.expansionsettings.disable_levelup_gate:
+				text += person.dictionary("\n\n[color=yellow]This will increase $his collected experience by 50%, and will double all received experience until next levelup[/color]")
 			if person.xp_boost_reqs.activate == 'fromtalk':
 				buttons.append({text = person.xp_boost_reqs.button, function = 'levelup', args = person.xp_boost_reqs.effect})
 

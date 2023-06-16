@@ -226,7 +226,7 @@ func openslavetab(person, islevelup = false):
 		$MainScreen/slave_tab.slavetabopen()
 		if islevelup:
 			$MainScreen/slave_tab._on_inspect_pressed()
-			if person.xp_boost_reqs.code == 'hidden':
+			if person.has_hidden_xp_requirement():
 				get_node("MainScreen/slave_tab/stats")._on_talk_pressed()
 
 
@@ -4837,7 +4837,7 @@ func updateSlaveListNode(node, person, visible):
 	node.find_node('name').set_text(person.name_long())
 	#Whims -- change text color
 	node.find_node('name').set('custom_colors/font_color', ColorN(person.namecolor))
-	if person.xp_boost_reqs.code == 'hidden':
+	if person.has_hidden_xp_requirement():
 		node.find_node('name').rect_min_size.x = 208 # manual resize since auto glitched
 		node.find_node('levelup').visible = true
 		node.find_node('levelup').hint_tooltip = person.dictionary("Talk to $him to investigate unlocking $his potential.")
