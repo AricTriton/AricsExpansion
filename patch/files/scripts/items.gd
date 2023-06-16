@@ -9,6 +9,7 @@ var enchantscript = load("res://files/scripts/enchantments.gd").new()
 func enchantrand(item, number = 1):
 	enchantscript.addrandomenchant(item, number)
 
+## Note: for unstackable items icon has to be a string
 var itemlist = {
 	food = {
 		code = 'food',
@@ -1573,7 +1574,7 @@ var itemlist = {
 	enchantment_orb = {
 		code = 'enchantment_orb',
 		name = 'Enchantment orb',
-		icon = load("res://files/aric_expansion_images/items/enchantment_sphere.png"),
+		icon = "res://files/aric_expansion_images/items/enchantment_sphere.png",
 		description = "Enchantment in its pure form, separated from item. It can be boosted and then infused into another item.",
 		effect = [],
 		recipe = '',
@@ -2048,8 +2049,8 @@ func oblivionpoteffect():
 	var text = ''
 	if person != globals.player:
 		text = person.dictionary('$name drinks the oblivion potion, forgetting all $his fixations. ')
-		if person.xp_boost_reqs.code != 'none':
-			person.xp_boost_reqs.code = 'hidden'
+		if person.has_xp_requirement():
+			person.create_new_xp_requirement()
 	else:
 		text = person.dictionary('You drink the oblivion potion, but it seems to not have any effect on you. ')
 	return text
