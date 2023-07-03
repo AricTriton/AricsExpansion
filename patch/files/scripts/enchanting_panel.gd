@@ -838,7 +838,7 @@ func consume_resources(price: ResourcesPrice) -> bool:
 		var required_ingredient = price.ingredients[ingredient]
 		globals.state.removeStackableItem(ingredient, required_ingredient)
 
-	if selected_slave != null:
+	if current_mode == AllModes[3] && selected_slave != null:
 		var break_level = get_slave_health_break(price)
 		if break_level != -1:
 			selected_slave.away.duration = SLAVE_AWAY_TIMES[break_level]
