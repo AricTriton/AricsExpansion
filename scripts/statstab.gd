@@ -265,12 +265,16 @@ func _on_talk_pressed(mode = 'talk'):
 				text = text + "— I actually would love to fuck right now. \n"
 			elif person.lust >= 60 && person.consent == true:
 				text = text + "— Uhm... would you like to give me some private attention? — $name gives you a deep lusting look. \n"
-		if person.xp >= 100 && person.levelupreqs.has('code') == false:
+
+		if person.has_hidden_xp_requirement():
 			buttons.append({text = person.dictionary("Investigate $name's potential"), function = 'levelreqs'})
-		elif person.levelupreqs.has('code'):
-			text += "\n\n[color=yellow]Your investigation shown, that " + person.dictionary(person.levelupreqs.speech) + '[/color]'
-			if person.levelupreqs.activate == 'fromtalk':
-				buttons.append({text = person.levelupreqs.button, function = 'levelup', args = person.levelupreqs.effect})
+		elif person.has_xp_requirement():
+			text += "\n\n[color=yellow]Your investigation has shown that " + person.dictionary(person.xp_boost_reqs.speech) + '[/color]'
+			if globals.expansionsettings.disable_levelup_gate:
+				text += person.dictionary("\n\n[color=yellow]This will increase $his collected experience by 50%, and will double all received experience until next levelup[/color]")
+			if person.xp_boost_reqs.activate == 'fromtalk':
+				buttons.append({text = person.xp_boost_reqs.button, function = 'levelup', args = person.xp_boost_reqs.effect})
+
 		if person.unique == 'Zoe' && globals.state.sidequests.zoe == 5:
 			if globals.state.getCountStackableItem('teleportseal') >= 10 && globals.state.getCountStackableItem('taintedessenceing') >= 5 && globals.state.getCountStackableItem('magicessenceing') >= 5:
 				buttons.append({text = "Give Zoe requested items", function = 'zoequest'})

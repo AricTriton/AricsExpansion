@@ -671,7 +671,7 @@ func updatestats():
 			get_node("stats/statspanel/" + i +'/Button').visible = true
 		else:
 			get_node("stats/statspanel/" + i+'/Button').visible = false
-	if person.levelupreqs.empty() && person.xp < 100:
+	if !person.has_xp_requirement():
 		$stats/basics/levelupreqs.set_bbcode("")
 	get_node("stats/statspanel/hp").set_value((person.stats.health_cur/float(person.stats.health_max))*100)
 	get_node("stats/statspanel/en").set_value((person.stats.energy_cur/float(person.stats.energy_max))*100)
@@ -694,15 +694,13 @@ func updatestats():
 		get_node("stats/statspanel/jailportrait").visible = false
 	###---End Expansion---###
 	$stats/statspanel/spec.set_texture(specimages[str(person.spec)])
-	if person.xp >= 100:
-		get_node("stats/statspanel/xp").tint_progress = Color(2.167,1.176,1.167,1)
-		if person.levelupreqs.empty():
-			$stats/basics/levelupreqs.set_bbcode(person.dictionary("You don't know what might unlock $name's potential further, yet. "))
-		else:
-			$stats/basics/levelupreqs.set_bbcode(person.levelupreqs.descript)
-	else:
-		get_node("stats/statspanel/xp").tint_progress = ColorN("white")
+	if !person.has_xp_requirement():
 		$stats/basics/levelupreqs.set_bbcode('')
+	elif person.has_hidden_xp_requirement():
+		$stats/basics/levelupreqs.set_bbcode(person.dictionary("You don't know what might unlock $name's potential further, yet. "))
+	else:
+		$stats/basics/levelupreqs.set_bbcode(person.xp_boost_reqs.descript)
+	get_node("stats/statspanel/xp").tint_progress = ColorN("white")
 	###---Added by Expansion---### New Images
 	#---Movement Icons
 	$stats/statspanel/movement.set_texture(movementimages[str(globals.expansion.getMovementIcon(person))])
@@ -792,7 +790,7 @@ func _on_movement_mouse_entered():
 	if person.movement == 'walk':
 		text = "[center][color=aqua]Normal Movement.[/color][/center]\n$name is walking around like normal."
 	elif person.movement == 'fly':
-		text = "[center][color=aqua]Will Fly until under 50 Energy[/color][/center]\n$name is currently flapping $his wings and hovering a foot or two off of the ground.\n\n[color=green]Attack and Speed increased by 125%\n[/color]"
+		text = "[center][color=aqua]Will Fly until under 50 Energy[/color][/center]\n$name is currently flapping $his wings and hovering a foot or two off of the ground.\n\n[color=green]Attack and Speed increased by +3\n[/color]"
 	elif person.movement == 'crawl':
 		text = "[center][color=red]Only able to Crawl.\nAttack and Speed Penalties in Combat.\nWill not Join the Party.\nUnable to work many jobs.[/color][/center]\n$name is currently crawling on the ground on all fours.\n\n"
 	elif person.movement == 'none':

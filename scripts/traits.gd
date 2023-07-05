@@ -918,7 +918,7 @@ var traits = {
 	#Movement Traits
 	"Movement: Flying": {
 		"name": "Movement: Flying",
-		"description": "$name is currently flapping $his wings and hovering around.\n\n[color=green]Attack and Speed increased by 125%\n[/color]\n[color=aqua]Will Fly until under 50 Energy[/color]",
+		"description": "$name is currently flapping $his wings and hovering around.\n\n[color=green]Attack and Speed increased by +3\n[/color]\n[color=aqua]Will Fly until under 50 Energy[/color]",
 		"effect": {
 			"code": "flying",
 		},

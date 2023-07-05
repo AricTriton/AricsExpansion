@@ -215,6 +215,21 @@ func rebuild_slave_list():
 	###---End Expansion---###
 	_on_orderbutton_pressed()
 
+
+func openslavetab(person, islevelup = false):
+	if person.sleep == 'farm':
+		_on_farm_pressed()
+		farminspect(person)
+	else:
+		currentslave = globals.slaves.find(person)
+		get_tree().get_current_scene().hide_everything()
+		$MainScreen/slave_tab.slavetabopen()
+		if islevelup:
+			$MainScreen/slave_tab._on_inspect_pressed()
+			if person.has_hidden_xp_requirement():
+				get_node("MainScreen/slave_tab/stats")._on_talk_pressed()
+
+
 func _input(event):
 	###---Added by Expansion---### Minor Tweaks by Dabros Integration
 	## CHANGED NEW - 26/5/19 - for allowing prev/next keys for slave selection
@@ -1762,6 +1777,8 @@ func _on_mansion_pressed():
 	mansion_popup.append(process_auto_inventory_management())
 	build_mansion_info()
 	rebuild_slave_list()
+	exploration.visited_outside = false
+	exploration.visited_wild = false
 	show_popup_with_texts(mansion_popup)
 
 
@@ -1790,56 +1807,12 @@ func process_captured_group() -> String:
 func process_auto_inventory_management() -> String:
 	var settings = globals.state.inventory_settings.get("auto_management", {})
 
-	if settings.get("unload_backpack", false): #unload items
-		unload_backpack()
-	
-	if !settings.get("restock_backpack", false):
-		return ""
+	if !exploration.visited_outside || !settings.get("execute_return", false):
+		return "" # Don't execute when not visited outside (for example, just loaded game)
+	if settings.get("execute_return_wild", false) && !exploration.visited_wild:
+		return "" # Don't execute when required visit wild and only visited cities
 
-	var buy = settings.get("buy_items", false)
-	var warn = settings.get("warn_not_enough_items", false)
-	var restock_amount = settings.get("restock_amount", {})
-	return restock_backpack(restock_amount, buy, warn)
-
-
-func unload_backpack():
-	for stackable in globals.state.backpack.stackables:
-		globals.itemdict[stackable].amount += globals.state.backpack.stackables[stackable]
-	globals.state.backpack.stackables = {}
-	for item in globals.state.unstackables.values():
-		if item.owner == 'backpack':
-			item.owner = null
-
-
-func restock_backpack(restock_amount: Dictionary, buy_items: bool, warn_items: bool) -> String:
-	var warnings = PoolStringArray()
-	var backpack_items = globals.state.backpack.stackables
-	
-	for item in restock_amount:
-		var need_item = restock_amount[item] - backpack_items.get(item, 0)
-		if need_item <= 0:
-			continue
-		var has_item = globals.itemdict[item].amount
-		var item_name = globals.itemdict[item].name
-
-		if has_item < need_item && buy_items:
-			var items_to_buy = need_item - has_item
-			var price = items_to_buy * globals.itemdict[item].cost
-			if price <= globals.resources.gold:
-				if warn_items:
-					warnings.append("Bought additional %s of `%s` for %s gold" % [items_to_buy, item_name, price])
-				globals.resources.gold -= price
-				globals.itemdict[item].amount += items_to_buy
-
-		has_item = globals.itemdict[item].amount
-		if has_item < need_item && warn_items:
-			warnings.append("Failed to add all %s `%s` to backpack: you only have %s" % [need_item, item_name, has_item])
-		
-		var items_to_move = min(has_item, need_item)
-		backpack_items[item] = backpack_items.get(item, 0) + items_to_move
-		globals.itemdict[item].amount -= items_to_move
-
-	return warnings.join("\n")
+	return get_node("inventory").run_auto_inventory_management()
 
 
 func show_popup_with_texts(texts: Array) -> void:
@@ -4864,10 +4837,10 @@ func updateSlaveListNode(node, person, visible):
 	node.find_node('name').set_text(person.name_long())
 	#Whims -- change text color
 	node.find_node('name').set('custom_colors/font_color', ColorN(person.namecolor))
-	if person.xp >= 100:
+	if person.has_hidden_xp_requirement():
 		node.find_node('name').rect_min_size.x = 208 # manual resize since auto glitched
 		node.find_node('levelup').visible = true
-		node.find_node('levelup').hint_tooltip = person.dictionary("Talk to $him to investigate unlocking $his potential." if person.levelupreqs.empty() else "Check requirements for unlocking $his potential.")
+		node.find_node('levelup').hint_tooltip = person.dictionary("Talk to $him to investigate unlocking $his potential.")
 	else:
 		node.find_node('levelup').visible = false
 		node.find_node('name').rect_min_size.x = 235 # manual resize since auto glitched

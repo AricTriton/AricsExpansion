@@ -1,5 +1,13 @@
 
+var visited_outside = false
+var visited_wild = false
+
 var travel = globals.expansiontravel #ralphD
+
+<AddTo 7>
+func zoneenter(zone):
+	visited_outside = true
+	visited_wild = visited_wild || zone.combat
 
 func enemyencounter():
 	var enc
@@ -480,13 +488,14 @@ func enemydefeated():
 	###---Added by Expansion---### NPCs Expanded
 	text += "You also found a total of [color=yellow]" + str(round(stolengold)) + "[/color] pieces of gold hidden in the pockets, boots, and various orifaces of your victims.\n"
 	###---End Expansion---###
-	globals.player.xp += round(expearned/(globals.state.playergroup.size()+1))
+	var experience_per_person = round(expearned/(globals.state.playergroup.size()+1))
+	globals.player.xp_add(experience_per_person)
 	for i in globals.state.playergroup:
 		var person = globals.state.findslave(i)
-		person.xp += round(expearned/(globals.state.playergroup.size()+1))
-		if person.levelupreqs.has('code') && person.levelupreqs.code == 'wincombat':
-			person.levelup()
+		if person.xp_boost_reqs.code == 'wincombat':
+			person.boost_xp()
 			text += person.dictionary("[color=green]Your decisive win inspired $name, and made $him unlock new potential.[/color] \n")
+		person.xp_add(experience_per_person)
 		if person.health > person.stats.health_max/1.3:
 			person.cour += rand_range(1,3)
 	

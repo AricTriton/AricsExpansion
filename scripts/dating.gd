@@ -420,7 +420,7 @@ func propose(person, counter):
 			else:
 				text += "\n\n[color=green]Unlocked sexual actions with [name2].[/color]"
 			###---End Expansion---###
-			if person.levelupreqs.has('code') && person.levelupreqs.code == 'relationship':
+			if person.xp_boost_reqs.code == 'relationship':
 				text += "\n\n[color=green]After getting closer with [name2], you felt like [he2] unlocked new potential. [/color]"
 				###---Modified by Expansion---### Levelup Removed by Ank BugFix v4a
 			globals.state.sexactions += 1
