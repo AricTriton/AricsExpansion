@@ -2665,6 +2665,7 @@ func brothelservicesalicestart():
 	buildbuttons(array)
 
 func brothelservicesalice1():
+	var buttons = []
 	mansion.background_set("brothel")
 	yield(main, 'animfinished')
 	clearbuttons()
@@ -2679,66 +2680,90 @@ func brothelservicesalice1():
 		text += "\n\nOnce inside, Alice looks to you contemplating."
 		buttons.append({text = 'Ask her to take you.', function = 'alicegiving1'})
 	mansion.maintext = text
-	buildbuttons(array)
+	buildbuttons(buttons)
 
+func clienttitle():
+	var titles = []
+	if globals.player.sex == 'male':
+		titles = ["master","sir","my lord"]
+	elif globals.player.asser < 40:
+		titles = ["slut","bitch","slattern","pervert","degenerate","tramp","harlot"]
+	else:
+		titles = ["mistress","mam","my lady","mistress","my lady","madam"]
+	return titles[randi() % titles.size()]
+
+func alicestance():
+	var stances = []
+	if globals.player.sex == 'male' || globals.player.asser >= 40:
+		stances = ["She continues to avoid meeting your gaze.","She stares at the floor in front of her.","She stands still with with eyes downcast."]
+	else:
+		stances = ["Alice folds her arms under her breasts and lifts her chin to look down her nose at you.","Her lip curls into a smirk as she regards you.","A smile slowly creeps onto her face.","She stares at you, a glint in her eye."]
+	return stances[randi() % stances.size()]
+	
+func alicesmalltalk():
+	var convo = ["You chat pleasantly on the edge of the bed for a time."]
+	var race = globals.player.race
+	#var town = globals.state.townsexpanded[town]
+	var partymember = globals.state.playergroup[randi() % convo.size()]
+	if globals.resources.gold < 500:
+		convo.append("You explain a little about the expenses involved in running a mansion and your financial worries.  She pays close attention with an arm around you and her bosom pressing into you pleasantly.")
+	if race != "Human":
+		convo.append("You talk about growing up as a " + str(race) + " with a human uncle.  Alice listens attentively.")
+	if globals.state.playergroup[randi() % convo.size()] != globals.player:
+		convo.append("You tell a story about this one time you kept " + partymember.name + " waiting on you while traveling and how they're back in the lounge probably waiting impatinently for you right now.  Alice seems a little troubled for a moment, but laughs.\n\n[color=yellow]Well at least the scenery should be nice.[/color]")
+	return convo[randi() % convo.size()]
+	
 func alicetoysays1():
+	var buttons = []
 	mansion.background_set("brothel")
 	yield(main, 'animfinished')
 	clearbuttons()
 	setcharacter('alicenude') #needs gallery entry to work
 	var text = ""
 	var diceroll = rand_range(0,20)
-	var stances = ["She continues to avoid meeting your gaze.","She stares at the floor in front of her.","She stands still with with eyes downcast."]
-	if globals.player.sex == 'male':
-		var titles = ["master","sir","my lord"]
-	elif globals.player.asser < 40:
-		var titles = ["slut","bitch","slattern","pervert","degenerate","tramp","harlot"]
-		stances = ["Alice folds her arms under her breasts and lifts her chin.","Her lip curls into a smirk as she regards you.","A smile slowly creeps onto her face.","She stares at you, a glint in her eye."]
-	else:
-		var titles = ["mistress","mam","my lady","mistress","my lady","madam"]
-	var clienttitle = titles[randi() % titles.size()]
-	var alicestance = stances[randi() % stances.size()]
 	if globals.player.sex != 'female' || globals.player.asser >= 40:
 		if diceroll < 5:
-			text += str(alicestance) + "\n\n[color=yellow]It is not a toy's place to judge her betters plans for her.[/color]"
+			text += alicestance() + "\n\n[color=yellow]It is not a toy's place to judge her betters plans for her.[/color]"
 		elif diceroll < 9:
-			text += str(alicestance) + "\n\n[color=yellow]A lowly being like me exists only to serve " + str(clienttitle) + ".[/color]"
+			text += alicestance() + "\n\n[color=yellow]A lowly being like me exists only to serve " + clienttitle() + ".[/color]"
 		elif diceroll < 13:
-			text += str(alicestance) + "\n\n[color=yellow]My desires are only how to best serve you "+ str(clienttitle) +".[/color]"
+			text += alicestance() + "\n\n[color=yellow]My desires are only how to best serve you "+ clienttitle() + ".[/color]"
 		elif diceroll < 17:
-			text += str(alicestance) + "\n\n[color=yellow]If it pleases you "+ str(clienttitle) +", you may pound the delusional dreams out of this whore to remind me that I am nothing more than your toy.[/color]"
+			text += alicestance() + "\n\n[color=yellow]If it pleases you " + clienttitle() + ", you may pound the delusional dreams out of this whore to remind me that I am nothing more than your toy.[/color]"
 		else:
-			text += str(alicestance) + "\n\n[color=yellow]I am yours to use " + str(clienttitle) + ".  Pay no mind to my wishes.[/color]"
+			text += alicestance() + "\n\n[color=yellow]I am yours to use " + clienttitle() + ".  Pay no mind to my wishes.[/color]"
 		buttons.append({text = 'Take her.', function = 'alicetaken1'})
 	else:
 		if diceroll > 10:
-			text += str(alicestance) + "\n\n[color=yellow]I think I'd like to put you in your place " + str(clienttitle) + ".[/color]"
+			text += alicestance() + "\n\n[color=yellow]I think I'd like to put you in your place " + clienttitle() + ".[/color]"
 		else:
-			text += str(alicestance) + "\n\n[color=yellow]You're a little " + str(clienttitle) + " and I'm going to treat you like one.[/color]"
+			text += alicestance() + "\n\n[color=yellow]You're a little " + clienttitle() + " and I'm going to treat you like one.[/color]"
 		buttons.append({text = 'Ask her to take you.', function = 'alicegiving1'})
 	mansion.maintext = text
-	buildbuttons(array)
+	buildbuttons(buttons)
 	
 func aliceconvo1():
+	var buttons = []
 	mansion.background_set("brothel")
 	yield(main, 'animfinished')
 	clearbuttons()
 	setcharacter('alicenude') #needs gallery entry to work
 	var text = ""
 	var diceroll = rand_range(0,20)
-	if globals.state.sidequests.alice == 1:
-		text += "[color=green]So first day on the job?[/color]\n\nShe relaxes just a little and looks up, trembling.\n\n[color=yellow]Yes, actually you're my first customer.[/color]\n\nAt first you think she might just be nervous, but then you notice the telltale glistening streaked down her thighs.  She looks away again and recomposes herself.\n\n[color=yellow]How may I serve you master?[/color]"
-		globals.state.sidequests.alice += 1
+	if globals.state.sidequests.alicestartday == globals.resources.day:
+		text += "[color=green]So first day on the job?[/color]\n\nShe relaxes just a little and looks up, trembling.\n\n[color=yellow]Yes, actually you're my first customer.[/color]\n\nAt first you thought she was nervous, but then you notice the telltale glistening streaks down her thighs.  She looks away again and recomposes herself.\n\n[color=yellow]How may I serve you " + clienttitle() + "?[/color]"
 	elif globals.state.sidequests.alice == 2:
 		text += "[color=green]Why do you sell yourself?[/color]"
 	elif globals.state.sidequests.alice >= 5:
 		text += "[color=green]Blah blah blah[/color]"
+	else:
+		text += "You chat pleasantly on the edge of the bed for a time."
 	if globals.player.sex != 'female' || globals.player.asser >= 40:
 		buttons.append({text = 'Take her.', function = 'alicetaken1'})
 	else:
 		buttons.append({text = 'Ask her to take you.', function = 'alicegiving1'})
 	mansion.maintext = text
-	buildbuttons(array)
+	buildbuttons(buttons)
 
 func brothelservicesalicedone():
 	mansion.background_set("brothel")
@@ -2749,7 +2774,7 @@ func brothelservicesalicedone():
 	var text = "You point to [color=aqua]Alice[/color] and nod.\n[color=yellow]-I'll have her.[/color]\n\nThe [color=aqua]Madam[/color] looks at you with an understanding smile.\n[color=yellow]-I'm certain you will thoroughly enjoy yourself.[/color]"
 	if globals.resources.gold >= 50:
 		globals.resources.gold -= 50
-		globals.player.energy += 25 
+		globals.player.energy += 25
 		if globals.state.sidequests.alice == 1:
 			text += "\n\nAlice leads you to a back room. You enjoy the flitting of her wings as she lets you ravage her after teasing you and exciting you. You leave feeling satisfied and refreshed.\n\n[color=green]Gained 25 Energy[/color]\n[color=red]Lost 50 Gold[/color]"
 		elif globals.state.sidequests.alice >= 2:

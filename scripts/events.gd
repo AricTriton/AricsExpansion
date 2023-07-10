@@ -34,6 +34,7 @@ func alice(state = 1):
 			sprites = [['alicenude','pos1','opac']]
 		#globals.state.upcomingevents.append({code = 'bubblepotappearance',duration =7})
 		globals.state.sidequests.alice = 1
+		globals.state.sidequests.alicestartday = globals.resources.day
 		buttons.append(["Infinite Alice (Unlimited Alices may appear in game)", 'alice', 4])
 		buttons.append([" Gotta Catch 'Em All (Only one Alice of each type may exist)", 'alice', 5])
 		buttons.append([" There Can Only Be One (Only one recruitable Alice will exist)", 'alice', 6])

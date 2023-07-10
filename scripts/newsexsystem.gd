@@ -2044,7 +2044,6 @@ func stopongoingaction(meta, rebuild = false):
 	elif action.scene.code == 'rope':
 		for i in action.takers:
 			i.effects.erase('tied')
-		#globals.itemdict['rope'].amount += globals.state.calcRecoverRope(action.takers.size(), 'sex') #ralph_Alice - bug fix: was generating new ropes before
 	elif action.scene.code == 'subdue':
 		for taker in action.takers:
 			for giver in action.givers:

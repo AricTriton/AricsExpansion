@@ -1,5 +1,7 @@
 
 var travel = globals.expansiontravel #ralphD
+var aliceknown = false #ralph_alice
+var alicesuspicion = 0 #ralph_alice
 
 func enemyencounter():
 	var enc
@@ -237,6 +239,8 @@ func buildenemies(enemyname = null):
 
 ################### #ralph_alice
 
+################### #ralph_alice
+
 func alice():
 	var array = []
 	if globals.state.decisions.has("aliceinfinite") || globals.state.decisions.has("aliceoneofeach") || globals.state.decisions.has("aliceonlyone"):
@@ -250,7 +254,6 @@ func alice():
 	outside.buildbuttons(array, self)
 
 func talkalice(stage = 1): #future plans - tie in player stats: charm, good/evil, wit, beauty etc.
-	globals.slaves = globals.expansionpersona.createpersona("Alice") #generate an Alice anyway - BBP
 	var state = false
 	var buttons = []
 	var image
@@ -261,13 +264,12 @@ func talkalice(stage = 1): #future plans - tie in player stats: charm, good/evil
 	var AlicesWith = 0
 	var party = globals.state.playergroup.duplicate()
 	var partycount = 0
-	AlicesOwned = globals.expansionpersona.countpersona("Alice") #0 #bubblepot - can you set up a formula to count how many first name == Alice's are in the mansion roster here?
-	print("BBP-Test: Alices owned = " + str(AlicesOwned))
+	AlicesOwned = 0 #bubblepot - can you set up a formula to count how many first name == Alice's are in the mansion roster here?
 	for i in party:
 		var j = globals.state.findslave(i)
 		if globals.player != j:
 			partycount += 1
-		if j.persona == "Alice": 
+		if j.persona == ['Alice']:
 			AlicesWith += 1
 	if globals.state.capturedgroup.size() > 0:
 		captives = true

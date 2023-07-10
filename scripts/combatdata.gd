@@ -407,7 +407,7 @@ var enemygrouppools = {
 		units = [['alice',1,1]], awareness = -10, captured = null, special = 'alice', escape = 12,
 		description = "You spot a lone [color=aqua]Alice[/color] that seems somehow familiar. $He seems to be unaware of your presence as of yet. ",
 		descriptionescape = "The [color=aqua]girl[/color] runs and hides before you get close to them. ",
-	}
+	},
 	#/ralph_alice
 }
 
