@@ -11,6 +11,7 @@ var database = {
 		name = 'Wimborn Outskirts',
 		description = "The rural road leads across green plains and various settlements. Bright scenery puts you at peace. ",
 		enemies = [{value = 'peasant', weight = 2},{value = 'banditseasy', weight = 1},{value = 'thugseasy',weight = 3},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters
+		#enemies = [{value = 'alice', weight = 20},{value = 'peasant', weight = 2},{value = 'banditseasy', weight = 1},{value = 'thugseasy',weight = 3},{value = 'noenemyencountered', weight = 6}], #ralphD - added nonenemyencounters #ralph_alice TEST - need to remove/replace
 		encounters = [],
 		length = 5,
 		exits = ['wimborn','forest','prairie'],
