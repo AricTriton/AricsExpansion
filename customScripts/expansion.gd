@@ -3365,7 +3365,7 @@ func updateBodyImage(person):
 		person.imagetype = typeEnumToString[imagetype]
 		var ref = dictUniqueImagePaths[person.unique][imagetype]
 		person.imagefull = ref[stress] if ref.has(stress) else ref[HIGH_STRESS]
-		#BBP Addition
+		#BBP Addition - Persona system
 	elif globals.expansionpersona.dictPersonaImagePaths.has(person.persona) && person.imageportait == globals.expansionpersona.persona[person.persona].get('imageportait',''):
 		var imagetype
 		if int(person.exposed.chest) + int(person.exposed.genitals) + int(person.exposed.ass) >= 2:

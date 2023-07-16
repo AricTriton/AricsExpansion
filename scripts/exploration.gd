@@ -264,7 +264,8 @@ func talkalice(stage = 1): #future plans - tie in player stats: charm, good/evil
 	var AlicesWith = 0
 	var party = globals.state.playergroup.duplicate()
 	var partycount = 0
-	AlicesOwned = 0 #bubblepot - can you set up a formula to count how many first name == Alice's are in the mansion roster here?
+	AlicesOwned = globals.expansionpersona.countpersonbyname("Alice") #0 bubblepot - can you set up a formula to count how many first name == Alice's are in the mansion roster here?
+	print("BBP-Test: Alices owned = " + str(AlicesOwned))
 	for i in party:
 		var j = globals.state.findslave(i)
 		if globals.player != j:

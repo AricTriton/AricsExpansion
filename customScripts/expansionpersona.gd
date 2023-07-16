@@ -424,14 +424,19 @@ func aliceinfinite(alice): #This function can be further generalized I think but
 	return alice
 
 
-func countpersona(persona):
+func countpersona(persona): #takes an array as an argument. Double check syntax.
 	var counter = 0
 	for i in globals.slaves:
-		if i.persona == persona:
+		if i.persona in persona:
 			counter += 1
 	return counter
 		
-
+func countpersonbyname(person):
+	var counter = 0
+	for i in globals.slaves:
+		if i.name == name:
+			counter += 1
+	return counter
 
 #Brought this here to mimic the dictionary structure for uniques without linking the entire script here.
 enum {IMAGE_DEFAULT, IMAGE_NAKED}
