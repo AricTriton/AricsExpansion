@@ -420,7 +420,8 @@ func aliceinfinite(alice): #This function can be further generalized I think but
 		alice.surname = names.humansurname
 	elif alice.race == "Taurus":
 		alice.surname = names.taurussurname
-	else globals.printErrorCode("Alice: Unrecognized Race on" + alice.name)
+	else: 
+		globals.printErrorCode("Alice: Unrecognized Race on" + alice.name)
 	return alice
 
 
@@ -434,7 +435,7 @@ func countpersona(persona): #takes an array as an argument. Double check syntax.
 func countpersonbyname(person):
 	var counter = 0
 	for i in globals.slaves:
-		if i.name == name:
+		if i.name == person.name:
 			counter += 1
 	return counter
 

@@ -3383,7 +3383,7 @@ func updateBodyImage(person):
 			if dictUniqueImagePaths[person.persona][imagetype].has(IMAGE_PREG):
 				stress = IMAGE_PREG
 		person.imagetype = typeEnumToString[imagetype]
-		var ref = dictPersonaImagePaths[person.unique][imagetype]
+		var ref = globals.expansionpersona.dictPersonaImagePaths[person.unique][imagetype]
 		person.imagefull = ref[stress] if ref.has(stress) else ref[HIGH_STRESS] 
 	###---End Expansion---###
 	elif person.imagefull != null:
