@@ -376,8 +376,8 @@ var persona_videos = { #store persona-related videos here
 	nothing = 'nothing to see here'
 }
 
-func createpersona(name):
-	var refChar = persona.get(name)
+func createpersona(persona):
+	var refChar = persona.get(persona)
 	if persona.has(name):
 		var person = globals.newslave(refChar.basics[0], refChar.basics[1],refChar.basics[2],refChar.basics[3])
 		person.cleartraits()
@@ -432,10 +432,10 @@ func countpersona(persona): #takes an array as an argument. Double check syntax.
 			counter += 1
 	return counter
 		
-func countpersonbyname(person):
+func countpersonbyname(persons):
 	var counter = 0
 	for i in globals.slaves:
-		if i.name == person.name:
+		if i.name in persons:
 			counter += 1
 	return counter
 
