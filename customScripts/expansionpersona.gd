@@ -39,7 +39,7 @@ Template to read so I don't keep switching tabs
 var namefile = load("res://files/scripts/characters/names.gd").new()
 var names = namefile.names
 
-var persona = {
+var personas = {
 	AliceClassic = {
 		basics = ['Human', 'adult', 'female', 'commoner'],
 		persona = 'AliceClassic',
@@ -376,9 +376,9 @@ var persona_videos = { #store persona-related videos here
 	nothing = 'nothing to see here'
 }
 
-func createpersona(persona):
-	var refChar = persona.get(persona)
-	if persona.has(name):
+func createpersona(persona_tag):
+	var refChar = personas.get(persona_tag)
+	if personas.has(persona_tag):
 		var person = globals.newslave(refChar.basics[0], refChar.basics[1],refChar.basics[2],refChar.basics[3])
 		person.cleartraits()
 		person.imagefull = null
@@ -404,7 +404,7 @@ func createpersona(persona):
 			elif i in person.consentexp:
 				person.consentexp[i] = refChar[i]
 			elif i != 'basics':
-				globals.printErrorCode("Persona character improper attribute: " + str(i) + " on " + name)
+				globals.printErrorCode("Persona character improper attribute: " + str(i) + " on " + persona_tag)
 		###---Added by Expansion---### Unique Genealogy Fixer
 		#uniqueGenealogyFixer(person)
 		###---End Expansion---###
@@ -412,10 +412,15 @@ func createpersona(persona):
 			globals.state.relativesdata[person.id].name = person.name_long()
 		return person
 	else:
-		globals.printErrorCode("Persona character not found: " + name)
+		globals.printErrorCode("Persona character not found: " + persona_tag)
 		return null
 
-func aliceinfinite(alice): #This function can be further generalized I think but this will do for now.
+func createrandomalice(): #purely for testing. This will not work from a direct call. globals.gd is not linked here.
+	var alices = ['AliceClassic','AliceMeow','AliceMilker','AliceBunny','AlicePuppy','AliceFoxy']
+	createpersona(globals.randomfromarray(alices))
+	globals.slaves = person
+
+func aliceinfinitenamegen(alice): #This function can be further generalized I think but this will do for now.
 	if alice.race in ["Human", "Halfkin Bunny", "Halfkin Cat", "Halfkin Wolf", "Halfkin Fox"]:
 		alice.surname = names.humansurname
 	elif alice.race == "Taurus":

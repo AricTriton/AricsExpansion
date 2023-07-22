@@ -3365,8 +3365,8 @@ func updateBodyImage(person):
 		person.imagetype = typeEnumToString[imagetype]
 		var ref = dictUniqueImagePaths[person.unique][imagetype]
 		person.imagefull = ref[stress] if ref.has(stress) else ref[HIGH_STRESS]
-		#BBP Addition - Persona system
-	elif globals.expansionpersona.dictPersonaImagePaths.has(person.persona) && person.imageportait == globals.expansionpersona.persona[person.persona].get('imageportait',''):
+		#BBP Addition - Persona system Image Rules
+	elif globals.expansionpersona.dictPersonaImagePaths.has(person.persona) && person.imageportait == globals.expansionpersona.personas[person.persona].get('imageportait',''):
 		var imagetype
 		if int(person.exposed.chest) + int(person.exposed.genitals) + int(person.exposed.ass) >= 2:
 			imagetype = IMAGE_NAKED
@@ -3383,7 +3383,7 @@ func updateBodyImage(person):
 			if dictUniqueImagePaths[person.persona][imagetype].has(IMAGE_PREG):
 				stress = IMAGE_PREG
 		person.imagetype = typeEnumToString[imagetype]
-		var ref = globals.expansionpersona.dictPersonaImagePaths[person.unique][imagetype]
+		var ref = globals.expansionpersona.dictPersonaImagePaths[person.persona][imagetype]
 		person.imagefull = ref[stress] if ref.has(stress) else ref[HIGH_STRESS] 
 	###---End Expansion---###
 	elif person.imagefull != null:

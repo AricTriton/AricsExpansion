@@ -270,8 +270,9 @@ func talkalice(stage = 1): #future plans - tie in player stats: charm, good/evil
 		var j = globals.state.findslave(i)
 		if globals.player != j:
 			partycount += 1
-		if j.persona == ['Alice']:
+		if j.persona in ['AliceClassic','AliceMilker','AliceMeow','AlicePuppy','AliceBunny','AliceFoxy']:
 			AlicesWith += 1
+			print("BBP-Test: Alices With =" + str(AlicesWith))
 	if globals.state.capturedgroup.size() > 0:
 		captives = true
 	print("Ralph Test - Enemy Unit Size:"+str(enemygroup.units.size()))
