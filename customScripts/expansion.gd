@@ -3364,6 +3364,26 @@ func updateBodyImage(person):
 				stress = IMAGE_PREG
 		person.imagetype = typeEnumToString[imagetype]
 		var ref = dictUniqueImagePaths[person.unique][imagetype]
+		person.imagefull = ref[stress] if ref.has(stress) else ref[HIGH_STRESS]
+		#BBP Addition - Persona system Image Rules
+	elif globals.expansionpersona.dictPersonaImagePaths.has(person.persona) && person.imageportait == globals.expansionpersona.personas[person.persona].get('imageportait',''):
+		var imagetype
+		if int(person.exposed.chest) + int(person.exposed.genitals) + int(person.exposed.ass) >= 2:
+			imagetype = IMAGE_NAKED
+		else:
+			imagetype = IMAGE_DEFAULT
+		var stress
+		if person.stress < 20:
+			stress = LOW_STRESS
+		elif person.stress < 60:
+			stress = MID_STRESS
+		else:
+			stress = HIGH_STRESS
+		if person.preg.duration > 0 && person.knowledge.append('currentpregnancy') || person.swollen > 0 && person.swollen >= globals.heightarrayexp.find(person.height)/2:
+			if dictUniqueImagePaths[person.persona][imagetype].has(IMAGE_PREG):
+				stress = IMAGE_PREG
+		person.imagetype = typeEnumToString[imagetype]
+		var ref = globals.expansionpersona.dictPersonaImagePaths[person.persona][imagetype]
 		person.imagefull = ref[stress] if ref.has(stress) else ref[HIGH_STRESS] 
 	###---End Expansion---###
 	elif person.imagefull != null:
