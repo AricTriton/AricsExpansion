@@ -2102,7 +2102,7 @@ var shops = {
 		code = 'wimbornmarket',
 		sprite = 'merchant',
 		name = "Wimborn's Market",
-		items = ['teleportwimborn','food','supply','bandage','rope','torch','teleportseal', 'basicsolutioning','aphrodisiac','magicessenceing', 'natureessenceing','armorleather','armorchain','weapondagger','weaponserrateddagger','weaponlongbow','weaponbasicstaff','weaponmagusstaff','weaponmace','weaponsword','weaponceremonialsword','acctravelbag'],
+		items = ['teleportwimborn','food','supply','bandage','rope','torch','teleportseal','basicsolutioning','aphrodisiac','magicessenceing', 'natureessenceing','armorleather','armorchain','weapondagger','weaponserrateddagger','weaponlongbow','weaponbasicstaff','weaponmagusstaff','weaponmace','weaponsword','weaponceremonialsword','acctravelbag'],
 		selling = true
 	},
 	wimbornboutique = {
