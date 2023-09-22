@@ -1585,13 +1585,20 @@ func _on_serviceconfirm_pressed():
 			person.levelup()
 		person.away.duration = 1 + globals.originsarray.find(person.origins)
 		person.away.at = 'training'
+#Added missing warrior buff
 	elif operation.code == 'spec':
 		if person.levelupreqs.has('code') && person.levelupreqs.code == 'specialization':
 			person.levelup()
 		globals.resources.gold -= 500
-		if person.effects.has('bodyguardeffect'): person.add_effect(globals.effectdict.bodyguardeffect, true)
-		person.spec = get_node("slaveservicepanel/serviceconfirm").get_meta('spec').code
-		if person.spec == 'bodyguard': person.add_effect(globals.effectdict.bodyguardeffect)
+	if person.effects.has('bodyguardeffect'):
+		person.add_effect(globals.effectdict.bodyguardeffect, true)
+	elif person.effects.has('warrioreffect'):
+		person.add_effect(globals.effectdict.warrioreffect, true)
+	person.spec = get_node("slaveservicepanel/serviceconfirm").get_meta('spec').code
+	if person.spec == 'bodyguard':
+		person.add_effect(globals.effectdict.bodyguardeffect)
+	elif person.spec == 'warrior':
+		person.add_effect(globals.effectdict.warrioreffect)
 		person.away.duration = 5
 		person.away.at = 'training'
 	slaveserviceselected = null
@@ -2089,13 +2096,20 @@ func tishaquest():
 
 #################### Markets
 
-###---Added by Expansion---### ElPresidente Items
+###---Added by Expansion---### ElPresidente & CyrusLance Items
 var shops = {
 	wimbornmarket = {
 		code = 'wimbornmarket',
 		sprite = 'merchant',
 		name = "Wimborn's Market",
-		items = ['teleportwimborn','food','supply','bandage','rope','torch','teleportseal', 'basicsolutioning','hairdye', 'aphrodisiac' ,'beautypot', 'magicessenceing', 'natureessenceing','armorleather','armorchain','weapondagger','weaponserrateddagger','weaponlongbow','weaponbasicstaff','weaponmagusstaff','weaponmace','weaponsword','weaponceremonialsword','clothsundress','clothmaid','clothbutler','underwearlacy','underwearboxers', 'acctravelbag'],
+		items = ['teleportwimborn','food','supply','bandage','rope','torch','teleportseal', 'basicsolutioning','aphrodisiac','magicessenceing', 'natureessenceing','armorleather','armorchain','weapondagger','weaponserrateddagger','weaponlongbow','weaponbasicstaff','weaponmagusstaff','weaponmace','weaponsword','weaponceremonialsword','acctravelbag'],
+		selling = true
+	},
+	wimbornboutique = {
+		code = 'wimbornboutique',
+		sprite = 'CLSeraphShopkeeper',
+		name = "CL Boutique",
+		items = ['hairdye','beautypot','clothsundress','clothmaid','clothbutler','underwearlacy','underwearboxers', 'acctravelbag'],
 		selling = true
 	},
 	shaliqshop = {
@@ -2155,7 +2169,7 @@ var shops = {
 ###---End Expansion---###
 
 func market():
-	var array = [{name = 'Market stalls (shop)', function = 'shopinitiate', args = 'wimbornmarket'}, {name = 'Return', function = 'town'}]
+	var array = [{name = 'Market stalls (shop)', function = 'shopinitiate', args = 'wimbornmarket'}, {name = 'CL Boutique (shop)', function = 'shopinitiate', args = 'wimbornboutique'}, {name = 'Return', function = 'town'}]
 	get_parent().nodefade($charactersprite, 0.3)
 	main.background_set('market')
 	if OS.get_name() != "HTML5":
