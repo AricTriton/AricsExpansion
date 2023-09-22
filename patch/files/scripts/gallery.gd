@@ -579,6 +579,8 @@ var sprites = {
 	jasonfrown = load("res://files/aric_expansion_images/characters/Jason/jasonfrown.png"),
 	jasonneutral = load("res://files/aric_expansion_images/characters/Jason/jasonneutral.png"),
 	jasonsmirk = load("res://files/aric_expansion_images/characters/Jason/jasonsmirk.png"),
+	#CL Seraph
+	CLSeraphShopkeeper = load("res://files/aric_expansion_images/characters/New NPC/cl_seraph_shop_keeper.png"),
 	###---End Expansion---###
 }
 var scenes = {
