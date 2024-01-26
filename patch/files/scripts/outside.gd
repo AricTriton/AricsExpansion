@@ -1582,12 +1582,12 @@ func _on_serviceconfirm_pressed():
 		globals.resources.gold -= operation.price * (globals.originsarray.find(person.origins)+1)
 		person.origins = globals.originsarray[globals.originsarray.find(person.origins)+1]
 		if person.levelupreqs.has('code') && person.levelupreqs.code == 'improvegrade':
-			person.levelup()
+			person.xp_boost()
 		person.away.duration = 1 + globals.originsarray.find(person.origins)
 		person.away.at = 'training'
 	elif operation.code == 'spec':
 		if person.levelupreqs.has('code') && person.levelupreqs.code == 'specialization':
-			person.levelup()
+			person.xp_boost()
 		globals.resources.gold -= 500
 		if person.effects.has('bodyguardeffect'): person.add_effect(globals.effectdict.bodyguardeffect, true)
 		person.spec = get_node("slaveservicepanel/serviceconfirm").get_meta('spec').code
