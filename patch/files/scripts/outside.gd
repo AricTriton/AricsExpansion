@@ -1590,15 +1590,15 @@ func _on_serviceconfirm_pressed():
 		if person.levelupreqs.has('code') && person.levelupreqs.code == 'specialization':
 			person.xp_boost()
 		globals.resources.gold -= 500
-	if person.effects.has('bodyguardeffect'):
-		person.add_effect(globals.effectdict.bodyguardeffect, true)
-	elif person.effects.has('warrioreffect'):
-		person.add_effect(globals.effectdict.warrioreffect, true)
-	person.spec = get_node("slaveservicepanel/serviceconfirm").get_meta('spec').code
-	if person.spec == 'bodyguard':
-		person.add_effect(globals.effectdict.bodyguardeffect)
-	elif person.spec == 'warrior':
-		person.add_effect(globals.effectdict.warrioreffect)
+		if person.effects.has('bodyguardeffect'):
+			person.add_effect(globals.effectdict.bodyguardeffect, true)
+		elif person.effects.has('warrioreffect'):
+			person.add_effect(globals.effectdict.warrioreffect, true)
+		person.spec = get_node("slaveservicepanel/serviceconfirm").get_meta('spec').code
+		if person.spec == 'bodyguard':
+			person.add_effect(globals.effectdict.bodyguardeffect)
+		elif person.spec == 'warrior':
+			person.add_effect(globals.effectdict.warrioreffect)
 		person.away.duration = 5
 		person.away.at = 'training'
 	slaveserviceselected = null
