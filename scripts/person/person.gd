@@ -538,7 +538,7 @@ func xp_add(difference, add_multiplier: bool = true):
 func consent_set(value):
 	consent = value
 
-	if value && !consent && xp_boost_reqs.code == 'relationship':
+	if value && xp_boost_reqs.code == 'relationship':
 		var current_scene = globals.get_tree().get_current_scene()
 		var scene_has_infotext = current_scene.has_node("infotext")
 		var not_on_date = !current_scene.has_node("date") || !current_scene.get_node("date").visible
