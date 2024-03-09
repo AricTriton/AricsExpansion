@@ -2571,11 +2571,13 @@ func sebastianorder():
 #				counter -= 1
 	else:
 		var person = globals.state.sebastianslave
+		selectedslave = person
 		var array = [{name = "Pay", function = "sebastianpay"}, {name = "Refuse", function = "sebastianrefuse"}]
 		mansion.maintext = "After few moments, Sebastian presents to you a chained " + person.race + person.dictionary(" $child, who still looks pretty rebellious.\n\n— Got you what you asked for!\n\nYou slowly inspect $him.") + person.descriptionsmall() + "\n\n— I would like to receive " + str(person.buyprice()) + person.dictionary(" gold for my service. If you don't want $him, it's fine, since I can find another buyer in huge town like this.")
 		buildbuttons(array)
 
 func sebastianpay():
+	selectedslave = null
 	var person = globals.state.sebastianslave
 	if globals.resources.gold >= person.buyprice():
 		var effect = globals.effectdict.captured
@@ -2593,6 +2595,7 @@ func sebastianpay():
 		main.popup("You don't have enough money.")
 
 func sebastianrefuse():
+	selectedslave = null
 	globals.state.sebastianorder.taken = false
 	market()
 
