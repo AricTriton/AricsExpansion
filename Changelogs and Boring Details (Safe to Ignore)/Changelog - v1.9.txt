@@ -1,0 +1,170 @@
+#---New Features---#
+<Dimensional Crystal>
+>New Ability: Detoxify
+Detoxify is a new Crystal Ability that grants you a new spell when discovered. The spell will fully purge the Toxicity of a slave at the cost of one of the Crystal's Lifeforce. It requires at least level 2 to unlock.
+
+#---BugFix and Misc Stuff---#
+	FlaireFleetmist
+>Fix error when an action continues but the selected givers and takers have changed
+Fix error when the "103 suck nipples" action continues but the selected givers and takers have changed. In most cases, the text would still be displayed correctly. However, in some cases, you'd have a console error, or the wrong giver or taker would be described.
+
+	durandal3
+>Image loading performance tweaks
+>Fix error with sebastian slave
+>Typo fixes
+>Update person name label in combat settings popup
+>Add detailed ovulation cycle display when perfect info enabled
+>Fix updating movement type in some cases
+Swollen isn't always up to date when calling getMovement
+
+
+	zclimber
+>Don't overwrite captured person fear and loyalty
+>Fixed some bugs and unsupported in 3.2 features
+>Fix inventory issue
+>Another fix part
+>Another fix
+>Changed statspanel to display obedience
+>QOL improvements
+>Fix wrong merge and remove more spaces
+>Bugfix: caligoodend
+>Bugfix: flight movement info
+>Bugfix: slaves display in inventory
+>Enchanting 2.1 - some fixes
+>Panic debuff
+>Allow to return to old levelup
+>Fix enchantment orb
+>Fix being unable to grind items in some circumstances
+>Fix relationship and specialization potential incorrectly working
+>Fix crash when clicking on race in Sebastian's slave
+>Fix offsets in outside.gd slave specialization confirm
+
+#---Other Contributor Notes---#
+#Reference Key#
+ Person -
+>Feature/Title
+Details of their Pull Request
+#Reference Key#
+
+
+  durandal3 -
+>Lactation/milking updates
+Moderate rework of how lactation and milking works. The basic ideas of
+how things work are basically the same, but the details are
+significantly changed. Basic concept after fixing bugs was to remove the
+artificial cap of 50 when milked in the farm, adjusting the
+hyperlactation bonus so it didn't get too crazy, and trying to clarify
+the definitions of milk regen/storage/max/pressure.
+
+Hyperlactation significantly changed. Now increases regen/storage during
+normal lactation, and has no special effect during milking. Allow
+pressure to expand breasts up to max size while hyperlactating. Add a
+new lactating field for hyperlactation duration, to increase the bonus
+over time (instead of being based on normal lactation duration).
+
+Change what exactly pressure represents, to be the extra milk stored
+beyond normal capacity.
+
+Some changes also made to milking in the farm. Remove the secondary
+hyperlactation production bonus, but also remove the limit of 50 milk
+produced. Hand extraction mod now more heavily based on milkmaid skill,
+and effort can help make up for a low skill level. Now it takes a
+moderate amount of time for a milkmaid to become skilled enough to out
+perform the auto-extractors (also tweaked the auto-extractors to make
+them a little better). Use milkmaid lewdness for lust gain.
+
+Remove a bunch of unused code for old milking systems
+
+Fix various bugs:
+Taurus/extra tits not applying regen/storage bonuses correctly
+Farm milking causing milkstorage to go negative
+Cattle fate text being repeated
+
+>Performance improvements for sex scenes
+>Rework mental stat tracking
+Several changes to how mental stats are handled to fix some
+inconsistencies and errors.
+
+Gear bonuses are now tracked separately, so they don't prevent
+increasing a stat when you should be able to. Also colorizes the stat
+display on the slave tab.
+
+Changes how stat maximums are handled, so all changes to the max
+(generally from traits) are applied equally at all grades. Before would
+mostly only apply positive changes to grades below noble. Actual maximum
+(including racial/trait modification) is now consistently shown
+everywhere.
+
+Includes backwards compatibility changes to be able to update existing
+games.
+>Change racial mental stat handling
+Instead of needing to apply the racial stat bonus when getting the
+current/max, or setting the base, apply the racial bonus to the
+base/max directly.
+
+>Fix mental stat backwords compatability update
+Need to recalculate the current value for each stat, in case the max
+changed from the recent mental stat updates. Caused by the change to
+make max mods based on the current origin level.
+
+>Add portrait for secondary slave in random daily events
+
+
+  CyrusLance
+>New weapons and armor addition
+>Typo fix and change Ceremonial Sword to strength
+Fix several typos and change ceremonial sword to strength based weapon.
+
+>New spells icon
+>Update abilities.gd - 3 new spells
+Added 3 spells
+Arcane Bolt -  low damage, no mana cost and cast every turn.
+Astral Poison - low aoe damage, inflicts drain -25 atk on enemies.
+Nova - high aoe damage.
+
+>Added CL Serpah npc
+>Character sprites - CL Seraph
+>Add files via upload
+
+>New shop and warrior fix
+Added new shop to Wimborn: CL Boutique and shuffle over items from market stall to boutique.
+Also added missing warrior spec buff
+>Added new shop and warrior spec fix
+Added the new clothes shop to Wimborn: CL Boutique and shuffle over clothes and beauty product from market stall to boutique.
+Also included the missing warrior spec effect.
+
+
+	zclimber
+>Add new icons
+>Add combat_settings_popup to mansion
+>Add editor to outside characted info
+>Use new settings in combat
+>Allow filtering gear items by slot
+>Combat skills improvements
+>New graphics files
+>Patch enchantments.gd
+>Limit max item in shop inventory
+>Use enchantments.gd info to color item tooltips
+>Add enchanting panel
+>Variable gold cost
+>Add "clean item" btn, some fixes
+>Add bigger buttons to inventory
+>Fix inventory issue
+>Refactor and split useskills
+>Fix yields and split enemyturn
+>Refactor combatant.health_set and combatant.defeat
+
+>Enchanting quickfixes
+Add missed enchanting bg
+Removed "mansionbuttons" group from some unrelated buttons
+>Combat refactors
+>Add missed enchanting bg
+>Display absolute XP amount
+>New pictures for enchanting
+>Improve teleport seal usefulness
+>Add inventory management
+>Party first
+>Enchanting V2
+>Enhance Auto Inventory
+>Move all items on Shift pressed
+>Instead of levelup gate, have xp boost

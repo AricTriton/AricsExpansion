@@ -2,7 +2,7 @@
 
 ###---Variables: These can safely be altered---### Still in Progress, will be edited through In-Game Settings UI eventually
 
-var modversion = "1.8e"
+var modversion = "1.9"
 #---Aric's and Game's Base Values potentially changed by Ralph's
 var use_ralphs_tweaks = false					# Set this to true if you want to use the settings within applyRalphsTweaks as well as the Hybrid system.
 var unique_trait_generation = false				# Set this to true if you want a 1 in 5 chance for babies to gain unique traits such as sturdy.
@@ -18,7 +18,7 @@ var perfectinfo = false
 var enablecheatbutton = false
 
 #-- Use abilities on auto attack, left to right. Hint: reorder/activate abilities in the character info menu when out.
-var autoattackability = false
+var autoattackability = true
 
 #-- New Game Options
 #Control MC and Starting Slave Purebred vs Hybrid
@@ -607,7 +607,7 @@ var critical_strikes = true
 var critical_damage_base = 100
 var critical_damage_per_str = 20
 var panic_debuff = true
-var disable_levelup_gate = true
+var disable_levelup_gate = false
 
 
 func addConstantsSupport():
