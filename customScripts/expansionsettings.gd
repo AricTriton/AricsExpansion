@@ -607,7 +607,7 @@ var critical_strikes = true
 var critical_damage_base = 100
 var critical_damage_per_str = 20
 var panic_debuff = true
-var disable_levelup_gate = false
+var disable_levelup_gate = true
 
 
 func addConstantsSupport():
