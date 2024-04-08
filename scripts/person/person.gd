@@ -525,10 +525,10 @@ func xp_add(difference, add_multiplier: bool = true):
 		return
 
 	if !globals.expansionsettings.disable_levelup_gate:
-		if !has_xp_requirement():
+		if self != globals.player:
 			create_new_xp_requirement()
-		return
-	 
+			return
+	
 	levelup()
 	var overflow_xp = difference - required_to_next_level
 	if overflow_xp >= level:
