@@ -511,6 +511,9 @@ func has_hidden_xp_requirement() -> bool:
 
 
 func xp_set(value):
+	if value <= realxp:
+		realxp = value
+		return
 	xp_add(value - realxp)
 
 
@@ -526,9 +529,10 @@ func xp_add(difference, add_multiplier: bool = true):
 
 	if !globals.expansionsettings.disable_levelup_gate:
 		if self != globals.player:
-			create_new_xp_requirement()
+			if !has_xp_requirement():
+				create_new_xp_requirement()
 			return
-	
+
 	levelup()
 	var overflow_xp = difference - required_to_next_level
 	if overflow_xp >= level:
