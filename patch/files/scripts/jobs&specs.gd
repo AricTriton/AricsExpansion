@@ -199,6 +199,63 @@ var jobdict = {
 		location = ['frostford'],
 		tags = ['frostford','physical'],
 	},
+		
+
+	docker = {
+		code = 'docker',
+		name = "W - Dock Hauler",
+		type = 'basic',
+		description = "$name will be working at the dockyard, hauling goods on and off the ships that come. \n\n[color=yellow]\n\nEfficiency grows with Strength and Endurance. Penalized for high Confidence.",
+		workline = "$name will be working at the docks, hauling cargo for pittance pay.",
+		reqs = "globals.currentslave.traits.has('Frail') == false ",
+		unlockreqs = "true",
+		maxnumber = 0,
+		order = 9,
+		location = ['wimborn'],
+		tags = ['wimborn','physical'],
+	},
+
+	clinic = {
+		code = 'clinic',
+		name = "F - Clinic",
+		type = 'social',
+		description = "$name will be helping the local clinic at Frostford. \n\n[color=yellow]\n\nEfficiency grows with Wit, Magic Affinity, and to a lesser degree Agility.[/color]",
+		workline = "$name will be helping the local clinic at Frostford, healing people injured in the woods.",
+		reqs = "true",
+		unlockreqs = 'true',
+		maxnumber = 0,
+		order = 9,
+		location = ['frostford'],
+		tags = ['frostford','social','vocal'],
+	},
+	charcoaler = {
+		code = 'charcoaler',
+		name = "F - Charcoal Kilns",
+		type = 'social',
+		description = "$name will be working in the charcoal kilns, cooperating with the other workers in hauling fuel, building pits, and managing the fires. \n\n[color=yellow]\n\nEfficiency grows with Strength, to a lesser degree with Endurance and Agility. Penalized for low combined Courage and Wit.",
+		workline = "$name will be working in the local charcoal kilns, turning dried wood into charcoal.",
+		reqs = "globals.currentslave.traits.has('Frail') == false ",
+		unlockreqs = "true",
+		maxnumber = 0,
+		order = 9,
+		location = ['frostford'],
+		tags = ['frostford','social','physical'],
+	},
+
+	barriermage = {
+		code = 'barriermage',
+		name = 'G - Barrier Mage',
+		type = 'social',
+		description = "$name will be working with Gorn's barrier mages, coordinating magical repellants and defense networks, a key component of the city's defenses. \n\n[color=yellow]Requires grade of [color=aqua]Commoner[/color] or higher. \n\nEfficiency grows with Magic Affinity, Wit, and to a lesser degree Endurance. Penalized for low Courage. \n\nFor security reasons, you may only send a maximum of three slaves to work here at any one time.",
+		workline = "$name will be working in the city defenses, exercising Guild authority on the spellwork involved.",
+		reqs = "globals.originsarray.find(globals.currentslave.origins) >= 2 && globals.currentslave.traits.has('Mute') == false ",
+		unlockreqs = 'globals.state.rank >= 3',
+		maxnumber = 3,
+		order = 9,
+		location = ['gorn'],
+		tags = ['gorn','social','vocal'],
+	},
+
 	ffprostitution = {
 		code = 'ffprostitution',
 		name = "F - Prostitution",
@@ -906,7 +963,7 @@ func cooking(person):
 			text += "- " + str(chance) + "% Chance "
 		food += bonusfood
 	###---End Expansion---###
-	var maxFood = min(globals.state.foodbuy,globals.resources.foodcaparray[globals.state.mansionupgrades.foodcapacity])
+	var maxFood =  min(globals.state.foodbuy,globals.resources.foodcaparray[globals.state.mansionupgrades.foodcapacity])
 	var foodDiff = int(maxFood - globals.resources.food - food) / foodCount
 	if foodDiff > 0:
 		var foodPrice = globals.itemdict.food.cost
@@ -917,6 +974,119 @@ func cooking(person):
 			food += toBuy * foodCount
 	text = person.dictionary(text)
 	var dict = {text = text, gold = gold, food = food}
+	return dict
+
+
+func docker(person):
+	var text = "$name spent the day in Wimborn's piers, hauling cargo on and off ships. \n"
+	var gold = max(person.sstr*rand_range(3,7) + person.send*rand_range(3,7),5)
+	###---Added by Expansion---### Job Skills
+	person.add_jobskill('docker', 1)
+	var chance = clamp(person.jobskills.docker + (person.energy*1), 1, 50)
+	var bonus = 0
+	if rand_range(0,100) <= chance:
+		bonus = round(rand_range(person.energy*.1,person.energy*.5))
+		text += "$He got into a great routine and completed far more work today than $he had originally planned. $He earned [color=green]" + str(bonus) + " Extra Gold[/color] from $his hard labor. "
+		if globals.expansionsettings.perfectinfo == true:
+			text += "- " + str(chance) + "% Chance"
+		gold += bonus
+	###---End Expansion---###
+	elif rand_range(0,100) + person.conf/2 > 50 + person.jobskills.docker + person.loyal/3:
+		gold = gold*rand_range(0.25, 0.75)
+		text += "Due to [color=red]excessive pride[/color], $he caused trouble with the pier boss and their pay was docked. \n"
+
+	person.xp += gold/4
+	text += "In the end $he made [color=yellow]" + str(round(gold)) + "[/color] gold\n"
+	var dict = {text = text, gold = gold}
+	return dict
+
+func clinic(person):
+	var text = "$name is working at the clinic.\n"
+	var count = max( round( ( 1 + max(person.smaf,0) ) * person.wit * ( 1 + max(person.sagi/3,0) ) / 70), 2)
+	person.stress += min(count,10)
+	person.add_jobskill('nurse',1)
+	var bonus = 0
+	while rand_range(0,100) < person.jobskills.nurse - 10*bonus:
+		bonus += 1
+	
+	count += bonus
+	if bonus >= 5:	
+		text += "$He worked quickly and efficiently thanks to $his Job Skill, and was able to finish work early.\n"
+	elif bonus >= 2:
+		text += "$He worked a little faster thanks to $his skill.\n" 
+	
+	var gold = 0
+	var rate = 4
+	while count > 0:
+		if count >= 10:
+			count -= 10
+			gold += 10*rand_range(rate, rate+3)
+		else
+			gold += count*rand_range(rate, rate+3)
+			count = 0
+		if rate > 1:
+			rate -= 1.5
+	
+	gold = round(gold).5
+	person.xp += round(count*1.5)
+	person.learningpoints += floor(count/5)
+
+	text += "By the end of the day $he earned [color=yellow]"+ str(gold) + "[/color] gold.\n"
+
+	var dict = {text = text, gold = gold}
+	return dict
+
+
+func charcoaler(person):
+	var text = "$name spent the day in the Frostford charcoal kilns, turning firewood into charcoal. \n"
+	var gold = max(person.sstr*rand_range(6,10) + person.send*rand_range(3,5) + person.sagi*rand_range(3,5),5)
+	###---Added by Expansion---### Job Skills
+	person.add_jobskill('charcoaler', 1)
+	var chance = clamp(person.jobskills.charcoaler + (person.energy*1), 1, 50)
+	var bonus = 0
+	if rand_range(0,100) <= chance:
+		bonus = round(rand_range(person.energy*.1,person.energy*.5))
+		text += "$He got into a great routine and completed far more work today than $he had originally planned. $He earned [color=green]" + str(bonus) + " Extra Gold[/color] from $his hard labor. "
+		if globals.expansionsettings.perfectinfo == true:
+			text += "- " + str(chance) + "% Chance"
+		gold += bonus
+	###---End Expansion---###
+	elif person.wit + person.cour < 100 && rand_range(0,100) + (person.wit + person.cour)/4 < 33 - person.jobskills.docker:
+		gold = gold*rand_range(0.25, 0.75)
+		text += "Due to [color=red]neither knowing what to do nor readily following instructions[/color], $he couldn't work effectively and had $his pay cut. \n"
+
+	person.xp += gold/4
+	text += "In the end $he made [color=yellow]" + str(round(gold)) + "[/color] gold\n"
+	var dict = {text = text, gold = gold}
+	return dict
+
+func barriermage(person):
+	var text
+	var gold
+	text = "$name worked in shoring up Gorn's magical defenses.\n"
+	gold = person.smaf*rand_range(10,15) + person.wit/2.5 + person.send*rand_range(4,8) + min(globals.state.reputation.gorn/2,25)
+	if person.spec in ['mage']:
+		gold *= 1.2
+	###---Added by Expansion---###
+	#Job Skills
+	person.add_jobskill('mage', 1)
+	var chance = clamp(person.jobskills.mage + (person.wit*.1), 1, 50)
+	var bonus = person.wit *.2
+	if rand_range(0,100) <= chance:
+		text += "$He was especially efficient in $his mana usage, allowing $him leeway to further improve on the defensive works. $He earned [color=green]" + str(bonus) + " Extra Gold[/color] "
+		if globals.expansionsettings.perfectinfo == true:
+			text += "- " + str(chance) + "% Chance"
+		gold += bonus
+	elif person.cour < 50 && rand_range(0,100) + person.cour/4 < 33 - person.jobskills.mage:
+		gold = gold*rand_range(0.25, 0.75)
+		text += "Due to [color=red]$his cowardice[/color], $he was slow in $his patrols and had $his pay cut. \n"
+
+	###---End Expansion---###
+	gold = round(max(5, gold))
+	person.xp += gold/5
+	person.stress += rand_range(5,10)
+	text = text + "$He earned [color=yellow]"+str(gold)+"[/color] gold by the end of day.\n"
+	var dict = {text = text, gold = gold}
 	return dict
 
 func lumberer(person):
