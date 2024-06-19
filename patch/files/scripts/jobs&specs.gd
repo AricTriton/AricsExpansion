@@ -1021,7 +1021,7 @@ func clinic(person):
 		if count >= 10:
 			count -= 10
 			gold += 10*rand_range(rate, rate+3)
-		else
+		else:
 			gold += count*rand_range(rate, rate+3)
 			count = 0
 		if rate > 1:
