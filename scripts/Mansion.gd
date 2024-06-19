@@ -1,6 +1,6 @@
 
 ###---Added by Expansion---### Deviate
-var corejobs = ['rest','forage','hunt','cooking','library','nurse','maid','storewimborn','artistwimborn','assistwimborn','whorewimborn','escortwimborn','fucktoywimborn', 'lumberer', 'ffprostitution','guardian', 'research', 'slavecatcher','fucktoy','housepet','trainer','crystalresearcher']
+var corejobs = ['rest','forage','hunt','cooking','library','nurse','maid','storewimborn','artistwimborn','assistwimborn','whorewimborn','escortwimborn','fucktoywimborn', 'lumberer', 'docker','clinic','charcoaler','barriermage', 'ffprostitution','guardian', 'research', 'slavecatcher','fucktoy','housepet','trainer','crystalresearcher']
 var manaeaters = ['Succubus','Golem'] #ralphC - used in food consumption calcs, etc.
 ###---End Expansion---###
 var outOfMansionJobs = ['storewimborn','artistwimborn','assistwimborn','whorewimborn','escortwimborn','fucktoywimborn', 'lumberer', 'ffprostitution','guardian', 'research', 'slavecatcher','fucktoy'] # /Capitulize - Jobs outside of the mansion.
