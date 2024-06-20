@@ -1027,9 +1027,9 @@ func clinic(person):
 		if rate > 1:
 			rate -= 1.5
 	
-	gold = round(gold).5
+	gold = round(gold)
 	person.xp += round(count*1.5)
-	person.learningpoints += floor(count/5)
+	person.learningpoints += floor(count/10)
 
 	text += "By the end of the day $he earned [color=yellow]"+ str(gold) + "[/color] gold.\n"
 
