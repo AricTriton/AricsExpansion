@@ -1202,7 +1202,7 @@ func storewimborn(person):
 		priceBonus += 0.35
 	var gold = rand_range(1,5) + (person.charm + person.wit) / 2
 	gold = round(gold * min(0.10 * (globals.originsarray.find(person.origins) + 7), 1) * bonus)
-	var xp = gold / 4
+
 
 	###---Added by Expansion---###
 	#Job Skills
@@ -1223,6 +1223,8 @@ func storewimborn(person):
 			gold += nude_dict.gold
 	###---End Expansion---###
 
+	var xp = gold / 4
+	
 	var supplyDiff = globals.itemdict.supply.amount - globals.state.supplykeep
 	var supplySold = 20 + floor(gold / 5)
 	if supplyDiff > 0:

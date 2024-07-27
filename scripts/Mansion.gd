@@ -1083,6 +1083,12 @@ func _on_end_pressed():
 							person.exposed.genitalsforced = true
 						if person.vagina != "none":
 							text0.set_bbcode(text0.get_bbcode() + person.dictionary("The beast lunged forward and violently thrust its throbbing member into the wimpering $name's " + str(globals.expansion.namePussy()) + ". "))
+							if person.vagvirgin == true:
+								text0.set_bbcode(text0.get_bbcode() + person.dictionary("$name's virginity was taken by a dog.\n\n"))
+								person.vagvirgin = false
+								#ADD VIRGINITY LOSS NEGATIVES HERE #
+					else:
+						text0.set_bbcode(text0.get_bbcode() + person.dictionary("\n"))
 						else:
 							text0.set_bbcode(text0.get_bbcode() + person.dictionary("The beast lunged forward and forced $name onto the floor before mounting $his " + str(globals.expansion.namePenis()) + " and having its way with $him. "))
 					text0.set_bbcode(text0.get_bbcode() + "\n")
